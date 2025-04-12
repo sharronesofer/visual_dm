@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+venv/
+venv_py311/
+.env
+firebase_credentials.json
+openai_api_key.json
+config/
+utils/__pycache__/
+data/
+chroma_store/
+.python-version

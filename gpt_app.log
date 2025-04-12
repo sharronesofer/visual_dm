@@ -1,7 +1,0 @@
-2025-04-04 10:46:55,661 INFO: Firebase initialized successfully. [in /Users/Sharrone/visual_dm/app_gpt_integration.py:34]
-2025-04-04 10:46:55,662 INFO: OpenAI API key loaded successfully. [in /Users/Sharrone/visual_dm/app_gpt_integration.py:42]
-2025-04-04 11:39:19,780 ERROR: Unhandled Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. [in /Users/Sharrone/visual_dm/app_gpt_integration.py:94]
-2025-04-04 11:39:31,149 INFO: Firebase initialized successfully. [in /Users/Sharrone/visual_dm/app_gpt_integration.py:34]
-2025-04-04 11:39:31,150 INFO: OpenAI API key loaded successfully. [in /Users/Sharrone/visual_dm/app_gpt_integration.py:42]
-2025-04-04 11:39:34,968 ERROR: Unhandled Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. [in /Users/Sharrone/visual_dm/app_gpt_integration.py:94]
-2025-04-04 11:40:48,012 ERROR: Unhandled Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. [in /Users/Sharrone/visual_dm/app_gpt_integration.py:94]
