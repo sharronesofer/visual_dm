@@ -1,0 +1,60 @@
+{
+  "initiative": {
+    "base_roll": "1d20",
+    "modifier": "Dexterity modifier + feat bonuses (e.g. Improved Initiative)",
+    "reroll_on_tie": true
+  },
+  "attack_roll": {
+    "formula": "1d20 + base attack bonus + ability modifier (Str for melee, Dex for ranged) + misc modifiers",
+    "vs_ac": "Compared against target's Armor Class",
+    "critical_range": "Varies by weapon (e.g. 20/x2, 19-20/x2)",
+    "confirmation_roll": "Roll to confirm critical on hit within critical range"
+  },
+  "armor_class": {
+    "formula": "10 + armor bonus + shield bonus + Dex modifier + size modifier + natural armor + deflection + misc",
+    "touch_ac": "10 + Dex + deflection + misc (ignores armor/shield/natural)",
+    "flat_footed_ac": "10 + armor + shield + natural + misc (no Dex if surprised)"
+  },
+  "combat_actions": {
+    "standard_action": [
+      "Attack",
+      "Cast a Spell",
+      "Ready",
+      "Use Special Ability"
+    ],
+    "move_action": [
+      "Move up to speed",
+      "Draw weapon",
+      "Stand up",
+      "Mount/dismount"
+    ],
+    "full_round_action": [
+      "Full attack",
+      "Run",
+      "Withdraw",
+      "Coup de Grace"
+    ],
+    "free_action": [
+      "Drop item",
+      "Speak",
+      "Cease concentration"
+    ]
+  },
+  "damage": {
+    "melee": "Strength modifier added",
+    "ranged": "No Strength modifier unless composite bow or thrown weapon",
+    "critical": "Multiply base damage (weapon-dependent)",
+    "resistance": "Reduce damage from specific types (e.g., fire resistance 5)"
+  },
+  "conditions": {
+    "flat-footed": "Cannot take reactions, no Dex bonus to AC",
+    "grappled": "Limited actions, –4 to Dex, no movement",
+    "prone": "–4 melee attack, +4 to ranged attacks against you",
+    "blinded": "–2 AC, loses Dex to AC, –4 on most checks, moves at half speed"
+  },
+  "saving_throws": {
+    "Fortitude": "Resists poison, disease, etc. (Constitution-based)",
+    "Reflex": "Avoids damage from area effects (Dexterity-based)",
+    "Will": "Resists mental influence (Wisdom-based)"
+  }
+}

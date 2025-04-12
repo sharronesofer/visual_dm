@@ -1,0 +1,806 @@
+[
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 12,
+    "flat_footed_ac": 12,
+    "initiative": 2,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 12,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Swipe",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": ["slashing"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Keen Senses"
+    ],
+    "environment": "Temperate forests",
+    "motif_affinities": ["Survival"],
+    "faction": "Grove Wanderers",
+    "narrative_hooks": [
+      "A small, tree-dwelling creature that attacks in self-defense but can prove troublesome to travelers."
+    ],
+    "id": "pine_clawling",
+    "name": "Pine Clawling"
+  },
+  {
+    "type": "Fey",
+    "alignment": "Chaotic Neutral",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 15,
+    "touch_ac": 12,
+    "flat_footed_ac": 13,
+    "initiative": 2,
+    "speed": "25 ft., fly 25 ft. (poor)",
+    "abilities": {
+      "Strength": 8,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 10,
+      "Wisdom": 13,
+      "Charisma": 12
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Needle Dart",
+        "type": "ranged",
+        "damage": "1d4+1",
+        "critical": "20/x2",
+        "damage_type": ["piercing"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Minor Illusion (at will)"
+    ],
+    "traits": [
+      "Skittish"
+    ],
+    "environment": "Enchanted groves",
+    "motif_affinities": ["Survival"],
+    "faction": "Thistlebloom Court",
+    "narrative_hooks": [
+      "Playful but unpredictable, these tiny fey creatures harass lumberjacks encroaching on old woodland."
+    ],
+    "id": "thistle_imp",
+    "name": "Thistle Imp"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Neutral Evil",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 12,
+    "flat_footed_ac": 12,
+    "initiative": 2,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 13,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 8,
+      "Wisdom": 10,
+      "Charisma": 8
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Jagged Spear",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": ["piercing"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Pack Tactics"
+    ],
+    "environment": "Desert camps",
+    "motif_affinities": ["Survival"],
+    "faction": "Sand Reavers",
+    "narrative_hooks": [
+      "A cunning desert tribe that raids small caravans, leaving few survivors to tell tales."
+    ],
+    "id": "dune_raider",
+    "name": "Dune Raider"
+  },
+  {
+    "type": "Aberration",
+    "alignment": "Chaotic Neutral",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 13,
+    "touch_ac": 11,
+    "flat_footed_ac": 12,
+    "initiative": 1,
+    "speed": "20 ft., climb 10 ft.",
+    "abilities": {
+      "Strength": 12,
+      "Dexterity": 13,
+      "Constitution": 12,
+      "Intelligence": 5,
+      "Wisdom": 10,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Tentacle Jab",
+        "type": "melee",
+        "damage": "1d4+1",
+        "critical": "20/x2",
+        "damage_type": ["bludgeoning"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Spit Slime (DC 12 Reflex or entangled)"
+    ],
+    "traits": [],
+    "environment": "Slime-coated caverns",
+    "motif_affinities": ["Survival"],
+    "faction": "Cavernspawn Colonies",
+    "narrative_hooks": [
+      "Small, bulbous cave-dwellers known to ambush adventurers from hidden cracks."
+    ],
+    "id": "slime_runt",
+    "name": "Slime Runt"
+  },
+  {
+    "type": "Elemental",
+    "alignment": "Neutral",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 15,
+    "touch_ac": 12,
+    "flat_footed_ac": 13,
+    "initiative": 2,
+    "speed": "20 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 4,
+      "Wisdom": 10,
+      "Charisma": 8
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Dripping Slam",
+        "type": "melee",
+        "damage": "1d6+0",
+        "critical": "20/x2",
+        "damage_type": ["acid"],
+        "to_hit": 2
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Melting Touch"
+    ],
+    "traits": [
+      "Resistance to Acid 5"
+    ],
+    "environment": "Alchemical pools",
+    "motif_affinities": ["Survival"],
+    "faction": "Caustic Droplets",
+    "narrative_hooks": [
+      "Born of failed lab experiments, these small elementals corrode metal with each strike."
+    ],
+    "id": "acidic_globule",
+    "name": "Acidic Globule"
+  },
+  {
+    "type": "Plant",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+6",
+    "hp": 20,
+    "armor_class": 13,
+    "touch_ac": 10,
+    "flat_footed_ac": 13,
+    "initiative": 0,
+    "speed": "10 ft.",
+    "abilities": {
+      "Strength": 14,
+      "Dexterity": 10,
+      "Constitution": 14,
+      "Intelligence": 2,
+      "Wisdom": 10,
+      "Charisma": 4
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Vine Lash",
+        "type": "melee",
+        "damage": "1d6+2",
+        "critical": "20/x2",
+        "damage_type": ["slashing"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Spore Puff (DC 12 Fort or slowed 1 round)"
+    ],
+    "traits": [],
+    "environment": "Overgrown ruins",
+    "motif_affinities": ["Survival"],
+    "faction": "Sporewood Growths",
+    "narrative_hooks": [
+      "Often mistaken for normal foliage until it lashes out at unsuspecting prey."
+    ],
+    "id": "lashing_sporebush",
+    "name": "Lashing Sporebush"
+  },
+  {
+    "type": "Undead",
+    "alignment": "Chaotic Evil",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 12,
+    "flat_footed_ac": 12,
+    "initiative": 2,
+    "speed": "25 ft.",
+    "abilities": {
+      "Strength": 12,
+      "Dexterity": 14,
+      "Constitution": 0,
+      "Intelligence": 6,
+      "Wisdom": 10,
+      "Charisma": 10
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Shadow Swipe",
+        "type": "melee",
+        "damage": "1d4+1",
+        "critical": "20/x2",
+        "damage_type": ["cold"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Weakening Touch (DC 12 Fort or -1 STR)"
+    ],
+    "traits": [
+      "Undead Resistances"
+    ],
+    "environment": "Abandoned crypts",
+    "motif_affinities": ["Survival"],
+    "faction": "Nightshroud Haunts",
+    "narrative_hooks": [
+      "Flickering echoes of restless souls, easily scattered but dangerous in large numbers."
+    ],
+    "id": "wisp_wraithling",
+    "name": "Wisp Wraithling"
+  },
+  {
+    "type": "Construct",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 16,
+    "touch_ac": 10,
+    "flat_footed_ac": 16,
+    "initiative": 0,
+    "speed": "20 ft.",
+    "abilities": {
+      "Strength": 14,
+      "Dexterity": 10,
+      "Constitution": 0,
+      "Intelligence": 4,
+      "Wisdom": 10,
+      "Charisma": 1
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Stone Fist",
+        "type": "melee",
+        "damage": "1d6+2",
+        "critical": "20/x2",
+        "damage_type": ["bludgeoning"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Harden (once per day, +2 AC for 1 minute)"
+    ],
+    "traits": [
+      "Construct Immunities"
+    ],
+    "environment": "Ancient temples",
+    "motif_affinities": ["Survival"],
+    "faction": "Forgotten Shrine Wardens",
+    "narrative_hooks": [
+      "Small living statues set to guard old altars, often found patrolling in pairs."
+    ],
+    "id": "statuary_guardling",
+    "name": "Statuary Guardling"
+  },
+  {
+    "type": "Dragon",
+    "alignment": "Neutral",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 15,
+    "touch_ac": 12,
+    "flat_footed_ac": 13,
+    "initiative": 2,
+    "speed": "20 ft., fly 20 ft.",
+    "abilities": {
+      "Strength": 11,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 5,
+      "Wisdom": 10,
+      "Charisma": 10
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Frost Breath",
+        "type": "special",
+        "damage": "1d6 cold",
+        "critical": "—",
+        "damage_type": ["cold"],
+        "to_hit": 0
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Minor Frost Breath (DC 12 Reflex half)"
+    ],
+    "traits": [],
+    "environment": "Icy foothills",
+    "motif_affinities": ["Survival"],
+    "faction": "Frost Wyrmlings",
+    "narrative_hooks": [
+      "Young draconic creatures that chill the night air with their breath. Often lurk around glacial caverns."
+    ],
+    "id": "glacier_hatchling",
+    "name": "Glacier Hatchling"
+  },
+  {
+    "type": "Magical Beast",
+    "alignment": "Neutral",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 12,
+    "flat_footed_ac": 12,
+    "initiative": 2,
+    "speed": "35 ft.",
+    "abilities": {
+      "Strength": 12,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 4,
+      "Wisdom": 12,
+      "Charisma": 7
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Crackling Antler",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": ["electric"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Static Discharge (DC 12 Fort or -2 penalty on rolls for 1 round)"
+    ],
+    "traits": [],
+    "environment": "Stormy plains",
+    "motif_affinities": ["Survival"],
+    "faction": "Rolling Thunder Herd",
+    "narrative_hooks": [
+      "These swift deer-like creatures spark with lightning during downpours."
+    ],
+    "id": "stormhorn_grazer",
+    "name": "Stormhorn Grazer"
+  },
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 13,
+    "touch_ac": 11,
+    "flat_footed_ac": 12,
+    "initiative": 1,
+    "speed": "30 ft., climb 10 ft.",
+    "abilities": {
+      "Strength": 13,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Grapple Lunge",
+        "type": "melee",
+        "damage": "1d4+1",
+        "critical": "20/x2",
+        "damage_type": ["bludgeoning"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Surprise Grapple (if hidden)"
+    ],
+    "traits": [],
+    "environment": "Jungle vines",
+    "motif_affinities": ["Survival"],
+    "faction": "Tanglefang Territors",
+    "narrative_hooks": [
+      "These monkey-like beasts snatch gear from travelers, retreating to the canopy."
+    ],
+    "id": "vine_clamberer",
+    "name": "Vine Clamberer"
+  },
+  {
+    "type": "Fiend",
+    "alignment": "Chaotic Evil",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 11,
+    "flat_footed_ac": 13,
+    "initiative": 1,
+    "speed": "25 ft.",
+    "abilities": {
+      "Strength": 11,
+      "Dexterity": 13,
+      "Constitution": 12,
+      "Intelligence": 6,
+      "Wisdom": 10,
+      "Charisma": 10
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Fel Claw",
+        "type": "melee",
+        "damage": "1d4+1",
+        "critical": "20/x2",
+        "damage_type": ["slashing", "evil"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Minor Hellish Rebuke (1/day, 1d6 fire, DC 12 Reflex half)"
+    ],
+    "traits": [
+      "Darkvision 60 ft."
+    ],
+    "environment": "Infernal borderlands",
+    "motif_affinities": ["Survival"],
+    "faction": "Impling Scouts",
+    "narrative_hooks": [
+      "Often used as low-level scouts or infiltrators by greater fiends."
+    ],
+    "id": "ember_imp",
+    "name": "Ember Imp"
+  },
+  {
+    "type": "Outsider",
+    "alignment": "Neutral",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 12,
+    "flat_footed_ac": 12,
+    "initiative": 2,
+    "speed": "25 ft., fly 20 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 6,
+      "Wisdom": 10,
+      "Charisma": 8
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Warped Gust",
+        "type": "ranged",
+        "damage": "1d4+1",
+        "critical": "20/x2",
+        "damage_type": ["force"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Short-Range Teleport (1/day)"
+    ],
+    "traits": [],
+    "environment": "Planar rifts",
+    "motif_affinities": ["Survival"],
+    "faction": "Twisting Gate Strays",
+    "narrative_hooks": [
+      "Accidentally stranded on the Material Plane, these small outsiders cause unpredictable breezes."
+    ],
+    "id": "dimensional_stray",
+    "name": "Dimensional Stray"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Neutral Good",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 15,
+    "touch_ac": 13,
+    "flat_footed_ac": 13,
+    "initiative": 2,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 12,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 10,
+      "Wisdom": 11,
+      "Charisma": 10
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Spear Thrust",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x3",
+        "damage_type": ["piercing"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Teamwork (ally gains +1 to hit if flanking with this unit)"
+    ],
+    "environment": "Woodland outposts",
+    "motif_affinities": ["Survival"],
+    "faction": "Emerald Rangers",
+    "narrative_hooks": [
+      "Patrolling archers who also carry spears, they politely discourage poachers or trespassers."
+    ],
+    "id": "juniper_ranger",
+    "name": "Juniper Ranger"
+  },
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 14,
+    "flat_footed_ac": 12,
+    "initiative": 2,
+    "speed": "40 ft.",
+    "abilities": {
+      "Strength": 13,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Pounce",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": ["slashing"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Surprise Pounce"
+    ],
+    "traits": [],
+    "environment": "Steppes",
+    "motif_affinities": ["Survival"],
+    "faction": "Wild Fang Stalkers",
+    "narrative_hooks": [
+      "A small but swift catlike predator that leaps on unsuspecting prey near tall grass."
+    ],
+    "id": "steppe_pouncer",
+    "name": "Steppe Pouncer"
+  },
+  {
+    "type": "Magical Beast",
+    "alignment": "Neutral Evil",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 14,
+    "touch_ac": 11,
+    "flat_footed_ac": 13,
+    "initiative": 1,
+    "speed": "30 ft., burrow 5 ft.",
+    "abilities": {
+      "Strength": 14,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 4,
+      "Wisdom": 10,
+      "Charisma": 8
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Venomous Spine",
+        "type": "ranged",
+        "damage": "1d4+2",
+        "critical": "20/x2",
+        "damage_type": ["piercing"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Poisoned Spine (DC 12 Fort, 1d2 CON damage)"
+    ],
+    "traits": [],
+    "environment": "Desert dunes",
+    "motif_affinities": ["Survival"],
+    "faction": "Scorpion Tunnels",
+    "narrative_hooks": [
+      "A scorpion-like monster that occasionally leaps from hidden sand-burrows to ambush travelers."
+    ],
+    "id": "sandstinger_scorp",
+    "name": "Sandstinger Scorp"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Lawful Neutral",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 15,
+    "touch_ac": 13,
+    "flat_footed_ac": 13,
+    "initiative": 2,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 14,
+      "Constitution": 12,
+      "Intelligence": 10,
+      "Wisdom": 12,
+      "Charisma": 8
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Halberd Slash",
+        "type": "melee",
+        "damage": "1d10+0",
+        "critical": "20/x3",
+        "damage_type": ["slashing"],
+        "to_hit": 2
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Polearm Defense (+1 AC if set against a charge)"
+    ],
+    "traits": [],
+    "environment": "Fortified roads",
+    "motif_affinities": ["Survival"],
+    "faction": "Roadwardens",
+    "narrative_hooks": [
+      "Stationed to protect travelers from bandits, but quick to levy tolls for passage."
+    ],
+    "id": "halberd_sentinel",
+    "name": "Halberd Sentinel"
+  },
+  {
+    "type": "Undead",
+    "alignment": "Neutral Evil",
+    "challenge_rating": 0.75,
+    "hit_dice": "3d8+3",
+    "hp": 18,
+    "armor_class": 13,
+    "touch_ac": 10,
+    "flat_footed_ac": 13,
+    "initiative": 0,
+    "speed": "20 ft.",
+    "abilities": {
+      "Strength": 13,
+      "Dexterity": 10,
+      "Constitution": 0,
+      "Intelligence": 4,
+      "Wisdom": 10,
+      "Charisma": 10
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Heavy Maul",
+        "type": "melee",
+        "damage": "1d8+1",
+        "critical": "20/x2",
+        "damage_type": ["bludgeoning"],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [
+      "Crushing Blow (once per day, +2 damage)"
+    ],
+    "traits": [
+      "Undead Fortitude"
+    ],
+    "environment": "Ancient tomb",
+    "motif_affinities": ["Survival"],
+    "faction": "Cairn-Bound Horrors",
+    "narrative_hooks": [
+      "Constructed from the bones of warriors, these undead keep vigil over cursed barrows."
+    ],
+    "id": "maul_husk",
+    "name": "Maul Husk"
+  }
+]

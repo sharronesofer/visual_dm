@@ -1,0 +1,38 @@
+{
+  "Lawful Good": {
+    "description": "Acts as a good person is expected or required to act. Combines honor and compassion.",
+    "example_behaviors": ["Help others", "Tell the truth", "Keep promises", "Protect the innocent"]
+  },
+  "Neutral Good": {
+    "description": "Does the best that a good person can do. Committed to helping others, but doesn’t feel beholden to laws.",
+    "example_behaviors": ["Help others", "Do what is right regardless of law"]
+  },
+  "Chaotic Good": {
+    "description": "Acts as conscience directs, with little regard for expectations. Values freedom, not rules.",
+    "example_behaviors": ["Defy authority for justice", "Break laws that hurt people", "Support revolution"]
+  },
+  "Lawful Neutral": {
+    "description": "Acts in accordance with law, tradition, or a personal code.",
+    "example_behaviors": ["Follow orders", "Keep records", "Judge fairly, even without emotion"]
+  },
+  "True Neutral": {
+    "description": "Does what seems best at the time. Doesn’t feel strongly toward any alignment.",
+    "example_behaviors": ["Balance forces", "Avoid extreme positions", "Observe and adapt"]
+  },
+  "Chaotic Neutral": {
+    "description": "Values freedom and randomness above all. Avoids authority, but not necessarily wicked.",
+    "example_behaviors": ["Act unpredictably", "Follow whims", "Break norms"]
+  },
+  "Lawful Evil": {
+    "description": "Uses law to advance selfish or cruel goals. Methodical, calculating villainy.",
+    "example_behaviors": ["Exploit loopholes", "Use contracts against others", "Follow evil orders to the letter"]
+  },
+  "Neutral Evil": {
+    "description": "Does whatever it can get away with, without compassion or qualms.",
+    "example_behaviors": ["Lie", "Cheat", "Use violence if convenient"]
+  },
+  "Chaotic Evil": {
+    "description": "Does whatever their greed, hatred, or lust for destruction drives them to do.",
+    "example_behaviors": ["Revel in chaos", "Hurt others for fun", "Destroy property"]
+  }
+}

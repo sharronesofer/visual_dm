@@ -1,0 +1,62 @@
+{
+    "Invisibility": {
+      "school": "Illusion (Glamer)",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S", "M"],
+      "duration": "1 min/level (D)",
+      "saving_throw": "Will negates (harmless, object)",
+      "spell_resistance": "Yes (harmless, object)",
+      "description": "Subject is invisible until it attacks or casts a spell."
+    },
+    "Cure Moderate Wounds": {
+      "school": "Conjuration (Healing)",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S"],
+      "duration": "Instantaneous",
+      "saving_throw": "Will half (harmless)",
+      "spell_resistance": "Yes (harmless)",
+      "description": "Cures 2d8 +1/level damage (max +10)."
+    },
+    "Mirror Image": {
+      "school": "Illusion (Figment)",
+      "casting_time": "1 standard action",
+      "range": "Personal",
+      "components": ["V", "S"],
+      "duration": "1 min/level",
+      "saving_throw": "None",
+      "spell_resistance": "No",
+      "description": "Creates 1d4 + 1 images (plus one per three levels) that mimic your movements to confuse attackers."
+    },
+    "Scorching Ray": {
+      "school": "Evocation [Fire]",
+      "casting_time": "1 standard action",
+      "range": "Close (25 ft. + 5 ft./2 levels)",
+      "components": ["V", "S"],
+      "duration": "Instantaneous",
+      "saving_throw": "None",
+      "spell_resistance": "Yes",
+      "description": "Deals 4d6 fire damage, multiple rays at higher levels."
+    },
+    "Bull's Strength": {
+      "school": "Transmutation",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S", "M"],
+      "duration": "1 min/level",
+      "saving_throw": "Will negates (harmless)",
+      "spell_resistance": "Yes (harmless)",
+      "description": "Subject gains +4 enhancement bonus to Strength."
+    },
+    "Blur": {
+      "school": "Illusion (Glamer)",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V"],
+      "duration": "1 round/level",
+      "saving_throw": "Will negates (harmless)",
+      "spell_resistance": "Yes",
+      "description": "Attacks against subject have 20% miss chance."
+    }
+  }

@@ -1,0 +1,586 @@
+{
+  "Barbarian": {
+    "hit_die": "d12",
+    "base_attack_bonus": "full",
+    "good_saves": [
+      "Fortitude"
+    ],
+    "skill_points_per_level": 4,
+    "class_skills": [
+      "Climb",
+      "Craft",
+      "Handle Animal",
+      "Intimidate",
+      "Jump",
+      "Listen",
+      "Ride",
+      "Survival",
+      "Swim"
+    ],
+    "proficiencies": [
+      "all simple and martial weapons",
+      "light armor",
+      "medium armor",
+      "shields (except tower shields)"
+    ],
+    "features": {
+      "1": [
+        "Fast Movement",
+        "Illiteracy",
+        "Rage 1/day"
+      ]
+    },
+    "starting_gold_dice": "4d4 * 10",
+    "description": "A fierce warrior driven by rage, skilled in melee combat and raw survivability.",
+    "is_spellcaster": false
+  },
+  "Bard": {
+    "hit_die": "d6",
+    "base_attack_bonus": "medium",
+    "good_saves": [
+      "Reflex",
+      "Will"
+    ],
+    "skill_points_per_level": 6,
+    "class_skills": [
+      "Appraise",
+      "Balance",
+      "Bluff",
+      "Climb",
+      "Concentration",
+      "Craft",
+      "Decipher Script",
+      "Diplomacy",
+      "Disguise",
+      "Escape Artist",
+      "Gather Information",
+      "Hide",
+      "Jump",
+      "Knowledge",
+      "Listen",
+      "Move Silently",
+      "Perform",
+      "Profession",
+      "Sense Motive",
+      "Sleight of Hand",
+      "Speak Language",
+      "Spellcraft",
+      "Swim",
+      "Tumble",
+      "Use Magic Device"
+    ],
+    "proficiencies": [
+      "all simple weapons",
+      "longsword",
+      "rapier",
+      "sap",
+      "short sword",
+      "shortbow",
+      "whip",
+      "light armor",
+      "shields (except tower shields)"
+    ],
+    "features": {
+      "1": [
+        "Bardic Music",
+        "Bardic Knowledge",
+        "Countersong",
+        "Fascinate",
+        "Inspire Courage +1"
+      ]
+    },
+    "starting_gold_dice": "3d4 * 10",
+    "description": "A versatile performer who uses music and lore to inspire, manipulate, and cast spells.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 2,
+      "1": 1
+    }
+  },
+  "Cleric": {
+    "hit_die": "d8",
+    "base_attack_bonus": "medium",
+    "good_saves": [
+      "Fortitude",
+      "Will"
+    ],
+    "skill_points_per_level": 2,
+    "class_skills": [
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Heal",
+      "Knowledge (arcana)",
+      "Knowledge (religion)",
+      "Knowledge (the planes)",
+      "Profession",
+      "Spellcraft"
+    ],
+    "proficiencies": [
+      "all simple weapons",
+      "all armor (light, medium, heavy)",
+      "shields (except tower shields)"
+    ],
+    "features": {
+      "1": [
+        "Aura",
+        "Turn or Rebuke Undead",
+        "Domains"
+      ]
+    },
+    "starting_gold_dice": "5d4 * 10",
+    "description": "A divine spellcaster who channels the power of a deity to heal and smite.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 3,
+      "1": 1
+    }
+  },
+  "Druid": {
+    "hit_die": "d8",
+    "base_attack_bonus": "medium",
+    "good_saves": [
+      "Fortitude",
+      "Will"
+    ],
+    "skill_points_per_level": 4,
+    "class_skills": [
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Handle Animal",
+      "Heal",
+      "Knowledge (nature)",
+      "Listen",
+      "Profession",
+      "Ride",
+      "Spellcraft",
+      "Spot",
+      "Survival",
+      "Swim"
+    ],
+    "proficiencies": [
+      "all simple weapons",
+      "scimitar",
+      "sickle",
+      "club",
+      "dagger",
+      "dart",
+      "quarterstaff",
+      "spear",
+      "light and medium armor",
+      "shields (except metal)"
+    ],
+    "features": {
+      "1": [
+        "Nature Sense",
+        "Wild Empathy",
+        "Animal Companion"
+      ]
+    },
+    "starting_gold_dice": "2d4 * 10",
+    "description": "A shapeshifting priest of nature who casts spells and commands the wild.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 3,
+      "1": 1
+    }
+  },
+  "Fighter": {
+    "hit_die": "d10",
+    "base_attack_bonus": "full",
+    "good_saves": [
+      "Fortitude"
+    ],
+    "skill_points_per_level": 2,
+    "class_skills": [
+      "Climb",
+      "Craft",
+      "Handle Animal",
+      "Intimidate",
+      "Jump",
+      "Ride",
+      "Swim"
+    ],
+    "proficiencies": [
+      "all simple and martial weapons",
+      "all armor (light, medium, heavy)",
+      "shields (including tower shields)"
+    ],
+    "features": {
+      "1": [
+        "Bonus Feat"
+      ]
+    },
+    "starting_gold_dice": "6d4 * 10",
+    "description": "A martial expert trained in various weapons and armor, unmatched in physical combat.",
+    "is_spellcaster": false
+  },
+  "Monk": {
+    "hit_die": "d8",
+    "base_attack_bonus": "medium",
+    "good_saves": [
+      "Fortitude",
+      "Reflex",
+      "Will"
+    ],
+    "skill_points_per_level": 4,
+    "class_skills": [
+      "Balance",
+      "Climb",
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Escape Artist",
+      "Hide",
+      "Jump",
+      "Knowledge (arcana)",
+      "Listen",
+      "Move Silently",
+      "Perform",
+      "Profession",
+      "Sense Motive",
+      "Spot",
+      "Swim",
+      "Tumble"
+    ],
+    "proficiencies": [
+      "no armor or shields",
+      "special monk weapons"
+    ],
+    "features": {
+      "1": [
+        "Flurry of Blows",
+        "Unarmed Strike",
+        "Bonus Feat"
+      ]
+    },
+    "starting_gold_dice": "1d4 * 10",
+    "description": "A master of martial arts and inner power, fighting unarmored and unarmed with speed and precision.",
+    "is_spellcaster": false
+  },
+  "Paladin": {
+    "hit_die": "d10",
+    "base_attack_bonus": "full",
+    "good_saves": [
+      "Fortitude"
+    ],
+    "skill_points_per_level": 2,
+    "class_skills": [
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Handle Animal",
+      "Heal",
+      "Knowledge (nobility)",
+      "Knowledge (religion)",
+      "Profession",
+      "Ride",
+      "Sense Motive"
+    ],
+    "proficiencies": [
+      "all simple and martial weapons",
+      "all armor (light, medium, heavy)",
+      "shields (including tower shields)"
+    ],
+    "features": {
+      "1": [
+        "Aura of Good",
+        "Detect Evil",
+        "Smite Evil 1/day"
+      ]
+    },
+    "starting_gold_dice": "6d4 * 10",
+    "description": "A divine champion sworn to righteousness, granted holy powers and divine smites.",
+    "is_spellcaster": false
+  },
+  "Ranger": {
+    "hit_die": "d8",
+    "base_attack_bonus": "full",
+    "good_saves": [
+      "Fortitude",
+      "Reflex"
+    ],
+    "skill_points_per_level": 6,
+    "class_skills": [
+      "Climb",
+      "Concentration",
+      "Craft",
+      "Handle Animal",
+      "Heal",
+      "Hide",
+      "Jump",
+      "Knowledge (dungeoneering)",
+      "Knowledge (geography)",
+      "Listen",
+      "Move Silently",
+      "Profession",
+      "Ride",
+      "Search",
+      "Spot",
+      "Survival",
+      "Swim",
+      "Use Rope"
+    ],
+    "proficiencies": [
+      "all simple and martial weapons",
+      "light armor",
+      "medium armor",
+      "shields (except tower shields)"
+    ],
+    "features": {
+      "1": [
+        "Track",
+        "Favored Enemy"
+      ]
+    },
+    "starting_gold_dice": "5d4 * 10",
+    "description": "A nature-based warrior skilled in ranged weapons, tracking, and minor spellcasting.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 2,
+      "1": 1
+    }
+  },
+  "Rogue": {
+    "hit_die": "d6",
+    "base_attack_bonus": "medium",
+    "good_saves": [
+      "Reflex"
+    ],
+    "skill_points_per_level": 8,
+    "class_skills": [
+      "Appraise",
+      "Balance",
+      "Bluff",
+      "Climb",
+      "Craft",
+      "Decipher Script",
+      "Diplomacy",
+      "Disable Device",
+      "Disguise",
+      "Escape Artist",
+      "Forgery",
+      "Gather Information",
+      "Hide",
+      "Intimidate",
+      "Jump",
+      "Knowledge (local)",
+      "Listen",
+      "Move Silently",
+      "Open Lock",
+      "Perform",
+      "Profession",
+      "Search",
+      "Sense Motive",
+      "Sleight of Hand",
+      "Spot",
+      "Swim",
+      "Tumble",
+      "Use Magic Device",
+      "Use Rope"
+    ],
+    "proficiencies": [
+      "all simple weapons",
+      "hand crossbow",
+      "rapier",
+      "sap",
+      "shortbow",
+      "short sword",
+      "light armor",
+      "no shields"
+    ],
+    "features": {
+      "1": [
+        "Sneak Attack +1d6",
+        "Trapfinding"
+      ]
+    },
+    "starting_gold_dice": "4d4 * 10",
+    "description": "A cunning and stealthy trickster, adept in sneak attacks, disarming traps, and deception.",
+    "is_spellcaster": false
+  },
+  "Sorcerer": {
+    "hit_die": "d4",
+    "base_attack_bonus": "low",
+    "good_saves": [
+      "Will"
+    ],
+    "skill_points_per_level": 2,
+    "class_skills": [
+      "Bluff",
+      "Concentration",
+      "Craft",
+      "Knowledge (arcana)",
+      "Profession",
+      "Spellcraft"
+    ],
+    "proficiencies": [
+      "all simple weapons",
+      "no armor or shields"
+    ],
+    "features": {
+      "1": [
+        "Summon Familiar"
+      ]
+    },
+    "starting_gold_dice": "3d4 * 10",
+    "description": "A spellcaster who draws on innate magical power from a mystical bloodline.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 4,
+      "1": 2
+    }
+  },
+  "Wizard": {
+    "hit_die": "d4",
+    "base_attack_bonus": "low",
+    "good_saves": [
+      "Will"
+    ],
+    "skill_points_per_level": 2,
+    "class_skills": [
+      "Concentration",
+      "Craft",
+      "Decipher Script",
+      "Knowledge (all)",
+      "Profession",
+      "Spellcraft"
+    ],
+    "proficiencies": [
+      "club",
+      "dagger",
+      "heavy crossbow",
+      "light crossbow",
+      "quarterstaff",
+      "no armor or shields"
+    ],
+    "features": {
+      "1": [
+        "Scribe Scroll",
+        "Summon Familiar"
+      ]
+    },
+    "starting_gold_dice": "2d4 * 10",
+    "description": "A scholarly arcane caster who prepares spells from a spellbook and manipulates reality.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 3,
+      "1": 1
+    }
+  },
+  "Witch": {
+    "hit_die": "d6",
+    "base_attack_bonus": "low",
+    "good_saves": [
+      "Will"
+    ],
+    "skill_points_per_level": 4,
+    "class_skills": [
+      "Concentration",
+      "Craft",
+      "Heal",
+      "Knowledge (arcana)",
+      "Knowledge (nature)",
+      "Profession",
+      "Sense Motive",
+      "Spellcraft",
+      "Use Magic Device"
+    ],
+    "proficiencies": [
+      "dagger",
+      "quarterstaff",
+      "club",
+      "light armor"
+    ],
+    "features": {
+      "1": [
+        "Hex (1/day)",
+        "Witch\u2019s Familiar",
+        "Darkvision"
+      ]
+    },
+    "starting_gold_dice": "3d4 * 10",
+    "description": "A spellcaster who communes with otherworldly powers through rituals and a familiar.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 3,
+      "1": 1
+    }
+  },
+  "Gunslinger": {
+    "hit_die": "d10",
+    "base_attack_bonus": "full",
+    "good_saves": [
+      "Reflex"
+    ],
+    "skill_points_per_level": 4,
+    "class_skills": [
+      "Balance",
+      "Climb",
+      "Craft",
+      "Disable Device",
+      "Escape Artist",
+      "Hide",
+      "Intimidate",
+      "Jump",
+      "Listen",
+      "Move Silently",
+      "Ride",
+      "Search",
+      "Spot",
+      "Survival",
+      "Tumble",
+      "Use Rope"
+    ],
+    "proficiencies": [
+      "firearms",
+      "light armor",
+      "bucklers"
+    ],
+    "features": {
+      "1": [
+        "Quick Draw",
+        "Firearm Proficiency",
+        "Deadeye Shot"
+      ]
+    },
+    "starting_gold_dice": "5d4 * 10",
+    "description": "A martial class that specializes in firearms, fast reflexes, and stylish shooting.",
+    "is_spellcaster": false
+  },
+  "Psion": {
+    "hit_die": "d6",
+    "base_attack_bonus": "low",
+    "good_saves": [
+      "Will"
+    ],
+    "skill_points_per_level": 2,
+    "class_skills": [
+      "Autohypnosis",
+      "Concentration",
+      "Knowledge (psionics)",
+      "Profession",
+      "Psicraft"
+    ],
+    "proficiencies": [
+      "dagger",
+      "quarterstaff",
+      "no armor or shields"
+    ],
+    "features": {
+      "1": [
+        "Psionic Manifestation",
+        "Power Pool",
+        "Focus Discipline"
+      ]
+    },
+    "starting_gold_dice": "2d4 * 10",
+    "description": "A master of psionics who manifests mental powers through discipline and training.",
+    "is_spellcaster": true,
+    "spells_known_at_level_1": {
+      "0": 2,
+      "1": 2
+    }
+  }
+}

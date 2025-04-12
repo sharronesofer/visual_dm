@@ -1,0 +1,529 @@
+{
+  "grassland": {
+    "danger_range": [
+      0,
+      3
+    ],
+    "description": "Rolling fields and scattered wildflowers.",
+    "encouraged": [
+      "farming villages",
+      "merchant caravans"
+    ],
+    "forbidden": [
+      "large predatory beasts",
+      "arcane anomalies"
+    ],
+    "rarity": 1,
+    "population_modifier": 1.1
+  },
+  "forest": {
+    "danger_range": [
+      2,
+      5
+    ],
+    "description": "Thick woods with dappled sunlight.",
+    "encouraged": [
+      "ranger outposts",
+      "ancient ruins"
+    ],
+    "forbidden": [
+      "massive fortresses",
+      "desert flora"
+    ],
+    "rarity": 1,
+    "population_modifier": 0.95
+  },
+  "riverlands": {
+    "danger_range": [
+      1,
+      4
+    ],
+    "description": "Meandering rivers and fertile banks.",
+    "encouraged": [
+      "fishing towns",
+      "water spirits"
+    ],
+    "forbidden": [
+      "volcanic activity",
+      "undead swarms"
+    ],
+    "rarity": 2,
+    "population_modifier": 1.15
+  },
+  "hills": {
+    "danger_range": [
+      2,
+      4
+    ],
+    "description": "Gentle slopes and rocky outcrops.",
+    "encouraged": [
+      "shepherding",
+      "hidden caches"
+    ],
+    "forbidden": [
+      "dense jungles",
+      "crystalline terrain"
+    ],
+    "rarity": 2,
+    "population_modifier": 0.9
+  },
+  "wetlands": {
+    "danger_range": [
+      3,
+      6
+    ],
+    "description": "Boggy marshes and reed-choked pools.",
+    "encouraged": [
+      "amphibious monsters",
+      "drifting settlements"
+    ],
+    "forbidden": [
+      "dry terrain features",
+      "snow"
+    ],
+    "rarity": 3,
+    "population_modifier": 0.85
+  },
+  "desert": {
+    "danger_range": [
+      4,
+      7
+    ],
+    "description": "Windswept dunes and ancient bones.",
+    "encouraged": [
+      "oasis cults",
+      "buried temples"
+    ],
+    "forbidden": [
+      "lush greenery",
+      "ice magic"
+    ],
+    "rarity": 3,
+    "population_modifier": 0.75
+  },
+  "tundra": {
+    "danger_range": [
+      3,
+      6
+    ],
+    "description": "Frozen plains and biting winds.",
+    "encouraged": [
+      "nomadic tribes",
+      "ice elementals"
+    ],
+    "forbidden": [
+      "volcanic creatures",
+      "jungle fauna"
+    ],
+    "rarity": 3,
+    "population_modifier": 0.7
+  },
+  "mountains": {
+    "danger_range": [
+      4,
+      8
+    ],
+    "description": "Towering peaks and narrow passes.",
+    "encouraged": [
+      "dragon nests",
+      "dwarven halls"
+    ],
+    "forbidden": [
+      "wetlands",
+      "floating structures"
+    ],
+    "rarity": 3,
+    "population_modifier": 0.65
+  },
+  "savanna": {
+    "danger_range": [
+      2,
+      5
+    ],
+    "description": "Tall grasses and scattered acacia trees.",
+    "encouraged": [
+      "beast herds",
+      "tribal waystations"
+    ],
+    "forbidden": [
+      "frost entities",
+      "deepwater creatures"
+    ],
+    "rarity": 2,
+    "population_modifier": 1.0
+  },
+  "jungle": {
+    "danger_range": [
+      5,
+      8
+    ],
+    "description": "Dense, humid and teeming with life.",
+    "encouraged": [
+      "lost civilizations",
+      "poisonous plants"
+    ],
+    "forbidden": [
+      "snowy terrain",
+      "arcane constructs"
+    ],
+    "rarity": 4,
+    "population_modifier": 0.85
+  },
+  "coastal": {
+    "danger_range": [
+      1,
+      4
+    ],
+    "description": "Rocky shores and tide-swept beaches.",
+    "encouraged": [
+      "fishing villages",
+      "shipwrecks"
+    ],
+    "forbidden": [
+      "mountain peaks",
+      "volcanic eruptions"
+    ],
+    "rarity": 2,
+    "population_modifier": 1.15
+  },
+  "volcano": {
+    "danger_range": [
+      6,
+      10
+    ],
+    "description": "Molten rock and choking smoke.",
+    "encouraged": [
+      "fire cults",
+      "elemental nodes"
+    ],
+    "forbidden": [
+      "cold-blooded animals",
+      "forests"
+    ],
+    "rarity": 8,
+    "population_modifier": 0.6
+  },
+  "cursed_lands": {
+    "danger_range": [
+      7,
+      10
+    ],
+    "description": "Blighted ground and whispering winds.",
+    "encouraged": [
+      "necromancers",
+      "haunted memories"
+    ],
+    "forbidden": [
+      "holy sites",
+      "thriving farms"
+    ],
+    "rarity": 9,
+    "population_modifier": 0.5
+  },
+  "toxic_swamp": {
+    "danger_range": [
+      6,
+      9
+    ],
+    "description": "Noxious gases and luminous fungi.",
+    "encouraged": [
+      "mutant fauna",
+      "abandoned labs"
+    ],
+    "forbidden": [
+      "clean water",
+      "winged wildlife"
+    ],
+    "rarity": 7,
+    "population_modifier": 0.55
+  },
+  "necrotic_fields": {
+    "danger_range": [
+      7,
+      10
+    ],
+    "description": "Dry cracked soil and bone piles.",
+    "encouraged": [
+      "undead armies",
+      "death cults"
+    ],
+    "forbidden": [
+      "living forests",
+      "innocent travelers"
+    ],
+    "rarity": 9,
+    "population_modifier": 0.6
+  },
+  "haunted_woods": {
+    "danger_range": [
+      5,
+      9
+    ],
+    "description": "Gloomy trees and cold fog.",
+    "encouraged": [
+      "ghosts",
+      "cursed altars"
+    ],
+    "forbidden": [
+      "sunlight",
+      "temples of good"
+    ],
+    "rarity": 6,
+    "population_modifier": 0.7
+  },
+  "frozen_wastes": {
+    "danger_range": [
+      5,
+      9
+    ],
+    "description": "Perpetual snow and ancient ice.",
+    "encouraged": [
+      "ice beasts",
+      "forgotten relics"
+    ],
+    "forbidden": [
+      "lava",
+      "jungle animals"
+    ],
+    "rarity": 6,
+    "population_modifier": 0.65
+  },
+  "scorched_plains": {
+    "danger_range": [
+      6,
+      9
+    ],
+    "description": "Ash-covered ground and blackened skies.",
+    "encouraged": [
+      "ash demons",
+      "war zones"
+    ],
+    "forbidden": [
+      "rivers",
+      "living flora"
+    ],
+    "rarity": 7,
+    "population_modifier": 0.6
+  },
+  "shattered_mountains": {
+    "danger_range": [
+      6,
+      10
+    ],
+    "description": "Fractured peaks and floating rock debris.",
+    "encouraged": [
+      "earthquakes",
+      "air elementals"
+    ],
+    "forbidden": [
+      "orderly settlements",
+      "normal gravity"
+    ],
+    "rarity": 9,
+    "population_modifier": 0.55
+  },
+  "wasteland": {
+    "danger_range": [
+      6,
+      9
+    ],
+    "description": "Barren and wind-blasted with eerie silence.",
+    "encouraged": [
+      "exiled factions",
+      "buried weapons"
+    ],
+    "forbidden": [
+      "natural beauty",
+      "innocent creatures"
+    ],
+    "rarity": 7,
+    "population_modifier": 0.5
+  },
+  "ruins": {
+    "danger_range": [
+      4,
+      8
+    ],
+    "description": "Crumbling stone and echoes of the past.",
+    "encouraged": [
+      "ancient secrets",
+      "traps"
+    ],
+    "forbidden": [
+      "new construction",
+      "vibrant life"
+    ],
+    "rarity": 5,
+    "population_modifier": 0.75
+  },
+  "arcane_storm": {
+    "danger_range": [
+      7,
+      10
+    ],
+    "description": "Swirling magical energy and chaos.",
+    "encouraged": [
+      "elemental rifts",
+      "wild mages"
+    ],
+    "forbidden": [
+      "mundane reality",
+      "stable technology"
+    ],
+    "rarity": 9,
+    "population_modifier": 0.7
+  },
+  "celestial_plateau": {
+    "danger_range": [
+      2,
+      6
+    ],
+    "description": "Radiant fields touched by divine essence.",
+    "encouraged": [
+      "angels",
+      "holy quests"
+    ],
+    "forbidden": [
+      "undead",
+      "blasphemy"
+    ],
+    "rarity": 6,
+    "population_modifier": 0.9
+  },
+  "void_rift": {
+    "danger_range": [
+      8,
+      10
+    ],
+    "description": "A crack in reality itself.",
+    "encouraged": [
+      "eldritch horrors",
+      "lost time"
+    ],
+    "forbidden": [
+      "order",
+      "safe travel"
+    ],
+    "rarity": 10,
+    "population_modifier": 0.4
+  },
+  "floating_isles": {
+    "danger_range": [
+      5,
+      9
+    ],
+    "description": "Gravity-defying land masses.",
+    "encouraged": [
+      "sky pirates",
+      "rare herbs"
+    ],
+    "forbidden": [
+      "tunneling creatures",
+      "caves"
+    ],
+    "rarity": 8,
+    "population_modifier": 0.6
+  },
+  "crystal_forest": {
+    "danger_range": [
+      4,
+      7
+    ],
+    "description": "Glittering trees of solid gem.",
+    "encouraged": [
+      "magical creatures",
+      "singing stones"
+    ],
+    "forbidden": [
+      "woodcutters",
+      "mundane wildlife"
+    ],
+    "rarity": 6,
+    "population_modifier": 1.0
+  },
+  "grave_valley": {
+    "danger_range": [
+      6,
+      10
+    ],
+    "description": "A long depression filled with tombs.",
+    "encouraged": [
+      "restless dead",
+      "forgotten kings"
+    ],
+    "forbidden": [
+      "festivals",
+      "sunlight"
+    ],
+    "rarity": 7,
+    "population_modifier": 0.6
+  },
+  "fungal_jungle": {
+    "danger_range": [
+      5,
+      9
+    ],
+    "description": "Gigantic mushrooms and glowing spores.",
+    "encouraged": [
+      "myconids",
+      "hallucinogens"
+    ],
+    "forbidden": [
+      "light magic",
+      "flammables"
+    ],
+    "rarity": 6,
+    "population_modifier": 0.75
+  },
+  "sunken_city": {
+    "danger_range": [
+      6,
+      10
+    ],
+    "description": "Ruins deep beneath the water.",
+    "encouraged": [
+      "sea witches",
+      "forgotten tech"
+    ],
+    "forbidden": [
+      "dry air",
+      "above-ground buildings"
+    ],
+    "rarity": 9,
+    "population_modifier": 0.5
+  },
+  "clockwork_canyon": {
+    "danger_range": [
+      5,
+      8
+    ],
+    "description": "Ancient machines embedded in rock.",
+    "encouraged": [
+      "automata",
+      "ancient inventors"
+    ],
+    "forbidden": [
+      "organic growth",
+      "wild magic"
+    ],
+    "rarity": 8,
+    "population_modifier": 0.8
+  },
+  "obsidian_sea": {
+    "danger_range": [
+      7,
+      10
+    ],
+    "description": "Vast stretches of glassy black rock.",
+    "encouraged": [
+      "mirror beasts",
+      "dark omens"
+    ],
+    "forbidden": [
+      "flowing water",
+      "natural sound"
+    ],
+    "rarity": 10,
+    "population_modifier": 0.5
+  }
+}

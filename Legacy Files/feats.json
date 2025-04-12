@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Grim Harvest",
+    "skill": "Arcana",
+    "mp_cost": null,
+    "effect": "Regain HP when you kill creatures with spells",
+    "purchased_points": "Arcana skill rank 1",
+    "feat_prerequisite": ""
+  },
+  {
+    "name": "Hypnotic Gaze",
+    "skill": "Arcana",
+    "mp_cost": null,
+    "effect": "Charm creature in melee; incapacitate it until harmed",
+    "purchased_points": "Arcana skill rank 1",
+    "feat_prerequisite": ""
+  },
+  {
+    "name": "Arcane Ward",
+    "skill": "Arcana",
+    "mp_cost": null,
+    "effect": "Create shield of HP when casting abjuration spells",
+    "purchased_points": "Arcana skill rank 1",
+    "feat_prerequisite": ""
+  },
+  {
+    "name": "Acuity",
+    "skill": "Domain",
+    "mp_cost": null,
+    "effect": "Increase your MP on level up to 1d12+int",
+    "purchased_points": "Domain skill 1",
+    "feat_prerequisite": ""
+  },
+  {
+    "name": "Rage",
+    "skill": "Athletics",
+    "mp_cost": 15,
+    "effect": "Bonus damage, resistance",
+    "purchased_points": "Athletics skill rank 1",
+    "feat_prerequisite": ""
+  },
+  {
+    "name": "Agonizing Blast",
+    "skill": "Occult",
+    "mp_cost": null,
+    "effect": "Add CHA modifier to Eldritch Blast damage",
+    "purchased_points": "",
+    "feat_prerequisite": "Eldritch Blast"
+  },
+  {
+    "name": "Level 3 Spell",
+    "skill": "Domain",
+    "mp_cost": 5,
+    "effect": "Level 3 Spells",
+    "purchased_points": "",
+    "feat_prerequisite": "Domain Spellcasting"
+  },
+  {
+    "name": "Unarmored Movement",
+    "skill": "Athletics",
+    "mp_cost": null,
+    "effect": "+10 ft speed when not wearing armor",
+    "purchased_points": "Athletics skill rank 1",
+    "feat_prerequisite": ""
+  },
+  {
+    "name": "War Caster",
+    "skill": "Domain",
+    "mp_cost": null,
+    "effect": "Advantage on concentration saves, cast while hands full, OA with spells.",
+    "purchased_points": "Divine skill rank 1",
+    "feat_prerequisite": ""
+  },
+  {
+    "name": "Divine Spellcasting",
+    "skill": "Divine",
+    "mp_cost": null,
+    "effect": "Full divine caster (WIS) with prepared spells",
+    "purchased_points": "Divine skill rank 1",
+    "feat_prerequisite": ""
+  }
+]

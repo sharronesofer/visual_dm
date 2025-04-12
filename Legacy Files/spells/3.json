@@ -1,0 +1,72 @@
+{
+    "Fireball": {
+      "school": "Evocation [Fire]",
+      "casting_time": "1 standard action",
+      "range": "Long (400 ft. + 40 ft./level)",
+      "components": ["V", "S", "M"],
+      "duration": "Instantaneous",
+      "saving_throw": "Reflex half",
+      "spell_resistance": "Yes",
+      "description": "Deals 1d6 fire damage per level (max 10d6) in a 20-ft.-radius spread."
+    },
+    "Fly": {
+      "school": "Transmutation",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S", "F"],
+      "duration": "1 min/level",
+      "saving_throw": "Will negates (harmless)",
+      "spell_resistance": "Yes (harmless)",
+      "description": "Subject flies at speed of 60 ft. (good maneuverability)."
+    },
+    "Dispel Magic": {
+      "school": "Abjuration",
+      "casting_time": "1 standard action",
+      "range": "Medium (100 ft. + 10 ft./level)",
+      "components": ["V", "S"],
+      "duration": "Instantaneous",
+      "saving_throw": "None",
+      "spell_resistance": "No",
+      "description": "Cancels one magical spell or effect."
+    },
+    "Lightning Bolt": {
+      "school": "Evocation [Electricity]",
+      "casting_time": "1 standard action",
+      "range": "120 ft.",
+      "components": ["V", "S", "M"],
+      "duration": "Instantaneous",
+      "saving_throw": "Reflex half",
+      "spell_resistance": "Yes",
+      "description": "Deals 1d6 electricity damage per level (max 10d6)."
+    },
+    "Haste": {
+      "school": "Transmutation",
+      "casting_time": "1 standard action",
+      "range": "Close (25 ft. + 5 ft./2 levels)",
+      "components": ["V", "S", "M"],
+      "duration": "1 round/level",
+      "saving_throw": "Fortitude negates (harmless)",
+      "spell_resistance": "Yes (harmless)",
+      "description": "One creature/level moves and acts more quickly."
+    },
+    "Slow": {
+      "school": "Transmutation",
+      "casting_time": "1 standard action",
+      "range": "Close (25 ft. + 5 ft./2 levels)",
+      "components": ["V", "S", "M"],
+      "duration": "1 round/level",
+      "saving_throw": "Will negates",
+      "spell_resistance": "Yes",
+      "description": "One subject/level has a reduced number of actions."
+    },
+    "Protection from Energy": {
+      "school": "Abjuration",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S", "DF"],
+      "duration": "10 min/level or until discharged",
+      "saving_throw": "Will negates (harmless)",
+      "spell_resistance": "Yes (harmless)",
+      "description": "Absorbs 12 points/level of damage from one kind of energy (max 120)."
+    }
+  }

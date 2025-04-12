@@ -1,0 +1,962 @@
+[
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Giant Rat Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Pack Tactics"
+    ],
+    "environment": "Sewers and ruins",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A giant rat has been harassing nearby travelers."
+    ],
+    "id": "giant_rat",
+    "name": "Giant Rat"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Kobold Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Sunlight Sensitivity",
+      "Pack Tactics"
+    ],
+    "environment": "Caves and warrens",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A kobold has been harassing nearby travelers."
+    ],
+    "id": "kobold",
+    "name": "Kobold"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Goblin Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Nimble Escape"
+    ],
+    "environment": "Forests and dungeons",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A goblin has been harassing nearby travelers."
+    ],
+    "id": "goblin",
+    "name": "Goblin"
+  },
+  {
+    "type": "Undead",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Skeleton Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Undead Fortitude"
+    ],
+    "environment": "Tombs and crypts",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A skeleton has been harassing nearby travelers."
+    ],
+    "id": "skeleton",
+    "name": "Skeleton"
+  },
+  {
+    "type": "Undead",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Zombie Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Undead Fortitude"
+    ],
+    "environment": "Graveyards",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A zombie has been harassing nearby travelers."
+    ],
+    "id": "zombie",
+    "name": "Zombie"
+  },
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Stirge Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Blood Drain"
+    ],
+    "environment": "Swamps and caves",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A stirge has been harassing nearby travelers."
+    ],
+    "id": "stirge",
+    "name": "Stirge"
+  },
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Wolf Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Pack Tactics"
+    ],
+    "environment": "Forests and hills",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A wolf has been harassing nearby travelers."
+    ],
+    "id": "wolf",
+    "name": "Wolf"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Bandit Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [],
+    "environment": "Roads and camps",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A bandit has been harassing nearby travelers."
+    ],
+    "id": "bandit",
+    "name": "Bandit"
+  },
+  {
+    "type": "Vermin",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Giant Centipede Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Poison Bite"
+    ],
+    "environment": "Caves",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A giant centipede has been harassing nearby travelers."
+    ],
+    "id": "giant_centipede",
+    "name": "Giant Centipede"
+  },
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Bat Swarm Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Swarm"
+    ],
+    "environment": "Caves and ruins",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A bat swarm has been harassing nearby travelers."
+    ],
+    "id": "bat_swarm",
+    "name": "Bat Swarm"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Gnoll Scout Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Aggressive"
+    ],
+    "environment": "Savannah and plains",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A gnoll scout has been harassing nearby travelers."
+    ],
+    "id": "gnoll_scout",
+    "name": "Gnoll Scout"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Troglodyte Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Stench"
+    ],
+    "environment": "Underdark",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A troglodyte has been harassing nearby travelers."
+    ],
+    "id": "troglodyte",
+    "name": "Troglodyte"
+  },
+  {
+    "type": "Fiend",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Quasit Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Magic Resistance",
+      "Shapechanger"
+    ],
+    "environment": "Abyss",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A quasit has been harassing nearby travelers."
+    ],
+    "id": "quasit",
+    "name": "Quasit"
+  },
+  {
+    "type": "Fey",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Blink Dog Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Teleport"
+    ],
+    "environment": "Forests",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A blink dog has been harassing nearby travelers."
+    ],
+    "id": "blink_dog",
+    "name": "Blink Dog"
+  },
+  {
+    "type": "Elemental",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Mephit Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Death Burst"
+    ],
+    "environment": "Elemental planes",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A mephit has been harassing nearby travelers."
+    ],
+    "id": "mephit",
+    "name": "Mephit"
+  },
+  {
+    "type": "Plant",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Myconid Sprout Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Pacifying Spores"
+    ],
+    "environment": "Underdark",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A myconid sprout has been harassing nearby travelers."
+    ],
+    "id": "myconid_sprout",
+    "name": "Myconid Sprout"
+  },
+  {
+    "type": "Plant",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Thorny Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Bramble Body"
+    ],
+    "environment": "Overgrown ruins",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A thorny has been harassing nearby travelers."
+    ],
+    "id": "thorny",
+    "name": "Thorny"
+  },
+  {
+    "type": "Beast",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Fire Beetle Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Glowing Glands"
+    ],
+    "environment": "Caves",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A fire beetle has been harassing nearby travelers."
+    ],
+    "id": "fire_beetle",
+    "name": "Fire Beetle"
+  },
+  {
+    "type": "Humanoid",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Lizardfolk Whelp Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Hold Breath"
+    ],
+    "environment": "Swamps",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A lizardfolk whelp has been harassing nearby travelers."
+    ],
+    "id": "lizardfolk_whelp",
+    "name": "Lizardfolk Whelp"
+  },
+  {
+    "type": "Plant",
+    "alignment": "Unaligned",
+    "challenge_rating": 0.25,
+    "hit_dice": "2d8+2",
+    "hp": 11,
+    "armor_class": 13,
+    "touch_ac": 13,
+    "flat_footed_ac": 11,
+    "initiative": 1,
+    "speed": "30 ft.",
+    "abilities": {
+      "Strength": 10,
+      "Dexterity": 12,
+      "Constitution": 12,
+      "Intelligence": 2,
+      "Wisdom": 12,
+      "Charisma": 6
+    },
+    "skills": {},
+    "attacks": [
+      {
+        "name": "Fungoid Attack",
+        "type": "melee",
+        "damage": "1d6+1",
+        "critical": "20/x2",
+        "damage_type": [
+          "piercing"
+        ],
+        "to_hit": 3
+      }
+    ],
+    "equipment": {},
+    "special_abilities": [],
+    "traits": [
+      "Poison Spores"
+    ],
+    "environment": "Fungal groves",
+    "motif_affinities": [
+      "Survival"
+    ],
+    "faction": "Wilderness Threats",
+    "narrative_hooks": [
+      "A fungoid has been harassing nearby travelers."
+    ],
+    "id": "fungoid",
+    "name": "Fungoid"
+  }
+]

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Chat Testing</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #chatLog {
+      width: 100%; 
+      height: 400px; 
+      border: 1px solid #ccc; 
+      padding: 10px; 
+      overflow-y: scroll; 
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+    }
+    #messageInput {
+      width: 80%;
+      padding: 10px;
+    }
+    #sendButton {
+      padding: 10px 20px;
+    }
+
+    .userMessage {
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 5px 0;
+    }
+    .dmMessage {
+      background-color: #ddeeff;
+      color: #2a2a2a;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 0.5em 0;
+    }
+    .systemMessage {
+      color: red;
+      font-weight: bold;
+    }
+
+    #signUpForm, #loginForm {
+      margin-bottom: 20px;
+    }
+    #signUpForm input, #loginForm input {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #signUpButton, #loginButton {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
+      color: white;
+    }
+    #signUpButton {
+      background-color: #28a745; /* green */
+    }
+    #loginButton {
+      background-color: #17a2b8; /* teal/blue */
+    }
+    #signUpButton:hover {
+      background-color: #218838;
+    }
+    #loginButton:hover {
+      background-color: #138496;
+    }
+
+    #chatContainer {
+      display: none; /* Hide chat until user is logged in or signed up */
+    }
+  </style>
+</head>
+<body>
+  <h1>Live Chat Testing</h1>
+  
+  <!-- Sign Up Form -->
+  <div id="signUpForm">
+    <h2>Sign Up</h2>
+    <input type="text" id="signUpUsername" placeholder="Username">
+    <input type="email" id="signUpEmail" placeholder="Email">
+    <input type="password" id="signUpPassword" placeholder="Password">
+    <button id="signUpButton">Sign Up</button>
+    <p id="signUpError" style="color: red;"></p>
+  </div>
+
+  <!-- Login Form -->
+  <div id="loginForm">
+    <h2>Login</h2>
+    <input type="text" id="loginUsername" placeholder="Username">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button id="loginButton">Log In</button>
+    <p id="loginError" style="color: red;"></p>
+  </div>
+
+  <!-- Chat Box -->
+  <div id="chatContainer">
+    <div id="chatLog"></div>
+    <input type="text" id="messageInput" placeholder="Type your message here...">
+    <button id="sendButton">Send</button>
+  </div>
+
+  <script>
+    // Inserts a newline after every 4th period and every 2nd double-quote
+    function formatTextByRules(text) {
+      let result = "";
+      let periodCount = 0;
+      let quoteCount = 0;
+
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+
+        // Count periods
+        if (c === ".") {
+          periodCount++;
+          // After 4th period, insert a newline
+          if (periodCount === 4) {
+            result += "." + "\n";
+            periodCount = 0;
+            continue;
+          }
+        } else {
+          // Only counting consecutive periods. If you prefer total period counting, remove this reset.
+          periodCount = 0;
+        }
+
+        // Count quotes
+        if (c === '"') {
+          quoteCount++;
+          // After 2 quotes, insert a newline
+          if (quoteCount === 2) {
+            result += '"' + "\n";
+            quoteCount = 0;
+            continue;
+          }
+        }
+
+        // Append character
+        result += c;
+      }
+
+      return result;
+    }
+
+    const chatLog = document.getElementById('chatLog');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const signUpButton = document.getElementById('signUpButton');
+    const signUpForm = document.getElementById('signUpForm');
+    const signUpError = document.getElementById('signUpError');
+    const loginForm = document.getElementById('loginForm');
+    const loginButton = document.getElementById('loginButton');
+    const loginError = document.getElementById('loginError');
+    const chatContainer = document.getElementById('chatContainer');
+
+    // === Sign Up ===
+    signUpButton.addEventListener('click', async () => {
+      const username = document.getElementById('signUpUsername').value;
+      const email = document.getElementById('signUpEmail').value;
+      const password = document.getElementById('signUpPassword').value;
+
+      if (!username || !email || !password) {
+        signUpError.textContent = "All fields are required.";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5050/auth/sign_up", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password })
+        });
+        const data = await response.json();
+        
+        if (data.error) {
+          signUpError.textContent = data.error;
+        } else {
+          // Sign-up successful
+          signUpForm.style.display = 'none';
+          loginForm.style.display = 'none';
+          chatContainer.style.display = 'block';
+          appendMessage("DM", "Welcome! How can I assist you today?");
+        }
+      } catch (e) {
+        signUpError.textContent = "Error during sign-up: " + e;
+      }
+    });
+
+    // === Login ===
+    loginButton.addEventListener('click', async () => {
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+      if (!username || !password) {
+        loginError.textContent = "Username and password are required.";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5050/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
+
+        if (data.error) {
+          loginError.textContent = data.error;
+        } else {
+          // Login successful
+          loginForm.style.display = 'none';
+          signUpForm.style.display = 'none';
+          chatContainer.style.display = 'block';
+          appendMessage("DM", `Welcome back, ${data.username}! Let's continue your adventure.<br>Would you like to create a new character or load an existing one?`);
+        }
+      } catch (e) {
+        loginError.textContent = "Error during login: " + e;
+      }
+    });
+
+    // === Chat Functions ===
+    function appendMessage(sender, rawText) {
+      const messageElem = document.createElement('div');
+
+      // Apply our custom line-break rules:
+      const transformedText = formatTextByRules(rawText);
+
+      // Then replace '\n' with '<br>' for HTML display
+      const safeHtml = transformedText.replace(/\n/g, "<br>");
+
+      // Insert the final HTML
+      messageElem.innerHTML = `<strong>${sender}:</strong> ${safeHtml}`;
+
+      // Assign a style class
+      if (sender === "User") {
+        messageElem.classList.add("userMessage");
+      } else if (sender === "DM") {
+        messageElem.classList.add("dmMessage");
+      } else {
+        messageElem.classList.add("systemMessage");
+      }
+
+      chatLog.appendChild(messageElem);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    sendButton.addEventListener('click', async () => {
+      const userMessage = messageInput.value.trim();
+      if (!userMessage) return;
+      appendMessage("User", userMessage);
+      messageInput.value = "";
+      
+      try {
+        const response = await fetch("http://localhost:5050/dm_response", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: userMessage })
+        });
+        const data = await response.json();
+        // Format the GPT reply with our custom rules as well
+        appendMessage("DM", data.reply || "No response");
+      } catch (e) {
+        appendMessage("System", "Error: " + e);
+      }
+    });
+
+    // Allow sending message with Enter key
+    messageInput.addEventListener('keydown', (e) => {
+      if (e.key === "Enter") {
+        sendButton.click();
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
