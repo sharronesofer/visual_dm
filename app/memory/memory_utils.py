@@ -1,4 +1,4 @@
-from memory_class import MemoryManager
+from app.memory.memory_class import MemoryManager
 
 def store_interaction(npc_id, character_id, interaction_text, tags=None):
     manager = MemoryManager(npc_id, character_id)

@@ -1,7 +1,7 @@
-from app.utils.gpt_utils import GPTRequest
+from app.utils.gpt_class import GPTRequest
 import json
 
-with open("app/rules_json/feats.json") as f:
+with open("rules_json/feats.json") as f:
     ALL_FEATS = {feat["name"]: feat for feat in json.load(f)}
 
 def lookup_actions_for_combatant(feat_names: list[str], combatant: dict, battlefield_context: dict):

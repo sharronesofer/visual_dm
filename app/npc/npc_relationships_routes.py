@@ -4,7 +4,7 @@ from app.utils.firebase_utils import db
 
 # External functions - ensure these are defined and imported properly
 from app.npc.npc_relationships_utils import loyalty_tick, run_daily_relationship_tick
-from app.characters.character_utils import rotate_motifs_if_needed
+from app.motifs.motif_engine_class import MotifEngine
 from app.data.party_utils import add_to_party, create_party
 
 npc_relationship_bp = Blueprint('npc_relationship', __name__)
@@ -74,7 +74,9 @@ def npc_motif_tick():
     updated = {}
     for npc_id, npc in all_npcs.items():
         pool = npc.get("narrative_motif_pool", {})
-        updated_pool = rotate_motifs_if_needed(pool)  # External function; ensure defined
+        engine = MotifEngine(npc_id)
+        engine.tick_all().rotate().save()
+        updated_pool = engine.get_pool()        
         db.reference(f'/npcs/{npc_id}/narrative_motif_pool').set(updated_pool)
         updated[npc_id] = updated_pool.get("active_motifs", [])
 

@@ -38,7 +38,7 @@ def load_json(path):
         return {}
 
 # Load equipment data at module initialization
-equipment_data = load_json("rules/equipment.json")
+equipment_data = load_json("rules_json/equipment.json")
 
 def validate_equipment_item(item_name):
     """

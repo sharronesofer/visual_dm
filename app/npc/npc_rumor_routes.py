@@ -1,24 +1,14 @@
 from flask import Blueprint, request, jsonify
-import random, json, logging
-from datetime import datetime, timedelta, timezone
+import random
+import json
 import openai
-from app.quests.quest_utils import log_gpt_usage
-from app.utils.firebase_utils import db
-from app.utils.gpt_utils import gpt_router, score_interaction, detect_skill_action
-from app.rules.rules_validation_routes import resolve_skill_check
-from app.memory.memory_utils import (
-    get_recent_interactions,
-    store_interaction, summarize_and_clean_memory
-)
-from app.quests.quest_utils import (
-    append_to_existing_log, 
-    extract_quest_from_reply
-)
-from app.npc.npc_rumor_utils import share_rumors_between_npcs
-from app.npc.npc_relationships_utils import (
-    loyalty_tick, run_daily_relationship_tick, update_npc_location
-)
+from datetime import datetime
+from firebase_admin import db
 
+from app.utils.gpt_utils import log_gpt_usage
+from app.memory.memory_utils import store_interaction
+from app.npc.npc_rumor_utils import share_rumors_between_npcs
+from app.npc.npc_relationships_utils import update_npc_location
 
 rumor_bp = Blueprint('rumor', __name__)
 
@@ -45,6 +35,7 @@ def simulate_npc_interactions():
         others = [o for o in npcs if o != npc]
         if not others or random.random() > 0.6:
             continue
+
         partner = random.choice(others)
         matrix_ref = db.reference(f'/npc_opinion_matrix/{npc}/{partner}')
         score = matrix_ref.get() or 0
@@ -71,18 +62,21 @@ def simulate_npc_interactions():
         except Exception:
             summary = f"{npc} and {partner} interact (GPT failed)."
 
-        for id_ in [npc, partner]:
-            mem_ref = db.reference(f"/npc_memory/{id_.lower()}")
-            memory = mem_ref.get() or {"rag_log": [], "summary": ""}
-            memory["rag_log"].append({"interaction": summary, "timestamp": datetime.utcnow().isoformat()})
-            mem_ref.set(memory)
+        # Use memory_utils store_interaction for both NPCs
+        store_interaction(npc, partner, summary)
+        store_interaction(partner, npc, summary)
 
         rumor_result = share_rumors_between_npcs(npc, partner)
         new_score = score + {"friendly": 2, "neutral": 0, "hostile": -2}[tone]
         matrix_ref.set(new_score)
+
         interaction_log.append({
-            "npc": npc, "partner": partner, "tone": tone, "summary": summary,
-            "shared_rumors": rumor_result.get("shared", []), "new_score": new_score
+            "npc": npc,
+            "partner": partner,
+            "tone": tone,
+            "summary": summary,
+            "shared_rumors": rumor_result.get("shared", []),
+            "new_score": new_score
         })
 
     return jsonify({"message": f"Interactions at '{poi_id}' simulated.", "interactions": interaction_log}), 200

@@ -1,7 +1,7 @@
 from datetime import datetime
 from firebase_admin import db
 import random
-from app.utils.motif_utils import (
+from app.motifs.motif_utils import (
     CANONICAL_MOTIFS, roll_new_motif,
     motif_needs_rotation
 )

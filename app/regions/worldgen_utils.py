@@ -6,7 +6,7 @@ from uuid import uuid4
 import openai
 from firebase_admin import db
 import math
-from app.quests.quest_utils import log_gpt_usage
+from app.utils.gpt_utils import log_gpt_usage
 
 # Constants and metadata (example placeholder)
 land_type_meta = {

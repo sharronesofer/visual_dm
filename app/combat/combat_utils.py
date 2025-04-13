@@ -1,6 +1,7 @@
 from app.combat.combat_class import CombatAction, Combatant
 from app.combat.status_effects_utils import tick_status_effects
 from app.data.party_utils import abandon_party
+from app.npc.npc_loyalty_utils import should_abandon
 import random
 
 def resolve_turn(combatant: Combatant, targets: list, action_data=None, battlefield=None):

@@ -142,3 +142,19 @@ def detect_skill_action(prompt):
         if any(keyword in prompt_lower for keyword in keywords):
             return skill
     return None
+
+def gpt_call(system_prompt, user_prompt, temperature=0.7, max_tokens=600):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        logging.error(f"GPT call failed: {e}")
+        return f"Error calling GPT: {e}"

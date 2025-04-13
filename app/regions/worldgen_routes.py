@@ -7,7 +7,7 @@ from flask import Blueprint, request, jsonify
 from firebase_admin import db
 
 from app.regions.worldgen_utils import refresh_cleared_pois, generate_monsters_for_tile
-from app.utils.gpt_utils import log_gpt_usage  # Only if this exists in your utils
+from app.utils.gpt_utils import log_gpt_usage
 
 from app.combat.combat_utils import start_combat
 from app.data.party_utils import award_xp_to_party
@@ -117,7 +117,7 @@ def generate_location_gpt():
         location = json.loads(response.choices[0].message.content.strip())
         location["coordinates"] = {"x": x, "y": y}
         db.reference(f"/locations/{x}_{y}").set(location)
-        log_gpt_usage("gpt-4o", response.get("usage", {}))  # External function; verify definition.
+        _usage("gpt-4o", response.get("usage", {}))  # External function; verify definition.
         return jsonify({"message": "Location generated and saved.", "location": location})
     except Exception as e:
         return jsonify({"error": f"GPT or Firebase error: {str(e)}"}), 500

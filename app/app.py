@@ -13,7 +13,7 @@ from app.data.party_routes import party_bp
 from app.dm_engine.dm_routes import dm_engine_bp
 from app.memory.memory_routes import memory_bp
 from app.motifs.motif_routes import motif_bp
-from app.npc.npc_routes import npc_bp
+from app.npc.npc_routes import npc_routes_bp
 from app.quests.quest_routes import quest_bp
 from app.regions.region_routes import region_management_bp
 from app.regions.tension_routes import tension_bp
@@ -46,7 +46,7 @@ app.register_blueprint(party_bp)
 app.register_blueprint(dm_engine_bp)
 app.register_blueprint(memory_bp)
 app.register_blueprint(motif_bp)
-app.register_blueprint(npc_bp)
+app.register_blueprint(npc_routes_bp)
 app.register_blueprint(quest_bp)
 app.register_blueprint(region_management_bp)
 app.register_blueprint(tension_bp)

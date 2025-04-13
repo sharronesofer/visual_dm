@@ -6,31 +6,13 @@ import openai
 import json
 
 from app.characters.character_utils import (
-    generate_ability_scores,
-    save_partial_character_data,
-    finalize_character_creation,
+    build_character_from_input,
+    save_partial_character_data
 )
-from app.dm_engine.dm_utils import classify_request, gpt_call
+from app.utils.gpt_utils import gpt_call 
+from app.dm_engine.dm_utils import classify_request
 
 dm_engine_bp = Blueprint("dm_engine", __name__)
-
-
-def gpt_call(system_prompt, user_prompt, temperature=0.7, max_tokens=600):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        logging.error(f"GPT call failed: {e}")
-        return f"Error calling GPT: {e}"
-
 
 @dm_engine_bp.route('/dm_response', methods=['POST'])
 def dm_response():
@@ -47,7 +29,7 @@ def dm_response():
     dm_mode = user_data.get("dm_mode", "normal")
     lowered_prompt = user_prompt.lower()
 
-    # Character Creation Mode
+    # === CHARACTER CREATION START ===
     if "create" in lowered_prompt and "character" in lowered_prompt:
         user_data["dm_mode"] = "character_creation"
         user_ref.set(user_data)
@@ -57,18 +39,27 @@ def dm_response():
             "name": None,
             "race": None,
             "class": None,
-            "ability_scores": generate_ability_scores(),
+            "ability_scores": None,
             "background": None
         }
         db.reference(f"/temp_characters/{user_id}").set(temp_data)
         return jsonify({"reply": "Character creation started."}), 200
 
+    # === CHARACTER FINALIZATION ===
     elif "finish" in lowered_prompt or "done" in lowered_prompt:
-        result = finalize_character_creation(user_id)
-        user_data["dm_mode"] = "normal"
-        user_ref.set(user_data)
-        return jsonify(result), 200
+        temp_data = db.reference(f"/temp_characters/{user_id}").get() or {}
+        try:
+            result = build_character_from_input(temp_data)
+            db.reference(f"/players/{user_id}").set(result)
 
+            user_data["dm_mode"] = "normal"
+            user_ref.set(user_data)
+
+            return jsonify({"reply": "Character finalized and saved.", "character": result}), 200
+        except Exception as e:
+            return jsonify({"reply": f"Error finalizing character: {str(e)}"}), 400
+
+    # === CHARACTER CREATION STEPS ===
     elif dm_mode == "character_creation":
         if "race" in lowered_prompt:
             for race_option in ["dwarf", "elf", "human", "halfling"]:
@@ -91,10 +82,9 @@ def dm_response():
 
         return jsonify({"reply": "Character data updated."}), 200
 
-    # Start Game Mode
+    # === START GAME MODE ===
     elif mode == "start_game":
         character_id = data.get("character_id")
-
         if not character_id:
             return jsonify({"reply": "Missing character_id."}), 400
 
@@ -118,7 +108,7 @@ def dm_response():
         reply = gpt_call(system_content, user_content)
         return jsonify({"reply": reply}), 200
 
-    # Default Mode (Narrative/Mechanical)
+    # === DEFAULT MODE (Narrative or Mechanical) ===
     else:
         user_style = classify_request(user_prompt)
 

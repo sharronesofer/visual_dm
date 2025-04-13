@@ -1,9 +1,7 @@
 from flask import Blueprint, request, jsonify
 from firebase_admin import db
 
-from app.npc.npc_loyalty_routes import loyalty_bp
 from app.npc.npc_rumor_routes import rumor_bp
-from app.npc.npc_relationships_routes import relationship_bp
 
 from app.npc.npc_loyalty_utils import (
     build_npc_from_input,
@@ -12,14 +10,6 @@ from app.npc.npc_loyalty_utils import (
 )
 
 npc_bp = Blueprint("npc", __name__)
-
-# Register working submodules
-npc_bp.register_blueprint(loyalty_bp)
-npc_bp.register_blueprint(rumor_bp)
-npc_bp.register_blueprint(relationship_bp)
-# npc_bp.register_blueprint(memory_bp)     ← only if this file exists
-# npc_bp.register_blueprint(npc_char_bp)   ← not needed; you're handling it here
-
 
 @npc_bp.route("/npc/create", methods=["POST"])
 def create_npc():

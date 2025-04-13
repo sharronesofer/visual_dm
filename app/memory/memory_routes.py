@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from memory_utils import store_interaction, update_long_term_memory, summarize_and_clean_memory, get_recent_interactions
+from app.memory.memory_utils import store_interaction, update_long_term_memory, summarize_and_clean_memory, get_recent_interactions
 
 memory_bp = Blueprint('memory', __name__)
 
