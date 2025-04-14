@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 from firebase_admin import db
 
-from app.rules.rules_validation_routes import resolve_combat_action
 from app.combat.ai_combat_utils import choose_action_gpt
+from app.combat.combat_class import CombatAction, Combatant
 from app.regions.worldgen_utils import attempt_rest
 
 combat_bp = Blueprint("combat", __name__)
@@ -21,10 +21,32 @@ def combat_round():
     for combatant in combatants:
         if combatant.get("type") == "npc":
             action_data = choose_action_gpt(combatant, battlefield_context)
-            result = resolve_combat_action(combatant, action_data, battlefield_context)
+
+            target_id = action_data.get("target")
+            if not target_id:
+                actions.append({
+                    "character_id": combatant.get("npc_id"),
+                    "result": "No target specified"
+                })
+                continue
+
+            # TEMPORARY: Mock target data (should be loaded from DB in real case)
+            target_data = {
+                "id": target_id,
+                "character_id": target_id,
+                "stats": {"HP": 30, "AC": 12, "DEX": 10},
+                "feats": [],
+                "equipment": []
+            }
+
+            attacker_obj = Combatant(combatant["npc_id"], combatant)
+            target_obj = Combatant(target_id, target_data)
+
+            combat_action = CombatAction(attacker_obj, target_obj, action_data, battlefield_context)
+            result = combat_action.resolve()
             actions.append(result)
+
         else:
-            # Player-controlled characters should submit actions separately
             actions.append({
                 "character_id": combatant.get("character_id"),
                 "result": "awaiting_player_action"
