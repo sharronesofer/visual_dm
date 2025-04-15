@@ -1,6 +1,6 @@
 from datetime import datetime
 from firebase_admin import db
-from app.combat.ai_combat_utils import roll_initiative
+from app.combat.combat_utils import roll_initiative
 from app.combat.status_effects_utils import apply_status_effect, resolve_status_effects
 import random
 
@@ -95,3 +95,28 @@ def start_firebase_combat(encounter_name, player_party, enemy_party, battle_map=
     db.reference(f"/combat_state/{battle_id}").set(combat_state)
 
     return battle_id, combat_state
+
+def sync_post_combat(combatant):
+    ref = db.reference(f"/npcs/{combatant.character_id}")  # or /players/
+    ref.update({
+        "current_hp": combatant.current_hp,
+        "temp_hp": combatant.temp_hp,
+        "status_effects": combatant.stats.get("status_effects", [])
+    })
+
+from firebase_admin import db
+
+def sync_post_combat_state_to_firebase(party, enemies):
+    """
+    Push post-combat health, temp HP, and persistent status effects to Firebase.
+    """
+    all_combatants = party + enemies
+
+    for c in all_combatants:
+        ref_path = f"/npcs/{c.character_id}" if c.character_id.startswith("npc") else f"/players/{c.character_id}"
+        ref = db.reference(ref_path)
+        ref.update({
+            "current_hp": c.current_hp,
+            "temp_hp": c.temp_hp,
+            "status_effects": c.stats.get("status_effects", [])
+        })
