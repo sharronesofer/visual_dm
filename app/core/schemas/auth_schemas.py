@@ -23,10 +23,10 @@ class RegisterRequestSchema(Schema):
     )
     password = fields.Str(
         required=True,
-        validate=validate.Length(min=8),
+        validate=validate.Length(min=12),
         metadata={
-            "description": "Password for the account (min 8 characters)",
-            "example": "SecurePass123"
+            "description": "Password for the account (min 12 characters)",
+            "example": "SecurePass123456"
         }
     )
 

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: visualdm-config
+  namespace: visualdm
+data:
+  FLASK_ENV: production
+  POSTGRES_DB: visualdm
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  API_VERSION: "v1"
+  LOG_LEVEL: "info" 

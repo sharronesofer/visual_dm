@@ -1,0 +1,72 @@
+{
+  "alert_data": {
+    "name": "High CPU Usage",
+    "severity": "P2",
+    "system": "web_server",
+    "description": "Web server CPU usage exceeded 90% for more than 5 minutes",
+    "value": 92.5,
+    "unit": "%",
+    "threshold": 90,
+    "impact": "Potential slowdown in web server response times affecting user experience",
+    "id": "d1db25f9-b2d8-415b-9008-139e4856950b",
+    "created_at": "2025-05-14T22:06:33.361437+00:00",
+    "status": "acknowledged",
+    "auto_recovery_attempts": {
+      "scale_up_pods": 1
+    },
+    "history": [
+      {
+        "timestamp": "2025-05-14T22:26:33.358436+00:00",
+        "event": "auto_recovery_attempted",
+        "action": "scale_up_pods",
+        "attempt": 1,
+        "max_attempts": 1
+      },
+      {
+        "timestamp": "2025-05-14T22:26:33.359764+00:00",
+        "event": "auto_recovery_succeeded",
+        "action": "scale_up_pods"
+      }
+    ],
+    "resolved_at": "2025-05-14T22:26:33.359759+00:00",
+    "acknowledged_at": "2025-05-14T22:11:33.361456+00:00",
+    "last_updated_at": "2025-05-14T22:11:33.361463+00:00"
+  },
+  "result": {
+    "action": "skipped",
+    "reason": "escalation_not_needed",
+    "alert": {
+      "name": "High CPU Usage",
+      "severity": "P2",
+      "system": "web_server",
+      "description": "Web server CPU usage exceeded 90% for more than 5 minutes",
+      "value": 92.5,
+      "unit": "%",
+      "threshold": 90,
+      "impact": "Potential slowdown in web server response times affecting user experience",
+      "id": "d1db25f9-b2d8-415b-9008-139e4856950b",
+      "created_at": "2025-05-14T22:06:33.361437+00:00",
+      "status": "acknowledged",
+      "auto_recovery_attempts": {
+        "scale_up_pods": 1
+      },
+      "history": [
+        {
+          "timestamp": "2025-05-14T22:26:33.358436+00:00",
+          "event": "auto_recovery_attempted",
+          "action": "scale_up_pods",
+          "attempt": 1,
+          "max_attempts": 1
+        },
+        {
+          "timestamp": "2025-05-14T22:26:33.359764+00:00",
+          "event": "auto_recovery_succeeded",
+          "action": "scale_up_pods"
+        }
+      ],
+      "resolved_at": "2025-05-14T22:26:33.359759+00:00",
+      "acknowledged_at": "2025-05-14T22:11:33.361456+00:00",
+      "last_updated_at": "2025-05-14T22:11:33.361463+00:00"
+    }
+  }
+}

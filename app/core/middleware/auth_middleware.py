@@ -6,6 +6,7 @@ from functools import wraps
 from flask import request, jsonify, current_app, g
 from app.core.services.auth_service import AuthService
 from app.core.exceptions import AuthenticationError, AuthorizationError
+from app.core.services.access_control_service import access_control_service
 
 def require_auth(f):
     """
@@ -60,17 +61,36 @@ def require_role(*roles):
         @wraps(f)
         def decorated(*args, **kwargs):
             try:
-                # Check if user has required role
-                if not g.current_user or g.current_user.role.name not in roles:
+                # Check if user has required role using access_control_service
+                user = g.current_user
+                if not user or not any(user.role and user.role.name == role for role in roles):
                     raise AuthorizationError('Insufficient permissions')
-                
                 return f(*args, **kwargs)
-                
             except AuthorizationError as e:
                 return jsonify({'error': str(e)}), 403
             except Exception as e:
                 current_app.logger.error(f"Role authorization error: {str(e)}")
                 return jsonify({'error': 'Authorization failed'}), 500
-        
+        return decorated
+    return decorator
+
+def require_permission(permission):
+    """
+    Decorator to require a specific permission for routes (middleware-level).
+    Must be used after @require_auth.
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            try:
+                user = g.current_user
+                if not user or not access_control_service.has_permission(user, permission):
+                    raise AuthorizationError(f'Insufficient permissions: {permission}')
+                return f(*args, **kwargs)
+            except AuthorizationError as e:
+                return jsonify({'error': str(e)}), 403
+            except Exception as e:
+                current_app.logger.error(f"Permission authorization error: {str(e)}")
+                return jsonify({'error': 'Authorization failed'}), 500
         return decorated
     return decorator 

@@ -1,11 +1,14 @@
-from typing import Tuple
+from typing import Tuple, Optional
 from dataclasses import dataclass
 from visual_client.ui.screens.game.region_map_screen import Viewport
 import time
+from visual_client.core.utils.coordinates import GlobalCoord, LocalCoord
+from visual_client.core.utils import coordinate_utils as cu
 
 class ViewportManager:
     """
     Manages the state and operations of the map viewport, including position, zoom, and visible bounds.
+    Uses the standardized coordinate system to maintain precision in large-scale environments.
     """
     def __init__(self, x: float = 0, y: float = 0, width: int = 800, height: int = 600, scale: float = 1.0):
         self.viewport = Viewport(x, y, width, height, scale)
@@ -17,14 +20,21 @@ class ViewportManager:
         self._animation_to = (x, y, scale)
         self._animation_elapsed = 0.0
 
-    def get_position(self) -> Tuple[float, float]:
-        """Return the (x, y) position of the viewport."""
-        return (self.viewport.x, self.viewport.y)
+    def get_position(self) -> LocalCoord:
+        """Return the position of the viewport as a LocalCoord (floating origin aware)."""
+        # Convert global position to local using coordinate utilities
+        pos = GlobalCoord(self.viewport.x, self.viewport.y)
+        local = cu.global_to_local(pos)
+        assert isinstance(local, LocalCoord), "Viewport position must be a LocalCoord"
+        return local
 
-    def set_position(self, x: float, y: float) -> None:
-        """Set the (x, y) position of the viewport and mark as dirty."""
-        self.viewport.x = x
-        self.viewport.y = y
+    def set_position(self, position: LocalCoord) -> None:
+        """Set the position of the viewport using a LocalCoord and mark as dirty."""
+        assert isinstance(position, LocalCoord), "Position must be a LocalCoord"
+        # Convert local position to global using coordinate utilities
+        global_pos = cu.local_to_global(position)
+        self.viewport.x = global_pos.x
+        self.viewport.y = global_pos.y
         self.viewport.dirty = True
 
     def get_zoom(self) -> float:
@@ -63,31 +73,47 @@ class ViewportManager:
         """Clear the dirty flag after redraw."""
         self.viewport.dirty = False
 
-    def screen_to_world(self, screen_x: float, screen_y: float) -> Tuple[float, float]:
+    def screen_to_world(self, screen_x: float, screen_y: float) -> LocalCoord:
         """
-        Convert screen (pixel) coordinates to world (map) coordinates.
+        Convert screen (pixel) coordinates to local (map) coordinates (floating origin aware).
         Args:
             screen_x: X coordinate on the screen (pixels)
             screen_y: Y coordinate on the screen (pixels)
         Returns:
-            (world_x, world_y): Corresponding world coordinates
+            LocalCoord: Corresponding local coordinates
         """
-        world_x = self.viewport.x + (screen_x / self.viewport.scale)
-        world_y = self.viewport.y + (screen_y / self.viewport.scale)
-        return (world_x, world_y)
+        screen_coord = (screen_x, screen_y)
+        view_pos = (self.viewport.x, self.viewport.y)
+        view_size = (self.viewport.width / self.viewport.scale, self.viewport.height / self.viewport.scale)
+        screen_size = (self.viewport.width, self.viewport.height)
+        # Use the utility function to convert, returning local
+        return cu.screen_to_world(
+            screen_coord,
+            view_pos,
+            view_size,
+            screen_size,
+            return_global=False
+        )
 
-    def world_to_screen(self, world_x: float, world_y: float) -> Tuple[float, float]:
+    def world_to_screen(self, world_coord: LocalCoord) -> Tuple[float, float]:
         """
-        Convert world (map) coordinates to screen (pixel) coordinates.
+        Convert local (map) coordinates to screen (pixel) coordinates (floating origin aware).
         Args:
-            world_x: X coordinate in world space
-            world_y: Y coordinate in world space
+            world_coord: LocalCoord in local space
         Returns:
             (screen_x, screen_y): Corresponding screen coordinates (pixels)
         """
-        screen_x = (world_x - self.viewport.x) * self.viewport.scale
-        screen_y = (world_y - self.viewport.y) * self.viewport.scale
-        return (screen_x, screen_y)
+        view_pos = (self.viewport.x, self.viewport.y)
+        view_size = (self.viewport.width / self.viewport.scale, self.viewport.height / self.viewport.scale)
+        screen_size = (self.viewport.width, self.viewport.height)
+        # Use the utility function to convert
+        return cu.world_to_screen(
+            world_coord,
+            view_pos,
+            view_size,
+            screen_size,
+            use_local=True
+        )
 
     def set_constraints(self, map_width: int, map_height: int, min_zoom: float = 0.1, max_zoom: float = 10.0) -> None:
         """
@@ -126,8 +152,16 @@ class ViewportManager:
             dx: Change in x (world units)
             dy: Change in y (world units)
         """
-        self.viewport.x += dx
-        self.viewport.y += dy
+        current_pos = GlobalCoord(self.viewport.x, self.viewport.y)
+        delta_vec = (dx, dy)
+        
+        # Use vector addition from coordinate utilities
+        new_pos_tuple = cu.vec_add(cu.global_to_tuple(current_pos), delta_vec + (0.0,))
+        
+        # Update position
+        self.viewport.x = new_pos_tuple[0]
+        self.viewport.y = new_pos_tuple[1]
+        
         self._apply_constraints()
         self.viewport.dirty = True
 
@@ -144,22 +178,29 @@ class ViewportManager:
         if hasattr(self, '_min_zoom') and hasattr(self, '_max_zoom'):
             new_scale = max(self._min_zoom, min(self._max_zoom, new_scale))
         if center_x is not None and center_y is not None:
+            # Convert screen coordinate to world before zoom
             world_before = self.screen_to_world(center_x, center_y)
+            
+            # Apply zoom
             self.viewport.scale = new_scale
+            
+            # Convert same screen coordinate to world after zoom
             world_after = self.screen_to_world(center_x, center_y)
-            self.viewport.x += world_before[0] - world_after[0]
-            self.viewport.y += world_before[1] - world_after[1]
+            
+            # Adjust viewport position to keep the point under cursor
+            self.viewport.x += world_before.x - world_after.x
+            self.viewport.y += world_before.y - world_after.y
         else:
             self.viewport.scale = new_scale
+            
         self._apply_constraints()
         self.viewport.dirty = True
 
-    def animate_to(self, target_x: float, target_y: float, target_scale: float, duration_ms: int) -> None:
+    def animate_to(self, target_pos: GlobalCoord, target_scale: float, duration_ms: int) -> None:
         """
         Start a smooth animation to the target position and scale over the given duration (ms).
         Args:
-            target_x: Target x position (world units)
-            target_y: Target y position (world units)
+            target_pos: Target position as GlobalCoord
             target_scale: Target zoom (scale)
             duration_ms: Animation duration in milliseconds
         """
@@ -167,7 +208,7 @@ class ViewportManager:
         self._animation_start_time = time.time()
         self._animation_duration = duration_ms / 1000.0  # seconds
         self._animation_from = (self.viewport.x, self.viewport.y, self.viewport.scale)
-        self._animation_to = (target_x, target_y, target_scale)
+        self._animation_to = (target_pos.x, target_pos.y, target_scale)
         self._animation_elapsed = 0.0
 
     def update_animation(self, dt_ms: int) -> None:
@@ -182,12 +223,17 @@ class ViewportManager:
         t = min(1.0, self._animation_elapsed / self._animation_duration)
         from_x, from_y, from_scale = self._animation_from
         to_x, to_y, to_scale = self._animation_to
-        # Linear interpolation
-        new_x = from_x + (to_x - from_x) * t
-        new_y = from_y + (to_y - from_y) * t
+        
+        # Use vector lerp from coordinate utilities
+        start_vec = (from_x, from_y)
+        end_vec = (to_x, to_y)
+        new_pos = cu.vec_lerp(start_vec, end_vec, t)
+        
+        # Linear interpolation for scale
         new_scale = from_scale + (to_scale - from_scale) * t
-        self.viewport.x = new_x
-        self.viewport.y = new_y
+        
+        self.viewport.x = new_pos[0]
+        self.viewport.y = new_pos[1]
         self.viewport.scale = new_scale
         self._apply_constraints()
         self.viewport.dirty = True
@@ -222,11 +268,15 @@ class ViewportManager:
         # Center position
         target_x = (self._map_width - (viewport_width / target_zoom)) / 2
         target_y = (self._map_height - (viewport_height / target_zoom)) / 2
+        
+        # Create target position as GlobalCoord
+        target_pos = GlobalCoord(target_x, target_y)
+        
         if animate:
-            self.animate_to(target_x, target_y, target_zoom, duration_ms)
+            self.animate_to(target_pos, target_zoom, duration_ms)
         else:
-            self.viewport.x = target_x
-            self.viewport.y = target_y
+            self.viewport.x = target_pos.x
+            self.viewport.y = target_pos.y
             self.viewport.scale = target_zoom
             self._apply_constraints()
             self.viewport.dirty = True 

@@ -382,9 +382,9 @@ export const isISO8601Date = (value: string): boolean => {
 };
 
 export const isStrongPassword = (value: string): boolean => {
-  // At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
+  // At least 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
   const strongPasswordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/;
   return strongPasswordRegex.test(value);
 };
 

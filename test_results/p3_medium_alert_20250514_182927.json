@@ -1,0 +1,110 @@
+{
+  "alert_data": {
+    "name": "API Response Time",
+    "severity": "P3",
+    "system": "api_gateway",
+    "description": "API response times exceeded 500ms for more than 10 minutes",
+    "value": 650,
+    "unit": "ms",
+    "threshold": 500,
+    "impact": "Some API requests experiencing slower response times"
+  },
+  "result": {
+    "action": "processed",
+    "alert": {
+      "name": "API Response Time",
+      "severity": "P3",
+      "system": "api_gateway",
+      "description": "API response times exceeded 500ms for more than 10 minutes",
+      "value": 650,
+      "unit": "ms",
+      "threshold": 500,
+      "impact": "Some API requests experiencing slower response times",
+      "id": "90465c1d-48fc-4978-87e0-53b4676f1027",
+      "created_at": "2025-05-14T22:29:27.779904+00:00",
+      "status": "new",
+      "current_escalation_level": "initial_response",
+      "initial_response_at": "2025-05-14T22:29:27.779919+00:00",
+      "initial_targets": [
+        {
+          "role": "primary_oncall",
+          "description": "Primary On-Call Engineer",
+          "notification_methods": [
+            "pagerduty_primary",
+            "slack_dm",
+            "sms",
+            "email"
+          ]
+        }
+      ],
+      "initial_actions": [
+        "create_ticket",
+        "notify_slack_channel"
+      ],
+      "initial_automations": [
+        "assign_ticket_id"
+      ],
+      "history": [
+        {
+          "timestamp": "2025-05-14T22:29:27.779922+00:00",
+          "event": "alert_received",
+          "targets": [
+            "primary_oncall"
+          ],
+          "actions": [
+            "create_ticket",
+            "notify_slack_channel"
+          ],
+          "automations": [
+            "assign_ticket_id"
+          ]
+        }
+      ]
+    },
+    "notifications": {
+      "success": [
+        {
+          "channel": "pagerduty",
+          "targets": [
+            "pagerduty_primary"
+          ],
+          "timestamp": "2025-05-14T22:29:27.780030+00:00"
+        },
+        {
+          "channel": "sms",
+          "targets": [],
+          "timestamp": "2025-05-14T22:29:27.780078+00:00"
+        },
+        {
+          "channel": "email",
+          "targets": [
+            "primary_oncall@example.com",
+            "oncall@example.com"
+          ],
+          "timestamp": "2025-05-14T22:29:27.780223+00:00"
+        },
+        {
+          "channel": "slack",
+          "targets": [
+            "@primary_oncall",
+            "#incidents"
+          ],
+          "timestamp": "2025-05-14T22:29:27.780348+00:00"
+        }
+      ],
+      "failure": []
+    },
+    "automations": {
+      "success": [
+        {
+          "automation": "assign_ticket_id",
+          "result": {
+            "ticket_id": "TICKET-93F13ECE"
+          },
+          "timestamp": "2025-05-14T22:29:27.780415+00:00"
+        }
+      ],
+      "failure": []
+    }
+  }
+}

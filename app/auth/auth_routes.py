@@ -24,6 +24,7 @@ from app.core.schemas.auth_schemas import (
 )
 from app.auth.models import User
 from app.core.database import db
+from app.core.middleware.password_reset_rate_limiter import password_reset_rate_limit
 import re
 
 # Marshmallow Schemas
@@ -283,6 +284,7 @@ def refresh():
 
 # Password reset request endpoint (stub, implement email sending as needed)
 @auth_bp.route('/password-reset', methods=['POST'])
+@password_reset_rate_limit
 def password_reset():
     """
     Request password reset.
@@ -317,6 +319,22 @@ def password_reset():
                 errors:
                   type: object
                   example: {"email": ["Not a valid email address."]}
+      429:
+        description: Too many requests
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: Too many password reset requests
+                message:
+                  type: string
+                  example: Rate limit exceeded. Please try again later.
+                retry_after:
+                  type: integer
+                  example: 3600
     """
     data = request.get_json(force=True)
     validated, errors = validate_request(PasswordResetRequestSchema(), data)
@@ -327,6 +345,7 @@ def password_reset():
 
 # Password reset confirm endpoint (stub, implement token verification as needed)
 @auth_bp.route('/password-reset-confirm', methods=['POST'])
+@password_reset_rate_limit
 def password_reset_confirm():
     """
     Confirm password reset.
@@ -361,6 +380,22 @@ def password_reset_confirm():
                 errors:
                   type: object
                   example: {"token": ["Invalid or expired token."]}
+      429:
+        description: Too many requests
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: Too many password reset requests
+                message:
+                  type: string
+                  example: Rate limit exceeded. Please try again later.
+                retry_after:
+                  type: integer
+                  example: 3600
     """
     data = request.get_json(force=True)
     validated, errors = validate_request(PasswordResetConfirmSchema(), data)

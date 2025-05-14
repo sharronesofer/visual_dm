@@ -145,4 +145,7 @@ scripts/load-tests/results/*.json
 # These files will be stored through other means outside of GitHub
 scripts/load-tests/results/stress_metrics.json
 scripts/load-tests/results/spike_metrics.json
-scripts/load-tests/results/load_metrics.json 
+scripts/load-tests/results/load_metrics.json
+
+# Added by Claude Task Master
+# OS specific

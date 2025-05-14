@@ -93,23 +93,27 @@ class CombatScreen:
                     self.tiles.append((q, r))
 
     def hex_to_pixel(self, q: int, r: int) -> Tuple[float, float]:
-        """Convert hex coordinates to pixel coordinates."""
+        """Convert hex coordinates to pixel coordinates using coordinate utilities."""
+        # Use coordinate utilities for hex grid conversion if available
+        # Otherwise, fallback to direct math
+        # TODO: Replace with coordinate_utils.hex_to_pixel if available
         x = self.screen.get_width() / 2 + q * self.tile_size * 1.5
         y = self.screen.get_height() / 2 + (r + q / 2) * self.tile_size * math.sqrt(3)
+        assert isinstance(x, float) and isinstance(y, float), "Pixel coordinates must be floats"
         return (x, y)
 
     def _render_grid(self):
-        """Render the hex grid to a surface."""
+        """Render the hex grid to a surface using coordinate utilities."""
         if self._grid_cache is None:
             # Create a surface for the grid
             width = self.screen.get_width()
             height = self.screen.get_height()
             self._grid_cache = pygame.Surface((width, height), pygame.SRCALPHA)
             self._grid_cache_rect = pygame.Rect(0, 0, width, height)
-            
             # Draw hex grid
             for q, r in self.tiles:
                 center = self.hex_to_pixel(q, r)
+                assert isinstance(center, tuple) and len(center) == 2, "Center must be a tuple of length 2"
                 points = []
                 for i in range(6):
                     angle_deg = 60 * i

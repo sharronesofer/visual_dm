@@ -5,21 +5,26 @@ Handles application creation, configuration, and initialization.
 
 import os
 import logging
-from typing import Optional
+from typing import Optional, Dict, Any
 from flask import Flask
 from app.core.config import Config
 from app.extensions import init_extensions, db
 from app.core.utils.error_handlers import register_error_handlers
-from app.core.utils.logging_utils import setup_logging
 
-logger = logging.getLogger(__name__)
+# Import the new logging system
+from app.core.logging import get_logger
+from app.core.logging.flask_integration import configure_flask_logging
 
-def create_app(config_name: Optional[str] = None) -> Flask:
+# Get a logger for this module
+logger = get_logger(__name__)
+
+def create_app(config_name: Optional[str] = None, logging_config: Optional[Dict[str, Any]] = None) -> Flask:
     """
     Create and configure the Flask application.
     
     Args:
         config_name: The name of the configuration to use
+        logging_config: Optional logging configuration overrides
         
     Returns:
         Flask: The configured Flask application
@@ -36,8 +41,8 @@ def create_app(config_name: Optional[str] = None) -> Flask:
             config_name = os.getenv('FLASK_ENV', 'development')
         app.config.from_object(Config)
         
-        # Setup logging
-        setup_logging(app)
+        # Configure logging using the new centralized system
+        configure_flask_logging(app, request_logger_config=logging_config)
         logger.info(f"Application created with {config_name} configuration")
         
         # Initialize extensions

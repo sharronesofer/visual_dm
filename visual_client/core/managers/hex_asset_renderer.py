@@ -1,5 +1,6 @@
 """
 Renderer for hex-based assets that integrates with the hex mapping system.
+Uses standardized coordinate system for consistent rendering across the application.
 """
 
 import pygame
@@ -10,6 +11,8 @@ from .hex_asset_manager import HexAssetManager
 from .hex_asset_cache import HexAssetCache
 from .hex_sprite_sheet import HexSpriteSheet
 from ..error_handler import handle_component_error, ErrorSeverity
+from ..utils.coordinates import GlobalCoord, LocalCoord
+from ..utils import coordinate_utils as cu
 
 class HexAssetRenderer:
     """Renders hex-based assets with proper scaling, layering, and transitions."""
@@ -46,20 +49,16 @@ class HexAssetRenderer:
         self,
         hex_coord: Tuple[int, int],
         scale: float = 1.0
-    ) -> Tuple[int, int]:
-        """Calculate pixel position for a hex coordinate.
-        
-        Args:
-            hex_coord: (q, r) hex coordinates
-            scale: Zoom scale factor
-            
-        Returns:
-            (x, y) pixel coordinates
-        """
+    ) -> LocalCoord:
+        """Calculate local position for a hex coordinate (relative to floating origin)."""
         q, r = hex_coord
         x = self.hex_size * (3/2 * q) * scale
         y = self.hex_size * (np.sqrt(3)/2 * q + np.sqrt(3) * r) * scale
-        return (int(x), int(y))
+        global_pos = GlobalCoord(x, y)
+        # Convert to local coordinates for floating origin
+        local_pos = cu.global_to_local(global_pos)
+        assert isinstance(local_pos, LocalCoord), "Hex position must be a LocalCoord"
+        return local_pos
         
     def render_hex_tile(
         self,
@@ -71,19 +70,12 @@ class HexAssetRenderer:
         effects: List[str] = None,
         scale: float = 1.0
     ) -> None:
-        """Render a complete hex tile with all its components.
-        
-        Args:
-            surface: Target surface to render on
-            hex_coord: (q, r) hex coordinates
-            terrain_type: Type of terrain for the base
-            features: List of terrain features to render
-            overlays: List of overlay effects
-            effects: List of visual effects
-            scale: Zoom scale factor
-        """
+        """Render a complete hex tile with all its components using local coordinates."""
         try:
-            pos = self.calculate_hex_position(hex_coord, scale)
+            # Calculate position using LocalCoord (floating origin aware)
+            pos_coord = self.calculate_hex_position(hex_coord, scale)
+            assert isinstance(pos_coord, LocalCoord), "Hex tile position must be a LocalCoord"
+            pos = (int(pos_coord.x), int(pos_coord.y))
             scaled_size = int(self.hex_size * scale)
             
             # Render base terrain
@@ -162,29 +154,22 @@ class HexAssetRenderer:
         view_rect: pygame.Rect,
         scale: float = 1.0
     ) -> None:
-        """Render a region of the hex map.
-        
-        Args:
-            surface: Target surface to render on
-            region_data: Dictionary mapping hex coordinates to tile data
-            view_rect: Visible region in pixel coordinates
-            scale: Zoom scale factor
-        """
+        """Render a region of the hex map using local coordinates."""
         try:
-            # Calculate visible hex range
-            min_x = view_rect.left
-            max_x = view_rect.right
-            min_y = view_rect.top
-            max_y = view_rect.bottom
-            
+            rect_bounds = (
+                view_rect.left,
+                view_rect.top,
+                view_rect.right,
+                view_rect.bottom
+            )
             for hex_coord, tile_data in region_data.items():
-                pos = self.calculate_hex_position(hex_coord, scale)
-                
-                # Skip tiles outside view
-                if (pos[0] + self.hex_size * scale < min_x or
-                    pos[0] > max_x or
-                    pos[1] + self.hex_size * scale < min_y or
-                    pos[1] > max_y):
+                pos_coord = self.calculate_hex_position(hex_coord, scale)
+                hex_bottom_right = LocalCoord(
+                    pos_coord.x + self.hex_size * scale,
+                    pos_coord.y + self.hex_size * scale
+                )
+                if not (cu.is_within_bounds(pos_coord, rect_bounds) or 
+                        cu.is_within_bounds(hex_bottom_right, rect_bounds)):
                     continue
                 
                 self.render_hex_tile(

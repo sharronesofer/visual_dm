@@ -48,18 +48,44 @@ describe('NPCAffinityService', () => {
   it('processes daily interactions with ~10% probability', () => {
     const service = NPCAffinityService.getInstance();
     (service as any).affinities.clear();
-    // 10 NPCs in one POI: 45 pairs
-    const npcsByPoi = { 'poi1': Array.from({ length: 10 }, (_, i) => `npc${i}`) };
-    const totalPairs = 45;
-    let total = 0;
-    // Run 1000 times to get average
-    for (let i = 0; i < 1000; i++) {
-      total += service.processInteractions(npcsByPoi);
+    
+    // Mock the random function to make this test deterministic
+    const originalRandom = Math.random;
+    const mockInteractions: Record<string, boolean> = {};
+    
+    try {
+      // Mock Math.random to return controlled values
+      Math.random = jest.fn().mockImplementation(() => {
+        return 0.09; // Just below 0.1 (10%) to force interactions
+      });
+      
+      // 10 NPCs in one POI: 45 pairs
+      const npcsByPoi = { 'poi1': Array.from({ length: 10 }, (_, i) => `npc${i}`) };
+      
+      // Run the interactions with mocked random
+      const interactionsCount = service.processInteractions(npcsByPoi);
+      
+      // With our mocked 9% chance, all interactions should occur
+      // This verifies that the interaction probability logic works correctly
+      expect(interactionsCount).toBe(45); // All 45 possible pairs should interact
+      
+      // Verify some affinity records were actually created
+      const allAffinities = Array.from((service as any).affinities.values());
+      expect(allAffinities.length).toBeGreaterThan(0);
+      
+      // Test with 11% (above threshold) to ensure no interactions
+      Math.random = jest.fn().mockImplementation(() => {
+        return 0.11; // Just above 0.1 (10%) to prevent interactions
+      });
+      
       (service as any).affinities.clear();
+      const noInteractionsCount = service.processInteractions(npcsByPoi);
+      expect(noInteractionsCount).toBe(0); // No interactions should occur
+      
+    } finally {
+      // Restore the original Math.random
+      Math.random = originalRandom;
     }
-    const avg = total / 1000;
-    expect(avg).toBeGreaterThan(3);
-    expect(avg).toBeLessThan(7);
   });
 
   it('processes interactions deterministically with a seed', () => {

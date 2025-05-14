@@ -18,6 +18,22 @@ from app.core.models.resource import Resource
 from app.core.models.trade_route import TradeRoute
 from app.core.models.world_event import WorldEvent
 # from app.core.schemas.base import BaseSchema  # Uncomment or fix this import if available
+from dataclasses import dataclass, field
+import logging
+import uuid
+import json
+import copy
+
+from app.core.models.entity import Entity
+from app.core.models.character import Character
+from app.core.models.location import Location
+from app.core.models.item import Item
+from app.core.models.world_state import WorldState
+from app.core.persistence.world_persistence import WorldPersistenceManager, FileSystemStorageStrategy
+from app.core.persistence.serialization import serialize, deserialize
+from app.core.persistence.transaction import Transaction
+
+logger = logging.getLogger(__name__)
 
 class Season(str, Enum):
     SPRING = "spring"
@@ -407,4 +423,383 @@ if __name__ == "__main__":
         w.notify_players(event)
         print("test_event_system passed")
 
-    test_event_system() 
+    test_event_system()
+
+@dataclass
+class World:
+    """
+    Represents a complete game world.
+    
+    The World class encapsulates all entities, state, and behavior of the game world.
+    It provides methods for managing entities, running simulations, and persisting state.
+    """
+    name: str
+    description: str = ""
+    world_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    state: WorldState = field(default_factory=WorldState)
+    persistence_manager: Optional[WorldPersistenceManager] = None
+    _is_loaded_from_storage: bool = False
+    _metadata: Dict[str, Any] = field(default_factory=dict)
+    
+    def __post_init__(self):
+        """Initialize the world after creation."""
+        # Set up any required connections or resources
+        self.state.attach_world(self)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert world to dictionary for serialization.
+        
+        Returns:
+            Dictionary representation of the world
+        """
+        return {
+            "world_id": self.world_id,
+            "name": self.name,
+            "description": self.description,
+            "created_at": self.created_at,
+            "metadata": self._metadata,
+            "state": self.state.to_dict(),
+            "last_modified": datetime.utcnow().isoformat()
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'World':
+        """
+        Create a world from a dictionary representation.
+        
+        Args:
+            data: Dictionary representation of the world
+            
+        Returns:
+            World instance
+        """
+        world_id = data.get("world_id", str(uuid.uuid4()))
+        name = data.get("name", "Untitled World")
+        description = data.get("description", "")
+        created_at = data.get("created_at", datetime.utcnow().isoformat())
+        metadata = data.get("metadata", {})
+        
+        # Create world with basic properties
+        world = cls(
+            world_id=world_id,
+            name=name,
+            description=description,
+            created_at=created_at
+        )
+        
+        # Set metadata
+        world._metadata = metadata
+        
+        # Initialize state from dict if available
+        if "state" in data:
+            world.state = WorldState.from_dict(data["state"])
+            world.state.attach_world(world)
+        
+        # Mark as loaded from storage
+        world._is_loaded_from_storage = True
+        
+        return world
+    
+    def initialize_persistence(self, storage_root: str) -> None:
+        """
+        Initialize persistence for this world.
+        
+        Args:
+            storage_root: Root directory for storage
+        """
+        storage = FileSystemStorageStrategy(storage_root)
+        self.persistence_manager = WorldPersistenceManager(storage)
+    
+    def save(self, create_snapshot: bool = False, description: Optional[str] = None) -> bool:
+        """
+        Save the world to storage.
+        
+        Args:
+            create_snapshot: Whether to create a version snapshot
+            description: Description for the snapshot
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        if self.persistence_manager is None:
+            logger.error("Cannot save world: persistence not initialized")
+            return False
+        
+        # Convert world to dict format
+        world_dict = self.to_dict()
+        
+        # If not already loaded from storage, create in storage
+        if not self._is_loaded_from_storage:
+            if self.persistence_manager.load_world(self.world_id) is None:
+                # Create new world in storage
+                self.persistence_manager.create_world(self.world_id, self._metadata)
+                self._is_loaded_from_storage = True
+        
+        # Update cache
+        self.persistence_manager.worlds_cache[self.world_id] = world_dict
+        
+        # Save to storage
+        return self.persistence_manager.save_world(
+            self.world_id, 
+            create_snapshot=create_snapshot,
+            description=description
+        )
+    
+    @classmethod
+    def load(cls, world_id: str, storage_root: str, version_id: Optional[str] = None) -> Optional['World']:
+        """
+        Load a world from storage.
+        
+        Args:
+            world_id: ID of the world to load
+            storage_root: Root directory for storage
+            version_id: Specific version to load (latest if None)
+            
+        Returns:
+            Loaded world, or None if not found
+        """
+        # Initialize storage and persistence manager
+        storage = FileSystemStorageStrategy(storage_root)
+        persistence_manager = WorldPersistenceManager(storage)
+        
+        # Load world data
+        world_data = persistence_manager.load_world(world_id, version_id)
+        
+        if world_data is None:
+            logger.error(f"Failed to load world {world_id}")
+            return None
+        
+        # Create world from data
+        world = cls.from_dict(world_data)
+        
+        # Attach persistence manager
+        world.persistence_manager = persistence_manager
+        
+        return world
+    
+    def create_snapshot(self, description: Optional[str] = None) -> Optional[str]:
+        """
+        Create a version snapshot of the world.
+        
+        Args:
+            description: Description for the snapshot
+            
+        Returns:
+            ID of the created version, or None if failed
+        """
+        if self.persistence_manager is None:
+            logger.error("Cannot create snapshot: persistence not initialized")
+            return None
+        
+        # Save first to ensure latest state
+        self.save()
+        
+        # Create snapshot
+        return self.persistence_manager.create_snapshot(self.world_id, description)
+    
+    def rollback_to_version(self, version_id: str) -> bool:
+        """
+        Roll back to a previous version.
+        
+        Args:
+            version_id: ID of the version to roll back to
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        if self.persistence_manager is None:
+            logger.error("Cannot roll back: persistence not initialized")
+            return False
+        
+        # Roll back
+        world_data = self.persistence_manager.rollback_to_version(self.world_id, version_id)
+        
+        if world_data is None:
+            logger.error(f"Failed to roll back to version {version_id}")
+            return False
+        
+        # Update world from data
+        loaded_world = self.from_dict(world_data)
+        
+        # Update this world's properties
+        self.name = loaded_world.name
+        self.description = loaded_world.description
+        self._metadata = loaded_world._metadata
+        self.state = loaded_world.state
+        self.state.attach_world(self)
+        
+        return True
+    
+    def begin_transaction(self, name: Optional[str] = None) -> Optional[Transaction]:
+        """
+        Begin a new transaction for batching changes.
+        
+        Args:
+            name: Optional name for the transaction
+            
+        Returns:
+            Transaction object, or None if persistence not initialized
+        """
+        if self.persistence_manager is None:
+            logger.error("Cannot begin transaction: persistence not initialized")
+            return None
+        
+        # Get transaction manager
+        transaction_manager = self.persistence_manager.get_transaction_manager(self.world_id)
+        
+        if transaction_manager is None:
+            logger.error("Transaction manager not found")
+            return None
+        
+        # Create transaction
+        return transaction_manager.begin_transaction(name)
+    
+    def list_versions(self) -> List[Dict[str, Any]]:
+        """
+        List all versions of this world.
+        
+        Returns:
+            List of version metadata
+        """
+        if self.persistence_manager is None:
+            logger.error("Cannot list versions: persistence not initialized")
+            return []
+        
+        # Get version control
+        version_control = self.persistence_manager.get_version_control(self.world_id)
+        
+        if version_control is None:
+            logger.error("Version control not found")
+            return []
+        
+        # Get versions
+        return version_control.list_versions()
+    
+    def add_entity(self, entity: Entity) -> bool:
+        """
+        Add an entity to the world.
+        
+        Args:
+            entity: Entity to add
+            
+        Returns:
+            True if added, False if already exists
+        """
+        return self.state.add_entity(entity)
+    
+    def remove_entity(self, entity_id: str) -> bool:
+        """
+        Remove an entity from the world.
+        
+        Args:
+            entity_id: ID of the entity to remove
+            
+        Returns:
+            True if removed, False if not found
+        """
+        return self.state.remove_entity(entity_id)
+    
+    def get_entity(self, entity_id: str) -> Optional[Entity]:
+        """
+        Get an entity by ID.
+        
+        Args:
+            entity_id: ID of the entity
+            
+        Returns:
+            Entity if found, None otherwise
+        """
+        return self.state.get_entity(entity_id)
+    
+    def get_all_entities(self) -> List[Entity]:
+        """
+        Get all entities in the world.
+        
+        Returns:
+            List of all entities
+        """
+        return self.state.get_all_entities()
+    
+    def get_characters(self) -> List[Character]:
+        """
+        Get all characters in the world.
+        
+        Returns:
+            List of all characters
+        """
+        return self.state.get_characters()
+    
+    def get_locations(self) -> List[Location]:
+        """
+        Get all locations in the world.
+        
+        Returns:
+            List of all locations
+        """
+        return self.state.get_locations()
+    
+    def get_items(self) -> List[Item]:
+        """
+        Get all items in the world.
+        
+        Returns:
+            List of all items
+        """
+        return self.state.get_items()
+    
+    def update_metadata(self, key: str, value: Any) -> None:
+        """
+        Update metadata for the world.
+        
+        Args:
+            key: Metadata key
+            value: Metadata value
+        """
+        self._metadata[key] = value
+        
+        # Mark as dirty
+        if self.persistence_manager is not None:
+            self.persistence_manager.mark_world_dirty(self.world_id)
+    
+    def get_metadata(self, key: str) -> Optional[Any]:
+        """
+        Get metadata value.
+        
+        Args:
+            key: Metadata key
+            
+        Returns:
+            Metadata value if exists, None otherwise
+        """
+        return self._metadata.get(key)
+    
+    def get_all_metadata(self) -> Dict[str, Any]:
+        """
+        Get all metadata.
+        
+        Returns:
+            Dictionary of all metadata
+        """
+        return copy.deepcopy(self._metadata)
+    
+    def __str__(self) -> str:
+        """
+        Get string representation of the world.
+        
+        Returns:
+            String representation
+        """
+        entity_count = len(self.state.get_all_entities())
+        character_count = len(self.state.get_characters())
+        location_count = len(self.state.get_locations())
+        item_count = len(self.state.get_items())
+        
+        return (
+            f"World: {self.name} (ID: {self.world_id})\n"
+            f"Description: {self.description}\n"
+            f"Created: {self.created_at}\n"
+            f"Entities: {entity_count} total ({character_count} characters, "
+            f"{location_count} locations, {item_count} items)"
+        ) 

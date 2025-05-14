@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Passwords do not match!');
             }
 
-            if (password.length < 8) {
+            if (password.length < 12) {
                 e.preventDefault();
-                alert('Password must be at least 8 characters long!');
+                alert('Password must be at least 12 characters long!');
             }
         });
     }

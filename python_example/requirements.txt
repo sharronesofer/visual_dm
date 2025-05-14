@@ -1,0 +1,37 @@
+# Python dependencies for converted TypeScript project
+# Auto-generated equivalents of npm packages
+
+# Web framework and utilities
+flask>=2.3.3
+flask-cors>=4.0.0
+flask-socketio>=5.3.6
+gunicorn>=21.2.0
+
+# HTTP client
+requests>=2.31.0
+
+# Data processing
+pydash>=7.0.6
+python-dateutil>=2.8.2
+
+# Database clients
+sqlalchemy>=2.0.23
+pymongo>=4.6.0
+psycopg2-binary>=2.9.9
+
+# Development tools
+pytest>=7.4.3
+mypy>=1.7.0
+pylint>=3.0.2
+black>=23.11.0
+autopep8>=2.0.4
+
+# Other utilities
+python-dotenv>=1.0.0
+uuid>=1.30
+pyyaml>=6.0.1
+
+# Additional dependencies from package.json
+uuid
+logging
+psycopg2-binary

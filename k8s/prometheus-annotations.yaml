@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visualdm-app
+  namespace: visualdm
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '5000'
+    prometheus.io/path: '/metrics' 

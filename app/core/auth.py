@@ -15,6 +15,7 @@ from app.core.utils.error_utils import (
     AuthorizationError
 )
 from app.core.utils.auth_utils import require_permission
+from app.core.services.access_control_service import access_control_service
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -151,23 +152,19 @@ def require_permission(permission: str) -> Callable:
             try:
                 if not hasattr(request, 'user'):
                     raise AuthenticationError("User not authenticated")
-                
-                user_permissions = request.user.get('permissions', [])
-                if permission not in user_permissions:
+                user = request.user
+                if not access_control_service.has_permission(user, permission):
                     logger.warning(
-                        f"User {request.user.get('uid')} lacks required permission: {permission}"
+                        f"User {getattr(user, 'uid', getattr(user, 'id', 'unknown'))} lacks required permission: {permission}"
                     )
                     raise AuthorizationError(
                         "Insufficient permissions",
                         required_permissions=[permission]
                     )
-                
                 return f(*args, **kwargs)
-                
             except AuthorizationError as e:
                 logger.error(f"Authorization error: {str(e)}")
                 return jsonify(e.to_dict()), e.status_code
-                
             except Exception as e:
                 logger.error(f"Unexpected authorization error: {str(e)}")
                 return jsonify({
@@ -176,9 +173,8 @@ def require_permission(permission: str) -> Callable:
                     'status_code': 500,
                     'details': {'error': str(e)}
                 }), 500
-                
         return decorated_function
-    return decorator 
+    return decorator
 
 # Example usage for developers:
 # @require_permission('manage_users')

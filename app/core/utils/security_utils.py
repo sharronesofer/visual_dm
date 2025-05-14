@@ -12,6 +12,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from .config_utils import config
 from .error_utils import AuthenticationError, AuthorizationError
+from app.core.services.access_control_service import access_control_service
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -68,10 +69,10 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> Dict[str, Any]:
         raise AuthenticationError("Invalid authentication credentials")
 
 def check_permissions(user, required_permissions: list) -> None:
-    """Check if user has required permissions using RBAC."""
+    """Check if user has required permissions using the unified access control service."""
     missing_permissions = [
         perm for perm in required_permissions
-        if not user.has_permission(perm)
+        if not access_control_service.has_permission(user, perm)
     ]
     if missing_permissions:
         raise AuthorizationError(

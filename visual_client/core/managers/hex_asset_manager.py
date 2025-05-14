@@ -25,6 +25,7 @@ class HexAssetManager(AssetManager):
         self.hex_metadata: Dict[str, Dict[str, Any]] = {}
         self.sprite_sheets: Dict[str, pygame.Surface] = {}
         self.memory_usage: Dict[str, int] = {}
+        self.animation_data: Dict[str, Dict[str, Any]] = {}
         self._setup_hex_directories()
         
     def _setup_hex_directories(self) -> None:
@@ -35,8 +36,12 @@ class HexAssetManager(AssetManager):
                 "terrain/features",
                 "terrain/overlay",
                 "terrain/variations",
+                "terrain/seasonal",
                 "terrain/test_overlays",
-                "terrain/test_all"
+                "terrain/test_all",
+                "terrain/characters",
+                "terrain/equipment",
+                "terrain/animations"
             ]
             
             for directory in hex_directories:
@@ -100,6 +105,7 @@ class HexAssetManager(AssetManager):
                 
             if cache:
                 self.cache[path] = surface
+                self._maintain_cache_size()
                 
             # Store metadata
             if metadata:
@@ -121,6 +127,10 @@ class HexAssetManager(AssetManager):
                 ErrorSeverity.ERROR,
                 {"path": path, "category": category}
             )
+            # Try to load fallback image
+            fallback_path = self.asset_dir / "terrain" / "base" / "fallback.png"
+            if fallback_path.exists():
+                return pygame.image.load(str(fallback_path))
             return None
             
     def _optimize_hex_image(self, surface: pygame.Surface) -> pygame.Surface:
@@ -134,7 +144,7 @@ class HexAssetManager(AssetManager):
         """
         try:
             # Convert to optimal format for hex tiles
-            if surface.get_bitsize() != 32:
+            if surface.get_alpha():
                 surface = surface.convert_alpha()
             else:
                 surface = surface.convert()
@@ -249,45 +259,38 @@ class HexAssetManager(AssetManager):
         Args:
             category: Optional category to clear
         """
-        try:
-            if category:
-                # Clear specific category
-                paths_to_clear = [
-                    path for path in self.cache.keys()
-                    if self.hex_metadata.get(path, {}).get("category") == category
-                ]
-                for path in paths_to_clear:
-                    del self.cache[path]
-                    del self.hex_metadata[path]
-                    del self.memory_usage[path]
-            else:
-                # Clear all hex assets
-                self.hex_metadata.clear()
-                self.sprite_sheets.clear()
-                self.memory_usage.clear()
-                self.cache.clear()
+        if category:
+            # Clear only assets in the specified category
+            for path in list(self.cache.keys()):
+                if path in self.hex_metadata and self.hex_metadata[path].get("category") == category:
+                    self.cache.pop(path)
+                    self.memory_usage.pop(path, None)
+                    self.hex_metadata.pop(path, None)
+        else:
+            # Clear all hex assets
+            for path in list(self.hex_metadata.keys()):
+                self.cache.pop(path, None)
                 
-        except Exception as e:
-            handle_component_error(
-                "HexAssetManager",
-                "clear_hex_cache",
-                e,
-                ErrorSeverity.ERROR,
-                {"category": category}
-            )
-            
+            self.memory_usage.clear()
+            self.hex_metadata.clear()
+    
     def process_hex_loading_queue(self) -> None:
-        """Process the hex asset loading queue."""
+        """Process hex-specific items in the loading queue."""
         try:
             for path, info in list(self.loading_queue.items()):
                 if info["type"] == "hex_image":
-                    surface = pygame.image.load(info["path"])
-                    if info["optimize"]:
+                    # Load the image
+                    full_path = info["path"]
+                    surface = pygame.image.load(full_path)
+                    
+                    if info.get("optimize", False):
                         surface = self._optimize_hex_image(surface)
-                    if info["cache"]:
+                        
+                    # Store the loaded surface
+                    if info.get("cache", True):
                         self.cache[path] = surface
                         
-                    # Store metadata
+                    # Store metadata if provided
                     if info.get("metadata"):
                         self.hex_metadata[path] = {
                             "category": info["category"],
@@ -297,8 +300,12 @@ class HexAssetManager(AssetManager):
                         }
                         self.memory_usage[path] = self.hex_metadata[path]["memory"]
                         
-                    del self.loading_queue[path]
+                    # Remove from queue
+                    self.loading_queue.pop(path, None)
                     
+            # Let the parent class handle other types
+            super().process_loading_queue()
+            
         except Exception as e:
             handle_component_error(
                 "HexAssetManager",
@@ -306,8 +313,230 @@ class HexAssetManager(AssetManager):
                 e,
                 ErrorSeverity.ERROR
             )
-            
+    
     def load_terrain(self, terrain_type: str) -> Optional[pygame.Surface]:
-        """Load a terrain image from the base directory."""
-        filename = f"terrain_{terrain_type}_00.png"
-        return self.load_hex_image(filename, "base", metadata={"type": terrain_type}, lazy=False) 
+        """Load a terrain asset.
+        
+        Args:
+            terrain_type: Type of terrain to load
+            
+        Returns:
+            Loaded terrain surface or None if failed
+        """
+        try:
+            # Try to find in base directory first
+            path = f"{terrain_type}.png"
+            return self.load_hex_image(path, "base")
+        except Exception as e:
+            handle_component_error(
+                "HexAssetManager",
+                "load_terrain",
+                e,
+                ErrorSeverity.ERROR,
+                {"terrain_type": terrain_type}
+            )
+            return None
+    
+    def load_hex_animation(
+        self,
+        animation_name: str,
+        category: str = "animations",
+        frame_width: Optional[int] = None,
+        frame_height: Optional[int] = None
+    ) -> Optional[List[pygame.Surface]]:
+        """Load a hex-based animation.
+        
+        Args:
+            animation_name: Name of the animation
+            category: Animation category
+            frame_width: Width of each frame (if loading from sprite sheet)
+            frame_height: Height of each frame (if loading from sprite sheet)
+            
+        Returns:
+            List of animation frame surfaces or None if failed
+        """
+        try:
+            # Check if we already have animation data
+            if animation_name in self.animation_data:
+                return self.animation_data[animation_name]["frames"]
+                
+            # Try to load from sprite sheet first if dimensions provided
+            if frame_width and frame_height:
+                sheet_path = f"{category}/{animation_name}_sheet.png"
+                frames = self.load_sprite_sheet(
+                    sheet_path,
+                    frame_width,
+                    frame_height,
+                    lazy=False,
+                    optimize=True
+                )
+                if frames:
+                    self.animation_data[animation_name] = {
+                        "frames": frames,
+                        "durations": [100] * len(frames),  # Default 100ms per frame
+                        "loop": True
+                    }
+                    return frames
+                    
+            # If no sprite sheet or loading failed, try individual frames
+            frame_paths = []
+            frame_num = 1
+            
+            while True:
+                frame_path = f"{category}/{animation_name}_{frame_num:02d}.png"
+                full_path = self.asset_dir / "terrain" / frame_path
+                
+                if not full_path.exists():
+                    break
+                    
+                frame_paths.append(frame_path)
+                frame_num += 1
+                
+            if not frame_paths:
+                return None
+                
+            frames = []
+            for frame_path in frame_paths:
+                frame = self.load_hex_image(frame_path, category)
+                if frame:
+                    frames.append(frame)
+                    
+            if frames:
+                self.animation_data[animation_name] = {
+                    "frames": frames,
+                    "durations": [100] * len(frames),  # Default 100ms per frame
+                    "loop": True
+                }
+                
+            return frames
+            
+        except Exception as e:
+            handle_component_error(
+                "HexAssetManager",
+                "load_hex_animation",
+                e,
+                ErrorSeverity.ERROR,
+                {"animation_name": animation_name, "category": category}
+            )
+            return None
+    
+    def apply_hex_tint(
+        self,
+        surface: pygame.Surface,
+        tint_color: Tuple[int, int, int],
+        alpha: int = 128
+    ) -> pygame.Surface:
+        """Apply a hex-specific tint to a surface.
+        
+        Args:
+            surface: Surface to tint
+            tint_color: RGB tuple (0-255) for tint color
+            alpha: Alpha value (0-255) for tint opacity
+            
+        Returns:
+            Tinted surface
+        """
+        # Delegate to parent class method
+        return self.apply_tint_to_surface(surface, tint_color, alpha)
+    
+    def load_hex_terrain_set(self, terrain_type: str) -> Optional[List[pygame.Surface]]:
+        """Load all variants of a hex terrain type.
+        
+        Args:
+            terrain_type: Type of terrain (e.g., 'grass', 'water')
+            
+        Returns:
+            List of terrain variant surfaces or None if loading failed
+        """
+        return self.load_terrain_set(terrain_type)
+    
+    def load_hex_feature_set(self, feature_type: str) -> Optional[List[pygame.Surface]]:
+        """Load all variants of a hex feature type.
+        
+        Args:
+            feature_type: Type of feature (e.g., 'tree', 'rock')
+            
+        Returns:
+            List of feature variant surfaces or None if loading failed
+        """
+        try:
+            frames = []
+            for i in range(1, 6):  # Try up to 5 variations
+                path = f"{feature_type}_{i:02d}.png"
+                frame = self.load_hex_image(path, "features")
+                if frame:
+                    frames.append(frame)
+                    
+            return frames if frames else None
+            
+        except Exception as e:
+            handle_component_error(
+                "HexAssetManager",
+                "load_hex_feature_set",
+                e,
+                ErrorSeverity.ERROR,
+                {"feature_type": feature_type}
+            )
+            return None
+    
+    def load_hex_seasonal_variations(self, base_asset: str) -> Optional[Dict[str, pygame.Surface]]:
+        """Load seasonal variations of a hex asset.
+        
+        Args:
+            base_asset: Base asset name
+            
+        Returns:
+            Dictionary of season to surface mappings or None if loading failed
+        """
+        try:
+            seasons = {
+                "summer": "summer",
+                "autumn": "autumn", 
+                "winter": "winter",
+                "spring": "spring",
+                "rain": "rain",
+                "snow": "snow",
+                "fog": "fog"
+            }
+            
+            variations = {}
+            
+            for season_key, season_name in seasons.items():
+                path = f"{season_name}_{base_asset}"
+                surface = self.load_hex_image(path, "seasonal")
+                if surface:
+                    variations[season_key] = surface
+                    
+            return variations if variations else None
+            
+        except Exception as e:
+            handle_component_error(
+                "HexAssetManager",
+                "load_hex_seasonal_variations",
+                e,
+                ErrorSeverity.ERROR,
+                {"base_asset": base_asset}
+            )
+            return None
+    
+    def load_hex_asset_index(self, index_path: str) -> Optional[Dict[str, Any]]:
+        """Load and validate a hex asset index file.
+        
+        Args:
+            index_path: Path to the index file
+            
+        Returns:
+            Parsed index data or None if loading failed
+        """
+        try:
+            schema_path = "hex_asset_index.schema.json"
+            return self.load_json(index_path, validate_schema=True, schema_path=schema_path)
+        except Exception as e:
+            handle_component_error(
+                "HexAssetManager",
+                "load_hex_asset_index",
+                e,
+                ErrorSeverity.ERROR,
+                {"index_path": index_path}
+            )
+            return None 

@@ -1,0 +1,192 @@
+{
+  "alert_data": {
+    "name": "Database Connection Failures",
+    "severity": "P1",
+    "system": "database_system",
+    "description": "Multiple database connection failures detected affecting all services",
+    "value": 85,
+    "unit": "%",
+    "threshold": 10,
+    "impact": "Critical impact on all services. Users unable to access the platform.",
+    "id": "f74e50e3-be9b-4dcc-9243-74ed1116361d",
+    "created_at": "2025-05-14T22:06:22.120927+00:00",
+    "status": "new",
+    "current_escalation_level": "initial_response",
+    "initial_response_at": "2025-05-14T22:26:22.105939+00:00",
+    "initial_targets": [
+      {
+        "role": "primary_oncall",
+        "description": "Primary On-Call Engineer",
+        "notification_methods": [
+          "pagerduty_primary",
+          "slack_dm",
+          "sms",
+          "email"
+        ]
+      }
+    ],
+    "initial_actions": [
+      "create_incident",
+      "notify_slack_channel",
+      "update_status_page"
+    ],
+    "initial_automations": [
+      "start_incident_timer",
+      "create_zoom_bridge",
+      "assign_incident_id"
+    ],
+    "history": [
+      {
+        "timestamp": "2025-05-14T22:26:22.105946+00:00",
+        "event": "alert_received",
+        "targets": [
+          "primary_oncall"
+        ],
+        "actions": [
+          "create_incident",
+          "notify_slack_channel",
+          "update_status_page"
+        ],
+        "automations": [
+          "start_incident_timer",
+          "create_zoom_bridge",
+          "assign_incident_id"
+        ]
+      },
+      {
+        "timestamp": "2025-05-14T22:26:22.122016+00:00",
+        "event": "escalated_to_first_level",
+        "targets": [
+          "service_owner",
+          "director"
+        ],
+        "actions": [
+          "notify_slack_channel",
+          "update_incident_status",
+          "expand_zoom_bridge"
+        ]
+      }
+    ]
+  },
+  "result": {
+    "action": "escalated",
+    "level": "first_level",
+    "alert": {
+      "name": "Database Connection Failures",
+      "severity": "P1",
+      "system": "database_system",
+      "description": "Multiple database connection failures detected affecting all services",
+      "value": 85,
+      "unit": "%",
+      "threshold": 10,
+      "impact": "Critical impact on all services. Users unable to access the platform.",
+      "id": "f74e50e3-be9b-4dcc-9243-74ed1116361d",
+      "created_at": "2025-05-14T22:06:22.120927+00:00",
+      "status": "new",
+      "current_escalation_level": "first_level",
+      "initial_response_at": "2025-05-14T22:26:22.105939+00:00",
+      "initial_targets": [
+        {
+          "role": "primary_oncall",
+          "description": "Primary On-Call Engineer",
+          "notification_methods": [
+            "pagerduty_primary",
+            "slack_dm",
+            "sms",
+            "email"
+          ]
+        }
+      ],
+      "initial_actions": [
+        "create_incident",
+        "notify_slack_channel",
+        "update_status_page"
+      ],
+      "initial_automations": [
+        "start_incident_timer",
+        "create_zoom_bridge",
+        "assign_incident_id"
+      ],
+      "history": [
+        {
+          "timestamp": "2025-05-14T22:26:22.105946+00:00",
+          "event": "alert_received",
+          "targets": [
+            "primary_oncall"
+          ],
+          "actions": [
+            "create_incident",
+            "notify_slack_channel",
+            "update_status_page"
+          ],
+          "automations": [
+            "start_incident_timer",
+            "create_zoom_bridge",
+            "assign_incident_id"
+          ]
+        },
+        {
+          "timestamp": "2025-05-14T22:26:22.122016+00:00",
+          "event": "escalated_to_first_level",
+          "targets": [
+            "service_owner",
+            "director"
+          ],
+          "actions": [
+            "notify_slack_channel",
+            "update_incident_status",
+            "expand_zoom_bridge"
+          ]
+        }
+      ],
+      "first_level_at": "2025-05-14T22:26:22.121985+00:00",
+      "escalation_targets": [
+        {
+          "role": "service_owner",
+          "description": "Service Owner",
+          "notification_methods": [
+            "slack_dm",
+            "email"
+          ]
+        },
+        {
+          "role": "director",
+          "description": "Director of Engineering",
+          "notification_methods": [
+            "slack_dm",
+            "email",
+            "phone_call_p1_only"
+          ]
+        }
+      ],
+      "escalation_actions": [
+        "notify_slack_channel",
+        "update_incident_status",
+        "expand_zoom_bridge"
+      ]
+    },
+    "notifications": {
+      "success": [
+        {
+          "channel": "slack",
+          "targets": [
+            "@service_owner",
+            "@director",
+            "#incidents"
+          ],
+          "timestamp": "2025-05-14T22:26:22.124972+00:00"
+        },
+        {
+          "channel": "email",
+          "targets": [
+            "director@example.com",
+            "service_owner@example.com",
+            "oncall@example.com"
+          ],
+          "timestamp": "2025-05-14T22:26:22.126041+00:00"
+        }
+      ],
+      "failure": []
+    }
+  }
+}

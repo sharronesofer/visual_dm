@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: visualdm
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-to-db-redis
+  namespace: visualdm
+spec:
+  podSelector:
+    matchLabels:
+      app: db
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: visualdm-app
+      ports:
+        - protocol: TCP
+          port: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-to-redis
+  namespace: visualdm
+spec:
+  podSelector:
+    matchLabels:
+      app: redis
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: visualdm-app
+      ports:
+        - protocol: TCP
+          port: 6379 

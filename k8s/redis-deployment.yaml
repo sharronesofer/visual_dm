@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: visual-dm-redis
+  namespace: visual-dm
+  labels:
+    app: visual-dm
+    component: redis
+spec:
+  serviceName: visual-dm-redis
+  replicas: 1
+  selector:
+    matchLabels:
+      app: visual-dm
+      component: redis
+  template:
+    metadata:
+      labels:
+        app: visual-dm
+        component: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7.0-alpine
+        command:
+        - redis-server
+        - --appendonly
+        - "yes"
+        - --requirepass
+        - "$(REDIS_PASSWORD)"
+        ports:
+        - containerPort: 6379
+          name: redis
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: visual-dm-secrets
+              key: redis-password
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi 

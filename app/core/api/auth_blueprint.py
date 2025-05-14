@@ -24,7 +24,7 @@ from app.core.database import db
 class LoginRequest(BaseModel):
     """Login request schema."""
     email: EmailStr
-    password: constr(min_length=8, max_length=128)
+    password: constr(min_length=12, max_length=128)
 
 class LoginResponseSchema(Schema):
     """Login response schema."""
@@ -203,7 +203,7 @@ auth_blueprint = BaseAPIBlueprint("auth", __name__)
             "type": "object",
             "properties": {
                 "email": {"type": "string", "format": "email"},
-                "password": {"type": "string", "minLength": 8, "maxLength": 128}
+                "password": {"type": "string", "minLength": 12, "maxLength": 128}
             },
             "required": ["email", "password"]
         }

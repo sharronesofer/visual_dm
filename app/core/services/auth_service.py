@@ -20,6 +20,7 @@ from app.core.exceptions import (
     UserNotFoundError,
     InvalidTokenError
 )
+from app.core.utils.security_logger import SecurityEventLogger
 
 class AuthService:
     """Service for handling user authentication and session management."""
@@ -173,10 +174,22 @@ class AuthService:
         """
         user = User.query.filter_by(email=email).first()
         if not user:
+            # Log failed attempt but don't reveal user existence
+            SecurityEventLogger.log_password_reset_attempt(
+                email=email,
+                success=False,
+                reason="User not found"
+            )
             raise UserNotFoundError("No user found with this email address")
         
         reset_token = generate_token()
         user.set_reset_token(reset_token)
+        
+        # Log successful token generation
+        SecurityEventLogger.log_password_reset_attempt(
+            email=email,
+            success=True
+        )
         
         send_password_reset_email(user.email, reset_token)
     
@@ -196,16 +209,36 @@ class AuthService:
             InvalidTokenError: If token is invalid or expired
         """
         user = User.query.filter_by(reset_token=token).first()
+        
+        # Handle invalid token
         if not user:
+            SecurityEventLogger.log_event(
+                event_type="password_reset_failure",
+                details={"reason": "Invalid token", "token": token[:5] + "..." if token else "None"},
+                level="warning"
+            )
             raise InvalidTokenError("Invalid reset token")
         
+        # Handle expired token
         if not user.check_reset_token(token):
+            SecurityEventLogger.log_password_reset_attempt(
+                email=user.email,
+                success=False,
+                reason="Token expired"
+            )
             raise InvalidTokenError("Reset token has expired")
         
         user.set_password(new_password)
         user.reset_token = None
         user.reset_token_expires = None
         db.session.commit()
+        
+        # Log successful password reset
+        SecurityEventLogger.log_password_reset_attempt(
+            email=user.email,
+            success=True,
+            reason="Password reset successful"
+        )
         
         return user
     

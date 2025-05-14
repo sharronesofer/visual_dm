@@ -1466,3 +1466,176 @@ The following is a comprehensive list of actionable tasks currently tracked for 
 ---
 
 *End of Task Breakdown (Imported from tasks_import.json)* 
+
+# TypeScript to Python Conversion Tool
+
+This project involves creating a set of tools to automatically convert TypeScript code to Python, specifically targeting applications for Steam release. The conversion tools will transform TypeScript syntax, types, classes, and React components into Python-compatible code.
+
+# Core Features
+
+## TypeScript Syntax Conversion
+- Transform TypeScript-specific syntax (interfaces, types, enums, etc.) to Python equivalents
+- Convert TypeScript classes to Python classes with proper typing
+- Handle TypeScript imports and organize them in Python format
+- Support common TypeScript/JavaScript idioms and patterns
+
+## Python Best Practices Implementation
+- Apply Python naming conventions (camelCase to snake_case)
+- Fix common conversion issues like booleans and string formatting
+- Create proper Python package structure with `__init__.py` files
+- Ensure PEP8 compliance with code formatting tools
+
+## Project Structure Management
+- Maintain project directory structure during conversion
+- Handle non-TypeScript files properly (copying or converting as needed)
+- Generate requirements.txt with Python equivalents of npm packages
+- Create entry points for the converted Python application
+
+# User Experience
+- Command-line tools for individual and batch file conversion
+- Comprehensive conversion for entire projects with a single command
+- Clear documentation for the conversion process and post-conversion steps
+- Examples demonstrating the conversion of various TypeScript features
+
+# Technical Architecture
+
+## Component Structure
+- **ts2py.py**: Core conversion engine for transforming TypeScript syntax to Python
+  - Type system conversion (interfaces, types, enums to Python equivalents)
+  - Class conversion with proper Python structure and naming
+  - Function conversion including arrow functions and async methods
+  - Import/export statement handling
+  - Common JavaScript/TypeScript pattern translation
+
+- **fix_python_conversion.py**: Post-processing tool for improving generated Python code
+  - Convert naming conventions (camelCase to snake_case)
+  - Fix boolean values (true/false to True/False)
+  - Implement proper string formatting
+  - Organize imports according to PEP8
+  - Fix common syntax issues after conversion
+
+- **convert_project.py**: High-level tool for handling entire project conversion
+  - Coordinate the conversion process for all files
+  - Create Python package structure with `__init__.py` files
+  - Copy non-TypeScript assets and resources
+  - Generate requirements.txt with Python equivalents
+  - Create entry points for Python applications
+
+## Data Models
+- Type mappings from TypeScript to Python (string → str, etc.)
+- Import path resolution and module structure conversion
+- Class structure transformation rules
+- Common pattern replacement rules
+
+## Infrastructure Requirements
+- Python 3.8+ runtime
+- Dependencies:
+  - autopep8 for code formatting
+  - Standard library modules for file handling and regex
+- Command-line interfaces for all tools
+- Documentation in Markdown format
+
+# Development Roadmap
+
+## Phase 1: Core Conversion Logic
+- Implement basic TypeScript to Python type conversion
+- Handle class and function syntax conversion
+- Convert import/export statements properly
+- Support TypeScript enums, interfaces, and basic types
+- Build test cases for basic conversion functionality
+
+## Phase 2: Post-Processing Improvements  
+- Implement naming convention adjustments
+- Create import organization and cleanup
+- Fix common syntax issues in converted code
+- Implement Python best practices in generated code
+- Add PEP8 formatting support
+
+## Phase 3: Project Structure Handling
+- Add support for handling entire project directories
+- Implement Python package structure creation
+- Handle non-TypeScript files properly
+- Generate requirements.txt with dependency mappings
+- Create application entry points
+
+## Phase 4: Advanced Features and Edge Cases
+- Support for complex TypeScript types and patterns
+- Handle TypeScript decorators
+- Implement UI component conversion strategies
+- Support React component patterns
+- Handle TypeScript generics properly
+
+## Phase 5: Documentation and Examples  
+- Create comprehensive usage documentation
+- Develop example conversions with before/after
+- Document known limitations and workarounds
+- Create post-conversion guidance for Steam integration
+- Provide troubleshooting guides for common issues
+
+# Logical Dependency Chain
+
+## Foundation Components
+1. Core type system mapping (TypeScript → Python types)
+2. Basic syntax conversion functions
+3. File handling and directory structure maintenance
+
+## Progressive Feature Implementation
+1. Simple TypeScript file conversion with basic features
+2. Class and function conversion with proper Python structure
+3. Post-processing fixes for naming and syntax issues
+4. Full project conversion with package structure
+
+## End-User Facing Elements  
+1. Command-line interfaces for all conversion tools
+2. Documentation and examples for users
+3. Steam integration guidance
+4. Troubleshooting guides
+
+# Risks and Mitigations
+
+## Technical Challenges
+- **Complex TypeScript Features**: Some advanced TypeScript features may not have direct Python equivalents.
+  - *Mitigation*: Provide clear documentation for cases requiring manual intervention.
+
+- **React Component Conversion**: React's component model doesn't directly map to Python.
+  - *Mitigation*: Create guidance for using Flask or other Python web frameworks as alternatives.
+
+- **Type Safety Loss**: Python's dynamic typing is less strict than TypeScript.
+  - *Mitigation*: Use Python type hints extensively and provide guidance on type checking tools.
+
+## Implementation Risks
+- **Conversion Accuracy**: Automated conversions may not handle all edge cases.
+  - *Mitigation*: Build a comprehensive test suite with diverse TypeScript patterns.
+
+- **Library Compatibility**: npm packages won't have direct Python equivalents.
+  - *Mitigation*: Create a mapping of common libraries and alternatives.
+
+- **Steam Integration**: Python apps need specific handling for Steam integration.
+  - *Mitigation*: Provide detailed guidance on Steam SDK usage with Python.
+
+# Appendix
+
+## TypeScript to Python Type Mappings
+- string → str
+- number → float
+- boolean → bool
+- any → Any
+- void → None
+- Array<T> → List[T]
+- Record<K,V> → Dict[K,V]
+- undefined/null → None
+- interface → class
+- enum → Enum class
+
+## Common npm to pip Package Mappings
+- axios → requests
+- lodash → pydash
+- moment → python-dateutil
+- express → flask
+- react → (No direct equivalent, using Flask templates)
+
+## Steam Integration Considerations
+- Python GUI frameworks compatible with Steam (PyGame, PyQt)
+- Steam Overlay integration techniques
+- Steam achievements and leaderboard API access
+- Save data and Cloud storage integration 

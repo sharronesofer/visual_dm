@@ -312,4 +312,11 @@ class LoadingManager:
                 e,
                 ErrorSeverity.ERROR,
                 {"id": id}
-            ) 
+            )
+            
+    def get_progress(self, id: str) -> Optional[float]:
+        """Get the current progress (0.0-1.0) for a loading operation by id."""
+        state = self.loading_states.get(id)
+        if state:
+            return state["current"] / state["total"]
+        return None 

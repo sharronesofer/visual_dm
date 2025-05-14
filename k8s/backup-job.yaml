@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: web-app-backup
+  namespace: default
+spec:
+  schedule: "0 2 * * *" # Daily at 2am
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup
+              image: busybox
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  # Placeholder: Replace with actual backup logic (e.g., aws s3 cp)
+                  echo "Backing up data..."
+                  tar czf /backup/backup-$(date +%F).tar.gz /data
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+                - name: backup
+                  mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: web-app-data
+            - name: backup
+              emptyDir: {}

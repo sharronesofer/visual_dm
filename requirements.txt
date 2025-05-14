@@ -6,6 +6,7 @@ Flask-Limiter==3.5.1
 Flask-SQLAlchemy==3.1.1
 Flask-Migrate==4.0.5
 Flask-Marshmallow==1.0.0
+Flask-WTF==1.2.1
 
 # API Documentation
 apispec==6.5.0
@@ -143,3 +144,15 @@ pylint>=2.9.6
 # Added from the code block
 reportlab>=3.6.0  # For PDF export in monitoring/reporting
 # Set ADMIN_EMAIL in your environment for scheduled monitoring report emails 
+
+# Python dependencies for TypeScript to Python migration
+mypy>=1.0.0
+flake8>=6.0.0
+pytest>=7.3.1
+black>=23.3.0
+pylint>=2.17.0
+typing-extensions>=4.5.0
+pydantic>=2.0.0
+pygame>=2.5.0
+fastapi>=0.95.1
+uvicorn>=0.22.0 

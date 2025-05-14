@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-05-14T18:29:27.959250",
+  "tests_run": 7,
+  "test_names": [
+    "p1_critical_alert",
+    "p2_high_alert",
+    "p3_medium_alert",
+    "p4_low_alert",
+    "suppression_rule",
+    "auto_recovery",
+    "system_override"
+  ]
+}

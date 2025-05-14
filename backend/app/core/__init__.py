@@ -1,0 +1,1 @@
+"""Core functionality for the Visual DM backend application.""" 

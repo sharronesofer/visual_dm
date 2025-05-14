@@ -61,6 +61,12 @@ class ConfigManager:
                     "save_dir": "saves",
                     "screenshot_dir": "screenshots",
                     "log_dir": "logs"
+                },
+                "spatial_indexing": {
+                    "batch_size": 128,
+                    "flush_interval": 0.05,
+                    "update_frequency": 60,
+                    "enable_performance_monitoring": True
                 }
             }
             

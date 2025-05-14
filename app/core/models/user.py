@@ -58,7 +58,7 @@ class User(db.Model):
     def has_permission(self, permission_name: str) -> bool:
         """Check if the user has a specific permission via their role."""
         if self.role and hasattr(self.role, 'permissions'):
-            return self.role.permissions.filter_by(name=permission_name).count() > 0
+            return self.role.has_permission(permission_name)
         return False
     
     def set_role(self, role):

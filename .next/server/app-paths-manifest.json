@@ -1,0 +1,6 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/docs/route": "app/api/docs/route.js",
+  "/frontend/node_modules/color-convert/route": "app/frontend/node_modules/color-convert/route.js",
+  "/api-docs/page": "app/api-docs/page.js"
+}

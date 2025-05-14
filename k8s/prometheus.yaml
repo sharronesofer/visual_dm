@@ -1,0 +1,65 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: visualdm-prometheus
+  labels:
+    app: visualdm
+spec:
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      app: visualdm
+  resources:
+    requests:
+      memory: 400Mi
+      cpu: 200m
+    limits:
+      memory: 1Gi
+      cpu: 1
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: visualdm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.51.0
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: prometheus-data
+              mountPath: /prometheus
+      volumes:
+        - name: prometheus-data
+          persistentVolumeClaim:
+            claimName: prometheus-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-data
+  namespace: visualdm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi 

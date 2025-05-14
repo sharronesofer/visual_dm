@@ -12,8 +12,12 @@ from flask_jwt_extended import (
     jwt_required, create_access_token, create_refresh_token, get_jwt_identity, get_jwt
 )
 from app.auth.auth_utils import AuthService
+from app.core.validation.captcha import require_captcha
+from app.core.validation.rate_limiter import rate_limit
 
 @bp.route('/login', methods=['GET', 'POST'])
+@require_captcha()
+@rate_limit('auth')
 def login():
     """Handle user login."""
     if current_user.is_authenticated:
@@ -47,6 +51,8 @@ def logout():
     return redirect(url_for('main.index'))
 
 @bp.route('/register', methods=['GET', 'POST'])
+@require_captcha()
+@rate_limit('auth')
 def register():
     """Handle user registration."""
     if current_user.is_authenticated:
@@ -73,7 +79,7 @@ def register():
 
         # Password strength validation
         if not User.validate_password_strength(password):
-            flash('Password must be at least 8 characters long and contain both letters and numbers.', 'error')
+            flash('Password must be at least 12 characters long and contain both letters and numbers.', 'error')
             return redirect(url_for('auth.register'))
 
         try:
@@ -90,8 +96,35 @@ def register():
     return render_template('auth/register.html')
 
 @bp.route('/api/login', methods=['POST'])
+@rate_limit('auth')
 def api_login():
     data = request.get_json()
+    
+    # Validate CAPTCHA
+    challenge_id = data.get('captcha_challenge_id')
+    captcha_response = data.get('captcha_response')
+    
+    if not challenge_id or not captcha_response:
+        return jsonify({
+            'error': 'validation_error',
+            'message': 'CAPTCHA validation required',
+            'details': [{'field': 'captcha', 'message': 'CAPTCHA response is required'}]
+        }), 400
+    
+    # Import here to avoid circular imports
+    from app.core.validation.captcha import captcha_manager
+    
+    if not captcha_manager.validate_captcha(challenge_id, captcha_response):
+        # Generate a new CAPTCHA
+        new_captcha = captcha_manager.get_captcha()
+        return jsonify({
+            'error': 'validation_error',
+            'message': 'Invalid CAPTCHA response',
+            'details': [{'field': 'captcha', 'message': 'Incorrect CAPTCHA response'}],
+            'new_captcha': new_captcha
+        }), 400
+    
+    # Proceed with login
     username_or_email = data.get('username') or data.get('email')
     password = data.get('password')
     if not username_or_email or not password:

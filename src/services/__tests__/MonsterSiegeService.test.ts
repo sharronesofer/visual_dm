@@ -50,11 +50,29 @@ describe('MonsterSiegeService', () => {
   it('resolves attack with outcome: close_defeat', async () => {
     const pois = [new POI('B', 'Border Town', [0, 0], 'town', 'region', 'active')];
     const [attack] = service.triggerAttacks(pois, { seed: 2, attackChance: 1 });
-    // Set attack strength to be slightly higher than defender
-    attack.strength = 12;
-    const result = await service.resolveAttack(attack.id);
-    expect(['close_defeat', 'defended']).toContain(result.outcome); // Randomness may push to defended
-    expect(attack.resolved).toBe(true);
+    
+    // Mock Math.random to ensure deterministic outcome
+    const originalRandom = Math.random;
+    try {
+      // Force a value that will lead to close_defeat
+      Math.random = jest.fn().mockReturnValue(0.4); // Adjust value based on implementation
+      
+      // Set attack strength to be slightly higher than defender
+      attack.strength = 12;
+      const result = await service.resolveAttack(attack.id);
+      
+      // Since we've made the test deterministic, we can assert the exact outcome
+      expect(result.outcome).toBe('close_defeat');
+      expect(attack.resolved).toBe(true);
+      expect(result.combatLog.length).toBeGreaterThan(0);
+      
+      // Check additional properties to verify correct outcome processing
+      const poi = pois[0];
+      expect(poi.metadata!.damageLevel).toBeGreaterThan(0);
+      expect(poi.metadata!.factionStrength).toBeLessThan(100);
+    } finally {
+      Math.random = originalRandom;
+    }
   });
 
   it('resolves attack with outcome: decisive_defeat', async () => {

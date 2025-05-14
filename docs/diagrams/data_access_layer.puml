@@ -1,0 +1,98 @@
+@startuml Data Access Layer Architecture
+
+' Styling and theme
+skinparam backgroundColor white
+skinparam componentStyle uml2
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+' Component definitions
+package "Application Layer" {
+  [Game Logic] as GameLogic
+  [API Controllers] as APIControllers
+  [Services] as Services
+}
+
+package "Data Access Layer" {
+  [Repositories] as Repositories
+  [Entity Mappers] as EntityMappers
+  [Query Builders] as QueryBuilders
+  [Connection Pool] as ConnectionPool
+  [Transaction Manager] as TransactionManager
+}
+
+package "Persistence Layer" {
+  database "PostgreSQL" as PostgreSQL {
+    [Tables] as Tables
+    [Stored Procedures] as StoredProcedures
+    [Indexes] as Indexes
+  }
+  
+  [Backup System] as BackupSystem
+  [Migration Scripts] as MigrationScripts
+}
+
+package "Monitoring & Observability" {
+  [Query Logging] as QueryLogging
+  [Performance Metrics] as PerformanceMetrics
+  [Error Tracking] as ErrorTracking
+}
+
+' Relationships and data flow
+GameLogic --> Services
+APIControllers --> Services
+Services --> Repositories
+
+Repositories --> EntityMappers
+Repositories --> QueryBuilders
+Repositories --> TransactionManager
+QueryBuilders --> ConnectionPool
+TransactionManager --> ConnectionPool
+ConnectionPool --> PostgreSQL
+
+PostgreSQL <-- MigrationScripts
+PostgreSQL <-- BackupSystem
+
+ConnectionPool --> QueryLogging
+QueryBuilders --> QueryLogging
+QueryLogging --> PerformanceMetrics
+ConnectionPool --> PerformanceMetrics
+TransactionManager --> ErrorTracking
+
+' Interaction explanations
+note right of Services
+  Services encapsulate business logic
+  and coordinate persistence operations
+end note
+
+note right of Repositories
+  Repositories abstract database operations
+  and provide domain-specific methods
+end note
+
+note right of EntityMappers
+  Convert between database row format
+  and application domain objects
+end note
+
+note left of ConnectionPool
+  Manages database connections
+  and optimizes resource usage
+end note
+
+note left of TransactionManager
+  Ensures data consistency
+  with ACID guarantees
+end note
+
+note bottom of MigrationScripts
+  Versioned schema changes
+  for controlled evolution
+end note
+
+note bottom of BackupSystem
+  Daily backups and
+  point-in-time recovery
+end note
+
+@enduml 

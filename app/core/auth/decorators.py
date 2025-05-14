@@ -5,6 +5,7 @@ from flask import request, current_app, g
 import jwt
 
 from ..api.response import APIResponse
+from app.core.services.access_control_service import access_control_service
 
 def get_token_from_header() -> Optional[str]:
     """Extract JWT token from Authorization header."""
@@ -51,13 +52,11 @@ def require_role(role: Union[str, List[str]]) -> Callable:
         @require_auth
         def decorated(*args, **kwargs):
             required_roles = [role] if isinstance(role, str) else role
-            user_roles = g.current_user.get('roles', [])
-            
-            if not any(r in user_roles for r in required_roles):
+            user = g.current_user
+            if not user or not any(user.role and user.role.name == r for r in required_roles):
                 return APIResponse.forbidden(
                     f"Required role(s): {', '.join(required_roles)}"
                 ).to_dict(), 403
-                
             return f(*args, **kwargs)
         return decorated
     return decorator
@@ -69,13 +68,11 @@ def require_permission(permission: Union[str, List[str]]) -> Callable:
         @require_auth
         def decorated(*args, **kwargs):
             required_permissions = [permission] if isinstance(permission, str) else permission
-            user_permissions = g.current_user.get('permissions', [])
-            
-            if not any(p in user_permissions for p in required_permissions):
+            user = g.current_user
+            if not user or not any(access_control_service.has_permission(user, p) for p in required_permissions):
                 return APIResponse.forbidden(
                     f"Required permission(s): {', '.join(required_permissions)}"
                 ).to_dict(), 403
-                
             return f(*args, **kwargs)
         return decorated
     return decorator

@@ -27,6 +27,9 @@ from app.core.models.character import Character
 ## from app.core.routes.quest_routes import quest_routes
 ## from app.core.routes.world_routes import world_routes
 ## from app.core.routes.code_routes import code_routes
+from app.core.routes.captcha_routes import captcha_bp
+from app.core.routes.native_captcha_routes import native_captcha_bp
+from app.core.routes.native_auth_routes import native_auth_bp
 from flask_socketio import SocketIO
 from redis import Redis
 from .extensions import db
@@ -66,14 +69,14 @@ def create_app(config=None):
     
     # Load configuration
     if config is None:
-        # Load default configuration
-        app.config.from_object('app.config.default')
+        # Load default configuration from config dictionary
+        from app.config import config as config_dict
         
-        # Override with instance configuration
+        # Apply the appropriate configuration based on environment
         if app.config.get('ENV') == 'production':
-            app.config.from_object('app.config.production')
+            app.config.from_object(config_dict['production'])
         else:
-            app.config.from_object('app.config.development')
+            app.config.from_object(config_dict['development'])
     else:
         # Load custom configuration
         app.config.from_object(config)
@@ -85,6 +88,22 @@ def create_app(config=None):
     
     # Register blueprints
     ## app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(captcha_bp)
+    app.register_blueprint(native_captcha_bp)
+    app.register_blueprint(native_auth_bp)
+    
+    # Register error handlers
+    register_error_handlers(app)
+    
+    # Initialize CSRF protection
+    from flask_wtf.csrf import CSRFProtect
+    csrf = CSRFProtect(app)
+    
+    # Register login manager
+    login_manager.init_app(app)
+    
+    # Initialize JWT manager for token-based auth
+    jwt = JWTManager(app)
     
     return app
 

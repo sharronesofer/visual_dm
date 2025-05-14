@@ -1,0 +1,129 @@
+{
+  "alert_data": {
+    "name": "Database Connection Failures",
+    "severity": "P1",
+    "system": "database_system",
+    "description": "Multiple database connection failures detected affecting all services",
+    "value": 85,
+    "unit": "%",
+    "threshold": 10,
+    "impact": "Critical impact on all services. Users unable to access the platform."
+  },
+  "result": {
+    "action": "processed",
+    "alert": {
+      "name": "Database Connection Failures",
+      "severity": "P1",
+      "system": "database_system",
+      "description": "Multiple database connection failures detected affecting all services",
+      "value": 85,
+      "unit": "%",
+      "threshold": 10,
+      "impact": "Critical impact on all services. Users unable to access the platform.",
+      "id": "42c22722-3891-4bf5-9452-deef822fb7ff",
+      "created_at": "2025-05-14T22:26:33.057951+00:00",
+      "status": "new",
+      "current_escalation_level": "initial_response",
+      "initial_response_at": "2025-05-14T22:26:33.058125+00:00",
+      "initial_targets": [
+        {
+          "role": "primary_oncall",
+          "description": "Primary On-Call Engineer",
+          "notification_methods": [
+            "pagerduty_primary",
+            "slack_dm",
+            "sms",
+            "email"
+          ]
+        }
+      ],
+      "initial_actions": [
+        "create_incident",
+        "notify_slack_channel",
+        "update_status_page"
+      ],
+      "initial_automations": [
+        "start_incident_timer",
+        "create_zoom_bridge",
+        "assign_incident_id"
+      ],
+      "history": [
+        {
+          "timestamp": "2025-05-14T22:26:33.058130+00:00",
+          "event": "alert_received",
+          "targets": [
+            "primary_oncall"
+          ],
+          "actions": [
+            "create_incident",
+            "notify_slack_channel",
+            "update_status_page"
+          ],
+          "automations": [
+            "start_incident_timer",
+            "create_zoom_bridge",
+            "assign_incident_id"
+          ]
+        }
+      ]
+    },
+    "notifications": {
+      "success": [
+        {
+          "channel": "pagerduty",
+          "targets": [
+            "pagerduty_primary"
+          ],
+          "timestamp": "2025-05-14T22:26:33.058295+00:00"
+        },
+        {
+          "channel": "sms",
+          "targets": [
+            "primary_oncall"
+          ],
+          "timestamp": "2025-05-14T22:26:33.058380+00:00"
+        },
+        {
+          "channel": "slack",
+          "targets": [
+            "#incidents",
+            "@primary_oncall"
+          ],
+          "timestamp": "2025-05-14T22:26:33.058504+00:00"
+        },
+        {
+          "channel": "email",
+          "targets": [
+            "oncall@example.com",
+            "primary_oncall@example.com"
+          ],
+          "timestamp": "2025-05-14T22:26:33.058663+00:00"
+        }
+      ],
+      "failure": []
+    },
+    "automations": {
+      "success": [
+        {
+          "automation": "start_incident_timer",
+          "timestamp": "2025-05-14T22:26:33.058688+00:00"
+        },
+        {
+          "automation": "create_zoom_bridge",
+          "result": {
+            "zoom_url": "https://zoom.us/j/123456789"
+          },
+          "timestamp": "2025-05-14T22:26:33.058709+00:00"
+        },
+        {
+          "automation": "assign_incident_id",
+          "result": {
+            "incident_id": "INC-36785460"
+          },
+          "timestamp": "2025-05-14T22:26:33.058787+00:00"
+        }
+      ],
+      "failure": []
+    }
+  }
+}

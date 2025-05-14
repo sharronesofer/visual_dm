@@ -1,0 +1,5 @@
+./types/buildings/base.ts
+./types/buildings/dungeon.ts
+./types/buildings/exploration.ts
+./types/buildings/social.ts
+./app/frontend/types/index.ts

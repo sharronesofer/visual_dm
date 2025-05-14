@@ -2,7 +2,12 @@
 
 {% block content %}
 <div class="auth-container">
-    <h1>Register</h1>
+    <h1>Create an Account</h1>
+    {% if validation_error %}
+    <div class="error-message">
+        {{ validation_error.message }}
+    </div>
+    {% endif %}
     <form method="POST" action="{{ url_for('auth.register') }}">
         <div class="form-group">
             <label for="username">Username</label>
@@ -15,10 +20,20 @@
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
+            <small class="form-text text-muted">Password must be at least 12 characters long.</small>
         </div>
         <div class="form-group">
             <label for="confirm_password">Confirm Password</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <div class="form-group">
+            <label for="captcha">CAPTCHA Verification</label>
+            <div class="captcha-container">
+                <img src="data:image/png;base64,{{ g.captcha_image }}" alt="CAPTCHA image" class="captcha-image">
+                <button type="button" class="refresh-captcha" onclick="refreshCaptcha()">↻</button>
+            </div>
+            <input type="text" id="captcha" name="captcha" placeholder="Enter the characters you see above" required>
+            <small class="form-text text-muted">This helps us prevent automated registrations.</small>
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Register</button>
@@ -28,4 +43,33 @@
         <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
     </div>
 </div>
-{% endblock %} 
+
+<script>
+    function refreshCaptcha() {
+        fetch('{{ url_for("captcha.get_api_captcha") }}')
+            .then(response => response.json())
+            .then(data => {
+                // Update the CAPTCHA image
+                document.querySelector('.captcha-image').src = 'data:image/png;base64,' + data.image;
+
+                // Update the challenge ID in the session through a hidden form submission
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ url_for("captcha.update_session_captcha") }}';
+                form.style.display = 'none';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'challenge_id';
+                input.value = data.challenge_id;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            })
+            .catch(error => {
+                console.error('Error refreshing CAPTCHA:', error);
+            });
+    }
+</script>
+{% endblock %}

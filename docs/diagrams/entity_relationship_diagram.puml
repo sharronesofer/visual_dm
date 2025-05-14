@@ -1,0 +1,135 @@
+@startuml Entity Relationship Diagram
+
+' Styling and theme
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define ForeignKey(x) <color:red>x</color>
+!define PK(x) <color:blue><b>PK: x</b></color>
+!define FK(x) <color:green><i>FK: x</i></color>
+!define Enum(name,desc) class name as "desc" << (E,#A9DCDF) >>
+!define Index(name,desc) class name as "desc" << (I,#FFCC88) >>
+
+hide methods
+hide stereotypes
+
+skinparam class {
+    BackgroundColor white
+    ArrowColor black
+    BorderColor #33A0A0
+    FontSize 12
+    FontName Arial
+}
+
+' Enum Types
+Enum(ItemTypes, "item_type (ENUM)") {
+    WEAPON
+    ARMOR
+    POTION
+    SCROLL
+    MATERIAL
+    TREASURE
+    KEY
+    QUEST
+    MISC
+}
+
+Enum(RarityNames, "item_rarity (ENUM)") {
+    COMMON
+    UNCOMMON
+    RARE
+    EPIC
+    LEGENDARY
+}
+
+' Tables
+Table(Items, "Items") {
+    PK(id: UUID)
+    name: VARCHAR(100)
+    description: TEXT
+    type: item_type
+    weight: DECIMAL(10,2)
+    value: INTEGER
+    base_stats: JSONB
+    FK(rarity_id: INTEGER)
+    created_at: TIMESTAMP WITH TIME ZONE
+    updated_at: TIMESTAMP WITH TIME ZONE
+}
+
+Table(RarityTiers, "Rarity Tiers") {
+    PK(id: SERIAL)
+    name: item_rarity
+    probability: DECIMAL(5,4)
+    value_multiplier: DECIMAL(10,2)
+    color_hex: VARCHAR(7)
+    created_at: TIMESTAMP WITH TIME ZONE
+}
+
+Table(PlayerInventory, "Player Inventory (Planned)") {
+    PK(id: UUID)
+    FK(player_id: UUID)
+    FK(item_id: UUID)
+    quantity: INTEGER
+    obtained_at: TIMESTAMP WITH TIME ZONE
+    last_used_at: TIMESTAMP WITH TIME ZONE
+}
+
+Table(Players, "Players (Planned)") {
+    PK(id: UUID)
+    username: VARCHAR(50)
+    created_at: TIMESTAMP WITH TIME ZONE
+}
+
+Table(CharacterAttributes, "Character Attributes (Planned)") {
+    PK(id: UUID)
+    FK(player_id: UUID)
+    strength: INTEGER
+    dexterity: INTEGER
+    intelligence: INTEGER
+    constitution: INTEGER
+    wisdom: INTEGER
+    charisma: INTEGER
+    updated_at: TIMESTAMP WITH TIME ZONE
+}
+
+Table(QuestProgress, "Quest Progress (Planned)") {
+    PK(id: UUID)
+    FK(player_id: UUID)
+    FK(quest_id: UUID)
+    status: quest_status
+    progress: JSONB
+    started_at: TIMESTAMP WITH TIME ZONE
+    completed_at: TIMESTAMP WITH TIME ZONE
+}
+
+' Indexes
+Index(idx_items_type, "idx_items_type") {
+    table: items
+    columns: type
+}
+
+Index(idx_items_name, "idx_items_name") {
+    table: items
+    columns: name
+}
+
+Index(idx_items_value, "idx_items_value") {
+    table: items
+    columns: value
+}
+
+Index(idx_items_rarity, "idx_items_rarity") {
+    table: items
+    columns: rarity_id
+}
+
+' Relationships
+Items "0..*" -- "1" RarityTiers : rarity_id
+Items "1" -- "0..*" PlayerInventory : item_id
+Players "1" -- "0..*" PlayerInventory : player_id
+Players "1" -- "1" CharacterAttributes : player_id
+Players "1" -- "0..*" QuestProgress : player_id
+
+' Enum associations (dotted lines to show type relationship)
+Items::type .right. ItemTypes
+RarityTiers::name .down. RarityNames
+
+@enduml 

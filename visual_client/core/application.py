@@ -32,6 +32,7 @@ from .security_manager import SecurityManager
 from .privacy_manager import PrivacyManager
 from datetime import datetime, timedelta
 from visual_client.ui.screens.game.npc_affinity_debug_panel import NPCAffinityDebugPanel
+from .managers.scene_loader_manager import SceneLoaderManager
 
 logger = logging.getLogger(__name__)
 
@@ -183,6 +184,11 @@ class Application:
             
             # Register API versions
             self._register_api_versions()
+            
+            # Integrate SceneLoaderManager for async scene loading
+            if hasattr(self, 'scene_manager'):
+                self.scene_loader_manager = SceneLoaderManager(self.scene_manager, self.loading_manager)
+                self.scene_manager.set_scene_loader_manager(self.scene_loader_manager)
             
         except Exception as e:
             handle_component_error(

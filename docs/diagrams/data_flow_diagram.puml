@@ -1,0 +1,106 @@
+@startuml Data Flow Diagram
+
+!define RECTANGLE class
+!define STORAGE database
+!define ARROW -->
+!define DASHEDARROW ..>
+!define DOTTEDLINE .
+!define EXTERNALENTITY participant
+
+skinparam componentStyle rectangle
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam rectangleBorderThickness 2
+
+' External entities
+EXTERNALENTITY "Game Client" as client
+EXTERNALENTITY "Admin Dashboard" as admin
+EXTERNALENTITY "Analytic Services" as analytics
+
+' Processes
+RECTANGLE "API Layer" as api #white
+RECTANGLE "Authentication\nService" as auth #white
+RECTANGLE "Business Logic\nLayer" as businessLogic #white
+RECTANGLE "Repository\nLayer" as repository #white
+RECTANGLE "Connection\nManager" as connection #white
+RECTANGLE "Caching\nLayer" as cache #white
+RECTANGLE "Query\nProcessor" as query #white
+RECTANGLE "Event\nPublisher" as events #white
+
+' Data stores
+STORAGE "PostgreSQL\nDatabase" as database #white
+STORAGE "Redis\nCache" as redisCache #white
+STORAGE "Event\nQueue" as eventQueue #white
+
+' Data flows
+client ARROW api : "1. HTTP Request"
+admin ARROW api : "2. Admin API Calls"
+
+api ARROW auth : "3. Validate\nCredentials"
+auth ARROW api : "4. Auth\nToken"
+
+api ARROW businessLogic : "5. Process\nRequests"
+
+businessLogic ARROW repository : "6. CRUD\nOperations"
+businessLogic ARROW cache : "7. Cache\nLookup"
+
+cache ARROW redisCache : "8. Get/Set\nCache Data"
+cache ARROW businessLogic : "9. Cached\nResponse"
+
+repository ARROW connection : "10. DB\nAccess"
+connection ARROW query : "11. Execute\nQueries"
+query ARROW database : "12. SQL\nStatements"
+database ARROW query : "13. Query\nResults"
+query ARROW connection : "14. Processed\nData"
+connection ARROW repository : "15. DB\nResponse"
+
+repository ARROW businessLogic : "16. Domain\nObjects"
+businessLogic ARROW events : "17. Publish\nEvents"
+events ARROW eventQueue : "18. Store\nEvents"
+eventQueue ARROW analytics : "19. Consume\nEvents"
+
+businessLogic ARROW api : "20. API\nResponse"
+api ARROW client : "21. HTTP\nResponse"
+api ARROW admin : "22. Admin\nInterface\nUpdates"
+
+' Cache invalidation flow
+events DASHEDARROW cache : "23. Invalidate\nCache"
+
+' Transaction boundaries
+RECTANGLE "Transaction Boundary" as txBoundary #transparent {
+  businessLogic
+  repository
+  connection
+  query
+}
+
+' Notes
+note left of auth
+  JWT token validation
+  Role-based permissions
+end note
+
+note right of cache
+  TTL-based caching
+  Invalidation on write
+end note
+
+note right of repository
+  Abstracts DB operations
+  Returns domain objects
+end note
+
+note bottom of events
+  Publishes domain events
+  Ensures eventual consistency
+end note
+
+note bottom of database
+  Tables:
+  - items
+  - rarity_tiers
+  - (future tables)
+end note
+
+@enduml 

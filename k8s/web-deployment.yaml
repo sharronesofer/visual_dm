@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visual-dm-web
+  namespace: visual-dm
+  labels:
+    app: visual-dm
+    component: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: visual-dm
+      component: web
+  template:
+    metadata:
+      labels:
+        app: visual-dm
+        component: web
+    spec:
+      containers:
+      - name: web
+        image: visual-dm-web:latest  # This should be updated with your actual image repository
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+          name: http
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          allowPrivilegeEscalation: false 

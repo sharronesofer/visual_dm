@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["jest"],
+    "isolatedModules": false
+  },
+  "include": [
+    "app/frontend/**/*.ts",
+    "app/frontend/**/*.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+} 

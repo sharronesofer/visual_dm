@@ -10,6 +10,36 @@
 
 import type { RegionData, ViewportBounds, RegionApiService } from './RegionApiService';
 import type { RegionCache } from './RegionCache';
+import { EventBus } from '../core/events/EventBus';
+import { SceneEventType, ISceneEvent } from '../core/events/SceneEventTypes';
+
+/**
+ * Event subscriber for region system integration with scene events
+ */
+class RegionEventSubscriber {
+  constructor(private regionSystem: RegionSystem) {
+    const eventBus = EventBus.getInstance();
+    // Subscribe to relevant scene event types
+    eventBus.on(SceneEventType.SCENE_LOADED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_UNLOADED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_ACTIVATED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_DEACTIVATED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_OBJECT_ADDED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_OBJECT_REMOVED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.COORDINATES_CHANGED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.BOUNDARY_CROSSED, this.handleSceneEvent.bind(this));
+  }
+
+  /**
+   * Handle scene events and trigger region-specific updates
+   */
+  private async handleSceneEvent(event: ISceneEvent): Promise<void> {
+    // Log the event for monitoring
+    console.log('[RegionEventSubscriber] Received scene event:', event.type, event);
+    // TODO: Implement region-specific update logic based on event type
+    // Example: if (event.type === SceneEventType.SCENE_OBJECT_ADDED) { ... }
+  }
+}
 
 export class RegionSystem {
   private api: RegionApiService;
@@ -22,6 +52,8 @@ export class RegionSystem {
   constructor(api: RegionApiService, cache: RegionCache) {
     this.api = api;
     this.cache = cache;
+    // Register the event subscriber for scene events
+    new RegionEventSubscriber(this);
   }
 
   /**
@@ -47,8 +79,7 @@ export class RegionSystem {
       console.warn('API fetch failed, using cached data if available:', apiErr);
       // In a real implementation, you would map bounds to region IDs and get those from cache
       // Here, we return all cached regions (could be filtered by bounds)
-      // @ts-expect-error: Temporary type assertion until proper type definitions are added
-      regions = Array.from(this.cache['cache'].values()).map(entry => entry.region);
+      regions = Array.from(this.cache['cache'].values()).map((entry: any) => entry.region);
     }
     return regions;
   }

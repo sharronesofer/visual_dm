@@ -1,0 +1,11 @@
+/Users/Sharrone/Visual_DM/src/worldgen/core/DeterministicRNG.ts
+/Users/Sharrone/Visual_DM/src/worldgen/core/GenerationPipeline.ts
+/Users/Sharrone/Visual_DM/src/worldgen/core/GeneratorRegistry.ts
+/Users/Sharrone/Visual_DM/src/worldgen/core/IWorldGenerator.ts
+/Users/Sharrone/Visual_DM/src/worldgen/region/BaseRegionGenerator.ts
+/Users/Sharrone/Visual_DM/src/worldgen/region/HandcraftedRegionGenerator.ts
+/Users/Sharrone/Visual_DM/src/worldgen/region/ProceduralRegionGenerator.ts
+/Users/Sharrone/Visual_DM/src/worldgen/region/RegionGeneratorFactory.ts
+/Users/Sharrone/Visual_DM/src/worldgen/region/RegionGeneratorInterfaces.ts
+/Users/Sharrone/Visual_DM/src/worldgen/validation/RegionValidationRules.ts
+/Users/Sharrone/Visual_DM/src/worldgen/validation/RegionValidator.ts

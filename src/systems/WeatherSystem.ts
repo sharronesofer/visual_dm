@@ -7,7 +7,8 @@ import {
   WeatherParams,
   WeatherConfig,
   RegionWeather
-} from '../types/weather';
+} from '../core/interfaces/types/weather';
+import { WeatherEffectSystem } from './WeatherEffectSystem';
 
 const DEFAULT_CONFIG: WeatherConfig = {
   transitionDuration: 1000, // 1 second
@@ -109,14 +110,16 @@ export class WeatherSystem {
   private state: WeatherSystemState;
   private config: WeatherConfig;
   private updateTimer: number | null;
+  private effectSystem: WeatherEffectSystem;
 
-  constructor(config: Partial<WeatherConfig> = {}) {
+  constructor(config: Partial<WeatherConfig> = {}, effectSystem?: WeatherEffectSystem) {
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.state = {
       regions: {},
       globalEffects: []
     };
     this.updateTimer = null;
+    this.effectSystem = effectSystem || new WeatherEffectSystem();
   }
 
   // Initialize weather for a region
@@ -135,17 +138,17 @@ export class WeatherSystem {
 
   // Generate a new weather state based on parameters
   private generateWeather(params: WeatherParams): WeatherState {
-    const { season = 'spring', terrain = { plains: 1 } } = params;
-    
-    // Calculate weights based on season and terrain
-    const weights = this.calculateWeatherWeights(season, terrain);
-    
+    const { season = 'spring', biome = 'temperate', altitude = 0 } = params;
+
+    // Calculate weights based on season and biome (use biome as a proxy for terrain)
+    const weights = this.calculateWeatherWeights(season, biome);
+
     // Select weather type based on weights
     const type = this.selectWeatherType(weights);
-    
+
     // Determine intensity
     const intensity = this.determineIntensity(type);
-    
+
     // Generate effects
     const effects = this.generateEffects(type, intensity);
 
@@ -161,8 +164,14 @@ export class WeatherSystem {
   // Calculate weighted probabilities for weather types
   private calculateWeatherWeights(
     season: string,
-    terrain: Record<string, number>
+    biome: string
   ): Record<WeatherType, number> {
+    // Map biome to terrain type for weights
+    const terrainType = biome === 'desert' ? 'desert'
+      : biome === 'tundra' ? 'mountain'
+        : biome === 'coastal' ? 'plains'
+          : biome === 'tropical' ? 'forest'
+            : 'plains';
     const weights: Record<WeatherType, number> = {
       clear: 0,
       rain: 0,
@@ -173,23 +182,17 @@ export class WeatherSystem {
       heatwave: 0,
       blizzard: 0
     };
-
-    // Combine seasonal and terrain weights
-    Object.entries(terrain).forEach(([terrainType, distribution]) => {
-      Object.entries(this.config.terrainWeights[terrainType] || {}).forEach(
-        ([weatherType, weight]) => {
-          weights[weatherType as WeatherType] +=
-            weight * distribution * this.config.seasonalWeights[season][weatherType as WeatherType];
-        }
-      );
-    });
-
+    Object.entries(this.config.terrainWeights[terrainType] || {}).forEach(
+      ([weatherType, weight]) => {
+        weights[weatherType as WeatherType] +=
+          weight * this.config.seasonalWeights[season][weatherType as WeatherType];
+      }
+    );
     // Normalize weights
     const total = Object.values(weights).reduce((sum, w) => sum + w, 0);
     Object.keys(weights).forEach(key => {
       weights[key as WeatherType] /= total;
     });
-
     return weights;
   }
 
@@ -197,14 +200,14 @@ export class WeatherSystem {
   private selectWeatherType(weights: Record<WeatherType, number>): WeatherType {
     const random = Math.random();
     let sum = 0;
-    
+
     for (const [type, weight] of Object.entries(weights)) {
       sum += weight;
       if (random <= sum) {
         return type as WeatherType;
       }
     }
-    
+
     return 'clear'; // Fallback
   }
 
@@ -416,7 +419,7 @@ export class WeatherSystem {
   // Start weather system updates
   public start(): void {
     if (this.updateTimer !== null) return;
-    
+
     this.updateTimer = window.setInterval(() => {
       this.update();
     }, this.config.updateInterval);
@@ -425,16 +428,16 @@ export class WeatherSystem {
   // Stop weather system updates
   public stop(): void {
     if (this.updateTimer === null) return;
-    
+
     window.clearInterval(this.updateTimer);
     this.updateTimer = null;
   }
 
   // Update weather state
   private update(): void {
-    Object.entries(this.state.regions).forEach(([regionId, weather]) => {
+    Object.entries(this.state.regions).forEach(([regionId, weather]: [string, RegionWeather]) => {
       const timeSinceUpdate = Date.now() - weather.lastUpdated;
-      
+
       // Check if current weather has expired
       if (timeSinceUpdate >= weather.current.duration * 1000) {
         // Shift to next forecasted weather
@@ -444,12 +447,22 @@ export class WeatherSystem {
             current: nextWeather,
             forecast: [
               ...weather.forecast,
-              this.generateWeather({ region: regionId })
+              this.generateWeather({ region: regionId, biome: 'temperate', season: 'spring', altitude: 0 })
             ],
             lastUpdated: Date.now()
           };
+          // Set new region effects in the effect system
+          this.effectSystem.setRegionEffects(regionId, nextWeather);
         }
       }
+      // --- DYNAMIC SCALING: Update LOD based on distance (stub: use 0 for now) ---
+      this.effectSystem.updateLOD(0); // Replace 0 with actual camera/region distance
+      // --- CULLING: Cull effects if needed (stub: use 0 for now) ---
+      this.effectSystem.cullEffects(regionId, 0); // Replace 0 with actual camera/region distance
+      // --- PERFORMANCE MONITORING & FALLBACK ---
+      this.effectSystem.monitorAndFallback();
+      // --- LOGGING & MONITORING ---
+      this.effectSystem.logResourceStatus();
     });
   }
 
@@ -462,7 +475,7 @@ export class WeatherSystem {
   public getRegionEffects(regionId: string): WeatherEffect[] {
     const weather = this.getRegionWeather(regionId);
     if (!weather) return [];
-    
+
     return [
       ...weather.current.effects,
       ...this.state.globalEffects

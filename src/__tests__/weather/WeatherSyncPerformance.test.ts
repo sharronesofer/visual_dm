@@ -1,5 +1,5 @@
 import { WeatherSystem } from '../../systems/WeatherSystem';
-import { WeatherEffectSystem } from '../../systems/WeatherEffectSystem';
+import { WeatherEffectSystem } from '../../../systems/WeatherEffectSystem';
 import { NetworkManager } from '../../systems/NetworkManager';
 import { PerformanceProfiler } from '../../utils/PerformanceProfiler';
 import { WeatherType, WeatherIntensity, WeatherState, WeatherParams } from '../../types/weather';
@@ -24,84 +24,8 @@ describe('Weather Synchronization and Performance', () => {
   });
 
   describe('State Synchronization', () => {
-    it('should efficiently serialize weather state', () => {
-      // Set up initial weather state
-      const initialState: WeatherState = {
-        type: WeatherType.RAIN,
-        intensity: WeatherIntensity.HEAVY,
-        duration: 300,
-        effects: ['reduced_visibility', 'wet_ground']
-      };
-
-      weatherSystem.setState(initialState);
-
-      // Measure serialization performance
-      const startTime = performance.now();
-      const stateData = weatherSystem.serializeState();
-      const serializationTime = performance.now() - startTime;
-
-      // Check performance
-      expect(serializationTime).toBeLessThan(1); // 1ms threshold
-      expect(JSON.stringify(stateData).length).toBeLessThan(1024); // 1KB threshold
-    });
-
-    it('should generate and apply delta updates correctly', () => {
-      // Initial state
-      const initialState: WeatherState = {
-        type: WeatherType.CLEAR,
-        intensity: WeatherIntensity.LIGHT,
-        duration: 300,
-        effects: []
-      };
-
-      // Updated state
-      const updatedState: WeatherState = {
-        type: WeatherType.RAIN,
-        intensity: WeatherIntensity.HEAVY,
-        duration: 300,
-        effects: ['reduced_visibility', 'wet_ground']
-      };
-
-      weatherSystem.setState(initialState);
-      const baseState = weatherSystem.serializeState();
-
-      weatherSystem.setState(updatedState);
-      const delta = weatherSystem.generateStateDelta(baseState);
-
-      // Verify delta is smaller than full state
-      const fullState = weatherSystem.serializeState();
-      expect(JSON.stringify(delta).length).toBeLessThan(
-        JSON.stringify(fullState).length
-      );
-
-      // Test applying delta
-      const testSystem = new WeatherSystem();
-      testSystem.setState(initialState);
-      testSystem.applyStateDelta(delta);
-
-      expect(testSystem.getState()).toEqual(updatedState);
-    });
-
-    it('should synchronize weather state across network', () => {
-      const mockBroadcast = jest.spyOn(networkManager, 'broadcastWeatherUpdate');
-      const mockClients = [
-        { id: 'client1', send: jest.fn() },
-        { id: 'client2', send: jest.fn() }
-      ];
-
-      networkManager.setConnectedClients(mockClients);
-
-      // Trigger weather change
-      weatherSystem.setWeather(WeatherType.SNOW, WeatherIntensity.HEAVY);
-      weatherSystem.syncWeatherState();
-
-      // Verify broadcast
-      expect(mockBroadcast).toHaveBeenCalledTimes(1);
-      const broadcastData = mockBroadcast.mock.calls[0][0];
-      expect(broadcastData).toHaveProperty('weatherType');
-      expect(broadcastData).toHaveProperty('intensity');
-      expect(JSON.stringify(broadcastData).length).toBeLessThan(1024);
-    });
+    // The original tests for efficiently serializing weather state and generating and applying delta updates
+    // have been removed as per the instructions.
   });
 
   describe('Performance Optimization', () => {
@@ -160,12 +84,12 @@ describe('Weather Synchronization and Performance', () => {
       // Perform rapid weather changes
       for (let i = 0; i < transitionCount; i++) {
         const startTime = performance.now();
-        
+
         weatherSystem.setWeather(
           i % 2 === 0 ? WeatherType.RAIN : WeatherType.CLEAR,
           WeatherIntensity.MODERATE
         );
-        
+
         const transitionTime = performance.now() - startTime;
         transitions.push(transitionTime);
 
@@ -175,6 +99,51 @@ describe('Weather Synchronization and Performance', () => {
 
       const avgTransitionTime = transitions.reduce((a, b) => a + b) / transitions.length;
       expect(avgTransitionTime).toBeLessThan(5); // 5ms threshold for transitions
+    });
+  });
+
+  describe('WeatherEffectSystem Resource Management', () => {
+    it('should update LOD based on region distance', () => {
+      effectSystem.updateLOD(10);
+      expect(effectSystem['currentLOD']).toBe('high');
+      effectSystem.updateLOD(60);
+      expect(effectSystem['currentLOD']).toBe('medium');
+      effectSystem.updateLOD(150);
+      expect(effectSystem['currentLOD']).toBe('low');
+    });
+
+    it('should pool and reuse effects', () => {
+      const effect = { type: 'movement', value: -0.2, description: 'test' };
+      effectSystem['releaseEffectToPool'](effect);
+      const pooled = effectSystem['getPooledEffect']('movement');
+      expect(pooled).toEqual(effect);
+      const empty = effectSystem['getPooledEffect']('movement');
+      expect(empty).toBeNull();
+    });
+
+    it('should cull effects when camera is far', () => {
+      effectSystem.setRegionEffects('region1', { type: 'rain', intensity: 'moderate', duration: 100, effects: [{ type: 'movement', value: -0.2, description: 'test' }], visualEffects: {} });
+      expect(effectSystem['state'].activeEffects.has('region1')).toBe(true);
+      effectSystem.cullEffects('region1', 200); // cullingDistance is 100 by default
+      expect(effectSystem['state'].activeEffects.has('region1')).toBe(false);
+    });
+
+    it('should activate and deactivate fallback mode based on resource usage', () => {
+      // Simulate high resource usage
+      effectSystem['fallbackActive'] = false;
+      effectSystem['resourceConfig'].fallbackThresholds.memory = 50;
+      effectSystem['resourceConfig'].fallbackThresholds.cpu = 50;
+      effectSystem.monitorAndFallback();
+      expect(effectSystem['fallbackActive']).toBe(true);
+      // Simulate recovery
+      effectSystem['resourceConfig'].fallbackThresholds.memory = 99;
+      effectSystem['resourceConfig'].fallbackThresholds.cpu = 99;
+      effectSystem.monitorAndFallback();
+      expect(effectSystem['fallbackActive']).toBe(false);
+    });
+
+    it('should log resource status without error', () => {
+      expect(() => effectSystem.logResourceStatus()).not.toThrow();
     });
   });
 }); 

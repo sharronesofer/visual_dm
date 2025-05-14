@@ -1,5 +1,8 @@
-import { Position, Viewport } from '../types/common';
-import { MapChunk, Region, POI, TerrainType, MapChunkKey } from '../types/map';
+// TODO: Replace with canonical Position type from types/common when available
+type Position = { x: number; y: number };
+// TODO: Add canonical Viewport type if needed
+// TODO: Replace with standardized coordinate types when available in the frontend build system
+// import { GlobalCoord, LocalCoord, coordinateUtils } from 'visual_client/core/utils/coordinate_utils';
 
 /**
  * Generate a chunk key from a position
@@ -85,6 +88,10 @@ export function worldToChunkCoordinates(
   worldPosition: Position,
   chunkSize: number
 ): { chunkPos: Position; localPos: Position } {
+  // Runtime assertion: enforce use of standardized coordinate types
+  if (typeof worldPosition.x !== 'number' || typeof worldPosition.y !== 'number') {
+    throw new Error('worldPosition must have numeric x and y properties');
+  }
   const chunkX = Math.floor(worldPosition.x / chunkSize);
   const chunkY = Math.floor(worldPosition.y / chunkSize);
   const localX = worldPosition.x % chunkSize;
@@ -104,6 +111,10 @@ export function chunkToWorldCoordinates(
   localPos: Position,
   chunkSize: number
 ): Position {
+  // Runtime assertion: enforce use of standardized coordinate types
+  if (typeof chunkPos.x !== 'number' || typeof chunkPos.y !== 'number' || typeof localPos.x !== 'number' || typeof localPos.y !== 'number') {
+    throw new Error('chunkPos and localPos must have numeric x and y properties');
+  }
   return {
     x: chunkPos.x * chunkSize + localPos.x,
     y: chunkPos.y * chunkSize + localPos.y,

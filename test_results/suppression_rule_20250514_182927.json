@@ -1,0 +1,26 @@
+{
+  "alert_data": {
+    "name": "Database Connection Errors",
+    "severity": "P2",
+    "system": "database_system",
+    "description": "Several database connection errors detected",
+    "value": 5,
+    "unit": "errors",
+    "threshold": 3
+  },
+  "result": {
+    "action": "suppressed",
+    "alert": {
+      "name": "Database Connection Errors",
+      "severity": "P2",
+      "system": "database_system",
+      "description": "Several database connection errors detected",
+      "value": 5,
+      "unit": "errors",
+      "threshold": 3,
+      "id": "1c75d9ae-003f-46c7-8a38-eaf4de74c41f",
+      "created_at": "2025-05-14T22:29:27.868901+00:00",
+      "status": "new"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+name: API Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'app/**/*.py'
+      - 'docs/**'
+      - '.github/workflows/api-docs.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/**/*.py'
+      - 'docs/**'
+      - '.github/workflows/api-docs.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flask-swagger-ui apispec marshmallow flask-apispec flasgger
+        
+    - name: Generate OpenAPI documentation
+      run: |
+        python -m flask swagger export > openapi.json
+      env:
+        FLASK_APP: app.app:create_app
+        FLASK_ENV: development
+        
+    - name: Build Swagger UI
+      run: |
+        mkdir -p docs/api
+        wget https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.11.0.tar.gz
+        tar -xzf v5.11.0.tar.gz
+        cp -r swagger-ui-5.11.0/dist/* docs/api/
+        cp openapi.json docs/api/
+        sed -i 's|https://petstore.swagger.io/v2/swagger.json|./openapi.json|g' docs/api/swagger-initializer.js
+        
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/api
+        force_orphan: true
+        commit_message: 'docs: update API documentation' 

@@ -1,0 +1,64 @@
+{
+  "duplicate_candidates": [
+    {
+      "similarity": 0.8050027987689935,
+      "task1": {
+        "id": "659",
+        "title": "Task #659: Implement Core Nemesis/Rival System Data Models and Relationships",
+        "status": "pending",
+        "description": "Design and implement the fundamental data models and relationship management functionality for the Nemesis/Rival System, including relationship types, grudge tracking, memory integration, and state progression mechanisms."
+      },
+      "task2": {
+        "id": "660",
+        "title": "Task #660: Implement Core Nemesis/Rival System Data Models and Relationships",
+        "status": "pending",
+        "description": "Design and implement the fundamental data models for the Nemesis/Rival System, including relationship extensions, profile models, triggering system, and persistence layer that integrates with the existing RelationshipManager."
+      }
+    },
+    {
+      "similarity": 0.7803527051019287,
+      "task1": {
+        "id": "643",
+        "title": "Task #643: Implement Comprehensive Data Structure for Global Arcs in the Arcs System",
+        "status": "pending",
+        "description": "Design and implement a robust data structure for Global Arcs that supports narrative progression, with properties for identity, purpose, stages, conditions, completion criteria, and system relationships while adhering to clean architecture principles."
+      },
+      "task2": {
+        "id": "647",
+        "title": "Task #647: Implement Comprehensive Data Structure for Faction Arcs in the Arcs System",
+        "status": "pending",
+        "description": "Design and implement a robust data structure for Faction Arcs that encapsulates faction-specific narrative journeys, including properties for faction identity, goals, progression stages, triggering conditions, inter-faction relationships, and completion criteria."
+      }
+    },
+    {
+      "similarity": 0.7712131091891421,
+      "task1": {
+        "id": "623",
+        "title": "Task #623: Conduct and Document Comprehensive Q&A Session for Motifs Narrative System",
+        "status": "done",
+        "description": "Organize, conduct, and document a thorough Q&A session for the Motifs Narrative System, addressing motif tracking, player interaction, and system extensibility, resulting in clear and accessible documentation for both developers and narrative designers."
+      },
+      "task2": {
+        "id": "626",
+        "title": "Task #626: Conduct and Document Comprehensive Q&A Session for Nemesis/Rival System",
+        "status": "done",
+        "description": "Organize, conduct, and document a thorough Q&A session for the Nemesis/Rival System covering nemesis generation, rivalry mechanics, player impact, and system extensibility, resulting in comprehensive documentation for developers and designers."
+      }
+    },
+    {
+      "similarity": 0.7633888311645046,
+      "task1": {
+        "id": "624",
+        "title": "Task #624: Conduct and Document Comprehensive Q&A Session for Arcs System",
+        "status": "pending",
+        "description": "Organize, conduct, and document a thorough Q&A session for the Arcs System covering all arc types (Global, Regional, Faction, Character), their generation, progression, dependencies, and integration with other narrative systems."
+      },
+      "task2": {
+        "id": "625",
+        "title": "Task #625: Conduct and Document Comprehensive Q&A Session for Rumors System",
+        "status": "done",
+        "description": "Organize, conduct, and document a thorough Q&A session for the Rumors System covering rumor generation, propagation mechanics, player/NPC interaction, and integration with other game systems."
+      }
+    }
+  ]
+}

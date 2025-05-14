@@ -4,6 +4,7 @@ Role model for user roles and permissions.
 
 from app.core.database import db
 from sqlalchemy.orm import relationship
+from app.core.models.permission import Permission, role_permissions
 
 class Role(db.Model):
     """Role model for user authorization."""
@@ -12,7 +13,12 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(200))
-    permissions = db.Column(db.JSON, default=list)
+    permissions = db.relationship(
+        'Permission',
+        secondary=role_permissions,
+        backref=db.backref('roles', lazy='dynamic'),
+        lazy='dynamic'
+    )
     
     # Relationships
     users = relationship('User', back_populates='role')
@@ -40,7 +46,7 @@ class Role(db.Model):
         Returns:
             bool: True if role has permission
         """
-        return permission in self.permissions
+        return self.permissions.filter_by(name=permission).count() > 0
     
     def add_permission(self, permission: str) -> None:
         """
@@ -49,8 +55,9 @@ class Role(db.Model):
         Args:
             permission: Permission to add
         """
-        if permission not in self.permissions:
-            self.permissions.append(permission)
+        perm = Permission.query.filter_by(name=permission).first()
+        if perm and not self.permissions.filter_by(name=permission).first():
+            self.permissions.append(perm)
     
     def remove_permission(self, permission: str) -> None:
         """
@@ -59,8 +66,9 @@ class Role(db.Model):
         Args:
             permission: Permission to remove
         """
-        if permission in self.permissions:
-            self.permissions.remove(permission)
+        perm = Permission.query.filter_by(name=permission).first()
+        if perm and self.permissions.filter_by(name=permission).first():
+            self.permissions.remove(perm)
     
     @classmethod
     def create_default_roles(cls) -> None:

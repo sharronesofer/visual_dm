@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: visualdm-servicemonitor
+  labels:
+    app: visualdm
+spec:
+  selector:
+    matchLabels:
+      app: visualdm
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s 

@@ -17,6 +17,7 @@ from .base_manager import BaseManager
 from app.core.database import db
 from app.core.models.user import User
 from app.core.models.role import Role
+from app.core.services.access_control_service import access_control_service
 
 logger = logging.getLogger(__name__)
 
@@ -250,10 +251,8 @@ def get_user_by_username(username: str) -> Optional[User]:
         return None
 
 def has_permission(user, permission_name: str) -> bool:
-    """Check if the user has a specific permission via their role."""
-    if hasattr(user, 'has_permission'):
-        return user.has_permission(permission_name)
-    return False
+    """Check if the user has a specific permission via the unified access control service."""
+    return access_control_service.has_permission(user, permission_name)
 
 def require_permission(permission: str):
     """Decorator to require a specific permission for a route."""

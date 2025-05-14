@@ -1,0 +1,70 @@
+{
+    "app": {
+        "name": "Visual DM",
+        "version": "1.0.0",
+        "debug": false
+    },
+    "display": {
+        "width": 1280,
+        "height": 720,
+        "fullscreen": false,
+        "fps": 60,
+        "background_color": [
+            40,
+            44,
+            52
+        ],
+        "text_color": [
+            255,
+            255,
+            255
+        ],
+        "button_color": [
+            70,
+            70,
+            70
+        ],
+        "button_hover_color": [
+            90,
+            90,
+            90
+        ],
+        "button_active_color": [
+            110,
+            110,
+            110
+        ],
+        "border_color": [
+            100,
+            100,
+            100
+        ]
+    },
+    "audio": {
+        "enabled": true,
+        "music_volume": 0.7,
+        "sfx_volume": 1.0
+    },
+    "input": {
+        "mouse_sensitivity": 1.0,
+        "keyboard_repeat_delay": 500,
+        "keyboard_repeat_interval": 50
+    },
+    "network": {
+        "websocket_uri": "ws://localhost:8000/ws",
+        "api_base_url": "http://localhost:8000/api",
+        "reconnect_interval": 5,
+        "max_retries": 3
+    },
+    "storage": {
+        "save_dir": "saves",
+        "screenshot_dir": "screenshots",
+        "log_dir": "logs"
+    },
+    "spatial_indexing": {
+        "batch_size": 128,
+        "flush_interval": 0.05,
+        "update_frequency": 60,
+        "enable_performance_monitoring": true
+    }
+}

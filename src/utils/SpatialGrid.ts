@@ -1,3 +1,6 @@
+import { EventBus } from '../core/events/EventBus';
+import { SceneEventType, ISceneEvent } from '../core/events/SceneEventTypes';
+
 interface Position {
   x: number;
   y: number;
@@ -5,6 +8,34 @@ interface Position {
 
 interface GridCell {
   entities: Set<string>;
+}
+
+/**
+ * Event subscriber for spatial grid integration with scene events
+ */
+class SpatialEventSubscriber {
+  constructor(private spatialGrid: SpatialGrid) {
+    const eventBus = EventBus.getInstance();
+    // Subscribe to relevant scene event types
+    eventBus.on(SceneEventType.SCENE_LOADED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_UNLOADED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_ACTIVATED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_DEACTIVATED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_OBJECT_ADDED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.SCENE_OBJECT_REMOVED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.COORDINATES_CHANGED, this.handleSceneEvent.bind(this));
+    eventBus.on(SceneEventType.BOUNDARY_CROSSED, this.handleSceneEvent.bind(this));
+  }
+
+  /**
+   * Handle scene events and trigger spatial-specific updates
+   */
+  private async handleSceneEvent(event: ISceneEvent): Promise<void> {
+    // Log the event for monitoring
+    console.log('[SpatialEventSubscriber] Received scene event:', event.type, event);
+    // TODO: Implement spatial-specific update logic based on event type
+    // Example: if (event.type === SceneEventType.COORDINATES_CHANGED) { ... }
+  }
 }
 
 export class SpatialGrid {
@@ -16,6 +47,8 @@ export class SpatialGrid {
     this.grid = new Map();
     this.entityPositions = new Map();
     this.cellSize = cellSize;
+    // Register the event subscriber for scene events
+    new SpatialEventSubscriber(this);
   }
 
   /**

@@ -12,6 +12,9 @@ from app.core.exceptions import (
     UserNotFoundError,
     InvalidTokenError
 )
+from app.core.validation.captcha import api_require_captcha
+from app.core.validation.rate_limiter import rate_limit
+from app.core.middleware.password_reset_rate_limiter import password_reset_rate_limit
 
 # Create blueprint
 auth_bp = Blueprint('auth', __name__)
@@ -24,12 +27,16 @@ class RegisterSchema(Schema):
     password = fields.Str(required=True)
     first_name = fields.Str()
     last_name = fields.Str()
+    captcha_challenge_id = fields.Str(required=True)
+    captcha_response = fields.Str(required=True)
 
 class LoginSchema(Schema):
     """Login request schema."""
     username_or_email = fields.Str(required=True)
     password = fields.Str(required=True)
-    device_info = fields.Str()
+    device_info = fields.Dict()
+    captcha_challenge_id = fields.Str(required=True)
+    captcha_response = fields.Str(required=True)
 
 class PasswordResetRequestSchema(Schema):
     """Password reset request schema."""
@@ -44,15 +51,16 @@ class UserResponseSchema(Schema):
     """User response schema."""
     id = fields.Int()
     username = fields.Str()
-    email = fields.Str()
-    full_name = fields.Str()
-    role = fields.Str()
-    is_active = fields.Bool()
-    is_verified = fields.Bool()
+    email = fields.Email()
+    first_name = fields.Str()
+    last_name = fields.Str()
     created_at = fields.DateTime()
+    updated_at = fields.DateTime()
     last_login = fields.DateTime()
 
 @auth_bp.route('/register', methods=['POST'])
+@rate_limit('auth')
+@api_require_captcha()
 def register():
     """Register a new user."""
     try:
@@ -94,6 +102,8 @@ def register():
         return jsonify({'error': 'Registration failed'}), 500
 
 @auth_bp.route('/login', methods=['POST'])
+@rate_limit('auth')
+@api_require_captcha()
 def login():
     """Authenticate a user and create a session."""
     try:
@@ -139,6 +149,7 @@ def verify_email(token):
         return jsonify({'error': 'Email verification failed'}), 500
 
 @auth_bp.route('/forgot-password', methods=['POST'])
+@password_reset_rate_limit
 def forgot_password():
     """Initiate password reset process."""
     try:
@@ -157,6 +168,7 @@ def forgot_password():
         return jsonify({'error': 'Failed to process password reset request'}), 500
 
 @auth_bp.route('/reset-password', methods=['POST'])
+@password_reset_rate_limit
 def reset_password():
     """Reset a user's password."""
     try:

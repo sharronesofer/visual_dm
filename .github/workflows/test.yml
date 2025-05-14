@@ -1,0 +1,97 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint
+
+    - name: Run Jest tests
+      run: npm run test:unit
+      env:
+        CI: true
+
+    - name: Run Cypress Component Tests
+      uses: cypress-io/github-action@v6
+      with:
+        component: true
+        browser: chrome
+        record: true
+      env:
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+    - name: Run Cypress E2E Tests
+      uses: cypress-io/github-action@v6
+      with:
+        browser: chrome
+        record: true
+        parallel: true
+        group: 'E2E Tests'
+        wait-on: 'http://localhost:3000'
+        start: npm start
+      env:
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+    - name: Run Visual Regression Tests
+      run: npx percy exec -- cypress run
+      env:
+        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage/lcov.info
+        flags: unittests,e2e
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload test artifacts
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: test-artifacts
+        path: |
+          cypress/screenshots/
+          cypress/videos/
+          coverage/
+        retention-days: 7
+
+  notify:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Slack on failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 

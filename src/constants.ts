@@ -59,7 +59,7 @@ export const ENDPOINTS = {
 
 export const VALIDATION_PATTERNS = {
   EMAIL: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
-  PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+  PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{12,}$/,
   USERNAME: /^[a-zA-Z0-9_]{3,}$/
 };
 

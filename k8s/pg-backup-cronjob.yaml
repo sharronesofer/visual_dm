@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg-backup
+  namespace: visualdm
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pg-backup
+              image: postgres:15
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: visualdm-secrets
+                      key: POSTGRES_PASSWORD
+              command: ["/bin/sh", "-c"]
+              args:
+                - "pg_dump -h db -U postgres -d visualdm > /backup/visualdm-$(date +%F).sql"
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup
+              persistentVolumeClaim:
+                claimName: pg-backup-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-backup-data
+  namespace: visualdm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi 

@@ -26,6 +26,8 @@ from app.ui.components import (
     ComponentStyle,
     BaseComponent
 )
+from visual_client.core.utils.coordinates import GlobalCoord, LocalCoord
+from visual_client.core.utils import coordinate_utils as cu
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -80,6 +82,37 @@ class Viewport:
     height: int
     scale: float = 1.0
     dirty: bool = True  # Whether the viewport needs redrawing
+    
+    @property
+    def position(self) -> GlobalCoord:
+        """Get the viewport position as a GlobalCoord."""
+        return GlobalCoord(self.x, self.y)
+    
+    @position.setter
+    def position(self, pos: GlobalCoord) -> None:
+        """Set the viewport position from a GlobalCoord."""
+        self.x = pos.x
+        self.y = pos.y
+        self.dirty = True
+    
+    def get_visible_rect_tuple(self) -> Tuple[float, float, float, float]:
+        """Get the viewport rectangle as a tuple."""
+        return (
+            self.x,
+            self.y,
+            self.width / self.scale,
+            self.height / self.scale
+        )
+    
+    def get_visible_bounds(self) -> Tuple[GlobalCoord, GlobalCoord]:
+        """Get the top-left and bottom-right points of the visible area."""
+        return (
+            GlobalCoord(self.x, self.y),
+            GlobalCoord(
+                self.x + (self.width / self.scale),
+                self.y + (self.height / self.scale)
+            )
+        )
 
 class RegionMapScreen:
     """Region map screen with optimized rendering."""
@@ -131,7 +164,7 @@ class RegionMapScreen:
         except Exception as e:
             raise ScreenError(f"Failed to initialize components: {str(e)}")
             
-    def _get_section_key(self, x: int, y: int) -> Tuple[int, int]:
+    def _get_section_key(self, x: float, y: float) -> Tuple[int, int]:
         """Get the section key for given coordinates.
         
         Args:
@@ -141,9 +174,10 @@ class RegionMapScreen:
         Returns:
             Tuple[int, int]: Section key
         """
+        # Convert to int to ensure consistent section keys
         return (
-            x // self.section_size,
-            y // self.section_size
+            int(x // self.section_size),
+            int(y // self.section_size)
         )
         
     def _get_visible_sections(self) -> Set[Tuple[int, int]]:
@@ -153,23 +187,22 @@ class RegionMapScreen:
             Set[Tuple[int, int]]: Set of visible section keys
         """
         visible = set()
-        viewport_rect = pygame.Rect(
-            self.viewport.x,
-            self.viewport.y,
-            self.viewport.width / self.viewport.scale,
-            self.viewport.height / self.viewport.scale
-        )
+        
+        # Get viewport bounds using GlobalCoords
+        top_left, bottom_right = self.viewport.get_visible_bounds()
+        
+        # Add buffer for smoother scrolling
+        buffer_size = self.section_size
         
         # Calculate the range of sections to check
-        start_x = int(viewport_rect.left // self.section_size)
-        start_y = int(viewport_rect.top // self.section_size)
-        end_x = int(viewport_rect.right // self.section_size) + 1
-        end_y = int(viewport_rect.bottom // self.section_size) + 1
+        start_x = int((top_left.x - buffer_size) // self.section_size)
+        start_y = int((top_left.y - buffer_size) // self.section_size)
+        end_x = int((bottom_right.x + buffer_size) // self.section_size) + 1
+        end_y = int((bottom_right.y + buffer_size) // self.section_size) + 1
         
-        # Add a buffer zone for smoother scrolling
-        buffer = 1
-        for x in range(start_x - buffer, end_x + buffer):
-            for y in range(start_y - buffer, end_y + buffer):
+        # Add sections in the visible range
+        for x in range(start_x, end_x):
+            for y in range(start_y, end_y):
                 visible.add((x, y))
                 
         return visible
@@ -294,20 +327,28 @@ class RegionMapScreen:
         return colors.get(terrain_type, (100, 100, 100))
         
     def _handle_scroll(self, dx: float, dy: float) -> None:
-        """Handle map scrolling.
+        """Handle scrolling the viewport.
         
         Args:
-            dx: X scroll amount
-            dy: Y scroll amount
+            dx: Change in x
+            dy: Change in y
         """
-        self.viewport.x += dx * self.scroll_speed / self.viewport.scale
-        self.viewport.y += dy * self.scroll_speed / self.viewport.scale
+        # Convert the current position to a GlobalCoord
+        current_pos = self.viewport.position
         
-        # Clamp viewport to map boundaries
-        self.viewport.x = max(0, min(self.viewport.x, 10000))  # Adjust max value as needed
-        self.viewport.y = max(0, min(self.viewport.y, 10000))  # Adjust max value as needed
+        # Create a movement vector and apply it
+        movement = (dx, dy)
+        new_pos_tuple = cu.vec_add(cu.global_to_tuple(current_pos), movement + (0.0,))  # Add z component
         
+        # Update the viewport position
+        self.viewport.x = new_pos_tuple[0]
+        self.viewport.y = new_pos_tuple[1]
+        
+        # Mark viewport as dirty
         self.viewport.dirty = True
+        
+        # Recalculate visible sections
+        self.visible_sections = self._get_visible_sections()
         
     def _handle_zoom(self, factor: float) -> None:
         """Handle map zooming.
