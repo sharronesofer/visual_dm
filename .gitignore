@@ -1,0 +1,148 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Firebase credentials
+firebase-credentials.json
+*-firebase-credentials.json
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+media/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+venv_py311/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Database
+*.db
+*.sqlite3
+
+# Cache
+.cache/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local development
+local_settings.py
+
+.env
+config/
+utils/__pycache__/
+data/
+chroma_store/
+zshrc
+
+# Added by Claude Task Master
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+
+# Dependency directories
+node_modules/
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Task files
+tasks.json
+tasks/
+
+# Dependencies
+.pnp
+.pnp.js
+
+# Build output
+out/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# Cache directories
+.npm/
+.eslintcache
+.parcel-cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# Large files
+scripts/load-tests/results/*.json
+.next/cache/webpack/**/*.pack
+*.pack
+*.so
+*.dylib
+
+# Exclude large test result files and binary files
+# These files will be stored through other means outside of GitHub
+scripts/load-tests/results/stress_metrics.json
+scripts/load-tests/results/spike_metrics.json
+scripts/load-tests/results/load_metrics.json 
