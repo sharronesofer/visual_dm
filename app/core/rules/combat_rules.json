@@ -1,0 +1,113 @@
+{
+  "action_economy": {
+    "action_types": {
+      "action": {
+        "description": "Primary action taken during a turn",
+        "limit_per_turn": 1,
+        "examples": ["Attack", "Cast Spell", "Dash"]
+      },
+      "bonus": {
+        "description": "Secondary action that can be taken in addition to main action",
+        "limit_per_turn": 1,
+        "examples": ["Off-hand Attack", "Quick Spell"]
+      },
+      "movement": {
+        "description": "Movement-related actions",
+        "limit_per_turn": 1,
+        "examples": ["Move", "Disengage"]
+      },
+      "free": {
+        "description": "Actions that don't consume action slots",
+        "limit_per_turn": "unlimited",
+        "examples": ["Drop Item", "Speak"]
+      }
+    },
+    "triggers": {
+      "reaction": {
+        "description": "Actions taken in response to specific events",
+        "limit_per_round": 1,
+        "examples": ["Opportunity Attack", "Counterspell"]
+      }
+    }
+  },
+  "combat_resolution": {
+    "attack_roll": {
+      "base_dc": 10,
+      "modifiers": {
+        "advantage": "roll twice, take higher",
+        "disadvantage": "roll twice, take lower",
+        "cover": {
+          "half": "+2 to AC",
+          "three_quarters": "+5 to AC",
+          "total": "cannot be targeted"
+        }
+      }
+    },
+    "damage_types": {
+      "physical": ["bludgeoning", "piercing", "slashing"],
+      "elemental": ["fire", "cold", "lightning", "acid", "thunder"],
+      "magical": ["force", "necrotic", "radiant", "psychic"]
+    },
+    "critical_hits": {
+      "range": 20,
+      "effect": "double damage dice",
+      "confirm_roll": false
+    }
+  },
+  "status_effects": {
+    "conditions": {
+      "blinded": {
+        "description": "Can't see and automatically fails sight-based checks",
+        "duration": "until removed",
+        "removal_conditions": ["healing", "rest"]
+      },
+      "poisoned": {
+        "description": "Disadvantage on attack rolls and ability checks",
+        "duration": "1d4 rounds",
+        "removal_conditions": ["constitution_save", "healing"]
+      },
+      "restrained": {
+        "description": "Speed becomes 0, disadvantage on attack rolls and Dexterity saves",
+        "duration": "until removed",
+        "removal_conditions": ["strength_check", "help_action"]
+      }
+    },
+    "buffs": {
+      "blessed": {
+        "description": "Add 1d4 to attack rolls and saving throws",
+        "duration": "concentration, up to 1 minute",
+        "removal_conditions": ["concentration_broken"]
+      },
+      "hasted": {
+        "description": "Double speed, +2 to AC, advantage on Dexterity saves",
+        "duration": "concentration, up to 1 minute",
+        "removal_conditions": ["concentration_broken"]
+      }
+    }
+  },
+  "combat_behavior": {
+    "morale_system": {
+      "base_morale": 50,
+      "modifiers": {
+        "hp_percentage": {
+          "low": -30,
+          "medium": -15
+        },
+        "ally_ratio": {
+          "bad": -20,
+          "poor": -10
+        },
+        "loyalty": "reduces flee chance by loyalty//4"
+      },
+      "flee_conditions": {
+        "morale_check": "roll d100 <= flee_chance",
+        "consequences": "disengage and move away"
+      }
+    },
+    "targeting_priorities": {
+      "default": ["nearest_enemy", "lowest_hp", "highest_threat"],
+      "caster": ["other_casters", "ranged_combatants"],
+      "tank": ["highest_threat", "protect_allies"]
+    }
+  }
+} 

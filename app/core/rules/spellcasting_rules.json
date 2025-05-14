@@ -1,0 +1,152 @@
+{
+  "spell_schools": {
+    "arcane": {
+      "description": "Magic derived from study and understanding of magical forces",
+      "primary_attribute": "INT",
+      "spell_list": ["fireball", "magic_missile", "dispel_magic"]
+    },
+    "divine": {
+      "description": "Magic granted by divine entities or faith",
+      "primary_attribute": "WIS",
+      "spell_list": ["healing_word", "divine_smite", "turn_undead"]
+    },
+    "nature": {
+      "description": "Magic drawn from natural forces and the elements",
+      "primary_attribute": "WIS",
+      "spell_list": ["entangle", "call_lightning", "animal_friendship"]
+    }
+  },
+  "spell_levels": {
+    "cantrip": {
+      "description": "Basic spells that can be cast at will",
+      "mp_cost": 0,
+      "scaling": "increases with character level"
+    },
+    "first": {
+      "description": "Basic leveled spells",
+      "mp_cost": "1 per level",
+      "unlock_level": 1
+    },
+    "second": {
+      "description": "Intermediate spells",
+      "mp_cost": "2 per level",
+      "unlock_level": 3
+    },
+    "third": {
+      "description": "Advanced spells",
+      "mp_cost": "3 per level",
+      "unlock_level": 5
+    }
+  },
+  "casting_mechanics": {
+    "components": {
+      "verbal": {
+        "description": "Spoken incantations",
+        "requirement": "must be able to speak",
+        "silence_effect": "prevents casting"
+      },
+      "somatic": {
+        "description": "Hand gestures",
+        "requirement": "free hand",
+        "restrained_effect": "prevents casting"
+      },
+      "material": {
+        "description": "Physical components",
+        "requirement": "must have components",
+        "substitution": "spellcasting focus"
+      }
+    },
+    "concentration": {
+      "description": "Maintaining ongoing spell effects",
+      "rules": {
+        "limit": "one concentration spell at a time",
+        "break_conditions": ["damage", "incapacitation"],
+        "save_dc": "10 or half damage taken, whichever is higher"
+      }
+    },
+    "spell_slots": {
+      "recovery": "on long rest",
+      "flexible_casting": {
+        "allowed": true,
+        "conversion_rate": "higher_level_slot = 2 * lower_level_slots"
+      }
+    }
+  },
+  "spell_effects": {
+    "damage_types": {
+      "fire": {
+        "description": "Burning damage",
+        "resistances": ["fire_resistance", "heat_adaptation"],
+        "vulnerabilities": ["cold_weakness"]
+      },
+      "cold": {
+        "description": "Freezing damage",
+        "resistances": ["cold_resistance", "winter_born"],
+        "vulnerabilities": ["fire_weakness"]
+      },
+      "lightning": {
+        "description": "Electrical damage",
+        "resistances": ["lightning_resistance"],
+        "vulnerabilities": ["metal_armor"]
+      }
+    },
+    "area_effects": {
+      "radius": {
+        "description": "Circular area of effect",
+        "scaling": "5ft per spell level",
+        "cover_rules": "applies to all targets"
+      },
+      "cone": {
+        "description": "Triangular area of effect",
+        "scaling": "15ft per spell level",
+        "cover_rules": "applies to all targets"
+      },
+      "line": {
+        "description": "Linear area of effect",
+        "scaling": "30ft per spell level",
+        "cover_rules": "applies to first target"
+      }
+    },
+    "duration": {
+      "instantaneous": {
+        "description": "Effect occurs once and ends",
+        "examples": ["damage", "healing"]
+      },
+      "concentration": {
+        "description": "Lasts while caster maintains focus",
+        "maximum": "up to 1 minute",
+        "break_conditions": ["damage", "incapacitation"]
+      },
+      "timed": {
+        "description": "Lasts for specific duration",
+        "scaling": "increases with spell level",
+        "examples": ["1 round", "1 minute", "1 hour"]
+      }
+    }
+  },
+  "spell_interactions": {
+    "counterspelling": {
+      "reaction_cost": 1,
+      "check": "spellcasting ability check vs DC 10 + spell level",
+      "success": "spell is negated",
+      "failure": "spell proceeds normally"
+    },
+    "spell_resistance": {
+      "check": "spell save vs spell DC",
+      "dc_calculation": "8 + proficiency + spellcasting ability modifier",
+      "success": "half damage or no effect",
+      "failure": "full effect"
+    },
+    "spell_combinations": {
+      "allowed": true,
+      "rules": {
+        "same_target": "effects stack unless specified",
+        "opposing_effects": "stronger effect prevails",
+        "elemental_combinations": {
+          "fire + cold": "steam cloud",
+          "lightning + water": "expanded area"
+        }
+      }
+    }
+  }
+} 

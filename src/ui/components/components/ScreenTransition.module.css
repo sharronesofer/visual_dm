@@ -1,0 +1,64 @@
+.transitionContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Next transition animations */
+.transitionContainer[data-direction="next"][data-exiting="true"] {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.transitionContainer[data-direction="next"][data-exiting="false"] {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Previous transition animations */
+.transitionContainer[data-direction="prev"][data-exiting="true"] {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.transitionContainer[data-direction="prev"][data-exiting="false"] {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Transitioning state styles */
+.transitionContainer[data-transitioning="true"] {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Optional: Add different animation types */
+.transitionContainer[data-animation="fade"] {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.transitionContainer[data-animation="fade"][data-exiting="true"] {
+  transform: none;
+  opacity: 0;
+}
+
+.transitionContainer[data-animation="fade"][data-exiting="false"] {
+  transform: none;
+  opacity: 1;
+}
+
+.transitionContainer[data-animation="scale"] {
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.transitionContainer[data-animation="scale"][data-exiting="true"] {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.transitionContainer[data-animation="scale"][data-exiting="false"] {
+  transform: scale(1);
+  opacity: 1;
+} 

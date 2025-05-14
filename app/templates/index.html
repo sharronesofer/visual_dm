@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Visual DM</h1>
+    <p class="hero-text">Your digital companion for tabletop role-playing games.</p>
+    
+    {% if current_user.is_authenticated %}
+        <div class="dashboard">
+            <h2>Your Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-item">
+                    <h3>Campaigns</h3>
+                    <p>Manage your ongoing campaigns</p>
+                    <a href="{{ url_for('campaign.list') }}" class="btn btn-primary">View Campaigns</a>
+                </div>
+                <div class="dashboard-item">
+                    <h3>Characters</h3>
+                    <p>Create and manage characters</p>
+                    <a href="{{ url_for('character.list') }}" class="btn btn-primary">View Characters</a>
+                </div>
+                <div class="dashboard-item">
+                    <h3>NPCs</h3>
+                    <p>Manage non-player characters</p>
+                    <a href="{{ url_for('npc.list') }}" class="btn btn-primary">View NPCs</a>
+                </div>
+                <div class="dashboard-item">
+                    <h3>Locations</h3>
+                    <p>Create and explore locations</p>
+                    <a href="{{ url_for('location.list') }}" class="btn btn-primary">View Locations</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="cta-buttons">
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login</a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-secondary">Register</a>
+        </div>
+        
+        <div class="features">
+            <h2>Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Campaign Management</h3>
+                    <p>Create and manage multiple campaigns with ease.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Character Creation</h3>
+                    <p>Build detailed characters with our intuitive tools.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>NPC Database</h3>
+                    <p>Keep track of all your non-player characters.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Location Mapping</h3>
+                    <p>Create and link locations in your world.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .hero {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+    }
+
+    .hero-text {
+        font-size: 1.5rem;
+        color: var(--text-color);
+        margin-bottom: 3rem;
+    }
+
+    .cta-buttons {
+        margin-bottom: 4rem;
+    }
+
+    .cta-buttons .btn {
+        margin: 0 1rem;
+    }
+
+    .btn-secondary {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #1a252f;
+    }
+
+    .features {
+        margin-top: 4rem;
+    }
+
+    .features h2 {
+        margin-bottom: 2rem;
+    }
+
+    .features-grid,
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .feature-item,
+    .dashboard-item {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .feature-item h3,
+    .dashboard-item h3 {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+    }
+
+    .dashboard {
+        margin-top: 2rem;
+    }
+
+    .dashboard h2 {
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero-text {
+            font-size: 1.2rem;
+        }
+
+        .cta-buttons .btn {
+            display: block;
+            margin: 1rem auto;
+            max-width: 200px;
+        }
+    }
+</style>
+{% endblock %} 

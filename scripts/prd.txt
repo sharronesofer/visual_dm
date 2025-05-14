@@ -1,0 +1,1468 @@
+# Visual DM - Digital Tabletop RPG Companion
+## Product Requirements Document
+
+## Project Overview
+Visual DM is a comprehensive digital companion application for tabletop role-playing games, designed to assist Dungeon Masters (DMs) in managing and enriching their game sessions. The application provides tools for world-building, NPC management, quest tracking, combat management, and dynamic storytelling.
+
+## Core Features
+
+### 1. World Management System
+- Dynamic world state tracking with time, seasons, and weather
+- Faction and diplomatic relationship management
+- Economic system with trade routes and resource management
+- Event system for world-changing occurrences
+- Calendar and time tracking functionality
+
+### 2. NPC Management
+- Comprehensive NPC creation and management
+- Dynamic personality traits and behavior patterns
+- NPC schedules and routines
+- Relationship tracking between NPCs and players
+- Goal-driven behavior system
+- Memory and interaction history
+
+### 3. Quest System
+- Multi-stage quest creation and tracking
+- Dynamic quest generation based on world state
+- Quest dependencies and branching paths
+- Reward management and scaling
+- Quest impact on world state
+- Hidden requirements and secret objectives
+
+### 4. Combat Management
+- Initiative tracking and turn management
+- Dynamic encounter scaling
+- Battlefield conditions and effects
+- Status effect tracking
+- Automated damage calculations
+- Combat log and history
+
+### 5. Location Management
+- Dynamic location state tracking
+- Weather and environmental effects
+- Random encounter generation
+- Location-specific events
+- Resource availability tracking
+- Access requirements and restrictions
+
+### 6. Item System
+- Comprehensive item database
+- Dynamic item properties and effects
+- Magical item generation
+- Item history and lore
+- Usage tracking and durability
+- Item enhancement and modification
+
+## Technical Requirements
+
+### Architecture
+- Flask-based backend with RESTful API
+- SQLAlchemy for database management
+- WebSocket support for real-time updates
+- Redis for caching and session management
+- Modular design for easy extension
+
+### Data Models
+
+```python
+class World:
+    id: int
+    name: str
+    current_time: datetime
+    current_season: str
+    weather_conditions: Dict
+    active_events: List[Event]
+    factions: List[Faction]
+    locations: List[Location]
+    trade_routes: List[TradeRoute]
+
+class NPC:
+    id: int
+    name: str
+    personality_traits: Dict
+    relationships: Dict
+    schedule: List[ScheduleEntry]
+    goals: List[Goal]
+    current_location: Location
+    inventory: List[Item]
+    memory: List[Memory]
+
+class Quest:
+    id: int
+    title: str
+    description: str
+    stages: List[QuestStage]
+    requirements: List[Requirement]
+    rewards: List[Reward]
+    status: str
+    dependencies: List[Quest]
+    hidden_objectives: List[Objective]
+
+class Location:
+    id: int
+    name: str
+    description: str
+    current_state: Dict
+    weather: Dict
+    events: List[Event]
+    npcs: List[NPC]
+    items: List[Item]
+    requirements: List[Requirement]
+
+class Item:
+    id: int
+    name: str
+    description: str
+    type: str
+    rarity: str
+    properties: Dict
+    effects: List[Effect]
+    history: List[HistoryEntry]
+    durability: int
+    enhancements: List[Enhancement]
+
+class Faction:
+    id: int
+    name: str
+    description: str
+    relationships: Dict
+    resources: Dict
+    goals: List[Goal]
+    influence: float
+    territory: List[Location]
+    members: List[NPC]
+```
+
+### Security Requirements
+- User authentication and authorization
+- Role-based access control
+- Secure data storage
+- API rate limiting
+- Input validation and sanitization
+
+### Performance Requirements
+- Fast query response times
+- Efficient caching strategy
+- Optimized database queries
+- Real-time updates via WebSocket
+- Scalable architecture
+
+### Testing Requirements
+- Comprehensive unit tests
+- Integration testing
+- API endpoint testing
+- Performance testing
+- Security testing
+
+## Deployment Requirements
+- Docker containerization
+- Environment configuration
+- Database migration system
+- Logging and monitoring
+- Backup and recovery system
+
+## Future Enhancements
+- AI-powered NPC behavior
+- Procedural content generation
+- Advanced storytelling features
+- Mobile companion app
+- VTT integration
+- Custom rule system support
+
+This PRD outlines the core requirements and structure for the Visual DM project, focusing on creating a comprehensive and user-friendly digital companion for tabletop RPG games.
+
+# Visual DM - Product Requirements Document
+
+## Project Overview
+Visual DM is a comprehensive digital media management system that provides a robust platform for organizing, processing, and managing digital media assets. The system consists of multiple components working together to deliver a seamless experience for users managing their digital content.
+
+## Core Components
+
+### 1. Base Services Layer
+- Implement foundational entity interfaces and models
+- Create base service classes for common operations
+- Establish core data structures and utilities
+- Implement error handling and logging mechanisms
+
+### 2. Media Processing Engine
+- Develop media file processing capabilities
+- Implement format conversion and optimization
+- Create thumbnail generation system
+- Handle metadata extraction and management
+
+### 3. Storage Management
+- Design flexible storage backend interface
+- Implement file system storage provider
+- Add support for cloud storage providers
+- Create caching layer for improved performance
+
+### 4. API Layer
+- Design RESTful API endpoints
+- Implement authentication and authorization
+- Create API documentation
+- Add rate limiting and security measures
+
+### 5. User Interface
+- Develop modern, responsive web interface
+- Create intuitive media browsing experience
+- Implement drag-and-drop upload functionality
+- Add search and filtering capabilities
+
+## Technical Requirements
+
+### Architecture
+- Use TypeScript for type safety and better development experience
+- Implement modular architecture for easy extensibility
+- Follow clean code principles and SOLID design patterns
+- Use dependency injection for better testability
+
+### Data Model
+```typescript
+interface BaseEntity {
+  id: string | number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+interface MediaAsset extends BaseEntity {
+  filename: string;
+  path: string;
+  mimeType: string;
+  size: number;
+  metadata: Record<string, any>;
+  thumbnailUrl?: string;
+}
+
+interface Collection extends BaseEntity {
+  name: string;
+  description?: string;
+  assets: MediaAsset[];
+  tags: string[];
+}
+
+interface User extends BaseEntity {
+  username: string;
+  email: string;
+  collections: Collection[];
+  preferences: Record<string, any>;
+}
+```
+
+### Security Requirements
+- Implement JWT-based authentication
+- Add role-based access control
+- Secure file upload validation
+- Implement API key management
+- Add audit logging for sensitive operations
+
+### Performance Requirements
+- Support concurrent file processing
+- Implement efficient caching strategies
+- Optimize database queries
+- Enable horizontal scaling capabilities
+- Handle large media files efficiently
+
+### Testing Requirements
+- Unit tests for core functionality
+- Integration tests for API endpoints
+- End-to-end testing for critical flows
+- Performance testing for media processing
+- Security testing for authentication
+
+## Deployment Requirements
+- Containerized deployment with Docker
+- Kubernetes orchestration support
+- Automated CI/CD pipeline
+- Monitoring and alerting setup
+- Backup and disaster recovery plans
+
+## Future Enhancements
+- AI-powered media analysis
+- Advanced search capabilities
+- Collaborative features
+- Version control for assets
+- Integration with popular media tools
+
+This PRD outlines the core requirements and structure for the Visual DM project, focusing on creating a scalable and maintainable digital media management system.
+
+# Thumbnail Generation Service PRD
+
+## Overview
+A TypeScript-based service for generating thumbnails from various media types including images, videos, audio files, and documents. The service should be modular, extensible, and provide consistent thumbnail generation across different file formats.
+
+## Requirements
+
+### Core Functionality
+1. Support multiple media types:
+   - Images (JPEG, PNG, WebP, TIFF, GIF)
+   - Videos (MP4, WebM, OGG, QuickTime, AVI)
+   - Audio (MP3, WAV, OGG, FLAC, AAC, WebM)
+   - Documents (PDF, DOC, DOCX, XLS, XLSX)
+
+2. Thumbnail generation options:
+   - Configurable dimensions (width/height)
+   - Quality settings
+   - Output format selection (JPEG, PNG, WebP)
+   - Aspect ratio preservation
+   - Video frame timestamp selection
+   - Document page selection
+
+3. Error handling:
+   - Validation of input files and options
+   - Detailed error messages and codes
+   - Proper cleanup of temporary files
+
+### Architecture
+1. Base interfaces and types:
+   - ThumbnailGenerator interface
+   - ThumbnailOptions interface
+   - ThumbnailResult interface
+   - ServiceResponse type
+
+2. Abstract base class:
+   - BaseThumbnailGenerator with common functionality
+   - Default options handling
+   - Validation methods
+   - Resource cleanup
+
+3. Specialized generators:
+   - ImageThumbnailGenerator using Sharp
+   - VideoThumbnailGenerator using FFmpeg
+   - AudioThumbnailGenerator for waveform generation
+   - DocumentThumbnailGenerator using pdf2pic
+
+4. Main service:
+   - ThumbnailService as facade
+   - Automatic file type detection
+   - Generator selection
+   - Resource management
+
+### Technical Requirements
+1. Dependencies:
+   - sharp for image processing
+   - fluent-ffmpeg for video/audio processing
+   - pdf2pic for document processing
+   - file-type for MIME type detection
+   - mime-types for file extension handling
+   - uuid for temporary file names
+
+2. Error handling:
+   - Custom ValidationError class
+   - ServiceError interface
+   - Proper error codes and messages
+
+3. Testing:
+   - Unit tests for each generator
+   - Integration tests for ThumbnailService
+   - Test fixtures for each file type
+   - Error case coverage
+
+### Performance Requirements
+1. Resource management:
+   - Proper cleanup of temporary files
+   - Memory efficient processing
+   - Stream-based operations where possible
+
+2. Scalability:
+   - Modular design for easy extension
+   - Configurable processing options
+   - Support for additional file types
+
+### Documentation
+1. Code documentation:
+   - JSDoc comments
+   - Interface descriptions
+   - Usage examples
+   - Type definitions
+
+2. Error documentation:
+   - Error codes
+   - Error messages
+   - Recovery suggestions
+
+## Success Criteria
+1. Successfully generate thumbnails for all supported file types
+2. Maintain consistent quality across different media types
+3. Proper error handling and recovery
+4. Clean resource management
+5. Comprehensive test coverage
+6. Clear and maintainable code structure
+
+# Codebase Reorganization Project PRD
+
+## Project Overview
+This project aims to reorganize the existing codebase into a clean, structured, and maintainable layout. The reorganization will improve code clarity, reduce technical debt, and make the codebase easier to navigate and maintain.
+
+## Core Requirements
+
+### 1. New Project Structure Design
+- Create a comprehensive proposal for a new, logical folder structure
+- Define clear naming conventions and organization principles
+- Document the rationale behind structural decisions
+- Ensure the structure follows industry best practices
+- Consider scalability and future maintenance needs
+
+### 2. Codebase Analysis and Categorization
+- Complete review of all existing source files
+- Categorize files based on their purpose and relationships
+- Identify dependencies between different code modules
+- Document any technical debt or problematic areas
+- Create a mapping between old and new file locations
+
+### 3. File Migration Implementation
+- Systematic relocation of files to new structure
+- Maintain file integrity during moves
+- Preserve git history where possible
+- Ensure all files are placed in logically cohesive locations
+- Handle edge cases and special file types appropriately
+
+### 4. Import Path Updates
+- Update all import statements to reflect new file locations
+- Resolve any circular dependencies
+- Fix broken references
+- Verify and test all import paths
+- Implement consistent import patterns
+
+### 5. Cleanup and Verification
+- Remove empty directories
+- Delete obsolete files safely
+- Verify no orphaned files remain
+- Ensure no broken links exist
+- Document any removed files for reference
+
+## Technical Requirements
+- Must maintain all existing functionality
+- Zero downtime during migration
+- Comprehensive testing after each phase
+- Clear rollback strategy
+- Documentation of all changes
+
+## Success Criteria
+1. All files properly organized in new structure
+2. No broken imports or references
+3. All tests passing
+4. Clean git history maintained
+5. Improved code navigation and maintainability
+6. Complete documentation of new structure
+
+## Constraints
+- Minimize impact on active development
+- Preserve git history
+- Maintain backward compatibility where possible
+- Follow established coding standards
+- Consider impact on build and deployment processes
+
+# Task Implementation Details
+
+## Task 7: Setup Deployment Infrastructure
+**Priority:** Medium
+**Dependencies:** Tasks 1-5
+**Description:** Implement containerized deployment with Docker, Kubernetes orchestration, CI/CD pipeline, monitoring, and backup/disaster recovery plans.
+
+## Task 6: Implement Codebase Reorganization
+**Priority:** Low
+**Dependencies:** Tasks 1-5 (Core functionality implementation)
+**Description:** Reorganize the existing codebase into a clean, structured, and maintainable layout following the specifications in the Codebase Reorganization PRD.
+
+### Subtasks:
+
+#### 6.1: Project Structure Design and Documentation
+- Define new project structure and create comprehensive documentation
+- Create detailed project structure diagram
+- Document naming conventions and module boundaries
+- Define clear separation between layers
+- Create migration guidelines
+- Get stakeholder approval
+
+#### 6.2: Codebase Analysis and Categorization
+- Analyze existing codebase and categorize files
+- Inventory all source files
+- Identify module dependencies
+- Map current to target locations
+- Create detailed migration plan
+- Identify potential issues
+
+#### 6.3: File Migration Implementation
+- Execute file migration to new locations
+- Create new directory structure
+- Move files while preserving git history
+- Update build configurations
+- Create temporary compatibility layers
+
+#### 6.4: Import Path Updates and Verification
+- Update all import paths
+- Fix broken references
+- Run comprehensive testing
+- Address build/runtime errors
+- Document technical debt
+- Create verification checklist
+
+### Implementation Details
+
+The reorganization will follow this directory structure:
+```
+src/
+  core/
+    interfaces/       # Core type definitions and interfaces
+    models/          # Data models and schemas
+    services/        # Base service implementations
+    utils/           # Utility functions and helpers
+  api/
+    controllers/     # API endpoint controllers
+    middleware/      # Express middleware
+    routes/          # API route definitions
+    validation/      # Request validation schemas
+  media/
+    processors/      # Media processing implementations
+    thumbnails/      # Thumbnail generation
+    converters/      # Format conversion utilities
+  storage/
+    providers/       # Storage provider implementations
+    cache/          # Caching layer
+  auth/
+    strategies/      # Authentication strategies
+    permissions/     # Permission definitions and checks
+  ui/
+    components/      # UI components
+    pages/          # Page definitions
+    hooks/          # Custom React hooks
+    services/       # Frontend services
+  config/           # Configuration files
+  types/            # TypeScript type definitions
+  tests/            # Test files
+```
+
+### Testing Strategy
+
+1. Pre-migration Testing
+   - Run all existing tests for baseline
+   - Document current test coverage
+   - Identify critical paths
+
+2. Post-migration Verification
+   - Run automated verification for:
+     - Empty directories
+     - Broken imports
+     - Missing files
+   - Run all tests
+
+3. Manual Verification
+   - Review key file locations
+   - Check import statements
+   - Verify build process
+
+4. Regression Testing
+   - Test major features
+   - Verify API endpoints
+   - Test UI components
+
+5. Documentation Verification
+   - Verify structure documentation
+   - Check import examples
+   - Validate directory documentation
+
+# Visual DM Project Requirements Document
+
+## Project Overview
+Visual DM is a project focused on creating a visual development and management system. The project requires thorough code quality assessment and maintenance to ensure long-term sustainability and maintainability.
+
+## Code Quality Assessment Requirements
+
+### Codebase Quality Analysis
+The project requires a comprehensive analysis of the codebase quality focusing on:
+
+1. Code Readability and Clarity
+- Assessment of code formatting and style consistency
+- Evaluation of naming conventions for variables, functions, and classes
+- Review of code complexity and readability metrics
+
+2. Best Practices and Standards
+- Verification of adherence to industry-standard coding practices
+- Assessment of design pattern implementation
+- Review of code organization and architecture
+
+3. Modularity and Organization
+- Evaluation of component separation and responsibilities
+- Analysis of code coupling and cohesion
+- Assessment of file structure and module organization
+
+4. Maintainability
+- Review of code duplication and reusability
+- Assessment of technical debt
+- Evaluation of update and expansion capabilities
+
+5. Performance and Efficiency
+- Analysis of code performance metrics
+- Review of resource utilization
+- Identification of optimization opportunities
+
+6. Error Handling and Robustness
+- Assessment of error handling mechanisms
+- Review of edge case handling
+- Evaluation of system stability measures
+
+7. Documentation and Comments
+- Review of code documentation completeness
+- Assessment of API documentation
+- Evaluation of inline comment quality and usefulness
+
+### Implementation Requirements
+
+1. Analysis Tools and Metrics
+- Implement or integrate code quality analysis tools
+- Set up metrics collection for code quality indicators
+- Create reporting mechanisms for quality assessments
+
+2. Continuous Monitoring
+- Establish automated code quality checks
+- Implement regular quality assessment routines
+- Set up monitoring for quality metrics over time
+
+3. Improvement Implementation
+- Create action plans for identified issues
+- Implement code quality improvements
+- Validate and measure improvement impacts
+
+4. Documentation Updates
+- Update documentation based on findings
+- Create coding standards documentation
+- Maintain quality assessment guidelines
+
+## Success Criteria
+- Comprehensive code quality analysis completed
+- Clear identification of strengths and weaknesses
+- Actionable improvement recommendations provided
+- Implementation of key improvements
+- Established ongoing quality monitoring system
+
+# Visual DM 6 – AI-Driven UI and Animation System
+
+## Summary
+This document outlines the production specification for integrating AI-generated UI elements and animations into Visual DM 6. The goal is to implement a stylized, diegetic interface inspired by an old fantasy book, complete with animated page transitions, reusable sprite systems, and consistent asset pipelines. It also details tooling and workflows for automation, layout design, and sprite management.
+
+## Features
+
+### 1. Dual Animation Layers
+- **Region/World Layer**: 
+  - Top-down symbolic tiles (e.g. terrain, POIs).
+  - Static images only, generated procedurally.
+  - Tools: PixelOver, Scenario.gg.
+
+- **POI/Building Layer**:
+  - 3/4 view animated sprites used in both exploration and combat.
+  - Shared sprite format for reuse.
+  - Tools: Leonardo.ai or Scenario.gg for base sprites, ControlNet + AnimateDiff for animation, PixelOver for cleanup.
+
+### 2. Sprite System
+- Base sprite: Consistent format (e.g. 64×64, 4x2 walk grid).
+- Multiple **walk styles** (e.g. confident, limping, shuffling) generated via ControlNet using pose/edge/depth conditioning.
+- Styles assigned per NPC, randomly or based on traits.
+- Small vs large NPCs use same styles; animation speed is adjusted rather than image scaling.
+
+### 3. UI Theme and Structure
+- Visuals mimic a parchment-style medieval book.
+- Menus are framed like pages with illuminated margins and stylized text.
+- Each menu screen transition uses a **page-turn animation**.
+
+- Tools:
+  - **Leonardo.ai / Midjourney**: Generate parchment, borders, book motifs.
+  - **Figma**: Layout UI using assets, define coordinates, export JSON layout.
+  - **PixelOver / aseprite**: Cleanup, grid alignment, sprite formatting.
+
+### 4. Page-Turn Animation System
+- Frame-by-frame pseudo-animations at 4–8 fps.
+- Generated using **ControlNet + AnimateDiff**:
+  - Inputs: edge maps (Canny) or depth maps (MiDaS) extracted from hand-drawn or AI-rendered keyframes.
+  - Outputs: curved, turning page sequences matching style.
+- Playback managed via a `PageTurnMenu` class in runtime code.
+
+### 5. Asset Management and Layout Integration
+- Asset folders:
+/assets/
+/sprites/
+/ui/
+/animations/
+
+- Naming convention: lowercase, descriptive, consistent (e.g., `npc_guard_walk_east_01.png`)
+- UI layout exported from Figma as structured JSON for runtime positioning.
+- TexturePacker used for atlasing and performance optimization.
+- Git LFS used for asset version control.
+
+### 6. AI Tools and Usage Summary
+| Task                       | Tool                        |
+|---------------------------|-----------------------------|
+| Static sprite gen         | Leonardo.ai / Scenario.gg   |
+| Animated walk cycles      | ControlNet + AnimateDiff    |
+| Page-turn animations      | ControlNet + AnimateDiff    |
+| Edge/Depth map gen        | Canny / MiDaS (ComfyUI/A1111)|
+| Asset cleanup             | PixelOver / aseprite        |
+| UI layout design          | Figma                       |
+| Layout export             | JSON from Figma / manual    |
+| Sprite atlas generation   | TexturePacker               |
+
+## Deliverables
+- PageTurnMenu animation manager class
+- Sprite loader with walk-style handling
+- Figma-derived JSON UI layout loader
+- ComfyUI/AnimateDiff pipeline for walk + transition animation generation
+- Asset repository organized by this schema
+- Sample output: 2 UI screens with functional transitions, 3 walk styles applied to 5 sprite types
+
+## Constraints
+- All animations must use frame-based sprite sheets.
+- No runtime morphing or real-time physics for UI.
+- Maintain pixel resolution fidelity (no scaling/stretching).
+- Runtime performance must allow sub-100ms UI transitions.
+
+## Additional Asset & Placeholder Documentation
+
+For comprehensive planning and implementation of assets and placeholders, please consult the following documents:
+
+- [Hex-Based Map Asset Inventory](../docs/hex_asset_inventory.md):
+  - **Purpose:** Draft inventory of all required asset categories for region and combat/POI hex maps, including asset type, example, dimensions, color palette, style notes, and usage notes.
+  - **Usage:** Use this as a reference for asset creation, sprite management, and ensuring consistency across map systems. Update as new requirements emerge.
+
+- [Unimplemented Placeholders for Pre-Visual Asset Game Testing](../docs/unimplemented_placeholders.md):
+  - **Purpose:** Lists all game systems/components that require manual or specialist placeholder creation, as they cannot be generated automatically with ASCII or simple programmatic means.
+  - **Usage:** Reference this list to coordinate with specialists (UI/UX, animation, VFX, accessibility, audio, AI) for manual asset or placeholder creation. Update as new systems are added or requirements change.
+
+**Guidance:**
+- Review these documents during asset planning, task breakdown, and implementation phases.
+- Update the inventory and placeholder list as the project evolves.
+- Ensure all team members are aware of manual requirements and specialist involvement for non-automatable assets.
+
+# Visual DM - Dynamic Quest and Faction System
+
+## Overview
+Visual DM is a TypeScript-based game system that provides sophisticated quest generation and faction management. The system focuses on creating dynamic, faction-influenced quests with branching narratives and meaningful consequences.
+
+## Core Features
+
+### 1. Quest System
+- Dynamic quest generation based on templates
+- Multi-stage quest progression with branching paths
+- Condition-based quest advancement
+- Flexible reward system
+- Dialogue system with variations based on standing
+
+### 2. Faction System
+- Five main factions: Merchants, Warriors, Scholars, Mystics, and Outlaws
+- Faction relationships and standing mechanics
+- Reputation and tier progression
+- Special resources and quest preferences per faction
+- Value-based decision making
+
+### 3. Advanced Quest Features
+- Quest state tracking
+- NPC interaction history
+- Combat and skill progression integration
+- Inventory management
+- Location-based quest elements
+
+### 4. Faction Quest Integration
+- Faction-specific quest requirements
+- Standing-based quest availability
+- Competing faction mechanics
+- Special resource integration
+- Faction-specific dialogue variations
+
+## Technical Requirements
+
+### Development Environment
+- TypeScript/JavaScript
+- Strong type safety
+- Modular architecture
+- Comprehensive test coverage
+
+### Core Systems
+1. Quest Generation System
+   - Template-based generation
+   - Dynamic difficulty scaling
+   - Reward balancing
+   - Multi-stage progression
+
+2. Faction Management
+   - Standing calculation
+   - Relationship tracking
+   - Tier progression
+   - Resource management
+
+3. Consequence System
+   - Action impact tracking
+   - World state management
+   - NPC relationship updates
+   - Faction standing adjustments
+
+4. Dialogue System
+   - Standing-based variations
+   - Tone adaptation
+   - NPC relationship integration
+   - Faction value reflection
+
+## Implementation Priorities
+1. Core quest system foundation
+2. Basic faction mechanics
+3. Quest-faction integration
+4. Advanced quest features
+5. Dialogue system enhancement
+6. Testing and balancing
+
+## Success Criteria
+- Seamless integration between quest and faction systems
+- Dynamic quest generation with meaningful choices
+- Balanced faction progression
+- Comprehensive test coverage
+- Type-safe implementation
+- Maintainable and extensible codebase
+
+# Hex-Based Asset Management System PRD
+
+## Project Overview
+Create a comprehensive hex-based asset management system for a digital tabletop game, focusing on terrain generation and variation.
+
+## Core Requirements
+
+### 1. Asset Generation System
+- Generate base terrain sprites (64x64 pixels)
+- Create terrain features (trees, rocks, bushes, flowers)
+- Implement terrain overlays (elevation, shadows)
+- Generate seasonal and weather variations
+
+### 2. Asset Organization
+- Maintain clear directory structure
+- Implement consistent naming conventions
+- Support easy asset discovery and usage
+
+### 3. Technical Documentation
+- Document all asset specifications
+- Provide integration guidelines
+- Include performance optimization tips
+
+## Technical Specifications
+
+### Asset Types
+1. Base Terrain
+   - Multiple terrain types (grass, water, forest, etc.)
+   - Multiple variations per type
+   - RGBA format with transparency
+
+2. Terrain Features
+   - Multiple feature types
+   - Various variations per feature
+   - Proper alpha channel support
+
+3. Overlays and Variations
+   - Weather effects (rain, snow)
+   - Seasonal changes (autumn)
+   - Atmospheric effects (fog)
+
+### Implementation Requirements
+- Use Python with Pillow for image processing
+- Implement procedural generation
+- Support alpha channel throughout
+- Maintain consistent quality standards
+
+## Success Criteria
+- All assets generated to specification
+- Complete technical documentation
+- Successful overlay/variation tests
+- Optimized for performance
+
+# Product Requirements Document: Outlaw Status and Punitive Consequence System
+
+## Overview
+The Outlaw Status and Punitive Consequence System is designed to track, manage, and enforce consequences for player misconduct within the game, particularly focusing on hostile actions against friendly NPCs. The system will provide automated enforcement of rules while maintaining administrative oversight capabilities.
+
+## Core Features
+
+### 1. Infraction Tracking System
+- Real-time monitoring and logging of hostile actions against friendly NPCs
+- Server-side logging of all infractions with detailed metadata
+- Tracking system for both character-level and account-level violations
+- Integration with existing combat and NPC interaction systems
+
+### 2. Multi-Tier Consequence Structure
+#### Tier 1: Minor Infractions
+- Monetary fines calculated based on offense severity
+- Item confiscation system for specific violations
+- Warning system with clear communication to players
+
+#### Tier 2: Active Enforcement
+- Guard AI targeting system for identified outlaws
+- Dynamic NPC hostility adjustment based on outlaw status
+- Detention and combat mechanics for guard NPCs
+
+#### Tier 3: Temporary Suspension
+- Automated temporary bans based on infraction thresholds
+- Configurable suspension durations
+- Appeal system for suspended players
+
+#### Tier 4: Permanent Consequences
+- Permanent character bans for severe or repeated violations
+- Account-level ban system for persistent offenders
+- IP-based restrictions for extreme cases
+
+### 3. Visual Feedback Systems
+- Dynamic wanted poster system in game world
+- Bounty notice board implementation
+- Visual indicators for outlaw status on character models
+- UI elements showing current outlaw status and consequences
+
+### 4. Administrative Tools
+- Comprehensive moderation dashboard
+- Real-time infraction monitoring
+- Manual override capabilities
+- Detailed logging and audit trail
+- Appeal review system
+
+### 5. Player Communication System
+- Immediate notification system for infractions
+- Clear explanation of consequences
+- Appeal process documentation
+- Status update notifications
+
+## Technical Requirements
+
+### Database Schema
+- Character infraction records
+- Account violation history
+- IP tracking system
+- Administrative action logs
+- Appeal records
+- Consequence history
+
+### API Endpoints
+- Infraction recording
+- Status checking
+- Administrative actions
+- Appeal processing
+- Ban management
+- Notification delivery
+
+### Security Measures
+- Secure logging system
+- Anti-evasion measures
+- IP tracking protection
+- Admin action verification
+- Appeal verification system
+
+## User Experience
+
+### Player Perspective
+- Clear communication of rules and consequences
+- Immediate feedback for infractions
+- Visible status indicators
+- Accessible appeal process
+- Transparent consequence system
+
+### Administrator Perspective
+- Intuitive dashboard interface
+- Quick access to player histories
+- Efficient tools for common actions
+- Comprehensive logging view
+- Appeal management system
+
+## Performance Requirements
+- Real-time infraction detection and logging
+- Minimal impact on game performance
+- Scalable database structure
+- Efficient query performance
+- Reliable notification delivery
+
+## Testing Requirements
+- Unit tests for all core components
+- Integration testing with game systems
+- Load testing for concurrent infractions
+- Security testing for ban evasion
+- UI/UX testing for admin tools
+
+## Deployment Requirements
+- Database migration scripts
+- Rollback procedures
+- Monitoring setup
+- Backup systems
+- Performance metrics
+
+## Success Metrics
+- Reduction in friendly NPC attacks
+- Decreased repeat offenses
+- Admin tool efficiency
+- System performance impact
+- Player feedback on fairness
+
+# Visual DM - Monster Siege and NPC Affinity Systems PRD
+
+## Monster Siege and Dynamic POI Conversion System
+
+### Overview
+Implement a dynamic system for monster attacks on POIs with automatic combat simulations and POI type conversions based on battle outcomes.
+
+### Requirements
+1. Monster Attack Logic
+   - Trigger monster attacks on POIs through daily world-tick events
+   - POIs cleared by players generate NPC inhabitants
+   - NPCs progressively convert area into Social-type POI
+   - Daily attacks from all 6 surrounding directions
+   - Attack strength based on adjacent Terrain Danger Levels
+
+2. Combat Simulation
+   - Automatic combat between NPC defenders and monster attackers
+   - POI progression based on successful defense
+   - POI type conversion based on battle outcomes:
+     * Close defeats convert to Exploration type
+     * Decisive defeats convert to Dungeon type
+
+3. State Management
+   - Track faction strength
+   - Record combat outcomes
+   - Monitor POI type transitions
+   - Store event logs
+   - Integrate with existing Combat and Faction systems
+
+4. NPC Memory Integration
+   - Track NPC deaths in social POIs
+   - Update NPC memories for high-affinity relationships
+   - Maintain emotional impact on surviving NPCs
+
+## NPC Affinity and Relationship System
+
+### Overview
+Create a comprehensive system for tracking and managing NPC relationships and interactions.
+
+### Requirements
+1. Affinity Tracking
+   - Persist NPC-to-NPC affinity scores
+   - Maintain relationship network graph
+   - Track which NPCs know each other
+   - Store relationship strength scores
+
+2. Daily Interaction System
+   - Process interaction checks during world-tick events
+   - 10% interaction probability for NPC pairs in same POI
+   - Update affinity scores based on interactions
+   - Handle affinity decay over time
+
+3. Event Management
+   - Log all interactions
+   - Trigger events at affinity thresholds
+   - Support debugging and balancing
+   - Integrate with world-tick system
+
+4. Documentation
+   - Document affinity calculations
+   - Record interaction probabilities
+   - Maintain system integration points
+   - Track relationship network structure
+
+# Product Requirements Document (PRD)
+
+## Project: Visual_DM - Initial Implementation
+
+### Overview
+This document outlines the foundational requirements for the Visual_DM project, focusing on infrastructure, core systems, and essential features to enable rapid development and robust operation. The following requirements are derived from the first five tasks in the current task list and are intended to guide the initial implementation phase.
+
+---
+
+### 1. Setup CI/CD Pipeline
+- **Requirement:** Establish an automated Continuous Integration and Continuous Deployment (CI/CD) pipeline.
+- **Details:**
+  - The pipeline must support building, testing, and deploying the application automatically.
+  - Integrate with version control (e.g., GitHub Actions, GitLab CI, or similar).
+  - Include steps for linting, running tests, and deploying to staging/production environments.
+
+---
+
+### 2. Implement AI-Driven Medieval Book-Themed UI and Animation System
+- **Requirement:** Develop a comprehensive UI and animation system with a medieval book theme, leveraging AI tools for asset generation.
+- **Details:**
+  - Use AI to generate visual assets and animations.
+  - Implement a dual-layer animation approach (background and foreground/sprites).
+  - Standardize sprite formats and ensure efficient asset management.
+  - The UI must be visually cohesive and immersive, matching the medieval book aesthetic.
+
+---
+
+### 3. Implement Search and Filtering Capabilities
+- **Requirement:** Provide advanced search and filtering functionality for media assets.
+- **Details:**
+  - Users must be able to search and filter media assets by type, tags, and metadata.
+  - The system should support fast, scalable queries and return relevant results efficiently.
+  - Filtering options should be extensible for future asset types.
+
+---
+
+### 4. Implement Outlaw Status and Consequence System
+- **Requirement:** Develop a system to track, manage, and enforce consequences for player misconduct, especially hostile actions against friendly NPCs.
+- **Details:**
+  - Track player actions and flag misconduct.
+  - Apply consequences based on severity (e.g., outlaw status, penalties).
+  - Integrate with gameplay systems to reflect status changes and consequences.
+
+---
+
+### 5. Create Monitoring and Analytics System
+- **Requirement:** Implement a system to log and analyze building generation data, including placement statistics, performance metrics, and error tracking.
+- **Details:**
+  - Collect and store data on building generation events.
+  - Provide analytics dashboards or reports for key metrics.
+  - Include error tracking and alerting for failures or anomalies. 
+
+# Task Breakdown (Imported from tasks_import.json)
+
+The following is a comprehensive list of actionable tasks currently tracked for the Visual DM project, imported from the latest `tasks_import.json`. Each task includes its ID, title, description, and current status.
+
+---
+
+1. **ID: 1**
+   - **Title:** Setup CI/CD Pipeline
+   - **Description:** Create an automated CI/CD pipeline for building, testing, and deploying the application.
+   - **Status:** pending
+
+2. **ID: 2**
+   - **Title:** Implement AI-Driven Medieval Book-Themed UI and Animation System
+   - **Description:** Develop and integrate a comprehensive UI and animation system with a medieval book theme, utilizing AI tools for asset generation and implementing a dual-layer animation approach with standardized sprite formats and efficient asset management.
+   - **Status:** done
+
+3. **ID: 4**
+   - **Title:** Implement Search and Filtering Capabilities
+   - **Description:** Create advanced search and filtering functionality for media assets.
+   - **Status:** pending
+
+4. **ID: 5**
+   - **Title:** Implement Outlaw Status and Consequence System
+   - **Description:** Develop the system to track, manage, and enforce consequences for player misconduct, particularly focusing on hostile actions against friendly NPCs.
+   - **Status:** pending
+
+5. **ID: 6**
+   - **Title:** Create Monitoring and Analytics System
+   - **Description:** Implement a system to log and analyze building generation data, including placement statistics, performance metrics, and error tracking.
+   - **Status:** pending
+
+6. **ID: 7**
+   - **Title:** Add API Documentation and Security Measures
+   - **Description:** Create comprehensive API documentation using OpenAPI/Swagger and implement security measures like rate limiting and input validation.
+   - **Status:** pending
+
+7. **ID: 10**
+   - **Title:** Implement Version Control System Integration
+   - **Description:** Create integration with version control systems to link reviews and tasks to specific code versions
+   - **Status:** pending
+
+8. **ID: 11**
+   - **Title:** Implement Building Variation System
+   - **Description:** Create a system to generate variations of buildings based on templates, including size adjustments, style modifications, and purpose-driven layout changes.
+   - **Status:** pending
+
+9. **ID: 13**
+   - **Title:** Task #61
+   - **Description:** Create and implement a comprehensive suite of integration tests and system validation procedures for the POI Layout System to ensure all components work together correctly, maintain data integrity, and perform efficiently under various conditions.
+   - **Status:** in-progress
+
+10. **ID: 14**
+   - **Title:** Implement Comprehensive Testing
+   - **Description:** Develop and implement comprehensive testing including unit tests, integration tests, end-to-end testing, performance testing, and security testing.
+   - **Status:** pending
+
+11. **ID: 15**
+   - **Title:** Implement Base Entity Interfaces and Models
+   - **Description:** Create the foundational entity interfaces and data models as specified in the PRD, including BaseEntity, MediaAsset, Collection, and User interfaces.
+   - **Status:** pending
+
+12. **ID: 16**
+   - **Title:** Implement Kubernetes Orchestration
+   - **Description:** Create Kubernetes configuration for orchestrating the application in a cluster.
+   - **Status:** pending
+
+13. **ID: 17**
+   - **Title:** Develop Modern Responsive Web Interface
+   - **Description:** Create a modern, responsive web interface for the application using a frontend framework like React.
+   - **Status:** pending
+
+14. **ID: 19**
+   - **Title:** Implement Dynamic Cross-Context Weather System
+   - **Description:** Design and implement a comprehensive weather system that functions consistently across both region map and POI/combat screens, including dynamic weather generation, visual effects, and gameplay impacts.
+   - **Status:** done
+
+15. **ID: 20**
+   - **Title:** Implement Persistent POI Layout System
+   - **Description:** Design and implement a comprehensive Point of Interest (POI) layout system that supports multiple POI types with hierarchical subtypes, persistent storage, dynamic expansion, and thematic coherence in procedural generation.
+   - **Status:** in-progress
+
+16. **ID: 21**
+   - **Title:** Implement Thumbnail Generation System
+   - **Description:** Create a comprehensive thumbnail generation system that supports multiple media types including images, videos, audio files, and documents as specified in the Thumbnail Generation Service PRD.
+   - **Status:** pending
+
+17. **ID: 22**
+   - **Title:** Develop Media File Processing Capabilities
+   - **Description:** Implement core functionality for processing various media file types, including validation, metadata extraction, and basic transformations.
+   - **Status:** pending
+
+18. **ID: 23**
+   - **Title:** Resolve TypeScript and Linting Errors for EventEmitter, Buffer, and Custom Type Compatibility
+   - **Description:** Identify and fix TypeScript compatibility issues between EventEmitter, Buffer, and custom types to ensure strict type safety while maintaining existing functionality.
+   - **Status:** pending
+
+19. **ID: 24**
+   - **Title:** Implement Medieval-Themed Character and Party Management UI System
+   - **Description:** Design and develop a comprehensive medieval-themed UI system for character and party management that includes character sheets, party formation, inventory management, and settings configuration interfaces with consistent visual styling.
+   - **Status:** pending
+
+20. **ID: 26**
+   - **Title:** Create Base Service Classes
+   - **Description:** Develop base service classes for common operations that will be used across the application, implementing SOLID principles and dependency injection.
+   - **Status:** pending
+
+21. **ID: 27**
+   - **Title:** Create Comprehensive Reporting System
+   - **Description:** Develop a reporting system to generate detailed reports on review process and outcomes
+   - **Status:** pending
+
+22. **ID: 28**
+   - **Title:** Create Building Accessibility System
+   - **Description:** Implement a system to ensure buildings have proper accessibility features, including entrances/exits, navigation paths, and collision-free movement.
+   - **Status:** pending
+
+23. **ID: 29**
+   - **Title:** Implement Codebase Reorganization
+   - **Description:** Reorganize the existing codebase into a clean, structured, and maintainable layout following the specifications in the Codebase Reorganization PRD.
+   - **Status:** pending
+
+24. **ID: 30**
+   - **Title:** Implement Code Analysis Integration
+   - **Description:** Create integration with code analysis tools to enhance review with automated findings
+   - **Status:** pending
+
+25. **ID: 31**
+   - **Title:** Develop Event Integration System
+   - **Description:** Create a system to integrate buildings with narrative events, including quest triggers, NPC encounters, and dynamic event locations.
+   - **Status:** pending
+
+26. **ID: 35**
+   - **Title:** Implement Medieval-Themed HUD Systems for POI Exploration and Combat
+   - **Description:** Design and implement comprehensive Heads-Up Display (HUD) systems for both POI exploration and combat screens that integrate with the medieval book theme, maintaining consistent pixel art style and performance requirements.
+   - **Status:** pending
+
+27. **ID: 36**
+   - **Title:** Task #23
+   - **Description:** Implement a comprehensive set of media format conversion utilities including video, audio, and document converters with a factory pattern and support for stream-based processing of large files.
+   - **Status:** pending
+
+28. **ID: 39**
+   - **Title:** Create Documentation System Integration
+   - **Description:** Develop integration with documentation systems to link reviews and tasks to relevant documentation
+   - **Status:** pending
+
+29. **ID: 40**
+   - **Title:** Develop Comprehensive Hex-Based Asset Management System
+   - **Description:** Create a complete asset management system and generate all required sprites/assets for the hex-based map systems at both region and combat/POI levels, including terrain types, overlays, indicators, and effects.
+   - **Status:** in-progress
+
+30. **ID: 43**
+   - **Title:** Develop Task Generation Algorithm
+   - **Description:** Create an algorithm that analyzes review responses and generates actionable tasks
+   - **Status:** pending
+
+31. **ID: 44**
+   - **Title:** Design RESTful API Endpoints
+   - **Description:** Design and implement RESTful API endpoints for the Persistent POI Layout System, following best practices for API design. These endpoints will manage Points of Interest (POIs) in the game world, including their types, relationships, and persistence.
+   - **Status:** pending
+
+32. **ID: 45**
+   - **Title:** Implement Monster Siege and Dynamic POI Conversion System
+   - **Description:** Design and implement a comprehensive system for monster attacks on POIs with automatic combat simulations and POI type conversions based on battle outcomes. This includes daily world-tick events for monster attacks, NPC inhabitant generation, progressive POI conversion, multi-directional attacks, terrain-based attack strength, and automatic combat resolution.
+   - **Status:** pending
+
+33. **ID: 48**
+   - **Title:** Implement Error Handling and Logging Mechanisms
+   - **Description:** Create a robust error handling and logging system that will be used throughout the application to capture, report, and handle errors consistently.
+   - **Status:** pending
+
+34. **ID: 52**
+   - **Title:** Design Flexible Storage Backend Interface
+   - **Description:** Create a flexible storage backend interface that can support multiple storage providers and implement the file system storage provider.
+   - **Status:** pending
+
+35. **ID: 77**
+   - **Title:** Design Review Template Schema
+   - **Description:** Create a standardized review template schema that covers all required aspects of system evaluation
+   - **Status:** in-progress
+
+36. **ID: 78**
+   - **Title:** Task #78: Taskmaster Duplicate Task Cleanup
+   - **Description:** Identify and remove all duplicate tasks from the Taskmaster task list while preserving unique tasks, then generate a report of the cleanup process and results.
+   - **Status:** pending
+
+37. **ID: 79**
+   - **Title:** Task #79: Implement Advanced Combat Feat Effect Classes
+   - **Description:** Develop and integrate new effect classes for the feat system to support advanced combat mechanics, including status conditions, transformations, stat-based dice rolls, and saving throw conditions.
+   - **Status:** pending
+
+38. **ID: 80**
+   - **Title:** Task #80: Integrate Batch-Imported Combat Feats into Game System
+   - **Description:** Fully integrate all batch-imported combat menu feats into the game system by implementing required effect classes, ensuring proper registration with the FeatManager, and connecting feats to character creation, advancement, and combat logic. Special attention must be given to 'Intrinsic' feats that should be automatically granted to all characters.
+   - **Status:** pending
+
+39. **ID: 81**
+   - **Title:** Task #81: Audit and Rebalance Feat Prerequisites for Game Balance
+   - **Description:** Conduct a comprehensive audit of all feats in the system and rebalance their prerequisites to improve game balance, create meaningful progression paths, and ensure appropriate feat availability at all character levels.
+   - **Status:** pending
+
+40. **ID: 84**
+   - **Title:** Implement Question Generation Engine
+   - **Description:** Develop the core engine that generates system-specific questions based on the review template
+   - **Status:** pending
+
+41. **ID: 85**
+   - **Title:** Build Response Capture System
+   - **Description:** Create a system to capture, store, and manage review responses
+   - **Status:** pending
+
+42. **ID: 87**
+   - **Title:** Implement Review Data Storage
+   - **Description:** Design and implement the data storage system for reviews, questions, responses, and tasks
+   - **Status:** pending
+
+43. **ID: 88**
+   - **Title:** Create Task Management System Integration
+   - **Description:** Develop integration with existing task management systems to track and manage generated tasks
+   - **Status:** pending
+
+44. **ID: 90**
+   - **Title:** Build Review Analytics Engine
+   - **Description:** Create an analytics system to identify patterns and insights from review data
+   - **Status:** pending
+
+45. **ID: 91**
+   - **Title:** Develop User Interface for Review Management
+   - **Description:** Create a user interface for managing the review process and viewing results
+   - **Status:** pending
+
+46. **ID: 92**
+   - **Title:** Implement Authentication and Authorization
+   - **Description:** Create a security system to control access to review data and functionality
+   - **Status:** pending
+
+47. **ID: 95**
+   - **Title:** Build CI/CD Pipeline Integration
+   - **Description:** Create integration with CI/CD pipelines to automate the review process
+   - **Status:** pending
+
+48. **ID: 100**
+   - **Title:** Add Drag-and-Drop Upload Functionality
+   - **Description:** Implement drag-and-drop file upload with progress tracking and validation.
+   - **Status:** pending
+
+49. **ID: 102**
+   - **Title:** Setup Containerized Deployment
+   - **Description:** Create Docker configuration for containerized deployment of the application.
+   - **Status:** pending
+
+50. **ID: 116**
+   - **Title:** Create Interior Generation System
+   - **Description:** Develop a system to generate building interiors based on building type templates, including room layouts, furniture placement, and functional requirements.
+   - **Status:** pending
+
+51. **ID: 117**
+   - **Title:** Implement Persistence and State Management
+   - **Description:** Create a system to store and manage building data, including location coordinates, interior layouts, and state information for session continuity.
+   - **Status:** pending
+
+52. **ID: 120**
+   - **Title:** Implement Building Type Template Editor
+   - **Description:** Create a tool for defining and editing building type templates, including room layouts, furniture placement rules, and decoration schemes.
+   - **Status:** pending
+
+53. **ID: 121**
+   - **Title:** Develop POI Integration System
+   - **Description:** Create a system to integrate the building generation with Points of Interest (POIs), including building distribution based on POI type and danger level.
+   - **Status:** pending
+
+54. **ID: 124**
+   - **Title:** Implement Performance Optimization System
+   - **Description:** Create a system to optimize building generation performance, ensuring it meets the target of < 2 seconds per building and < 5 seconds per POI layout.
+   - **Status:** pending
+
+55. **ID: 126**
+   - **Title:** Develop Media Processing Engine
+   - **Description:** Implement the media file processing capabilities including format conversion, optimization, thumbnail generation, and metadata extraction.
+   - **Status:** pending
+
+56. **ID: 127**
+   - **Title:** Implement Storage Management System
+   - **Description:** Design and implement a flexible storage backend interface with support for file system and cloud storage providers, plus a caching layer.
+   - **Status:** pending
+
+57. **ID: 128**
+   - **Title:** Develop RESTful API Layer
+   - **Description:** Design and implement RESTful API endpoints with authentication, authorization, documentation, rate limiting, and security measures.
+   - **Status:** pending
+
+58. **ID: 129**
+   - **Title:** Create User Interface Components
+   - **Description:** Develop a modern, responsive web interface with intuitive media browsing, drag-and-drop upload, and search/filtering capabilities.
+   - **Status:** pending
+
+59. **ID: 130**
+   - **Title:** Implement Hex-Based Asset Management System
+   - **Description:** Create a comprehensive hex-based asset management system for terrain generation and variation as specified in the PRD.
+   - **Status:** pending
+
+60. **ID: 131**
+   - **Title:** Develop Sprite System
+   - **Description:** Implement the dual animation layer sprite system with region/world layer and POI/building layer as specified in the PRD.
+   - **Status:** pending
+
+61. **ID: 132**
+   - **Title:** Implement Quest and Faction System
+   - **Description:** Develop the dynamic quest generation and faction management system with branching narratives and meaningful consequences.
+   - **Status:** pending
+
+62. **ID: 134**
+   - **Title:** Implement Security Features
+   - **Description:** Implement comprehensive security features including JWT authentication, role-based access control, secure file upload validation, API key management, and audit logging.
+   - **Status:** pending
+
+63. **ID: 135**
+   - **Title:** Optimize Performance
+   - **Description:** Implement performance optimizations including concurrent file processing, efficient caching strategies, database query optimization, and large file handling.
+   - **Status:** pending
+
+64. **ID: 137**
+   - **Title:** Setup Deployment Infrastructure
+   - **Description:** Implement containerized deployment with Docker, Kubernetes orchestration, CI/CD pipeline, monitoring, and backup/disaster recovery plans.
+   - **Status:** pending
+
+65. **ID: 139**
+   - **Title:** Conduct Code Quality Assessment
+   - **Description:** Perform a comprehensive analysis of codebase quality focusing on readability, best practices, modularity, maintainability, performance, error handling, and documentation.
+   - **Status:** pending
+
+66. **ID: 140**
+   - **Title:** Implement Outlaw Status and Punitive Consequence System
+   - **Description:** Develop a comprehensive system to track player misconduct against NPCs, apply appropriate consequences based on severity tiers, and provide both player-facing and administrative interfaces for the outlaw status system.
+   - **Status:** pending
+
+67. **ID: 149**
+   - **Title:** Implement Format Conversion and Optimization
+   - **Description:** Develop functionality for converting media files between different formats and optimizing them for storage and delivery.
+   - **Status:** pending
+
+68. **ID: 151**
+   - **Title:** Implement Cloud Storage Provider Support
+   - **Description:** Add support for cloud storage providers such as AWS S3, Google Cloud Storage, and Azure Blob Storage.
+   - **Status:** pending
+
+69. **ID: 152**
+   - **Title:** Create Caching Layer for Improved Performance
+   - **Description:** Implement a caching layer to improve performance for frequently accessed media assets and other data.
+   - **Status:** pending
+
+70. **ID: 157**
+   - **Title:** Implement Intuitive Media Browsing Experience
+   - **Description:** Create an intuitive media browsing experience with features like grid and list views, previews, and metadata display.
+   - **Status:** pending
+
+---
+
+*End of Task Breakdown (Imported from tasks_import.json)* 

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "main_001",
+    "title": "Defend the Village",
+    "description": "Protect the village from the bandit attack.",
+    "type": "KILL",
+    "questType": "KILL",
+    "status": "PENDING",
+    "difficulty": 3,
+    "requirements": { "minimumLevel": 2, "minimumReputation": 10 },
+    "objectives": [
+      { "id": "obj1", "description": "Defeat 10 bandits", "type": "KILL", "target": "bandit", "amount": 10 }
+    ],
+    "dialogue": [
+      { "text": "Help us!", "npcId": "villager_1", "responses": [ { "text": "I will help." } ] }
+    ],
+    "rewards": { "gold": 100, "experience": 500, "items": ["sword"] },
+    "location": "village_1"
+  },
+  {
+    "id": "side_001",
+    "title": "Gather Herbs",
+    "description": "Collect 5 healing herbs for the healer.",
+    "type": "COLLECT",
+    "questType": "COLLECT",
+    "status": "PENDING",
+    "difficulty": 1,
+    "requirements": { "minimumLevel": 1, "minimumReputation": 0 },
+    "objectives": [
+      { "id": "obj1", "description": "Collect 5 healing herbs", "type": "COLLECT", "target": "herb", "amount": 5 }
+    ],
+    "dialogue": [
+      { "text": "Can you bring me some herbs?", "npcId": "healer_1", "responses": [ { "text": "Sure." } ] }
+    ],
+    "rewards": { "gold": 20, "experience": 50, "items": ["herb"] },
+    "location": "forest_1"
+  },
+  {
+    "id": "faction_001",
+    "title": "Sabotage Rival Camp",
+    "description": "Disrupt the rival faction's supply lines.",
+    "type": "DIPLOMATIC",
+    "questType": "DIPLOMATIC",
+    "status": "PENDING",
+    "difficulty": 4,
+    "requirements": { "minimumLevel": 5, "minimumReputation": 20 },
+    "objectives": [
+      { "id": "obj1", "description": "Destroy 3 supply crates", "type": "CUSTOM", "target": "crate", "amount": 3 }
+    ],
+    "dialogue": [
+      { "text": "We need to weaken our rivals.", "npcId": "faction_leader_1", "responses": [ { "text": "Understood." } ] }
+    ],
+    "rewards": { "gold": 200, "experience": 1000, "items": ["cloak"], "reputation": 10 },
+    "location": "rival_camp"
+  },
+  {
+    "id": "combat_001",
+    "title": "Arena Champion",
+    "description": "Win three consecutive battles in the arena.",
+    "type": "KILL",
+    "questType": "KILL",
+    "status": "PENDING",
+    "difficulty": 4,
+    "requirements": { "minimumLevel": 4, "minimumReputation": 5 },
+    "objectives": [
+      { "id": "obj1", "description": "Win 3 arena battles", "type": "KILL", "target": "arena_opponent", "amount": 3 }
+    ],
+    "dialogue": [
+      { "text": "Prove your strength in the arena!", "npcId": "arena_master", "responses": [ { "text": "I accept the challenge." } ] }
+    ],
+    "rewards": { "gold": 300, "experience": 1200, "items": ["champion_medal"] },
+    "location": "arena"
+  },
+  {
+    "id": "explore_001",
+    "title": "Map the Ancient Ruins",
+    "description": "Explore and map the entire ancient ruins area.",
+    "type": "EXPLORE",
+    "questType": "EXPLORE",
+    "status": "PENDING",
+    "difficulty": 2,
+    "requirements": { "minimumLevel": 2, "minimumReputation": 0 },
+    "objectives": [
+      { "id": "obj1", "description": "Visit all marked locations in the ruins", "type": "EXPLORE", "target": "ruins", "amount": 5 }
+    ],
+    "dialogue": [
+      { "text": "Bring me a complete map of the ruins.", "npcId": "historian_1", "responses": [ { "text": "I'll return with the map." } ] }
+    ],
+    "rewards": { "gold": 80, "experience": 300, "items": ["ancient_map"] },
+    "location": "ancient_ruins"
+  },
+  {
+    "id": "faction_002",
+    "title": "Negotiate Peace",
+    "description": "Broker a peace agreement between two rival factions.",
+    "type": "DIPLOMATIC",
+    "questType": "DIPLOMATIC",
+    "status": "PENDING",
+    "difficulty": 5,
+    "requirements": { "minimumLevel": 7, "minimumReputation": 30 },
+    "objectives": [
+      { "id": "obj1", "description": "Negotiate with both faction leaders", "type": "DIPLOMATIC_MEETING", "target": "faction_leader", "amount": 2 }
+    ],
+    "dialogue": [
+      { "text": "Can you bring peace to our lands?", "npcId": "council_1", "responses": [ { "text": "I will try." } ] }
+    ],
+    "rewards": { "gold": 500, "experience": 2000, "items": ["peace_treaty"], "diplomaticInfluence": 20 },
+    "location": "council_hall"
+  }
+] 

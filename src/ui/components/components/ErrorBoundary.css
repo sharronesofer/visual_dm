@@ -1,0 +1,102 @@
+.error-boundary-fallback {
+  padding: 2rem;
+  margin: 1rem;
+  border: 1px solid #ff6b6b;
+  border-radius: 0.5rem;
+  background-color: #fff5f5;
+  color: #c92a2a;
+  text-align: center;
+}
+
+.error-boundary-fallback h2 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.error-boundary-fallback pre {
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: #fff;
+  border: 1px solid #ffe3e3;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.error-boundary-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.error-boundary-actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.error-boundary-actions button:first-child {
+  background-color: #ff6b6b;
+  color: #fff;
+}
+
+.error-boundary-actions button:first-child:hover {
+  background-color: #fa5252;
+}
+
+.error-boundary-actions button:last-child {
+  background-color: #fff;
+  border: 1px solid #ff6b6b;
+  color: #ff6b6b;
+}
+
+.error-boundary-actions button:last-child:hover {
+  background-color: #fff5f5;
+}
+
+.error-boundary-actions button:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-color-scheme: dark) {
+  .error-boundary-fallback {
+    background-color: #2c2c2c;
+    border-color: #ff6b6b;
+    color: #ffa8a8;
+  }
+
+  .error-boundary-fallback pre {
+    background-color: #1c1c1c;
+    border-color: #ff8787;
+    color: #ffe3e3;
+  }
+
+  .error-boundary-actions button:first-child {
+    background-color: #ff6b6b;
+    color: #1c1c1c;
+  }
+
+  .error-boundary-actions button:first-child:hover {
+    background-color: #ff8787;
+  }
+
+  .error-boundary-actions button:last-child {
+    background-color: transparent;
+    border-color: #ff6b6b;
+    color: #ff8787;
+  }
+
+  .error-boundary-actions button:last-child:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+  }
+} 

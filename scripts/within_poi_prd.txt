@@ -1,0 +1,206 @@
+# Within-POI Generation System PRD
+
+## Overview
+The Within-POI Generation System will enable dynamic generation and rendering of interior spaces and content for Points of Interest (POIs) in the map system. This system will seamlessly integrate with the existing map virtualization and chunk-based loading system while providing detailed interior exploration capabilities.
+
+## Core Requirements
+
+### 1. POI Interior State Management
+- Implement a Zustand store (poiStore.ts) for managing POI interior state
+- Support multiple active POI interiors simultaneously
+- Track player position within POI spaces
+- Manage POI interior chunk loading and unloading
+- Handle POI-specific state (doors, containers, NPCs, etc.)
+- Implement memory management for inactive POI chunks
+
+### 2. POI Service Layer
+- Create POIService class for handling POI data operations
+- Implement methods for:
+  - Loading POI interior data
+  - Generating dynamic interior layouts
+  - Managing POI state persistence
+  - Handling POI interactions
+- Support both static and procedurally generated POI content
+- Integrate with existing MapService for seamless transitions
+
+### 3. POI Interior Components
+- Create VirtualizedPOIRenderer component
+  - Support efficient rendering of POI interiors
+  - Handle different zoom levels and view modes
+  - Implement proper component lifecycle management
+- Develop POITile component for interior tiles
+  - Support multiple tile types (walls, floors, furniture, etc.)
+  - Handle tile-specific interactions
+  - Support tile state changes
+- Create POIOverlay component
+  - Display POI-specific UI elements
+  - Show interactive elements and hotspots
+  - Handle overlay animations
+
+### 4. POI Interaction System
+- Implement POIInteractionManager
+  - Handle player interactions with POI elements
+  - Manage interaction state and feedback
+  - Support different interaction types
+- Create POIInteractionUI components
+  - Display context-sensitive interaction options
+  - Show interaction feedback
+  - Support keyboard and mouse controls
+
+### 5. POI Generation System
+- Implement POIGenerator service
+  - Support different POI types and themes
+  - Generate consistent layouts
+  - Handle room connections and flow
+- Create POITemplate system
+  - Define reusable POI layouts
+  - Support customization points
+  - Handle template validation
+
+### 6. State Integration
+- Integrate with existing mapStore
+  - Handle seamless transitions between exterior and interior
+  - Manage POI discovery and visibility
+  - Track POI state in world context
+- Implement proper state persistence
+  - Save POI state with world state
+  - Handle POI state loading/unloading
+  - Support POI state reset
+
+### 7. Performance Optimization
+- Implement efficient POI chunk loading
+  - Use LRU cache for POI chunks
+  - Implement predictive loading for POI areas
+  - Handle chunk unloading for memory management
+- Optimize rendering performance
+  - Use virtualization for large POIs
+  - Implement proper component memoization
+  - Handle efficient re-renders
+
+### 8. UI/UX Requirements
+- Smooth transitions between exterior and interior views
+- Clear visual indicators for interactive elements
+- Intuitive navigation controls
+- Responsive layout adaptation
+- Loading state indicators
+- Error state handling
+
+## Technical Specifications
+
+### API Integration Points
+1. POI Data Loading:
+```typescript
+interface POIData {
+  id: string;
+  type: POIType;
+  layout: POILayout;
+  state: POIState;
+  contents: POIContents;
+}
+
+interface POIService {
+  loadPOIData(id: string): Promise<POIData>;
+  generatePOILayout(type: POIType): POILayout;
+  savePOIState(id: string, state: POIState): Promise<void>;
+}
+```
+
+2. POI State Management:
+```typescript
+interface POIStore {
+  activePOIs: Map<string, POIData>;
+  currentPOI: string | null;
+  playerPosition: Position;
+  visibleArea: Position[];
+  
+  enterPOI(id: string): void;
+  exitPOI(id: string): void;
+  updatePOIState(id: string, updates: Partial<POIState>): void;
+}
+```
+
+3. POI Rendering:
+```typescript
+interface POIRendererProps {
+  poiId: string;
+  width: number;
+  height: number;
+  scale: number;
+  onInteraction?: (interaction: POIInteraction) => void;
+}
+```
+
+### State Management
+1. POI State Structure:
+```typescript
+interface POIState {
+  discovered: boolean;
+  explored: Set<string>; // Explored chunk IDs
+  containers: Map<string, ContainerState>;
+  doors: Map<string, DoorState>;
+  npcs: Map<string, NPCState>;
+  modifications: Map<string, TileModification>;
+}
+```
+
+2. Chunk Management:
+```typescript
+interface POIChunk {
+  id: string;
+  tiles: Record<string, POITile>;
+  entities: Record<string, POIEntity>;
+  lastAccessed: number;
+}
+```
+
+### Performance Considerations
+1. Chunk Loading:
+- Implement chunk-based loading with 16x16 tile chunks
+- Maintain maximum of 64 loaded chunks per POI
+- Use LRU cache for chunk management
+- Implement predictive loading for adjacent chunks
+
+2. Rendering Optimization:
+- Use react-window for virtualized rendering
+- Implement proper component memoization
+- Use efficient state updates
+- Handle proper cleanup of unused resources
+
+3. Memory Management:
+- Clear inactive POI data when memory threshold reached
+- Implement proper garbage collection hooks
+- Use efficient data structures for state management
+
+## Implementation Phases
+
+### Phase 1: Core Infrastructure
+1. Implement POI state management store
+2. Create basic POI service layer
+3. Implement POI chunk management system
+4. Set up basic POI component structure
+
+### Phase 2: Rendering System
+1. Implement VirtualizedPOIRenderer
+2. Create POITile components
+3. Implement basic POI interaction system
+4. Add transition animations
+
+### Phase 3: Generation System
+1. Implement POI generation service
+2. Create template system
+3. Add procedural generation capabilities
+4. Implement validation system
+
+### Phase 4: Integration & Polish
+1. Integrate with existing map system
+2. Implement state persistence
+3. Add performance optimizations
+4. Polish UI/UX elements
+
+## Success Criteria
+1. Smooth transition between exterior and interior views
+2. Consistent 60 FPS performance with large POIs
+3. Memory usage within acceptable limits
+4. Proper state persistence and recovery
+5. Intuitive user interaction
+6. Efficient generation of new POI content 
