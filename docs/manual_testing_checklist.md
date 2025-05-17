@@ -1,0 +1,11 @@
+# Manual Testing Checklist for Migrated Features
+
+| Feature Name         | Area      | Test Steps                                                                 | Expected Outcome                                      | Edge Cases/Notes                        | Verification Status |
+|---------------------|-----------|---------------------------------------------------------------------------|-------------------------------------------------------|------------------------------------------|--------------------|
+| mapReducer          | Backend   | 1. Trigger state changes via API or CLI<br>2. Inspect resulting state     | State transitions match original TypeScript behavior  | Test with invalid/edge-case actions      | Pending            |
+| Trade               | Backend   | 1. Create and process trade objects<br>2. Validate data integrity         | Trade data matches expected schema and logic          | Test with malformed trade data           | Pending            |
+| DetectionResult     | Backend   | 1. Run detection algorithms on sample data<br>2. Inspect results         | Detection results match original logic                | Test with edge-case market data          | Pending            |
+| market_utils        | Backend   | 1. Call movingAverage, standardDeviation, zScore with test data           | Calculations match original TypeScript outputs        | Test with empty/large/negative datasets  | Pending            |
+| CacheWarmer         | Backend   | 1. Trigger cache warming process<br>2. Inspect cache state                | Cache is populated as expected                        | Test with empty/large datasets           | Pending            |
+| RedisCacheService   | Backend   | 1. Store and retrieve data via Redis<br>2. Simulate cache failures        | Data is correctly cached and retrieved                | Test with Redis unavailable              | Pending            |
+| useMapStore         | Unity     | 1. Interact with map in Unity client<br>2. Observe state changes          | Map state updates and UI reflect expected behavior    | Test with rapid/invalid user actions     | Pending            | 

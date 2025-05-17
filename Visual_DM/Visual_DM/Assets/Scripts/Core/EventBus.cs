@@ -1,3 +1,4 @@
+// DEPRECATED: Use VisualDM.Systems.EventSystem.EventBus instead.
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace VisualDM.Core
     /// Event bus for Unity runtime events, implementing a publish-subscribe pattern.
     /// Allows components to communicate without direct references.
     /// </summary>
+    [Obsolete("EventBus has moved to VisualDM.Systems.EventSystem.EventBus. Use the new implementation.")]
     public class EventBus : MonoBehaviour
     {
         // Singleton instance
@@ -36,14 +38,7 @@ namespace VisualDM.Core
 
         private void Awake()
         {
-            if (_instance != null && _instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
+            throw new NotSupportedException("EventBus is deprecated. Use VisualDM.Systems.EventSystem.EventBus.");
         }
 
         /// <summary>

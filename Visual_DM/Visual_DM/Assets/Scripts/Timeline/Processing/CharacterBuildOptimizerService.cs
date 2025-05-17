@@ -27,7 +27,7 @@ namespace Visual_DM.Timeline.Processing
         public void PushRecommendations(CharacterBuild build, int maxFeats = 10)
         {
             var recommendations = GetRecommendations(build, maxFeats);
-            // TODO: Send recommendations to frontend via WebSocket
+            // Integration point: Send recommendations to frontend via WebSocket (not yet implemented)
             Debug.Log($"Pushing {recommendations.Count} recommendations for build {build.Name}");
         }
     }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace VisualDM.UI
 {
@@ -15,45 +16,153 @@ namespace VisualDM.UI
 
         public override void Initialize(params object[] args)
         {
+            try
+            {
+                // Background
+                var sr = gameObject.AddComponent<SpriteRenderer>();
+                sr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .Invoke(UIManager.Instance, new object[] { (int)width, (int)height, bgColor }) as Sprite;
+                sr.sortingOrder = 120;
+
+                // Username label and field
+                var usernameLabelObj = new GameObject("UsernameLabel");
+                usernameLabelObj.transform.SetParent(transform);
+                usernameLabelObj.transform.localPosition = new Vector3(0, 130, 0);
+                var usernameLabel = usernameLabelObj.AddComponent<TMPro.TextMeshPro>();
+                usernameLabel.text = "Username";
+                usernameLabel.fontSize = UI.DesignTokens.Typography.Body;
+                usernameLabel.font = UI.DesignTokens.Typography.SansFont;
+                usernameLabel.color = UI.DesignTokens.Colors.Neutral900;
+                usernameLabel.alignment = TMPro.TextAlignmentOptions.Center;
+
+                usernameField = new GameObject("UsernameField");
+                usernameField.transform.SetParent(transform);
+                usernameField.transform.localPosition = new Vector3(0, 100, 0);
+                var usernameInput = usernameField.AddComponent<UI.Components.InputField>();
+                usernameInput.Placeholder = "Enter username";
+                usernameInput.OnValueChanged = (val) => { };
+
+                // Password label and field
+                var passwordLabelObj = new GameObject("PasswordLabel");
+                passwordLabelObj.transform.SetParent(transform);
+                passwordLabelObj.transform.localPosition = new Vector3(0, 80, 0);
+                var passwordLabel = passwordLabelObj.AddComponent<TMPro.TextMeshPro>();
+                passwordLabel.text = "Password";
+                passwordLabel.fontSize = UI.DesignTokens.Typography.Body;
+                passwordLabel.font = UI.DesignTokens.Typography.SansFont;
+                passwordLabel.color = UI.DesignTokens.Colors.Neutral900;
+                passwordLabel.alignment = TMPro.TextAlignmentOptions.Center;
+
+                passwordField = new GameObject("PasswordField");
+                passwordField.transform.SetParent(transform);
+                passwordField.transform.localPosition = new Vector3(0, 50, 0);
+                var passwordInput = passwordField.AddComponent<UI.Components.InputField>();
+                passwordInput.Placeholder = "Enter password";
+                passwordInput.IsPassword = true;
+                passwordInput.OnValueChanged = (val) => { };
+
+                // Confirm password label and field
+                var confirmLabelObj = new GameObject("ConfirmPasswordLabel");
+                confirmLabelObj.transform.SetParent(transform);
+                confirmLabelObj.transform.localPosition = new Vector3(0, 30, 0);
+                var confirmLabel = confirmLabelObj.AddComponent<TMPro.TextMeshPro>();
+                confirmLabel.text = "Confirm Password";
+                confirmLabel.fontSize = UI.DesignTokens.Typography.Body;
+                confirmLabel.font = UI.DesignTokens.Typography.SansFont;
+                confirmLabel.color = UI.DesignTokens.Colors.Neutral900;
+                confirmLabel.alignment = TMPro.TextAlignmentOptions.Center;
+
+                confirmPasswordField = new GameObject("ConfirmPasswordField");
+                confirmPasswordField.transform.SetParent(transform);
+                confirmPasswordField.transform.localPosition = new Vector3(0, 0, 0);
+                var confirmInput = confirmPasswordField.AddComponent<UI.Components.InputField>();
+                confirmInput.Placeholder = "Re-enter password";
+                confirmInput.IsPassword = true;
+                confirmInput.OnValueChanged = (val) => { };
+
+                // Register button
+                registerButton = new GameObject("RegisterButton");
+                registerButton.transform.SetParent(transform);
             // Background
             var sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                 .Invoke(UIManager.Instance, new object[] { (int)width, (int)height, bgColor }) as Sprite;
             sr.sortingOrder = 120;
 
-            // TODO: Add username field rendering
+            // Username label and field
+            var usernameLabelObj = new GameObject("UsernameLabel");
+            usernameLabelObj.transform.SetParent(transform);
+            usernameLabelObj.transform.localPosition = new Vector3(0, 130, 0);
+            var usernameLabel = usernameLabelObj.AddComponent<TMPro.TextMeshPro>();
+            usernameLabel.text = "Username";
+            usernameLabel.fontSize = UI.DesignTokens.Typography.Body;
+            usernameLabel.font = UI.DesignTokens.Typography.SansFont;
+            usernameLabel.color = UI.DesignTokens.Colors.Neutral900;
+            usernameLabel.alignment = TMPro.TextAlignmentOptions.Center;
+
             usernameField = new GameObject("UsernameField");
             usernameField.transform.SetParent(transform);
             usernameField.transform.localPosition = new Vector3(0, 100, 0);
-            // TODO: Add input logic
+            var usernameInput = usernameField.AddComponent<UI.Components.InputField>();
+            usernameInput.Placeholder = "Enter username";
+            usernameInput.OnValueChanged = (val) => { };
 
-            // TODO: Add password field rendering
+            // Password label and field
+            var passwordLabelObj = new GameObject("PasswordLabel");
+            passwordLabelObj.transform.SetParent(transform);
+            passwordLabelObj.transform.localPosition = new Vector3(0, 80, 0);
+            var passwordLabel = passwordLabelObj.AddComponent<TMPro.TextMeshPro>();
+            passwordLabel.text = "Password";
+            passwordLabel.fontSize = UI.DesignTokens.Typography.Body;
+            passwordLabel.font = UI.DesignTokens.Typography.SansFont;
+            passwordLabel.color = UI.DesignTokens.Colors.Neutral900;
+            passwordLabel.alignment = TMPro.TextAlignmentOptions.Center;
+
             passwordField = new GameObject("PasswordField");
             passwordField.transform.SetParent(transform);
             passwordField.transform.localPosition = new Vector3(0, 50, 0);
-            // TODO: Add input logic
+            var passwordInput = passwordField.AddComponent<UI.Components.InputField>();
+            passwordInput.Placeholder = "Enter password";
+            passwordInput.IsPassword = true;
+            passwordInput.OnValueChanged = (val) => { };
 
-            // TODO: Add confirm password field rendering
+            // Confirm password label and field
+            var confirmLabelObj = new GameObject("ConfirmPasswordLabel");
+            confirmLabelObj.transform.SetParent(transform);
+            confirmLabelObj.transform.localPosition = new Vector3(0, 30, 0);
+            var confirmLabel = confirmLabelObj.AddComponent<TMPro.TextMeshPro>();
+            confirmLabel.text = "Confirm Password";
+            confirmLabel.fontSize = UI.DesignTokens.Typography.Body;
+            confirmLabel.font = UI.DesignTokens.Typography.SansFont;
+            confirmLabel.color = UI.DesignTokens.Colors.Neutral900;
+            confirmLabel.alignment = TMPro.TextAlignmentOptions.Center;
+
             confirmPasswordField = new GameObject("ConfirmPasswordField");
             confirmPasswordField.transform.SetParent(transform);
             confirmPasswordField.transform.localPosition = new Vector3(0, 0, 0);
-            // TODO: Add input logic
+            var confirmInput = confirmPasswordField.AddComponent<UI.Components.InputField>();
+            confirmInput.Placeholder = "Re-enter password";
+            confirmInput.IsPassword = true;
+            confirmInput.OnValueChanged = (val) => { };
 
             // Register button
             registerButton = new GameObject("RegisterButton");
             registerButton.transform.SetParent(transform);
             registerButton.transform.localPosition = new Vector3(0, -60, 0);
-            var btnSr = registerButton.AddComponent<SpriteRenderer>();
-            btnSr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(UIManager.Instance, new object[] { 140, 40, new Color(0.25f, 0.4f, 0.25f, 1f) }) as Sprite;
-            btnSr.sortingOrder = 121;
-            // TODO: Add click logic and validation
+            var btn = registerButton.AddComponent<UI.Components.Button>();
+            btn.Label = "Register";
+            btn.OnClick = () => { /* TODO: Implement registration logic */ };
 
-            // Error message placeholder
+            // Error message
             errorMsg = new GameObject("ErrorMsg");
             errorMsg.transform.SetParent(transform);
             errorMsg.transform.localPosition = new Vector3(0, -120, 0);
-            // TODO: Add text rendering for error messages
+            var errorLabel = errorMsg.AddComponent<TMPro.TextMeshPro>();
+            errorLabel.text = "";
+            errorLabel.fontSize = UI.DesignTokens.Typography.Caption;
+            errorLabel.font = UI.DesignTokens.Typography.SansFont;
+            errorLabel.color = UI.DesignTokens.Colors.Neutral400;
+            errorLabel.alignment = TMPro.TextAlignmentOptions.Center;
         }
 
         public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)

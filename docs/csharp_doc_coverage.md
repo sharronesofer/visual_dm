@@ -1,0 +1,833 @@
+# C# XML Documentation Coverage Report
+
+## UI
+- Total public members: 258
+- Documented: 38 (14.7%)
+- Undocumented: 220
+
+### Undocumented Members
+- `UI/QuestManagementPanel.cs` line 5: `public class QuestManagementPanel : PanelBase`
+- `UI/QuestManagementPanel.cs` line 14: `public override void Initialize(params object[] args)`
+- `UI/QuestManagementPanel.cs` line 53: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/RegistrationPanel.cs` line 5: `public class RegistrationPanel : PanelBase`
+- `UI/RegistrationPanel.cs` line 16: `public override void Initialize(params object[] args)`
+- `UI/RegistrationPanel.cs` line 100: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/CharacterBuildOptimizerPanel.cs` line 8: `public class CharacterBuildOptimizerPanel : PanelBase`
+- `UI/CharacterBuildOptimizerPanel.cs` line 23: `public override void Initialize(params object[] args)`
+- `UI/ModalDialog.cs` line 20: `public override void Initialize(params object[] args)`
+- `UI/ModalDialog.cs` line 55: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/UserProfilePanel.cs` line 5: `public class UserProfilePanel : PanelBase`
+- `UI/UserProfilePanel.cs` line 15: `public override void Initialize(params object[] args)`
+- `UI/UserProfilePanel.cs` line 56: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/PanelBase.cs` line 15: `public virtual void Hide()`
+- `UI/PanelBase.cs` line 20: `public virtual void Initialize(params object[] args) { }`
+- `UI/UploadProgressBar.cs` line 22: `public void Initialize(float width, float height)`
+- `UI/UploadProgressBar.cs` line 41: `public void SetProgress(float progress, float speedBytesPerSec = 0f, TimeSpan? eta = null, string label = "")`
+- `UI/LocationManagementPanel.cs` line 5: `public class LocationManagementPanel : PanelBase`
+- `UI/LocationManagementPanel.cs` line 14: `public override void Initialize(params object[] args)`
+- `UI/LocationManagementPanel.cs` line 53: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/DragAndDropUploadZone.cs` line 20: `public override void Initialize(params object[] args)`
+- `UI/LoginPanel.cs` line 5: `public class LoginPanel : PanelBase`
+- `UI/LoginPanel.cs` line 15: `public override void Initialize(params object[] args)`
+- `UI/LoginPanel.cs` line 80: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/PostUploadProcessor.cs` line 20: `public class PostUploadResult`
+- `UI/PostUploadProcessor.cs` line 22: `public bool Success;`
+- `UI/PostUploadProcessor.cs` line 23: `public string ErrorMessage;`
+- `UI/PostUploadProcessor.cs` line 24: `public string StoragePath;`
+- `UI/PostUploadProcessor.cs` line 25: `public object Metadata;`
+- `UI/PostUploadProcessor.cs` line 26: `public string ThumbnailPath;`
+- `UI/PostUploadProcessor.cs` line 29: `public async Task<PostUploadResult> ProcessAsync(string filePath, string storagePath)`
+- `UI/ItemManagementPanel.cs` line 5: `public class ItemManagementPanel : PanelBase`
+- `UI/ItemManagementPanel.cs` line 14: `public override void Initialize(params object[] args)`
+- `UI/ItemManagementPanel.cs` line 53: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/FileValidationService.cs` line 14: `public static long MaxFileSizeBytes = 50 * 1024 * 1024; // 50 MB`
+- `UI/FileValidationService.cs` line 16: `public class ValidationResult`
+- `UI/FileValidationService.cs` line 18: `public bool IsValid;`
+- `UI/FileValidationService.cs` line 19: `public string ErrorMessage;`
+- `UI/PowerAnalysisDashboard.cs` line 11: `public class PowerAnalysisDashboard : MonoBehaviour`
+- `UI/NavigationBar.cs` line 21: `public override void Initialize(params object[] args)`
+- `UI/NavigationBar.cs` line 28: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/FileUploadService.cs` line 22: `public class UploadProgress`
+- `UI/FileUploadService.cs` line 24: `public long BytesSent;`
+- `UI/FileUploadService.cs` line 25: `public long TotalBytes;`
+- `UI/FileUploadService.cs` line 26: `public float Progress => TotalBytes > 0 ? (float)BytesSent / TotalBytes : 0f;`
+- `UI/FileUploadService.cs` line 27: `public float SpeedBytesPerSec;`
+- `UI/FileUploadService.cs` line 31: `public class UploadResult`
+- `UI/FileUploadService.cs` line 33: `public bool Success;`
+- `UI/FileUploadService.cs` line 34: `public string ErrorMessage;`
+- `UI/FileUploadService.cs` line 35: `public string StoragePath;`
+- `UI/NPCManagementPanel.cs` line 5: `public class NPCManagementPanel : PanelBase`
+- `UI/NPCManagementPanel.cs` line 14: `public override void Initialize(params object[] args)`
+- `UI/NPCManagementPanel.cs` line 53: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/WorldManagementPanel.cs` line 5: `public class WorldManagementPanel : PanelBase`
+- `UI/WorldManagementPanel.cs` line 14: `public override void Initialize(params object[] args)`
+- `UI/WorldManagementPanel.cs` line 53: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/CombatTrackerPanel.cs` line 5: `public class CombatTrackerPanel : PanelBase`
+- `UI/CombatTrackerPanel.cs` line 14: `public override void Initialize(params object[] args)`
+- `UI/CombatTrackerPanel.cs` line 45: `public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)`
+- `UI/DesignTokens/Borders.cs` line 5: `public static class Borders`
+- `UI/DesignTokens/Borders.cs` line 8: `public const float Thin = 1f;`
+- `UI/DesignTokens/Borders.cs` line 9: `public const float Regular = 2f;`
+- `UI/DesignTokens/Borders.cs` line 10: `public const float Thick = 4f;`
+- `UI/DesignTokens/Borders.cs` line 13: `public const float None = 0f;`
+- `UI/DesignTokens/Borders.cs` line 14: `public const float Small = 4f;`
+- `UI/DesignTokens/Borders.cs` line 15: `public const float Medium = 8f;`
+- `UI/DesignTokens/Borders.cs` line 16: `public const float Large = 16f;`
+- `UI/DesignTokens/Borders.cs` line 19: `public static readonly Color Default = Colors.Neutral300;`
+- `UI/DesignTokens/Borders.cs` line 20: `public static readonly Color Focus = Colors.PrimaryDefault;`
+- `UI/DesignTokens/Borders.cs` line 21: `public static readonly Color Error = new Color(0.85f, 0.20f, 0.20f, 1.0f); // #D93333`
+- `UI/DesignTokens/Typography.cs` line 6: `public static class Typography`
+- `UI/DesignTokens/Typography.cs` line 9: `public const float HeadingLarge = 32f;`
+- `UI/DesignTokens/Typography.cs` line 10: `public const float HeadingMedium = 24f;`
+- `UI/DesignTokens/Typography.cs` line 11: `public const float HeadingSmall = 18f;`
+- `UI/DesignTokens/Typography.cs` line 12: `public const float Body = 14f;`
+- `UI/DesignTokens/Typography.cs` line 13: `public const float Caption = 12f;`
+- `UI/DesignTokens/Typography.cs` line 14: `public const float Code = 13f;`
+- `UI/DesignTokens/Typography.cs` line 17: `public const float HeadingLineHeight = 1.2f;`
+- `UI/DesignTokens/Typography.cs` line 18: `public const float BodyLineHeight = 1.4f;`
+- `UI/DesignTokens/Typography.cs` line 19: `public const float CodeLineHeight = 1.3f;`
+- `UI/DesignTokens/Typography.cs` line 22: `public const FontWeight HeadingWeight = FontWeight.Bold;`
+- `UI/DesignTokens/Typography.cs` line 23: `public const FontWeight BodyWeight = FontWeight.Regular;`
+- `UI/DesignTokens/Typography.cs` line 24: `public const FontWeight CodeWeight = FontWeight.Regular;`
+- `UI/DesignTokens/Typography.cs` line 27: `public static TMP_FontAsset SansFont;`
+- `UI/DesignTokens/Typography.cs` line 28: `public static TMP_FontAsset MonoFont;`
+- `UI/DesignTokens/Spacing.cs` line 3: `public static class Spacing`
+- `UI/DesignTokens/Spacing.cs` line 6: `public const float Unit = 4f;`
+- `UI/DesignTokens/Spacing.cs` line 7: `public const float XSmall = Unit;         // 4`
+- `UI/DesignTokens/Spacing.cs` line 8: `public const float Small = Unit * 2;      // 8`
+- `UI/DesignTokens/Spacing.cs` line 9: `public const float Medium = Unit * 4;     // 16`
+- `UI/DesignTokens/Spacing.cs` line 10: `public const float Large = Unit * 6;      // 24`
+- `UI/DesignTokens/Spacing.cs` line 11: `public const float XLarge = Unit * 8;     // 32`
+- `UI/DesignTokens/Spacing.cs` line 14: `public const float Section = Unit * 12;   // 48`
+- `UI/DesignTokens/Spacing.cs` line 15: `public const float Page = Unit * 20;      // 80`
+- `UI/DesignTokens/Colors.cs` line 5: `public static class Colors`
+- `UI/DesignTokens/Colors.cs` line 8: `public static readonly Color PrimaryDefault = new Color(0.20f, 0.40f, 0.80f, 1.0f); // #3366CC`
+- `UI/DesignTokens/Colors.cs` line 9: `public static readonly Color PrimaryHover = new Color(0.25f, 0.45f, 0.85f, 1.0f);   // #3F73D9`
+- `UI/DesignTokens/Colors.cs` line 10: `public static readonly Color PrimaryActive = new Color(0.16f, 0.32f, 0.64f, 1.0f);  // #2951A3`
+- `UI/DesignTokens/Colors.cs` line 13: `public static readonly Color SecondaryDefault = new Color(0.95f, 0.65f, 0.21f, 1.0f); // #F5A634`
+- `UI/DesignTokens/Colors.cs` line 14: `public static readonly Color SecondaryHover = new Color(0.98f, 0.72f, 0.36f, 1.0f);   // #FBC05C`
+- `UI/DesignTokens/Colors.cs` line 15: `public static readonly Color SecondaryActive = new Color(0.80f, 0.52f, 0.13f, 1.0f);  // #CC851F`
+- `UI/DesignTokens/Colors.cs` line 18: `public static readonly Color Neutral100 = new Color(1.0f, 1.0f, 1.0f, 1.0f);   // #FFFFFF`
+- `UI/DesignTokens/Colors.cs` line 19: `public static readonly Color Neutral200 = new Color(0.95f, 0.95f, 0.95f, 1.0f); // #F2F2F2`
+- `UI/DesignTokens/Colors.cs` line 20: `public static readonly Color Neutral300 = new Color(0.85f, 0.85f, 0.85f, 1.0f); // #D9D9D9`
+- `UI/DesignTokens/Colors.cs` line 21: `public static readonly Color Neutral400 = new Color(0.60f, 0.60f, 0.60f, 1.0f); // #999999`
+- `UI/DesignTokens/Colors.cs` line 22: `public static readonly Color Neutral500 = new Color(0.30f, 0.30f, 0.30f, 1.0f); // #4D4D4D`
+- `UI/DesignTokens/Colors.cs` line 23: `public static readonly Color Neutral900 = new Color(0.07f, 0.07f, 0.07f, 1.0f); // #121212`
+- `UI/DesignTokens/Colors.cs` line 26: `public static float GetLuminance(Color color)`
+- `UI/DesignTokens/Colors.cs` line 32: `public static float ContrastRatio(Color a, Color b)`
+- `UI/DesignTokens/Colors.cs` line 40: `public static bool MeetsWcagAA(Color a, Color b, bool largeText = false)`
+- `UI/DesignTokens/Colors.cs` line 46: `public static bool MeetsWcagAAA(Color a, Color b, bool largeText = false)`
+- `UI/DesignTokens/Shadows.cs` line 5: `public struct Shadow`
+- `UI/DesignTokens/Shadows.cs` line 7: `public Vector2 Offset;`
+- `UI/DesignTokens/Shadows.cs` line 8: `public float Blur;`
+- `UI/DesignTokens/Shadows.cs` line 9: `public Color Color;`
+- `UI/DesignTokens/Shadows.cs` line 18: `public static class Shadows`
+- `UI/DesignTokens/Shadows.cs` line 21: `public static readonly Shadow Level1 = new Shadow(new Vector2(0, -2), 4f, new Color(0, 0, 0, 0.10f));`
+- `UI/DesignTokens/Shadows.cs` line 22: `public static readonly Shadow Level2 = new Shadow(new Vector2(0, -4), 8f, new Color(0, 0, 0, 0.15f));`
+- `UI/DesignTokens/Shadows.cs` line 23: `public static readonly Shadow Level3 = new Shadow(new Vector2(0, -8), 16f, new Color(0, 0, 0, 0.20f));`
+- `UI/DesignTokens/Shadows.cs` line 24: `public static readonly Shadow Level4 = new Shadow(new Vector2(0, -12), 24f, new Color(0, 0, 0, 0.25f));`
+- `UI/DesignTokens/ThemeManager.cs` line 6: `public enum ThemeType { Light, Dark }`
+- `UI/DesignTokens/ThemeManager.cs` line 8: `public class ThemeManager : MonoBehaviour`
+- `UI/DesignTokens/ThemeManager.cs` line 10: `public static ThemeManager Instance { get; private set; }`
+- `UI/DesignTokens/ThemeManager.cs` line 11: `public ThemeType CurrentTheme { get; private set; } = ThemeType.Light;`
+- `UI/DesignTokens/ThemeManager.cs` line 12: `public static event Action<ThemeType> OnThemeChanged;`
+- `UI/DesignTokens/ThemeManager.cs` line 25: `public void SetTheme(ThemeType theme)`
+- `UI/DesignTokens/Transitions.cs` line 5: `public static class Transitions`
+- `UI/DesignTokens/Transitions.cs` line 8: `public const float Short = 0.1f;`
+- `UI/DesignTokens/Transitions.cs` line 9: `public const float Regular = 0.2f;`
+- `UI/DesignTokens/Transitions.cs` line 10: `public const float Long = 0.4f;`
+- `UI/DesignTokens/Transitions.cs` line 13: `public static AnimationCurve EaseIn = AnimationCurve.EaseInOut(0, 0, 1, 1);`
+- `UI/DesignTokens/Transitions.cs` line 14: `public static AnimationCurve EaseOut = AnimationCurve.EaseInOut(0, 0, 1, 1);`
+- `UI/DesignTokens/Transitions.cs` line 15: `public static AnimationCurve EaseInOut = AnimationCurve.EaseInOut(0, 0, 1, 1);`
+- `UI/Search/EntityResultDisplay.cs` line 7: `public class EntityResultDisplay : MonoBehaviour`
+- `UI/Search/EntityResultDisplay.cs` line 9: `public RectTransform displayPanel;`
+- `UI/Search/EntityResultDisplay.cs` line 10: `public Image mapPreviewImage;`
+- `UI/Search/EntityResultDisplay.cs` line 11: `public Text detailsText;`
+- `UI/Search/EntityResultDisplay.cs` line 51: `public void DisplayWorld(string name, string description, Sprite mapSprite)`
+- `UI/Search/EntityResultDisplay.cs` line 57: `public void DisplayNPC(string name, string traits, string relationships)`
+- `UI/Search/EntityResultDisplay.cs` line 63: `public void DisplayItem(string name, string properties)`
+- `UI/Search/SearchUIManager.cs` line 7: `public class SearchUIManager : MonoBehaviour`
+- `UI/Search/SearchInput.cs` line 8: `public class SearchInput : MonoBehaviour`
+- `UI/Search/SearchInput.cs` line 10: `public InputField inputField;`
+- `UI/Search/SearchInput.cs` line 11: `public RectTransform suggestionsPanel;`
+- `UI/Search/SearchInput.cs` line 12: `public GameObject suggestionItemPrefab;`
+- `UI/Search/SearchInput.cs` line 13: `public event Action<string> OnSearchSubmitted;`
+- `UI/Search/SearchInput.cs` line 14: `public event Action<string> OnSuggestionSelected;`
+- `UI/Search/SearchResultsDisplay.cs` line 8: `public class SearchResultsDisplay : MonoBehaviour`
+- `UI/Search/SearchResultsDisplay.cs` line 10: `public RectTransform resultsPanel;`
+- `UI/Search/SearchResultsDisplay.cs` line 11: `public GameObject resultItemPrefab;`
+- `UI/Search/SearchResultsDisplay.cs` line 12: `public Button nextPageButton;`
+- `UI/Search/SearchResultsDisplay.cs` line 13: `public Button prevPageButton;`
+- `UI/Search/SearchResultsDisplay.cs` line 14: `public Dropdown sortDropdown;`
+- `UI/Search/SearchResultsDisplay.cs` line 15: `public RectTransform filterTagsPanel;`
+- `UI/Search/SearchResultsDisplay.cs` line 17: `public event Action<int> OnPageChanged;`
+- `UI/Search/SearchResultsDisplay.cs` line 18: `public event Action<string> OnSortChanged;`
+- `UI/Search/SearchResultsDisplay.cs` line 76: `public void DisplayResults(List<string> results, int page, int totalPages)`
+- `UI/Search/SearchResultsDisplay.cs` line 94: `public void DisplayFilterTags(List<string> tags)`
+- `UI/Components/Icon.cs` line 13: `public Color Tint = Colors.Neutral900;`
+- `UI/Components/Icon.cs` line 14: `public float Size = 24f;`
+- `UI/Components/Icon.cs` line 23: `public void SetIcon(string iconName, Sprite sprite = null)`
+- `UI/Components/Icon.cs` line 33: `public void SetTint(Color color)`
+- `UI/Components/Icon.cs` line 39: `public void SetSize(float size)`
+- `UI/Components/InputField.cs` line 16: `public State FieldState = State.Default;`
+- `UI/Components/InputField.cs` line 17: `public string Placeholder = "Enter text...";`
+- `UI/Components/InputField.cs` line 18: `public string Value = "";`
+- `UI/Components/InputField.cs` line 19: `public bool IsFocused = false;`
+- `UI/Components/InputField.cs` line 20: `public bool IsPassword = false;`
+- `UI/Components/InputField.cs` line 21: `public Action<string> OnValueChanged;`
+- `UI/Components/InputField.cs` line 22: `public Action OnSubmit;`
+- `UI/Components/InputField.cs` line 96: `public void Focus()`
+- `UI/Components/InputField.cs` line 102: `public void Blur()`
+- `UI/Components/InputField.cs` line 108: `public void SetState(State state)`
+- `UI/Components/InputField.cs` line 114: `public void SetValue(string value)`
+- `UI/Components/InputField.cs` line 121: `public void SetPlaceholder(string text)`
+- `UI/Components/Checkbox.cs` line 14: `public bool IsFocused = false;`
+- `UI/Components/Checkbox.cs` line 15: `public Action<bool> OnValueChanged;`
+- `UI/Components/Checkbox.cs` line 56: `public void Toggle()`
+- `UI/Components/Checkbox.cs` line 64: `public void SetChecked(bool value)`
+- `UI/Components/RuntimeTextLabel.cs` line 14: `public enum TextType { HeadingLarge, HeadingMedium, HeadingSmall, Body, Caption, Code }`
+- `UI/Components/RuntimeTextLabel.cs` line 16: `public string Text`
+- `UI/Components/RuntimeTextLabel.cs` line 21: `public TextType Type = TextType.Body;`
+- `UI/Components/RuntimeTextLabel.cs` line 23: `public TextAlignmentOptions Alignment = TextAlignmentOptions.Left;`
+- `UI/Components/RuntimeTextLabel.cs` line 39: `public void SetText(string text) { Text = text; }`
+- `UI/Components/RuntimeTextLabel.cs` line 40: `public void SetType(TextType type) { Type = type; ApplyStyle(); }`
+- `UI/Components/RuntimeTextLabel.cs` line 41: `public void SetColor(Color color) { OverrideColor = color; ApplyStyle(); }`
+- `UI/Components/RuntimeTextLabel.cs` line 42: `public void SetAlignment(TextAlignmentOptions alignment) { Alignment = alignment; ApplyStyle(); }`
+- `UI/Components/Card.cs` line 13: `public float Width = 320f;`
+- `UI/Components/Card.cs` line 14: `public float Height = 180f;`
+- `UI/Components/Card.cs` line 15: `public float BorderRadius = Borders.Medium;`
+- `UI/Components/Card.cs` line 16: `public Color Background = Colors.Neutral100;`
+- `UI/Components/Card.cs` line 37: `public void SetElevation(int level)`
+- `UI/Components/Card.cs` line 43: `public void SetBackground(Color color)`
+- `UI/Components/Card.cs` line 49: `public void SetSize(float width, float height)`
+- `UI/Components/Button.cs` line 15: `public enum State { Default, Hover, Active, Disabled, Loading }`
+- `UI/Components/Button.cs` line 17: `public Variant ButtonVariant = Variant.Primary;`
+- `UI/Components/Button.cs` line 18: `public State ButtonState = State.Default;`
+- `UI/Components/Button.cs` line 19: `public string Label = "Button";`
+- `UI/Components/Button.cs` line 20: `public Action OnClick;`
+- `UI/Components/Button.cs` line 21: `public bool IsFocused = false;`
+- `UI/Components/Button.cs` line 74: `public void SetState(State state)`
+- `UI/Components/Button.cs` line 80: `public void SetVariant(Variant variant)`
+- `UI/Components/Button.cs` line 86: `public void SetLabel(string text)`
+- `Tests/UITests.cs` line 11: `public class UITests`
+- `Tests/UITests.cs` line 14: `public void FileValidationService_ValidatesFileTypeAndSize()`
+- `Tests/UITests.cs` line 24: `public async Task FileUploadService_UploadsFileSuccessfully()`
+- `Tests/UITests.cs` line 35: `public void ItemManagementPanel_InitializesWithoutError()`
+- `Tests/UIComponentTests.cs` line 9: `public class UIComponentTests`
+- `Tests/UIComponentTests.cs` line 12: `public void Button_InitializesAndRespondsToStateChanges()`
+- `Tests/UIComponentTests.cs` line 26: `public void Button_OnClick_InvokesAction()`
+- `Tests/UIComponentTests.cs` line 39: `public void InputField_HandlesTextInputAndFocus()`
+- `Tests/UIComponentTests.cs` line 53: `public void InputField_HandlesPlaceholderAndPassword()`
+- `Tests/UIComponentTests.cs` line 66: `public void Checkbox_TogglesAndInvokesCallback()`
+- `Tests/UIComponentTests.cs` line 80: `public void Card_AppliesStyleAndSize()`
+- `Tests/UIComponentTests.cs` line 94: `public void Icon_SetsIconAndTint()`
+- `Tests/UIComponentTests.cs` line 107: `public void RuntimeTextLabel_AppliesTypeAndColor()`
+- `Simulation/SimulationUIManager.cs` line 8: `public class SimulationUIManager : MonoBehaviour`
+- `Simulation/SimulationUIManager.cs` line 112: `public class FileUploadHandler : MonoBehaviour`
+- `Simulation/SimulationUIManager.cs` line 114: `public event Action<string> OnFileUploaded;`
+- `Simulation/SimulationUIManager.cs` line 115: `public void OpenFilePicker()`
+
+---
+
+## Other
+- Total public members: 632
+- Documented: 80 (12.7%)
+- Undocumented: 552
+
+### Undocumented Members
+- `Core/EventBus.cs` line 17: `public static EventBus Instance`
+- `Core/MonitoringManager.cs` line 19: `public class Metric`
+- `Core/MonitoringManager.cs` line 21: `public string Name;`
+- `Core/MonitoringManager.cs` line 22: `public float Value;`
+- `Core/MonitoringManager.cs` line 24: `public DateTime Timestamp;`
+- `Core/MonitoringManager.cs` line 60: `public float MemoryMB;`
+- `Core/MonitoringManager.cs` line 61: `public float PingMs;`
+- `Core/MonitoringManager.cs` line 62: `public int ErrorCount;`
+- `Core/StateManager.cs` line 12: `public static StateManager Instance`
+- `Core/StateManager.cs` line 41: `public void Set<T>(string key, T value)`
+- `Core/StateManager.cs` line 46: `public T Get<T>(string key, T defaultValue = default)`
+- `Core/StateManager.cs` line 53: `public bool Has(string key)`
+- `Core/StateManager.cs` line 58: `public void Remove(string key)`
+- `Core/StateManager.cs` line 64: `public void SetJwtToken(string token)`
+- `Core/StateManager.cs` line 69: `public string GetJwtToken()`
+- `Core/StateManager.cs` line 74: `public void SetUserRole(string role)`
+- `Core/StateManager.cs` line 79: `public string GetUserRole()`
+- `Core/WebSocketClient.cs` line 28: `public event Action<string> OnMessageReceived;`
+- `Core/WebSocketClient.cs` line 29: `public event Action OnConnected;`
+- `Core/WebSocketClient.cs` line 30: `public event Action OnDisconnected;`
+- `Core/WebSocketClient.cs` line 31: `public event Action<Exception> OnError;`
+- `Core/WebSocketClient.cs` line 33: `public void RegisterMessageHandler(string messageType, Action<string> handler)`
+- `Core/WebSocketClient.cs` line 38: `public async Task ConnectAsync(string server, string token, string clientId, int width, int height)`
+- `Core/WebSocketClient.cs` line 48: `public async Task ReconnectAsync()`
+- `Core/WebSocketClient.cs` line 56: `public async Task Connect(string uri)`
+- `Core/WebSocketClient.cs` line 74: `public async Task Send(string message)`
+- `Core/WebSocketClient.cs` line 82: `public async Task Disconnect()`
+- `Core/WebSocketClient.cs` line 123: `private class SimpleTypeWrapper { public string type; }`
+- `Network/WebSocketClient.cs` line 170: `public string type;`
+- `Network/WebSocketClient.cs` line 171: `public string message;`
+- `Network/WebSocketClient.cs` line 172: `public string level;`
+- `Network/WebSocketClient.cs` line 173: `public int code;`
+- `Network/WebSocketClient.cs` line 174: `public string client_id;`
+- `Network/WebSocketClient.cs` line 175: `public bool online;`
+- `Network/WebSocketClient.cs` line 176: `public float last_seen;`
+- `Network/WebSocketClient.cs` line 177: `public bool is_typing;`
+- `Tests/CharacterBuildOptimizerTests.cs` line 7: `public class CharacterBuildOptimizerTests`
+- `Tests/CharacterBuildOptimizerTests.cs` line 23: `public void RecommendFeats_TankRole_PrefersCombatFeats()`
+- `Tests/CharacterBuildOptimizerTests.cs` line 40: `public void RecommendFeats_DPSRole_PrefersMagicFeats()`
+- `Tests/CharacterBuildOptimizerTests.cs` line 57: `public void RecommendFeats_UtilityPlaystyle_PrefersUtilityFeats()`
+- `Tests/NPCPersonalityTests.cs` line 5: `public class NPCPersonalityTests`
+- `Tests/NPCPersonalityTests.cs` line 9: `public string TemplateName => "TestTemplate";`
+- `Tests/NPCPersonalityTests.cs` line 10: `public PersonalityProfile GetDefaultPersonality() => new PersonalityProfile(0.8f, 0.2f, 0.5f, 0.7f, 0.6f, 0.9f, 0.4f);`
+- `Tests/NPCPersonalityTests.cs` line 14: `public void RandomTraitGenerationProducesValidRange()`
+- `Tests/NPCPersonalityTests.cs` line 27: `public void TemplateTraitGenerationIsCloseToTemplate()`
+- `Tests/NPCPersonalityTests.cs` line 37: `public void MoodTransitionsAndDecayWork()`
+- `Tests/NPCPersonalityTests.cs` line 49: `public void BehaviorModifierCalculatesWeights()`
+- `Tests/WorldTests.cs` line 8: `public class WorldTests`
+- `Tests/WorldTests.cs` line 11: `public void WorldTimeSystem_Tick_AdvancesTime()`
+- `Tests/WorldTests.cs` line 23: `public void SeasonSystem_UpdatesSeasonCorrectly()`
+- `Tests/WorldTests.cs` line 35: `public void FactionSystem_AddAndGetRelationship()`
+- `Tests/WorldTests.cs` line 45: `public void EconomySystem_AddResourceAndUpdate()`
+- `Tests/SimulationTests.cs` line 9: `public class SimulationTests`
+- `Tests/SimulationTests.cs` line 12: `public void CharacterStats_ApplyAndRemoveModifiers()`
+- `Tests/SimulationTests.cs` line 22: `public void TestCaseGenerator_GeneratesBuildsAndEdgeCases()`
+- `Tests/SimulationTests.cs` line 33: `public async Task SimulationManager_SimulateBatchParallel_Works()`
+- `Tests/SimulationTests.cs` line 44: `public void StatisticalAnalysis_ComputeMetrics()`
+- `Tests/DialogueServiceTests.cs` line 22: `public void Setup()`
+- `Tests/DialogueServiceTests.cs` line 35: `public void Teardown()`
+- `Tests/DialogueServiceTests.cs` line 44: `public IEnumerator GenerateDialogue_WithValidPrompt_ReturnsExpectedResponse()`
+- `Tests/DialogueServiceTests.cs` line 80: `public IEnumerator GenerateDialogue_WithError_ReturnsErrorResponse()`
+- `Tests/DialogueServiceTests.cs` line 108: `public IEnumerator GenerateDialogue_WithException_HandlesGracefully()`
+- `Tests/DialogueServiceTests.cs` line 132: `public IEnumerator GenerateDialogue_WithConfigOverride_UsesMergedConfig()`
+- `Tests/DialogueServiceTests.cs` line 169: `public string LastPrompt { get; private set; }`
+- `Tests/DialogueServiceTests.cs` line 170: `public List<string> LastContext { get; private set; }`
+- `Tests/DialogueServiceTests.cs` line 171: `public GPTConfig LastConfig { get; private set; }`
+- `Tests/DialogueServiceTests.cs` line 177: `public void SetNextResponse(GPTResponse response)`
+- `Tests/DialogueServiceTests.cs` line 183: `public void SetNextException(Exception exception)`
+- `Tests/DialogueServiceTests.cs` line 190: `public override async Task<GPTResponse> GenerateCompletionAsync(string prompt, List<string> context, GPTConfig config)`
+- `Tests/UtilitiesTests.cs` line 9: `public class UtilitiesTests`
+- `Tests/UtilitiesTests.cs` line 12: `public void FeatPowerCalculator_CalculatesScoreWithModules()`
+- `Tests/UtilitiesTests.cs` line 23: `public void FeatPowerCalculator_ThrowsIfNoModulesRegistered()`
+- `Tests/UtilitiesTests.cs` line 31: `public void FeatAnalysisEngine_FlagsOverpoweredAndUnderpowered()`
+- `Tests/UtilitiesTests.cs` line 48: `public void ScoringModules_ProduceExpectedScores()`
+- `Tests/CoreTests.cs` line 8: `public class CoreTests`
+- `Tests/CoreTests.cs` line 11: `public void StateManager_SetAndGet_ReturnsCorrectValue()`
+- `Tests/CoreTests.cs` line 18: `public void StateManager_HasAndRemove_WorksCorrectly()`
+- `Tests/CoreTests.cs` line 27: `public void IdGenerator_GeneratesUniqueIds()`
+- `Tests/CoreTests.cs` line 35: `public void EventBus_SubscribeAndPublish_InvokesHandler()`
+- `Tests/PlayModeTests.cs` line 6: `public class PlayModeTests`
+- `Tests/PlayModeTests.cs` line 9: `public IEnumerator GameLoader_InitializesCoreSystems()`
+- `Tests/PlayModeTests.cs` line 31: `public IEnumerator GameLoader_CreatesWebSocketClient()`
+- `Tests/StorageTests.cs` line 10: `public class StorageTests`
+- `Tests/StorageTests.cs` line 16: `public void Setup()`
+- `Tests/StorageTests.cs` line 24: `public void Teardown()`
+- `Tests/StorageTests.cs` line 31: `public async Task SaveAndLoad_WritesAndReadsFile()`
+- `Tests/StorageTests.cs` line 41: `public async Task ExistsAndDelete_WorksCorrectly()`
+- `Tests/StorageTests.cs` line 51: `public void StorageFactory_ReturnsFileSystemProvider()`
+- `Simulation/SimulatedCharacter.cs` line 8: `public class SimulatedCharacter`
+- `Simulation/SimulatedCharacter.cs` line 10: `public string Name;`
+- `Simulation/SimulatedCharacter.cs` line 11: `public CharacterStats Stats;`
+- `Simulation/SimulatedCharacter.cs` line 12: `public List<Feat> ActiveFeats = new List<Feat>();`
+- `Simulation/SimulatedCharacter.cs` line 13: `public List<string> Inventory = new List<string>();`
+- `Simulation/SimulatedCharacter.cs` line 21: `public bool CanApplyFeat(Feat feat)`
+- `Simulation/SimulatedCharacter.cs` line 34: `public bool ApplyFeat(Feat feat)`
+- `Simulation/SimulatedCharacter.cs` line 42: `public bool RemoveFeat(Feat feat)`
+- `Simulation/SimulatedCharacter.cs` line 50: `public SimulatedCharacter Clone()`
+- `Simulation/SimulatedCharacter.cs` line 61: `public class Feat`
+- `Simulation/SimulatedCharacter.cs` line 63: `public string Name;`
+- `Simulation/SimulatedCharacter.cs` line 64: `public string Description;`
+- `Simulation/SimulatedCharacter.cs` line 65: `public List<IFeatPrerequisite> Prerequisites;`
+- `Simulation/SimulatedCharacter.cs` line 66: `public List<FeatEffect> Effects;`
+- `Simulation/SimulatedCharacter.cs` line 68: `public void Apply(SimulatedCharacter character)`
+- `Simulation/SimulatedCharacter.cs` line 75: `public void Remove(SimulatedCharacter character)`
+- `Simulation/SimulatedCharacter.cs` line 83: `public interface IFeatPrerequisite`
+- `Simulation/SimulatedCharacter.cs` line 89: `public class FeatEffect`
+- `Simulation/SimulatedCharacter.cs` line 91: `public string Stat;`
+- `Simulation/SimulatedCharacter.cs` line 92: `public float Additive;`
+- `Simulation/SimulatedCharacter.cs` line 93: `public float Multiplicative;`
+- `Simulation/SimulatedCharacter.cs` line 95: `public void Apply(SimulatedCharacter character)`
+- `Simulation/SimulatedCharacter.cs` line 103: `public void Remove(SimulatedCharacter character)`
+- `Simulation/CharacterStats.cs` line 8: `public class CharacterStats`
+- `Simulation/CharacterStats.cs` line 11: `public int Strength;`
+- `Simulation/CharacterStats.cs` line 12: `public int Dexterity;`
+- `Simulation/CharacterStats.cs` line 13: `public int Constitution;`
+- `Simulation/CharacterStats.cs` line 14: `public int Intelligence;`
+- `Simulation/CharacterStats.cs` line 15: `public int Wisdom;`
+- `Simulation/CharacterStats.cs` line 16: `public int Charisma;`
+- `Simulation/CharacterStats.cs` line 19: `public int MaxHP;`
+- `Simulation/CharacterStats.cs` line 20: `public int ArmorClass;`
+- `Simulation/CharacterStats.cs` line 21: `public int Initiative;`
+- `Simulation/CharacterStats.cs` line 22: `public int Speed;`
+- `Simulation/CharacterStats.cs` line 39: `public void ApplyAdditiveMod(string stat, float value)`
+- `Simulation/CharacterStats.cs` line 46: `public void ApplyMultiplicativeMod(string stat, float value)`
+- `Simulation/CharacterStats.cs` line 53: `public void RemoveAdditiveMod(string stat, float value)`
+- `Simulation/CharacterStats.cs` line 63: `public void RemoveMultiplicativeMod(string stat, float value)`
+- `Simulation/CharacterStats.cs` line 73: `public int GetStat(string stat)`
+- `Simulation/CharacterStats.cs` line 90: `public void RecalculateDerivedStats()`
+- `Simulation/CharacterStats.cs` line 98: `public CharacterStats Clone()`
+- `Simulation/SimulationReport.cs` line 10: `public class SimulationReport`
+- `Simulation/SimulationReport.cs` line 12: `public string ReportName;`
+- `Simulation/SimulationReport.cs` line 13: `public DateTime GeneratedAt;`
+- `Simulation/SimulationReport.cs` line 14: `public int Version;`
+- `Simulation/SimulationReport.cs` line 15: `public List<TestCase> TestCases;`
+- `Simulation/SimulationReport.cs` line 17: `public List<string> Outliers;`
+- `Simulation/SimulationReport.cs` line 18: `public List<BalanceRecommendation> Recommendations;`
+- `Simulation/SimulationReport.cs` line 19: `public List<VisualizationData> Visualizations;`
+- `Simulation/SimulationReport.cs` line 20: `public string TemplateName;`
+- `Simulation/SimulationReport.cs` line 21: `public string DashboardData;`
+- `Simulation/SimulationReport.cs` line 24: `public static event Action<string> OnReportGenerated;`
+- `Simulation/SimulationReport.cs` line 25: `public static event Action<string> OnReportExported;`
+- `Simulation/SimulationReport.cs` line 42: `public void GenerateSummary()`
+- `Simulation/SimulationReport.cs` line 53: `public void GenerateRecommendations()`
+- `Simulation/SimulationReport.cs` line 61: `public void GenerateVisualizations()`
+- `Simulation/SimulationReport.cs` line 68: `public string ExportJson()`
+- `Simulation/SimulationReport.cs` line 74: `public string ExportCsv()`
+- `Simulation/SimulationReport.cs` line 87: `public void CompareWith(SimulationReport previous)`
+- `Simulation/SimulationReport.cs` line 93: `public void GenerateDashboardData()`
+- `Simulation/SimulationReport.cs` line 99: `public void ApplyTemplate(string templateName)`
+- `Simulation/SimulationReport.cs` line 105: `public static void ScheduleReportGeneration(Action<SimulationReport> callback)`
+- `Simulation/SimulationReport.cs` line 110: `public void BroadcastReportGenerated()`
+- `Simulation/SimulationReport.cs` line 116: `public void BroadcastReportExported(string format)`
+- `Simulation/SimulationReport.cs` line 124: `public class BalanceRecommendation`
+- `Simulation/SimulationReport.cs` line 126: `public string FeatName;`
+- `Simulation/SimulationReport.cs` line 127: `public string Action;`
+- `Simulation/SimulationReport.cs` line 128: `public float Confidence;`
+- `Simulation/SimulationReport.cs` line 132: `public class VisualizationData`
+- `Simulation/SimulationReport.cs` line 134: `public string Type;`
+- `Simulation/SimulationReport.cs` line 135: `public string Data;`
+- `Simulation/SimulationDashboard.cs` line 7: `public class SimulationDashboard : MonoBehaviour`
+- `Simulation/SimulationDashboard.cs` line 42: `public void AddReport(SimulationReport report)`
+- `Simulation/SimulationManager.cs` line 10: `public static class SimulationManager`
+- `Simulation/SimulationManager.cs` line 15: `public static bool SimulateAttack(SimulatedCharacter attacker, SimulatedCharacter defender, int attackBonus = 0)`
+- `Simulation/SimulationManager.cs` line 23: `public static bool SimulateSkillCheck(SimulatedCharacter character, string stat, int difficultyClass)`
+- `Simulation/SimulationManager.cs` line 31: `public static float SimulateBatchAttacks(SimulatedCharacter attacker, SimulatedCharacter defender, int attackBonus, int trials)`
+- `Simulation/SimulationManager.cs` line 42: `public static float SimulateBatchSkillChecks(SimulatedCharacter character, string stat, int dc, int trials)`
+- `Simulation/SimulationManager.cs` line 53: `public static int RollDice(int sides)`
+- `Simulation/SimulationManager.cs` line 59: `public static float MonteCarlo(Func<bool> trial, int iterations)`
+- `Simulation/SimulationManager.cs` line 70: `public static void SetSeed(int seed)`
+- `Simulation/SimulationManager.cs` line 76: `public static event Action<string> OnTestProgress;`
+- `Simulation/SimulationManager.cs` line 77: `public static event Action<string> OnTestResult;`
+- `Simulation/SimulationManager.cs` line 80: `public static void BroadcastProgress(string message)`
+- `Simulation/SimulationManager.cs` line 87: `public static void BroadcastResult(string message)`
+- `Simulation/SimulationManager.cs` line 94: `public static async Task<float> SimulateBatchAttacksWithProgress(SimulatedCharacter attacker, SimulatedCharacter defender, int attackBonus, int trials)`
+- `Simulation/SimulationManager.cs` line 120: `public static async Task<List<float>> SimulateBatchParallel(List<(SimulatedCharacter, SimulatedCharacter, int, int)> jobs)`
+- `Simulation/SimulationManager.cs` line 159: `public static void EnqueueJob(Func<Task> job)`
+- `Simulation/SimulationManager.cs` line 177: `public static Stopwatch StartTiming() => Stopwatch.StartNew();`
+- `Simulation/SimulationManager.cs` line 178: `public static void LogTiming(string label, Stopwatch sw)`
+- `Simulation/SimulationManager.cs` line 184: `public static void SubmitDistributedJob(object jobData)`
+- `Simulation/SimulationManager.cs` line 190: `public static void AdjustWorkerCount(int desiredCount)`
+- `Simulation/StatisticalAnalysis.cs` line 8: `public static class StatisticalAnalysis`
+- `Simulation/StatisticalAnalysis.cs` line 11: `public static float Mean(List<float> values) => values.Count == 0 ? 0f : values.Sum() / values.Count;`
+- `Simulation/StatisticalAnalysis.cs` line 12: `public static float Median(List<float> values)`
+- `Simulation/StatisticalAnalysis.cs` line 19: `public static float StdDev(List<float> values)`
+- `Simulation/StatisticalAnalysis.cs` line 28: `public static List<int> DetectOutliers(List<float> values, float zThreshold = 2.0f)`
+- `Simulation/StatisticalAnalysis.cs` line 43: `public static Dictionary<string, float> AnalyzeFeatSynergy(List<TestCase> testCases)`
+- `Simulation/StatisticalAnalysis.cs` line 61: `public static List<string> DetectBrokenCombos(List<TestCase> testCases, float threshold = 0.9f)`
+- `Simulation/StatisticalAnalysis.cs` line 68: `public static Dictionary<string, Dictionary<CharacterArchetype, float>> CompareFeatEffectiveness(List<TestCase> testCases)`
+- `Simulation/StatisticalAnalysis.cs` line 94: `public static float ComputeDPS(TestCase tc) => UnityEngine.Random.Range(5f, 20f); // Replace with real logic`
+- `Simulation/StatisticalAnalysis.cs` line 95: `public static float ComputeSurvivability(TestCase tc) => UnityEngine.Random.Range(0.5f, 1.0f); // Replace with real logic`
+- `Simulation/StatisticalAnalysis.cs` line 96: `public static float ComputeUtility(TestCase tc) => UnityEngine.Random.Range(0f, 1.0f); // Replace with real logic`
+- `Simulation/StatisticalAnalysis.cs` line 99: `public class FeatInteractionGraph { /* To be implemented for reporting system */ }`
+- `Simulation/StatisticalAnalysis.cs` line 100: `public class FeatDependencyTree { /* To be implemented for reporting system */ }`
+- `Simulation/StatisticalAnalysis.cs` line 103: `public static List<string> RecognizeProblematicCombos(List<TestCase> testCases)`
+- `Simulation/TestCaseGenerator.cs` line 7: `public enum CharacterArchetype { Fighter, Mage, Rogue }`
+- `Simulation/TestCaseGenerator.cs` line 10: `public class TestCase`
+- `Simulation/TestCaseGenerator.cs` line 12: `public string Name;`
+- `Simulation/TestCaseGenerator.cs` line 13: `public SimulatedCharacter Character;`
+- `Simulation/TestCaseGenerator.cs` line 14: `public string Scenario;`
+- `Simulation/TestCaseGenerator.cs` line 15: `public int Version;`
+- `Simulation/TestCaseGenerator.cs` line 16: `public string Metadata;`
+- `Simulation/TestCaseGenerator.cs` line 19: `public static class TestCaseGenerator`
+- `Simulation/TestCaseGenerator.cs` line 25: `public static SimulatedCharacter GenerateBuild(CharacterArchetype archetype, int level = 1, int seed = -1)`
+- `Simulation/TestCaseGenerator.cs` line 41: `public static void ProgressCharacter(SimulatedCharacter character, int targetLevel, Func<SimulatedCharacter, Feat> featSelector = null)`
+- `Simulation/TestCaseGenerator.cs` line 56: `public static string GenerateScenario(string type, Dictionary<string, object> parameters = null)`
+- `Simulation/TestCaseGenerator.cs` line 69: `public static List<TestCase> LoadCustomTestCases(string json)`
+- `Simulation/TestCaseGenerator.cs` line 83: `public static SimulatedCharacter GenerateEdgeCase(string type)`
+- `Simulation/TestCaseGenerator.cs` line 94: `public static List<TestCase> GenerateBatch(CharacterArchetype[] archetypes, int[] levels, string[] scenarios)`
+- `Simulation/TestCaseGenerator.cs` line 119: `public static void SetVersion(int version) => currentVersion = version;`
+- `Simulation/TestCaseGenerator.cs` line 120: `public static int GetVersion() => currentVersion;`
+- `Simulation/TestCaseGenerator.cs` line 124: `private class TestCaseListWrapper { public List<TestCase> testCases; }`
+- `World/WorldTimeSystem.cs` line 6: `public class WorldTimeSystem`
+- `World/WorldTimeSystem.cs` line 8: `public int Year { get; private set; }`
+- `World/WorldTimeSystem.cs` line 9: `public int Month { get; private set; }`
+- `World/WorldTimeSystem.cs` line 10: `public int Day { get; private set; }`
+- `World/WorldTimeSystem.cs` line 11: `public int Hour { get; private set; }`
+- `World/WorldTimeSystem.cs` line 12: `public int Minute { get; private set; }`
+- `World/WorldTimeSystem.cs` line 13: `public int Second { get; private set; }`
+- `World/WorldTimeSystem.cs` line 15: `public int DaysPerMonth { get; private set; } = 30;`
+- `World/WorldTimeSystem.cs` line 16: `public int MonthsPerYear { get; private set; } = 12;`
+- `World/WorldTimeSystem.cs` line 17: `public int HoursPerDay { get; private set; } = 24;`
+- `World/WorldTimeSystem.cs` line 18: `public int MinutesPerHour { get; private set; } = 60;`
+- `World/WorldTimeSystem.cs` line 19: `public int SecondsPerMinute { get; private set; } = 60;`
+- `World/WorldTimeSystem.cs` line 22: `public event Action OnTimeChanged;`
+- `World/WorldTimeSystem.cs` line 34: `public void Tick(float deltaTime)`
+- `World/WorldTimeSystem.cs` line 75: `public void SetCalendar(int daysPerMonth, int monthsPerYear, int hoursPerDay, int minutesPerHour, int secondsPerMinute)`
+- `World/FactionSystem.cs` line 6: `public class FactionSystem`
+- `World/FactionSystem.cs` line 8: `public class Faction`
+- `World/FactionSystem.cs` line 10: `public string Name;`
+- `World/FactionSystem.cs` line 11: `public float Influence;`
+- `World/FactionSystem.cs` line 12: `public HashSet<string> Territories;`
+- `World/FactionSystem.cs` line 18: `public void AddFaction(string name)`
+- `World/FactionSystem.cs` line 24: `public void SetRelationship(string factionA, string factionB, float value)`
+- `World/FactionSystem.cs` line 30: `public float GetRelationship(string factionA, string factionB)`
+- `World/FactionSystem.cs` line 37: `public void UpdateInfluence(string faction, float delta)`
+- `World/FactionSystem.cs` line 43: `public void AddTerritory(string faction, string territory)`
+- `World/FactionSystem.cs` line 49: `public void RemoveTerritory(string faction, string territory)`
+- `World/FactionSystem.cs` line 55: `public IEnumerable<Faction> GetAllFactions() => factions.Values;`
+- `World/EconomySystem.cs` line 6: `public class EconomySystem`
+- `World/EconomySystem.cs` line 8: `public class Resource`
+- `World/EconomySystem.cs` line 10: `public string Name;`
+- `World/EconomySystem.cs` line 11: `public float Quantity;`
+- `World/EconomySystem.cs` line 12: `public float ProductionRate;`
+- `World/EconomySystem.cs` line 13: `public float ConsumptionRate;`
+- `World/EconomySystem.cs` line 16: `public class TradeRoute`
+- `World/EconomySystem.cs` line 18: `public string From;`
+- `World/EconomySystem.cs` line 19: `public string To;`
+- `World/EconomySystem.cs` line 20: `public float Volume;`
+- `World/EconomySystem.cs` line 28: `public void AddResource(string name, float initialQty, float prodRate, float consRate)`
+- `World/EconomySystem.cs` line 34: `public void AddTradeRoute(string from, string to, float volume)`
+- `World/EconomySystem.cs` line 39: `public void UpdateEconomy(WorldTimeSystem time)`
+- `World/EconomySystem.cs` line 68: `public float GetResourceQuantity(string name) => resources.TryGetValue(name, out var r) ? r.Quantity : 0f;`
+- `World/EconomySystem.cs` line 69: `public float GetMarketPrice(string name) => marketPrices.TryGetValue(name, out var p) ? p : 1f;`
+- `World/WeatherSystem.cs` line 6: `public class WeatherSystem`
+- `World/WeatherSystem.cs` line 8: `public enum WeatherType { Clear, Rain, Storm, Snow, Fog, Cloudy }`
+- `World/WeatherSystem.cs` line 9: `public WeatherType CurrentWeather { get; private set; }`
+- `World/WeatherSystem.cs` line 19: `public void UpdateWeather(WorldTimeSystem time, SeasonSystem season)`
+- `World/CalendarSystem.cs` line 6: `public class CalendarSystem`
+- `World/CalendarSystem.cs` line 8: `public class ImportantDate`
+- `World/CalendarSystem.cs` line 10: `public string Name;`
+- `World/CalendarSystem.cs` line 11: `public int Year;`
+- `World/CalendarSystem.cs` line 12: `public int Month;`
+- `World/CalendarSystem.cs` line 13: `public int Day;`
+- `World/CalendarSystem.cs` line 18: `public void AddImportantDate(string name, int year, int month, int day)`
+- `World/CalendarSystem.cs` line 23: `public void RemoveImportantDate(string name)`
+- `World/CalendarSystem.cs` line 28: `public IEnumerable<ImportantDate> GetImportantDatesForDay(int year, int month, int day)`
+- `World/CalendarSystem.cs` line 37: `public IEnumerable<ImportantDate> GetAllImportantDates() => importantDates;`
+- `World/WorldManager.cs` line 7: `public class WorldManager : MonoBehaviour`
+- `World/WorldManager.cs` line 9: `public WorldTimeSystem TimeSystem { get; private set; }`
+- `World/WorldManager.cs` line 10: `public SeasonSystem SeasonSystem { get; private set; }`
+- `World/WorldManager.cs` line 11: `public WeatherSystem WeatherSystem { get; private set; }`
+- `World/WorldManager.cs` line 12: `public FactionSystem FactionSystem { get; private set; }`
+- `World/WorldManager.cs` line 13: `public EconomySystem EconomySystem { get; private set; }`
+- `World/WorldManager.cs` line 14: `public EventSystem EventSystem { get; private set; }`
+- `World/WorldManager.cs` line 15: `public CalendarSystem CalendarSystem { get; private set; }`
+- `World/EventSystem.cs` line 6: `public class EventSystem`
+- `World/EventSystem.cs` line 8: `public class WorldEvent`
+- `World/EventSystem.cs` line 10: `public string Name;`
+- `World/EventSystem.cs` line 11: `public int TriggerYear;`
+- `World/EventSystem.cs` line 12: `public int TriggerMonth;`
+- `World/EventSystem.cs` line 13: `public int TriggerDay;`
+- `World/EventSystem.cs` line 14: `public Action OnEvent;`
+- `World/EventSystem.cs` line 15: `public bool Triggered;`
+- `World/EventSystem.cs` line 20: `public void ScheduleEvent(string name, int year, int month, int day, Action onEvent)`
+- `World/EventSystem.cs` line 25: `public void UpdateEvents(WorldTimeSystem time)`
+- `World/EventSystem.cs` line 40: `public IEnumerable<WorldEvent> GetUpcomingEvents(WorldTimeSystem time)`
+- `World/SeasonSystem.cs` line 6: `public class SeasonSystem`
+- `World/SeasonSystem.cs` line 8: `public enum Season { Spring, Summer, Autumn, Winter }`
+- `World/SeasonSystem.cs` line 9: `public Season CurrentSeason { get; private set; }`
+- `World/SeasonSystem.cs` line 27: `public void UpdateSeason(WorldTimeSystem time)`
+- `World/SeasonSystem.cs` line 40: `public void SetSeasonStartDays(Dictionary<Season, int> startDays)`
+- `Storage/FileSystemStorageProvider.cs` line 45: `public async Task<string> Save(string path, byte[] data)`
+- `Storage/FileSystemStorageProvider.cs` line 55: `public async Task<byte[]> Load(string path)`
+- `Storage/FileSystemStorageProvider.cs` line 63: `public Task<bool> Delete(string path)`
+- `Storage/FileSystemStorageProvider.cs` line 78: `public Task<bool> Exists(string path)`
+- `Dialogue/DialogueGenerationService.cs` line 14: `public string model = "gpt-3.5-turbo";`
+- `Dialogue/DialogueGenerationService.cs` line 15: `public float temperature = 0.7f;`
+- `Dialogue/DialogueGenerationService.cs` line 16: `public int maxTokens = 512;`
+- `Dialogue/DialogueGenerationService.cs` line 17: `public List<string> stop = new List<string>();`
+- `Dialogue/DialogueGenerationService.cs` line 26: `public string text = "";`
+- `Dialogue/DialogueGenerationService.cs` line 27: `public GPTUsage usage;`
+- `Dialogue/DialogueGenerationService.cs` line 28: `public string error;`
+- `Dialogue/DialogueGenerationService.cs` line 29: `public object raw;`
+- `Dialogue/DialogueGenerationService.cs` line 32: `public class GPTUsage`
+- `Dialogue/DialogueGenerationService.cs` line 34: `public int promptTokens;`
+- `Dialogue/DialogueGenerationService.cs` line 35: `public int completionTokens;`
+- `Dialogue/DialogueGenerationService.cs` line 36: `public int totalTokens;`
+- `Dialogue/GPTClient.cs` line 34: `public int totalTokens;`
+- `Dialogue/GPTClient.cs` line 35: `public int rollingTokens;`
+- `Dialogue/GPTClient.cs` line 36: `public int windowMs;`
+- `Dialogue/GPTClient.cs` line 37: `public long lastReset;`
+- `Dialogue/GPTClient.cs` line 43: `public string role;`
+- `Dialogue/GPTClient.cs` line 44: `public string content;`
+- `Dialogue/GPTClient.cs` line 50: `public string model;`
+- `Dialogue/GPTClient.cs` line 51: `public List<ChatMessage> messages;`
+- `Dialogue/GPTClient.cs` line 52: `public float temperature;`
+- `Dialogue/GPTClient.cs` line 53: `public int max_tokens;`
+- `Dialogue/GPTClient.cs` line 54: `public List<string> stop;`
+- `Dialogue/GPTClient.cs` line 61: `public ChatUsage usage;`
+- `Dialogue/GPTClient.cs` line 64: `public class ChatChoice`
+- `Dialogue/GPTClient.cs` line 66: `public ChatMessage message;`
+- `Dialogue/GPTClient.cs` line 67: `public int index;`
+- `Dialogue/GPTClient.cs` line 68: `public string finish_reason;`
+- `Dialogue/GPTClient.cs` line 72: `public class ChatUsage`
+- `Dialogue/GPTClient.cs` line 74: `public int prompt_tokens;`
+- `Dialogue/GPTClient.cs` line 75: `public int completion_tokens;`
+- `Dialogue/GPTClient.cs` line 76: `public int total_tokens;`
+- `Dialogue/GPTClient.cs` line 361: `public string name;`
+- `Dialogue/GPTClient.cs` line 362: `public float intensity;`
+- `Dialogue/GPTClient.cs` line 363: `public string description;`
+- `Utilities/FeatPowerCalculator.cs` line 15: `public FeatPowerConfig Config { get; set; } = new FeatPowerConfig();`
+- `Utilities/FeatPowerCalculator.cs` line 139: `public float ResourceCostWeight { get; set; } = 1.0f;`
+- `Utilities/FeatPowerCalculator.cs` line 140: `public float CooldownWeight { get; set; } = 1.0f;`
+- `Utilities/FeatPowerCalculator.cs` line 141: `public float UtilityWeight { get; set; } = 1.0f;`
+- `Utilities/FeatPowerCalculator.cs` line 142: `public float SynergyWeight { get; set; } = 1.0f;`
+- `Utilities/FeatPowerCalculator.cs` line 143: `public float BaseEffectValue { get; set; } = 1.0f; // Fallback if no effect value present`
+- `Utilities/SynergyScoringModule.cs` line 6: `public class SynergyScoringModule : IFeatScoringModule`
+- `Utilities/SynergyScoringModule.cs` line 9: `public string Name => "Synergy";`
+- `Utilities/SynergyScoringModule.cs` line 10: `public void Configure(FeatPowerConfig config) { _config = config; }`
+- `Utilities/SynergyScoringModule.cs` line 11: `public float Score(Feat feat, IEnumerable<Feat> allFeats = null)`
+- `Utilities/ResourceCostScoringModule.cs` line 7: `public class ResourceCostScoringModule : IFeatScoringModule`
+- `Utilities/ResourceCostScoringModule.cs` line 10: `public string Name => "ResourceCost";`
+- `Utilities/ResourceCostScoringModule.cs` line 11: `public void Configure(FeatPowerConfig config) { _config = config; }`
+- `Utilities/ResourceCostScoringModule.cs` line 12: `public float Score(Feat feat, IEnumerable<Feat> allFeats = null)`
+- `Utilities/EffectMagnitudeScoringModule.cs` line 6: `public class EffectMagnitudeScoringModule : IFeatScoringModule`
+- `Utilities/EffectMagnitudeScoringModule.cs` line 9: `public string Name => "EffectMagnitude";`
+- `Utilities/EffectMagnitudeScoringModule.cs` line 10: `public void Configure(FeatPowerConfig config) { _config = config; }`
+- `Utilities/EffectMagnitudeScoringModule.cs` line 11: `public float Score(Feat feat, IEnumerable<Feat> allFeats = null)`
+- `Utilities/FeatDatabaseService.cs` line 9: `public class FeatDatabaseService`
+- `Utilities/FeatDatabaseService.cs` line 18: `public void Load()`
+- `Utilities/FeatDatabaseService.cs` line 28: `public void Save()`
+- `Utilities/FeatDatabaseService.cs` line 33: `public List<Feat> GetAllFeats() => _cache.ToList();`
+- `Utilities/FeatDatabaseService.cs` line 34: `public Feat GetFeatById(string id) => _cache.FirstOrDefault(f => f.Id == id);`
+- `Utilities/FeatDatabaseService.cs` line 35: `public void AddOrUpdateFeat(Feat feat)`
+- `Utilities/FeatDatabaseService.cs` line 42: `public void DeleteFeat(string id)`
+- `Utilities/FeatDatabaseService.cs` line 47: `public void BatchUpdate(IEnumerable<Feat> feats)`
+- `Utilities/CooldownScoringModule.cs` line 7: `public class CooldownScoringModule : IFeatScoringModule`
+- `Utilities/CooldownScoringModule.cs` line 10: `public string Name => "Cooldown";`
+- `Utilities/CooldownScoringModule.cs` line 11: `public void Configure(FeatPowerConfig config) { _config = config; }`
+- `Utilities/CooldownScoringModule.cs` line 12: `public float Score(Feat feat, IEnumerable<Feat> allFeats = null)`
+- `Utilities/FeatAnalysisEngine.cs` line 9: `public class FeatAnalysisEngine`
+- `Utilities/FeatAnalysisEngine.cs` line 11: `public class FeatAnalysisResult`
+- `Utilities/FeatAnalysisEngine.cs` line 13: `public string FeatId { get; set; }`
+- `Utilities/FeatAnalysisEngine.cs` line 14: `public string FeatName { get; set; }`
+- `Utilities/FeatAnalysisEngine.cs` line 15: `public float PowerScore { get; set; }`
+- `Utilities/FeatAnalysisEngine.cs` line 16: `public string ImbalanceType { get; set; } // Overpowered, Underpowered, Situational`
+- `Utilities/FeatAnalysisEngine.cs` line 17: `public string Reasoning { get; set; }`
+- `Utilities/FeatAnalysisEngine.cs` line 18: `public string Suggestion { get; set; }`
+- `Utilities/FeatAnalysisEngine.cs` line 21: `public class FeatAnalysisReport`
+- `Utilities/FeatAnalysisEngine.cs` line 23: `public DateTime Timestamp { get; set; } = DateTime.UtcNow;`
+- `Utilities/FeatAnalysisEngine.cs` line 24: `public float Mean { get; set; }`
+- `Utilities/FeatAnalysisEngine.cs` line 25: `public float StdDev { get; set; }`
+- `Utilities/FeatAnalysisEngine.cs` line 26: `public List<FeatAnalysisResult> FlaggedFeats { get; set; } = new List<FeatAnalysisResult>();`
+- `Utilities/FeatAnalysisEngine.cs` line 43: `public FeatAnalysisReport Analyze(IEnumerable<Feat> feats)`
+- `Utilities/FeatAnalysisEngine.cs` line 102: `public string GenerateJsonReport(FeatAnalysisReport report)`
+- `Utilities/UtilityScoringModule.cs` line 6: `public class UtilityScoringModule : IFeatScoringModule`
+- `Utilities/UtilityScoringModule.cs` line 9: `public string Name => "Utility";`
+- `Utilities/UtilityScoringModule.cs` line 10: `public void Configure(FeatPowerConfig config) { _config = config; }`
+- `Utilities/UtilityScoringModule.cs` line 11: `public float Score(Feat feat, IEnumerable<Feat> allFeats = null)`
+- `FeatHistory/CharacterSnapshot.cs` line 7: `public class CharacterSnapshot`
+- `FeatHistory/CharacterSnapshot.cs` line 9: `public int Level { get; set; }`
+- `FeatHistory/CharacterSnapshot.cs` line 10: `public int Health { get; set; }`
+- `FeatHistory/CharacterSnapshot.cs` line 11: `public int Mana { get; set; }`
+- `FeatHistory/CharacterSnapshot.cs` line 12: `public int Strength { get; set; }`
+- `FeatHistory/CharacterSnapshot.cs` line 13: `public int Dexterity { get; set; }`
+- `FeatHistory/CharacterSnapshot.cs` line 14: `public int Intelligence { get; set; }`
+- `FeatHistory/FeatHistoryPanelTests.cs` line 5: `public class FeatHistoryPanelTests`
+- `FeatHistory/FeatHistoryPanelTests.cs` line 11: `public void SetUp()`
+- `FeatHistory/FeatHistoryPanelTests.cs` line 18: `public void TearDown()`
+- `FeatHistory/FeatHistoryPanelTests.cs` line 24: `public void TestPanelBuildsUI()`
+- `FeatHistory/FeatHistoryPanelTests.cs` line 30: `public void TestPanelRefreshesUI()`
+- `FeatHistory/FeatHistoryPanelTests.cs` line 37: `public void TestHelpButtonShowsHelp()`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 6: `public class FeatHistoryAnalyzerTests`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 12: `public void SetUp()`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 27: `public void TestMostFrequentFeatsGlobal()`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 35: `public void TestMostFrequentFeatsPerCharacter()`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 43: `public void TestAcquisitionStreaks()`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 51: `public void TestClassifyPlayerTypes()`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 60: `public void TestDetectAnomalies()`
+- `FeatHistory/FeatHistoryAnalyzerTests.cs` line 67: `public void TestSummaryStatistics()`
+- `FeatHistory/FeatHistoryDatabase.cs` line 10: `public class FeatHistoryDatabase`
+- `FeatHistory/FeatHistoryDatabase.cs` line 50: `public void AddEvent(FeatAchievementEvent featEvent)`
+- `FeatHistory/FeatHistoryDatabase.cs` line 60: `public List<FeatAchievementEvent> GetEventsForCharacter(string characterId)`
+- `FeatHistory/FeatHistoryDatabase.cs` line 67: `public List<FeatAchievementEvent> QueryEvents(DateTime? from = null, DateTime? to = null)`
+- `FeatHistory/FeatHistoryDatabase.cs` line 72: `public void PruneOldEvents()`
+- `FeatHistory/FeatHistoryAnalyzer.cs` line 7: `public class FeatHistoryAnalyzer`
+- `FeatHistory/FeatHistoryAnalyzer.cs` line 85: `public List<FeatAchievementEvent> DetectAnomalies(int rareThreshold = 1)`
+- `FeatHistory/FeatAchievementEvent.cs` line 7: `public class FeatAchievementEvent`
+- `FeatHistory/FeatAchievementEvent.cs` line 9: `public string Id { get; set; } // Unique event ID`
+- `FeatHistory/FeatAchievementEvent.cs` line 10: `public string CharacterId { get; set; } // Reference to character`
+- `FeatHistory/FeatAchievementEvent.cs` line 11: `public string FeatId { get; set; } // Reference to feat`
+- `FeatHistory/FeatAchievementEvent.cs` line 12: `public DateTime Timestamp { get; set; } // When the feat was acquired`
+- `FeatHistory/FeatAchievementEvent.cs` line 13: `public int CharacterLevel { get; set; } // Level at acquisition`
+- `FeatHistory/FeatAchievementEvent.cs` line 14: `public CharacterSnapshot StatsSnapshot { get; set; } // Character stats at acquisition`
+- `FeatHistory/FeatAchievementEvent.cs` line 15: `public string Context { get; set; } // Contextual info (JSON or string)`
+- `FeatHistory/FeatEventTracker.cs` line 9: `public class FeatEventTracker : MonoBehaviour`
+- `FeatHistory/FeatEventTracker.cs` line 11: `public static FeatEventTracker Instance { get; private set; }`
+- `FeatHistory/FeatEventTracker.cs` line 13: `public UnityEvent<FeatAchievementEvent> OnFeatAcquired = new UnityEvent<FeatAchievementEvent>();`
+- `FeatHistory/FeatEventTracker.cs` line 51: `public void RecordFeatAcquisition(string characterId, string featId, CharacterSnapshot snapshot, string context = "")`
+- `FeatHistory/FeatEventTracker.cs` line 75: `public void FlushBuffer()`
+- `FeatHistory/FeatEventTracker.cs` line 93: `public List<FeatAchievementEvent> GetHistoryForCharacter(string characterId)`
+- `FeatHistory/FeatEventTracker.cs` line 98: `public void PruneOldEvents()`
+- `FeatHistory/Feat.cs` line 7: `public class Feat`
+- `FeatHistory/Feat.cs` line 9: `public string Id { get; set; }`
+- `FeatHistory/Feat.cs` line 10: `public string Name { get; set; }`
+- `FeatHistory/Feat.cs` line 11: `public string Description { get; set; }`
+- `FeatHistory/FeatEventTrackerTests.cs` line 6: `public class FeatEventTrackerTests`
+- `FeatHistory/FeatEventTrackerTests.cs` line 12: `public void SetUp()`
+- `FeatHistory/FeatEventTrackerTests.cs` line 19: `public void TearDown()`
+- `FeatHistory/FeatEventTrackerTests.cs` line 25: `public void TestRecordFeatAcquisition_EnqueuesEvent()`
+- `FeatHistory/FeatEventTrackerTests.cs` line 35: `public void TestFlushBuffer_EmptiesQueue()`
+- `FeatHistory/FeatEventTrackerTests.cs` line 45: `public void TestErrorHandling_InvalidInput()`
+- `FeatHistory/FeatRecommendationEngineTests.cs` line 6: `public class FeatRecommendationEngineTests`
+- `FeatHistory/FeatRecommendationEngineTests.cs` line 13: `public void SetUp()`
+- `FeatHistory/FeatRecommendationEngineTests.cs` line 35: `public void TestCollaborativeFiltering()`
+- `FeatHistory/FeatRecommendationEngineTests.cs` line 42: `public void TestContentBasedFiltering()`
+- `FeatHistory/FeatRecommendationEngineTests.cs` line 49: `public void TestHybridScoring()`
+- `FeatHistory/FeatRecommendationEngineTests.cs` line 56: `public void TestABAssignmentConsistency()`
+- `FeatHistory/FeatRecommendationEngineTests.cs` line 64: `public void TestFeedbackCapture()`
+- `FeatHistory/FeatRecommendationEngine.cs` line 7: `public enum RecommendationStrategy { Collaborative, ContentBased, Hybrid }`
+- `FeatHistory/FeatRecommendationEngine.cs` line 9: `public class FeatRecommendationEngine`
+- `FeatHistory/FeatRecommendationEngine.cs` line 24: `public List<Feat> GetRecommendations(string characterId, int topN = 3, RecommendationStrategy? forcedStrategy = null)`
+- `FeatHistory/FeatRecommendationEngine.cs` line 110: `public void RecordFeedback(string characterId, string featId, bool accepted)`
+- `FeatHistory/FeatHistoryPanel.cs` line 9: `public class FeatHistoryPanel : MonoBehaviour`
+- `Timeline/Visualization/TimelineNode.cs` line 7: `public class TimelineNode : MonoBehaviour`
+- `Timeline/Visualization/TimelineNode.cs` line 9: `public Feat FeatData { get; private set; }`
+- `Timeline/Visualization/TimelineNode.cs` line 10: `public SpriteRenderer Renderer { get; private set; }`
+- `Timeline/Visualization/TimelineNode.cs` line 11: `public bool IsSelected { get; private set; }`
+- `Timeline/Visualization/TimelineNode.cs` line 12: `public bool IsHighlighted { get; private set; }`
+- `Timeline/Visualization/TimelineNode.cs` line 14: `public event Action<TimelineNode> OnPointerEnter;`
+- `Timeline/Visualization/TimelineNode.cs` line 15: `public event Action<TimelineNode> OnPointerExit;`
+- `Timeline/Visualization/TimelineNode.cs` line 16: `public event Action<TimelineNode> OnPointerClick;`
+- `Timeline/Visualization/TimelineNode.cs` line 18: `public void Initialize(Feat feat, Color color)`
+- `Timeline/Visualization/TimelineNode.cs` line 64: `public void SetHighlight(bool highlight, Color? highlightColor = null)`
+- `Timeline/Visualization/TooltipPanel.cs` line 7: `public class TooltipPanel : MonoBehaviour`
+- `Timeline/Visualization/TooltipPanel.cs` line 9: `public CanvasGroup CanvasGroup { get; private set; }`
+- `Timeline/Visualization/TooltipPanel.cs` line 10: `public RectTransform RectTransform { get; private set; }`
+- `Timeline/Visualization/TooltipPanel.cs` line 11: `public TextMeshProUGUI Text { get; private set; }`
+- `Timeline/Visualization/TooltipPanel.cs` line 36: `public void SetText(string content)`
+- `Timeline/Visualization/TooltipPanel.cs` line 42: `public void SetPosition(Vector2 screenPos)`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 10: `public class FeatTimelineVisualizer : MonoBehaviour`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 12: `public FeatDataProcessor DataProcessor;`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 13: `public float TimelineLength = 16f; // Unity units for levels 1-20`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 14: `public float TimelineY = 0f;`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 15: `public float NodeSpacing = 0.7f;`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 16: `public float NodeVerticalSpread = 2.5f;`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 17: `public float PanSpeed = 1.0f;`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 18: `public float ZoomSpeed = 2.0f;`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 19: `public float MinZoom = 0.5f;`
+- `Timeline/Visualization/FeatTimelineVisualizer.cs` line 20: `public float MaxZoom = 2.5f;`
+- `Timeline/Visualization/TimelineEdge.cs` line 5: `public class TimelineEdge : MonoBehaviour`
+- `Timeline/Visualization/TimelineEdge.cs` line 9: `public void Initialize(Vector3 start, Vector3 end, Color color)`
+- `Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs` line 12: `public class FeatTimelineVisualizerPlayModeTests`
+- `Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs` line 19: `public IEnumerator SetUp()`
+- `Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs` line 29: `public IEnumerator TearDown()`
+- `Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs` line 36: `public IEnumerator RendersNodesAndEdges_WithMockData()`
+- `Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs` line 61: `public IEnumerator TooltipAppears_OnNodeHover()`
+- `Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs` line 82: `public IEnumerator PathHighlighting_WorksOnClick()`
+- `Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs` line 108: `public IEnumerator GapAndClusterMarkers_AppearCorrectly()`
+- `Timeline/Processing/FeatDataProcessor.cs` line 11: `public class FeatDataProcessor`
+- `Timeline/Processing/FeatDataProcessor.cs` line 13: `public FeatDataSet DataSet { get; private set; } = new FeatDataSet();`
+- `Timeline/Processing/FeatDataProcessor.cs` line 14: `public bool IsLoaded { get; private set; } = false;`
+- `Timeline/Processing/FeatDataProcessor.cs` line 15: `public string LastError { get; private set; }`
+- `Timeline/Processing/FeatDataProcessor.cs` line 20: `public async Task<bool> LoadFeatsFromApiAsync()`
+- `Timeline/Processing/FeatDataProcessor.cs` line 57: `public bool ValidatePrerequisites(out List<string> circularChains)`
+- `Timeline/Processing/FeatDataProcessor.cs` line 95: `public IEnumerable<Feat> FilterByCategory(FeatCategory category)`
+- `Timeline/Processing/FeatDataProcessor.cs` line 100: `public IEnumerable<Feat> FilterByLevel(int level)`
+- `Timeline/Processing/FeatDataProcessor.cs` line 105: `public IEnumerable<Feat> SearchByName(string searchTerm)`
+- `Timeline/Processing/FeatDataProcessor.cs` line 110: `public IEnumerable<Feat> GetAvailableFeatsAtLevel(int level)`
+- `Timeline/Processing/CharacterBuildOptimizerService.cs` line 8: `public class CharacterBuildOptimizerService : MonoBehaviour`
+- `Timeline/Processing/CharacterBuildOptimizerService.cs` line 21: `public List<Feat> GetRecommendations(CharacterBuild build, int maxFeats = 10)`
+- `Timeline/Processing/CharacterBuildOptimizerService.cs` line 27: `public void PushRecommendations(CharacterBuild build, int maxFeats = 10)`
+- `Timeline/Processing/CharacterBuildOptimizer.cs` line 9: `public class CharacterBuildOptimizer`
+- `Timeline/Processing/CharacterBuildOptimizer.cs` line 18: `public List<Feat> RecommendFeats(CharacterBuild build, int maxFeats = 10)`
+- `Timeline/Models/Playstyle.cs` line 3: `public enum Playstyle`
+- `Timeline/Models/Role.cs` line 3: `public enum Role`
+- `Timeline/Models/FeatCategory.cs` line 3: `public enum FeatCategory`
+- `Timeline/Models/FeatDataSet.cs` line 6: `public class FeatDataSet`
+- `Timeline/Models/FeatDataSet.cs` line 8: `public List<Feat> Feats { get; set; } = new List<Feat>();`
+- `Timeline/Models/FeatDataSet.cs` line 11: `public void BuildIndex()`
+- `Timeline/Models/FeatDataSet.cs` line 16: `public Feat GetFeatById(string id)`
+- `Timeline/Models/FeatDataSet.cs` line 22: `public IEnumerable<Feat> GetFeatsByCategory(FeatCategory category)`
+- `Timeline/Models/FeatDataSet.cs` line 27: `public IEnumerable<Feat> GetFeatsByLevel(int level)`
+- `Timeline/Models/CharacterBuild.cs` line 6: `public class CharacterBuild`
+- `Timeline/Models/CharacterBuild.cs` line 8: `public string Name { get; set; }`
+- `Timeline/Models/CharacterBuild.cs` line 9: `public CharacterStats Stats { get; set; }`
+- `Timeline/Models/CharacterBuild.cs` line 10: `public string Role { get; set; } // e.g., "Tank", "DPS", "Support"`
+- `Timeline/Models/CharacterBuild.cs` line 11: `public string Playstyle { get; set; } // e.g., "Aggressive", "Defensive", "Balanced"`
+- `Timeline/Models/CharacterBuild.cs` line 12: `public List<Feat> SelectedFeats { get; set; } = new List<Feat>();`
+- `Timeline/Models/CharacterBuild.cs` line 13: `public int Level { get; set; }`
+- `Timeline/Models/Feat.cs` line 5: `public class Feat`
+- `Timeline/Models/Feat.cs` line 7: `public string Id { get; set; }`
+- `Timeline/Models/Feat.cs` line 8: `public string Name { get; set; }`
+- `Timeline/Models/Feat.cs` line 9: `public string Description { get; set; }`
+- `Timeline/Models/Feat.cs` line 10: `public FeatCategory Category { get; set; }`
+- `Timeline/Models/Feat.cs` line 11: `public int LevelRequirement { get; set; }`
+- `Timeline/Models/Feat.cs` line 12: `public List<string> Prerequisites { get; set; } = new List<string>();`
+- `NPC/NPCPersonality.cs` line 8: `public class PersonalityProfile`
+- `NPC/NPCPersonality.cs` line 11: `[Range(0f, 1f)] public float Friendliness;`
+- `NPC/NPCPersonality.cs` line 12: `[Range(0f, 1f)] public float Aggression;`
+- `NPC/NPCPersonality.cs` line 13: `[Range(0f, 1f)] public float Curiosity;`
+- `NPC/NPCPersonality.cs` line 14: `[Range(0f, 1f)] public float Discipline;`
+- `NPC/NPCPersonality.cs` line 15: `[Range(0f, 1f)] public float Optimism;`
+- `NPC/NPCPersonality.cs` line 16: `[Range(0f, 1f)] public float Sociability;`
+- `NPC/NPCPersonality.cs` line 17: `[Range(0f, 1f)] public float Intelligence;`
+- `NPC/NPCPersonality.cs` line 33: `public float Compare(PersonalityProfile other)`
+- `NPC/NPCBase.cs` line 6: `public class NPCBase : MonoBehaviour`
+- `NPC/NPCBase.cs` line 8: `public string NPCName;`
+- `NPC/NPCBase.cs` line 9: `public PersonalityProfile Personality { get; private set; }`
+- `NPC/NPCBase.cs` line 10: `public NPCMood Mood { get; private set; }`
+- `NPC/NPCBase.cs` line 14: `public void Initialize(INPCTemplate template = null, System.Random rng = null)`
+- `NPC/NPCBase.cs` line 25: `public float GetAggressionWeight() => _behaviorModifier.GetAggressionWeight();`
+- `NPC/NPCBase.cs` line 26: `public float GetSociabilityWeight() => _behaviorModifier.GetSociabilityWeight();`
+- `NPC/NPCBase.cs` line 27: `public float GetCuriosityWeight() => _behaviorModifier.GetCuriosityWeight();`
+- `NPC/NPCBase.cs` line 31: `public void OnEventAffectingMood(MoodState mood, float intensity = 1f)`
+- `NPC/NPCBase.cs` line 37: `public void UpdateMood(float deltaTime)`
+- `NPC/NPCBase.cs` line 43: `public override string ToString()`
+- `NPC/NPCBehaviorModifier.cs` line 5: `public class NPCBehaviorModifier`
+- `NPC/NPCBehaviorModifier.cs` line 17: `public float GetAggressionWeight()`
+- `NPC/NPCBehaviorModifier.cs` line 27: `public float GetSociabilityWeight()`
+- `NPC/NPCBehaviorModifier.cs` line 39: `public float GetCuriosityWeight()`
+- `NPC/NPCTraitGenerator.cs` line 6: `public static class NPCTraitGenerator`
+- `NPC/NPCTraitGenerator.cs` line 9: `public static PersonalityProfile GenerateRandomProfile(System.Random rng = null)`
+- `NPC/NPCTraitGenerator.cs` line 24: `public static PersonalityProfile GenerateFromTemplate(INPCTemplate template, float variance = 0.1f, System.Random rng = null)`
+- `NPC/NPCMood.cs` line 6: `public enum MoodState`
+- `NPC/NPCMood.cs` line 17: `public class NPCMood`
+- `NPC/NPCMood.cs` line 19: `public MoodState CurrentMood { get; private set; } = MoodState.Neutral;`
+- `NPC/NPCMood.cs` line 20: `public float MoodIntensity { get; private set; } = 0f; // 0 = baseline, 1 = max`
+- `NPC/NPCMood.cs` line 25: `public void ApplyMood(MoodState newMood, float intensity = 1f)`
+- `NPC/NPCMood.cs` line 39: `public void DecayMood(float deltaTime)`
+- `NPC/NPCMood.cs` line 52: `public override string ToString()`
+- `NPC/INPCTemplate.cs` line 3: `public interface INPCTemplate`
+
+---
+
+## Quest
+- Total public members: 122
+- Documented: 90 (73.8%)
+- Undocumented: 32
+
+### Undocumented Members
+- `Tests/QuestSystemTests.cs` line 8: `public class QuestSystemTests`
+- `Tests/QuestSystemTests.cs` line 11: `public void QuestTemplate_GeneratesQuestWithParameters()`
+- `Tests/QuestSystemTests.cs` line 20: `public void QuestDependencyManager_AddsAndDetectsDependencies()`
+- `Tests/QuestSystemTests.cs` line 30: `public void LocationStateSystem_ManagesLocations()`
+- `Tests/QuestSystemTests.cs` line 40: `public void FactionRelationshipSystem_ManagesFactions()`
+- `Tests/QuestSystemTests.cs` line 49: `public void WorldStateManager_TracksState()`
+- `Tests/QuestSystemTests.cs` line 59: `public void QuestStageManager_ManagesStages()`
+- `Tests/QuestSystemTests.cs` line 70: `public void QuestSerialization_SerializesAndDeserializes()`
+- `Tests/QuestSystemTests.cs` line 79: `public void QuestManager_AddsAndRemovesQuests()`
+- `Tests/QuestSystemTests.cs` line 90: `public void QuestReward_And_Requirement_Constructors()`
+- `Tests/QuestSystemTests.cs` line 101: `public void ConditionEvaluator_EvaluatesConditions()`
+- `Tests/QuestSystemTests.cs` line 108: `public void HiddenObjective_ConstructsAndSetsProperties()`
+- `Tests/QuestTests.cs` line 8: `public class QuestTests`
+- `Tests/QuestTests.cs` line 11: `public void Quest_CanSetAndGetProperties()`
+- `Tests/QuestTests.cs` line 23: `public void QuestStage_CanSetAndGetObjectives()`
+- `Tests/QuestTests.cs` line 32: `public void RewardGenerator_GeneratesExpectedRewards()`
+- `Quest/FactionRelationshipSystem.cs` line 13: `public static FactionRelationshipSystem Instance`
+- `Quest/FactionRelationshipSystem.cs` line 27: `public enum FactionStanding { Hostile, Neutral, Friendly, Allied }`
+- `Quest/FactionRelationshipSystem.cs` line 30: `public class ReputationChangeEvent : UnityEngine.Events.UnityEvent<string, float> { }`
+- `Quest/FactionRelationshipSystem.cs` line 33: `public ReputationChangeEvent OnReputationChanged = new ReputationChangeEvent();`
+- `Quest/FactionRelationshipSystem.cs` line 36: `public float HostileThreshold = -50f;`
+- `Quest/FactionRelationshipSystem.cs` line 37: `public float NeutralThreshold = 0f;`
+- `Quest/FactionRelationshipSystem.cs` line 38: `public float FriendlyThreshold = 50f;`
+- `Quest/FactionRelationshipSystem.cs` line 39: `public float AlliedThreshold = 100f;`
+- `Quest/LocationStateSystem.cs` line 13: `public static LocationStateSystem Instance`
+- `Quest/LocationStateSystem.cs` line 27: `public enum LocationState { Normal, Endangered, Destroyed, Occupied, Hidden }`
+- `Quest/LocationStateSystem.cs` line 30: `public class LocationStateChangeEvent : UnityEngine.Events.UnityEvent<string, LocationState> { }`
+- `Quest/LocationStateSystem.cs` line 33: `public LocationStateChangeEvent OnLocationStateChanged = new LocationStateChangeEvent();`
+- `Quest/QuestManager.cs` line 13: `public static QuestManager Instance`
+- `Quest/WorldStateManager.cs` line 13: `public static WorldStateManager Instance`
+- `Quest/WorldStateManager.cs` line 28: `public class StateChangeEvent : UnityEngine.Events.UnityEvent<string, object> { }`
+- `Quest/WorldStateManager.cs` line 31: `public StateChangeEvent OnStateChanged = new StateChangeEvent();`
+
+---
+

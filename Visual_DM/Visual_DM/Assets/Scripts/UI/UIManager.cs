@@ -7,9 +7,28 @@ namespace VisualDM.UI
     /// <summary>
     /// Manages runtime UI panels and navigation for the game. All UI is generated at runtime.
     /// </summary>
+    /// <remarks>
+    /// This singleton is created at runtime and persists across scenes. All UI panels are generated and managed here.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // Access the UIManager singleton
+    /// var ui = UIManager.Instance;
+    /// // Create a new panel
+    /// var panel = ui.CreatePanel("InventoryPanel", new Vector2(400, 300), new Vector2(0, 0), Color.gray);
+    /// // Show the panel
+    /// ui.ShowPanel("InventoryPanel");
+    /// </code>
+    /// </example>
     public class UIManager : MonoBehaviour
     {
         private static UIManager _instance;
+        /// <summary>
+        /// Singleton instance of the UIManager. Created at runtime if not present.
+        /// </summary>
+        /// <remarks>
+        /// Access this property to interact with the UI system. The instance is created automatically if it does not exist.
+        /// </remarks>
         public static UIManager Instance
         {
             get
@@ -27,8 +46,25 @@ namespace VisualDM.UI
         private readonly Dictionary<string, GameObject> panels = new Dictionary<string, GameObject>();
         private GameObject currentPanel;
 
+        /// <summary>
+        /// Breakpoint categories for responsive UI layout.
+        /// </summary>
+        /// <remarks>
+        /// Used to adapt UI layout to different screen sizes at runtime.
+        /// </remarks>
         public enum Breakpoint { Mobile, Tablet, Desktop, LargeDesktop }
+
+        /// <summary>
+        /// The current UI breakpoint, updated automatically on screen resize.
+        /// </summary>
         public Breakpoint CurrentBreakpoint { get; private set; }
+
+        /// <summary>
+        /// Event triggered when the UI breakpoint changes (e.g., on screen resize).
+        /// </summary>
+        /// <remarks>
+        /// Subscribe to this event to update UI layout dynamically.
+        /// </remarks>
         public event System.Action<Breakpoint> OnBreakpointChanged;
 
         private Vector2Int lastScreenSize;
@@ -69,6 +105,16 @@ namespace VisualDM.UI
             }
         }
 
+        /// <summary>
+        /// Determines the breakpoint category for a given screen width.
+        /// </summary>
+        /// <param name="width">The screen width in pixels.</param>
+        /// <returns>The corresponding <see cref="Breakpoint"/> value.</returns>
+        /// <example>
+        /// <code>
+        /// var bp = UIManager.Instance.GetBreakpoint(Screen.width);
+        /// </code>
+        /// </example>
         public Breakpoint GetBreakpoint(int width)
         {
             if (width < 600) return Breakpoint.Mobile;
@@ -80,6 +126,19 @@ namespace VisualDM.UI
         /// <summary>
         /// Create and register a new UI panel at runtime.
         /// </summary>
+        /// <param name="panelName">Unique name for the panel.</param>
+        /// <param name="size">Size of the panel in pixels.</param>
+        /// <param name="position">Position of the panel in world space.</param>
+        /// <param name="bgColor">Background color of the panel.</param>
+        /// <returns>The created <see cref="GameObject"/> representing the panel.</returns>
+        /// <remarks>
+        /// Panels are generated at runtime and managed by the UIManager. Use <see cref="ShowPanel"/> to display.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// var panel = UIManager.Instance.CreatePanel("SettingsPanel", new Vector2(300, 200), new Vector2(0, 0), Color.white);
+        /// </code>
+        /// </example>
         public GameObject CreatePanel(string panelName, Vector2 size, Vector2 position, Color bgColor)
         {
             if (panels.ContainsKey(panelName))
@@ -102,6 +161,15 @@ namespace VisualDM.UI
         /// <summary>
         /// Show a registered panel and hide the current one.
         /// </summary>
+        /// <param name="panelName">The name of the panel to show.</param>
+        /// <remarks>
+        /// Only one panel is visible at a time. Hides the previously active panel.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// UIManager.Instance.ShowPanel("InventoryPanel");
+        /// </code>
+        /// </example>
         public void ShowPanel(string panelName)
         {
             if (currentPanel != null)
@@ -116,6 +184,12 @@ namespace VisualDM.UI
         /// <summary>
         /// Hide a specific panel.
         /// </summary>
+        /// <param name="panelName">The name of the panel to hide.</param>
+        /// <example>
+        /// <code>
+        /// UIManager.Instance.HidePanel("SettingsPanel");
+        /// </code>
+        /// </example>
         public void HidePanel(string panelName)
         {
             if (panels.TryGetValue(panelName, out var panel))

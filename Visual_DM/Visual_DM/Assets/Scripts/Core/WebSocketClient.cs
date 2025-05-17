@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Net.WebSockets;
 using System.Text;
+using VisualDM.Systems.EventSystem;
 
 namespace VisualDM.Core
 {
     /// <summary>
     /// Basic WebSocket client for real-time communication. Designed for runtime use only.
+    /// Now uses EventBus and UINotificationEvent for notifications.
     /// </summary>
     public class WebSocketClient : MonoBehaviour
     {
@@ -29,6 +31,7 @@ namespace VisualDM.Core
         public event Action OnConnected;
         public event Action OnDisconnected;
         public event Action<Exception> OnError;
+        // public event Action<string, string> OnNotification; // Removed in favor of EventBus
 
         public void RegisterMessageHandler(string messageType, Action<string> handler)
         {
@@ -103,13 +106,42 @@ namespace VisualDM.Core
                     break;
                 }
                 var msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                // Dispatch to registered handler if message type matches
-                // TODO: Parse message type from msg (stub)
-                string messageType = "default"; // Replace with real parsing
+                // Parse message type from JSON (expects { "type": "...", ... })
+                string messageType = "default";
+                try
+                {
+                    var json = JsonUtility.FromJson<SimpleTypeWrapper>(msg);
+                    if (!string.IsNullOrEmpty(json.type))
+                        messageType = json.type;
+                }
+                catch { /* If parsing fails, fallback to default */ }
                 if (messageHandlers.TryGetValue(messageType, out var handler))
                     handler(msg);
                 OnMessageReceived?.Invoke(msg);
+                // If this is a notification, publish via EventBus
+                if (messageType == "notification")
+                {
+                    try
+                    {
+                        var notif = JsonUtility.FromJson<NotificationPayload>(msg);
+                        var evt = new UINotificationEvent(
+                            notif.message,
+                            notif.level,
+                            DateTime.UtcNow
+                        );
+                        EventBus.Instance.Publish(evt);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"[WebSocketClient] Failed to publish notification event: {ex.Message}");
+                    }
+                }
             }
         }
     }
+
+    [Serializable]
+    private class SimpleTypeWrapper { public string type; }
+    [Serializable]
+    private class NotificationPayload { public string type; public string message; public string level; }
 } 

@@ -111,4 +111,24 @@ jobs:
       - name: Notify Slack (placeholder)
         run: |
           echo "CI pipeline failed. Please check the logs."
-          # Integrate with Slack/email as per docs/ci-cd-architecture.md 
+          # Integrate with Slack/email as per docs/ci-cd-architecture.md
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore dependencies
+        run: dotnet restore Visual_DM/Assembly-CSharp.csproj
+      - name: Build with analyzers
+        run: dotnet build Visual_DM/Assembly-CSharp.csproj --no-restore
+      - name: Run static analysis (StyleCop, Roslyn, Sonar)
+        run: dotnet build Visual_DM/Assembly-CSharp.csproj --no-restore --no-incremental
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs
+          path: Visual_DM/Visual_DM/Temp/obj/Assembly-CSharp/ 

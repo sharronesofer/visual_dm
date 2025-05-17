@@ -31,8 +31,15 @@ namespace VisualDM.Quest
         /// </summary>
         public void AddQuest(Quest quest)
         {
-            if (quest == null || string.IsNullOrEmpty(quest.Id)) return;
-            quests[quest.Id] = quest;
+            try
+            {
+                if (quest == null || string.IsNullOrEmpty(quest.Id)) return;
+                quests[quest.Id] = quest;
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to add quest.", "QuestManager.AddQuest");
+            }
         }
 
         /// <summary>
@@ -40,7 +47,15 @@ namespace VisualDM.Quest
         /// </summary>
         public bool RemoveQuest(string questId)
         {
-            return quests.Remove(questId);
+            try
+            {
+                return quests.Remove(questId);
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to remove quest.", "QuestManager.RemoveQuest");
+                return false;
+            }
         }
 
         /// <summary>
@@ -48,8 +63,16 @@ namespace VisualDM.Quest
         /// </summary>
         public Quest FindQuest(string questId)
         {
-            quests.TryGetValue(questId, out var quest);
-            return quest;
+            try
+            {
+                quests.TryGetValue(questId, out var quest);
+                return quest;
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to find quest.", "QuestManager.FindQuest");
+                return null;
+            }
         }
 
         /// <summary>
@@ -57,7 +80,15 @@ namespace VisualDM.Quest
         /// </summary>
         public List<Quest> GetAllQuests()
         {
-            return new List<Quest>(quests.Values);
+            try
+            {
+                return new List<Quest>(quests.Values);
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to get all quests.", "QuestManager.GetAllQuests");
+                return new List<Quest>();
+            }
         }
 
         /// <summary>
@@ -65,7 +96,14 @@ namespace VisualDM.Quest
         /// </summary>
         public void ClearQuests()
         {
-            quests.Clear();
+            try
+            {
+                quests.Clear();
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to clear quests.", "QuestManager.ClearQuests");
+            }
         }
     }
 } 

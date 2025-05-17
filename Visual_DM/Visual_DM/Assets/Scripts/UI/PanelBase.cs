@@ -58,5 +58,23 @@ namespace VisualDM.UI
             if (VisibleForRole(userRole)) Show();
             else Hide();
         }
+
+        /// <summary>
+        /// Called when an error occurs in the panel. Override to display custom error UI.
+        /// </summary>
+        public virtual void OnPanelError(string userMessage, string context)
+        {
+            // Default: log error. Derived panels can override to show error UI.
+            Debug.LogError($"Panel error in {context}: {userMessage}");
+        }
+
+        /*
+         * Error Handling Pattern for UI Panels:
+         * - Wrap critical operations in try-catch blocks.
+         * - Use ErrorHandlingService.Instance.LogException for logging.
+         * - Call OnPanelError to display user-friendly error messages in the UI.
+         * - Override OnPanelError in derived panels for custom error display.
+         * - See PowerAnalysisDashboard and MonitoringDashboard for examples.
+         */
     }
 } 

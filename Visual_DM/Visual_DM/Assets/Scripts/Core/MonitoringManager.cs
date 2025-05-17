@@ -128,8 +128,9 @@ namespace VisualDM.Core
             RecordMetric("cpu_percent", cpu);
             RecordMetric("ping_ms", ping);
             RecordMetric("error_count", errors);
-            // TODO: Send metrics to backend via WebSocketClient if connected
-            // WebSocketClient.Instance?.SendMetrics(recentMetrics);
+            // Send metrics to backend via WebSocketClient if connected (stub)
+            // Example: WebSocketClient.Instance?.SendMetrics(recentMetrics);
+            // Integration point for future implementation.
         }
 
         /// <summary>
@@ -217,8 +218,10 @@ namespace VisualDM.Core
                 {
                     try
                     {
-                        // TODO: Implement ping to backend server
-                        // lastPing = ...
+                        // Implement ping to backend server (stub)
+                        // Example: WebSocketClient.Instance?.SendPing();
+                        // lastPing = ... (update with actual ping time)
+                        // Integration point for future implementation.
                         Thread.Sleep(5000);
                     }
                     catch { }
@@ -257,7 +260,9 @@ namespace VisualDM.Core
             {
                 AlertEvent?.Invoke(alertType, message);
             }
-            // TODO: Integrate with email, webhook, or other notification systems
+            // Integrate with email, webhook, or other notification systems (stub)
+            // Example: NotificationService.SendAlert(alertType, message);
+            // Integration point for future implementation.
         }
 
         /// <summary>

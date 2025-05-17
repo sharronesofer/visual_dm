@@ -1,6 +1,7 @@
 using UnityEngine;
 using VisualDM.UI.Search;
 using System.Collections.Generic;
+using System;
 
 namespace VisualDM.UI.Search
 {
@@ -42,28 +43,63 @@ namespace VisualDM.UI.Search
 
         private void OnSearchSubmitted(string query)
         {
-            // TODO: Call backend search API with query and filters
-            // Update resultsDisplay with new results
+            try
+            {
+                // TODO: Call backend search API with query and filters
+                // Update resultsDisplay with new results
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Search submission failed.", "SearchUIManager.OnSearchSubmitted");
+            }
         }
 
         private void OnSuggestionSelected(string suggestion)
         {
-            // Optionally auto-submit search or update input
+            try
+            {
+                // Optionally auto-submit search or update input
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Suggestion selection failed.", "SearchUIManager.OnSuggestionSelected");
+            }
         }
 
         private void OnFiltersChanged(List<string> filters)
         {
-            // TODO: Call backend search API with current query and filters
+            try
+            {
+                // TODO: Call backend search API with current query and filters
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Filter change failed.", "SearchUIManager.OnFiltersChanged");
+            }
         }
 
         private void OnPageChanged(int newPage)
         {
-            // TODO: Fetch next/prev page from backend
+            try
+            {
+                // TODO: Fetch next/prev page from backend
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Page change failed.", "SearchUIManager.OnPageChanged");
+            }
         }
 
         private void OnSortChanged(string sortField)
         {
-            // TODO: Update search results with new sort order
+            try
+            {
+                // TODO: Update search results with new sort order
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Sort change failed.", "SearchUIManager.OnSortChanged");
+            }
         }
     }
 } 

@@ -80,7 +80,30 @@ namespace VisualDM.Quest
             if (mergedParams.TryGetValue("difficulty", out var customDiff) && customDiff is int)
                 quest.Difficulty = (int)customDiff;
 
-            // TODO: Add logic to generate stages, requirements, rewards, etc. from parameters
+            // Generate stages from parameters if provided
+            if (mergedParams.TryGetValue("stages", out var stagesObj) && stagesObj is List<string> stageNames)
+            {
+                foreach (var stageName in stageNames)
+                {
+                    quest.Stages.Add(new QuestStage { Id = Guid.NewGuid().ToString(), Objectives = new List<string> { stageName } });
+                }
+            }
+            // Generate requirements from parameters if provided
+            if (mergedParams.TryGetValue("requirements", out var reqsObj) && reqsObj is List<string> reqs)
+            {
+                foreach (var req in reqs)
+                {
+                    quest.Requirements.Add(new QuestRequirement { Requirement = req });
+                }
+            }
+            // Generate rewards from parameters if provided
+            if (mergedParams.TryGetValue("rewards", out var rewardsObj) && rewardsObj is List<string> rewards)
+            {
+                foreach (var reward in rewards)
+                {
+                    quest.Rewards.Add(new QuestReward { Reward = reward });
+                }
+            }
 
             return quest;
         }

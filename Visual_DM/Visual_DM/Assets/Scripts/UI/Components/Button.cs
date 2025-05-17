@@ -54,7 +54,7 @@ namespace VisualDM.UI.Components
         void OnMouseEnter() { if (ButtonState != State.Disabled) SetState(State.Hover); }
         void OnMouseExit() { if (ButtonState != State.Disabled) SetState(State.Default); }
         void OnMouseDown() { if (ButtonState != State.Disabled) SetState(State.Active); }
-        void OnMouseUp() { if (ButtonState != State.Disabled) { SetState(State.Hover); OnClick?.Invoke(); } }
+        void OnMouseUp() { if (ButtonState != State.Disabled) { SetState(State.Hover); TriggerClick(); } }
 
         void Update()
         {
@@ -62,7 +62,7 @@ namespace VisualDM.UI.Components
             if (IsFocused && ButtonState != State.Disabled && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space)))
             {
                 SetState(State.Active);
-                OnClick?.Invoke();
+                TriggerClick();
             }
             // Visual focus indicator
             if (IsFocused && ButtonState != State.Disabled)
@@ -87,6 +87,18 @@ namespace VisualDM.UI.Components
         {
             Label = text;
             if (_label != null) _label.text = text;
+        }
+
+        public void TriggerClick()
+        {
+            try
+            {
+                OnClick?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Button click failed.", "Button.TriggerClick");
+            }
         }
 
         private void ApplyStyle()

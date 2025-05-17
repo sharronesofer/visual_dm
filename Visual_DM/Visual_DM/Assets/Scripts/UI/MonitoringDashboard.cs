@@ -52,52 +52,60 @@ namespace VisualDM.UI
 
         private void CreateUI()
         {
-            // Canvas
-            canvas = new GameObject("MonitoringDashboardCanvas").AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.gameObject.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            canvas.gameObject.AddComponent<GraphicRaycaster>();
-            DontDestroyOnLoad(canvas.gameObject);
-
-            // Root panel
-            rootPanel = new GameObject("RootPanel").AddComponent<RectTransform>();
-            rootPanel.SetParent(canvas.transform, false);
-            rootPanel.anchorMin = Vector2.zero;
-            rootPanel.anchorMax = Vector2.one;
-            rootPanel.offsetMin = Vector2.zero;
-            rootPanel.offsetMax = Vector2.zero;
-
-            // Top row: KPIs
-            var kpiPanel = CreatePanel(rootPanel, new Vector2(0, 0.85f), new Vector2(1, 1), 0);
-            float kpiWidth = 0.25f;
-            fpsText = CreateKPI(kpiPanel, "FPS", 0, kpiWidth, out fpsIndicator);
-            memoryText = CreateKPI(kpiPanel, "Memory", 1, kpiWidth, out _);
-            pingText = CreateKPI(kpiPanel, "Ping", 2, kpiWidth, out _);
-            errorText = CreateKPI(kpiPanel, "Errors", 3, kpiWidth, out errorIndicator);
-
-            // Middle: Alert log
-            alertLogPanel = CreatePanel(rootPanel, new Vector2(0.05f, 0.05f), new Vector2(0.95f, 0.8f), 1);
-            var logTitle = CreateText(alertLogPanel, "Alert Log", 18, FontStyle.Bold, TextAnchor.UpperLeft);
-            logTitle.rectTransform.anchorMin = new Vector2(0, 0.95f);
-            logTitle.rectTransform.anchorMax = new Vector2(1, 1);
-            logTitle.rectTransform.offsetMin = new Vector2(0, 0);
-            logTitle.rectTransform.offsetMax = new Vector2(0, 0);
-            for (int i = 0; i < maxLogEntries; i++)
+            try
             {
-                var entry = CreateText(alertLogPanel, "", 14, FontStyle.Normal, TextAnchor.UpperLeft);
-                entry.rectTransform.anchorMin = new Vector2(0, 0.9f - i * 0.09f);
-                entry.rectTransform.anchorMax = new Vector2(1, 0.98f - i * 0.09f);
-                entry.rectTransform.offsetMin = new Vector2(0, 0);
-                entry.rectTransform.offsetMax = Vector2.zero;
-                alertLogEntries.Add(entry);
-            }
+                // Canvas
+                canvas = new GameObject("MonitoringDashboardCanvas").AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.gameObject.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                canvas.gameObject.AddComponent<GraphicRaycaster>();
+                DontDestroyOnLoad(canvas.gameObject);
 
-            // Thresholds display
-            thresholdsText = CreateText(rootPanel, "", 14, FontStyle.Italic, TextAnchor.UpperLeft);
-            thresholdsText.rectTransform.anchorMin = new Vector2(0.02f, 0.82f);
-            thresholdsText.rectTransform.anchorMax = new Vector2(0.98f, 0.85f);
-            thresholdsText.rectTransform.offsetMin = Vector2.zero;
-            thresholdsText.rectTransform.offsetMax = Vector2.zero;
+                // Root panel
+                rootPanel = new GameObject("RootPanel").AddComponent<RectTransform>();
+                rootPanel.SetParent(canvas.transform, false);
+                rootPanel.anchorMin = Vector2.zero;
+                rootPanel.anchorMax = Vector2.one;
+                rootPanel.offsetMin = Vector2.zero;
+                rootPanel.offsetMax = Vector2.zero;
+
+                // Top row: KPIs
+                var kpiPanel = CreatePanel(rootPanel, new Vector2(0, 0.85f), new Vector2(1, 1), 0);
+                float kpiWidth = 0.25f;
+                fpsText = CreateKPI(kpiPanel, "FPS", 0, kpiWidth, out fpsIndicator);
+                memoryText = CreateKPI(kpiPanel, "Memory", 1, kpiWidth, out _);
+                pingText = CreateKPI(kpiPanel, "Ping", 2, kpiWidth, out _);
+                errorText = CreateKPI(kpiPanel, "Errors", 3, kpiWidth, out errorIndicator);
+
+                // Middle: Alert log
+                alertLogPanel = CreatePanel(rootPanel, new Vector2(0.05f, 0.05f), new Vector2(0.95f, 0.8f), 1);
+                var logTitle = CreateText(alertLogPanel, "Alert Log", 18, FontStyle.Bold, TextAnchor.UpperLeft);
+                logTitle.rectTransform.anchorMin = new Vector2(0, 0.95f);
+                logTitle.rectTransform.anchorMax = new Vector2(1, 1);
+                logTitle.rectTransform.offsetMin = new Vector2(0, 0);
+                logTitle.rectTransform.offsetMax = new Vector2(0, 0);
+                for (int i = 0; i < maxLogEntries; i++)
+                {
+                    var entry = CreateText(alertLogPanel, "", 14, FontStyle.Normal, TextAnchor.UpperLeft);
+                    entry.rectTransform.anchorMin = new Vector2(0, 0.9f - i * 0.09f);
+                    entry.rectTransform.anchorMax = new Vector2(1, 0.98f - i * 0.09f);
+                    entry.rectTransform.offsetMin = new Vector2(0, 0);
+                    entry.rectTransform.offsetMax = Vector2.zero;
+                    alertLogEntries.Add(entry);
+                }
+
+                // Thresholds display
+                thresholdsText = CreateText(rootPanel, "", 14, FontStyle.Italic, TextAnchor.UpperLeft);
+                thresholdsText.rectTransform.anchorMin = new Vector2(0.02f, 0.82f);
+                thresholdsText.rectTransform.anchorMax = new Vector2(0.98f, 0.85f);
+                thresholdsText.rectTransform.offsetMin = Vector2.zero;
+                thresholdsText.rectTransform.offsetMax = Vector2.zero;
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to build Monitoring Dashboard UI.", "MonitoringDashboard.CreateUI");
+                OnPanelError("Failed to build dashboard UI.", "MonitoringDashboard.CreateUI");
+            }
         }
 
         private RectTransform CreatePanel(Transform parent, Vector2 anchorMin, Vector2 anchorMax, int siblingIndex)
@@ -158,21 +166,29 @@ namespace VisualDM.UI
 
         private void UpdateMetrics()
         {
-            var metrics = MonitoringManager.Instance.GetRecentMetrics();
-            float fps = GetLatestMetric(metrics, "fps");
-            float memory = GetLatestMetric(metrics, "memory_mb");
-            float ping = GetLatestMetric(metrics, "ping_ms");
-            float errors = GetLatestMetric(metrics, "error_count");
-            fpsText.text = $"{fps:F1}";
-            memoryText.text = $"{memory:F1} MB";
-            pingText.text = ping >= 0 ? $"{ping:F0} ms" : "-";
-            errorText.text = $"{errors:F0}";
-            fpsIndicator.color = fps < 30 ? red : (fps < 50 ? yellow : green);
-            errorIndicator.color = errors > 0 ? (errors > 5 ? red : yellow) : green;
+            try
+            {
+                var metrics = MonitoringManager.Instance.GetRecentMetrics();
+                float fps = GetLatestMetric(metrics, "fps");
+                float memory = GetLatestMetric(metrics, "memory_mb");
+                float ping = GetLatestMetric(metrics, "ping_ms");
+                float errors = GetLatestMetric(metrics, "error_count");
+                fpsText.text = $"{fps:F1}";
+                memoryText.text = $"{memory:F1} MB";
+                pingText.text = ping >= 0 ? $"{ping:F0} ms" : "-";
+                errorText.text = $"{errors:F0}";
+                fpsIndicator.color = fps < 30 ? red : (fps < 50 ? yellow : green);
+                errorIndicator.color = errors > 0 ? (errors > 5 ? red : yellow) : green;
 
-            // Update thresholds display
-            var thresholds = MonitoringManager.Instance.CurrentAlertThresholds;
-            thresholdsText.text = $"Thresholds: FPS < {thresholds.Fps}, Mem > {thresholds.MemoryMB}MB, Ping > {thresholds.PingMs}ms, Errors >= {thresholds.ErrorCount}";
+                // Update thresholds display
+                var thresholds = MonitoringManager.Instance.CurrentAlertThresholds;
+                thresholdsText.text = $"Thresholds: FPS < {thresholds.Fps}, Mem > {thresholds.MemoryMB}MB, Ping > {thresholds.PingMs}ms, Errors >= {thresholds.ErrorCount}";
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to update dashboard metrics.", "MonitoringDashboard.UpdateMetrics");
+                OnPanelError("Metrics update failed.", "MonitoringDashboard.UpdateMetrics");
+            }
         }
 
         private float GetLatestMetric(List<MonitoringManager.Metric> metrics, string name)
@@ -185,9 +201,17 @@ namespace VisualDM.UI
 
         private void OnAlertReceived(string alertType, string message)
         {
-            for (int i = maxLogEntries - 1; i > 0; i--)
-                alertLogEntries[i].text = alertLogEntries[i - 1].text;
-            alertLogEntries[0].text = $"[{DateTime.Now:HH:mm:ss}] {alertType}: {message}";
+            try
+            {
+                for (int i = maxLogEntries - 1; i > 0; i--)
+                    alertLogEntries[i].text = alertLogEntries[i - 1].text;
+                alertLogEntries[0].text = $"[{DateTime.Now:HH:mm:ss}] {alertType}: {message}";
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to handle alert.", "MonitoringDashboard.OnAlertReceived");
+                OnPanelError("Alert handling failed.", "MonitoringDashboard.OnAlertReceived");
+            }
         }
 
         private void HandleKeyboardNavigation()
@@ -209,6 +233,25 @@ namespace VisualDM.UI
                     if (i != selectedIndex)
                         selectables[i].color = Color.white;
             }
+        }
+
+        public override void Initialize(params object[] args)
+        {
+            try
+            {
+                // Existing initialization logic
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to initialize Monitoring Dashboard.", "MonitoringDashboard.Initialize");
+                OnPanelError("Failed to initialize dashboard. Please try again.", "MonitoringDashboard.Initialize");
+            }
+        }
+
+        private void OnPanelError(string message, string context)
+        {
+            // Implement user-friendly error handling logic here
+            Debug.LogError($"Error in {context}: {message}");
         }
     }
 } 

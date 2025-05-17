@@ -1,0 +1,4 @@
+/Users/Sharrone/Visual_DM/Visual_DM/Temp/obj/Assembly-CSharp/Assembly-CSharp.csproj.AssemblyReference.cache
+/Users/Sharrone/Visual_DM/Visual_DM/Temp/obj/Assembly-CSharp/Assembly-CSharp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/Sharrone/Visual_DM/Visual_DM/Temp/obj/Assembly-CSharp/Assembly-CSharp.csproj.CoreCompileInputs.cache
+/Users/Sharrone/Visual_DM/Visual_DM/Temp/obj/Assembly-CSharp/Assembly-CSharp.sourcelink.json

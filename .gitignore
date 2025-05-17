@@ -149,3 +149,8 @@ scripts/load-tests/results/load_metrics.json
 
 # Added by Claude Task Master
 # OS specific
+
+# Ensure static analysis config and docs are tracked
+!.editorconfig
+!Visual_DM/Assembly-CSharp.ruleset
+!docs/coding-standards.md

@@ -1,0 +1,64 @@
+Feature Name,File Path,Component Type,Description,API Endpoint,External Dependencies,Notes
+mapReducer,src/reducers/mapReducer.ts,reducer,Root reducer for map state management in the game,,../types/state,Composed of several slice reducers for UI, game, player, viewport
+Trade,pricing/marketManipulation.ts,interface,Trade data structure for market manipulation analysis,,,
+DetectionResult,pricing/marketManipulation.ts,interface,Result of market manipulation detection,,,
+movingAverage,pricing/marketManipulation.ts,function,Calculates moving average for trade values,,,
+standardDeviation,pricing/marketManipulation.ts,function,Calculates standard deviation for trade values,,,
+zScore,pricing/marketManipulation.ts,function,Calculates z-score for anomaly detection,,,
+detectVolumeSpike,pricing/marketManipulation.ts,function,Detects volume spikes in trade data,,,
+detectPriceAnomaly,pricing/marketManipulation.ts,function,Detects price anomalies in trade data,,,
+detectRepetitiveTrades,pricing/marketManipulation.ts,function,Detects repetitive trade patterns,,,
+runManipulationDetection,pricing/marketManipulation.ts,function,Runs all market manipulation detection algorithms,,,
+CircuitBreaker,pricing/marketManipulation.ts,class,Implements circuit breaker for market events,,,
+moderatorDashboard,pricing/marketManipulation.ts,function,Dashboard for moderators to review detection results,,,
+CacheWarmer,src/services/CacheWarmer.ts,class,Service for warming up cache in the application,,,
+RedisCacheService,src/services/RedisCacheService.ts,class,Service for interacting with Redis cache,,,
+marketToMapMarker,src/store/mapStore.ts,function,Converts market data to map marker format,,,
+syncMarketMarkers,src/store/mapStore.ts,function,Synchronizes market markers with the market system,,,
+fetchDiscoveredMarkets,src/store/mapStore.ts,async function,Fetches discovered markets and adds markers,,,
+useMapStore,src/store/mapStore.ts,function,Custom hook for map state management,,create<MapState>(),,
+World,src/interfaces/World.ts,interface,World entity interface extending BaseEntity,,,
+setTheme,src/store/themeSlice.ts,const,Theme action creator,,themeSlice.actions,Part of theme management slice
+toggleTheme,src/store/themeSlice.ts,const,Theme action creator,,themeSlice.actions,Part of theme management slice
+themeReducer,src/store/themeSlice.ts,const,Theme reducer,,themeSlice.reducer,Part of theme management slice
+rootReducer,src/store/rootReducer.ts,const,Root reducer combining all slices,,combineReducers,Entry point for Redux state
+mediaReducer,src/store/mediaSlice.ts,const,Media reducer for handling media state,,mediaSlice.reducer,Part of media management slice
+setItems,src/store/mediaSlice.ts,const,Media action creator,,mediaSlice.actions,Part of media management slice
+setLoading,src/store/mediaSlice.ts,const,Media action creator,,mediaSlice.actions,Part of media management slice
+setError,src/store/mediaSlice.ts,const,Media action creator,,mediaSlice.actions,Part of media management slice
+setSelectedItem,src/store/mediaSlice.ts,const,Media action creator,,mediaSlice.actions,Part of media management slice
+authReducer,src/store/authSlice.ts,const,Auth reducer for authentication state,,authSlice.reducer,Part of authentication management
+setUser,src/store/authSlice.ts,const,Auth action creator,,authSlice.actions,Part of authentication management
+logout,src/store/authSlice.ts,const,Auth action creator,,authSlice.actions,Part of authentication management
+useSettingsStore,src/store/settingsStore.ts,const,Custom hook for settings state management,,create<SettingsState>(),
+PersistenceConfig,src/store/utils/persistence.ts,interface,Configuration for persistence handlers,,,
+PersistenceHandler,src/store/utils/persistence.ts,interface,Handler interface for persistence logic,,,
+createPersistence,src/store/utils/persistence.ts,const,Factory for creating persistence handlers,,,
+useWizardStore,src/store/ui/wizardStore.ts,const,Custom hook for wizard UI state,,create<WizardState>(),
+ValidationError,src/store/utils/validation.ts,interface,Validation error structure,,,
+ValidationResult,src/store/utils/validation.ts,interface,Validation result structure,,,
+ValidationRule,src/store/utils/validation.ts,interface,Validation rule definition,,,
+FieldValidation,src/store/utils/validation.ts,interface,Field validation structure,,,
+createValidator,src/store/utils/validation.ts,const,Factory for creating validators,,,
+useCharacterStore,src/store/core/characterStore.ts,const,Custom hook for character state management,,create<CharacterStore>(),
+Relationship,src/interfaces/NPC.ts,interface,Relationship data structure for NPCs,,,
+RelationshipEvent,src/interfaces/NPC.ts,interface,Event structure for NPC relationships,,,
+ScheduleEntry,src/interfaces/NPC.ts,interface,Schedule entry for NPCs,,,
+NPCGoal,src/interfaces/NPC.ts,interface,Goal structure for NPCs,,,
+NPCMemory,src/interfaces/NPC.ts,interface,Memory structure for NPCs,,,
+NPC,src/interfaces/NPC.ts,interface,NPC entity interface extending BaseEntity,,,
+ResourceState,src/interfaces/Location.ts,interface,Resource state for locations,,,
+EncounterTableEntry,src/interfaces/Location.ts,interface,Encounter table entry for locations,,,
+AccessRequirement,src/interfaces/Location.ts,interface,Access requirement for locations,,,
+LocationEvent,src/interfaces/Location.ts,interface,Event structure for locations,,,
+Location,src/interfaces/Location.ts,interface,Location entity interface extending BaseEntity,,,
+usePoiStore,src/store/core/poiStore.ts,const,Custom hook for POI state management,,create<POIState>(),
+QuestCondition,src/interfaces/Quest.ts,interface,Condition for quest progression,,,
+QuestReward,src/interfaces/Quest.ts,interface,Reward structure for quests,,,
+QuestStage,src/interfaces/Quest.ts,interface,Stage structure for quests,,,
+QuestWorldImpact,src/interfaces/Quest.ts,interface,World impact structure for quests,,,
+Quest,src/interfaces/Quest.ts,interface,Quest entity interface extending BaseEntity,,,
+FactionRelationship,src/interfaces/Faction.ts,interface,Relationship structure for factions,,,
+FactionResource,src/interfaces/Faction.ts,interface,Resource structure for factions,,,
+Territory,src/interfaces/Faction.ts,interface,Territory structure for factions,,,
+Faction,src/interfaces/Faction.ts,interface,Faction entity interface extending BaseEntity,,, 

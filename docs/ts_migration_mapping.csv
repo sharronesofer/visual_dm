@@ -1,0 +1,10 @@
+Feature Name,Old File Path,Component Type,Description,New Python File,New C# File,WebSocket Endpoint,Implementation Notes,Status,Test File,Test Status
+mapReducer,src/reducers/mapReducer.ts,reducer,Root reducer for map state management in the game,python_converted/map_reducer.py,Visual_DM/Visual_DM/Assets/Scripts/Game/MapReducer.cs,,Split between Python backend and Unity C# for state sync,In Progress,Test Needed,Test Needed
+Trade,pricing/marketManipulation.ts,interface,Trade data structure for market manipulation analysis,python_converted/trade.py,,,Data model ported to Python,Done,Test Needed,Test Needed
+DetectionResult,pricing/marketManipulation.ts,interface,Result of market manipulation detection,python_converted/detection_result.py,,,Data model ported to Python,Done,Test Needed,Test Needed
+movingAverage,pricing/marketManipulation.ts,function,Calculates moving average for trade values,python_converted/market_utils.py,,,Utility function in Python,Done,Test Needed,Test Needed
+standardDeviation,pricing/marketManipulation.ts,function,Calculates standard deviation for trade values,python_converted/market_utils.py,,,Utility function in Python,Done,Test Needed,Test Needed
+zScore,pricing/marketManipulation.ts,function,Calculates z-score for anomaly detection,python_converted/market_utils.py,,,Utility function in Python,Done,Test Needed,Test Needed
+CacheWarmer,src/services/CacheWarmer.ts,class,Service for warming up cache in the application,backend/cache_warmer.py,,,Service implemented in Python,In Progress,Test Needed,Test Needed
+RedisCacheService,src/services/RedisCacheService.ts,class,Service for interacting with Redis cache,backend/redis_cache_service.py,,,Service implemented in Python,In Progress,Test Needed,Test Needed
+useMapStore,src/store/mapStore.ts,function,Custom hook for map state management,,Visual_DM/Visual_DM/Assets/Scripts/Game/MapStore.cs,,Implemented as C# MonoBehaviour for Unity,In Progress,Test Needed,Test Needed 

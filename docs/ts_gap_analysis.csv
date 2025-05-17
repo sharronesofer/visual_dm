@@ -1,0 +1,5 @@
+Feature Name,Old File Path,Component Type,Description,Criticality,Estimated Effort,Dependencies,Justification,Status
+mapReducer,src/reducers/mapReducer.ts,reducer,Root reducer for map state management in the game,Critical,High,,Required for state sync between backend and Unity,Test Stub/Checklist Created
+CacheWarmer,src/services/CacheWarmer.ts,class,Service for warming up cache in the application,Medium,Medium,,Needed for performance optimization,Test Stub/Checklist Created
+RedisCacheService,src/services/RedisCacheService.ts,class,Service for interacting with Redis cache,High,Medium,,Required for backend caching,Test Stub/Checklist Created
+useMapStore,src/store/mapStore.ts,function,Custom hook for map state management,High,High,,Unity implementation in progress,Test Stub/Checklist Created 

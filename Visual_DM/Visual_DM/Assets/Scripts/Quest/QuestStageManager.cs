@@ -25,10 +25,17 @@ namespace VisualDM.Quest
         /// </summary>
         public void ActivateStage(QuestStage stage)
         {
-            if (stage == null || activeStages.ContainsKey(stage.Id)) return;
-            stage.Status = QuestStageStatus.InProgress;
-            activeStages[stage.Id] = stage;
-            OnStageActivated?.Invoke(stage);
+            try
+            {
+                if (stage == null || activeStages.ContainsKey(stage.Id)) return;
+                stage.Status = QuestStageStatus.InProgress;
+                activeStages[stage.Id] = stage;
+                OnStageActivated?.Invoke(stage);
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to activate quest stage.", "QuestStageManager.ActivateStage");
+            }
         }
 
         /// <summary>
@@ -36,8 +43,15 @@ namespace VisualDM.Quest
         /// </summary>
         public void DeactivateStage(string stageId)
         {
-            if (activeStages.ContainsKey(stageId))
-                activeStages.Remove(stageId);
+            try
+            {
+                if (activeStages.ContainsKey(stageId))
+                    activeStages.Remove(stageId);
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to deactivate quest stage.", "QuestStageManager.DeactivateStage");
+            }
         }
 
         /// <summary>
@@ -45,22 +59,29 @@ namespace VisualDM.Quest
         /// </summary>
         public void CheckAndCompleteStage(QuestStage stage, Func<string, bool> conditionEvaluator)
         {
-            if (stage == null || stage.Status != QuestStageStatus.InProgress) return;
-            bool allMet = true;
-            foreach (var cond in stage.CompletionConditions)
+            try
             {
-                if (!conditionEvaluator(cond))
+                if (stage == null || stage.Status != QuestStageStatus.InProgress) return;
+                bool allMet = true;
+                foreach (var cond in stage.CompletionConditions)
                 {
-                    allMet = false;
-                    break;
+                    if (!conditionEvaluator(cond))
+                    {
+                        allMet = false;
+                        break;
+                    }
+                }
+                if (allMet)
+                {
+                    stage.Status = QuestStageStatus.Completed;
+                    OnStageCompleted?.Invoke(stage);
+                    DeactivateStage(stage.Id);
+                    HandleBranching(stage);
                 }
             }
-            if (allMet)
+            catch (Exception ex)
             {
-                stage.Status = QuestStageStatus.Completed;
-                OnStageCompleted?.Invoke(stage);
-                DeactivateStage(stage.Id);
-                HandleBranching(stage);
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to check and complete quest stage.", "QuestStageManager.CheckAndCompleteStage");
             }
         }
 
@@ -82,7 +103,15 @@ namespace VisualDM.Quest
         /// </summary>
         public List<QuestStage> GetActiveStages()
         {
-            return new List<QuestStage>(activeStages.Values);
+            try
+            {
+                return new List<QuestStage>(activeStages.Values);
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to get active quest stages.", "QuestStageManager.GetActiveStages");
+                return new List<QuestStage>();
+            }
         }
 
         /// <summary>
@@ -90,7 +119,14 @@ namespace VisualDM.Quest
         /// </summary>
         public void ClearActiveStages()
         {
-            activeStages.Clear();
+            try
+            {
+                activeStages.Clear();
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to clear active quest stages.", "QuestStageManager.ClearActiveStages");
+            }
         }
     }
 } 

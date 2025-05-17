@@ -27,6 +27,16 @@ namespace VisualDM.Quest
     /// <summary>
     /// Represents a quest in the game.
     /// </summary>
+    /// <remarks>
+    /// Quests manage their own state transitions and can trigger world impacts and rewards. Integrates with quest manager and event systems.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var quest = new Quest { Id = "quest_001", Title = "Find the Artifact" };
+    /// quest.Status = QuestStatus.InProgress;
+    /// quest.RevealHiddenObjectives(condition => PlayerHasItem(condition));
+    /// </code>
+    /// </example>
     [Serializable]
     public class Quest
     {
@@ -95,6 +105,15 @@ namespace VisualDM.Quest
         /// <summary>
         /// Checks and reveals hidden objectives if their discovery conditions are met.
         /// </summary>
+        /// <param name="conditionEvaluator">A function that evaluates discovery conditions for hidden objectives.</param>
+        /// <remarks>
+        /// This method should be called after quest state changes or player actions that may reveal new objectives.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// quest.RevealHiddenObjectives(condition => PlayerHasItem(condition));
+        /// </code>
+        /// </example>
         public void RevealHiddenObjectives(Func<string, bool> conditionEvaluator)
         {
             foreach (var hidden in hiddenObjectives)

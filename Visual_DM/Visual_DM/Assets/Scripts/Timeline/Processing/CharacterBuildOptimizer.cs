@@ -65,7 +65,7 @@ namespace Visual_DM.Timeline.Processing
             float synergy = 0f;
             // Example: If feat shares category with selected feats, boost score
             if (selectedFeats.Any(f => f.Category == feat.Category)) synergy += 1f;
-            // TODO: Add more advanced synergy logic as needed
+            // Extension point: Add more advanced synergy logic here as needed.
             return synergy;
         }
     }

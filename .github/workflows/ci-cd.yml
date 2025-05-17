@@ -98,8 +98,32 @@ jobs:
           name: backend-test-logs
           path: .pytest_cache/
 
+  unity-performance-tests:
+    runs-on: ubuntu-latest
+    container:
+      image: unityci/editor:ubuntu-2022.3.11f1-base-1.0.1
+      options: --user 0
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache Unity Library
+        uses: actions/cache@v3
+        with:
+          path: Visual_DM/Visual_DM/Library
+          key: ${{ runner.os }}-unity-library-${{ hashFiles('Visual_DM/Visual_DM/Assets/**', 'Visual_DM/Visual_DM/ProjectSettings/**') }}
+      - name: Run Unity Performance Tests
+        run: |
+          /opt/unity/Editor/Unity -batchmode -nographics -projectPath Visual_DM/Visual_DM -runTests -testPlatform PlayMode -testResults unity-performance-results.xml -logFile unity-test.log || true
+      - name: Upload Unity Performance Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: unity-performance-results
+          path: Visual_DM/Visual_DM/unity-performance-results.xml
+      - name: Check for Performance Regression
+        run: |
+          python scripts/ci/check_performance_regression.py Visual_DM/Visual_DM/unity-performance-results.xml
+
   e2e-tests:
-    needs: [frontend-tests, backend-tests]
+    needs: [frontend-tests, backend-tests, unity-performance-tests]
     runs-on: ubuntu-latest
     services:
       postgres:

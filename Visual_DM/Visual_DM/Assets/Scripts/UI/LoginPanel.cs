@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace VisualDM.UI
 {
@@ -14,39 +15,75 @@ namespace VisualDM.UI
 
         public override void Initialize(params object[] args)
         {
-            // Background
-            var sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(UIManager.Instance, new object[] { (int)width, (int)height, bgColor }) as Sprite;
-            sr.sortingOrder = 120;
+            try
+            {
+                // Background
+                var sr = gameObject.AddComponent<SpriteRenderer>();
+                sr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .Invoke(UIManager.Instance, new object[] { (int)width, (int)height, bgColor }) as Sprite;
+                sr.sortingOrder = 120;
 
-            // TODO: Add username field rendering
-            usernameField = new GameObject("UsernameField");
-            usernameField.transform.SetParent(transform);
-            usernameField.transform.localPosition = new Vector3(0, 60, 0);
-            // TODO: Add input logic
+                // Username label and field
+                var usernameLabelObj = new GameObject("UsernameLabel");
+                usernameLabelObj.transform.SetParent(transform);
+                usernameLabelObj.transform.localPosition = new Vector3(0, 90, 0);
+                var usernameLabel = usernameLabelObj.AddComponent<TMPro.TextMeshPro>();
+                usernameLabel.text = "Username";
+                usernameLabel.fontSize = UI.DesignTokens.Typography.Body;
+                usernameLabel.font = UI.DesignTokens.Typography.SansFont;
+                usernameLabel.color = UI.DesignTokens.Colors.Neutral900;
+                usernameLabel.alignment = TMPro.TextAlignmentOptions.Center;
 
-            // TODO: Add password field rendering
-            passwordField = new GameObject("PasswordField");
-            passwordField.transform.SetParent(transform);
-            passwordField.transform.localPosition = new Vector3(0, 10, 0);
-            // TODO: Add input logic
+                usernameField = new GameObject("UsernameField");
+                usernameField.transform.SetParent(transform);
+                usernameField.transform.localPosition = new Vector3(0, 60, 0);
+                var usernameInput = usernameField.AddComponent<UI.Components.InputField>();
+                usernameInput.Placeholder = "Enter username";
+                usernameInput.OnValueChanged = (val) => { };
 
-            // Login button
-            loginButton = new GameObject("LoginButton");
-            loginButton.transform.SetParent(transform);
-            loginButton.transform.localPosition = new Vector3(0, -50, 0);
-            var btnSr = loginButton.AddComponent<SpriteRenderer>();
-            btnSr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(UIManager.Instance, new object[] { 120, 40, new Color(0.25f, 0.4f, 0.25f, 1f) }) as Sprite;
-            btnSr.sortingOrder = 121;
-            // TODO: Add click logic and validation
+                // Password label and field
+                var passwordLabelObj = new GameObject("PasswordLabel");
+                passwordLabelObj.transform.SetParent(transform);
+                passwordLabelObj.transform.localPosition = new Vector3(0, 40, 0);
+                var passwordLabel = passwordLabelObj.AddComponent<TMPro.TextMeshPro>();
+                passwordLabel.text = "Password";
+                passwordLabel.fontSize = UI.DesignTokens.Typography.Body;
+                passwordLabel.font = UI.DesignTokens.Typography.SansFont;
+                passwordLabel.color = UI.DesignTokens.Colors.Neutral900;
+                passwordLabel.alignment = TMPro.TextAlignmentOptions.Center;
 
-            // Error message placeholder
-            errorMsg = new GameObject("ErrorMsg");
-            errorMsg.transform.SetParent(transform);
-            errorMsg.transform.localPosition = new Vector3(0, -100, 0);
-            // TODO: Add text rendering for error messages
+                passwordField = new GameObject("PasswordField");
+                passwordField.transform.SetParent(transform);
+                passwordField.transform.localPosition = new Vector3(0, 10, 0);
+                var passwordInput = passwordField.AddComponent<UI.Components.InputField>();
+                passwordInput.Placeholder = "Enter password";
+                passwordInput.IsPassword = true;
+                passwordInput.OnValueChanged = (val) => { };
+
+                // Login button
+                loginButton = new GameObject("LoginButton");
+                loginButton.transform.SetParent(transform);
+                loginButton.transform.localPosition = new Vector3(0, -50, 0);
+                var btn = loginButton.AddComponent<UI.Components.Button>();
+                btn.Label = "Login";
+                btn.OnClick = () => { /* TODO: Implement login logic */ };
+
+                // Error message
+                errorMsg = new GameObject("ErrorMsg");
+                errorMsg.transform.SetParent(transform);
+                errorMsg.transform.localPosition = new Vector3(0, -100, 0);
+                var errorLabel = errorMsg.AddComponent<TMPro.TextMeshPro>();
+                errorLabel.text = "";
+                errorLabel.fontSize = UI.DesignTokens.Typography.Caption;
+                errorLabel.font = UI.DesignTokens.Typography.SansFont;
+                errorLabel.color = UI.DesignTokens.Colors.Neutral400;
+                errorLabel.alignment = TMPro.TextAlignmentOptions.Center;
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to initialize Login Panel.", "LoginPanel.Initialize");
+                // Optionally show a user-friendly error UI here
+            }
         }
 
         public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)

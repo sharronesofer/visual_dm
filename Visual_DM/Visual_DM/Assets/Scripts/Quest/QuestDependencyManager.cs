@@ -50,7 +50,12 @@ namespace VisualDM.Quest
                         return false;
                 }
             }
-            // TODO: Add playerStatCheck and worldStateCheck as needed
+            // Check player stat requirements if provided
+            if (playerStatCheck != null && !playerStatCheck(questId))
+                return false;
+            // Check world state requirements if provided
+            if (worldStateCheck != null && !worldStateCheck(questId))
+                return false;
             // Check mutual exclusivity
             if (mutualExclusives.TryGetValue(questId, out var exclusives))
             {

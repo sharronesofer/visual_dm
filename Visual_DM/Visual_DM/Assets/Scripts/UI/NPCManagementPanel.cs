@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace VisualDM.UI
 {
@@ -13,33 +14,49 @@ namespace VisualDM.UI
 
         public override void Initialize(params object[] args)
         {
-            // Background
-            var sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(UIManager.Instance, new object[] { (int)width, (int)height, bgColor }) as Sprite;
-            sr.sortingOrder = 110;
+            try
+            {
+                // Background
+                var sr = gameObject.AddComponent<SpriteRenderer>();
+                sr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .Invoke(UIManager.Instance, new object[] { (int)width, (int)height, bgColor }) as Sprite;
+                sr.sortingOrder = 110;
 
-            // TODO: Add title text rendering
-            titleObj = new GameObject("Title");
-            titleObj.transform.SetParent(transform);
-            titleObj.transform.localPosition = new Vector3(0, height/2 - 30, 0);
-            // TODO: Add text rendering for title
+                // Title
+                titleObj = new GameObject("Title");
+                titleObj.transform.SetParent(transform);
+                titleObj.transform.localPosition = new Vector3(0, height/2 - 30, 0);
+                var titleLabel = titleObj.AddComponent<TMPro.TextMeshPro>();
+                titleLabel.text = "NPC Management";
+                titleLabel.fontSize = UI.DesignTokens.Typography.HeadingMedium;
+                titleLabel.font = UI.DesignTokens.Typography.SansFont;
+                titleLabel.color = UI.DesignTokens.Colors.Neutral900;
+                titleLabel.alignment = TMPro.TextAlignmentOptions.Center;
 
-            // Placeholder for NPC list
-            listPlaceholder = new GameObject("NPCListPlaceholder");
-            listPlaceholder.transform.SetParent(transform);
-            listPlaceholder.transform.localPosition = new Vector3(0, 0, 0);
-            // TODO: Add list rendering
+                // NPC list placeholder (to be replaced with actual list rendering)
+                listPlaceholder = new GameObject("NPCListPlaceholder");
+                listPlaceholder.transform.SetParent(transform);
+                listPlaceholder.transform.localPosition = new Vector3(0, 0, 0);
+                var listLabel = listPlaceholder.AddComponent<TMPro.TextMeshPro>();
+                listLabel.text = "[NPC List Here]";
+                listLabel.fontSize = UI.DesignTokens.Typography.Body;
+                listLabel.font = UI.DesignTokens.Typography.SansFont;
+                listLabel.color = UI.DesignTokens.Colors.Neutral400;
+                listLabel.alignment = TMPro.TextAlignmentOptions.Center;
 
-            // Add button
-            addButton = new GameObject("AddNPCButton");
-            addButton.transform.SetParent(transform);
-            addButton.transform.localPosition = new Vector3(width/2 - 60, -height/2 + 30, 0);
-            var btnSr = addButton.AddComponent<SpriteRenderer>();
-            btnSr.sprite = UIManager.Instance.GetType().GetMethod("GenerateRectSprite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(UIManager.Instance, new object[] { 100, 40, new Color(0.25f, 0.4f, 0.25f, 1f) }) as Sprite;
-            btnSr.sortingOrder = 111;
-            // TODO: Add click logic
+                // Add button
+                addButton = new GameObject("AddNPCButton");
+                addButton.transform.SetParent(transform);
+                addButton.transform.localPosition = new Vector3(width/2 - 60, -height/2 + 30, 0);
+                var btn = addButton.AddComponent<UI.Components.Button>();
+                btn.Label = "Add NPC";
+                btn.OnClick = () => { /* TODO: Implement add NPC logic */ };
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Failed to initialize NPC Management Panel.", "NPCManagementPanel.Initialize");
+                // Optionally show a user-friendly error UI here
+            }
         }
 
         public override void OnBreakpointChanged(UIManager.Breakpoint breakpoint)

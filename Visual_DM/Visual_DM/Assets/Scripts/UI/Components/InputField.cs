@@ -87,7 +87,7 @@ namespace VisualDM.UI.Components
                         Value += c;
                     }
                 }
-                OnValueChanged?.Invoke(Value);
+                HandleInput(Value);
                 _text.text = IsPassword ? new string('*', Value.Length) : Value;
                 _placeholder.gameObject.SetActive(string.IsNullOrEmpty(Value));
             }
@@ -159,6 +159,18 @@ namespace VisualDM.UI.Components
             _text.color = text;
             // TODO: Draw border using additional SpriteRenderer or outline
             // TODO: Add focus ring if IsFocused
+        }
+
+        private void HandleInput(string value)
+        {
+            try
+            {
+                OnValueChanged?.Invoke(value);
+            }
+            catch (Exception ex)
+            {
+                VisualDM.Utilities.ErrorHandlingService.Instance.LogException(ex, "Input field value change failed.", "InputField.HandleInput");
+            }
         }
     }
 } 

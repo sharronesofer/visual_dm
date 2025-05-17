@@ -68,7 +68,14 @@ namespace VisualDM.Simulation
         // Load custom test cases from JSON (stub)
         public static List<TestCase> LoadCustomTestCases(string json)
         {
-            // TODO: Implement JSON parsing
+            // Unity's JsonUtility requires a wrapper class for lists
+            try
+            {
+                var wrapper = JsonUtility.FromJson<TestCaseListWrapper>(json);
+                if (wrapper != null && wrapper.testCases != null)
+                    return wrapper.testCases;
+            }
+            catch { /* Fallback to empty list on error */ }
             return new List<TestCase>();
         }
 
@@ -112,4 +119,7 @@ namespace VisualDM.Simulation
         public static void SetVersion(int version) => currentVersion = version;
         public static int GetVersion() => currentVersion;
     }
+
+    [Serializable]
+    private class TestCaseListWrapper { public List<TestCase> testCases; }
 } 

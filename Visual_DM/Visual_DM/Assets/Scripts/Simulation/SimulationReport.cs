@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using System.Threading.Tasks;
 
 namespace VisualDM.Simulation
 {
@@ -18,6 +19,10 @@ namespace VisualDM.Simulation
         public List<VisualizationData> Visualizations;
         public string TemplateName;
         public string DashboardData;
+
+        // WebSocket integration hooks (stub)
+        public static event Action<string> OnReportGenerated;
+        public static event Action<string> OnReportExported;
 
         public SimulationReport(string name, int version, List<TestCase> testCases)
         {
@@ -100,6 +105,18 @@ namespace VisualDM.Simulation
         public static void ScheduleReportGeneration(Action<SimulationReport> callback)
         {
             // TODO: Implement scheduling
+        }
+
+        public void BroadcastReportGenerated()
+        {
+            OnReportGenerated?.Invoke($"Report generated: {ReportName} at {GeneratedAt}");
+            // TODO: Send message to WebSocket client if connected
+        }
+
+        public void BroadcastReportExported(string format)
+        {
+            OnReportExported?.Invoke($"Report exported: {ReportName} as {format}");
+            // TODO: Send message to WebSocket client if connected
         }
     }
 

@@ -1,0 +1,32 @@
+Summary: 22 files inventoried, 2 Still Needed, 1 Needs Action, 15 Deprecated, 4 Migrated
+
+File Path,File Type,Description,Migration Status,Notes,Relevance,Final Status
+cypress.config.ts,ts,Cypress E2E test configuration,Needs Review,Contains DB reset/seed logic,Config,Needs Action
+utils/pathfinding.ts,ts,Pathfinding utility,Needs Review,Used for grid/path logic,,Migrated
+utils/buildingValidation.ts,ts,Building validation utility,Needs Review,Used for building placement,,Migrated
+utils/generationParameters.ts,ts,Procedural generation parameters,Needs Review,Used for worldgen,,Migrated
+utils/buildingFactory.ts,ts,Building factory utility,Needs Review,Used for entity creation,,Migrated
+utils/grid.ts,ts,Grid management utility,Needs Review,Used for map/grid logic,,Migrated
+tests/typescript/math.test.ts,ts,Math utility tests,Legacy/Deprecated,Test file,
+tests/typescript/services/base.service.test.ts,ts,Base service tests,Legacy/Deprecated,Test file,
+tests/typescript/services/user.service.test.ts,ts,User service tests,Legacy/Deprecated,Test file,
+tsconfig.jest.json,json,Jest TypeScript config,Needs Review,Extends tsconfig.json,Config,Deprecated
+tsconfig.json,json,TypeScript config,Needs Review,Project-wide TS config,Config,Deprecated
+task_similarity_results.json,json,Task similarity analysis,Needs Review,Used for migration audit,Data,Still Needed
+tasks/tasks.json,json,TaskMaster tasks,Needs Review,Tracks project tasks,Data,Still Needed
+map-system/src/reportWebVitals.ts,ts,Web Vitals reporting utility,Needs Review,React performance monitoring,,Deprecated
+map-system/src/types/state.ts,ts,Global state type definitions,Needs Review,Used for Redux/React state,,Deprecated
+map-system/tsconfig.json,json,TypeScript config for map-system,Needs Review,Module-specific TS config,Config,Deprecated
+app/frontend/tsconfig.json,json,TypeScript config for frontend,Needs Review,Frontend-specific TS config,Config,Deprecated
+utils/__tests__/buildingValidation.test.ts,ts,Unit test for building validation,Legacy/Deprecated,Test file,
+utils/__tests__/pathfinding.test.ts,ts,Unit test for pathfinding,Legacy/Deprecated,Test file,
+utils/__tests__/generationParameters.test.ts,ts,Unit test for generation parameters,Legacy/Deprecated,Test file,
+utils/__tests__/grid.test.ts,ts,Unit test for grid,Legacy/Deprecated,Test file,
+map-system/src/setupTests.ts,ts,React testing setup,Needs Review,Configures test environment for React,,Deprecated
+map-system/src/index.tsx,tsx,React app entry point,Needs Review,Main entry for React app,,Deprecated
+map-system/src/App.tsx,tsx,Main React App component,Needs Review,Top-level React component,,Deprecated
+scripts/analyze_ts_dependencies.py,py,Python script for TS dependency analysis,Ignore,Not in audit scope,
+scripts/convert_all_ts_to_py.py,py,Python script for TS to Python conversion,Ignore,Not in audit scope,
+scripts/component-audit/node_modules/@babel/types/lib/validators/react/isReactComponent.js,js,Babel React component validator,Needs Review,Used for React component analysis,,Deprecated
+package.json,json,Project dependencies and scripts,Needs Review,Defines project dependencies and scripts,Config,Still Needed
+map-system/package.json,json,Map-system module dependencies,Needs Review,Module-specific dependencies,Config,Deprecated 
