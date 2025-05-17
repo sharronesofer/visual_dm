@@ -139,7 +139,7 @@ class BuildingGenerationQueue:
     
     async def process_async(self) -> Dict[str, Any]:
         """Process tasks asynchronously and return results."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         results = {}
         
         while not (self.task_queue.empty() and self.result_queue.empty()):

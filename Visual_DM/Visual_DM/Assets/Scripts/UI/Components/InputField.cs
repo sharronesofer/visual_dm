@@ -20,6 +20,14 @@ namespace VisualDM.UI.Components
         public bool IsPassword = false;
         public Action<string> OnValueChanged;
         public Action OnSubmit;
+        /// <summary>
+        /// Optional validator function for input. If set, input is validated on change.
+        /// </summary>
+        public Func<string, bool> Validator;
+        /// <summary>
+        /// Returns true if the current Value passes validation.
+        /// </summary>
+        public bool IsValid { get; private set; } = true;
 
         private SpriteRenderer _background;
         private TextMeshPro _text;
@@ -87,7 +95,20 @@ namespace VisualDM.UI.Components
                         Value += c;
                     }
                 }
-                HandleInput(Value);
+                // Validate input if validator is set
+                if (Validator != null)
+                {
+                    IsValid = Validator(Value);
+                    SetState(IsValid ? (IsFocused ? State.Focused : State.Default) : State.Error);
+                }
+                else
+                {
+                    IsValid = true;
+                }
+                if (IsValid)
+                {
+                    HandleInput(Value);
+                }
                 _text.text = IsPassword ? new string('*', Value.Length) : Value;
                 _placeholder.gameObject.SetActive(string.IsNullOrEmpty(Value));
             }

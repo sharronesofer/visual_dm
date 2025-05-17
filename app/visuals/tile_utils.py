@@ -95,7 +95,7 @@ def get_visible_tiles(player_id):
                                 partial.pop("POI", None)
                                 partial.pop("npcs_present", None)
                                 adjacent[tid] = partial
-            except:
+            except Exception:  # autofix: specify exception
                 continue
 
     return {

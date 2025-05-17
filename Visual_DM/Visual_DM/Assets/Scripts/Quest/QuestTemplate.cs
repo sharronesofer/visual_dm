@@ -15,6 +15,9 @@ namespace VisualDM.Quest
         [SerializeField] private string baseDescription;
         [SerializeField] private int baseDifficulty;
         [SerializeField] private Dictionary<string, object> parameters;
+        [SerializeField] private string arcType; // "Global", "Regional", "Faction", "Character"
+        [SerializeField] private string questType; // "Collection", "Elimination", "Exploration", etc.
+        [SerializeField] private List<string> objectiveTemplates; // Parameterized objectives
 
         /// <summary>
         /// Unique identifier for the template.
@@ -36,11 +39,15 @@ namespace VisualDM.Quest
         /// Parameters for customizing quest generation.
         /// </summary>
         public Dictionary<string, object> Parameters { get => parameters; set => parameters = value; }
+        public string ArcType { get => arcType; set => arcType = value; }
+        public string QuestType { get => questType; set => questType = value; }
+        public List<string> ObjectiveTemplates { get => objectiveTemplates; set => objectiveTemplates = value; }
 
         public QuestTemplate()
         {
             parameters = new Dictionary<string, object>();
             baseDifficulty = 1;
+            objectiveTemplates = new List<string>();
         }
 
         /// <summary>
@@ -72,7 +79,25 @@ namespace VisualDM.Quest
                 }
             }
 
-            // Example: apply parameters to quest (expand as needed)
+            // Apply arc and quest type
+            if (mergedParams.TryGetValue("arcType", out var arcTypeVal) && arcTypeVal is string)
+                quest.Description += $"\n[Arc Type: {arcTypeVal}]";
+            if (mergedParams.TryGetValue("questType", out var questTypeVal) && questTypeVal is string)
+                quest.Description += $"\n[Quest Type: {questTypeVal}]";
+
+            // Handle parameterized objectives by quest type
+            if (mergedParams.TryGetValue("objectives", out var objObj) && objObj is List<string> objectives)
+            {
+                var stage = new QuestStage { Id = Guid.NewGuid().ToString(), Objectives = new List<string>(objectives) };
+                quest.Stages.Add(stage);
+            }
+            else if (objectiveTemplates != null && objectiveTemplates.Count > 0)
+            {
+                var stage = new QuestStage { Id = Guid.NewGuid().ToString(), Objectives = new List<string>(objectiveTemplates) };
+                quest.Stages.Add(stage);
+            }
+
+            // Existing parameter handling (title, description, difficulty, stages, requirements, rewards)
             if (mergedParams.TryGetValue("title", out var customTitle) && customTitle is string)
                 quest.Title = (string)customTitle;
             if (mergedParams.TryGetValue("description", out var customDesc) && customDesc is string)
@@ -80,7 +105,6 @@ namespace VisualDM.Quest
             if (mergedParams.TryGetValue("difficulty", out var customDiff) && customDiff is int)
                 quest.Difficulty = (int)customDiff;
 
-            // Generate stages from parameters if provided
             if (mergedParams.TryGetValue("stages", out var stagesObj) && stagesObj is List<string> stageNames)
             {
                 foreach (var stageName in stageNames)
@@ -88,7 +112,6 @@ namespace VisualDM.Quest
                     quest.Stages.Add(new QuestStage { Id = Guid.NewGuid().ToString(), Objectives = new List<string> { stageName } });
                 }
             }
-            // Generate requirements from parameters if provided
             if (mergedParams.TryGetValue("requirements", out var reqsObj) && reqsObj is List<string> reqs)
             {
                 foreach (var req in reqs)
@@ -96,7 +119,6 @@ namespace VisualDM.Quest
                     quest.Requirements.Add(new QuestRequirement { Requirement = req });
                 }
             }
-            // Generate rewards from parameters if provided
             if (mergedParams.TryGetValue("rewards", out var rewardsObj) && rewardsObj is List<string> rewards)
             {
                 foreach (var reward in rewards)
@@ -108,4 +130,4 @@ namespace VisualDM.Quest
             return quest;
         }
     }
-} 
+}

@@ -39,7 +39,18 @@ namespace VisualDM.UI
                 usernameField.transform.localPosition = new Vector3(0, 60, 0);
                 var usernameInput = usernameField.AddComponent<UI.Components.InputField>();
                 usernameInput.Placeholder = "Enter username";
-                usernameInput.OnValueChanged = (val) => { };
+                usernameInput.Validator = (val) =>
+                {
+                    var sanitized = VisualDM.Utilities.InputSanitizer.SanitizeUsername(val);
+                    return sanitized != null && VisualDM.Utilities.InputSanitizer.IsUsernameAllowed(sanitized);
+                };
+                usernameInput.OnValueChanged = (val) =>
+                {
+                    if (!usernameInput.IsValid)
+                        errorLabel.text = "Invalid or reserved username.";
+                    else
+                        errorLabel.text = "";
+                };
 
                 // Password label and field
                 var passwordLabelObj = new GameObject("PasswordLabel");
@@ -66,7 +77,14 @@ namespace VisualDM.UI
                 loginButton.transform.localPosition = new Vector3(0, -50, 0);
                 var btn = loginButton.AddComponent<UI.Components.Button>();
                 btn.Label = "Login";
-                btn.OnClick = () => { /* TODO: Implement login logic */ };
+                btn.OnClick = () => {
+                    if (!usernameInput.IsValid)
+                    {
+                        errorLabel.text = "Please enter a valid username.";
+                        return;
+                    }
+                    // TODO: Implement login logic
+                };
 
                 // Error message
                 errorMsg = new GameObject("ErrorMsg");

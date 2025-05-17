@@ -2,7 +2,7 @@
 Schemas for version control related models.
 """
 
-from marshmallow import Schema, fields, post_dump
+from marshmallow import Schema, fields, post_dump, validate
 from datetime import datetime
 
 class LocationVersionSchema(Schema):
@@ -37,4 +37,19 @@ class LocationChangeLogSchema(Schema):
         """Format datetime fields to ISO format."""
         if 'created_at' in data and data['created_at']:
             data['created_at'] = data['created_at'].isoformat()
-        return data 
+        return data
+
+class VersionControlSchema(Schema):
+    """
+    Marshmallow schema for serializing VersionControl model.
+    Matches the standardized type system and model fields.
+    """
+    id = fields.Int(dump_only=True)
+    version = fields.Str(required=True)
+    description = fields.Str(allow_none=True)
+    version_type = fields.Str(validate=validate.OneOf([
+        'migration', 'feature', 'bugfix', 'release'
+    ]))
+    metadata = fields.Dict()
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True) 

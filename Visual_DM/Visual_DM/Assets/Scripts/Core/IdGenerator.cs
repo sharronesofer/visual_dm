@@ -87,5 +87,31 @@ namespace VisualDM.Core
             
             return stringBuilder.ToString();
         }
+        
+        /// <summary>
+        /// Generates a unique action ID for replay protection, combining timestamp, secure random nonce, and session/user ID.
+        /// Use this for all critical actions (e.g., purchases, combat, permission changes) to prevent replay attacks.
+        /// Usage:
+        ///     var actionId = IdGenerator.GenerateActionId(sessionId);
+        ///     // Include actionId in all critical API requests and validate on the backend
+        /// </summary>
+        /// <param name="sessionId">The user or session identifier to include in the action ID</param>
+        /// <returns>A unique action ID string</returns>
+        public static string GenerateActionId(string sessionId)
+        {
+            // High-precision UTC timestamp (ticks)
+            var timestamp = DateTime.UtcNow.Ticks;
+
+            // Cryptographically secure random nonce (16 bytes, hex encoded)
+            byte[] nonceBytes = new byte[16];
+            using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(nonceBytes);
+            }
+            string nonceHex = BitConverter.ToString(nonceBytes).Replace("-", "").ToLowerInvariant();
+
+            // Compose action ID
+            return $"{timestamp}_{nonceHex}_{sessionId}";
+        }
     }
 } 

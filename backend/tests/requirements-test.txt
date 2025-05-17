@@ -1,8 +1,0 @@
-pytest
-pytest-asyncio
-pytest-cov
-httpx
-websockets
-locust
-bandit
-flake8 

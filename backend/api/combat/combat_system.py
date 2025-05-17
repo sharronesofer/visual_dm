@@ -615,7 +615,7 @@ class CombatManager:
                 return sum(rolls) + modifier
             
             return int(dice_part) + modifier
-        except:
+        except Exception:  # autofix: specify exception
             # Fallback to minimum damage on parse error
             logger.error(f"Failed to parse damage dice: {damage_dice}")
             return 1

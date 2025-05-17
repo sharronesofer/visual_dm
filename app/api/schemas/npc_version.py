@@ -56,4 +56,19 @@ class NPCVersionHistorySchema(Schema):
     change_description = fields.Str(required=True)
     changed_fields = fields.List(fields.Str())
     created_at = fields.DateTime(required=True)
-    code_version_id = fields.Int(allow_none=True) 
+    code_version_id = fields.Int(allow_none=True)
+
+class ConsequenceSchema(Schema):
+    """
+    Marshmallow schema for serializing Consequence model.
+    Matches the standardized type system and model fields.
+    """
+    id = fields.Int(dump_only=True)
+    description = fields.Str(allow_none=True)
+    consequence_type = fields.Str(validate=validate.OneOf([
+        'positive', 'negative', 'neutral'
+    ]))
+    impact = fields.Dict()
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True)
+    related_event_id = fields.Int(allow_none=True) 

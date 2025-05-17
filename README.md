@@ -23,6 +23,7 @@ A modern dungeon master assistant tool with advanced AI features for generating 
 - [Language & Project Structure Policy](#language--project-structure-policy)
 - [WebSocket-Only Communication Policy & Migration Guide](#websocket-only-communication-policy--migration-guide)
 - [Enhanced TypeScript to Python Type Conversion](#enhanced-typescript-to-python-type-conversion)
+- [Chaos Engine Integration](#chaos-engine-integration)
 
 ## Features
 
@@ -149,3 +150,67 @@ This section defines the authoritative policy for technology stack, directory or
 ### Technology Stack
 
 - **Backend:** Python 3.11+ (active code in `
+
+# Chaos Engine Integration
+
+## Overview
+
+The Motif System now integrates with a dedicated Chaos Engine via the `IChaosEngine` interface, enabling bidirectional, event-driven communication. This decouples chaos logic from motif management and allows for robust, testable, and extensible system interactions.
+
+## Key Components
+
+- **IChaosEngine**: Interface defining the contract for chaos state management and motif event handling.
+- **ChaosState**: Data contract representing the current chaos state (level, description, etc.).
+- **MotifEventData**: Data contract for motif-related events sent to the Chaos Engine.
+- **ChaosEngine**: Default implementation, registered at startup via `ServiceLocator`.
+- **MotifPool/MotifFactory**: Use `IChaosEngine` to determine chaos state and publish motif events.
+
+## Sequence Diagram
+
+```
+MotifPool.Rotate() --> ServiceLocator.Resolve<IChaosEngine>()
+MotifPool ----> IChaosEngine.GetChaosState() : Query current chaos
+MotifFactory ----> IChaosEngine.GetChaosState() : Query for chaosSource
+MotifFactory ----> IChaosEngine.OnMotifEvent(MotifEventData) : Publish motif rolled event
+MotifPool ----> IChaosEngine.OnMotifEvent(MotifEventData) : Publish motif rotated event
+IChaosEngine ----> Updates internal ChaosState
+```
+
+## Usage Example
+
+```csharp
+// Register ChaosEngine at startup
+ChaosEngineRegistration.Register();
+
+// In MotifPool
+var chaosEngine = ServiceLocator.Instance.Resolve<IChaosEngine>();
+var chaos = chaosEngine.GetChaosState().ChaosLevel > 0.5f;
+
+// In MotifFactory
+var motif = new Motif(theme, lifespan, "1.0.0", chaosSource);
+chaosEngine.OnMotifEvent(new MotifEventData {
+    MotifTheme = motif.Theme,
+    IsChaosSource = motif.ChaosSource,
+    EventType = "MotifRolled",
+    Context = "RollNewMotif"
+});
+```
+
+## Extending the Integration
+
+- Implement custom `IChaosEngine` logic for advanced chaos state management.
+- Subscribe to motif and chaos events via the event bus for further system integration.
+- Add new fields to `ChaosState` and `MotifEventData` as needed.
+
+## Error Handling
+
+- All integration points are wrapped in try/catch and log errors via `IntegrationLogger`.
+- Fallback logic ensures system stability if the Chaos Engine is unavailable.
+
+## Testing
+
+- Unit and integration tests should mock `IChaosEngine` to verify motif/chaos interactions.
+
+---
+
+For more details, see the code in `Systems/Integration/` and `MotifSystem/` directories.

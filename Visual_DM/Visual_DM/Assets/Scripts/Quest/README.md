@@ -246,4 +246,106 @@ LocationStateSystem.Instance.OnLocationStateChanged.AddListener((locationId, sta
 - Use properties for encapsulation.
 - Favor composition over inheritance.
 - Document all public APIs.
-- Keep all scripts in this directory for quest-related logic. 
+- Keep all scripts in this directory for quest-related logic.
+
+# Arc-to-Quest Generation System Architecture
+
+## Overview
+This system transforms narrative arcs (Global, Regional, Faction, Character) into playable quests and missions. It is designed for extensibility, narrative coherence, and integration with existing quest and arc systems.
+
+## Core Components
+
+### 1. ArcQuestGenerationContext
+- Encapsulates all data needed for quest generation from an arc (arc reference, stage, type, player/world state, motif, etc.).
+
+### 2. IArcToQuestMapper
+- Interface for mapping arcs to quests.
+- `List<Quest> GenerateQuests(ArcQuestGenerationContext context);`
+- Implementations can specialize for different arc types or narrative motifs.
+
+### 3. ArcQuestMappingRule
+- Abstract base class for rules that determine how arc objectives/stages are translated into quest objectives/types.
+- Supports extensibility for custom mapping logic.
+
+## Extension Points
+- Add new `IArcToQuestMapper` implementations for custom arc types or motifs.
+- Add new `ArcQuestMappingRule` subclasses for new quest types or mapping strategies.
+- Integrate with dependency management, motif system, and quest lifecycle management via context and hooks.
+
+## Integration
+- Designed to work with QuestTemplate, QuestManager, and arc classes in VisualDM.Narrative.
+- Supports bidirectional updates between arc progression and quest completion.
+
+## Example Usage
+```csharp
+var context = new ArcQuestGenerationContext {
+    Arc = myGlobalArc,
+    ArcStage = myGlobalArc.Stages[0],
+    ArcType = "Global",
+    PlayerState = playerStateDict,
+    WorldState = worldStateDict,
+    Motif = "Rebellion"
+};
+IArcToQuestMapper mapper = new GlobalArcToQuestMapper();
+List<Quest> quests = mapper.GenerateQuests(context);
+```
+
+## Next Steps
+- Implement concrete mappers and mapping rules for each arc type.
+- Integrate with quest lifecycle and persistence systems.
+- Provide designer configuration interfaces for tuning quest generation.
+
+## Developer Tools and Testing Utilities
+
+### ArcToQuestDebugTools
+- Static utility for visualizing and debugging arc-to-quest relationships.
+- Methods:
+  - `PrintArcToQuestMapping(GlobalArc arc, List<Quest> quests)`: Logs mapping from arcs to generated quests and their stages.
+  - `PrintQuestChains(QuestDependencyManager depManager, List<Quest> quests)`: Logs quest chains and dependencies (requires public accessors in depManager).
+  - `ValidateQuestGeneration(GlobalArc arc, List<Quest> quests)`: Validates that generated quests match arc stages (basic check).
+
+## Designer Configuration and Usage Examples
+
+### Tuning Quest Generation Parameters
+- Designers can create or edit `QuestTemplate` assets to define base titles, descriptions, objectives, and parameters for each quest type and arc type.
+- Use the `ArcType` and `QuestType` fields to specialize templates for Global, Regional, Faction, or Character arcs, and for quest types like Collection, Elimination, Exploration, Dialogue, etc.
+- Parameterize objectives using the `ObjectiveTemplates` list and provide dynamic content via the `Parameters` dictionary.
+
+### Structuring Arcs for Optimal Quest Generation
+- Ensure each arc (GlobalArc, RegionalArc, etc.) has well-defined stages with unique names and descriptions.
+- Use motif themes and metadata to influence quest generation for narrative coherence.
+- Integrate with the MotifSystem by specifying motif themes in arc metadata or quest generation context.
+
+### Example: Creating a Motif-Aware Quest Template
+```csharp
+var template = new QuestTemplate
+{
+    ArcType = "Global",
+    QuestType = "Story",
+    BaseTitle = "Defend the City",
+    BaseDescription = "Protect the city from invading forces.",
+    ObjectiveTemplates = new List<string> { "Defeat all invaders", "Secure the city gates" },
+    Parameters = new Dictionary<string, object> { { "motif", "Defense" } }
+};
+```
+
+### Example: Generating Quests from an Arc with Motif Integration
+```csharp
+var motifPool = ... // Get MotifPool instance
+var motif = MotifIntegrationUtility.GetMotifForTheme(motifPool, "Defense");
+var context = new ArcQuestGenerationContext {
+    Arc = myGlobalArc,
+    ArcStage = myGlobalArc.Stages[0],
+    ArcType = "Global",
+    Motif = "Defense",
+    MotifData = motif
+};
+IArcToQuestMapper mapper = new GlobalArcToQuestMapper();
+List<Quest> quests = mapper.GenerateQuests(context);
+ArcToQuestDebugTools.PrintArcToQuestMapping(myGlobalArc, quests);
+```
+
+### Best Practices
+- Document all new templates and mapping rules for future maintainers.
+- Use the debug tools to validate quest generation before playtesting.
+- Regularly update documentation as new arc types, quest types, or motif integrations are added. 

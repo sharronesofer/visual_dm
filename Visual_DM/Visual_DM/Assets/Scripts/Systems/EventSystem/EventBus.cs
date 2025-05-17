@@ -188,5 +188,27 @@ namespace VisualDM.Systems.EventSystem
             if (_debugMode)
                 Debug.Log("[EventBus] Cleared all subscriptions");
         }
+
+        /// <summary>
+        /// Example usage for subscribing to nemesis/rival state changes:
+        /// </summary>
+        /// <example>
+        /// EventBus.Instance.Subscribe<RelationshipStateChangedEvent>(evt => {
+        ///     Debug.Log($"NPC {evt.NPCId} changed relationship with {evt.TargetId} from {evt.OldState} to {evt.NewState} (intensity: {evt.Intensity})");
+        /// });
+        /// </example>
+        /// <summary>
+        /// Example usage for publishing a relationship-impacting event:
+        /// </summary>
+        /// <example>
+        /// EventBus.Instance.Publish(new RelationshipEventTrigger(
+        ///     npcId: "npc_1",
+        ///     targetId: "npc_2",
+        ///     eventType: "combat_win",
+        ///     eventScore: 20f,
+        ///     context: "NPC 1 defeated NPC 2 in battle",
+        ///     timestamp: DateTime.UtcNow
+        /// ));
+        /// </example>
     }
-} 
+}

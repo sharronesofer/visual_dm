@@ -78,7 +78,7 @@ async def test_process_queue(generator):
 @pytest.mark.asyncio
 async def test_concurrent_processing(generator):
     """Test that buildings are processed concurrently."""
-    start_time = asyncio.get_event_loop().time()
+    start_time = asyncio.new_event_loop().time()
     
     # Queue buildings with different processing times
     for i in range(4):
@@ -91,7 +91,7 @@ async def test_concurrent_processing(generator):
         )
     
     results = await generator.process_queue()
-    end_time = asyncio.get_event_loop().time()
+    end_time = asyncio.new_event_loop().time()
     
     # Verify all buildings were processed
     assert len(results) == 4

@@ -25,7 +25,7 @@ namespace VisualDM.Quest
     }
 
     /// <summary>
-    /// Represents a quest in the game.
+    /// Represents a quest entity with state, versioning, and timestamps.
     /// </summary>
     /// <remarks>
     /// Quests manage their own state transitions and can trigger world impacts and rewards. Integrates with quest manager and event systems.
@@ -50,56 +50,50 @@ namespace VisualDM.Quest
         [SerializeField] private QuestStatus status;
         [SerializeField] private int difficulty;
         [SerializeField] private List<HiddenObjective> hiddenObjectives;
+        [SerializeField] public string QuestId { get => id; set => id = value; }
+        [SerializeField] public string Title { get => title; set => title = value; }
+        [SerializeField] public string Description { get => description; set => description = value; }
+        [SerializeField] public List<QuestStage> Stages { get => stages; set => stages = value; }
+        [SerializeField] public List<QuestRequirement> Requirements { get => requirements; set => requirements = value; }
+        [SerializeField] public List<QuestReward> Rewards { get => rewards; set => rewards = value; }
+        [SerializeField] public WorldImpact WorldImpactData { get => worldImpact; set => worldImpact = value; }
+        [SerializeField] public QuestStatus Status { get => status; set => status = value; }
+        [SerializeField] public int Difficulty { get => difficulty; set => difficulty = value; }
+        [SerializeField] public List<HiddenObjective> HiddenObjectives { get => hiddenObjectives; set => hiddenObjectives = value; }
+        [SerializeField] public QuestStateMachine StateMachine { get; private set; }
+        [SerializeField] public int Version { get; set; }
+        [SerializeField] public DateTime CreatedAt { get; set; }
+        [SerializeField] public DateTime UpdatedAt { get; set; }
+        [SerializeField] public DateTime? ExpiresAt { get; set; }
+        [SerializeField] public QuestVersionHistory VersionHistory { get; private set; }
 
-        /// <summary>
-        /// Unique identifier for the quest.
-        /// </summary>
-        public string Id { get => id; set => id = value; }
-        /// <summary>
-        /// Title of the quest.
-        /// </summary>
-        public string Title { get => title; set => title = value; }
-        /// <summary>
-        /// Description of the quest.
-        /// </summary>
-        public string Description { get => description; set => description = value; }
-        /// <summary>
-        /// List of quest stages.
-        /// </summary>
-        public List<QuestStage> Stages { get => stages; set => stages = value; }
-        /// <summary>
-        /// List of quest requirements.
-        /// </summary>
-        public List<QuestRequirement> Requirements { get => requirements; set => requirements = value; }
-        /// <summary>
-        /// List of quest rewards.
-        /// </summary>
-        public List<QuestReward> Rewards { get => rewards; set => rewards = value; }
-        /// <summary>
-        /// World impact of completing the quest.
-        /// </summary>
-        public WorldImpact WorldImpactData { get => worldImpact; set => worldImpact = value; }
-        /// <summary>
-        /// Current status of the quest.
-        /// </summary>
-        public QuestStatus Status { get => status; set => status = value; }
-        /// <summary>
-        /// Difficulty rating of the quest.
-        /// </summary>
-        public int Difficulty { get => difficulty; set => difficulty = value; }
-        /// <summary>
-        /// List of hidden objectives for the quest (global, not per stage).
-        /// </summary>
-        public List<HiddenObjective> HiddenObjectives { get => hiddenObjectives; set => hiddenObjectives = value; }
-
-        public Quest()
+        public Quest(string questId, string title, string description, QuestState initialState = QuestState.Locked)
         {
+            QuestId = questId;
+            Title = title;
+            Description = description;
+            StateMachine = new QuestStateMachine(initialState);
+            Version = 1;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+            ExpiresAt = null;
+            VersionHistory = new QuestVersionHistory();
+            VersionHistory.AddVersion(this);
             stages = new List<QuestStage>();
             requirements = new List<QuestRequirement>();
             rewards = new List<QuestReward>();
             hiddenObjectives = new List<HiddenObjective>();
             status = QuestStatus.NotStarted;
             difficulty = 1;
+        }
+
+        public void Update(string newTitle, string newDescription)
+        {
+            Title = newTitle;
+            Description = newDescription;
+            Version++;
+            UpdatedAt = DateTime.UtcNow;
+            VersionHistory.AddVersion(this);
         }
 
         /// <summary>
@@ -120,6 +114,21 @@ namespace VisualDM.Quest
             {
                 hidden.TryReveal(conditionEvaluator);
             }
+        }
+
+        public bool RollbackToVersion(int version)
+        {
+            return VersionHistory.Rollback(this, version);
+        }
+
+        public bool IsExpired()
+        {
+            return ExpiresAt.HasValue && DateTime.UtcNow > ExpiresAt.Value;
+        }
+
+        public void ScheduleExpiration(DateTime expiresAt)
+        {
+            ExpiresAt = expiresAt.ToUniversalTime();
         }
     }
 } 

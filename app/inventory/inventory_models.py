@@ -2,10 +2,20 @@
 Inventory model definitions.
 """
 
+from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, Float, JSON, Boolean, ForeignKey
+from sqlalchemy import String, Integer, Float, JSON, Boolean, ForeignKey, Text, Enum
 from datetime import datetime
 from app.core.database import db
+from app.core.models.base import BaseModel
+import enum
+
+class ItemCategory(enum.Enum):
+    WEAPON = "weapon"
+    ARMOR = "armor"
+    CONSUMABLE = "consumable"
+    QUEST = "quest"
+    MISC = "misc"
 
 class Item(db.Model):
     """Item model for game items."""

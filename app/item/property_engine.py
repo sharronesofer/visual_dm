@@ -1,3 +1,4 @@
+import ast  # autofix: added for safer eval
 import json
 from typing import Any, Dict
 from app.item.models import Item, ItemProperty, PropertyDefinition
@@ -37,6 +38,6 @@ class PropertyCalculator:
         # WARNING: Use a safe eval method in production. Here, use eval with limited globals for demo.
         safe_globals = {**context, **{k: self.get_property(k) for k in self.properties}}
         try:
-            return eval(formula, {"__builtins__": {}}, safe_globals)
+            return ast.literal_eval(  # autofix: safer evalformula, {"__builtins__": {}}, safe_globals)
         except Exception:
             return None 

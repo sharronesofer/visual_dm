@@ -43,11 +43,11 @@ namespace Visual_DM.UI
                 // Initialize services
                 _dbService = new FeatDatabaseService(Application.persistentDataPath + "/feats.json");
                 _calculator = new FeatPowerCalculator();
-                _calculator.RegisterModule(new EffectMagnitudeScoringModule());
-                _calculator.RegisterModule(new ResourceCostScoringModule());
-                _calculator.RegisterModule(new CooldownScoringModule());
-                _calculator.RegisterModule(new UtilityScoringModule());
-                _calculator.RegisterModule(new SynergyScoringModule());
+                _calculator.RegisterModule(new GenericScoringModule("EffectMagnitude", "EffectValue"));
+                _calculator.RegisterModule(new GenericScoringModule("ResourceCost", "ResourceCost"));
+                _calculator.RegisterModule(new GenericScoringModule("Cooldown", "Cooldown"));
+                _calculator.RegisterModule(new GenericScoringModule("Utility", "Utility"));
+                _calculator.RegisterModule(new GenericScoringModule("Synergy", "Synergy"));
                 _analysisEngine = new FeatAnalysisEngine(_calculator);
                 _allFeats = _dbService.GetAllFeats();
                 BuildUI();

@@ -7,6 +7,7 @@ from backend.app.middleware.error_handler import (
     generic_exception_handler,
 )
 from backend.app.middleware.rate_limit import RateLimitMiddleware
+from backend.app.middleware.validation import CentralizedValidationMiddleware
 
 __all__ = [
     "RequestLoggingMiddleware",
@@ -16,4 +17,5 @@ __all__ = [
     "sqlalchemy_exception_handler",
     "generic_exception_handler",
     "RateLimitMiddleware",
+    "CentralizedValidationMiddleware",
 ] 

@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using VisualDM.World;
 using System.Linq;
+using UnityEngine;
 
 namespace VisualDM.Tests
 {
@@ -51,5 +52,68 @@ namespace VisualDM.Tests
             // Should not throw and should update resource
             Assert.IsTrue(econ != null);
         }
+
+        [Test]
+        public void Region_CreationAndProperties()
+        {
+            var rect = new Rect(0, 0, 10, 10);
+            var region = new VisualDM.World.Region("TestRegion", "Biome", rect);
+            region.DominantFactions.Add("FactionA");
+            region.ResourceDistribution["Gold"] = 100f;
+            region.CulturalAttributes["Language"] = "Elvish";
+            Assert.AreEqual("TestRegion", region.Name);
+            Assert.AreEqual("Biome", region.Type);
+            Assert.IsTrue(region.DominantFactions.Contains("FactionA"));
+            Assert.AreEqual(100f, region.ResourceDistribution["Gold"]);
+            Assert.AreEqual("Elvish", region.CulturalAttributes["Language"]);
+        }
+
+        [Test]
+        public void Region_BoundaryDetection_Works()
+        {
+            var rect = new Rect(0, 0, 10, 10);
+            var region = new VisualDM.World.Region("TestRegion", "Biome", rect);
+            Assert.IsTrue(region.Contains(new Vector2(5, 5)));
+            Assert.IsFalse(region.Contains(new Vector2(15, 15)));
+        }
+
+        [Test]
+        public void RegionSystem_AddAndQueryRegions()
+        {
+            var sys = new VisualDM.World.RegionSystem();
+            var region1 = new VisualDM.World.Region("A", "City", new Rect(0, 0, 5, 5));
+            var region2 = new VisualDM.World.Region("B", "Forest", new Rect(3, 3, 5, 5));
+            sys.AddRegion(region1);
+            sys.AddRegion(region2);
+            // Overlapping area
+            var all = sys.GetAllRegionsAtPosition(new Vector2(4, 4));
+            Assert.AreEqual(2, all.Count);
+            var single = sys.GetRegionAtPosition(new Vector2(1, 1));
+            Assert.AreEqual(region1.Id, single.Id);
+        }
+
+        [Test]
+        public void RegionSystem_ArcAssociation_Works()
+        {
+            var sys = new VisualDM.World.RegionSystem();
+            var region = new VisualDM.World.Region("A", "City", new Rect(0, 0, 5, 5));
+            sys.AddRegion(region);
+            string arcId = "arc-123";
+            sys.AssociateArcWithRegion(arcId, region.Id);
+            var regions = sys.GetRegionsForArc(arcId);
+            Assert.AreEqual(1, regions.Count);
+            Assert.AreEqual(region.Id, regions[0].Id);
+        }
+
+        [Test]
+        public void RegionSystem_Serialization_Works()
+        {
+            var sys = new VisualDM.World.RegionSystem();
+            var region = new VisualDM.World.Region("A", "City", new Rect(0, 0, 5, 5));
+            sys.AddRegion(region);
+            string json = sys.Serialize();
+            var sys2 = VisualDM.World.RegionSystem.Deserialize(json);
+            Assert.AreEqual(1, sys2.GetAllRegions().GetEnumerator().MoveNext() ? 1 : 0);
+        }
     }
-} 
+}

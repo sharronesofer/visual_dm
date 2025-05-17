@@ -69,6 +69,10 @@ namespace VisualDM.UI
 
         private Vector2Int lastScreenSize;
 
+        private string currentDialogueText = "";
+        private bool isDialogueLoading = false;
+        private string dialogueError = null;
+
         void Awake()
         {
             if (_instance != null && _instance != this)
@@ -208,6 +212,27 @@ namespace VisualDM.UI
             tex.SetPixels(pixels);
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
+        }
+
+        public void ShowDialogue(string text, bool loading = false, string error = null)
+        {
+            currentDialogueText = text;
+            isDialogueLoading = loading;
+            dialogueError = error;
+            // For now, just log to console. Replace with actual UI update logic.
+            if (!string.IsNullOrEmpty(error))
+            {
+                Debug.LogError($"[Dialogue UI] Error: {error}");
+            }
+            else if (loading)
+            {
+                Debug.Log($"[Dialogue UI] Loading: {text}");
+            }
+            else
+            {
+                Debug.Log($"[Dialogue UI] {text}");
+            }
+            // TODO: Update runtime-generated dialogue panel with text/loading/error
         }
     }
 } 

@@ -3,11 +3,18 @@ Version control models for managing code version linkage with tasks and reviews.
 """
 
 from typing import Dict, Any, List, Optional
-from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey, Text, Boolean, Index, UniqueConstraint
+from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey, Text, Boolean, Index, UniqueConstraint, Enum
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from app.core.database import db
 from app.core.models.base import BaseModel
+import enum
+
+class VersionType(enum.Enum):
+    MIGRATION = "migration"
+    FEATURE = "feature"
+    BUGFIX = "bugfix"
+    RELEASE = "release"
 
 class CodeVersion(BaseModel):
     """Model for tracking code versions (commits, branches, tags)."""
@@ -36,8 +43,39 @@ class CodeVersion(BaseModel):
     review_links = relationship('ReviewVersionLink', back_populates='version', cascade='all, delete-orphan')
 
 class VersionControl(CodeVersion):
-    """Alias for backward compatibility."""
-    pass
+    """
+    Model for version control entries in the game.
+    Fields:
+        id (int): Primary key.
+        version (str): Version string.
+        description (str): Description of the version entry.
+        version_type (VersionType): Type of version entry.
+        metadata (dict): Additional metadata.
+        created_at (datetime): Creation timestamp.
+        updated_at (datetime): Last update timestamp.
+    """
+    __tablename__ = 'version_control'
+    __table_args__ = {'extend_existing': True}
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, doc="Primary key.")
+    version: Mapped[str] = mapped_column(String(50), nullable=False, doc="Version string.")
+    description: Mapped[Optional[str]] = mapped_column(Text, doc="Description of the version entry.")
+    version_type: Mapped[VersionType] = mapped_column(Enum(VersionType), default=VersionType.RELEASE, doc="Type of version entry.")
+    metadata: Mapped[dict] = mapped_column(JSON, default=dict, doc="Additional metadata.")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, doc="Creation timestamp.")
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, doc="Last update timestamp.")
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize the version control entry to a dictionary."""
+        return {
+            "id": self.id,
+            "version": self.version,
+            "description": self.description,
+            "version_type": self.version_type.value if self.version_type else None,
+            "metadata": self.metadata,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None
+        }
 
 class TaskVersionLink(BaseModel):
     """Model for linking tasks to code versions."""

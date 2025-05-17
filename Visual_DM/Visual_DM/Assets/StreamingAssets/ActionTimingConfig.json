@@ -1,0 +1,5 @@
+{
+    "basicAttackMs": 50,
+    "specialAbilityMs": 100,
+    "contextualActionMs": 150
+}

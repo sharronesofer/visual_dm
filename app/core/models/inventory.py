@@ -3,14 +3,35 @@ Inventory item model for game items.
 """
 
 from typing import Dict, Any, List, Optional
-from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey, Text, Float, Boolean, Index
-from sqlalchemy.orm import relationship
+from sqlalchemy import Integer, String, JSON, DateTime, ForeignKey, Text, Float, Boolean, Index
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from app.core.database import db
 from app.core.models.base import BaseModel
 
 class InventoryItem(BaseModel):
-    """Model for game items."""
+    """
+    Model for game items in inventory.
+    Fields:
+        id (int): Primary key.
+        name (str): Item name.
+        description (str): Item description.
+        item_type (str): Type of item (weapon, armor, consumable, etc.).
+        rarity (str): Rarity of the item (common, rare, epic, legendary).
+        value (int): Gold value.
+        weight (float): Weight in kg.
+        stack_size (int): Current stack size.
+        max_stack (int): Maximum stack size.
+        properties (dict): Item properties (damage, defense, effects, etc.).
+        requirements (dict): Requirements (level, stats, etc.).
+        is_equippable (bool): Whether the item can be equipped.
+        is_consumable (bool): Whether the item can be consumed.
+        is_quest_item (bool): Whether the item is a quest item.
+        owner_id (int): Foreign key to character owner.
+        owner (Character): Related character.
+        item_id (int): Foreign key to item definition.
+        item (Item): Related item definition.
+    """
     __tablename__ = 'inventory_items'
     __table_args__ = (
         Index('ix_inventory_items_type', 'item_type'),
@@ -18,28 +39,27 @@ class InventoryItem(BaseModel):
         Index('ix_inventory_items_owner_id', 'owner_id'),
         {'extend_existing': True}
     )
-    
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    description = Column(Text)
-    item_type = Column(String(50))  # weapon, armor, consumable, etc.
-    rarity = Column(String(20))  # common, rare, epic, legendary
-    value = Column(Integer)  # gold value
-    weight = Column(Float)  # in kg
-    stack_size = Column(Integer, default=1)
-    max_stack = Column(Integer, default=1)
-    properties = Column(JSON, default=dict)  # damage, defense, effects, etc.
-    requirements = Column(JSON, default=dict)  # level, stats, etc.
-    is_equippable = Column(Boolean, default=False)
-    is_consumable = Column(Boolean, default=False)
-    is_quest_item = Column(Boolean, default=False)
-    
-    # Foreign Keys
-    owner_id = Column(Integer, ForeignKey('characters.id'))
-    owner = relationship('Character', back_populates='inventory_items')
-    item_id = Column(Integer, ForeignKey('items.id'))
-    item = relationship('app.core.models.item.Item', back_populates='inventory_items')
-    
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, doc="Primary key.")
+    name: Mapped[str] = mapped_column(String(100), nullable=False, doc="Item name.")
+    description: Mapped[Optional[str]] = mapped_column(Text, doc="Item description.")
+    item_type: Mapped[Optional[str]] = mapped_column(String(50), doc="Type of item (weapon, armor, consumable, etc.).")
+    rarity: Mapped[Optional[str]] = mapped_column(String(20), doc="Rarity of the item (common, rare, epic, legendary).")
+    value: Mapped[Optional[int]] = mapped_column(Integer, doc="Gold value.")
+    weight: Mapped[Optional[float]] = mapped_column(Float, doc="Weight in kg.")
+    stack_size: Mapped[int] = mapped_column(Integer, default=1, doc="Current stack size.")
+    max_stack: Mapped[int] = mapped_column(Integer, default=1, doc="Maximum stack size.")
+    properties: Mapped[dict] = mapped_column(JSON, default=dict, doc="Item properties (damage, defense, effects, etc.).")
+    requirements: Mapped[dict] = mapped_column(JSON, default=dict, doc="Requirements (level, stats, etc.).")
+    is_equippable: Mapped[bool] = mapped_column(Boolean, default=False, doc="Whether the item can be equipped.")
+    is_consumable: Mapped[bool] = mapped_column(Boolean, default=False, doc="Whether the item can be consumed.")
+    is_quest_item: Mapped[bool] = mapped_column(Boolean, default=False, doc="Whether the item is a quest item.")
+
+    owner_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('characters.id'), doc="Foreign key to character owner.")
+    owner: Mapped[Optional['Character']] = relationship('Character', back_populates='inventory_items')
+    item_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('items.id'), doc="Foreign key to item definition.")
+    item: Mapped[Optional['Item']] = relationship('app.core.models.item.Item', back_populates='inventory_items')
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert model to dictionary."""
         return {

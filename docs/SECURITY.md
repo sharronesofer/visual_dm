@@ -228,3 +228,79 @@ The security implementation adapts based on the environment:
 For security concerns or questions:
 - Security Team: security@visualdm.com
 - Bug Reports: https://github.com/visualdm/backend/security 
+
+# Replay/Exploit Protection System
+
+## Overview
+This system prevents replay attacks and malicious reuse of valid requests for all critical actions (e.g., purchases, combat, permission changes) by requiring a unique action ID with each request. The backend validates, stores, and enforces a time window for each action ID, rejecting duplicates or expired IDs.
+
+## Action ID Generation
+
+### Python (Backend)
+Use the `generate_action_id(session_id)` function from `app/core/validation/helpers.py`:
+```python
+action_id = generate_action_id(user_id)
+```
+- Combines high-precision timestamp, cryptographically secure random nonce, and user/session ID.
+
+### C# (Unity Client)
+Use the `IdGenerator.GenerateActionId(sessionId)` method:
+```csharp
+string actionId = IdGenerator.GenerateActionId(sessionId);
+```
+- Same structure as backend: timestamp, secure random nonce, session/user ID.
+
+## Validation and Storage
+- Backend endpoints require `action_id` in the request payload for all critical actions.
+- The backend validates:
+  - Action ID is present
+  - Not previously used (checked via Redis or in-memory fallback)
+  - Within a 5-minute window (configurable)
+- Used action IDs are stored with a TTL (time-to-live) to prevent replay.
+
+## Integration Points
+- **Backend:**
+  - `app/api/routes/player_actions.py` (purchases, combat, etc.)
+  - Decorators and middleware enforce validation and storage.
+- **Unity Client:**
+  - `ActionQueue`, `CombatStateManager`, and all critical request senders include the action ID in payloads.
+
+## Logging and Auditing
+- All rejected replay attempts (missing, duplicate, or expired action IDs) are logged via the `log_replay_attempt` function/module.
+- Logs include user ID, action type, reason, and request data for security auditing.
+
+## Best Practices
+- Always generate a new action ID for each critical action.
+- Never reuse action IDs.
+- Ensure the session/user ID is unique and consistent across client and server.
+- Extend replay protection to any new critical endpoints or actions.
+
+## Example: Python Backend
+```python
+from app.core.validation.helpers import generate_action_id
+from app.core.replay_protection import validate_action_id, store_action_id
+
+# In endpoint:
+action_id = request.json.get('action_id')
+user_id = get_jwt_identity()
+if not action_id or not validate_action_id(action_id, user_id):
+    raise ValidationError("Invalid or replayed action_id.")
+store_action_id(action_id, user_id)
+```
+
+## Example: C# Unity Client
+```csharp
+string actionId = IdGenerator.GenerateActionId(sessionId);
+request.action_id = actionId;
+// Send request to backend
+```
+
+## Troubleshooting & FAQ
+- **Q: What if Redis is unavailable?**
+  - The backend falls back to an in-memory store (not recommended for production).
+- **Q: What if the client clock is skewed?**
+  - The backend enforces a time window; ensure client clocks are reasonably accurate.
+- **Q: How do I extend replay protection to a new endpoint?**
+  - Require `action_id` in the request, validate and store it using the provided helpers.
+
+For further details, see the implementation in `app/core/validation/helpers.py`, `app/core/replay_protection.py`, and `Visual_DM/Visual_DM/Assets/Scripts/Core/IdGenerator.cs`. 

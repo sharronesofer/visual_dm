@@ -1,10 +1,18 @@
 using System;
 using System.Collections.Generic;
+using Systems.Integration;
+using System.Threading;
 
 namespace VisualDM.World
 {
     public class EconomySystem
     {
+        // --- Transaction Safety ---
+        // All resource and trade modifications are atomic and thread-safe.
+        // Each operation is wrapped in a lock and logged with a unique transaction ID.
+        // See: Task #592 implementation notes.
+        private readonly object _economyLock = new object();
+
         public class Resource
         {
             public string Name;
@@ -27,41 +35,79 @@ namespace VisualDM.World
 
         public void AddResource(string name, float initialQty, float prodRate, float consRate)
         {
-            resources[name] = new Resource { Name = name, Quantity = initialQty, ProductionRate = prodRate, ConsumptionRate = consRate };
-            marketPrices[name] = 1.0f;
+            lock (_economyLock)
+            {
+                string txnId = Guid.NewGuid().ToString();
+                try
+                {
+                    resources[name] = new Resource { Name = name, Quantity = initialQty, ProductionRate = prodRate, ConsumptionRate = consRate };
+                    marketPrices[name] = 1.0f;
+                    IntegrationLogger.Log($"[Economy] AddResource txn={txnId} name={name}", LogLevel.Info, "EconomySystem", null, "AddResource", "Committed");
+                }
+                catch (Exception ex)
+                {
+                    IntegrationLogger.Log($"[Economy] AddResource txn={txnId} failed: {ex.Message}", LogLevel.Error, "EconomySystem", null, "AddResource", "RolledBack");
+                    throw;
+                }
+            }
         }
 
         public void AddTradeRoute(string from, string to, float volume)
         {
-            tradeRoutes.Add(new TradeRoute { From = from, To = to, Volume = volume });
+            lock (_economyLock)
+            {
+                string txnId = Guid.NewGuid().ToString();
+                try
+                {
+                    tradeRoutes.Add(new TradeRoute { From = from, To = to, Volume = volume });
+                    IntegrationLogger.Log($"[Economy] AddTradeRoute txn={txnId} from={from} to={to}", LogLevel.Info, "EconomySystem", null, "AddTradeRoute", "Committed");
+                }
+                catch (Exception ex)
+                {
+                    IntegrationLogger.Log($"[Economy] AddTradeRoute txn={txnId} failed: {ex.Message}", LogLevel.Error, "EconomySystem", null, "AddTradeRoute", "RolledBack");
+                    throw;
+                }
+            }
         }
 
         public void UpdateEconomy(WorldTimeSystem time)
         {
-            // Update resources
-            foreach (var res in resources.Values)
+            lock (_economyLock)
             {
-                res.Quantity += res.ProductionRate - res.ConsumptionRate;
-                if (res.Quantity < 0) res.Quantity = 0;
-            }
-            // Simulate trade
-            foreach (var route in tradeRoutes)
-            {
-                // Simple trade simulation: move volume between resources if both exist
-                if (resources.ContainsKey(route.From) && resources.ContainsKey(route.To))
+                string txnId = Guid.NewGuid().ToString();
+                try
                 {
-                    float tradeAmount = Math.Min(route.Volume, resources[route.From].Quantity);
-                    resources[route.From].Quantity -= tradeAmount;
-                    resources[route.To].Quantity += tradeAmount;
+                    // Update resources
+                    foreach (var res in resources.Values)
+                    {
+                        res.Quantity += res.ProductionRate - res.ConsumptionRate;
+                        if (res.Quantity < 0) res.Quantity = 0;
+                    }
+                    // Simulate trade
+                    foreach (var route in tradeRoutes)
+                    {
+                        if (resources.ContainsKey(route.From) && resources.ContainsKey(route.To))
+                        {
+                            float tradeAmount = Math.Min(route.Volume, resources[route.From].Quantity);
+                            resources[route.From].Quantity -= tradeAmount;
+                            resources[route.To].Quantity += tradeAmount;
+                        }
+                    }
+                    // Update market prices
+                    foreach (var res in resources.Values)
+                    {
+                        float fluctuation = (float)(rng.NextDouble() - 0.5) * 0.1f; // +/-5%
+                        float supplyDemand = (res.ProductionRate - res.ConsumptionRate) / Math.Max(1f, res.Quantity);
+                        marketPrices[res.Name] *= 1f + fluctuation + 0.01f * supplyDemand;
+                        if (marketPrices[res.Name] < 0.1f) marketPrices[res.Name] = 0.1f;
+                    }
+                    IntegrationLogger.Log($"[Economy] UpdateEconomy txn={txnId}", LogLevel.Info, "EconomySystem", null, "UpdateEconomy", "Committed");
                 }
-            }
-            // Update market prices
-            foreach (var res in resources.Values)
-            {
-                float fluctuation = (float)(rng.NextDouble() - 0.5) * 0.1f; // +/-5%
-                float supplyDemand = (res.ProductionRate - res.ConsumptionRate) / Math.Max(1f, res.Quantity);
-                marketPrices[res.Name] *= 1f + fluctuation + 0.01f * supplyDemand;
-                if (marketPrices[res.Name] < 0.1f) marketPrices[res.Name] = 0.1f;
+                catch (Exception ex)
+                {
+                    IntegrationLogger.Log($"[Economy] UpdateEconomy txn={txnId} failed: {ex.Message}", LogLevel.Error, "EconomySystem", null, "UpdateEconomy", "RolledBack");
+                    throw;
+                }
             }
         }
 

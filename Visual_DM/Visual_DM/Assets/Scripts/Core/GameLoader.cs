@@ -3,6 +3,9 @@ using UnityEngine;
 using System.Threading.Tasks;
 using VisualDM.UI;
 using VisualDM.Systems.EventSystem;
+using Visual_DM.Animation.Threading;
+using System.Collections.Generic;
+using Systems.Integration;
 
 /// <summary>
 /// Entry point for the game. Bootstraps all core systems and runtime managers.
@@ -20,6 +23,12 @@ public class GameLoader : MonoBehaviour
 {
     private WorldManager worldManager;
     private WebSocketClient _wsClient;
+    private VisualDM.Inventory.Inventory inventoryManager;
+
+    // Animation threading system singletons
+    public static AnimationThreadingConfig AnimationConfig { get; private set; }
+    public static ThreadPoolManager AnimationThreadPool { get; private set; }
+    public static AnimationJobSystem AnimationJobs { get; private set; }
 
     void Awake()
     {
@@ -28,11 +37,74 @@ public class GameLoader : MonoBehaviour
         worldManager = worldManagerObj.AddComponent<WorldManager>();
         DontDestroyOnLoad(worldManagerObj);
 
+        // Register WorldManager as IWorldSystem for integration
+        ServiceLocator.Instance.Register<IWorldSystem>(worldManager);
+
         // Initialize UI Manager
         VisualDM.UI.UIManager.Instance.ToString(); // Ensures UIManager singleton is created
 
         // Initialize State Manager
         VisualDM.Core.StateManager.Instance.ToString(); // Ensures StateManager singleton is created
+
+        // Initialize Inventory System
+        GameObject inventoryManagerObj = new GameObject("InventoryManager");
+        inventoryManager = inventoryManagerObj.AddComponent<VisualDM.Inventory.Inventory>();
+        DontDestroyOnLoad(inventoryManagerObj);
+
+        // --- Ensure DialogueGenerationService is present ---
+        if (FindObjectOfType<VisualDM.Dialogue.DialogueGenerationService>() == null)
+        {
+            var go = new GameObject("DialogueGenerationService");
+            go.AddComponent<VisualDM.Dialogue.DialogueGenerationService>();
+            DontDestroyOnLoad(go);
+        }
+        // --- Ensure DialogueContextManager is present ---
+        if (FindObjectOfType<VisualDM.Dialogue.DialogueContextManager>() == null)
+        {
+            var go = new GameObject("DialogueContextManager");
+            go.AddComponent<VisualDM.Dialogue.DialogueContextManager>();
+            DontDestroyOnLoad(go);
+        }
+        // --- Ensure TheftSystemBootstrapper is present ---
+        if (FindObjectOfType<VisualDM.Theft.TheftSystemBootstrapper>() == null)
+        {
+            var go = new GameObject("TheftSystemBootstrapper");
+            go.AddComponent<VisualDM.Theft.TheftSystemBootstrapper>();
+            DontDestroyOnLoad(go);
+        }
+        // --- Ensure BountyHunterManager is present ---
+        if (FindObjectOfType<VisualDM.BountyHunter.BountyHunterManager>() == null)
+        {
+            var go = new GameObject("BountyHunterManager");
+            go.AddComponent<VisualDM.BountyHunter.BountyHunterManager>();
+            DontDestroyOnLoad(go);
+        }
+
+        // --- Initialize Animation Threading System ---
+        AnimationConfig = new AnimationThreadingConfig();
+        AnimationThreadPool = new ThreadPoolManager(AnimationConfig.WorkerThreads);
+        AnimationJobs = new AnimationJobSystem(AnimationThreadPool);
+        // TODO: Integrate with asset management system (Task #586)
+
+        // --- Initialize MotifAsyncWorker (hidden GameObject) ---
+        if (FindObjectOfType<VisualDM.MotifSystem.MotifAsyncWorker>() == null)
+        {
+            var go = new GameObject("MotifAsyncWorker");
+            go.AddComponent<VisualDM.MotifSystem.MotifAsyncWorker>();
+            go.hideFlags = HideFlags.HideAndDontSave;
+            DontDestroyOnLoad(go);
+        }
+
+        // --- Warm MotifCache with critical motifs (if available) ---
+        // Example: Warm with canonical motifs (could be loaded from backend or config)
+        var motifCache = new VisualDM.MotifSystem.MotifCache();
+        var criticalMotifs = new List<VisualDM.MotifSystem.Motif>();
+        foreach (var theme in VisualDM.MotifSystem.MotifFactory.CanonicalMotifs)
+        {
+            var motif = new VisualDM.MotifSystem.Motif(theme, 3); // Default lifespan 3
+            criticalMotifs.Add(motif);
+        }
+        motifCache.WarmCache(criticalMotifs);
     }
 
     /// <summary>
@@ -118,4 +190,4 @@ public class GameLoader : MonoBehaviour
             DontDestroyOnLoad(go);
         }
     }
-} 
+}

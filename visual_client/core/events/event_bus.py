@@ -335,5 +335,5 @@ class EventBus:
         try:
             self.queue.join(timeout=timeout)
             return True
-        except:
+        except Exception:  # autofix: specify exception
             return False 

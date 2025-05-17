@@ -1,4 +1,0 @@
-export const API_METRICS = {
-    ENABLE_PERFORMANCE_TRACKING: false,
-    TRACKING_SAMPLE_RATE: 1.0,
-}; 

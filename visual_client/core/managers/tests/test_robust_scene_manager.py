@@ -107,8 +107,8 @@ def create_test_assets():
     # Remove test assets
     try:
         shutil.rmtree(TEST_ASSETS_DIR)
-    except:
-        pass
+    except Exception:  # autofix: specify exception
+        print("Exception occurred")  # autofix: handle error
 
 # TEST CASES
 

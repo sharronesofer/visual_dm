@@ -4,6 +4,22 @@ using UnityEngine;
 
 namespace VisualDM.Quest
 {
+    public enum QuestRewardType
+    {
+        Item,
+        Currency,
+        Experience,
+        Ability,
+        Other
+    }
+
+    public enum QuestRewardState
+    {
+        Unclaimed,
+        Claimed,
+        Expired
+    }
+
     /// <summary>
     /// Represents a reward for completing a quest or quest stage.
     /// </summary>
@@ -14,6 +30,11 @@ namespace VisualDM.Quest
         [SerializeField] private Dictionary<string, float> reputationRewards;
         [SerializeField] private float experience;
         [SerializeField] private List<string> specialRewards;
+        public QuestRewardType Type { get; set; }
+        public string RewardId { get; set; }
+        public int Amount { get; set; }
+        public QuestRewardState State { get; set; }
+        public DateTime? Expiry { get; set; }
 
         /// <summary>
         /// List of item IDs rewarded.
@@ -38,6 +59,19 @@ namespace VisualDM.Quest
             reputationRewards = new Dictionary<string, float>();
             specialRewards = new List<string>();
             experience = 0f;
+            State = QuestRewardState.Unclaimed;
+            Expiry = null;
+        }
+
+        public void Claim()
+        {
+            if (State == QuestRewardState.Unclaimed && !IsExpired())
+                State = QuestRewardState.Claimed;
+        }
+
+        public bool IsExpired()
+        {
+            return Expiry.HasValue && DateTime.UtcNow > Expiry.Value;
         }
     }
 } 

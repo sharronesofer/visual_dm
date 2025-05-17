@@ -15,11 +15,13 @@ import os
 import sys
 from datetime import datetime
 import copy
+import shutil
 
 # File paths
 TASKS_FILE = "tasks/tasks.json"
 DONE_TASKS_FILE = "tasks/done_tasks.json"
 BACKUP_SUFFIX = f".bak.{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+BACKUP_FILE = "tasks/Tasks_pre_migration_backup.json"
 
 def load_json_file(file_path):
     """Load and parse a JSON file."""
@@ -42,7 +44,6 @@ def create_backup(file_path):
     """Create a backup of the original file."""
     backup_path = f"{file_path}{BACKUP_SUFFIX}"
     try:
-        import shutil
         shutil.copy2(file_path, backup_path)
         print(f"Created backup of {file_path} at {backup_path}")
     except Exception as e:
@@ -111,6 +112,26 @@ def filter_done_tasks(tasks):
     
     return done_tasks, active_tasks, extracted_done_subtasks
 
+def extract_done_tasks(tasks):
+    done = []
+    remaining = []
+    for task in tasks:
+        # Handle subtasks recursively if present
+        subtasks = task.get("subtasks", [])
+        if subtasks:
+            done_sub, rem_sub = extract_done_tasks(subtasks)
+            task["subtasks"] = rem_sub
+            if done_sub:
+                done.extend(done_sub)
+        # Check main task status
+        if task.get("status") == "done":
+            # Remove subtasks from done task if any remain (already handled above)
+            task["subtasks"] = task.get("subtasks", [])
+            done.append(task)
+        else:
+            remaining.append(task)
+    return done, remaining
+
 def main():
     """Main function to move done tasks to done_tasks.json."""
     # Create backups first
@@ -118,38 +139,45 @@ def main():
     if os.path.exists(DONE_TASKS_FILE):
         create_backup(DONE_TASKS_FILE)
     
+    # Backup already created, but check if exists
+    if not os.path.exists(BACKUP_FILE):
+        shutil.copy(TASKS_FILE, BACKUP_FILE)
+        print(f"Backup created at {BACKUP_FILE}")
+    else:
+        print(f"Backup already exists at {BACKUP_FILE}")
+    
     # Load both files
     tasks_data = load_json_file(TASKS_FILE)
     
     # Try to load done_tasks.json, or create a new structure if it doesn't exist
     try:
         done_tasks_data = load_json_file(DONE_TASKS_FILE)
-    except:
+    except Exception:  # autofix: specify exception
         done_tasks_data = {"tasks": []}
     
     # Extract the task lists
     tasks = tasks_data.get('tasks', [])
     done_tasks_existing = done_tasks_data.get('tasks', [])
     
-    # Find done tasks and separate them
-    done_tasks_new, active_tasks, extracted_done_subtasks = filter_done_tasks(tasks)
+    # Extract done tasks
+    done_tasks, remaining_tasks = extract_done_tasks(tasks)
     
-    print(f"Found {len(done_tasks_new)} done tasks to move")
-    print(f"Found {len(extracted_done_subtasks)} done subtasks to extract as standalone tasks")
+    print(f"Found {len(done_tasks)} done tasks to move")
+    print(f"Remaining tasks: {len(remaining_tasks)} (not including their subtasks)")
     
-    # Combine existing done tasks with new done tasks and extracted subtasks
-    combined_done_tasks = done_tasks_existing + done_tasks_new + extracted_done_subtasks
+    # Combine existing done tasks with new done tasks
+    combined_done_tasks = done_tasks_existing + done_tasks
     
     # Update the data structures
-    tasks_data['tasks'] = active_tasks
+    tasks_data['tasks'] = remaining_tasks
     done_tasks_data['tasks'] = combined_done_tasks
     
     # Save updated files
     save_json_file(TASKS_FILE, tasks_data)
     save_json_file(DONE_TASKS_FILE, done_tasks_data)
     
-    print(f"Successfully moved {len(done_tasks_new)} done tasks and {len(extracted_done_subtasks)} done subtasks from tasks.json to done_tasks.json")
-    print(f"tasks.json now has {len(active_tasks)} active tasks")
+    print(f"Successfully moved {len(done_tasks)} done tasks to {DONE_TASKS_FILE}")
+    print(f"tasks.json now has {len(remaining_tasks)} active tasks")
     print(f"done_tasks.json now has {len(combined_done_tasks)} done tasks")
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ Quest model for tracking player quests and objectives.
 """
 
 from typing import Dict, Any, List, Optional
-from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey, Float, Boolean, Table, Enum as SQLEnum
+from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey, Float, Boolean, Table, Enum as SQLEnum, Text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from app.core.database import db
@@ -19,75 +19,64 @@ class QuestType(Enum):
     EVENT = "event"
 
 class QuestStatus(Enum):
-    AVAILABLE = "available"
-    ACTIVE = "active"
+    NOT_STARTED = "not_started"
+    IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     FAILED = "failed"
-    EXPIRED = "expired"
 
 class Quest(BaseModel):
-    """Model for tracking quests."""
+    """
+    Model for quests in the game.
+    Fields:
+        id (int): Primary key.
+        name (str): Quest name.
+        description (str): Quest description.
+        status (QuestStatus): Status of the quest.
+        objectives (list): List of quest objectives.
+        rewards (dict): Rewards for completing the quest.
+        requirements (dict): Requirements to start the quest.
+        is_main_quest (bool): Whether this is a main quest.
+        created_at (datetime): Creation timestamp.
+        updated_at (datetime): Last update timestamp.
+        party_id (int): Foreign key to party.
+        party (Party): Related party.
+    """
     __tablename__ = 'quests'
+    __table_args__ = {'extend_existing': True}
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(100))
-    description: Mapped[str] = mapped_column(String(500))
-    type: Mapped[QuestType] = mapped_column(SQLEnum(QuestType), default=QuestType.SIDE)
-    status: Mapped[QuestStatus] = mapped_column(SQLEnum(QuestStatus), default=QuestStatus.AVAILABLE)
-    level_requirement: Mapped[int] = mapped_column(Integer, default=1)
-    experience_reward: Mapped[int] = mapped_column(Integer, default=0)
-    gold_reward: Mapped[int] = mapped_column(Integer, default=0)
-    item_rewards: Mapped[List[Dict[str, Any]]] = mapped_column(JSON, default=list)
-    prerequisites: Mapped[List[int]] = mapped_column(JSON, default=list)  # List of quest IDs
-    objectives: Mapped[List[Dict[str, Any]]] = mapped_column(JSON, default=list)
-    start_date: Mapped[Optional[datetime]] = mapped_column(DateTime)
-    end_date: Mapped[Optional[datetime]] = mapped_column(DateTime)
-    location_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('locations.id'))
-    npc_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('npcs.id'))
-    region_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('regions.id'))
-    faction_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('factions.id'))
-    
-    # Relationships
-    location = relationship('app.core.models.location.Location', back_populates='quests')
-    npc = relationship('NPC', back_populates='quests', foreign_keys=[npc_id])
-    characters = relationship('app.core.models.character.Character', secondary=character_quests, back_populates='quests')
-    region = relationship('Region', back_populates='quests')
-    faction = relationship('Faction', back_populates='quests')
-    progress_records = relationship('QuestProgress', back_populates='quest')
-    rewards = relationship('app.core.models.quest.QuestReward', back_populates='quest')
-    world_impacts = relationship('app.core.models.quest.QuestWorldImpact', back_populates='quest')
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, doc="Primary key.")
+    name: Mapped[str] = mapped_column(String(100), nullable=False, doc="Quest name.")
+    description: Mapped[Optional[str]] = mapped_column(Text, doc="Quest description.")
+    status: Mapped[QuestStatus] = mapped_column(SQLEnum(QuestStatus), default=QuestStatus.NOT_STARTED, doc="Status of the quest.")
+    objectives: Mapped[list] = mapped_column(JSON, default=list, doc="List of quest objectives.")
+    rewards: Mapped[dict] = mapped_column(JSON, default=dict, doc="Rewards for completing the quest.")
+    requirements: Mapped[dict] = mapped_column(JSON, default=dict, doc="Requirements to start the quest.")
+    is_main_quest: Mapped[bool] = mapped_column(Boolean, default=False, doc="Whether this is a main quest.")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, doc="Creation timestamp.")
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, doc="Last update timestamp.")
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.item_rewards = kwargs.get('item_rewards', [])
-        self.prerequisites = kwargs.get('prerequisites', [])
-        self.objectives = kwargs.get('objectives', [])
+    party_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('parties.id'), doc="Foreign key to party.")
+    party: Mapped[Optional['Party']] = relationship('Party', back_populates='quests')
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert quest to dictionary representation."""
+        """Serialize the quest to a dictionary."""
         return {
-            'id': self.id,
-            'title': self.title,
-            'description': self.description,
-            'type': self.type.value,
-            'status': self.status.value,
-            'level_requirement': self.level_requirement,
-            'experience_reward': self.experience_reward,
-            'gold_reward': self.gold_reward,
-            'item_rewards': self.item_rewards,
-            'prerequisites': self.prerequisites,
-            'objectives': self.objectives,
-            'start_date': self.start_date.isoformat() if self.start_date else None,
-            'end_date': self.end_date.isoformat() if self.end_date else None,
-            'location_id': self.location_id,
-            'npc_id': self.npc_id,
-            'region_id': self.region_id,
-            'faction_id': self.faction_id
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "status": self.status.value if self.status else None,
+            "objectives": self.objectives,
+            "rewards": self.rewards,
+            "requirements": self.requirements,
+            "is_main_quest": self.is_main_quest,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "party_id": self.party_id
         }
 
     def is_available(self, character: 'Character') -> bool:
         """Check if quest is available for a character."""
-        if self.status != QuestStatus.AVAILABLE:
+        if self.status != QuestStatus.NOT_STARTED:
             return False
             
         if character.level < self.level_requirement:
@@ -112,13 +101,13 @@ class Quest(BaseModel):
         if not self.is_available(character):
             return False
             
-        self.status = QuestStatus.ACTIVE
+        self.status = QuestStatus.IN_PROGRESS
         character.quests.append(self)
         return True
 
     def complete(self, character: 'Character') -> bool:
         """Complete the quest and grant rewards."""
-        if self.status != QuestStatus.ACTIVE:
+        if self.status != QuestStatus.IN_PROGRESS:
             return False
             
         # Check if all objectives are complete
@@ -143,7 +132,7 @@ class Quest(BaseModel):
 
     def expire(self) -> None:
         """Mark the quest as expired."""
-        self.status = QuestStatus.EXPIRED
+        self.status = QuestStatus.FAILED
 
     def update_objective(self, objective_id: int, progress: int) -> bool:
         """Update progress on a quest objective."""

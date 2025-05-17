@@ -2,10 +2,71 @@
 Spell model definitions.
 """
 
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer, JSON, DateTime, Boolean, Float, ForeignKey
+from typing import Dict, Any, List, Optional
+from sqlalchemy import Integer, String, JSON, DateTime, ForeignKey, Text, Float, Boolean, Enum
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from app.core.database import db
+from app.core.models.base import BaseModel
+import enum
+
+class MagicSchool(enum.Enum):
+    FIRE = "fire"
+    WATER = "water"
+    EARTH = "earth"
+    AIR = "air"
+    ARCANE = "arcane"
+    DIVINE = "divine"
+
+class SpellModel(BaseModel):
+    """
+    Model for magic spells in the game.
+    Fields:
+        id (int): Primary key.
+        name (str): Spell name.
+        description (str): Spell description.
+        school (MagicSchool): School of magic.
+        mana_cost (float): Mana cost to cast the spell.
+        power (float): Power of the spell.
+        effects (dict): Effects of the spell.
+        requirements (dict): Requirements to learn/cast the spell.
+        created_at (datetime): Creation timestamp.
+        updated_at (datetime): Last update timestamp.
+        owner_id (int): Foreign key to character owner.
+        owner (Character): Related character.
+    """
+    __tablename__ = 'magic_spells'
+    __table_args__ = {'extend_existing': True}
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, doc="Primary key.")
+    name: Mapped[str] = mapped_column(String(100), nullable=False, doc="Spell name.")
+    description: Mapped[Optional[str]] = mapped_column(Text, doc="Spell description.")
+    school: Mapped[MagicSchool] = mapped_column(Enum(MagicSchool), default=MagicSchool.ARCANE, doc="School of magic.")
+    mana_cost: Mapped[float] = mapped_column(Float, default=0.0, doc="Mana cost to cast the spell.")
+    power: Mapped[float] = mapped_column(Float, default=0.0, doc="Power of the spell.")
+    effects: Mapped[dict] = mapped_column(JSON, default=dict, doc="Effects of the spell.")
+    requirements: Mapped[dict] = mapped_column(JSON, default=dict, doc="Requirements to learn/cast the spell.")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, doc="Creation timestamp.")
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, doc="Last update timestamp.")
+
+    owner_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('characters.id'), doc="Foreign key to character owner.")
+    owner: Mapped[Optional['Character']] = relationship('Character', back_populates='magic_spells')
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize the magic spell to a dictionary."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "school": self.school.value if self.school else None,
+            "mana_cost": self.mana_cost,
+            "power": self.power,
+            "effects": self.effects,
+            "requirements": self.requirements,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "owner_id": self.owner_id
+        }
 
 class SpellSchool(db.Model):
     """Spell school model for categorizing spells."""
