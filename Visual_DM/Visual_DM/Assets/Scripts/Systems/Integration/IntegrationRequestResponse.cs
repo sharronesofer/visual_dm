@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Threading;
+using VisualDM.Systems.EventSystem;
 
 namespace Systems.Integration
 {
@@ -20,7 +21,7 @@ namespace Systems.Integration
             var id = Guid.NewGuid();
             var tcs = new TaskCompletionSource<object>();
             _pendingRequests[id] = tcs;
-            IntegrationEventBus.Instance.Publish(new IntegrationRequest<TRequest, TResponse> { Request = request, Callback = callback });
+            EventBus.Instance.Publish(new IntegrationRequest<TRequest, TResponse> { Request = request, Callback = callback });
             return id;
         }
 
@@ -61,4 +62,4 @@ namespace Systems.Integration
             return id;
         }
     }
-} 
+}

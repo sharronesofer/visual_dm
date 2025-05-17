@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Systems.Integration;
+using VisualDM.Systems.EventSystem;
 
 namespace VisualDM.World
 {
@@ -43,13 +44,32 @@ namespace VisualDM.World
             Debug.Log($"Region at (10,10): {found?.Name}");
 
             // Subscribe to integration event bus
-            Systems.Integration.IntegrationEventBus.Instance.Subscribe<Systems.Integration.IntegrationMessage>(OnIntegrationMessage);
+            EventBus.Instance.Subscribe<Systems.Integration.IntegrationMessage>(OnIntegrationMessage);
         }
 
         private void OnIntegrationMessage(Systems.Integration.IntegrationMessage message)
         {
-            // TODO: Handle integration messages as needed
-            Debug.Log($"[WorldManager] Received integration message: {message.MessageType} from {message.SourceSystem} to {message.TargetSystem}");
+            // Handle integration messages for world system
+            if (message.TargetSystem == "World" || string.IsNullOrEmpty(message.TargetSystem))
+            {
+                if (message.MessageType == "SyncWorldState")
+                {
+                    try
+                    {
+                        var worldState = JsonUtility.FromJson<Systems.Integration.WorldState>(message.Payload);
+                        SyncWorldState(worldState);
+                        Debug.Log($"[WorldManager] Synced world state from integration event.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"[WorldManager] Failed to parse or sync world state: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"[WorldManager] Received integration message: {message.MessageType} from {message.SourceSystem} to {message.TargetSystem}");
+                }
+            }
         }
 
         void Update()
@@ -85,7 +105,7 @@ namespace VisualDM.World
         void OnDestroy()
         {
             // Unsubscribe from integration event bus to prevent memory leaks
-            Systems.Integration.IntegrationEventBus.Instance.Unsubscribe<Systems.Integration.IntegrationMessage>(OnIntegrationMessage);
+            EventBus.Instance.Unsubscribe<Systems.Integration.IntegrationMessage>(OnIntegrationMessage);
         }
     }
 }
