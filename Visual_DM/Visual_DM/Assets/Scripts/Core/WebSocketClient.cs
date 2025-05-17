@@ -26,6 +26,17 @@ namespace VisualDM.Core
         private string serverUri;
         private int width;
         private int height;
+        private long _totalBytesSent = 0;
+        private long _totalBytesReceived = 0;
+
+        /// <summary>
+        /// Total bytes sent via WebSocket.
+        /// </summary>
+        public long TotalBytesSent => _totalBytesSent;
+        /// <summary>
+        /// Total bytes received via WebSocket.
+        /// </summary>
+        public long TotalBytesReceived => _totalBytesReceived;
 
         public event Action<string> OnMessageReceived;
         public event Action OnConnected;
@@ -84,6 +95,7 @@ namespace VisualDM.Core
             var bytes = Encoding.UTF8.GetBytes(message);
             var buffer = new ArraySegment<byte>(bytes);
             await _ws.SendAsync(buffer, WebSocketMessageType.Text, true, _cts.Token);
+            _totalBytesSent += bytes.Length;
         }
 
         public async Task Disconnect()
@@ -127,6 +139,7 @@ namespace VisualDM.Core
                     break;
                 }
                 var msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                _totalBytesReceived += Encoding.UTF8.GetByteCount(msg);
                 // Parse message type from JSON (expects { "type": "...", ... })
                 string messageType = "default";
                 try
@@ -175,6 +188,15 @@ namespace VisualDM.Core
                     handler(msg);
                 OnMessageReceived?.Invoke(msg);
             }
+        }
+
+        public bool SendMetrics(string payload)
+        {
+            // Example send logic (replace with actual implementation)
+            var bytes = System.Text.Encoding.UTF8.GetBytes(payload);
+            _totalBytesSent += bytes.Length;
+            // ... send bytes over socket ...
+            return true; // Return true if send succeeded
         }
     }
 
