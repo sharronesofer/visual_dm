@@ -12,6 +12,10 @@ import {
   MouthType,
   ClothingType,
   EquipmentType,
+  ExtendedCharacterCustomization,
+  MeshSlot,
+  BlendShapeConfig,
+  MaterialAssignment,
 } from './CharacterCustomization';
 
 /**
@@ -217,12 +221,163 @@ export class CharacterCustomizationFactory {
       equipment:
         Math.random() > 0.5
           ? [
-              {
-                type: randomElement(equipmentTypes),
-                variant: 'basic',
-              },
-            ]
+            {
+              type: randomElement(equipmentTypes),
+              variant: 'basic',
+            },
+          ]
           : undefined,
+    };
+  }
+}
+
+/**
+ * Factory method for creating a modular/mesh-based character (e.g., Dwarf Warrior).
+ * Demonstrates use of meshSlots, blendShapes, materials, and scale.
+ */
+export class ModularCharacterCustomizationFactory extends CharacterCustomizationFactory {
+  /**
+   * Create a modular dwarf warrior character with unique scaling and mesh slots.
+   */
+  public static createDwarfWarrior(): ExtendedCharacterCustomization {
+    const meshSlots: MeshSlot[] = [
+      {
+        slot: 'body',
+        meshAsset: 'assets/meshes/dwarf_body.glb',
+        material: 'skin',
+        scale: { x: 0.85, y: 0.85, z: 0.85 },
+      },
+      {
+        slot: 'head',
+        meshAsset: 'assets/meshes/dwarf_head.glb',
+        material: 'skin',
+      },
+      {
+        slot: 'beard',
+        meshAsset: 'assets/meshes/dwarf_beard_long.glb',
+        material: 'hair',
+      },
+      {
+        slot: 'hair',
+        meshAsset: 'assets/meshes/dwarf_hair_short.glb',
+        material: 'hair',
+      },
+      {
+        slot: 'armor',
+        meshAsset: 'assets/meshes/dwarf_armor_heavy.glb',
+        material: 'armor',
+      },
+      {
+        slot: 'weapon',
+        meshAsset: 'assets/meshes/dwarf_axe.glb',
+        material: 'metal',
+      },
+    ];
+    const blendShapes: BlendShapeConfig[] = [
+      { name: 'jawWidth', value: 0.7 },
+      { name: 'browDepth', value: 0.5 },
+      { name: 'noseSize', value: 0.6 },
+    ];
+    const materials: MaterialAssignment[] = [
+      { materialKey: 'skin', color: '#b08d57' },
+      { materialKey: 'hair', color: '#6b3e26' },
+      { materialKey: 'armor', color: '#888888', metallic: 0.8, roughness: 0.3 },
+      { materialKey: 'metal', color: '#cccccc', metallic: 1.0, roughness: 0.2 },
+    ];
+    const scale = { x: 0.85, y: 0.85, z: 0.85 };
+    return {
+      bodyType: BodyType.HumanMaleLarge, // Closest base type for compatibility
+      skinTone: SkinTone.Medium,
+      hair: {
+        style: HairStyle.Short,
+        color: HairColor.Brown,
+      },
+      eyes: {
+        type: EyeType.Round,
+        color: EyeColor.Brown,
+      },
+      mouth: {
+        type: MouthType.Neutral,
+      },
+      clothing: {
+        type: ClothingType.Armor,
+        color: '#888888',
+      },
+      equipment: [
+        {
+          type: EquipmentType.Sword,
+          variant: 'axe',
+        },
+      ],
+      meshSlots,
+      blendShapes,
+      materials,
+      scale,
+    };
+  }
+
+  /**
+   * Create a modular character with a full layered armor set, demonstrating armor layering, z-order, and material variety.
+   */
+  public static createLayeredArmorSet(): ExtendedCharacterCustomization {
+    const meshSlots: MeshSlot[] = [
+      {
+        slot: 'helmet',
+        meshAsset: 'assets/meshes/armor_helmet.glb',
+        material: 'armor_helmet',
+        armorSlot: 'helmet',
+        zOrder: 10,
+      },
+      {
+        slot: 'chest',
+        meshAsset: 'assets/meshes/armor_chest.glb',
+        material: 'armor_chest',
+        armorSlot: 'chest',
+        zOrder: 20,
+      },
+      {
+        slot: 'shoulders',
+        meshAsset: 'assets/meshes/armor_shoulders.glb',
+        material: 'armor_shoulders',
+        armorSlot: 'shoulders',
+        zOrder: 30,
+      },
+      {
+        slot: 'legs',
+        meshAsset: 'assets/meshes/armor_legs.glb',
+        material: 'armor_legs',
+        armorSlot: 'legs',
+        zOrder: 40,
+      },
+      {
+        slot: 'boots',
+        meshAsset: 'assets/meshes/armor_boots.glb',
+        material: 'armor_boots',
+        armorSlot: 'boots',
+        zOrder: 50,
+      },
+      {
+        slot: 'gloves',
+        meshAsset: 'assets/meshes/armor_gloves.glb',
+        material: 'armor_gloves',
+        armorSlot: 'gloves',
+        zOrder: 60,
+      },
+    ];
+    const materials: MaterialAssignment[] = [
+      { materialKey: 'armor_helmet', color: '#cccccc', metallic: 1.0, roughness: 0.2, preset: 'steel' },
+      { materialKey: 'armor_chest', color: '#888888', metallic: 0.9, roughness: 0.3, preset: 'steel' },
+      { materialKey: 'armor_shoulders', color: '#b08d57', metallic: 0.7, roughness: 0.4, preset: 'bronze' },
+      { materialKey: 'armor_legs', color: '#a0522d', metallic: 0.3, roughness: 0.6, preset: 'leather' },
+      { materialKey: 'armor_boots', color: '#654321', metallic: 0.2, roughness: 0.7, preset: 'leather' },
+      { materialKey: 'armor_gloves', color: '#654321', metallic: 0.2, roughness: 0.7, preset: 'leather' },
+    ];
+    return {
+      bodyType: BodyType.HumanMaleMedium,
+      skinTone: SkinTone.Light,
+      meshSlots,
+      materials,
+      scale: { x: 1, y: 1, z: 1 },
     };
   }
 }

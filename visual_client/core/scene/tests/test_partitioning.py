@@ -1,5 +1,5 @@
 import unittest
-from visual_client.core.scene.partitioning import SpatialPartitionTree, SceneChunk
+from visual_client.core.scene.partitioning import SpatialPartitionTree, SceneChunk, ChunkMetadata
 
 class TestSpatialPartitionTree(unittest.TestCase):
     def setUp(self):
@@ -38,6 +38,22 @@ class TestSpatialPartitionTree(unittest.TestCase):
         chunk = SceneChunk(((0,0,0), (10,10,10)))
         self.assertTrue(chunk.contains((5,5,5)))
         self.assertFalse(chunk.contains((15,5,5)))
+
+def test_chunk_metadata_state_and_priority():
+    meta = ChunkMetadata(dependencies=["a", "b"], load_priority=1.0, streaming_state="unloaded", lod_level=0)
+    assert meta.streaming_state == "unloaded"
+    meta.set_priority(2.5)
+    assert meta.load_priority == 2.5
+    meta.set_streaming_state("loading")
+    assert meta.streaming_state == "loading"
+    meta.set_lod(1)
+    assert meta.lod_level == 1
+
+def test_chunk_metadata_dependencies():
+    meta = ChunkMetadata(dependencies=["dep1", "dep2"])
+    assert "dep1" in meta.dependencies
+    meta.dependencies.append("dep3")
+    assert "dep3" in meta.dependencies
 
 if __name__ == '__main__':
     unittest.main() 

@@ -5,12 +5,14 @@ Service layer for managing factions and their relationships.
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime
 from sqlalchemy import and_, or_
-from app.core.models.faction import Faction
+from app.core.models.world import Faction
 from app.core.database import db
 from app.core.exceptions import (
     FactionNotFoundError, InvalidRelationshipError,
     DuplicateFactionError
 )
+from app.core.api.validation.faction_validators import FactionType
+from app.core.api.validation.faction_validators import FactionStatus
 
 class FactionService:
     """Service for managing faction operations."""
@@ -123,155 +125,123 @@ class FactionService:
         db.session.commit()
 
 class FactionRelationshipService:
-    """Service for managing faction relationships."""
-    
+    """Service for managing relationships between any two entities (not just factions)."""
     @staticmethod
     def set_relationship(
-        faction_id: int,
-        target_faction_id: int,
-        relation_type: RelationType,
-        reputation_score: float = 0.0,
-        trade_status: bool = False,
+        entity1_id: int,
+        entity1_type: str,
+        entity2_id: int,
+        entity2_type: str,
+        relationship_type: str = None,
+        relationship_value: int = 0,
         metadata: Dict = None
-    ) -> FactionRelationship:
-        """Create or update a relationship between factions."""
-        # Validate factions exist
-        source_faction = FactionService.get_faction(faction_id)
-        target_faction = FactionService.get_faction(target_faction_id)
-        
-        if not source_faction or not target_faction:
-            raise FactionNotFoundError("One or both factions not found")
-            
-        if faction_id == target_faction_id:
-            raise InvalidRelationshipError("Cannot create relationship with self")
-
+    ) -> 'Relationship':
+        """Create or update a relationship between any two entities."""
+        from app.social.models.social import Relationship, EntityType
+        # Validate entity types
+        e1_type = EntityType(entity1_type)
+        e2_type = EntityType(entity2_type)
         # Get or create relationship
-        relationship = db.session.query(FactionRelationship).filter(
-            and_(
-                FactionRelationship.faction_id == faction_id,
-                FactionRelationship.target_faction_id == target_faction_id
-            )
+        relationship = db.session.query(Relationship).filter_by(
+            entity1_id=entity1_id,
+            entity1_type=e1_type,
+            entity2_id=entity2_id,
+            entity2_type=e2_type
         ).first()
-
         if relationship:
-            # Update existing
-            relationship.relation_type = relation_type
-            relationship.reputation_score = reputation_score
-            relationship.trade_status = trade_status
+            relationship.relationship_type = relationship_type
+            relationship.relationship_value = relationship_value
             if metadata:
-                relationship.metadata.update(metadata)
-                
-            # Update timestamps for specific changes
-            if relation_type in [RelationType.ALLIED, RelationType.VASSAL]:
-                relationship.alliance_date = datetime.utcnow()
-            elif relation_type in [RelationType.HOSTILE, RelationType.WAR]:
-                relationship.last_conflict_date = datetime.utcnow()
+                if relationship.metadata:
+                    relationship.metadata.update(metadata)
+                else:
+                    relationship.metadata = metadata
         else:
-            # Create new
-            relationship = FactionRelationship(
-                faction_id=faction_id,
-                target_faction_id=target_faction_id,
-                relation_type=relation_type,
-                reputation_score=reputation_score,
-                trade_status=trade_status,
-                metadata=metadata or {},
-                alliance_date=(datetime.utcnow() if relation_type in 
-                             [RelationType.ALLIED, RelationType.VASSAL] else None),
-                last_conflict_date=(datetime.utcnow() if relation_type in 
-                                  [RelationType.HOSTILE, RelationType.WAR] else None)
+            relationship = Relationship(
+                entity1_id=entity1_id,
+                entity1_type=e1_type,
+                entity2_id=entity2_id,
+                entity2_type=e2_type,
+                relationship_type=relationship_type,
+                relationship_value=relationship_value,
+                metadata=metadata or {}
             )
             db.session.add(relationship)
-
         db.session.commit()
         return relationship
 
     @staticmethod
     def get_relationship(
-        faction_id: int,
-        target_faction_id: int
-    ) -> Optional[FactionRelationship]:
-        """Get the relationship between two factions."""
-        return db.session.query(FactionRelationship).filter(
-            and_(
-                FactionRelationship.faction_id == faction_id,
-                FactionRelationship.target_faction_id == target_faction_id
-            )
+        entity1_id: int,
+        entity1_type: str,
+        entity2_id: int,
+        entity2_type: str
+    ) -> Optional['Relationship']:
+        from app.social.models.social import Relationship, EntityType
+        e1_type = EntityType(entity1_type)
+        e2_type = EntityType(entity2_type)
+        return db.session.query(Relationship).filter_by(
+            entity1_id=entity1_id,
+            entity1_type=e1_type,
+            entity2_id=entity2_id,
+            entity2_type=e2_type
         ).first()
 
     @staticmethod
-    def get_faction_relationships(
-        faction_id: int,
-        relation_type: RelationType = None,
-        min_reputation: float = None,
+    def get_entity_relationships(
+        entity_id: int,
+        entity_type: str,
+        relationship_type: str = None,
+        min_value: int = None,
         include_incoming: bool = False
-    ) -> List[FactionRelationship]:
-        """Get all relationships for a faction."""
-        query = db.session.query(FactionRelationship)
-        
+    ) -> List['Relationship']:
+        from app.social.models.social import Relationship, EntityType
+        e_type = EntityType(entity_type)
+        query = db.session.query(Relationship)
         if include_incoming:
-            query = query.filter(or_(
-                FactionRelationship.faction_id == faction_id,
-                FactionRelationship.target_faction_id == faction_id
-            ))
+            query = query.filter(
+                or_(
+                    Relationship.entity1_id == entity_id,
+                    Relationship.entity2_id == entity_id
+                ),
+                or_(
+                    Relationship.entity1_type == e_type,
+                    Relationship.entity2_type == e_type
+                )
+            )
         else:
-            query = query.filter(FactionRelationship.faction_id == faction_id)
-            
-        if relation_type:
-            query = query.filter(FactionRelationship.relation_type == relation_type)
-        if min_reputation is not None:
-            query = query.filter(FactionRelationship.reputation_score >= min_reputation)
-            
+            query = query.filter(
+                Relationship.entity1_id == entity_id,
+                Relationship.entity1_type == e_type
+            )
+        if relationship_type:
+            query = query.filter(Relationship.relationship_type == relationship_type)
+        if min_value is not None:
+            query = query.filter(Relationship.relationship_value >= min_value)
         return query.all()
 
     @staticmethod
-    def update_reputation(
-        faction_id: int,
-        target_faction_id: int,
-        change: float
-    ) -> Tuple[FactionRelationship, RelationType]:
-        """Update reputation between factions and determine new relation type."""
-        relationship = FactionRelationshipService.get_relationship(
-            faction_id, target_faction_id
-        )
-        if not relationship:
-            raise InvalidRelationshipError("Relationship does not exist")
-
-        # Update reputation score
-        old_score = relationship.reputation_score
-        new_score = max(-100, min(100, old_score + change))
-        relationship.reputation_score = new_score
-        
-        # Determine new relation type based on score
-        new_type = RelationType.NEUTRAL
-        if new_score >= 75:
-            new_type = RelationType.ALLIED
-        elif new_score >= 25:
-            new_type = RelationType.FRIENDLY
-        elif new_score <= -75:
-            new_type = RelationType.WAR
-        elif new_score <= -25:
-            new_type = RelationType.HOSTILE
-            
-        old_type = relationship.relation_type
-        if new_type != old_type:
-            relationship.relation_type = new_type
-            if new_type in [RelationType.ALLIED, RelationType.VASSAL]:
-                relationship.alliance_date = datetime.utcnow()
-            elif new_type in [RelationType.HOSTILE, RelationType.WAR]:
-                relationship.last_conflict_date = datetime.utcnow()
-
-        db.session.commit()
-        return relationship, new_type
+    def update_relationship_value(
+        entity1_id: int,
+        entity1_type: str,
+        entity2_id: int,
+        entity2_type: str,
+        delta: int
+    ) -> Optional['Relationship']:
+        rel = FactionRelationshipService.get_relationship(entity1_id, entity1_type, entity2_id, entity2_type)
+        if rel:
+            rel.relationship_value += delta
+            db.session.commit()
+        return rel
 
     @staticmethod
     def delete_relationship(
-        faction_id: int,
-        target_faction_id: int
+        entity1_id: int,
+        entity1_type: str,
+        entity2_id: int,
+        entity2_type: str
     ) -> None:
-        """Delete a relationship between factions."""
-        relationship = FactionRelationshipService.get_relationship(
-            faction_id, target_faction_id
-        )
-        if relationship:
-            db.session.delete(relationship)
+        rel = FactionRelationshipService.get_relationship(entity1_id, entity1_type, entity2_id, entity2_type)
+        if rel:
+            db.session.delete(rel)
             db.session.commit() 

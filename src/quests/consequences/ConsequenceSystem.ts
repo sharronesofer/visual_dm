@@ -1,8 +1,9 @@
 import { QuestConsequence } from '../types';
 import { ItemConsequenceHandler, PlayerInventory } from './ItemConsequenceHandler';
 import { WorldStateHandler, WorldState } from './WorldStateHandler';
-import { FactionType } from '../../types/factions/faction';
+import { FactionType } from '../../core/interfaces/types/factions/faction';
 import { WorldStateChangeCustomData } from './types';
+import { ItemService } from '../../core/services/ItemService';
 
 /**
  * Types of consequences that can occur
@@ -39,16 +40,7 @@ export interface Consequence {
   severity: ConsequenceSeverity;
   description: string;
   trigger: ConsequenceTrigger;
-  effects: {
-    immediate?: (state: WorldState) => void;
-    ongoing?: (state: WorldState, deltaTime: number) => void;
-    cleanup?: (state: WorldState) => void;
-  };
-  metadata?: {
-    source: string;
-    timestamp: number;
-    expiresAt?: number;
-  };
+  effects: Record<string, any>;
 }
 
 export type WorldStateChangeType =
@@ -70,15 +62,14 @@ export interface WorldStateChange {
   customData?: WorldStateChangeCustomData;
 }
 
-export interface WorldStateChangeCustomData {
-  type: 'QUEST_COMPLETION' | 'QUEST_FAILURE' | 'QUEST_CANCELLATION' | 'TENSION_DECAY' | 'TENSION_STATE_CHANGE' | 'DIPLOMATIC_EVENT';
-  questId?: string;
-  winningFaction?: FactionType;
-  factions?: FactionType[];
+export interface WorldStateChangeEvent {
+  type: WorldStateChangeType;
+  description: string;
+  value: number;
+  affectedFactions: FactionType[];
+  location: string | null;
   timestamp: number;
-  oldState?: 'HIGH_TENSION' | 'LOW_TENSION';
-  newState?: 'HIGH_TENSION' | 'LOW_TENSION';
-  eventType?: 'OPPORTUNITY' | 'CONFLICT';
+  customData?: WorldStateChangeCustomData;
 }
 
 /**
@@ -87,8 +78,11 @@ export interface WorldStateChangeCustomData {
 export class ConsequenceSystem {
   private itemHandler: ItemConsequenceHandler;
 
-  constructor(private worldStateHandler: WorldStateHandler) {
-    this.itemHandler = new ItemConsequenceHandler();
+  constructor(
+    private worldStateHandler: WorldStateHandler,
+    private itemService: ItemService
+  ) {
+    this.itemHandler = new ItemConsequenceHandler(this.itemService);
   }
 
   /**
@@ -98,17 +92,19 @@ export class ConsequenceSystem {
     playerId: string,
     consequence: QuestConsequence
   ): Promise<void> {
+    const worldState = this.worldStateHandler.getWorldState();
+
     switch (consequence.type) {
       case 'ITEM_REWARD':
-        await this.itemHandler.handleItemReward(playerId, consequence, this.worldStateHandler.getWorldState());
+        await this.itemHandler.handleItemReward(playerId, consequence, worldState as any);
         break;
 
       case 'ITEM_REMOVE':
-        await this.itemHandler.handleItemRemoval(playerId, consequence, this.worldStateHandler.getWorldState());
+        await this.itemHandler.handleItemRemoval(playerId, consequence, worldState as any);
         break;
 
       case 'WORLD_STATE':
-        await this.worldStateHandler.handleWorldStateChange(consequence, this.worldStateHandler.getWorldState());
+        await this.worldStateHandler.handleWorldStateChange(consequence, worldState as any);
         break;
 
       default:
@@ -132,21 +128,23 @@ export class ConsequenceSystem {
    * Update world state (check expired effects, etc.)
    */
   update(): void {
-    this.worldStateHandler.update(this.worldStateHandler.getWorldState());
+    // Cast to any to work around type mismatch between different WorldState definitions
+    const worldState = this.worldStateHandler.getWorldState();
+    this.worldStateHandler.update(worldState as any);
   }
 
   /**
    * Get the current world state
    */
-  getWorldState(): WorldState {
+  getWorldState(): any {
     return this.worldStateHandler.getWorldState();
   }
 
   /**
    * Get a player's inventory
    */
-  getPlayerInventory(playerId: string): PlayerInventory {
-    return this.itemHandler.getPlayerInventory(playerId);
+  getPlayerInventory(): any {
+    return this.itemService.getPlayerInventory();
   }
 
   /**
@@ -169,7 +167,7 @@ export class ConsequenceSystem {
    */
   applyConsequences(consequences: WorldStateChange[]): void {
     consequences.forEach(consequence => {
-      this.worldStateHandler.applyChange(consequence);
+      this.worldStateHandler.applyWorldStateChange(consequence);
     });
   }
 
@@ -183,7 +181,7 @@ export class ConsequenceSystem {
   /**
    * Handle item consequences
    */
-  handleItemConsequences(inventory: any, consequences: any[]): void {
-    this.itemHandler.handleConsequences(inventory, consequences);
+  handleItemConsequences(playerId: string, consequences: any[]): void {
+    this.itemHandler.handleConsequences(playerId, consequences);
   }
 } 

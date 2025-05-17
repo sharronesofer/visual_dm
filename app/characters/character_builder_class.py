@@ -15,11 +15,10 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.core.models.character import Character
 from app.core.models.user import User
 from app.core.models.party import Party
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.models.spell import Spell
 from app.core.models.inventory import InventoryItem
-from app.core.models.combat import CombatStats
 from app.core.models.save import SaveGame
 
 # Get the absolute paths to the JSON files

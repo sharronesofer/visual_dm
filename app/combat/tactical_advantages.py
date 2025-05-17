@@ -4,7 +4,6 @@ It integrates with the hex grid system to provide combat bonuses based on terrai
 """
 
 from typing import Dict, Any, Tuple, Optional
-from app.core.models.combat import CombatParticipant
 from app.hexmap.tactical_hex_grid import TacticalHexGrid, TacticalHexCell
 
 def calculate_terrain_advantage(
@@ -93,8 +92,8 @@ def _calculate_los_penalty(
 
 def apply_terrain_advantages(
     grid: TacticalHexGrid,
-    attacker: CombatParticipant,
-    defender: CombatParticipant,
+    attacker,
+    defender,
     attack_roll: int
 ) -> Tuple[int, Dict[str, float]]:
     """
@@ -109,6 +108,7 @@ def apply_terrain_advantages(
     Returns:
         Tuple of (modified_roll, advantage_details)
     """
+    from app.core.models.combat import CombatParticipant
     # Get positions from combat state
     attacker_pos = (attacker.position_q, attacker.position_r)
     defender_pos = (defender.position_q, defender.position_r)

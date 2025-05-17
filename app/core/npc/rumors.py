@@ -8,7 +8,7 @@ import random
 from sqlalchemy.orm import Session
 from app.core.database import db
 from app.core.models.npc import NPC
-from app.core.models.region import Region
+from app.core.models.world import Region
 
 class NPCRumors:
     """Handles NPC rumor generation and management."""

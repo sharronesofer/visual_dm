@@ -14,7 +14,6 @@ from app.core.models.season_system import SeasonSystem
 from app.core.models.weather_system import WeatherSystem
 from app.core.models.npc_activity_system import NPCActivitySystem
 from app.core.enums import TimeOfDay, Season, WeatherType
-from app.core.models.faction import Faction
 from app.core.models.version_control import VersionControl
 
 class Weather(BaseModel):

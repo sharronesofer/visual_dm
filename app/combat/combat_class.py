@@ -3,7 +3,6 @@
 import random
 from app.combat.status_effects_utils import apply_status_effect
 from typing import Dict, Any, List, Optional
-from app.core.models.combat import CombatState, CombatParticipant, CombatEngine
 from app.core.models.character import Character
 from app.core.models.npc import NPC
 from app.core.database import db
@@ -194,7 +193,8 @@ class Combatant:
 class CombatManager:
     """Manager class for handling combat encounters."""
     
-    def __init__(self, combat_state: CombatState):
+    def __init__(self, combat_state):
+        from app.core.models.combat import CombatEngine
         self.combat_state = combat_state
         self.engine = CombatEngine(combat_state)
 
@@ -218,7 +218,7 @@ class CombatManager:
         db.session.commit()
         return cls(combat_state)
 
-    def add_participant(self, participant_data: Dict) -> CombatParticipant:
+    def add_participant(self, participant_data: Dict):
         """Add a participant to the combat."""
         participant = CombatParticipant(
             combat_state_id=self.combat_state.id,

@@ -8,13 +8,21 @@ from app.core.database import db
 from typing import Optional
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.dialects.postgresql import UUID
 from app.core.models.save import SaveGame
+from enum import Enum
+import uuid
+
+class UserRole(Enum):
+    ADMIN = 'admin'
+    USER = 'user'
+    GUEST = 'guest'
 
 class User(db.Model):
     """User model."""
     __tablename__ = 'users'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)

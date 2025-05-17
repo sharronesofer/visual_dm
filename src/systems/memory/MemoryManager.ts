@@ -1,4 +1,7 @@
 import { MemoryEventType } from '../../types/npc/memory';
+import { EventBus as CoreEventBus } from '../../core/interfaces/types/events';
+import { POIEvents } from '../../poi/types/POIEvents';
+import { TypedEventEmitter } from '../../utils/TypedEventEmitter';
 
 export interface Memory {
   id: string;
@@ -25,6 +28,17 @@ export interface MemoryQuery {
   tags?: string[];
   limit?: number;
 }
+
+// Use a typed EventBus for POI events
+const POIEventBus = CoreEventBus.getInstance() as TypedEventEmitter<POIEvents>;
+
+// Subscribe to POI evolution events for Memory system integration
+POIEventBus.on('poi:evolved', ({ poiId, poi, trigger, changes, version }) => {
+  // Example: Log the event
+  console.log(`[Memory Integration] Recording POI evolution event for POI ${poiId}, trigger: ${trigger}`);
+  // TODO: Record this as a MemoryEvent for historical tracking
+  // For example, create a new memory entry with details of the evolution
+});
 
 export class MemoryManager {
   private memories: Map<string, Memory>;

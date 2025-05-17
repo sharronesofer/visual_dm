@@ -1,7 +1,15 @@
 import { GridManager } from './grid';
-import { GridPosition, PathfindingNode, CellType } from '../types/grid';
-import { POICategory } from '../types/spatial';
+import { GridPosition, PathfindingNode, CellType, GridCell } from '../core/interfaces/types/grid';
+// If POICategory is not found in '../types/spatial', comment out or correct the import.
+// import { POICategory } from '../types/spatial';
 import { CollisionSystem } from './collision';
+import { canCharacterAccessBuilding, canCharacterAccessRoom, canCharacterAccessDoor } from './accessControl';
+import { Building } from '../core/interfaces/types/buildings';
+import { Room } from '../core/interfaces/types/buildings';
+import { Door } from '../core/interfaces/types/building';
+
+// Define POICategory if not imported
+export type POICategory = 'residential' | 'commercial' | 'industrial' | 'public' | 'restricted' | string;
 
 interface PathCache {
   path: GridPosition[];
@@ -61,17 +69,18 @@ export class PathfindingSystem {
   public findPath(
     start: GridPosition,
     end: GridPosition,
+    characterId?: string,
     predictiveAvoidance: boolean = false
   ): GridPosition[] {
     const openSet: PathfindingNode[] = [];
     const closedSet: Set<string> = new Set();
-    
+
     const startNode: PathfindingNode = {
       position: start,
       gCost: 0,
       hCost: this.calculateHeuristic(start, end)
     };
-    
+
     openSet.push(startNode);
 
     while (openSet.length > 0) {
@@ -83,7 +92,7 @@ export class PathfindingSystem {
       this.removeFromArray(openSet, currentNode);
       closedSet.add(this.positionToString(currentNode.position));
 
-      const neighbors = this.getWalkableNeighbors(currentNode.position);
+      const neighbors = this.getWalkableNeighbors(currentNode.position, characterId, undefined, undefined);
       for (const neighbor of neighbors) {
         if (closedSet.has(this.positionToString(neighbor))) {
           continue;
@@ -99,7 +108,7 @@ export class PathfindingSystem {
           newGCost += this.calculatePredictiveCollisionCost(neighbor);
         }
 
-        const neighborNode = openSet.find(node => 
+        const neighborNode = openSet.find(node =>
           this.isSamePosition(node.position, neighbor)
         );
 
@@ -129,7 +138,7 @@ export class PathfindingSystem {
     const now = Date.now();
     this.pathCache.forEach((cache, key) => {
       // Check if any point in the cached path is within the radius
-      const isAffected = cache.path.some(point => 
+      const isAffected = cache.path.some(point =>
         Math.abs(point.x - position.x) <= radius &&
         Math.abs(point.y - position.y) <= radius
       );
@@ -174,7 +183,8 @@ export class PathfindingSystem {
   public findGroupPath(
     start: GridPosition,
     end: GridPosition,
-    options: GroupPathfindingOptions
+    options: GroupPathfindingOptions,
+    characterId?: string
   ): GridPosition[] {
     const {
       groupSize = 1,
@@ -215,7 +225,7 @@ export class PathfindingSystem {
     };
 
     // Find path with adjusted costs
-    const path = this.findPath(start, end, predictiveAvoidance);
+    const path = this.findPath(start, end, characterId, predictiveAvoidance);
 
     // Restore original cost function
     this.getNodeCost = originalGetNodeCost;
@@ -252,17 +262,18 @@ export class PathfindingSystem {
       groupHeight: number;
       predictiveAvoidance: boolean;
       formationSpacing: number;
-    }
+    },
+    characterId?: string
   ): GridPosition[] {
     const openSet: PathfindingNode[] = [];
     const closedSet: Set<string> = new Set();
-    
+
     const startNode: PathfindingNode = {
       position: start,
       gCost: 0,
       hCost: this.calculateHeuristic(start, end, category)
     };
-    
+
     openSet.push(startNode);
 
     while (openSet.length > 0) {
@@ -274,7 +285,7 @@ export class PathfindingSystem {
       this.removeFromArray(openSet, currentNode);
       closedSet.add(this.positionToString(currentNode.position));
 
-      const neighbors = this.getWalkableNeighbors(currentNode.position, category, groupOptions);
+      const neighbors = this.getWalkableNeighbors(currentNode.position, characterId, category, groupOptions);
       for (const neighbor of neighbors) {
         if (closedSet.has(this.positionToString(neighbor))) {
           continue;
@@ -289,7 +300,7 @@ export class PathfindingSystem {
         );
 
         const gCost = currentNode.gCost + movementCost;
-        const neighborNode = openSet.find(node => 
+        const neighborNode = openSet.find(node =>
           this.isSamePosition(node.position, neighbor)
         );
 
@@ -319,7 +330,8 @@ export class PathfindingSystem {
       groupHeight: number;
       predictiveAvoidance: boolean;
       formationSpacing: number;
-    }
+    },
+    characterId?: string
   ): number {
     const cell = this.gridManager.getCellAt(to);
     if (!cell) return Infinity;
@@ -328,7 +340,7 @@ export class PathfindingSystem {
 
     if (category) {
       const rules = this.categoryRules[category];
-      
+
       // Apply category-specific rules
       if (rules.preferredTypes.includes(cell.cellType)) {
         cost *= 0.8; // 20% discount for preferred terrain
@@ -336,7 +348,7 @@ export class PathfindingSystem {
       if (rules.avoidTypes.includes(cell.cellType)) {
         cost *= 2.0; // Double cost for terrain to avoid
       }
-      
+
       cost *= rules.weightMultiplier;
     }
 
@@ -421,18 +433,19 @@ export class PathfindingSystem {
     category?: POICategory
   ): number {
     let base = Math.abs(start.x - end.x) + Math.abs(start.y - end.y);
-    
+
     if (category) {
       // Adjust heuristic based on category preferences
       const rules = this.categoryRules[category];
       base *= rules.weightMultiplier;
     }
-    
+
     return base;
   }
 
   private getWalkableNeighbors(
     position: GridPosition,
+    characterId?: string,
     category?: POICategory,
     groupOptions?: {
       groupWidth: number;
@@ -465,6 +478,23 @@ export class PathfindingSystem {
       if (category) {
         const rules = this.categoryRules[category];
         if (rules.avoidTypes.includes(cell.cellType)) continue;
+      }
+
+      // Check access control
+      let building: Building | undefined | null = undefined;
+      let room: Room | undefined | null = undefined;
+      let door: Door | undefined | null = undefined;
+      if (cell.buildingId) {
+        building = this.gridManager.getBuildingById(cell.buildingId) as Building | undefined | null;
+        if (characterId && building && !canCharacterAccessBuilding(characterId, building.metadata)) continue;
+      }
+      if (cell.roomId) {
+        room = this.gridManager.getRoomById(cell.roomId) as Room | undefined | null;
+        if (characterId && room && !canCharacterAccessRoom(characterId, room, building?.metadata)) continue;
+      }
+      if (cell.doorId) {
+        door = this.gridManager.getDoorById(cell.doorId) as Door | undefined | null;
+        if (characterId && door && !canCharacterAccessDoor(characterId, door, room || undefined, building?.metadata)) continue;
       }
 
       // Check if position is walkable for the entire group formation
@@ -557,7 +587,7 @@ export class PathfindingSystem {
   }
 
   private removeFromArray(arr: PathfindingNode[], item: PathfindingNode): void {
-    const index = arr.findIndex(node => 
+    const index = arr.findIndex(node =>
       this.isSamePosition(node.position, item.position)
     );
     if (index !== -1) {
@@ -595,5 +625,37 @@ export class PathfindingSystem {
     }
 
     return cost;
+  }
+
+  /**
+   * Register event listeners for building/room/door access control changes.
+   * These should be called by the building/room/door systems when relevant state changes occur.
+   */
+  public onBuildingAccessChanged(buildingId: string, affectedArea: { min: GridPosition, max: GridPosition }) {
+    // Invalidate pathfinding cache for the affected area
+    this.invalidateCacheRegion(affectedArea);
+  }
+
+  public onRoomAccessChanged(roomId: string, affectedArea: { min: GridPosition, max: GridPosition }) {
+    this.invalidateCacheRegion(affectedArea);
+  }
+
+  public onDoorAccessChanged(doorId: string, affectedArea: { min: GridPosition, max: GridPosition }) {
+    this.invalidateCacheRegion(affectedArea);
+  }
+
+  /**
+   * Invalidate pathfinding cache for a rectangular region (min/max inclusive)
+   */
+  private invalidateCacheRegion(region: { min: GridPosition, max: GridPosition }) {
+    // For each cached path, if any node is within the region, invalidate the cache entry
+    for (const [key, cache] of this.pathCache.entries()) {
+      if (cache.path.some(pos =>
+        pos.x >= region.min.x && pos.x <= region.max.x &&
+        pos.y >= region.min.y && pos.y <= region.max.y
+      )) {
+        this.pathCache.delete(key);
+      }
+    }
   }
 } 

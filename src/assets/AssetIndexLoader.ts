@@ -71,9 +71,9 @@ class AssetIndexLoader {
         const errors = (this._validate as any).errors;
         throw new Error(
           'Asset index validation failed:\n' +
-            (Array.isArray(errors)
-              ? errors.map(e => `- ${e.instancePath || e.dataPath || ''} ${e.message}`).join('\n')
-              : 'Unknown error')
+          (Array.isArray(errors)
+            ? errors.map(e => `- ${e.instancePath || e.dataPath || ''} ${e.message}`).join('\n')
+            : 'Unknown error')
         );
       }
     } else {
@@ -103,4 +103,4 @@ class AssetIndexLoader {
   }
 }
 
-module.exports = AssetIndexLoader;
+export default AssetIndexLoader;

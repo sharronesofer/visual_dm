@@ -6,7 +6,7 @@ import {
   ThematicElements,
   StateTracking
 } from '../types/POITypes';
-import { IPOI } from '../types/IPOI';
+import { IPOI } from '../interfaces/IPOI';
 
 /**
  * Abstract base class implementing common POI functionality
@@ -19,7 +19,7 @@ export abstract class BasePOI implements IPOI {
   description: string;
   coordinates: Coordinates;
   boundingBox: { width: number; height: number; depth: number; };
-  connections: ConnectionPoint[];
+  connections: string[];
   adjacentPOIs: string[];
   features: { id: string; type: string; properties: Record<string, unknown>; }[];
   npcs: string[];
@@ -32,6 +32,9 @@ export abstract class BasePOI implements IPOI {
   isExplored: boolean;
   canExpand: boolean;
   expansionRules?: { direction: 'north' | 'south' | 'east' | 'west' | 'up' | 'down'; conditions: string[]; probability: number; }[];
+  position: Coordinates;
+  size: { width: number; height: number; depth: number; };
+  properties: Record<string, unknown>;
 
   constructor(
     id: string,
@@ -47,7 +50,10 @@ export abstract class BasePOI implements IPOI {
     this.subtype = subtype;
     this.coordinates = coordinates;
     this.thematicElements = thematicElements;
-    
+    this.position = coordinates;
+    this.size = this.boundingBox;
+    this.properties = {};
+
     // Initialize default values
     this.description = '';
     this.boundingBox = { width: 1, height: 1, depth: 1 };
@@ -61,7 +67,7 @@ export abstract class BasePOI implements IPOI {
     this.isDiscovered = false;
     this.isExplored = false;
     this.canExpand = true;
-    
+
     // Initialize state tracking
     this.stateTracking = {
       version: 1,
@@ -71,11 +77,17 @@ export abstract class BasePOI implements IPOI {
         timestamp: new Date(),
         type: 'creation',
         details: 'POI created'
-      }]
+      }],
+      visits: 0,
+      discoveries: 0,
+      interactions: 0,
+      modificationHistory: []
     };
   }
 
-  // Serialization methods
+  /**
+   * Serialize the POI to a plain object for storage or transmission
+   */
   serialize(): Record<string, unknown> {
     return {
       id: this.id,
@@ -108,6 +120,10 @@ export abstract class BasePOI implements IPOI {
     };
   }
 
+  /**
+   * Deserialize a plain object into this POI instance
+   * @param data - The data to deserialize
+   */
   deserialize(data: Record<string, unknown>): void {
     if (typeof data.stateTracking === 'object' && data.stateTracking) {
       const stateData = data.stateTracking as {
@@ -130,22 +146,28 @@ export abstract class BasePOI implements IPOI {
 
       // Remove stateTracking from data to avoid double processing
       const { stateTracking, ...restData } = data;
-      
+
       // Type assertion for boolean fields
       const typedData = restData as {
-        isActive: boolean;
-        isDiscovered: boolean;
-        isExplored: boolean;
-        canExpand: boolean;
+        isActive?: boolean | string;
+        isDiscovered?: boolean | string;
+        isExplored?: boolean | string;
+        canExpand?: boolean | string;
       };
 
+      // Helper to coerce string|boolean to boolean
+      function toBool(val: boolean | string | undefined): boolean {
+        if (typeof val === 'string') return val === 'true';
+        return Boolean(val);
+      }
+
       Object.assign(this, {
-        ...restData,
-        isActive: Boolean(typedData.isActive),
-        isDiscovered: Boolean(typedData.isDiscovered),
-        isExplored: Boolean(typedData.isExplored),
-        canExpand: Boolean(typedData.canExpand)
+        ...restData
       });
+      this.isActive = toBool(typedData.isActive);
+      this.isDiscovered = toBool(typedData.isDiscovered);
+      this.isExplored = toBool(typedData.isExplored);
+      this.canExpand = toBool(typedData.canExpand);
     } else {
       throw new Error('Invalid state tracking data in POI deserialization');
     }
@@ -182,11 +204,8 @@ export abstract class BasePOI implements IPOI {
   }
 
   validateConnections(): boolean {
-    // Validate all connections have valid source and target coordinates
-    return this.connections.every(connection => 
-      this.validateCoordinates(connection.sourceCoords) &&
-      this.validateCoordinates(connection.targetCoords)
-    );
+    // Validate all connections are non-empty strings
+    return this.connections.every(id => typeof id === 'string' && id.length > 0);
   }
 
   validateThematicCoherence(): boolean {
@@ -229,5 +248,116 @@ export abstract class BasePOI implements IPOI {
       type,
       details
     });
+  }
+
+  /**
+   * Add a connection to another POI by ID
+   * @param targetPoiId - The ID of the POI to connect to
+   */
+  public addConnection(targetPoiId: string): void {
+    if (!this.connections.includes(targetPoiId)) {
+      this.connections.push(targetPoiId);
+    }
+  }
+
+  /**
+   * Get all connected POI IDs
+   * @returns Array of connected POI IDs
+   */
+  public getConnections(): string[] {
+    return [...this.connections];
+  }
+
+  /**
+   * Returns the coordinates of the POI (for spatial indexing)
+   * @returns Coordinates object
+   */
+  public getPosition(): Coordinates {
+    return this.coordinates;
+  }
+
+  /**
+   * Tracks state changes for auditing and debugging
+   * @param details - Description of the change
+   * @param type - Type of change (creation, modification, expansion, deletion)
+   */
+  public updateStateTracking(details: string, type: 'creation' | 'modification' | 'expansion' | 'deletion') {
+    if (!this.stateTracking) return;
+    this.stateTracking.version++;
+    this.stateTracking.lastModified = new Date();
+    this.stateTracking.changeHistory.push({
+      timestamp: new Date(),
+      type,
+      details
+    });
+  }
+
+  // IPOI interface methods
+  getStateTracking(): StateTracking {
+    return this.stateTracking;
+  }
+
+  setCoordinates(coordinates: Coordinates): void {
+    this.coordinates = coordinates;
+    this.position = coordinates;
+  }
+
+  getCoordinates(): Coordinates {
+    return this.coordinates;
+  }
+
+  setPosition(position: Coordinates): void {
+    this.setCoordinates(position);
+  }
+
+  setSize(size: { width: number; height: number; depth: number; }): void {
+    this.size = size;
+    this.boundingBox = size;
+  }
+
+  getSize(): { width: number; height: number; depth: number; } {
+    return this.size;
+  }
+
+  setThematicElements(elements: ThematicElements): void {
+    this.thematicElements = elements;
+  }
+
+  getThematicElements(): ThematicElements {
+    return this.thematicElements;
+  }
+
+  setProperty(key: string, value: unknown): void {
+    this.properties[key] = value;
+  }
+
+  getProperty<T>(key: string): T | undefined {
+    return this.properties[key] as T | undefined;
+  }
+
+  hasProperty(key: string): boolean {
+    return Object.prototype.hasOwnProperty.call(this.properties, key);
+  }
+
+  /**
+   * Remove a connection to another POI by ID
+   * @param targetPoiId - The ID of the POI to disconnect
+   */
+  public removeConnection(targetPoiId: string): void {
+    this.connections = this.connections.filter(id => id !== targetPoiId);
+  }
+
+  /**
+   * Get the POI type
+   */
+  public getType(): POIType {
+    return this.type;
+  }
+
+  /**
+   * Get the POI subtype
+   */
+  public getSubtype(): POISubtype {
+    return this.subtype;
   }
 } 

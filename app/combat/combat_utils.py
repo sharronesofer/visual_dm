@@ -19,38 +19,31 @@ from app.combat.combat_class import Combatant
 from app.combat.status_effects_utils import tick_status_effects, get_status_effect_modifiers
 from app.characters.party_utils import abandon_party
 from app.combat.combat_behavior_utils import should_abandon
-from app.combat.combat_state_class import CombatState
+from app.core.models.combat import CombatState
 from app.combat.combat_ram import ACTIVE_BATTLES
 from app.combat.tactical_advantages import apply_terrain_advantages
 from app.core.database import db
 from app.core.models.character import Character
 from app.core.models.user import User
 from app.core.models.party import Party
-from app.core.models.region import Region
-from app.core.models.quest import Quest
+from app.core.models.world import Region
+from app.quests.models.quest import Quest
 from app.core.models.spell import Spell, SpellEffect
 from app.core.models.inventory import InventoryItem
-from app.core.models.combat import CombatStats, Combat, CombatParticipant, CombatEngine
 from app.core.models.save import SaveGame
 from app.models.weapon import Weapon
 from app.utils.gpt_class import GPTClient
 from app.core.services.ai import LLMService
 from app.core.utils.error_utils import ValidationError, DatabaseError, NotFoundError
 from app.core.models.status import StatusEffect, EffectType
-from app.models import Quest
-from visual_client.game.combat import (
-    calculate_damage,
-    calculate_attack_bonus,
-    calculate_attack_roll,
-    apply_damage,
-    resolve_turn
-)
-from visual_client.game.character import should_abandon
-from visual_client.game.narrative import narrate_combat_action
+from app.combat.status_effects_manager import StatusEffectManager
 
 # Initialize GPT client and LLM service
 gpt_client = GPTClient()
 llm_service = LLMService()
+
+# Shared manager instance for combat utilities
+status_effect_manager = StatusEffectManager(db)
 
 def call(system_prompt: str, user_prompt: str, temperature: float = 0.7, max_tokens: int = 150) -> str:
     """Wrapper around LLM call to generate responses."""
@@ -292,28 +285,14 @@ def resolve_saving_throw(stat_mod, dc):
     }
 
 def apply_combat_status_effects(target_id, status_dict, source=None):
-    """Apply status effects to a combat participant."""
-    try:
-        participant = db.session.query(CombatParticipant).get(target_id)
-        if not participant:
-            raise NotFoundError(f"Combat participant {target_id} not found")
-
-        # Apply effects
-        for effect_name, duration in status_dict.items():
-            effect = StatusEffect(
-                participant_id=participant.id,
-                effect_type=EffectType[effect_name.upper()],
-                duration=duration,
-                source_id=source.id if source else None
-            )
-            db.session.add(effect)
-
-        db.session.commit()
-        return True
-
-    except Exception as e:
-        db.session.rollback()
-        raise DatabaseError(f"Failed to apply status effects: {str(e)}")
+    """Apply status effects to a combat participant using the new system."""
+    participant = db.session.query(CombatParticipant).get(target_id)
+    if not participant:
+        raise NotFoundError(f"Combat participant {target_id} not found")
+    for effect_id, stacking in status_dict.items():
+        status_effect_manager.apply_effect(participant, effect_id, stacking)
+    db.session.commit()
+    return True
 
 def roll_fumble_effect():
     """Roll for a fumble effect."""
@@ -536,26 +515,11 @@ def is_critical_hit(
     
     return random.random() < crit_chance
 
-def apply_status_effects(
-    participant: CombatParticipant,
-    effects: Dict[str, Any]
-) -> None:
-    """
-    Apply status effects to a participant.
-    
-    Args:
-        participant: The combat participant
-        effects: Dictionary of effects to apply
-    """
-    if not participant.status_effects:
-        participant.status_effects = []
-        
-    for effect_type, effect_data in effects.items():
-        participant.status_effects.append({
-            'type': effect_type,
-            'duration': effect_data.get('duration', 1),
-            'magnitude': effect_data.get('magnitude', 0)
-        })
+def apply_status_effects(participant: CombatParticipant, effects: Dict[str, Any]) -> None:
+    """Apply status effects to a participant using the new system."""
+    for effect_id, stacking in effects.items():
+        status_effect_manager.apply_effect(participant, effect_id, stacking)
+    db.session.commit()
 
 def apply_damage(target: Character, damage: int, damage_type: str) -> Dict[str, Any]:
     """Apply damage to a character."""

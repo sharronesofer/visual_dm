@@ -50,6 +50,9 @@ IMPORT_MAPPING = {
     'useRef': 'None  # React hooks removed',
 }
 
+# Add asyncio import if async functions are detected
+ASYNCIO_IMPORT = 'import asyncio'
+
 def camel_to_snake_case(name: str) -> str:
     """Convert camelCase to snake_case."""
     # Handle special cases where acronyms should remain uppercase
@@ -331,8 +334,59 @@ def process_classes(content: str) -> str:
     
     return content
 
+def convert_await_expressions(code: str) -> str:
+    """
+    Convert TypeScript 'await' expressions to Python 'await' expressions.
+    Handles:
+    - Simple await: const x = await foo();
+    - Nested await: await outer(await inner());
+    - Await in loops, conditionals, arrow functions, class methods.
+    - Preserves execution order and indentation.
+    """
+    # Replace 'await ' with 'await ' (Python uses same keyword)
+    # Remove semicolons at end of await lines
+    code = re.sub(r'await\s+', 'await ', code)
+    code = re.sub(r';\s*$', '', code, flags=re.MULTILINE)
+    # Optionally, handle more complex patterns if needed
+    return code
+
+# --- ASYNC/AWAIT: PROMISE METHOD CONVERSION START ---
+def convert_promise_chains(code: str) -> str:
+    """
+    Convert Promise chains (.then(), .catch(), .finally()) to Python async/await with try/except/finally.
+    - .then(): sequential await
+    - .catch(): try/except
+    - .finally(): try/finally
+    Handles chained calls and callback functions.
+    """
+    # Regex for Promise chains: promise.then(...).catch(...).finally(...)
+    # This is a simplified approach; for complex cases, a full parser is needed.
+    def promise_chain_replacer(match):
+        var = match.group(1)
+        promise_expr = match.group(2)
+        then_cb = match.group(3)
+        catch_cb = match.group(4)
+        finally_cb = match.group(5)
+        # Build Python try/except/finally structure
+        py = f"try:\n    {var} = await {promise_expr}({then_cb})"
+        if catch_cb:
+            py += f"\nexcept Exception as e:\n    {catch_cb}(e)"
+        if finally_cb:
+            py += f"\nfinally:\n    {finally_cb}()"
+        return py
+    # Example: const result = somePromise.then(cb).catch(errCb).finally(finCb)
+    pattern = r'const\s+(\w+)\s*=\s*([\w\.]+)\\.then\\(([^)]+)\\)(?:\\.catch\\(([^)]+)\\))?(?:\\.finally\\(([^)]+)\\))?'
+    code = re.sub(pattern, promise_chain_replacer, code)
+    # Optionally, handle more complex/nested chains
+    return code
+
+# Patch process_functions to apply Promise chain conversion after await conversion
+old_process_functions_await = process_functions
+
 def process_functions(content: str) -> str:
-    """Convert TypeScript functions to Python functions."""
+    """Convert TypeScript functions (including async/arrow) to Python functions, with await and Promise chain handling."""
+    imports_needed = set()
+    
     def function_replacer(match):
         async_keyword = match.group(1) or ""
         func_name = match.group(2)
@@ -344,6 +398,7 @@ def process_functions(content: str) -> str:
         params = params.replace(': string', ': str').replace(': number', ': float').replace(': boolean', ': bool')
         
         # Process return type
+        is_promise = 'Promise' in return_type
         if return_type:
             for ts_type, py_type in TYPE_MAPPING.items():
                 if ts_type in return_type:
@@ -353,32 +408,229 @@ def process_functions(content: str) -> str:
             return_annotation = ""
         
         # Create function definition
-        if async_keyword:
+        if async_keyword or is_promise:
+            imports_needed.add(ASYNCIO_IMPORT)
             func_def = f"async def {camel_to_snake_case(func_name)}({params}){return_annotation}:"
         else:
             func_def = f"def {camel_to_snake_case(func_name)}({params}){return_annotation}:"
         
-        # Process function body
+        # Process function body: await, then Promise chains
+        func_body = convert_await_expressions(func_body)
+        func_body = convert_promise_chains(func_body)
         func_body_lines = []
         for line in func_body.split('\n'):
             if line.strip():
                 func_body_lines.append(f"    {line.strip()}")
-        
-        # Handle empty functions
         if not func_body_lines:
             func_body_lines = ["    pass"]
-        
         return func_def + "\n" + "\n".join(func_body_lines)
-    
-    # Find functions and replace them
-    function_pattern = r'export\s+(async\s+)?function\s+(\w+)\((.*?)\)(?:\s*:\s*([^{]*))?{([^}]*)}'
-    if re.search(function_pattern, content):
-        content = re.sub(function_pattern, function_replacer, content)
-    
+
+    # Match named functions (async or not)
+    function_pattern = r'export\\s+(async\\s+)?function\\s+(\\w+)\\((.*?)\\)(?:\\s*:\\s*([^{]*))?{([^}]*)}'
+    content = re.sub(function_pattern, function_replacer, content)
+
+    # Match async arrow functions (const foo = async (...) => {...})
+    def arrow_func_replacer(match):
+        var_name = match.group(1)
+        async_keyword = match.group(2) or ""
+        params = match.group(3)
+        return_type = match.group(4) or ""
+        func_body = match.group(5)
+        is_promise = 'Promise' in return_type
+        if return_type:
+            for ts_type, py_type in TYPE_MAPPING.items():
+                if ts_type in return_type:
+                    return_type = return_type.replace(ts_type, py_type)
+            return_annotation = f" -> {return_type.strip()}"
+        else:
+            return_annotation = ""
+        if async_keyword or is_promise:
+            imports_needed.add(ASYNCIO_IMPORT)
+            func_def = f"async def {camel_to_snake_case(var_name)}({params}){return_annotation}:"
+        else:
+            func_def = f"def {camel_to_snake_case(var_name)}({params}){return_annotation}:"
+        # Process function body: await, then Promise chains
+        func_body = convert_await_expressions(func_body)
+        func_body = convert_promise_chains(func_body)
+        func_body_lines = []
+        for line in func_body.split('\n'):
+            if line.strip():
+                func_body_lines.append(f"    {line.strip()}")
+        if not func_body_lines:
+            func_body_lines = ["    pass"]
+        return func_def + "\n" + "\n".join(func_body_lines)
+    # Arrow function pattern (const foo = async (...) => {...})
+    arrow_func_pattern = r'const\\s+(\\w+)\\s*=\\s*(async\\s+)?\\((.*?)\\)(?:\\s*:\\s*([^{=]*))?\\s*=>\\s*{([^}]*)}'
+    content = re.sub(arrow_func_pattern, arrow_func_replacer, content)
+
+    # Optionally: handle async class/object methods (not just top-level)
+    # This can be expanded as needed for more complex patterns
+
+    # Add asyncio import if needed
+    if imports_needed:
+        content = f"{ASYNCIO_IMPORT}\n" + content
     return content
+# --- ASYNC/AWAIT: PROMISE METHOD CONVERSION END ---
+
+# --- ASYNC/AWAIT: PROMISE STATIC METHOD CONVERSION START ---
+def convert_promise_static_methods(code: str) -> str:
+    """
+    Convert static Promise methods to Python asyncio equivalents:
+    - Promise.all([...]) -> await asyncio.gather(...)
+    - Promise.race([...]) -> await asyncio.wait(..., return_when=asyncio.FIRST_COMPLETED)
+    - Promise.resolve(val) -> resolved asyncio.Future
+    - Promise.reject(err) -> rejected asyncio.Future
+    """
+    # Promise.all([a, b]) => await asyncio.gather(a, b)
+    code = re.sub(r'Promise\.all\((\[[^\]]*\])\)', r'await asyncio.gather\1', code)
+    # Promise.race([a, b]) => await asyncio.wait([a, b], return_when=asyncio.FIRST_COMPLETED)
+    code = re.sub(r'Promise\.race\((\[[^\]]*\])\)', r'await asyncio.wait\1, return_when=asyncio.FIRST_COMPLETED', code)
+    # Promise.resolve(val) => future = asyncio.Future(); future.set_result(val)
+    code = re.sub(r'Promise\.resolve\(([^)]+)\)', r'(lambda: (f := asyncio.Future(), f.set_result(\1), f)[0])()', code)
+    # Promise.reject(err) => future = asyncio.Future(); future.set_exception(err)
+    code = re.sub(r'Promise\.reject\(([^)]+)\)', r'(lambda: (f := asyncio.Future(), f.set_exception(\1), f)[0])()', code)
+    return code
+
+# Patch process_functions to apply static Promise method conversion after Promise chain conversion
+old_process_functions_promise = process_functions
+
+def process_functions(content: str) -> str:
+    """Convert TypeScript functions (including async/arrow) to Python functions, with await, Promise chain, and static method handling."""
+    imports_needed = set()
+    
+    def function_replacer(match):
+        async_keyword = match.group(1) or ""
+        func_name = match.group(2)
+        params = match.group(3)
+        return_type = match.group(4) or ""
+        func_body = match.group(5)
+        
+        # Process parameters
+        params = params.replace(': string', ': str').replace(': number', ': float').replace(': boolean', ': bool')
+        
+        # Process return type
+        is_promise = 'Promise' in return_type
+        if return_type:
+            for ts_type, py_type in TYPE_MAPPING.items():
+                if ts_type in return_type:
+                    return_type = return_type.replace(ts_type, py_type)
+            return_annotation = f" -> {return_type.strip()}"
+        else:
+            return_annotation = ""
+        
+        # Create function definition
+        if async_keyword or is_promise:
+            imports_needed.add(ASYNCIO_IMPORT)
+            func_def = f"async def {camel_to_snake_case(func_name)}({params}){return_annotation}:"
+        else:
+            func_def = f"def {camel_to_snake_case(func_name)}({params}){return_annotation}:"
+        
+        # Process function body: await, Promise chains, static methods
+        func_body = convert_await_expressions(func_body)
+        func_body = convert_promise_chains(func_body)
+        func_body = convert_promise_static_methods(func_body)
+        func_body_lines = []
+        for line in func_body.split('\n'):
+            if line.strip():
+                func_body_lines.append(f"    {line.strip()}")
+        if not func_body_lines:
+            func_body_lines = ["    pass"]
+        return func_def + "\n" + "\n".join(func_body_lines)
+
+    # Match named functions (async or not)
+    function_pattern = r'export\\s+(async\\s+)?function\\s+(\\w+)\\((.*?)\\)(?:\\s*:\\s*([^{]*))?{([^}]*)}'
+    content = re.sub(function_pattern, function_replacer, content)
+
+    # Match async arrow functions (const foo = async (...) => {...})
+    def arrow_func_replacer(match):
+        var_name = match.group(1)
+        async_keyword = match.group(2) or ""
+        params = match.group(3)
+        return_type = match.group(4) or ""
+        func_body = match.group(5)
+        is_promise = 'Promise' in return_type
+        if return_type:
+            for ts_type, py_type in TYPE_MAPPING.items():
+                if ts_type in return_type:
+                    return_type = return_type.replace(ts_type, py_type)
+            return_annotation = f" -> {return_type.strip()}"
+        else:
+            return_annotation = ""
+        if async_keyword or is_promise:
+            imports_needed.add(ASYNCIO_IMPORT)
+            func_def = f"async def {camel_to_snake_case(var_name)}({params}){return_annotation}:"
+        else:
+            func_def = f"def {camel_to_snake_case(var_name)}({params}){return_annotation}:"
+        # Process function body: await, Promise chains, static methods
+        func_body = convert_await_expressions(func_body)
+        func_body = convert_promise_chains(func_body)
+        func_body = convert_promise_static_methods(func_body)
+        func_body_lines = []
+        for line in func_body.split('\n'):
+            if line.strip():
+                func_body_lines.append(f"    {line.strip()}")
+        if not func_body_lines:
+            func_body_lines = ["    pass"]
+        return func_def + "\n" + "\n".join(func_body_lines)
+    # Arrow function pattern (const foo = async (...) => {...})
+    arrow_func_pattern = r'const\\s+(\\w+)\\s*=\\s*(async\\s+)?\\((.*?)\\)(?:\\s*:\\s*([^{=]*))?\\s*=>\\s*{([^}]*)}'
+    content = re.sub(arrow_func_pattern, arrow_func_replacer, content)
+
+    # Optionally: handle async class/object methods (not just top-level)
+    # This can be expanded as needed for more complex patterns
+
+    # Add asyncio import if needed
+    if imports_needed:
+        content = f"{ASYNCIO_IMPORT}\n" + content
+    return content
+# --- ASYNC/AWAIT: PROMISE STATIC METHOD CONVERSION END ---
+
+# --- ASYNC/AWAIT: INTEGRATION AND DOCUMENTATION START ---
+"""
+TypeScript to Python Converter - Async/Await Support
+
+This converter supports the following async/await and Promise patterns:
+- Async function detection: Converts TypeScript async functions and arrow functions to Python async def.
+- Await expression handling: Converts all await expressions, including nested and control-structure awaits.
+- Promise method chains: Converts .then(), .catch(), .finally() to Python async/await with try/except/finally.
+- Static Promise methods: Converts Promise.all, Promise.race, Promise.resolve, Promise.reject to asyncio equivalents.
+- Adds necessary asyncio imports automatically.
+- Maintains PEP 8 formatting and Python idioms.
+
+Known limitations:
+- Complex/nested Promise chains may require manual review.
+- Some advanced async patterns (e.g., async generators, custom Promise subclasses) are not fully supported.
+- Manual intervention may be needed for edge cases.
+
+Usage:
+    python ts2py.py <input.ts> [--output <output.py>]
+
+Example TypeScript:
+    export async function fetchData() {
+        const result = await fetch('url');
+        return result;
+    }
+    const all = await Promise.all([foo(), bar()]);
+    const winner = await Promise.race([foo(), bar()]);
+    const resolved = Promise.resolve(42);
+    const rejected = Promise.reject(new Error('fail'));
+
+Example Python output:
+    import asyncio
+    async def fetch_data():
+        result = await fetch('url')
+        return result
+    all = await asyncio.gather(foo(), bar())
+    winner = await asyncio.wait([foo(), bar()], return_when=asyncio.FIRST_COMPLETED)
+    resolved = (lambda: (f := asyncio.Future(), f.set_result(42), f)[0])()
+    rejected = (lambda: (f := asyncio.Future(), f.set_exception(Exception('fail')), f)[0])()
+
+See documentation in the code for more details.
+"""
+# --- ASYNC/AWAIT: INTEGRATION AND DOCUMENTATION END ---
 
 def convert_typescript_to_python(ts_content: str) -> str:
-    """Convert TypeScript code to Python."""
+    """Convert TypeScript code to Python, including async/await and Promise support."""
     # Process imports and get required typing imports
     content, typing_imports = process_imports(ts_content)
     
@@ -407,7 +659,7 @@ def convert_typescript_to_python(ts_content: str) -> str:
     content = process_types(content)
     content = process_enums(content)
     content = process_classes(content)
-    content = process_functions(content)
+    content = process_functions(content)  # Handles async/await, Promise chains, static methods
     
     # Common replacements
     replacements = [

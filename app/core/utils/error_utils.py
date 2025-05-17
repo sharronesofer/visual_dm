@@ -49,6 +49,12 @@ class BusinessLogicError(Exception):
         self.details = details or {}
         super().__init__(self.message)
 
+class TensionError(Exception):
+    pass
+
+class GenerationError(Exception):
+    pass
+
 # Alias for backward compatibility
 NotFoundError = ResourceNotFoundError
 

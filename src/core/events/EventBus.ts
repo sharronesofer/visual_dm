@@ -1,5 +1,38 @@
 /**
  * Central Event Bus implementation for cross-system notifications
+ *
+ * Event Propagation Lifecycle:
+ * 1. emit(event):
+ *    - Event is timestamped and statistics are updated.
+ *    - Debounce, throttle, and batching optimizations are applied if configured.
+ *    - Event is delivered to all registered handlers for the event type.
+ * 2. Handler Execution:
+ *    - Each handler is invoked in priority order.
+ *    - If a handler throws, error handling is triggered.
+ *    - 'once' handlers are automatically unsubscribed after execution.
+ * 3. Retry & Circuit Breaker:
+ *    - If a handler fails, it is retried according to its retry policy (setRetryPolicy).
+ *    - Retries use exponential backoff.
+ *    - If failures exceed the circuit breaker threshold, the handler is temporarily disabled (open state).
+ *    - Circuit breaker auto-resets after a timeout (half-open, then closed on success).
+ * 4. Dead-Letter Queue:
+ *    - If all retries are exhausted, the event/handler/error is moved to the dead-letter queue.
+ *    - Dead-lettered events can be inspected (getDeadLetterEvents), cleared (clearDeadLetterQueue), or reprocessed (reprocessDeadLetterEvents).
+ *    - Dead-letter queue metrics are available via getMetrics().
+ *
+ * Handler Best Practices:
+ * - Handlers should be idempotent: safe to invoke multiple times with the same event.
+ *   (e.g., check event IDs, maintain processed-event logs, or use atomic updates)
+ * - Handlers should be atomic: avoid partial state changes if interrupted or retried.
+ * - Use setRetryPolicy to configure retry behavior for critical handlers.
+ * - Monitor dead-letter queue for persistent failures and investigate root causes.
+ *
+ * Example Usage:
+ *   const bus = EventBus.getInstance();
+ *   bus.on('poi:evolved', async (event) => { ... });
+ *   bus.setRetryPolicy(myHandler, 3, 100); // 3 attempts, 100ms base backoff
+ *   const deadEvents = bus.getDeadLetterEvents();
+ *   await bus.reprocessDeadLetterEvents();
  */
 
 import { ISceneEvent, SceneEventType } from './SceneEventTypes';
@@ -126,6 +159,10 @@ export class EventBus {
     private circuitBreakerStates: Map<EventHandler, 'closed' | 'open' | 'half-open'> = new Map();
     private circuitBreakerTimers: Map<EventHandler, NodeJS.Timeout> = new Map();
     private retryConfigs: Map<EventHandler, { attempts: number; maxAttempts: number; backoff: number; }> = new Map();
+
+    /** Dead-letter queue for events that failed all retries */
+    private deadLetterQueue: { event: ISceneEvent; handler: EventHandler; error: any; timestamp: number }[] = [];
+    private deadLetterMetrics = { count: 0 };
 
     /**
      * Private constructor to prevent direct instantiation
@@ -409,7 +446,7 @@ export class EventBus {
      * Expose performance metrics
      */
     public getMetrics() {
-        return { ...this.metrics };
+        return { ...this.metrics, deadLetterCount: this.deadLetterMetrics.count };
     }
 
     /**
@@ -570,6 +607,11 @@ export class EventBus {
             } catch (err) {
                 await this.handleError(handler, event, err);
             }
+        } else if (!retryCfg || retryCfg.attempts >= (retryCfg?.maxAttempts ?? 0)) {
+            // All retries exhausted, move to dead-letter queue
+            this.deadLetterQueue.push({ event, handler, error, timestamp: Date.now() });
+            this.deadLetterMetrics.count++;
+            this.log(EventBusLogLevel.ERROR, 'Event moved to dead-letter queue after all retries failed', { event, handler, error });
         }
     }
 
@@ -601,5 +643,107 @@ export class EventBus {
             this.circuitBreakerTimers.delete(handler);
         }
         this.log(EventBusLogLevel.INFO, 'Circuit breaker manually reset for handler', { handler });
+    }
+
+    // --- Event Replay and State Snapshot API (for multiplayer resynchronization) ---
+
+    /**
+     * Retrieve events from the replay buffer by event ID range (inclusive)
+     * @param fromEventId Start event ID (inclusive)
+     * @param toEventId End event ID (inclusive, optional)
+     * @returns Array of ISceneEvent
+     */
+    public getEventsByIdRange(fromEventId: number, toEventId?: number): ISceneEvent[] {
+        // Assume each event in buffer has a unique, incrementing eventId property
+        return this.eventReplayBuffer.filter(e => {
+            const id = (e as any).eventId;
+            return id >= fromEventId && (toEventId === undefined || id <= toEventId);
+        });
+    }
+
+    /**
+     * Retrieve events from the replay buffer by timestamp range (inclusive)
+     * @param fromTimestamp Start timestamp (inclusive)
+     * @param toTimestamp End timestamp (inclusive, optional)
+     * @returns Array of ISceneEvent
+     */
+    public getEventsByTimestamp(fromTimestamp: number, toTimestamp?: number): ISceneEvent[] {
+        return this.eventReplayBuffer.filter(e => {
+            return e.timestamp >= fromTimestamp && (toTimestamp === undefined || e.timestamp <= toTimestamp);
+        });
+    }
+
+    /**
+     * Generate a full state snapshot for a given scene or system
+     * @param sceneId Scene or system identifier
+     * @returns Serialized state snapshot (object)
+     */
+    public generateStateSnapshot(sceneId?: string): Record<string, any> {
+        // Integration point: implement actual state serialization logic here
+        // For now, return a stub
+        return { sceneId, timestamp: Date.now(), state: {} };
+    }
+
+    /**
+     * Retrieve the latest state snapshot for a given scene or system
+     * @param sceneId Scene or system identifier
+     * @returns Serialized state snapshot (object) or undefined
+     */
+    public getLatestStateSnapshot(sceneId?: string): Record<string, any> | undefined {
+        // Integration point: retrieve from persistent storage or in-memory cache
+        // For now, return undefined
+        return undefined;
+    }
+
+    /**
+     * Prune expired events from the replay buffer based on retention policy
+     * @param maxAgeMs Maximum age in milliseconds to retain events
+     */
+    public pruneExpiredEvents(maxAgeMs: number): void {
+        const cutoff = Date.now() - maxAgeMs;
+        this.eventReplayBuffer = this.eventReplayBuffer.filter(e => e.timestamp >= cutoff);
+    }
+
+    /**
+     * Store a state snapshot (integration point for persistent storage)
+     * @param snapshot The snapshot object
+     */
+    public storeStateSnapshot(snapshot: Record<string, any>): void {
+        // Integration point: persist snapshot to disk, database, or cloud storage
+        // For now, this is a stub
+    }
+
+    /**
+     * Get all events in the dead-letter queue
+     */
+    public getDeadLetterEvents() {
+        return [...this.deadLetterQueue];
+    }
+
+    /**
+     * Clear the dead-letter queue
+     */
+    public clearDeadLetterQueue() {
+        this.deadLetterQueue = [];
+        this.deadLetterMetrics.count = 0;
+    }
+
+    /**
+     * Attempt to reprocess all events in the dead-letter queue
+     * (Will retry the original handler for each event)
+     */
+    public async reprocessDeadLetterEvents() {
+        const toReprocess = [...this.deadLetterQueue];
+        this.clearDeadLetterQueue();
+        for (const { event, handler } of toReprocess) {
+            try {
+                await handler(event);
+                this.log(EventBusLogLevel.INFO, 'Dead-letter event successfully reprocessed', { event, handler });
+            } catch (error) {
+                this.log(EventBusLogLevel.ERROR, 'Dead-letter event failed again', { event, handler, error });
+                this.deadLetterQueue.push({ event, handler, error, timestamp: Date.now() });
+                this.deadLetterMetrics.count++;
+            }
+        }
     }
 } 

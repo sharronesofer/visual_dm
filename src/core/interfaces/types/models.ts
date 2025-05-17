@@ -183,7 +183,7 @@ export interface Activity extends BaseEntity {
 /**
  * Notification type in the system
  */
-export type NotificationType = 'mention' | 'share' | 'comment' | 'system';
+export type NotificationType = 'mention' | 'share' | 'comment' | 'system' | 'material_refund';
 
 /**
  * Notification status
@@ -243,4 +243,16 @@ export interface BulkOperationResult {
   total: number;
   successCount: number;
   failureCount: number;
+}
+
+export function createMaterialRefundNotification(userId: ID, refunded: Record<string, number>): CreateNotificationDTO {
+  return {
+    userId,
+    type: 'material_refund',
+    title: 'Building Materials Refunded',
+    message: `You have received refunded materials: ${Object.entries(refunded)
+      .map(([mat, qty]) => `${qty}x ${mat}`)
+      .join(', ')}`,
+    metadata: { refunded }
+  };
 }

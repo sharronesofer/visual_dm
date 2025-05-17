@@ -227,10 +227,7 @@ class SceneManagerErrorHandling:
     
     def _handle_transition_timeout(self, transition_data: Dict[str, Any]) -> None:
         """
-        Handle a timed out transition by forcing completion or rolling back.
-        
-        Args:
-            transition_data: Data about the transition that timed out
+        Handle a transition timeout by rolling back or force-completing the transition.
         """
         try:
             # Get destination scene
@@ -268,15 +265,15 @@ class SceneManagerErrorHandling:
                         setattr(self, 'current_scene', from_scene)
                         logger.info(f"Reset scene to '{from_scene}'")
             
+            # Mark the transition as timed out
+            transition_data["status"] = "timeout"
             # Reset transition tracking
             self.current_transition_id = None
-            self.error_handler.force_complete_transition()
             
         except Exception as e:
             logger.error(f"Error handling transition timeout: {str(e)}")
             # Clear the transition state to avoid getting stuck
             self.current_transition_id = None
-            self.error_handler.force_complete_transition()
     
     def handle_missing_asset(self, asset_path: str, asset_type: str) -> str:
         """

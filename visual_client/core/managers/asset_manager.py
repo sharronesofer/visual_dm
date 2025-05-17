@@ -964,8 +964,8 @@ class AssetManager:
             self.asset_lod_metadata[asset_id] = {}
         self.asset_lod_metadata[asset_id][lod_level] = metadata
 
-    def get_asset_lod_metadata(self, asset_id: str, lod_level: int) -> Optional[Dict[str, Any]]:
-        """Get metadata for a specific asset and LOD level."""
+    def get_asset_lod(self, asset_id: str, lod_level: int) -> Optional[Dict[str, Any]]:
+        """Return the metadata for a given asset and LOD level, or None if not found."""
         return self.asset_lod_metadata.get(asset_id, {}).get(lod_level)
 
     def load_image_lod(
@@ -977,7 +977,7 @@ class AssetManager:
         cache: bool = True
     ) -> Optional[pygame.Surface]:
         """Load an image for a specific LOD level."""
-        metadata = self.get_asset_lod_metadata(asset_id, lod_level)
+        metadata = self.get_asset_lod(asset_id, lod_level)
         if not metadata:
             # Fallback to base asset
             return self.load_image(asset_id, lazy=lazy, optimize=optimize, cache=cache)

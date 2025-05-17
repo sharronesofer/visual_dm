@@ -4,7 +4,7 @@ Tests for the faction system.
 
 import pytest
 from datetime import datetime
-from app.core.models.faction import Faction, FactionRelation, RelationshipType
+from app.core.models.world import Faction, FactionRelation, RelationshipType
 from app.core.database import db
 
 @pytest.fixture

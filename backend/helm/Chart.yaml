@@ -1,0 +1,13 @@
+apiVersion: v2
+name: visual-dm-backend
+version: 0.1.0
+appVersion: "1.0.0"
+description: Helm chart for Visual DM backend API (FastAPI)
+type: application
+keywords:
+  - fastapi
+  - backend
+  - visual-dm
+maintainers:
+  - name: Visual DM Team
+    email: dev@visualdm.local 

@@ -23,7 +23,10 @@
       }
     ],
     "strictNullChecks": true,
-    "types": ["jest"]
+    "types": [
+      "jest"
+    ],
+    "allowImportingTsExtensions": true
   },
   "include": [
     "next-env.d.ts",

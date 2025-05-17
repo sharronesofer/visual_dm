@@ -7,7 +7,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from app.core.database import db
 from app.core.models.npc import NPC
-from app.core.models.region import Region
+from app.core.models.world import Region
 
 class NPCTravel:
     """Handles NPC travel and location management."""

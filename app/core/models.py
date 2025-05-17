@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Optional
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.core.database import db
+from sqlalchemy.dialects.postgresql import UUID
 
 class Role(db.Model):
     """Role model."""
@@ -49,7 +50,7 @@ class Character(db.Model):
     name = db.Column(db.String(80), nullable=False)
     level = db.Column(db.Integer, default=1)
     experience = db.Column(db.Integer, default=0)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

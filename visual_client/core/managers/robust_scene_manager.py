@@ -50,6 +50,10 @@ class RobustSceneManager(SceneManagerErrorHandling, BaseSceneManager):
             transition_timeout: Timeout for scene transitions in milliseconds
             *args, **kwargs: Arguments to pass to the base SceneManager
         """
+        # Set instance attributes for error handling parameters
+        self.default_scene = default_scene
+        self.max_retries = max_retries
+        self.transition_timeout = transition_timeout
         # Pass our error handling parameters to the error handling mixin
         error_handling_kwargs = {
             'default_scene': default_scene,
@@ -86,8 +90,13 @@ class RobustSceneManager(SceneManagerErrorHandling, BaseSceneManager):
         Returns:
             True if scene loaded successfully, False otherwise
         """
-        # Use error-handling wrapper only if explicitly requested, otherwise call base
-        return BaseSceneManager.load_scene(self, scene_name, *args, **kwargs)
+        try:
+            # Use error-handling wrapper only if explicitly requested, otherwise call base
+            return BaseSceneManager.load_scene(self, scene_name, *args, **kwargs)
+        except Exception as e:
+            # Handle the error using the error handler and return False
+            self.error_handler.handle_scene_load_error(scene_name, e, context={})
+            return False
     
     def update(self, *args, **kwargs) -> None:
         """
@@ -325,6 +334,10 @@ class RobustSceneManager(SceneManagerErrorHandling, BaseSceneManager):
         """Alias for active_scene to maintain compatibility with error handling and tests."""
         return getattr(self, 'active_scene', None)
 
+    @current_scene.setter
+    def current_scene(self, value: Optional[str]):
+        self.active_scene = value
+
     def load_scene_safe(self, scene_name: str, *args, **kwargs) -> bool:
         """
         Safely load a scene with error handling and fallbacks.
@@ -332,13 +345,12 @@ class RobustSceneManager(SceneManagerErrorHandling, BaseSceneManager):
         attempt = 0
         while attempt < self.max_retries:
             try:
-                # Call the base class's load_scene directly to avoid recursion
-                result = BaseSceneManager.load_scene(self, scene_name, *args, **kwargs)
+                # Call the instance's load_scene method (can be monkey-patched in tests)
+                result = self.load_scene(scene_name, *args, **kwargs)
                 if result:
                     return True
             except Exception as e:
-                self.error_handler.handle_scene_error(scene_name, e)
+                self.error_handler.handle_scene_load_error(scene_name, e, context={})
             attempt += 1
-        # If all retries fail, handle fallback or error
-        self.error_handler.handle_scene_error(scene_name, Exception(f"Failed to load scene '{scene_name}' after {self.max_retries} attempts."))
+        # If all attempts fail, handle fallback or error
         return False 

@@ -51,7 +51,7 @@ class Quest(BaseModel):
     location = relationship('app.core.models.location.Location', back_populates='quests')
     npc = relationship('NPC', back_populates='quests', foreign_keys=[npc_id])
     characters = relationship('app.core.models.character.Character', secondary=character_quests, back_populates='quests')
-    region = relationship('app.core.models.region.Region', back_populates='quests')
+    region = relationship('Region', back_populates='quests')
     faction = relationship('Faction', back_populates='quests')
     progress_records = relationship('QuestProgress', back_populates='quest')
     rewards = relationship('app.core.models.quest.QuestReward', back_populates='quest')

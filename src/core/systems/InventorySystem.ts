@@ -74,6 +74,7 @@ export interface InventoryQueryParams {
 export class InventorySystem extends BaseSystemManager {
     private inventoryRepository: Repository<Inventory>;
     private itemRepository: Repository<Item>;
+    private refundQueue: { [ownerId: string]: { [material: string]: number } } = {};
 
     constructor(config: SystemConfig) {
         super({
@@ -744,5 +745,22 @@ export class InventorySystem extends BaseSystemManager {
         const { inventory } = event.data;
         this.logDebug(`Handler: Inventory created for ${inventory.ownerId}`);
         // Additional logic can be added here
+    }
+
+    /**
+     * Queue refunded materials for later collection if inventory is full
+     */
+    public queueRefundedMaterials(ownerId: string, materials: { [material: string]: number }) {
+        if (!this.refundQueue[ownerId]) {
+            this.refundQueue[ownerId] = {};
+        }
+        for (const [mat, qty] of Object.entries(materials)) {
+            this.refundQueue[ownerId][mat] = (this.refundQueue[ownerId][mat] || 0) + qty;
+        }
+        this.logInfo(`Queued refunded materials for owner ${ownerId}:`, materials);
+    }
+
+    public getQueuedRefunds(ownerId: string): { [material: string]: number } {
+        return this.refundQueue[ownerId] || {};
     }
 } 

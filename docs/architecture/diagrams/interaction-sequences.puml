@@ -1,0 +1,28 @@
+@startuml
+' Sequence Diagram: User Interaction Flow
+
+actor User
+participant UI
+participant InteractionSystem
+participant GameEngine
+participant DataStore
+
+User -> UI : Initiate Action
+UI -> InteractionSystem : Send User Input
+InteractionSystem -> StateController : Validate Input
+StateController -> EventBus : Emit Event
+EventBus -> GameEngine : Trigger Game Logic
+GameEngine -> DataStore : Update State
+DataStore --> GameEngine : Confirm Update
+GameEngine --> EventBus : Notify Completion
+EventBus --> InteractionSystem : Event Result
+InteractionSystem --> UI : Update Display
+UI --> User : Show Result
+
+' Legend
+legend right
+  -> = Synchronous call
+  --> = Response/Callback
+endlegend
+
+@enduml

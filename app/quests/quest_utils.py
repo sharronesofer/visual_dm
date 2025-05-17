@@ -8,9 +8,9 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 import random
 import uuid
+from dataclasses import dataclass, field
 
-from app.models import Quest
-from app.models.quest_log import QuestLogEntry
+from app.quests.models.quest import Quest
 from app.core.utils.firebase_utils import (
     get_firestore_client,
     get_document,
@@ -22,6 +22,18 @@ from app.core.utils.error_utils import ValidationError, NotFoundError, DatabaseE
 from app.core.database import db
 
 logger = logging.getLogger(__name__)
+
+@dataclass
+class QuestLogEntry:
+    region: str
+    poi: str
+    summary: str
+    tags: List[str]
+    player_id: str
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    
+    def dict(self):
+        return self.__dict__
 
 # Quest Generation
 def generate_quest_title(theme: str, difficulty: str) -> str:

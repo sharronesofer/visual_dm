@@ -4,7 +4,7 @@ from app.core.models.weather_system import WeatherSystem
 from app.core.models.time_system import TimeSystem
 from app.core.models.season_system import SeasonSystem
 from app.core.models.character import Character
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.enums import WeatherType, WeatherIntensity, Season, RegionType, StatusEffect
 from app.utils.constants import (
     BASE_TEMPERATURE,

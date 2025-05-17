@@ -53,7 +53,7 @@ class Location(BaseModel):
     parent_location_id = Column(Integer, ForeignKey('locations.id'))
     parent_location = relationship("Location", remote_side="Location.id", backref="sub_locations")
     owner_faction_id = Column(Integer, ForeignKey('factions.id'))
-    owner_faction = relationship('app.core.models.faction.Faction')
+    owner_faction = relationship('Faction')
     
     # Version control relationships
     versions = relationship('LocationVersion', back_populates='location', cascade='all, delete-orphan', 

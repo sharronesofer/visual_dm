@@ -1,0 +1,51 @@
+replicaCount: 2
+
+image:
+  repository: your-docker-repo/visual-dm-backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+  hosts:
+    - host: visualdm.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
+
+env:
+  LOG_LEVEL: INFO
+  BACKEND_CORS_ORIGINS: '["http://localhost:3000"]'
+
+secretEnv:
+  DATABASE_URL: "REPLACE_BASE64_DB_URL"
+  SECRET_KEY: "REPLACE_BASE64_SECRET_KEY"
+
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  storageClass: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80 

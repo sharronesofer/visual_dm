@@ -9,8 +9,7 @@ quest_bp = Blueprint('quest', __name__)
 
 from . import quest_routes
 
-from app.models.quest_log import QuestLogEntry
-from app.models.arc import PlayerArc
+from app.arc.arc_models import PlayerArc
 from app.quests.quest_utils import (
     generate_quest_title,
     validate_quest_data,
@@ -28,7 +27,6 @@ from app.quests.quest_utils import (
 
 __all__ = [
     'quest_bp',
-    'QuestLogEntry',
     'PlayerArc',
     'generate_quest_title',
     'validate_quest_data',

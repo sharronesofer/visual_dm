@@ -11,7 +11,7 @@ from app.core.database import db
 from app.core.models.character import Character
 from app.core.models.user import User
 from app.core.models.party import Party
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.models.spell import Spell
 from app.core.models.inventory import InventoryItem
@@ -20,7 +20,7 @@ from app.core.models.save import SaveGame
 from app.core.models.world_state import WorldState
 from app.core.models.world_event import WorldEvent
 from app.core.models.npc import NPC
-from app.core.models.faction import Faction
+from app.core.models.world import Faction
 from app.core.models.point_of_interest import PointOfInterest
 from app.core.models.location import Location
 from app.core.utils.error_utils import ValidationError, DatabaseError, NotFoundError

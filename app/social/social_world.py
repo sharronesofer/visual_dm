@@ -1,13 +1,16 @@
 from typing import Dict, List, Optional, Tuple
-from .social_utils import SocialInteraction
 from .social_skills import SocialSkills
 from .social_consequences import SocialConsequences
+from app.social.models.social import Reputation, EntityType
+from app.core.database import db
+from sqlalchemy.orm.exc import NoResultFound
+from datetime import datetime
 
 class SocialWorld:
     def __init__(self):
         self.active_interactions: Dict[str, SocialInteraction] = {}
         self.relationship_changes: Dict[str, Dict[str, int]] = {}
-        self.reputation_changes: Dict[str, Dict[str, int]] = {}
+        # Removed deprecated self.reputation_changes
 
     def start_interaction(self, npc_id: str, character_id: str, relationship_status: str = "neutral") -> str:
         """Start a new social interaction and return its ID."""
@@ -58,14 +61,30 @@ class SocialWorld:
 
         # Apply changes
         self._update_relationship(npc_id, character_id, relationship_change)
-        self._update_reputation(character_id, reputation_change)
+        # Use new multi-entity update_reputation for each reputation type
+        for rep_type, delta in reputation_change.items():
+            self.update_reputation(
+                source_id=character_id,
+                source_type='individual',
+                target_id=npc_id,
+                target_type='individual',
+                delta=delta,
+                context=f"{skill}:{application}:{result['degree']}",
+                change_source='interaction'
+            )
 
         return {
             "consequence": consequence,
             "relationship_change": relationship_change,
             "reputation_change": reputation_change,
             "new_relationship": self._get_relationship(npc_id, character_id),
-            "new_reputation": self._get_reputation(character_id)
+            # Return all reputation records for this character as source
+            "new_reputation": [
+                rep.to_dict() for rep in Reputation.query.filter_by(
+                    source_entity_id=character_id,
+                    source_entity_type=EntityType('individual')
+                ).all()
+            ]
         }
 
     def _calculate_relationship_change(self,
@@ -133,19 +152,87 @@ class SocialWorld:
             self.relationship_changes[key] = 0
         self.relationship_changes[key] += change
 
-    def _update_reputation(self, character_id: str, changes: Dict[str, int]):
-        """Update a character's reputation."""
-        if character_id not in self.reputation_changes:
-            self.reputation_changes[character_id] = {"diplomatic": 0, "intimidating": 0}
-        
-        for rep_type, change in changes.items():
-            self.reputation_changes[character_id][rep_type] += change
-
     def _get_relationship(self, npc_id: str, character_id: str) -> int:
         """Get the current relationship value between an NPC and character."""
         key = f"{npc_id}_{character_id}"
         return self.relationship_changes.get(key, 0)
 
-    def _get_reputation(self, character_id: str) -> Dict[str, int]:
-        """Get a character's current reputation values."""
-        return self.reputation_changes.get(character_id, {"diplomatic": 0, "intimidating": 0}) 
+    def set_reputation(self, source_id: int, source_type: str, target_id: int, target_type: str, value: int, context: str = None, change_source: str = 'system'):
+        """Set or update reputation between any two entities."""
+        source_type = source_type.lower()
+        target_type = target_type.lower()
+        try:
+            rep = Reputation.query.filter_by(
+                source_entity_id=source_id,
+                source_entity_type=EntityType(source_type),
+                target_entity_id=target_id,
+                target_entity_type=EntityType(target_type)
+            ).one()
+            rep.value = value
+            rep.last_updated = datetime.utcnow()
+            rep.change_source = change_source
+            rep.context = context
+            rep.strength = self.compute_strength(rep)
+        except NoResultFound:
+            rep = Reputation(
+                source_entity_id=source_id,
+                source_entity_type=EntityType(source_type),
+                target_entity_id=target_id,
+                target_entity_type=EntityType(target_type),
+                value=value,
+                last_updated=datetime.utcnow(),
+                change_source=change_source,
+                context=context,
+                strength=1
+            )
+            db.session.add(rep)
+        db.session.commit()
+        return rep
+
+    def get_reputation(self, source_id: int, source_type: str, target_id: int, target_type: str) -> Optional[Reputation]:
+        """Get the reputation record between two entities."""
+        source_type = source_type.lower()
+        target_type = target_type.lower()
+        return Reputation.query.filter_by(
+            source_entity_id=source_id,
+            source_entity_type=EntityType(source_type),
+            target_entity_id=target_id,
+            target_entity_type=EntityType(target_type)
+        ).first()
+
+    def update_reputation(self, source_id: int, source_type: str, target_id: int, target_type: str, delta: int, context: str = None, change_source: str = 'system'):
+        """Increment/decrement reputation between two entities."""
+        source_type = source_type.lower()
+        target_type = target_type.lower()
+        rep = self.get_reputation(source_id, source_type, target_id, target_type)
+        if rep:
+            rep.value += delta
+            rep.last_updated = datetime.utcnow()
+            rep.change_source = change_source
+            rep.context = context
+            rep.strength = self.compute_strength(rep, delta)
+        else:
+            rep = Reputation(
+                source_entity_id=source_id,
+                source_entity_type=EntityType(source_type),
+                target_entity_id=target_id,
+                target_entity_type=EntityType(target_type),
+                value=delta,
+                last_updated=datetime.utcnow(),
+                change_source=change_source,
+                context=context,
+                strength=1
+            )
+            db.session.add(rep)
+        db.session.commit()
+        return rep
+
+    def compute_strength(self, rep: Reputation, delta: int = 0) -> int:
+        """Compute the strength of a reputation relationship."""
+        base = rep.strength or 0
+        return min(100, max(0, base + abs(delta)))
+
+    def gpt_enrich_reputation(self, rep: Reputation):
+        """Placeholder for GPT-based context/summary enrichment."""
+        # TODO: Integrate GPT to summarize or contextualize reputation changes
+        pass 

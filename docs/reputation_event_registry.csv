@@ -1,0 +1,19 @@
+Event Name,System,Triggering Condition,Magnitude/Impact,Context/Notes,Integration Point
+Dialogue Persuasion Success,Dialogue System,Successful persuasion attempt,Positive (variable),May depend on NPC traits,src/systems/npc/InteractionSystem.ts
+Dialogue Persuasion Failure,Dialogue System,Failed persuasion attempt,Negative (variable),May depend on NPC traits,src/systems/npc/InteractionSystem.ts
+Intimidation,Dialogue System,Intimidate NPC,Negative,May affect multiple factions,src/systems/npc/InteractionSystem.ts
+Knowledge Sharing,Dialogue System,Share valuable info,Positive,May unlock new quests,src/systems/npc/InteractionSystem.ts
+Lying/Truth-Telling,Dialogue System,Truth or lie revealed,Positive/Negative,Depends on outcome,src/systems/npc/InteractionSystem.ts
+Quest Completion (Success),Quest System,Complete quest successfully,Positive (configurable),May affect multiple factions,src/poi/models/SocialPOI.ts; src/quests/factions/FactionQuestSystem.ts
+Quest Completion (Failure),Quest System,Fail quest,Negative (configurable),May affect multiple factions,src/quests/factions/FactionQuestSystem.ts
+Bonus Objective,Quest System,Complete bonus objective,Positive,Extra reputation,src/quests/factions/FactionQuestSystem.ts
+Faction-Aligned Choice,Quest System,Make choice aligned with faction,Positive,May unlock special rewards,src/quests/factions/FactionQuestSystem.ts
+Combat: Kill NPC,Combat System,Kill enemy/neutral/ally,Negative,May trigger faction response,docs/reputation_audit_template.md
+Combat: Assist Ally,Combat System,Assist ally in combat,Positive,May increase standing,docs/reputation_audit_template.md
+Combat: Attack Neutral,Combat System,Attack neutral party,Negative,May affect multiple groups,docs/reputation_audit_template.md
+Trade: Fair Pricing,Economy System,Trade at fair price,Positive,Improves merchant reputation,src/systems/economy/EconomicAgentSystem.ts
+Trade: Unfair Pricing,Economy System,Exploitative trade,Negative,May lock out merchants,src/systems/economy/EconomicAgentSystem.ts
+Rare Item Trade,Economy System,Trade rare item,Positive/Negative,Context-dependent,src/systems/economy/EconomicAgentSystem.ts
+Group Action,Group System,Group performs action,Variable,Depends on action,src/systems/npc/GroupManager.ts
+POI Interaction,POI System,Interact with POI,Variable,May affect local economy/quests,src/poi/models/SocialPOI.ts
+Region Event,Region System,Region-specific event,Variable,Planned,docs/interaction_system/source_materials/tasks_478-482.json 

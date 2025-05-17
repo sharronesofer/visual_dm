@@ -2,12 +2,14 @@ import logging
 from logging.config import fileConfig
 
 from alembic import context
+from app.core.database import db
+from app.core.models import *  # Ensure all models are imported for Alembic autogenerate
 
 config = context.config
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
-target_metadata = None  # Set this to your SQLAlchemy Base.metadata if you have models
+target_metadata = db.Model.metadata  # Use Flask-SQLAlchemy metadata for migrations
 
 def run_migrations_offline():
     url = config.get_main_option("sqlalchemy.url")

@@ -6,8 +6,8 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 from app.core.models.world_state import WorldState
-from app.core.models.faction import Faction, FactionRelation, RelationshipType
-from app.core.models.region import Region
+from app.core.models.world import Faction, FactionRelation, RelationshipType
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.models.npc import NPC
 from app.world.world_tick_utils import (
@@ -87,14 +87,6 @@ class MockRelation:
         self.related_faction_id = related_faction_id
         self.value = value
         self.relation_type = relation_type
-
-# Create an enum for relationship types
-class RelationshipType:
-    ALLY = "ally"
-    FRIENDLY = "friendly"
-    NEUTRAL = "neutral"
-    HOSTILE = "hostile"
-    WAR = "war"
 
 # Create a mocked region class
 class MockRegion:

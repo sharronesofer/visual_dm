@@ -1,0 +1,29 @@
+@startuml
+' Component Overview Diagram for Interaction System
+
+!define RECTANGLE class
+
+RECTANGLE InteractionSystem {
+  :InputHandler;
+  :InteractionManager;
+  :StateController;
+  :EventBus;
+  :ExternalAPIAdapter;
+}
+
+RECTANGLE GameEngine
+RECTANGLE UI
+RECTANGLE DataStore
+
+InteractionSystem -- GameEngine : communicates
+InteractionSystem -- UI : updates
+InteractionSystem -- DataStore : persists state
+InteractionSystem -- ExternalAPIAdapter : integrates
+
+' Legend
+legend right
+  RECTANGLE = Component
+  -- = Communication/Dependency
+endlegend
+
+@enduml

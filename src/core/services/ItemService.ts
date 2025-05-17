@@ -1,21 +1,336 @@
 import { Pool } from 'pg';
-import { BaseItem, ItemType, RarityTier, ItemWithRarity, BaseStats } from '../types/loot';
+import { BaseItem, ItemType, RarityTier, ItemWithRarity, ItemRarity } from '../interfaces/types/loot';
+import { Item } from '../models/Item';
+import { ItemDatabaseService } from './ItemDatabaseService';
+import { InventoryService } from './InventoryService';
+import { initializeItemDatabase } from '../data/ItemTemplates';
 
 export class ItemService {
   private pool: Pool;
+  private itemDatabase: ItemDatabaseService;
+  private playerInventory: InventoryService;
+  private initialized: boolean = false;
 
   constructor(pool: Pool) {
     this.pool = pool;
+    this.itemDatabase = new ItemDatabaseService();
+    this.playerInventory = new InventoryService();
   }
 
   /**
-   * Create a new item
+   * Initialize the item system with predefined templates
    */
-  async createItem(item: Omit<BaseItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<BaseItem> {
+  initialize(): void {
+    if (this.initialized) {
+      return;
+    }
+
+    // Initialize item database with templates
+    initializeItemDatabase(this.itemDatabase);
+    this.initialized = true;
+  }
+
+  /**
+   * Get the item database service
+   */
+  getItemDatabase(): ItemDatabaseService {
+    this.ensureInitialized();
+    return this.itemDatabase;
+  }
+
+  /**
+   * Get the player inventory service
+   */
+  getPlayerInventory(): InventoryService {
+    this.ensureInitialized();
+    return this.playerInventory;
+  }
+
+  /**
+   * Make sure the item system is initialized
+   */
+  private ensureInitialized(): void {
+    if (!this.initialized) {
+      this.initialize();
+    }
+  }
+
+  /**
+   * Create a new item (in-memory approach)
+   */
+  createItem(item: Omit<BaseItem, 'id' | 'createdAt' | 'updatedAt'>): Item {
+    this.ensureInitialized();
+
+    const newItem = new Item({
+      ...item,
+      id: undefined, // Will be auto-generated
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    return newItem;
+  }
+
+  /**
+   * Get an item by ID from the item database
+   */
+  getItem(id: string): Item | undefined {
+    this.ensureInitialized();
+    return this.itemDatabase.getItem(id);
+  }
+
+  /**
+   * Update an existing item
+   */
+  updateItem(id: string, updates: Partial<BaseItem>): Item | null {
+    this.ensureInitialized();
+
+    const item = this.itemDatabase.getItem(id);
+    if (!item) {
+      return null;
+    }
+
+    // Apply updates
+    if (updates.name !== undefined) {
+      item.name = updates.name;
+    }
+
+    if (updates.description !== undefined) {
+      item.description = updates.description;
+    }
+
+    if (updates.weight !== undefined) {
+      item.weight = updates.weight;
+    }
+
+    if (updates.value !== undefined) {
+      item.value = updates.value;
+    }
+
+    if (updates.baseStats !== undefined) {
+      item.baseStats = updates.baseStats;
+    }
+
+    if (updates.type !== undefined) {
+      item.type = updates.type;
+    }
+
+    // Update the timestamp
+    item.updatedAt = new Date();
+
+    return item;
+  }
+
+  /**
+   * Delete an item (not applicable to in-memory system)
+   */
+  deleteItem(id: string): boolean {
+    // This is a no-op for in-memory storage
+    return true;
+  }
+
+  /**
+   * Get items with optional filtering
+   */
+  getItems(filters?: {
+    type?: ItemType;
+    minValue?: number;
+    maxValue?: number;
+    rarity?: ItemRarity;
+  }): Item[] {
+    this.ensureInitialized();
+
+    return this.itemDatabase.searchItems({
+      type: filters?.type,
+      minValue: filters?.minValue,
+      maxValue: filters?.maxValue,
+      rarity: filters?.rarity
+    });
+  }
+
+  /**
+   * Generate a random item from templates
+   */
+  generateRandomItem(itemType?: ItemType): Item | null {
+    this.ensureInitialized();
+
+    // Get all templates matching the type
+    const templates = this.itemDatabase.listTemplates(itemType ? { type: itemType } : undefined);
+
+    if (templates.length === 0) {
+      return null;
+    }
+
+    // Select a random template
+    const template = templates[Math.floor(Math.random() * templates.length)];
+
+    // Generate an item from the template
+    return this.itemDatabase.generateItemFromTemplate(template.id);
+  }
+
+  /**
+   * Generate a magical item (rare or better)
+   */
+  generateMagicalItem(itemType?: ItemType): Item | null {
+    this.ensureInitialized();
+    return this.itemDatabase.generateMagicalItem(itemType);
+  }
+
+  /**
+   * Create a loot drop based on difficulty level
+   */
+  generateLootDrop(
+    difficulty: number,
+    count: number = 1,
+    guaranteedTypes?: ItemType[]
+  ): Item[] {
+    this.ensureInitialized();
+
+    const loot: Item[] = [];
+
+    // Add guaranteed types first
+    if (guaranteedTypes && guaranteedTypes.length > 0) {
+      for (const type of guaranteedTypes) {
+        const item = this.generateRandomItem(type);
+        if (item) {
+          loot.push(item);
+        }
+      }
+    }
+
+    // Add random items until we reach the count
+    while (loot.length < count) {
+      // Higher difficulty increases chances of magical items
+      const magicalChance = Math.min(0.05 + (difficulty * 0.03), 0.5);
+
+      if (Math.random() < magicalChance) {
+        const magicalItem = this.generateMagicalItem();
+        if (magicalItem) {
+          loot.push(magicalItem);
+          continue;
+        }
+      }
+
+      // Otherwise, generate a normal item
+      const item = this.generateRandomItem();
+      if (item) {
+        loot.push(item);
+      }
+    }
+
+    return loot;
+  }
+
+  /**
+   * Add an item to player inventory
+   */
+  addItemToInventory(item: Item, quantity: number = 1): string | null {
+    this.ensureInitialized();
+    return this.playerInventory.addItem(item, quantity);
+  }
+
+  /**
+   * Remove an item from player inventory
+   */
+  removeItemFromInventory(slotId: string, quantity: number = 1): boolean {
+    this.ensureInitialized();
+    return this.playerInventory.removeItem(slotId, quantity);
+  }
+
+  /**
+   * Check if player has an item
+   */
+  playerHasItem(itemId: string, quantity: number = 1): boolean {
+    this.ensureInitialized();
+    return this.playerInventory.hasItem(itemId, quantity);
+  }
+
+  /**
+   * Get player inventory summary
+   */
+  getInventorySummary() {
+    this.ensureInitialized();
+    return this.playerInventory.getSummary();
+  }
+
+  /**
+   * Equip an item from inventory
+   */
+  equipItem(slotId: string): boolean {
+    this.ensureInitialized();
+    return this.playerInventory.equipItem(slotId);
+  }
+
+  /**
+   * Unequip an item
+   */
+  unequipItem(slotId: string): boolean {
+    this.ensureInitialized();
+    return this.playerInventory.unequipItem(slotId);
+  }
+
+  /**
+   * Get equipped items
+   */
+  getEquippedItems() {
+    this.ensureInitialized();
+    return this.playerInventory.getEquippedSlots();
+  }
+
+  /**
+   * Upgrade player inventory capacity
+   */
+  upgradeInventory(additionalWeight: number = 10, additionalSlots: number = 5): void {
+    this.ensureInitialized();
+    this.playerInventory.upgradeCapacity(additionalWeight, additionalSlots);
+  }
+
+  /**
+   * Get all rarity tiers
+   */
+  getRarityTiers(): RarityTier[] {
+    this.ensureInitialized();
+    return this.itemDatabase.getRarities();
+  }
+
+  /**
+   * Create loot table for a location/enemy
+   */
+  createLootTable(
+    entityType: 'location' | 'enemy',
+    entityId: string,
+    items: Array<{ itemType: ItemType, weight: number, count: number }>
+  ): boolean {
+    // In a real implementation, this would persist the loot table
+    // For now, we'll just return true to indicate success
+    return true;
+  }
+
+  /**
+   * Roll for loot from a loot table
+   */
+  rollLoot(
+    entityType: 'location' | 'enemy',
+    entityId: string,
+    difficultyModifier: number = 1.0
+  ): Item[] {
+    // In a real implementation, this would use the stored loot table
+    // For now, we'll generate random loot
+    const itemCount = Math.floor(Math.random() * 3) + 1; // 1-3 items
+    return this.generateLootDrop(difficultyModifier, itemCount);
+  }
+
+  // DATABASE METHODS FOR PERSISTENCE (Optional)
+  // These methods can be used if/when we need to persist items to the database
+
+  /**
+   * Save an in-memory item to the database
+   */
+  async saveItemToDatabase(item: Item): Promise<string> {
     const query = `
       INSERT INTO items (name, description, type, weight, value, base_stats)
       VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING *
+      RETURNING id
     `;
 
     const values = [
@@ -28,178 +343,38 @@ export class ItemService {
     ];
 
     const result = await this.pool.query(query, values);
-    return this.mapRowToItem(result.rows[0]);
+    return result.rows[0].id;
   }
 
   /**
-   * Get an item by ID
+   * Load all database items into memory
    */
-  async getItem(id: string): Promise<ItemWithRarity | null> {
+  async loadItemsFromDatabase(): Promise<void> {
     const query = `
       SELECT i.*, r.*
       FROM items i
       LEFT JOIN rarity_tiers r ON i.rarity_id = r.id
-      WHERE i.id = $1
     `;
 
-    const result = await this.pool.query(query, [id]);
-    if (result.rows.length === 0) {
-      return null;
-    }
-
-    return this.mapRowToItemWithRarity(result.rows[0]);
-  }
-
-  /**
-   * Update an existing item
-   */
-  async updateItem(id: string, updates: Partial<BaseItem>): Promise<BaseItem | null> {
-    const setClause = [];
-    const values = [id];
-    let paramIndex = 2;
-
-    if (updates.name !== undefined) {
-      setClause.push(`name = $${paramIndex}`);
-      values.push(updates.name);
-      paramIndex++;
-    }
-
-    if (updates.description !== undefined) {
-      setClause.push(`description = $${paramIndex}`);
-      values.push(updates.description);
-      paramIndex++;
-    }
-
-    if (updates.type !== undefined) {
-      setClause.push(`type = $${paramIndex}`);
-      values.push(updates.type);
-      paramIndex++;
-    }
-
-    if (updates.weight !== undefined) {
-      setClause.push(`weight = $${paramIndex}`);
-      values.push(updates.weight);
-      paramIndex++;
-    }
-
-    if (updates.value !== undefined) {
-      setClause.push(`value = $${paramIndex}`);
-      values.push(updates.value);
-      paramIndex++;
-    }
-
-    if (updates.baseStats !== undefined) {
-      setClause.push(`base_stats = $${paramIndex}`);
-      values.push(JSON.stringify(updates.baseStats));
-      paramIndex++;
-    }
-
-    if (setClause.length === 0) {
-      return this.getItem(id);
-    }
-
-    const query = `
-      UPDATE items
-      SET ${setClause.join(', ')}
-      WHERE id = $1
-      RETURNING *
-    `;
-
-    const result = await this.pool.query(query, values);
-    if (result.rows.length === 0) {
-      return null;
-    }
-
-    return this.mapRowToItem(result.rows[0]);
-  }
-
-  /**
-   * Delete an item
-   */
-  async deleteItem(id: string): Promise<boolean> {
-    const query = 'DELETE FROM items WHERE id = $1 RETURNING id';
-    const result = await this.pool.query(query, [id]);
-    return result.rows.length > 0;
-  }
-
-  /**
-   * Get all items with optional filtering
-   */
-  async getItems(filters?: {
-    type?: ItemType;
-    minValue?: number;
-    maxValue?: number;
-    rarityId?: number;
-  }): Promise<ItemWithRarity[]> {
-    let query = `
-      SELECT i.*, r.*
-      FROM items i
-      LEFT JOIN rarity_tiers r ON i.rarity_id = r.id
-      WHERE 1=1
-    `;
-    const values: any[] = [];
-    let paramIndex = 1;
-
-    if (filters?.type) {
-      query += ` AND i.type = $${paramIndex}`;
-      values.push(filters.type);
-      paramIndex++;
-    }
-
-    if (filters?.minValue !== undefined) {
-      query += ` AND i.value >= $${paramIndex}`;
-      values.push(filters.minValue);
-      paramIndex++;
-    }
-
-    if (filters?.maxValue !== undefined) {
-      query += ` AND i.value <= $${paramIndex}`;
-      values.push(filters.maxValue);
-      paramIndex++;
-    }
-
-    if (filters?.rarityId !== undefined) {
-      query += ` AND i.rarity_id = $${paramIndex}`;
-      values.push(filters.rarityId);
-      paramIndex++;
-    }
-
-    const result = await this.pool.query(query, values);
-    return result.rows.map(row => this.mapRowToItemWithRarity(row));
-  }
-
-  /**
-   * Set the rarity of an item
-   */
-  async setItemRarity(itemId: string, rarityId: number): Promise<ItemWithRarity | null> {
-    const query = `
-      UPDATE items
-      SET rarity_id = $2
-      WHERE id = $1
-      RETURNING *
-    `;
-
-    const result = await this.pool.query(query, [itemId, rarityId]);
-    if (result.rows.length === 0) {
-      return null;
-    }
-
-    return this.getItem(itemId);
-  }
-
-  /**
-   * Get all rarity tiers
-   */
-  async getRarityTiers(): Promise<RarityTier[]> {
-    const query = 'SELECT * FROM rarity_tiers ORDER BY probability DESC';
     const result = await this.pool.query(query);
-    return result.rows.map(row => ({
-      id: row.id,
-      name: row.name,
-      probability: parseFloat(row.probability),
-      valueMultiplier: parseFloat(row.value_multiplier),
-      colorHex: row.color_hex
-    }));
+
+    for (const row of result.rows) {
+      const baseItem = this.mapRowToItem(row);
+      const item = new Item(baseItem);
+
+      // If it has a rarity, set it
+      if (row.rarity_id) {
+        const rarity: RarityTier = {
+          id: row.rarity_id,
+          name: row.rarity_name,
+          probability: parseFloat(row.probability),
+          valueMultiplier: parseFloat(row.value_multiplier),
+          colorHex: row.color_hex
+        };
+
+        item.setRarity(rarity);
+      }
+    }
   }
 
   /**
@@ -213,26 +388,9 @@ export class ItemService {
       type: row.type as ItemType,
       weight: parseFloat(row.weight),
       value: parseInt(row.value),
-      baseStats: row.base_stats as BaseStats,
+      baseStats: row.base_stats,
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
-
-  /**
-   * Map a database row to an ItemWithRarity
-   */
-  private mapRowToItemWithRarity(row: any): ItemWithRarity {
-    const baseItem = this.mapRowToItem(row);
-    return {
-      ...baseItem,
-      rarity: row.rarity_id ? {
-        id: row.rarity_id,
-        name: row.name,
-        probability: parseFloat(row.probability),
-        valueMultiplier: parseFloat(row.value_multiplier),
-        colorHex: row.color_hex
-      } : null
-    } as ItemWithRarity;
   }
 } 

@@ -5,6 +5,7 @@ Role model for user roles and permissions.
 from app.core.database import db
 from sqlalchemy.orm import relationship
 from app.core.models.permission import Permission, role_permissions
+from datetime import datetime
 
 class Role(db.Model):
     """Role model for user authorization."""
@@ -19,6 +20,8 @@ class Role(db.Model):
         backref=db.backref('roles', lazy='dynamic'),
         lazy='dynamic'
     )
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
     users = relationship('User', back_populates='role')
@@ -30,11 +33,23 @@ class Role(db.Model):
         Args:
             name: Role name
             description: Role description
-            permissions: List of permission strings
+            permissions: List of permission strings or Permission objects
         """
         self.name = name
         self.description = description
-        self.permissions = permissions or []
+        if permissions:
+            # Convert permission names to Permission objects if needed
+            perms = []
+            for perm in permissions:
+                if isinstance(perm, str):
+                    perm_obj = Permission.query.filter_by(name=perm).first()
+                    if perm_obj:
+                        perms.append(perm_obj)
+                else:
+                    perms.append(perm)
+            self.permissions = perms
+        else:
+            self.permissions = []
     
     def has_permission(self, permission: str) -> bool:
         """

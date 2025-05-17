@@ -36,12 +36,32 @@ export interface PersistenceHandler {
 }
 
 /**
+ * Minimal in-memory storage fallback for Node/test environments
+ */
+const createMemoryStorage = (): StateStorage => {
+  const data: Record<string, string> = {};
+  return {
+    getItem(key: string) {
+      return Promise.resolve(data[key] ?? null);
+    },
+    setItem(key: string, value: string) {
+      data[key] = value;
+      return Promise.resolve();
+    },
+    removeItem(key: string) {
+      delete data[key];
+      return Promise.resolve();
+    },
+  };
+};
+
+/**
  * Creates a persistence handler for state management
  */
 export const createPersistence = (config: PersistenceConfig): PersistenceHandler => {
   const {
     prefix,
-    storage = localStorage as ExtendedStorage,
+    storage = (typeof localStorage !== 'undefined' ? localStorage : createMemoryStorage()) as ExtendedStorage,
     debounceTime = 1000,
     version = 1,
   } = config;

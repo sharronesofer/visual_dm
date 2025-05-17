@@ -30,41 +30,6 @@ class SpellSchool(db.Model):
             'updated_at': self.updated_at.isoformat()
         }
 
-class Spell(db.Model):
-    """Spell model."""
-    __tablename__ = 'spells'
-    __table_args__ = {'extend_existing': True}
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
-    description: Mapped[str] = mapped_column(String(500))
-    spell_type: Mapped[str] = mapped_column(String(50))  # 'attack', 'heal', 'buff', 'debuff'
-    school: Mapped[str] = mapped_column(String(50))  # 'fire', 'ice', 'lightning', etc.
-    level: Mapped[int] = mapped_column(Integer, default=1)
-    mp_cost: Mapped[int] = mapped_column(Integer, default=1)
-    range: Mapped[int] = mapped_column(Integer, default=1)
-    area: Mapped[int] = mapped_column(Integer, default=0)  # 0 for single target
-    duration: Mapped[int] = mapped_column(Integer, default=1)  # in rounds
-    effects: Mapped[dict] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def to_dict(self):
-        """Convert spell to dictionary."""
-        return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'spell_type': self.spell_type,
-            'school': self.school,
-            'level': self.level,
-            'mp_cost': self.mp_cost,
-            'range': self.range,
-            'area': self.area,
-            'duration': self.duration,
-            'effects': self.effects
-        }
-
 class Spellbook(db.Model):
     """Spellbook model for storing known spells."""
     __tablename__ = 'spellbooks'

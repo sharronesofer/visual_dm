@@ -1,6 +1,6 @@
 """Validation models for Quest-related API requests."""
 
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, ClassVar
 from pydantic import BaseModel, Field, validator
 from enum import Enum
 from datetime import datetime
@@ -85,6 +85,10 @@ class QuestObjective(BaseModel):
                 raise ValueError(result.errors[0]['error'])
         return v
 
+class QuestReward(BaseModel):
+    """Stub for QuestReward to satisfy type checking and Pydantic schema generation."""
+    pass
+
 class QuestCreateRequest(BaseModel):
     """Validation model for quest creation requests."""
     
@@ -106,12 +110,12 @@ class QuestCreateRequest(BaseModel):
     metadata: Optional[Dict] = Field(default_factory=dict)
     
     @validator('giver_id', 'location_id', 'faction_id', 'parent_quest_id')
-    def validate_entity_ids(cls, v, field):
+    def validate_entity_ids(cls, v):
         """Validate entity IDs if provided."""
         if v is not None:
             result = validate_id(v)
             if not result.is_valid:
-                raise ValueError(f"Invalid {field.name}: {result.errors[0]['error']}")
+                raise ValueError(f"Invalid {v}: {result.errors[0]['error']}")
         return v
     
     @validator('prerequisites')
@@ -177,12 +181,12 @@ class QuestUpdateRequest(BaseModel):
     metadata: Optional[Dict] = None
     
     @validator('giver_id', 'location_id', 'faction_id', 'parent_quest_id')
-    def validate_entity_ids(cls, v, field):
+    def validate_entity_ids(cls, v):
         """Validate entity IDs if provided."""
         if v is not None:
             result = validate_id(v)
             if not result.is_valid:
-                raise ValueError(f"Invalid {field.name}: {result.errors[0]['error']}")
+                raise ValueError(f"Invalid {v}: {result.errors[0]['error']}")
         return v
     
     @validator('prerequisites')
@@ -246,8 +250,8 @@ class QuestQueryParams(BaseModel, PaginationValidationMixin, SortValidationMixin
     has_time_limit: Optional[bool] = None
     tags: Optional[List[str]] = None
     
-    valid_sort_fields = ['name', 'type', 'status', 'difficulty', 'min_level', 'time_limit', 'created_at', 'updated_at']
-    valid_filters = {
+    valid_sort_fields: ClassVar = ['name', 'type', 'status', 'difficulty', 'min_level', 'time_limit', 'created_at', 'updated_at']
+    valid_filters: ClassVar = {
         'type': QuestType,
         'status': QuestStatus,
         'difficulty': QuestDifficulty,

@@ -3,6 +3,7 @@ import { Group, GroupType, GroupRole } from '../../types/npc/group';
 import { GroupManager } from './GroupManager';
 import { GroupFormationSystem } from './GroupFormationSystem';
 import { SpatialGrid } from '../../utils/SpatialGrid';
+import { EventBus } from '../../core/interfaces/types/events';
 
 interface GroupDecision {
   id: string;
@@ -25,6 +26,14 @@ export class GroupBehaviorSystem {
     this.formationSystem = new GroupFormationSystem(this.groupManager, gridSize);
     this.spatialGrid = new SpatialGrid(gridSize);
     this.activeDecisions = new Map();
+
+    // Subscribe to POI evolution events for NPC integration
+    EventBus.getInstance().on('poi:evolved', ({ poiId, poi, trigger, changes, version }) => {
+      // Example: Log the event
+      console.log(`[NPC Integration] POI evolved: ${poiId}, trigger: ${trigger}, changes:`, changes);
+      // TODO: Update NPC routines, spawning, or behaviors based on evolved POI state
+      // For example, if a settlement's population increases, spawn more NPCs or adjust routines
+    });
   }
 
   /**
@@ -42,10 +51,10 @@ export class GroupBehaviorSystem {
     const formationCheck = this.formationSystem.shouldFormGroup(npcs);
     if (formationCheck) {
       const { initiator, candidates } = formationCheck;
-      
+
       // Determine most appropriate group type based on shared goals
       const groupType = this.determineGroupType(initiator, candidates);
-      
+
       // Attempt to form the group
       const group = this.formationSystem.formGroup(
         initiator,
@@ -65,7 +74,7 @@ export class GroupBehaviorSystem {
   private determineGroupType(initiator: NPCData, candidates: NPCData[]): GroupType {
     const allNPCs = [initiator, ...candidates];
     const goalTypes = new Map<string, number>();
-    
+
     // Count goal types across all NPCs
     allNPCs.forEach(npc => {
       npc.goals.forEach(goal => {
@@ -75,7 +84,7 @@ export class GroupBehaviorSystem {
 
     // Map common goal types to group types
     const typeScores = new Map<GroupType, number>();
-    
+
     goalTypes.forEach((count, goalType) => {
       switch (goalType.toLowerCase()) {
         case 'trade':
@@ -161,7 +170,7 @@ export class GroupBehaviorSystem {
   ): boolean {
     const decision = this.activeDecisions.get(decisionId);
     if (!decision) return false;
-    
+
     if (decision.deadline < Date.now()) return false;
     if (!decision.options.includes(vote)) return false;
 
@@ -180,7 +189,7 @@ export class GroupBehaviorSystem {
 
     // Count weighted votes based on member roles
     const weightedVotes = new Map<string, number>();
-    
+
     decision.votes.forEach((vote, memberId) => {
       const weight = this.getMemberWeight(memberId);
       weightedVotes.set(vote, (weightedVotes.get(vote) || 0) + weight);
@@ -199,7 +208,7 @@ export class GroupBehaviorSystem {
 
     decision.result = result;
     this.activeDecisions.delete(decisionId);
-    
+
     return result;
   }
 

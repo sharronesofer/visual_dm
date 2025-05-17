@@ -120,9 +120,10 @@ class GeometryBatch:
 class OptimizedMeshGenerator:
     """Generates optimized meshes for buildings."""
     
-    def __init__(self):
+    def __init__(self, batch_size_threshold: int = 1000):
         self.octree: Optional[OctreeNode] = None
-        self.batches: Dict[str, GeometryBatch] = {}
+        self.batches: Dict[str, List[GeometryBatch]] = {}  # material_id -> list of batches
+        self.batch_size_threshold = batch_size_threshold
         
         # Reusable geometry for common shapes
         self.cube_vertices = np.array([
@@ -153,6 +154,10 @@ class OptimizedMeshGenerator:
             4, 5, 1, 1, 0, 4
         ])
     
+    def set_batch_size_threshold(self, threshold: int):
+        """Set the batch size threshold for geometry batching."""
+        self.batch_size_threshold = threshold
+    
     @building_profiler.track_component("spatial_partitioning")
     def initialize_spatial_partitioning(self, bounds: AABB) -> None:
         """Initialize the spatial partitioning structure."""
@@ -165,18 +170,24 @@ class OptimizedMeshGenerator:
         indices: np.ndarray,
         material_id: str
     ) -> None:
-        """Add geometry to the appropriate batch."""
+        """Add geometry to the appropriate batch, splitting if threshold is exceeded."""
         if material_id not in self.batches:
-            self.batches[material_id] = GeometryBatch(material_id)
-        self.batches[material_id].add_geometry(vertices, indices)
+            self.batches[material_id] = [GeometryBatch(material_id)]
+        current_batch = self.batches[material_id][-1]
+        current_batch.add_geometry(vertices, indices)
+        # If batch size exceeds threshold, finalize and start a new batch
+        if current_batch.vertex_offset >= self.batch_size_threshold:
+            # Optionally log batch split for profiling
+            logger.info(f"Batch for {material_id} reached threshold ({self.batch_size_threshold}), starting new batch.")
+            self.batches[material_id].append(GeometryBatch(material_id))
     
     @building_profiler.track_component("mesh_generation")
     def generate_building_mesh(
         self,
         rooms: List[Dict],
         lod: int
-    ) -> Dict[str, Tuple[np.ndarray, np.ndarray]]:
-        """Generate optimized building mesh with LOD support."""
+    ) -> Dict[str, List[Tuple[np.ndarray, np.ndarray]]]:
+        """Generate optimized building mesh with LOD support and batch size thresholding."""
         # Initialize spatial partitioning
         bounds = self._calculate_building_bounds(rooms)
         self.initialize_spatial_partitioning(bounds)
@@ -198,14 +209,19 @@ class OptimizedMeshGenerator:
             else:
                 # Detailed geometry with proper wall segments and openings
                 self._generate_detailed_room(room, room_index, colliding_rooms)
-            
+            # --- Log LOD transition for each room processed ---
+            building_profiler.log_lod_transition()
             # Add room to spatial index
             self.octree.insert((room_bounds, room_index))
         
         # Finalize all batches
         result = {}
-        for material_id, batch in self.batches.items():
-            result[material_id] = batch.finalize()
+        for material_id, batch_list in self.batches.items():
+            result[material_id] = [batch.finalize() for batch in batch_list if batch.vertex_offset > 0]
+            for batch in batch_list:
+                building_profiler.log_batch_size(material_id, batch.vertex_offset)
+        # --- Log cache utilization (number of batches/materials) ---
+        building_profiler.log_cache_utilization('geometry_batches', sum(len(b) for b in self.batches.values()))
         
         return result
     
@@ -275,6 +291,12 @@ class OptimizedMeshGenerator:
             ceiling_vertices = self._generate_ceiling_geometry(room)
             ceiling_indices = self._generate_ceiling_indices(len(ceiling_vertices))
             self.add_to_batch(ceiling_vertices, ceiling_indices, f"ceiling_{room.get('type', 'default')}")
+        # TODO: Add support for advanced elements (columns, beams, stairs, furniture, partitions, roofs)
+        # Example stub for columns:
+        # for column in room.get('columns', []):
+        #     col_vertices, col_indices = self._generate_column_geometry(column)
+        #     self.add_to_batch(col_vertices, col_indices, f"column_{column.get('material', 'default')}")
+        # TODO: Implement _generate_column_geometry, _generate_beam_geometry, _generate_stair_geometry, etc.
     
     def _generate_floor_geometry(self, room: Dict) -> np.ndarray:
         """Generate detailed floor geometry with proper UVs and materials."""

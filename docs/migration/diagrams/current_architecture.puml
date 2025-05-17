@@ -1,0 +1,30 @@
+@startuml
+!define RECTANGLE class
+
+RECTANGLE Python_Backend {
+  +API Layer
+  +Business Logic
+  +Data Access
+}
+
+RECTANGLE TypeScript_Frontend {
+  +UI Components
+  +State Management
+  +API Client
+}
+
+Python_Backend <.. TypeScript_Frontend : REST API
+
+note right of Python_Backend
+  - Handles world generation
+  - Exposes REST endpoints
+  - Manages data persistence
+end note
+
+note left of TypeScript_Frontend
+  - Renders UI
+  - Handles user input
+  - Communicates with backend
+end note
+
+@enduml

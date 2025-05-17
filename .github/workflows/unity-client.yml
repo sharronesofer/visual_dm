@@ -1,0 +1,55 @@
+# Unity Client CI Workflow
+# For full architecture, see docs/ci-cd-architecture.md
+
+name: Unity Client CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'UnityClient/**'
+      - '.github/workflows/unity-client.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'UnityClient/**'
+      - '.github/workflows/unity-client.yml'
+
+concurrency:
+  group: unity-client-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+      
+      - name: Install unity-lint
+        run: dotnet tool install -g unity-lint
+
+      - name: C# Code Analysis
+        run: |
+          cd UnityClient
+          unity-lint check --path ./Assets/Scripts/ 
+      - name: Upload Unity Lint Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: unity-lint-results
+          path: UnityClient/UnityLintResults/
+
+  notify:
+    if: failure()
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - name: Notify Slack (placeholder)
+        run: |
+          echo "Unity Client CI failed. Please check the logs."
+          # Integrate with Slack/email as per docs/ci-cd-architecture.md 

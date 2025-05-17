@@ -3,8 +3,8 @@ Tests for faction services.
 """
 
 import pytest
-from datetime import datetime
-from app.core.models.faction import Faction
+from datetime import datetime, timedelta
+from app.core.models.world import Faction
 from app.core.services.faction_service import (
     FactionService, FactionRelationshipService
 )
@@ -12,6 +12,9 @@ from app.core.exceptions import (
     FactionNotFoundError, InvalidRelationshipError,
     DuplicateFactionError
 )
+from app.social.models.social import Reputation, EntityType
+from app.social.social_world import SocialWorld
+from app.social.social_utils import get_reputation_between_entities, summarize_reputation_history
 
 @pytest.fixture
 def faction_data():
@@ -212,7 +215,7 @@ class TestFactionRelationshipService:
         assert hostile[0].relation_type == RelationType.HOSTILE
 
     def test_update_reputation(self, test_relationship, test_factions):
-        """Test updating reputation and relation type changes."""
+        """Test updating reputation and relation type changes, including strength and metadata."""
         # Test positive change
         rel, new_type = FactionRelationshipService.update_reputation(
             test_factions[0].id,
@@ -221,6 +224,13 @@ class TestFactionRelationshipService:
         )
         assert rel.reputation_score == 80.0
         assert new_type == RelationType.ALLIED
+        # Check strength and metadata if present
+        if hasattr(rel, 'strength'):
+            assert rel.strength >= 0
+        if hasattr(rel, 'last_updated'):
+            assert rel.last_updated is not None
+        if hasattr(rel, 'change_source'):
+            assert rel.change_source is not None
 
         # Test negative change
         rel, new_type = FactionRelationshipService.update_reputation(
@@ -230,6 +240,12 @@ class TestFactionRelationshipService:
         )
         assert rel.reputation_score == -20.0
         assert new_type == RelationType.NEUTRAL
+        if hasattr(rel, 'strength'):
+            assert rel.strength >= 0
+        if hasattr(rel, 'last_updated'):
+            assert rel.last_updated is not None
+        if hasattr(rel, 'change_source'):
+            assert rel.change_source is not None
 
         # Test bounds
         rel, _ = FactionRelationshipService.update_reputation(
@@ -238,6 +254,12 @@ class TestFactionRelationshipService:
             -200.0
         )
         assert rel.reputation_score == -100.0
+        if hasattr(rel, 'strength'):
+            assert rel.strength >= 0
+        if hasattr(rel, 'last_updated'):
+            assert rel.last_updated is not None
+        if hasattr(rel, 'change_source'):
+            assert rel.change_source is not None
 
     def test_delete_relationship(self, test_relationship, test_factions):
         """Test deleting a relationship."""
@@ -250,4 +272,6 @@ class TestFactionRelationshipService:
             test_factions[0].id,
             test_factions[1].id
         )
-        assert relationship is None 
+        assert relationship is None
+
+# test_multi_entity_reputation moved to test_social_reputation.py 

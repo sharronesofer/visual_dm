@@ -13,7 +13,7 @@ from app.core.utils.error_utils import ValidationError, NotFoundError, DatabaseE
 from app.core.models.character import Character
 from app.core.models.user import User
 from app.core.models.party import Party
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.models.spell import Spell
 from app.core.models.inventory import InventoryItem

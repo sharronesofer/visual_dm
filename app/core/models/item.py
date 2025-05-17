@@ -32,6 +32,70 @@ class ItemRarity(enum.Enum):
     LEGENDARY = "legendary"
     UNIQUE = "unique"
 
+class AttributeContainer:
+    """
+    Encapsulates item attributes with support for inheritance, composition, validation, and JSON (de)serialization.
+    """
+    def __init__(self, attributes=None, parent=None, compositions=None):
+        self.attributes = attributes or {}
+        self.parent = parent  # Optional parent AttributeContainer for inheritance
+        self.compositions = compositions or []  # List of AttributeContainers for composition
+
+    def get(self, key, default=None):
+        if key in self.attributes:
+            return self.attributes[key]
+        # Check compositions
+        for comp in self.compositions:
+            if key in comp.attributes:
+                return comp.attributes[key]
+        # Check parent
+        if self.parent:
+            return self.parent.get(key, default)
+        return default
+
+    def set(self, key, value):
+        self.attributes[key] = value
+
+    def validate(self, schema):
+        """Validate attributes against a schema (dict of key: {type, min, max, allowed, required})."""
+        for key, rules in schema.items():
+            value = self.get(key)
+            if rules.get('required') and value is None:
+                raise ValueError(f"Attribute '{key}' is required.")
+            if value is not None:
+                if 'type' in rules and not isinstance(value, rules['type']):
+                    raise TypeError(f"Attribute '{key}' must be of type {rules['type']}.")
+                if 'min' in rules and value < rules['min']:
+                    raise ValueError(f"Attribute '{key}' below minimum {rules['min']}.")
+                if 'max' in rules and value > rules['max']:
+                    raise ValueError(f"Attribute '{key}' above maximum {rules['max']}.")
+                if 'allowed' in rules and value not in rules['allowed']:
+                    raise ValueError(f"Attribute '{key}' value {value} not allowed.")
+        return True
+
+    def to_dict(self):
+        d = dict(self.attributes)
+        # Merge in compositions
+        for comp in self.compositions:
+            d.update(comp.to_dict())
+        # Merge in parent
+        if self.parent:
+            d.update(self.parent.to_dict())
+        return d
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(attributes=dict(d))
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __setitem__(self, key, value):
+        self.set(key, value)
+
+    def __contains__(self, key):
+        return self.get(key) is not None
+
 class Item(db.Model):
     """
     Represents an item in the game world
@@ -107,13 +171,96 @@ class Item(db.Model):
     inventory_items = relationship('InventoryItem', back_populates='item')
     equipment_instances = relationship('EquipmentInstance', back_populates='item')
 
+    # Class-level dictionary of item attribute templates
+    ITEM_TEMPLATES = {
+        'basic_weapon': {
+            'name': 'Basic Sword',
+            'type': 'weapon',
+            'rarity': 'common',
+            'weight': 5.0,
+            'value': 10,
+            'stats': {
+                'damage': 5,
+                'durability': 100,
+                'max_durability': 100,
+                'requirements': {'level': 1, 'stats': {}, 'skills': {}}
+            },
+            'properties': {
+                'effects': [],
+                'enchantments': [],
+                'sockets': [],
+                'modifiers': [],
+                'set': None
+            }
+        },
+        'basic_armor': {
+            'name': 'Leather Armor',
+            'type': 'armor',
+            'rarity': 'common',
+            'weight': 8.0,
+            'value': 15,
+            'stats': {
+                'armor': 3,
+                'durability': 80,
+                'max_durability': 80,
+                'requirements': {'level': 1, 'stats': {}, 'skills': {}}
+            },
+            'properties': {
+                'effects': [],
+                'enchantments': [],
+                'sockets': [],
+                'modifiers': [],
+                'set': None
+            }
+        },
+        'basic_consumable': {
+            'name': 'Health Potion',
+            'type': 'consumable',
+            'rarity': 'common',
+            'weight': 0.5,
+            'value': 5,
+            'stats': {
+                'heal': 20,
+                'requirements': {'level': 1, 'stats': {}, 'skills': {}}
+            },
+            'properties': {
+                'effects': [{'type': 'heal', 'amount': 20}],
+                'enchantments': [],
+                'sockets': [],
+                'modifiers': [],
+                'set': None
+            }
+        }
+    }
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.properties = kwargs.get('properties', {})
 
+    @property
+    def attributes(self):
+        """
+        Return an AttributeContainer combining stats and properties for flexible attribute access.
+        """
+        return AttributeContainer(attributes=self.stats or {}, compositions=[AttributeContainer(self.properties or {})])
+
+    def get_attribute(self, key, default=None):
+        """Get an attribute value from the AttributeContainer."""
+        return self.attributes.get(key, default)
+
+    def set_attribute(self, key, value):
+        """Set an attribute value in the stats field (primary attribute store)."""
+        stats = self.stats or {}
+        stats[key] = value
+        self.stats = stats
+
+    def validate_attributes(self, schema):
+        """Validate all attributes using AttributeContainer validation."""
+        return self.attributes.validate(schema)
+
     def to_dict(self) -> Dict:
-        """Convert item to dictionary representation."""
-        return {
+        """Convert item to dictionary representation, including all attributes."""
+        d = {
             'id': self.id,
             'name': self.name,
             'description': self.description,
@@ -122,9 +269,12 @@ class Item(db.Model):
             'weight': self.weight,
             'value': self.value,
             'properties': self.properties,
+            'stats': self.stats,
+            'attributes': self.attributes.to_dict(),
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
+        return d
 
     def update(self, data: Dict) -> None:
         """Update item properties."""
@@ -368,4 +518,27 @@ class Item(db.Model):
             # TODO: Teleport user
             result['destination'] = destination
         
-        return result 
+        return result
+
+    @classmethod
+    def create_from_template(cls, template_name, overrides=None):
+        """
+        Create an Item instance from a predefined template, applying any overrides.
+        Args:
+            template_name (str): The name of the template in ITEM_TEMPLATES.
+            overrides (dict): Optional dict of fields to override in the template.
+        Returns:
+            Item: A new Item instance.
+        """
+        import copy
+        if template_name not in cls.ITEM_TEMPLATES:
+            raise ValueError(f"Unknown item template: {template_name}")
+        template = copy.deepcopy(cls.ITEM_TEMPLATES[template_name])
+        overrides = overrides or {}
+        # Merge overrides into template
+        for key, value in overrides.items():
+            if key in ['stats', 'properties'] and key in template:
+                template[key].update(value)
+            else:
+                template[key] = value
+        return cls(**template) 

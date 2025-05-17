@@ -3,6 +3,7 @@ import { TileManager } from './TileManager';
 import { LightingSystem } from './LightingSystem';
 import { FogOfWarManager } from './FogOfWarManager';
 import { MapInteractionHandler } from './MapInteractionHandler';
+import { marketToMapObject } from './types';
 
 export class MapRenderer {
   private canvas: HTMLCanvasElement;
@@ -123,7 +124,7 @@ export class MapRenderer {
 
     // Skip rendering if tile is outside viewport
     if (screenPos.x + size < 0 || screenPos.x > this.viewport.size.width ||
-        screenPos.y + size < 0 || screenPos.y > this.viewport.size.height) {
+      screenPos.y + size < 0 || screenPos.y > this.viewport.size.height) {
       return;
     }
 
@@ -137,7 +138,7 @@ export class MapRenderer {
     const texture = this.textureCache.get(tile.type);
     if (texture) {
       this.ctx.save();
-      
+
       // Apply lighting if enabled
       if (this.renderOptions.showLighting) {
         const lighting = this.lightingSystem.calculateTileLighting(tile);
@@ -174,7 +175,27 @@ export class MapRenderer {
 
     // Skip rendering if object is outside viewport
     if (screenPos.x + width < 0 || screenPos.x > this.viewport.size.width ||
-        screenPos.y + height < 0 || screenPos.y > this.viewport.size.height) {
+      screenPos.y + height < 0 || screenPos.y > this.viewport.size.height) {
+      return;
+    }
+
+    if (object.type === 'market') {
+      // Draw a distinct market marker (e.g., blue circle with icon)
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.arc(screenPos.x + width / 2, screenPos.y + height / 2, Math.max(width, height) / 2, 0, 2 * Math.PI);
+      this.ctx.fillStyle = 'rgba(0, 120, 255, 0.7)';
+      this.ctx.fill();
+      this.ctx.strokeStyle = '#003366';
+      this.ctx.lineWidth = 2;
+      this.ctx.stroke();
+      // Optionally draw a market icon or the first letter of the market name
+      this.ctx.fillStyle = '#fff';
+      this.ctx.font = `${Math.floor(height / 1.5)}px sans-serif`;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillText((object.data.name || 'M')[0], screenPos.x + width / 2, screenPos.y + height / 2);
+      this.ctx.restore();
       return;
     }
 
@@ -248,5 +269,23 @@ export class MapRenderer {
     this.lightingSystem.clear();
     this.fogOfWar.clear();
     this.textureCache.clear();
+  }
+
+  public syncMarketMarkers(markets: any[]): void {
+    // Remove existing market objects
+    this.mapData.objects = this.mapData.objects.filter(obj => obj.type !== 'market');
+    // Add new market objects
+    for (const market of markets) {
+      this.mapData.objects.push(marketToMapObject(market));
+    }
+    this.render();
+  }
+
+  public onMarketMarkerClick(callback: (marketObject: MapObject) => void): void {
+    this.addInteractionListener(event => {
+      if (event.type === 'click' && event.object && event.object.type === 'market') {
+        callback(event.object);
+      }
+    });
   }
 } 

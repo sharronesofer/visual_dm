@@ -4,7 +4,8 @@ from datetime import datetime
 from app.combat.combat_logger import (
     CombatLogger, LogLevel, LogCategory, CombatLogEntry
 )
-from app.combat.damage_engine import DamageType, AttackType, DamageResult
+from app.core.enums import DamageType
+from app.combat.damage_engine import AttackType, DamageResult
 
 @pytest.fixture
 def mock_db():

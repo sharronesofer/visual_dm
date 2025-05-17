@@ -1,14 +1,16 @@
 import { Point, Size, Tile, MapData } from './types';
+import { DamageLOSCalculator } from '../../combat/DamageLOSCalculator';
+import { BuildingStructure } from '../../core/interfaces/types/building';
 
 export class FogOfWarManager {
   private visibilityMap: boolean[][];
   private exploredMap: boolean[][];
 
   constructor(private mapData: MapData) {
-    this.visibilityMap = Array(mapData.size.height).fill(false).map(() => 
+    this.visibilityMap = Array(mapData.size.height).fill(false).map(() =>
       Array(mapData.size.width).fill(false)
     );
-    this.exploredMap = Array(mapData.size.height).fill(false).map(() => 
+    this.exploredMap = Array(mapData.size.height).fill(false).map(() =>
       Array(mapData.size.width).fill(false)
     );
   }
@@ -42,9 +44,9 @@ export class FogOfWarManager {
       // Calculate if this tile blocks vision based on elevation differences
       const fromElevation = this.mapData.tiles[Math.floor(from.y)][Math.floor(from.x)].elevation;
       const toElevation = this.mapData.tiles[y1][x1].elevation;
-      const expectedElevation = fromElevation + (toElevation - fromElevation) * 
-        (Math.sqrt((x0 - from.x) ** 2 + (y0 - from.y) ** 2) / 
-         Math.sqrt((to.x - from.x) ** 2 + (to.y - from.y) ** 2));
+      const expectedElevation = fromElevation + (toElevation - fromElevation) *
+        (Math.sqrt((x0 - from.x) ** 2 + (y0 - from.y) ** 2) /
+          Math.sqrt((to.x - from.x) ** 2 + (to.y - from.y) ** 2));
 
       if (elevation > expectedElevation + 1) { // +1 for slight tolerance
         return false;
@@ -68,7 +70,19 @@ export class FogOfWarManager {
     return true;
   }
 
-  public updateVisibility(viewerPosition: Point, viewRadius: number): void {
+  /**
+   * Update visibility for a single viewer, optionally using a DamageLOSCalculator and building structure for damage-aware LOS.
+   * @param viewerPosition The position of the viewer.
+   * @param viewRadius The viewing radius.
+   * @param damageLOSCalculator Optional DamageLOSCalculator for damage-aware LOS.
+   * @param buildingStructure Optional BuildingStructure for damage-aware LOS.
+   */
+  public updateVisibility(
+    viewerPosition: Point,
+    viewRadius: number,
+    damageLOSCalculator?: DamageLOSCalculator,
+    buildingStructure?: BuildingStructure
+  ): void {
     // Reset visibility map but keep explored map
     for (let y = 0; y < this.mapData.size.height; y++) {
       for (let x = 0; x < this.mapData.size.width; x++) {
@@ -85,12 +99,20 @@ export class FogOfWarManager {
     for (let y = startY; y < endY; y++) {
       for (let x = startX; x < endX; x++) {
         const distance = Math.sqrt(
-          (x - viewerPosition.x) ** 2 + 
+          (x - viewerPosition.x) ** 2 +
           (y - viewerPosition.y) ** 2
         );
-
         if (distance <= viewRadius) {
-          if (this.calculateLineOfSight(viewerPosition, { x, y })) {
+          let visible = false;
+          if (damageLOSCalculator && buildingStructure) {
+            // Use damage-aware LOS
+            const vis = damageLOSCalculator.calculateVisibility(viewerPosition, { x, y }, buildingStructure);
+            visible = vis >= 0.5; // Threshold for visibility (configurable)
+          } else {
+            // Fallback to original LOS
+            visible = this.calculateLineOfSight(viewerPosition, { x, y });
+          }
+          if (visible) {
             this.visibilityMap[y][x] = true;
             this.exploredMap[y][x] = true;
           }
@@ -99,7 +121,17 @@ export class FogOfWarManager {
     }
   }
 
-  public updateVisibilityMultipleViewers(viewers: Array<{ position: Point, radius: number }>): void {
+  /**
+   * Update visibility for multiple viewers, optionally using a DamageLOSCalculator and building structure for damage-aware LOS.
+   * @param viewers Array of viewer positions and radii.
+   * @param damageLOSCalculator Optional DamageLOSCalculator for damage-aware LOS.
+   * @param buildingStructure Optional BuildingStructure for damage-aware LOS.
+   */
+  public updateVisibilityMultipleViewers(
+    viewers: Array<{ position: Point, radius: number }>,
+    damageLOSCalculator?: DamageLOSCalculator,
+    buildingStructure?: BuildingStructure
+  ): void {
     // Reset visibility map
     for (let y = 0; y < this.mapData.size.height; y++) {
       for (let x = 0; x < this.mapData.size.width; x++) {
@@ -109,7 +141,7 @@ export class FogOfWarManager {
 
     // Update visibility for each viewer
     for (const viewer of viewers) {
-      this.updateVisibility(viewer.position, viewer.radius);
+      this.updateVisibility(viewer.position, viewer.radius, damageLOSCalculator, buildingStructure);
     }
   }
 
@@ -139,7 +171,7 @@ export class FogOfWarManager {
     for (let y = startY; y < endY; y++) {
       for (let x = startX; x < endX; x++) {
         const distance = Math.sqrt(
-          (x - center.x) ** 2 + 
+          (x - center.x) ** 2 +
           (y - center.y) ** 2
         );
 

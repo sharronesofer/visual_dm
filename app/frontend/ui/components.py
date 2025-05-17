@@ -441,4 +441,132 @@ class MessageLog:
                 (self.rect.right - 10, self.rect.bottom - 5),
                 (self.rect.right - 20, self.rect.bottom - 5),
             ]
-        pygame.draw.polygon(surface, (200, 200, 200), points) 
+        pygame.draw.polygon(surface, (200, 200, 200), points)
+
+class VendorRepairPanel(Panel):
+    """Panel for interacting with builder vendors for building repair."""
+    def __init__(self, x: int, y: int, width: int, height: int, vendors: list, buildings: list, on_request_repair=None, on_confirm_repair=None, theme: Optional[UITheme] = None):
+        super().__init__(x, y, width, height, theme)
+        self.vendors = vendors  # List of vendor dicts with id, name, reputation, specialization, etc.
+        self.buildings = buildings  # List of building dicts with id, name, damage, type, etc.
+        self.selected_vendor = None
+        self.selected_building = None
+        self.selected_tier = 'Standard'
+        self.on_request_repair = on_request_repair
+        self.on_confirm_repair = on_confirm_repair
+        self.repair_cost = 0
+        self.status_label = Label(x + 10, y + 10, "Select a vendor to begin repair.", font_size=16)
+        self.add_child(self.status_label)
+        self.vendor_buttons = []
+        self.building_buttons = []
+        self.tier_buttons = []
+        self.repair_button = None
+        self.confirm_button = None
+        self.progress_bar = None
+        self._init_vendor_buttons()
+        self._init_building_buttons()
+        self._init_tier_buttons()
+
+    def _init_vendor_buttons(self):
+        btn_x = self.x + 10
+        btn_y = self.y + 40
+        for vendor in self.vendors:
+            btn = Button(btn_x, btn_y, 180, 30, f"{vendor['name']} | {vendor.get('specialization', 'General')} | {'★' * vendor.get('reputation', 1)}", callback=lambda v=vendor: self.select_vendor(v))
+            self.vendor_buttons.append(btn)
+            self.add_child(btn)
+            btn_y += 40
+
+    def _init_building_buttons(self):
+        btn_x = self.x + 220
+        btn_y = self.y + 40
+        for building in self.buildings:
+            label = f"{building['name']} (DMG: {building.get('damage', 0)})"
+            btn = Button(btn_x, btn_y, 180, 30, label, callback=lambda b=building: self.select_building(b))
+            self.building_buttons.append(btn)
+            self.add_child(btn)
+            btn_y += 40
+
+    def _init_tier_buttons(self):
+        btn_x = self.x + 10
+        btn_y = self.y + 160
+        tiers = [('Basic', 0.8), ('Standard', 1.0), ('Premium', 1.5)]
+        for tier, mult in tiers:
+            btn = Button(btn_x, btn_y, 100, 30, tier, callback=lambda t=tier: self.select_tier(t))
+            self.tier_buttons.append(btn)
+            self.add_child(btn)
+            btn_x += 110
+
+    def select_vendor(self, vendor):
+        self.selected_vendor = vendor
+        self.status_label.set_text(f"Selected vendor: {vendor['name']} ({vendor.get('specialization', 'General')}, {'★' * vendor.get('reputation', 1)})")
+        self._update_repair_button()
+
+    def select_building(self, building):
+        self.selected_building = building
+        self.status_label.set_text(f"Selected building: {building['name']} (DMG: {building.get('damage', 0)})")
+        self._update_repair_button()
+
+    def select_tier(self, tier):
+        self.selected_tier = tier
+        self.status_label.set_text(f"Selected repair tier: {tier}")
+        self._update_repair_button()
+
+    def _update_repair_button(self):
+        if self.selected_vendor and self.selected_building and self.selected_tier:
+            # Placeholder: cost calculation should be dynamic
+            base_cost = self.selected_building.get('damage', 0) * 100
+            tier_mult = {'Basic': 0.8, 'Standard': 1.0, 'Premium': 1.5}[self.selected_tier]
+            rep_mult = 1.0 - 0.05 * self.selected_vendor.get('reputation', 1)
+            self.repair_cost = int(base_cost * tier_mult * rep_mult)
+            if self.repair_button:
+                self.children.remove(self.repair_button)
+            self.repair_button = Button(self.x + 10, self.y + 200, 180, 30, f"Request Repair ({self.repair_cost}g)", callback=self.request_repair)
+            self.add_child(self.repair_button)
+
+    def request_repair(self):
+        if self.on_request_repair and self.selected_vendor and self.selected_building:
+            self.on_request_repair(self.selected_vendor, self.selected_building, self.selected_tier)
+        self.status_label.set_text("Repair requested. Awaiting confirmation...")
+        if self.confirm_button:
+            self.children.remove(self.confirm_button)
+        self.confirm_button = Button(self.x + 10, self.y + 240, 180, 30, "Confirm Repair", callback=self.confirm_repair)
+        self.add_child(self.confirm_button)
+        # Stub: show progress bar
+        self.progress_bar = ProgressBar(self.x + 10, self.y + 280, 180, 20)
+        self.add_child(self.progress_bar)
+
+    def confirm_repair(self):
+        if self.on_confirm_repair and self.selected_vendor and self.selected_building:
+            self.on_confirm_repair(self.selected_vendor, self.selected_building, self.selected_tier)
+        self.status_label.set_text("Repair confirmed!")
+        if self.confirm_button:
+            self.children.remove(self.confirm_button)
+        if self.progress_bar:
+            self.children.remove(self.progress_bar)
+            self.progress_bar = None
+        # Stub: show completion animation (not implemented)
+
+    def draw(self, surface):
+        super().draw(surface)
+        for child in self.children:
+            child.draw(surface)
+        # Optionally draw extra UI (e.g., progress bar animation)
+
+    def handle_event(self, event):
+        for child in self.children:
+            if child.handle_event(event):
+                return True
+        return False
+
+class ProgressBar(UIComponent):
+    def __init__(self, x, y, width, height, progress=0.0, theme: Optional[UITheme] = None):
+        super().__init__(x, y, width, height, theme)
+        self.progress = progress  # 0.0 to 1.0
+    def set_progress(self, value: float):
+        self.progress = max(0.0, min(1.0, value))
+    def draw(self, surface: pygame.Surface) -> None:
+        pygame.draw.rect(surface, (80, 80, 80), self.rect)
+        fill_rect = self.rect.copy()
+        fill_rect.width = int(self.rect.width * self.progress)
+        pygame.draw.rect(surface, (0, 200, 0), fill_rect)
+        pygame.draw.rect(surface, (255, 255, 255), self.rect, 2) 

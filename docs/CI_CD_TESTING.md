@@ -212,3 +212,67 @@ ALEMBIC_TEST_DB_URL=postgresql://postgres:postgres@localhost:5432/visual_dm_test
 ### In CI/CD
 - Migration tests are run as part of the backend test workflow
 - Failures will block deployment and must be fixed before merging 
+
+# CI/CD Pipeline Testing & Validation
+
+This document outlines the testing and validation strategy for the Visual DM CI/CD pipeline. For a full architectural overview, see [ci-cd-architecture.md](ci-cd-architecture.md).
+
+---
+
+## Pipeline Testing Strategy
+
+### 1. Pipeline Execution
+- All workflows are triggered on pull requests, pushes to main/develop, and scheduled runs.
+- Concurrency is enforced to prevent duplicate runs.
+
+### 2. Build Process
+- Each major component (backend, frontend, Unity client) is built in isolation and as part of integrated jobs.
+- Build failures block further pipeline stages.
+
+### 3. Test Execution
+- **Backend**: Runs `pytest` with coverage, on multiple Python versions.
+- **Frontend**: Runs `jest` and type checks.
+- **Unity**: Uses `game-ci/unity-test-runner` for C# tests.
+- **E2E**: Cypress tests run after backend/frontend are up.
+- **Performance**: k6 and Locust scripts run for load testing.
+
+### 4. Deployment Validation
+- Deployments to dev/staging/prod are validated with smoke tests.
+- Rollback is triggered automatically on failed smoke tests.
+
+### 5. Security Scanning
+- Snyk, Bandit, Trivy, and secret scanning run on every build.
+- Builds are blocked on high/critical vulnerabilities.
+
+### 6. Notification & Monitoring
+- Slack/email notifications for failures, approvals, and releases.
+- Metrics are collected for build times, test pass rates, and deployment frequency.
+
+### 7. Documentation Generation
+- API docs (Swagger/OpenAPI) and changelogs are generated and published automatically.
+
+---
+
+## Validation Steps
+- Test branches with intentional errors to verify build, test, and quality check failures are caught.
+- Deploy to test environments and verify rollback procedures.
+- Introduce test vulnerabilities to verify security scanning.
+- Simulate pipeline failures to test alerting and notification.
+- Review generated documentation and release notes for completeness.
+
+---
+
+For full details, see [ci-cd-architecture.md](ci-cd-architecture.md) and [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## Unity Client CI Testing & Validation
+
+For architectural details, see the [Unity Client CI Workflow section in ci-cd-architecture.md](ci-cd-architecture.md#6-unity-client-ci-workflow).
+
+### Testing Strategy
+- **Static Analysis**: All C# scripts in `Assets/Scripts/` are checked using `unity-lint` to enforce code quality and catch issues early.
+- **Artifact Review**: Lint results are uploaded as artifacts for every run, allowing maintainers to review code quality regardless of build status.
+- **Failure Notification**: On any failure, a notification job is triggered (currently a placeholder for Slack/email integration) to alert the team and ensure rapid response.
+
+### Validation
+- The workflow is triggered on all relevant code changes and workflow updates, ensuring continuous validation of the Unity client codebase.
+- Concurrency controls prevent duplicate runs and ensure only the latest changes are validated. 

@@ -1,98 +1,144 @@
 import { WorldState } from './WorldStateHandler';
+import { ItemService } from '../../core/services/ItemService';
+import { Item } from '../../core/models/Item';
+import { ItemType } from '../../core/interfaces/types/loot';
 
+// Define a proper type for the player inventory
 export interface PlayerInventory {
-  items: Map<string, number>;
-  equipment: Map<string, any>;
+  inventorySlotIds: string[];
 }
 
 export class ItemConsequenceHandler {
-  private playerInventories: Map<string, PlayerInventory> = new Map();
+  private playerIds: Set<string> = new Set();
+  private itemService: ItemService;
 
-  constructor() {}
+  constructor(itemService: ItemService) {
+    this.itemService = itemService;
+  }
 
   /**
    * Handle item reward consequence
    */
   async handleItemReward(playerId: string, consequence: any, worldState: WorldState): Promise<void> {
-    const inventory = this.getPlayerInventory(playerId);
-    const { itemId, amount } = consequence.value;
-    this.addItem(inventory, itemId, amount);
+    this.registerPlayer(playerId);
+
+    // Extract consequence details
+    const { itemId, itemType, amount = 1, rarity } = consequence.value;
+
+    // Generate an item based on the consequence
+    let item: Item | null = null;
+
+    if (itemId) {
+      // Try to get specific item by ID
+      const foundItem = this.itemService.getItem(itemId);
+      if (foundItem) {
+        item = foundItem;
+      }
+    } else if (itemType) {
+      // Generate a random item of the specified type
+      if (rarity && rarity.toLowerCase().includes('magic')) {
+        // Generate magical item
+        item = this.itemService.generateMagicalItem(itemType as ItemType);
+      } else {
+        // Generate regular item
+        item = this.itemService.generateRandomItem(itemType as ItemType);
+      }
+    } else {
+      // Generate completely random item
+      item = this.itemService.generateRandomItem();
+    }
+
+    // Add the item to player inventory
+    if (item) {
+      this.itemService.addItemToInventory(item, amount);
+    }
   }
 
   /**
    * Handle item removal consequence
    */
   async handleItemRemoval(playerId: string, consequence: any, worldState: WorldState): Promise<void> {
-    const inventory = this.getPlayerInventory(playerId);
-    const { itemId, amount } = consequence.value;
-    this.removeItem(inventory, itemId, amount);
+    this.registerPlayer(playerId);
+
+    // Extract consequence details
+    const { itemId, amount = 1 } = consequence.value;
+
+    // Get inventory slots that contain this item
+    const inventory = this.itemService.getPlayerInventory();
+    const slots = inventory.getAllSlots().filter(slot => slot.item.id === itemId);
+
+    // Remove items from slots
+    let remainingToRemove = amount;
+
+    for (const slot of slots) {
+      if (remainingToRemove <= 0) break;
+
+      const amountFromThisSlot = Math.min(slot.quantity, remainingToRemove);
+      if (this.itemService.removeItemFromInventory(slot.id, amountFromThisSlot)) {
+        remainingToRemove -= amountFromThisSlot;
+      }
+    }
   }
 
   /**
-   * Get player's inventory, creating it if it doesn't exist
+   * Register a player to be tracked
    */
-  getPlayerInventory(playerId: string): PlayerInventory {
-    if (!this.playerInventories.has(playerId)) {
-      this.playerInventories.set(playerId, {
-        items: new Map(),
-        equipment: new Map()
-      });
-    }
-    return this.playerInventories.get(playerId)!;
+  registerPlayer(playerId: string): void {
+    this.playerIds.add(playerId);
   }
 
   /**
    * Handle item consequences
    */
-  handleConsequences(inventory: PlayerInventory, consequences: any[]): void {
+  handleConsequences(playerId: string, consequences: any[]): void {
+    this.registerPlayer(playerId);
+
     consequences.forEach(consequence => {
       switch (consequence.type) {
         case 'ADD_ITEM':
-          this.addItem(inventory, consequence.itemId, consequence.amount);
+          this.handleItemReward(playerId, { value: consequence }, {} as WorldState);
           break;
+
         case 'REMOVE_ITEM':
-          this.removeItem(inventory, consequence.itemId, consequence.amount);
+          this.handleItemRemoval(playerId, { value: consequence }, {} as WorldState);
           break;
+
         case 'EQUIP_ITEM':
-          this.equipItem(inventory, consequence.itemId, consequence.slot);
+          this.equipItem(playerId, consequence.itemId, consequence.slot);
           break;
+
         case 'UNEQUIP_ITEM':
-          this.unequipItem(inventory, consequence.slot);
+          this.unequipItem(playerId, consequence.slot);
           break;
       }
     });
   }
 
-  private addItem(inventory: PlayerInventory, itemId: string, amount: number): void {
-    const currentAmount = inventory.items.get(itemId) || 0;
-    inventory.items.set(itemId, currentAmount + amount);
+  /**
+   * Equip an item to a specific slot
+   */
+  private equipItem(playerId: string, itemId: string, slot: string): void {
+    const inventory = this.itemService.getPlayerInventory();
+    const slots = inventory.getAllSlots().filter(s => s.item.id === itemId);
+
+    if (slots.length > 0) {
+      this.itemService.equipItem(slots[0].id);
+    }
   }
 
-  private removeItem(inventory: PlayerInventory, itemId: string, amount: number): void {
-    const currentAmount = inventory.items.get(itemId) || 0;
-    const newAmount = Math.max(0, currentAmount - amount);
-    inventory.items.set(itemId, newAmount);
-  }
+  /**
+   * Unequip an item from a specific slot
+   */
+  private unequipItem(playerId: string, slot: string): void {
+    const inventory = this.itemService.getPlayerInventory();
+    const equippedSlots = inventory.getEquippedSlots();
 
-  private equipItem(inventory: PlayerInventory, itemId: string, slot: string): void {
-    // Unequip any existing item in the slot
-    this.unequipItem(inventory, slot);
-    
-    // Equip the new item
-    inventory.equipment.set(slot, itemId);
-    
-    // Remove one instance from inventory
-    this.removeItem(inventory, itemId, 1);
-  }
+    // Find the slot matching the requested slot to unequip
+    // This is a simplification; in a real implementation, you would map slot names correctly
+    const slotToUnequip = equippedSlots[0]; // Just unequip the first equipped item for simplicity
 
-  private unequipItem(inventory: PlayerInventory, slot: string): void {
-    const equippedItem = inventory.equipment.get(slot);
-    if (equippedItem) {
-      // Add the item back to inventory
-      this.addItem(inventory, equippedItem, 1);
-      
-      // Clear the equipment slot
-      inventory.equipment.delete(slot);
+    if (slotToUnequip) {
+      this.itemService.unequipItem(slotToUnequip.id);
     }
   }
 } 

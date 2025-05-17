@@ -84,6 +84,24 @@ class CombatScreen:
         self._entity_cache: Dict[str, pygame.Surface] = {}
         self._max_entity_cache = 8
 
+        # --- Natural Language Action Input ---
+        self.action_input_active = False
+        self.action_input_text = ""
+        self.action_input_rect = pygame.Rect(100, 560, 600, 40)
+        self.action_input_max_length = 120
+        self.action_input_examples = [
+            "I swing my sword at the goblin",
+            "I cast a fireball at the troll",
+            "I dodge and counterattack",
+            "I use my shield to block",
+            "I try to trip the orc with my staff"
+        ]
+        self.action_input_example_index = 0
+        self.action_input_help_icon_rect = pygame.Rect(710, 560, 30, 30)
+        self.action_input_show_help = False
+        self.action_input_submit_rect = pygame.Rect(750, 560, 100, 40)
+        self.action_input_focused = False
+
     def build_hex_grid(self):
         """Build the hex grid for combat."""
         self.tiles = []
@@ -189,15 +207,53 @@ class CombatScreen:
             return
 
         if self.turn == "player":
-            action = self.action_menu.handle_event(event)
-            if action:
-                self.process_player_action(action)
+            # --- Natural Language Input Handling ---
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.action_input_rect.collidepoint(event.pos):
+                    self.action_input_active = True
+                    self.action_input_focused = True
+                else:
+                    self.action_input_active = False
+                    self.action_input_focused = False
+                if self.action_input_help_icon_rect.collidepoint(event.pos):
+                    self.action_input_show_help = not self.action_input_show_help
+                if self.action_input_submit_rect.collidepoint(event.pos):
+                    if self.action_input_text.strip():
+                        self.process_player_action(self.action_input_text.strip())
+                        self.action_input_text = ""
+                        self.action_input_active = False
+                        self.action_input_focused = False
+                # Allow clicking on example to fill input
+                example_rect = pygame.Rect(100, 610, 600, 30)
+                if example_rect.collidepoint(event.pos):
+                    self.action_input_example_index = (self.action_input_example_index + 1) % len(self.action_input_examples)
+                    self.action_input_text = self.action_input_examples[self.action_input_example_index]
+            elif event.type == pygame.KEYDOWN and self.action_input_focused:
+                if event.key == pygame.K_RETURN:
+                    if self.action_input_text.strip():
+                        self.process_player_action(self.action_input_text.strip())
+                        self.action_input_text = ""
+                        self.action_input_active = False
+                        self.action_input_focused = False
+                elif event.key == pygame.K_BACKSPACE:
+                    self.action_input_text = self.action_input_text[:-1]
+                elif event.key == pygame.K_TAB:
+                    # Cycle example
+                    self.action_input_example_index = (self.action_input_example_index + 1) % len(self.action_input_examples)
+                    self.action_input_text = self.action_input_examples[self.action_input_example_index]
+                elif len(self.action_input_text) < self.action_input_max_length and event.unicode.isprintable():
+                    self.action_input_text += event.unicode
+            else:
+                action = self.action_menu.handle_event(event)
+                if action:
+                    self.process_player_action(action)
 
     def process_player_action(self, action: str) -> None:
-        """Process a player action."""
+        """Process a player action. If the action is a natural language string, submit to backend as type 'natural_language'."""
         try:
-            if action == "Attack":
-                # Create attack animation
+            # If the action is a known menu action, handle as before
+            if action in ["Attack", "Cast", "Skill", "Item"]:
+                # ... existing animation and state update ...
                 start_pos = self.hex_to_pixel(*self.player_pos)
                 end_pos = self.hex_to_pixel(*self.enemy_pos)
                 animation = Animation(
@@ -209,12 +265,26 @@ class CombatScreen:
                     surface=self._get_entity_surface("player")
                 )
                 self.animations["player"].append(animation)
-                
-                # Update combat state
                 self.turn = "enemy"
-                
+                return
+            # Otherwise, treat as natural language action
+            payload = {
+                "type": "natural_language",
+                "input_text": action
+            }
+            # TODO: Replace with actual combat_id and endpoint
+            combat_id = getattr(self, 'combat_id', 1)
+            url = f"http://localhost:8000/combat/{combat_id}/action"
+            response = requests.post(url, json=payload)
+            if response.status_code == 200:
+                result = response.json()
+                # TODO: Handle result (update UI, show feedback, animate, etc.)
+                print("Action result:", result)
+                self.turn = "enemy"
+            else:
+                print("Error submitting action:", response.text)
         except Exception as e:
-            logger.error(f"Error processing player action: {str(e)}")
+            print(f"Error processing player action: {str(e)}")
 
     def draw(self):
         """Draw the combat screen."""
@@ -254,6 +324,32 @@ class CombatScreen:
             if not self.combat_over:
                 self.action_menu.set_enabled_actions(self.available_actions)
                 self.action_menu.draw()
+            
+            # --- Draw Natural Language Action Input ---
+            pygame.draw.rect(self.screen, (30, 30, 30), self.action_input_rect, border_radius=8)
+            border_color = (0, 200, 0) if self.action_input_focused else (100, 100, 100)
+            pygame.draw.rect(self.screen, border_color, self.action_input_rect, 2, border_radius=8)
+            input_surf = self.font.render(self.action_input_text or "Describe your action...", True, (255, 255, 255) if self.action_input_text else (180, 180, 180))
+            self.screen.blit(input_surf, (self.action_input_rect.x + 10, self.action_input_rect.y + 8))
+            # Character counter
+            counter_surf = self.font.render(f"{len(self.action_input_text)}/{self.action_input_max_length}", True, (180, 180, 180))
+            self.screen.blit(counter_surf, (self.action_input_rect.right - 60, self.action_input_rect.y + 8))
+            # Help icon
+            pygame.draw.circle(self.screen, (80, 180, 255), self.action_input_help_icon_rect.center, 15)
+            help_q = self.font.render("?", True, (255, 255, 255))
+            self.screen.blit(help_q, (self.action_input_help_icon_rect.x + 8, self.action_input_help_icon_rect.y + 5))
+            if self.action_input_show_help:
+                help_text = "Type a combat action in your own words. Press Enter or click Submit. Tab/click example to cycle."
+                help_surf = self.font.render(help_text, True, (255, 255, 200))
+                self.screen.blit(help_surf, (self.action_input_rect.x, self.action_input_rect.y - 30))
+            # Submit button
+            pygame.draw.rect(self.screen, (0, 120, 0), self.action_input_submit_rect, border_radius=8)
+            submit_surf = self.font.render("Submit", True, (255, 255, 255))
+            self.screen.blit(submit_surf, (self.action_input_submit_rect.x + 18, self.action_input_submit_rect.y + 8))
+            # Example action
+            example = self.action_input_examples[self.action_input_example_index]
+            example_surf = self.font.render(f"e.g. {example}", True, (200, 200, 200))
+            self.screen.blit(example_surf, (100, 610))
             
             # Clear dirty rects after drawing
             self.dirty_rects = []

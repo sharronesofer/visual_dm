@@ -13,6 +13,7 @@ import os
 import sys
 from datetime import datetime
 import copy
+import argparse
 
 # File paths
 TASKS_FILE = "tasks/tasks.json"
@@ -191,21 +192,44 @@ def consolidate_tasks_659_660(tasks_data):
     
     return tasks_data
 
+def move_done_tasks(tasks_file, done_tasks_file):
+    """Move all tasks with status 'done' from tasks_file to done_tasks_file."""
+    tasks_data = load_json_file(tasks_file)
+    all_tasks = tasks_data.get('tasks', [])
+    done_tasks = [t for t in all_tasks if t.get('status') == 'done']
+    remaining_tasks = [t for t in all_tasks if t.get('status') != 'done']
+
+    # Load or initialize done_tasks_file
+    if os.path.exists(done_tasks_file):
+        done_data = load_json_file(done_tasks_file)
+        done_list = done_data.get('tasks', [])
+    else:
+        done_list = []
+
+    # Append new done tasks
+    done_list.extend(done_tasks)
+    save_json_file(done_tasks_file, {'tasks': done_list})
+
+    # Save remaining tasks back to original file
+    tasks_data['tasks'] = remaining_tasks
+    save_json_file(tasks_file, tasks_data)
+    print(f"Moved {len(done_tasks)} done tasks to {done_tasks_file}.")
+
 def main():
-    """Main function to consolidate tasks."""
-    # Create backup first
-    create_backup(TASKS_FILE)
-    
-    # Load tasks file
-    tasks_data = load_json_file(TASKS_FILE)
-    
-    # Consolidate tasks
-    updated_tasks_data = consolidate_tasks_659_660(tasks_data)
-    
-    # Save updated file
-    save_json_file(TASKS_FILE, updated_tasks_data)
-    
-    print("Successfully consolidated tasks 659 and 660")
+    parser = argparse.ArgumentParser(description='Consolidate or move done tasks in tasks.json')
+    parser.add_argument('--move-done', action='store_true', help='Move all done tasks to done_tasks.json')
+    args = parser.parse_args()
+
+    if args.move_done:
+        create_backup(TASKS_FILE)
+        move_done_tasks(TASKS_FILE, 'tasks/done_tasks.json')
+    else:
+        # Default: consolidate tasks 659 and 660
+        create_backup(TASKS_FILE)
+        tasks_data = load_json_file(TASKS_FILE)
+        updated_tasks_data = consolidate_tasks_659_660(tasks_data)
+        save_json_file(TASKS_FILE, updated_tasks_data)
+        print("Successfully consolidated tasks 659 and 660")
 
 if __name__ == "__main__":
     main() 

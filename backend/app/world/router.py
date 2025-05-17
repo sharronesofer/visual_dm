@@ -10,6 +10,8 @@ from ..database import get_db
 from .region import Region, RegionProperties, RegionManager
 from .websocket import WorldStateManager
 from ..core.api.fastapi import APIResponse, APIError, NotFoundError
+from backend.app.models.market import MarketItem
+from backend.app.repositories.market_repository import MarketItemRepository
 
 router = APIRouter(tags=["world"])
 
@@ -57,6 +59,13 @@ class RegionUpdate(BaseModel):
     )
     z_index: Optional[int] = Field(None, description="Z-index for rendering order")
     is_visible: Optional[bool] = Field(None, description="Region visibility")
+
+class MarketResponse(BaseModel):
+    id: int
+    name: str
+    type: str
+    description: str = ""
+    # Add location fields if available in the model
 
 @router.post("/regions/", response_model=APIResponse[Dict[str, str]])
 async def create_region(region: RegionCreate, db: Session = Depends(get_db)):
@@ -225,4 +234,23 @@ async def websocket_endpoint(
     except WebSocketDisconnect:
         world_state.connections.disconnect(client_id)
     except Exception as e:
-        await websocket.close(code=1001, reason=str(e)) 
+        await websocket.close(code=1001, reason=str(e))
+
+@router.get("/markets/discovered", response_model=APIResponse[List[MarketResponse]])
+async def get_discovered_markets(db: Session = Depends(get_db)):
+    """Return all discovered markets for the current user (placeholder: all markets)."""
+    try:
+        repo = MarketItemRepository()
+        markets = repo.get_all(db)
+        # Convert to response model
+        market_list = [
+            MarketResponse(
+                id=m.id,
+                name=m.name,
+                type=m.type,
+                description=m.description or ""
+            ) for m in markets
+        ]
+        return APIResponse.success(data=market_list)
+    except Exception as e:
+        raise APIError(str(e)) 

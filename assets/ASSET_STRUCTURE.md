@@ -6,6 +6,8 @@ This document defines the folder hierarchy, naming conventions, and guidelines f
 
 ```
 assets/
+  overlays/         # Building damage overlay effects (dirty, dingy, chipped, cracked, etc.)
+  sprites/          # Building and module base sprites
   characters/
     idle/
     walk/
@@ -37,6 +39,8 @@ assets/
 ```
 
 ### Folder Explanations
+- **overlays/**: Building damage overlay effects (dirty, dingy, chipped, cracked, etc.)
+- **sprites/**: Building and module base sprites
 - **characters/**: All character sprites and animation frames, organized by animation type and body part.
 - **equipment/**: All equipment, item, and gear assets, organized by type.
 - **regions/**: All environment and region assets, organized by asset type.
@@ -61,6 +65,8 @@ assets/
 - Status effects: `status_effect_[type]_[frame].png` (e.g., `status_effect_poison_001.png`)
 - POI markers: `poi_marker_[type]_[variant].png` (e.g., `poi_marker_quest_01.png`)
 - POI interactions: `poi_interaction_[type]_[variant].png` (e.g., `poi_interaction_dialog_01.png`)
+- Building overlays: `overlay_[damage]_[variant].png` (e.g., `overlay_dirty_01.png`, `overlay_cracked_02.png`)
+- Building/module sprites: `sprite_[buildingtype]_[variant].png` (e.g., `sprite_house_01.png`, `sprite_factory_02.png`)
 
 ## File Formats & Size Constraints
 
@@ -85,6 +91,7 @@ assets/
 3. Use PNG format with transparent backgrounds.
 4. For new animation types or asset categories, update this document and the relevant README.md.
 5. Test new assets with the asset loader to ensure compatibility.
+6. For placeholder assets, use a solid color or simple pattern with the correct dimensions and a visible label (e.g., "DIRTY", "HOUSE") for easy identification during testing.
 
 ## Examples
 
@@ -99,6 +106,10 @@ assets/
 - `assets/combat/status/status_effect_poison_001.png`
 - `assets/poi/markers/poi_marker_quest_01.png`
 - `assets/poi/interactions/poi_interaction_dialog_01.png`
+- `assets/overlays/overlay_dirty_01.png`
+- `assets/overlays/overlay_cracked_01.png`
+- `assets/sprites/sprite_house_01.png`
+- `assets/sprites/sprite_factory_01.png`
 
 ---
 

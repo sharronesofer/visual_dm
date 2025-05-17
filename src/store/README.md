@@ -17,6 +17,12 @@ This document outlines the store architecture for the Visual DM application. We 
   - Handles POI activation and chunk management
   - Integrates with persistence service
 
+- **Interaction Store** (`interactionStore.ts`)
+  - Manages central state for the Interaction System (Redux-style)
+  - Handles state snapshots, validation, and debugging tools
+  - Provides action creators, reducer logic, and middleware for side effects
+  - Integrates with persistence and validation utilities
+
 ### 2. UI Stores
 - **Wizard Store** (`wizardStore.ts`)
   - Manages wizard/setup flow state

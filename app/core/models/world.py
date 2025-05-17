@@ -8,13 +8,11 @@ from typing import Dict, List, Optional, Any
 from pydantic import BaseModel, Field
 from datetime import datetime, timedelta
 from enum import Enum
-from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, func, Boolean, Text, Enum as SQLEnum
+from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, func, Boolean, Text, Enum as SQLEnum, ForeignKey, Index, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.core.db_base import Base, db
-from app.core.models.region import Region
 from app.core.enums import WorldType
 from random import random, choices
-from app.core.models.resource import Resource
 from app.core.models.trade_route import TradeRoute
 from app.core.models.world_event import WorldEvent
 # from app.core.schemas.base import BaseSchema  # Uncomment or fix this import if available
@@ -32,6 +30,8 @@ from app.core.models.world_state import WorldState
 from app.core.persistence.world_persistence import WorldPersistenceManager, FileSystemStorageStrategy
 from app.core.persistence.serialization import serialize, deserialize
 from app.core.persistence.transaction import Transaction
+from app.core.models.base import BaseModel as SA_BaseModel
+from pydantic import BaseModel as PydanticBaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -130,41 +130,7 @@ class WeatherData(BaseModel):
     visibility: float = 100.0
     last_update: datetime = Field(default_factory=datetime.utcnow)
 
-# --- TEMPORARY: Minimal SQLAlchemy World model for Alembic migration and tick_world_day ---
-class World(db.Model):
-    __tablename__ = 'worlds'
-    id = db.Column(Integer, primary_key=True)
-    name = db.Column(String(100), nullable=False)
-    description = db.Column(Text)
-    is_active = db.Column(Boolean, default=True)
-    game_time = db.Column(JSON)
-    world_type = db.Column(String(50), default='fantasy')
-    created_at = db.Column(DateTime, default=datetime.utcnow)
-    updated_at = db.Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    weather = db.Column(JSON, default=dict)
-    regions = relationship('Region', back_populates='world', cascade='all, delete-orphan')
-    factions = relationship('Faction', back_populates='world', cascade='all, delete-orphan')
-# --- TEMPORARY: Comment out hybrid World(BaseModel) for Alembic migration ---
-# class World(BaseModel):
-#     """Model for managing the game world state."""
-#     __tablename__ = 'worlds'
-#     __table_args__ = {'extend_existing': True}
-#
-#     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-#     name: Mapped[str] = mapped_column(String(100), nullable=False)
-#     description: Mapped[str] = mapped_column(Text)
-#     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-#     game_time: Mapped[Dict[str, int]] = mapped_column(JSON)
-#     world_type: Mapped[WorldType] = mapped_column(SQLEnum(WorldType), default=WorldType.FANTASY)
-#     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-#     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-#     weather: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)  # region_id -> WeatherData dict
-#
-#     def to_dict(self) -> Dict[str, Any]:
-#         ...
-#     # (rest of methods omitted for migration)
-
-class WorldMap(BaseModel):
+class WorldMap(PydanticBaseModel):
     """Model for the game world map."""
     id: int
     name: str = Field(description="Name of the map")
@@ -190,7 +156,7 @@ class WorldMap(BaseModel):
         """Add a new point of interest to the map."""
         self.points_of_interest.append(poi)
 
-class TerrainType(BaseModel):
+class TerrainType(PydanticBaseModel):
     """Model for terrain types."""
     id: int
     name: str
@@ -202,17 +168,6 @@ class TerrainType(BaseModel):
     resource_types: List[str] = Field(default_factory=list)
     hazards: List[Dict] = Field(default_factory=list)
     properties: Dict = Field(default_factory=dict)
-
-class Region(BaseModel):
-    """Region model."""
-    
-    id: int
-    name: str
-    description: str = Field(default="", description="Description of the region")
-    climate: str = Field(default="temperate", description="Climate type")
-    level_range: List[int] = Field(default=[1, 20], description="Level range for the region")
-    terrain_types: List[str] = Field(default_factory=list, description="List of terrain type IDs")
-    points_of_interest: List[str] = Field(default_factory=list, description="List of POI IDs")
 
 class PointOfInterest(BaseModel):
     """Model for points of interest on the map."""
@@ -802,4 +757,288 @@ class World:
             f"Created: {self.created_at}\n"
             f"Entities: {entity_count} total ({character_count} characters, "
             f"{location_count} locations, {item_count} items)"
-        ) 
+        )
+
+class Region(SA_BaseModel):
+    __tablename__ = 'regions'
+    __table_args__ = (
+        Index('ix_regions_type', 'type'),
+        {'extend_existing': True}
+    )
+    id: int = Column(Integer, primary_key=True)
+    name: str = Column(String(100), nullable=False)
+    description: str = Column(Text)
+    type: str = Column(String(50))
+    climate: str = Column(String(50))
+    terrain: str = Column(String(50))
+    level_range: dict = Column(JSON)
+    danger_level: float = Column(Float, default=0.0)
+    history: str = Column(Text)
+    terrain_data: dict = Column(JSON)
+    width: int = Column(Integer, default=50)
+    height: int = Column(Integer, default=50)
+    controlling_faction_id: int = Column(Integer, ForeignKey('factions.id', use_alter=True, name='fk_region_controlling_faction'))
+    world_id: int = Column(Integer, ForeignKey('worlds.id'))
+    world = relationship('World', back_populates='regions')
+    locations = relationship('Location', back_populates='region', cascade='all, delete-orphan')
+    quests = relationship('app.core.models.quest.Quest', back_populates='region', cascade='all, delete-orphan')
+    characters = relationship('Character', back_populates='region', cascade='all, delete-orphan')
+    parties = relationship('Party', back_populates='region', cascade='all, delete-orphan')
+    based_factions = relationship('Faction', back_populates='headquarters', foreign_keys='Faction.headquarters_id')
+    controlling_faction = relationship('Faction', back_populates='controlled_regions', foreign_keys=[controlling_faction_id])
+    resources = relationship('Resource', back_populates='region')
+    events = relationship('WorldEvent', back_populates='region')
+    points_of_interest = relationship('PointOfInterest', back_populates='region')
+
+    def __init__(self, name: str, description: str = "", width: int = 50, height: int = 50):
+        self.name = name
+        self.description = description
+        self.width = width
+        self.height = height
+        self.terrain_data = self._initialize_terrain()
+
+    def _initialize_terrain(self) -> dict:
+        return {
+            'cells': {
+                f"{x},{y}": {
+                    'terrain': 'plain',
+                    'elevation': 0,
+                    'features': [],
+                    'discovered': False
+                }
+                for x in range(self.width)
+                for y in range(self.height)
+            }
+        }
+
+    def get_cell(self, x: int, y: int) -> Optional[dict]:
+        return self.terrain_data['cells'].get(f"{x},{y}")
+
+    def set_cell(self, x: int, y: int, data: dict):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            self.terrain_data['cells'][f"{x},{y}"] = data
+
+    def discover_cell(self, x: int, y: int):
+        cell = self.get_cell(x, y)
+        if cell:
+            cell['discovered'] = True
+
+    def is_discovered(self, x: int, y: int) -> bool:
+        cell = self.get_cell(x, y)
+        return cell.get('discovered', False) if cell else False
+
+    def to_dict(self) -> dict:
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'type': self.type,
+            'climate': self.climate,
+            'terrain': self.terrain,
+            'level_range': self.level_range,
+            'danger_level': self.danger_level,
+            'history': self.history,
+            'controlling_faction_id': self.controlling_faction_id,
+            'locations': [location.to_dict() for location in self.locations],
+            'quests': [quest.to_dict() for quest in self.quests],
+            'characters': [character.to_dict() for character in self.characters],
+            'parties': [party.to_dict() for party in self.parties],
+            'resources': [resource.to_dict() for resource in self.resources],
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
+
+    def __repr__(self):
+        return f'<Region {self.name}>'
+
+    def add_point_of_interest(self, poi_id: str) -> None:
+        if poi_id not in self.points_of_interest:
+            self.points_of_interest.append(poi_id)
+
+    def remove_point_of_interest(self, poi_id: str) -> bool:
+        if poi_id in self.points_of_interest:
+            self.points_of_interest.remove(poi_id)
+            return True
+        return False
+
+    def add_npc(self, npc_id: str) -> None:
+        if npc_id not in self.npcs:
+            self.npcs.append(npc_id)
+
+    def remove_npc(self, npc_id: str) -> bool:
+        if npc_id in self.npcs:
+            self.npcs.remove(npc_id)
+            return True
+        return False
+
+    def add_quest(self, quest_id: str) -> None:
+        if quest_id not in self.quests:
+            self.quests.append(quest_id)
+
+    def remove_quest(self, quest_id: str) -> bool:
+        if quest_id in self.quests:
+            self.quests.remove(quest_id)
+            return True
+        return False
+
+globals()['Region'] = Region
+
+class Resource(SA_BaseModel):
+    __tablename__ = 'resources'
+    id: int = Column(Integer, primary_key=True)
+    name: str = Column(String(100), nullable=False)
+    type: str = Column(String(50), nullable=False)
+    amount: float = Column(Float, default=0.0)
+    price: float = Column(Float, default=1.0)
+    region_id: int = Column(Integer, ForeignKey('regions.id'), nullable=True)
+    faction_id: int = Column(Integer, ForeignKey('factions.id'), nullable=True)
+    last_updated: str = Column(String(50), default=datetime.utcnow)
+    region = relationship('Region', back_populates='resources')
+    faction = relationship('Faction', back_populates='resources_rel')
+
+globals()['Resource'] = Resource
+
+class RelationshipType(str, Enum):
+    ALLIED = "allied"
+    FRIENDLY = "friendly"
+    NEUTRAL = "neutral"
+    HOSTILE = "hostile"
+    WAR = "war"
+
+class FactionRelation(SA_BaseModel):
+    __tablename__ = 'faction_relations'
+    __table_args__ = (UniqueConstraint('faction_id', 'other_faction_id', name='uq_faction_relation'), {'extend_existing': True})
+    id: int = Column(Integer, primary_key=True)
+    faction_id: int = Column(Integer, ForeignKey('factions.id'), nullable=False)
+    other_faction_id: int = Column(Integer, ForeignKey('factions.id'), nullable=False)
+    relation_value: int = Column(Integer, default=0)
+    relation_type: str = Column(String(20), default=RelationshipType.NEUTRAL.value)
+    last_updated: datetime = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def update_relation(self, delta: int):
+        self.relation_value = max(-100, min(100, self.relation_value + delta))
+        self.relation_type = self._determine_type()
+        self.last_updated = datetime.utcnow()
+
+    def _determine_type(self) -> str:
+        if self.relation_value >= 75:
+            return RelationshipType.ALLIED.value
+        elif self.relation_value >= 25:
+            return RelationshipType.FRIENDLY.value
+        elif self.relation_value > -25:
+            return RelationshipType.NEUTRAL.value
+        elif self.relation_value > -75:
+            return RelationshipType.HOSTILE.value
+        else:
+            return RelationshipType.WAR.value
+
+class Faction(SA_BaseModel):
+    __tablename__ = 'factions'
+    __table_args__ = {'extend_existing': True}
+    id: int = Column(Integer, primary_key=True)
+    name: str = Column(String(100), nullable=False)
+    description: str = Column(Text)
+    type: str = Column(String(50))
+    alignment: str = Column(String(50))
+    influence: float = Column(Float, default=1.0)
+    reputation: float = Column(Float, default=0.0)
+    resources: dict = Column(JSON, default=lambda: {
+        'gold': 1000,
+        'materials': {},
+        'special_resources': {},
+        'income_sources': [],
+        'expenses': []
+    })
+    territory: dict = Column(JSON, default=dict)
+    relationships: dict = Column(JSON, default=lambda: {
+        'allies': [],
+        'enemies': [],
+        'neutral': [],
+        'trade_partners': []
+    })
+    history: str = Column(Text)
+    is_active: bool = Column(Boolean, default=True)
+    leader_id: int = Column(Integer, ForeignKey('npcs.id', use_alter=True, name='fk_faction_leader'))
+    headquarters_id: int = Column(Integer, ForeignKey('regions.id', use_alter=True, name='fk_faction_headquarters'))
+    leader = relationship('NPC', foreign_keys=[leader_id], back_populates='led_faction')
+    headquarters = relationship('Region', back_populates='based_factions', foreign_keys=[headquarters_id])
+    controlled_regions = relationship('Region', back_populates='controlling_faction', foreign_keys='Region.controlling_faction_id')
+    resources_rel = relationship('Resource', back_populates='faction')
+    owned_locations = relationship('PointOfInterest', back_populates='owner')
+    power: float = Column(Float, default=1.0)
+    wealth: float = Column(Float, default=1000.0)
+    goals: dict = Column(JSON, default=lambda: {
+        'current': [],
+        'completed': [],
+        'failed': []
+    })
+    policies: dict = Column(JSON, default=lambda: {
+        'diplomatic': {
+            'aggression': 0,
+            'trade_focus': 0,
+            'expansion': 0
+        },
+        'economic': {
+            'tax_rate': 10,
+            'trade_tariffs': 5,
+            'investment_focus': []
+        },
+        'military': {
+            'stance': 'defensive',
+            'recruitment_rate': 'normal',
+            'training_focus': []
+        }
+    })
+    state: dict = Column(JSON, default=lambda: {
+        'active_wars': [],
+        'current_projects': [],
+        'recent_events': [],
+        'statistics': {
+            'members_count': 0,
+            'territory_count': 0,
+            'quest_success_rate': 0
+        }
+    })
+    world_id: int = Column(Integer, ForeignKey('worlds.id'))
+    world = relationship('World', back_populates='factions')
+    quests = relationship('app.core.models.quest.Quest', back_populates='faction')
+    territories = relationship('Region', back_populates='controlling_faction', foreign_keys='Region.controlling_faction_id', overlaps='controlled_regions')
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert model to dictionary."""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'type': self.type,
+            'alignment': self.alignment,
+            'influence': self.influence,
+            'reputation': self.reputation,
+            'resources': self.resources,
+            'territory': self.territory,
+            'relationships': self.relationships,
+            'history': self.history,
+            'is_active': self.is_active,
+            'leader_id': self.leader_id,
+            'headquarters_id': self.headquarters_id,
+            'controlled_regions': [region.to_dict() for region in self.controlled_regions],
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
+
+    def __repr__(self):
+        return f'<Faction {self.name}>'
+
+class World(SA_BaseModel):
+    __tablename__ = 'worlds'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    description = Column(Text)
+    is_active = Column(Boolean, default=True)
+    game_time = Column(JSON)
+    world_type = Column(String(50), default='fantasy')
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    weather = Column(JSON, default=dict)
+    regions = relationship(Region, back_populates='world', cascade='all, delete-orphan')
+    factions = relationship('Faction', back_populates='world', cascade='all, delete-orphan') 

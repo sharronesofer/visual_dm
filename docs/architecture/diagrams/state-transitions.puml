@@ -1,0 +1,20 @@
+@startuml
+' State Diagram: Interaction System State Transitions
+
+[*] --> Idle
+Idle --> AwaitingInput : User Action
+AwaitingInput --> Processing : Input Validated
+Processing --> AwaitingExternal : Needs External Data
+Processing --> Success : Action Completed
+Processing --> Error : Validation Failed
+AwaitingExternal --> Processing : Data Received
+Error --> Idle : Reset
+Success --> Idle : Reset
+
+' Legend
+legend right
+  --> = State transition
+  [*] = Start state
+endlegend
+
+@enduml

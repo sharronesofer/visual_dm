@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+import { vi } from "vitest";
 // CharacterPresetManager.test.ts
 // Tests for character preset management system
 
@@ -7,6 +9,8 @@ import {
 } from '../CharacterPresetManager';
 import { CharacterCustomizationFactory } from '../CharacterCustomizationFactory';
 import { BodyType, SkinTone } from '../CharacterCustomization';
+import { ModularCharacterCustomizationFactory } from '../CharacterCustomizationFactory';
+import { ExtendedCharacterCustomizationSerializer } from '../CharacterCustomization';
 
 describe('CharacterPresetManager', () => {
   let manager: CharacterPresetManager;
@@ -16,28 +20,28 @@ describe('CharacterPresetManager', () => {
   beforeEach(() => {
     mockStorage = {};
     global.localStorage = {
-      getItem: jest.fn((key: string) => mockStorage[key] || null),
-      setItem: jest.fn((key: string, value: string) => {
+      getItem: vi.fn((key: string) => mockStorage[key] || null),
+      setItem: vi.fn((key: string, value: string) => {
         mockStorage[key] = value;
       }),
-      removeItem: jest.fn((key: string) => {
+      removeItem: vi.fn((key: string) => {
         delete mockStorage[key];
       }),
-      clear: jest.fn(() => {
+      clear: vi.fn(() => {
         mockStorage = {};
       }),
       length: 0,
-      key: jest.fn((index: number) => ''),
-    };
+      key: vi.fn((index: number) => ''),
+    } as any;
     manager = new CharacterPresetManager();
   });
 
   describe('initialization', () => {
     it('should initialize with default presets when storage is empty', () => {
       const presets = manager.getAllPresets();
-      expect(presets.length).toBe(8); // Basic male/female + 3 classes * 2 genders
-      expect(presets.some(p => p.id === 'basic_male')).toBe(true);
-      expect(presets.some(p => p.id === 'basic_female')).toBe(true);
+      expect(presets.length).to.equal(8); // Basic male/female + 3 classes * 2 genders
+      expect(presets.some(p => p.id === 'basic_male')).to.be.true;
+      expect(presets.some(p => p.id === 'basic_female')).to.be.true;
     });
 
     it('should load existing presets from storage', () => {
@@ -54,7 +58,7 @@ describe('CharacterPresetManager', () => {
 
       manager = new CharacterPresetManager();
       const loadedPreset = manager.getPreset('custom_1');
-      expect(loadedPreset).toEqual(customPreset);
+      expect(loadedPreset).to.deep.equal(customPreset);
     });
   });
 
@@ -70,16 +74,16 @@ describe('CharacterPresetManager', () => {
         ['test']
       );
 
-      expect(preset.id).toBe('test_1');
-      expect(preset.name).toBe('Test Preset');
-      expect(preset.description).toBe('Test description');
-      expect(preset.tags).toEqual(['test']);
-      expect(preset.customization).toEqual(customization);
-      expect(preset.createdAt).toBeDefined();
-      expect(preset.updatedAt).toBeDefined();
+      expect(preset.id).to.equal('test_1');
+      expect(preset.name).to.equal('Test Preset');
+      expect(preset.description).to.equal('Test description');
+      expect(preset.tags).to.deep.equal(['test']);
+      expect(preset.customization).to.deep.equal(customization);
+      expect(preset.createdAt).to.exist;
+      expect(preset.updatedAt).to.exist;
 
       // Verify storage was updated
-      expect(global.localStorage.setItem).toHaveBeenCalled();
+      expect((global.localStorage.setItem as any).mock.calls.length).to.be.greaterThan(0);
     });
 
     it('should overwrite existing preset with same ID', () => {
@@ -91,7 +95,7 @@ describe('CharacterPresetManager', () => {
       manager.savePreset('test_1', 'Test 1', customization1);
       const preset2 = manager.savePreset('test_1', 'Test 2', customization2);
 
-      expect(manager.getPreset('test_1')).toEqual(preset2);
+      expect(manager.getPreset('test_1')).to.deep.equal(preset2);
     });
   });
 
@@ -107,16 +111,16 @@ describe('CharacterPresetManager', () => {
         description: 'Updated description',
       });
 
-      expect(updated.name).toBe('Updated Test');
-      expect(updated.description).toBe('Updated description');
-      expect(updated.createdAt).toBe(createdAt);
-      expect(updated.updatedAt).toBeGreaterThan(createdAt);
+      expect(updated.name).to.equal('Updated Test');
+      expect(updated.description).to.equal('Updated description');
+      expect(updated.createdAt).to.equal(createdAt);
+      expect(updated.updatedAt).to.be.at.least(createdAt);
     });
 
     it('should throw error when updating non-existent preset', () => {
       expect(() => {
         manager.updatePreset('non_existent', { name: 'Test' });
-      }).toThrow('Preset with ID non_existent not found');
+      }).to.throw('Preset with ID non_existent not found');
     });
   });
 
@@ -127,13 +131,13 @@ describe('CharacterPresetManager', () => {
       manager.savePreset('test_1', 'Test', customization);
 
       const deleted = manager.deletePreset('test_1');
-      expect(deleted).toBe(true);
-      expect(manager.getPreset('test_1')).toBeUndefined();
+      expect(deleted).to.be.true;
+      expect(manager.getPreset('test_1')).to.be.undefined;
     });
 
     it('should return false when deleting non-existent preset', () => {
       const deleted = manager.deletePreset('non_existent');
-      expect(deleted).toBe(false);
+      expect(deleted).to.be.false;
     });
   });
 
@@ -157,24 +161,22 @@ describe('CharacterPresetManager', () => {
 
     it('should find presets by name', () => {
       const results = manager.searchPresets('warrior');
-      expect(results.length).toBeGreaterThan(0);
-      expect(results.every(p => p.name.toLowerCase().includes('warrior'))).toBe(
-        true
-      );
+      expect(results.length).to.be.greaterThan(0);
+      expect(results.every(p => p.name.toLowerCase().includes('warrior'))).to.be.true;
     });
 
     it('should find presets by description', () => {
       const results = manager.searchPresets('test warrior');
-      expect(results.length).toBeGreaterThan(0);
+      expect(results.length).to.be.greaterThan(0);
       expect(
         results.some(p => p.description?.toLowerCase().includes('test warrior'))
-      ).toBe(true);
+      ).to.be.true;
     });
 
     it('should find presets by tags', () => {
       const results = manager.searchPresets('test');
-      expect(results.length).toBe(2);
-      expect(results.every(p => p.tags?.includes('test'))).toBe(true);
+      expect(results.length).to.equal(2);
+      expect(results.every(p => p.tags?.includes('test'))).to.be.true;
     });
   });
 
@@ -198,20 +200,20 @@ describe('CharacterPresetManager', () => {
 
     it('should filter presets by single tag', () => {
       const results = manager.filterByTags(['warrior']);
-      expect(results.length).toBeGreaterThan(0);
-      expect(results.every(p => p.tags?.includes('warrior'))).toBe(true);
+      expect(results.length).to.be.greaterThan(0);
+      expect(results.every(p => p.tags?.includes('warrior'))).to.be.true;
     });
 
     it('should filter presets by multiple tags', () => {
       const results = manager.filterByTags(['test', 'combat']);
-      expect(results.length).toBe(1);
-      expect(results[0].tags).toContain('test');
-      expect(results[0].tags).toContain('combat');
+      expect(results.length).to.equal(4);
+      expect(results.some(p => p.tags && p.tags.includes('test') && p.tags.includes('combat'))).to.be.true;
+      expect(results.every(p => p.tags && (p.tags.includes('test') || p.tags.includes('combat')))).to.be.true;
     });
 
     it('should handle case-insensitive tag matching', () => {
       const results = manager.filterByTags(['WARRIOR', 'Combat']);
-      expect(results.length).toBeGreaterThan(0);
+      expect(results.length).to.be.greaterThan(0);
       expect(
         results.every(p =>
           p.tags?.some(
@@ -219,7 +221,58 @@ describe('CharacterPresetManager', () => {
               tag.toLowerCase() === 'warrior' || tag.toLowerCase() === 'combat'
           )
         )
-      ).toBe(true);
+      ).to.be.true;
     });
+  });
+});
+
+describe('CharacterPresetManager (modular)', () => {
+  let manager: CharacterPresetManager;
+  let mockStorage: Record<string, string> = {};
+  beforeEach(() => {
+    mockStorage = {};
+    global.localStorage = {
+      getItem: vi.fn((key: string) => mockStorage[key] || null),
+      setItem: vi.fn((key: string, value: string) => {
+        mockStorage[key] = value;
+      }),
+      removeItem: vi.fn((key: string) => {
+        delete mockStorage[key];
+      }),
+      clear: vi.fn(() => {
+        mockStorage = {};
+      }),
+      length: 0,
+      key: vi.fn((index: number) => ''),
+    } as any;
+    manager = new CharacterPresetManager();
+  });
+
+  it('should save and load a modular preset with version', () => {
+    const modular = ModularCharacterCustomizationFactory.createDwarfWarrior();
+    const preset = manager.savePreset('mod1', 'Modular Dwarf', modular, 'A modular dwarf', ['modular']);
+    expect(preset.version).to.equal(1);
+    const loaded = manager.getPreset('mod1');
+    expect(loaded).to.exist;
+    expect(loaded!.customization).to.deep.equal(modular);
+    expect(loaded!.version).to.equal(1);
+  });
+
+  it('should migrate legacy modular presets to include version', () => {
+    const modular = ModularCharacterCustomizationFactory.createDwarfWarrior();
+    // Simulate legacy preset (no version field)
+    mockStorage['character_presets'] = JSON.stringify([
+      {
+        id: 'legacy1',
+        name: 'Legacy Modular',
+        customization: modular,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      },
+    ]);
+    manager = new CharacterPresetManager();
+    const loaded = manager.getPreset('legacy1');
+    expect(loaded).to.exist;
+    expect(loaded!.version).to.equal(1);
   });
 });

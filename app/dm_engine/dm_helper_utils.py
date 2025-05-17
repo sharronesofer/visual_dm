@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from app.dm_engine.dm_utils import MOTIF_THEME_NAMES
 from typing import Dict, Any, List, Optional
 from app.core.models.character import Character
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.utils.event_utils import EventUtils
 from app.core.utils.world_tick_utils import WorldTickUtils

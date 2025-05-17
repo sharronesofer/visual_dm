@@ -1,11 +1,18 @@
-import { NPCData } from '../../types/npc/npc';
-import { DialogueManager, DialogueResponse } from '../../types/npc/DialogueManager';
-import { EmotionSystem, EmotionalState } from '../../types/npc/EmotionSystem';
-import { ReputationSystem } from '../../types/npc/ReputationSystem';
-import { MemoryManager, Memory, MemoryEventType } from '../../types/npc/memory';
+import { NPCData } from '../../core/interfaces/types/npc/npc';
+import { DialogueManager, DialogueResponse } from './DialogueManager';
+import { EmotionSystem } from './EmotionSystem';
+import { ReputationSystem } from './ReputationSystem';
+import { MemoryManager } from './MemoryManager';
 import { GroupFormationSystem } from './GroupFormationSystem';
 import { EconomicAgentSystem } from '../economy/EconomicAgentSystem';
-import { NPCEventLoggingService } from '../../services/NPCEventLoggingService';
+import { NPCEventLoggingService } from '../../core/services/NPCEventLoggingService';
+import { MemoryEventType } from '../../core/interfaces/types/npc/memory';
+import { DialogueConfigurationManager } from '../../dialogue/config/DialogueConfigurationManager';
+import { ConversationContextManager } from '../../dialogue/ConversationContextManager';
+import { useInteractionDispatch } from '../../store/core/interactionStore';
+import { eventBus } from '../../eventBus/EventBus';
+import { InteractionIntegrationEventType, InteractionIntegrationEventPayload } from '../../interfaces/InteractionIntegrationEvents';
+import { PartyIntegrationEventType, PartyIntegrationEventPayload } from '../../interfaces/PartyIntegrationEvents';
 
 export enum InteractionType {
   DIALOGUE = 'dialogue',
@@ -92,14 +99,26 @@ export class InteractionSystem {
   private memoryManager: MemoryManager;
   private groupSystem: GroupFormationSystem;
   private economicSystem: EconomicAgentSystem;
+  private configManager: DialogueConfigurationManager;
+  private contextManager: ConversationContextManager;
+  private dispatch: Function;
 
+  /**
+   * @param dialogueManager DialogueManager or EnhancedDialogueManager instance
+   * @param configManager DialogueConfigurationManager instance
+   * @param contextManager ConversationContextManager instance
+   * @param ...otherDeps Other system dependencies
+   */
   constructor(
     dialogueManager: DialogueManager,
     emotionSystem: EmotionSystem,
     reputationSystem: ReputationSystem,
     memoryManager: MemoryManager,
     groupSystem: GroupFormationSystem,
-    economicSystem: EconomicAgentSystem
+    economicSystem: EconomicAgentSystem,
+    configManager: DialogueConfigurationManager,
+    contextManager: ConversationContextManager,
+    dispatch?: Function
   ) {
     this.dialogueManager = dialogueManager;
     this.emotionSystem = emotionSystem;
@@ -107,23 +126,112 @@ export class InteractionSystem {
     this.memoryManager = memoryManager;
     this.groupSystem = groupSystem;
     this.economicSystem = economicSystem;
+    this.configManager = configManager;
+    this.contextManager = contextManager;
+    this.dispatch = dispatch ?? useInteractionDispatch();
+    this.setupPartyIntegrationListeners();
   }
 
+  private setupPartyIntegrationListeners() {
+    eventBus.on(PartyIntegrationEventType.PARTY_DISBANDED, (payload: PartyIntegrationEventPayload) => {
+      try {
+        this.updateMoraleOnPartyDisbanded(payload.partyId);
+      } catch (error) {
+        console.error('Error updating morale on PARTY_DISBANDED:', error);
+      }
+    });
+    eventBus.on(PartyIntegrationEventType.MEMBER_JOINED, (payload: PartyIntegrationEventPayload) => {
+      try {
+        this.updateMoraleOnMemberJoined(payload.partyId, payload.memberId);
+      } catch (error) {
+        console.error('Error updating morale on MEMBER_JOINED:', error);
+      }
+    });
+    eventBus.on(PartyIntegrationEventType.MEMBER_KICKED, (payload: PartyIntegrationEventPayload) => {
+      try {
+        this.updateMoraleOnMemberKicked(payload.partyId, payload.memberId);
+      } catch (error) {
+        console.error('Error updating morale on MEMBER_KICKED:', error);
+      }
+    });
+    // Add more handlers as needed for other party events
+  }
+
+  // --- Morale/Loyalty Tracking System Integration ---
+  // In-memory stubs for demonstration; replace with real persistence as needed
+  private npcMorale: Map<string, number> = new Map();
+  private npcLoyalty: Map<string, number> = new Map();
+
+  private updateMoraleOnPartyDisbanded(partyId: string) {
+    // Fetch all members of the party (stub: assume we have a way to get member IDs)
+    const memberIds = this.getPartyMemberIds(partyId);
+    memberIds.forEach(npcId => {
+      const oldMorale = this.npcMorale.get(npcId) ?? 50;
+      const newMorale = Math.max(0, oldMorale - 20); // Arbitrary morale drop
+      this.npcMorale.set(npcId, newMorale);
+      console.log(`Morale for NPC ${npcId} after party disbanded: ${oldMorale} -> ${newMorale}`);
+    });
+  }
+
+  private updateMoraleOnMemberJoined(partyId: string, memberId?: string) {
+    if (!memberId) return;
+    const oldMorale = this.npcMorale.get(memberId) ?? 50;
+    const newMorale = Math.min(100, oldMorale + 10); // Arbitrary morale boost
+    this.npcMorale.set(memberId, newMorale);
+    const oldLoyalty = this.npcLoyalty.get(memberId) ?? 50;
+    const newLoyalty = Math.min(100, oldLoyalty + 5); // Slight loyalty boost
+    this.npcLoyalty.set(memberId, newLoyalty);
+    console.log(`Morale for NPC ${memberId} after joining party: ${oldMorale} -> ${newMorale}`);
+    console.log(`Loyalty for NPC ${memberId} after joining party: ${oldLoyalty} -> ${newLoyalty}`);
+  }
+
+  private updateMoraleOnMemberKicked(partyId: string, memberId?: string) {
+    if (!memberId) return;
+    const oldMorale = this.npcMorale.get(memberId) ?? 50;
+    const newMorale = Math.max(0, oldMorale - 30); // Larger morale drop
+    this.npcMorale.set(memberId, newMorale);
+    const oldLoyalty = this.npcLoyalty.get(memberId) ?? 50;
+    const newLoyalty = Math.max(0, oldLoyalty - 15); // Loyalty penalty
+    this.npcLoyalty.set(memberId, newLoyalty);
+    console.log(`Morale for NPC ${memberId} after being kicked: ${oldMorale} -> ${newMorale}`);
+    console.log(`Loyalty for NPC ${memberId} after being kicked: ${oldLoyalty} -> ${newLoyalty}`);
+  }
+
+  // Stub: Replace with actual party member lookup
+  private getPartyMemberIds(partyId: string): string[] {
+    // In a real implementation, fetch from party system
+    // For now, return an empty array
+    return [];
+  }
+
+  /**
+   * Process an interaction and update UI state via Redux/Zustand
+   */
   public async processInteraction(
     initiator: NPCData,
     target: NPCData,
     context: InteractionContext
   ): Promise<InteractionResult> {
-    // Get current emotional states
-    const initiatorEmotion = await this.emotionSystem.getCurrentEmotionalState(initiator.id);
-    const targetEmotion = await this.emotionSystem.getCurrentEmotionalState(target.id);
+    // Emit interaction started event
+    eventBus.emit(InteractionIntegrationEventType.INTERACTION_STARTED, {
+      initiatorId: initiator.id,
+      targetId: target.id,
+      interactionType: context.type,
+      timestamp: Date.now(),
+    } as InteractionIntegrationEventPayload);
 
-    // Get relevant memories
-    const relevantMemories = await this.memoryManager.getRelevantMemories(
-      initiator.id,
-      context.type,
-      target.id
-    );
+    // Calculate emotional state for initiator and target (stub: use calculateEmotionalResponse)
+    const initiatorEmotion = this.emotionSystem.calculateEmotionalResponse({
+      npc: initiator,
+      interactionResult: { success: true, type: context.type, participants: [initiator.id, target.id], outcome: { description: '', effects: {} }, context, timestamp: Date.now() }
+    });
+    const targetEmotion = this.emotionSystem.calculateEmotionalResponse({
+      npc: target,
+      interactionResult: { success: true, type: context.type, participants: [initiator.id, target.id], outcome: { description: '', effects: {} }, context, timestamp: Date.now() }
+    });
+
+    // Get relevant memories (stub: use queryMemories)
+    const relevantMemories = await this.memoryManager.queryMemories(initiator.id, { type: context.type, participants: [target.id] });
 
     // Process interaction based on type
     let result: InteractionResult;
@@ -159,14 +267,23 @@ export class InteractionSystem {
         result = await this.processDefaultInteraction(initiator, target, context);
     }
 
+    // At the end, emit interaction completed event
+    eventBus.emit(InteractionIntegrationEventType.INTERACTION_COMPLETED, {
+      initiatorId: initiator.id,
+      targetId: target.id,
+      interactionType: context.type,
+      result,
+      timestamp: Date.now(),
+    } as InteractionIntegrationEventPayload);
+
     // Update memories for both participants
     await this.createInteractionMemories(result);
 
-    // Update emotional states
-    await this.updateEmotionalStates(result);
+    // TODO: Implement updateEmotionalStates if needed
+    // await this.updateEmotionalStates(result);
 
-    // Update reputations
-    await this.updateReputations(result);
+    // TODO: Implement updateReputations if needed
+    // await this.updateReputations(result);
 
     // Log interaction for both initiator and target
     const loggingService = NPCEventLoggingService.getInstance();
@@ -190,6 +307,29 @@ export class InteractionSystem {
       result,
       role: 'target',
     });
+
+    // Dispatch dialogue event to UI state
+    if (result && result.outcome && result.outcome.description) {
+      // Get rich dialogue metadata from DialogueManager
+      const dialogue = await this.dialogueManager.generateDialogue(initiator, context);
+      await this.dispatch({
+        type: 'UPDATE_STATE',
+        payload: {
+          lastDialogue: {
+            message: dialogue.message,
+            participants: result.participants,
+            context: result.context,
+            timestamp: result.timestamp,
+            cacheStatus: dialogue.cacheStatus,
+            gptMetadata: dialogue.gptMetadata,
+            error: dialogue.error,
+            contextSnapshot: dialogue.contextSnapshot,
+            cacheAnalytics: dialogue.cacheAnalytics
+          },
+          isLoading: false,
+        },
+      });
+    }
 
     return result;
   }
@@ -463,7 +603,7 @@ export class InteractionSystem {
       (mentor.stats.intelligence * 0.3 +
         mentor.stats.wisdom * 0.3 +
         mentor.stats.charisma * 0.2 +
-        mentor.personality.empathy * 0.2) /
+        (mentor.personality.traits.get('empathy') ?? 0) * 0.2) /
       2
     );
   }
@@ -474,9 +614,9 @@ export class InteractionSystem {
     context: InteractionContext
   ): number {
     return (
-      (initiator.personality.diplomacy * 0.3 +
-        initiator.personality.empathy * 0.3 +
-        target.personality.openness * 0.2 +
+      ((initiator.personality.traits.get('diplomacy') ?? 0) * 0.3 +
+        (initiator.personality.traits.get('empathy') ?? 0) * 0.3 +
+        (target.personality.traits.get('openness') ?? 0) * 0.2 +
         (context.socialContext?.relationship || 0) * 0.2) /
       2
     );
@@ -488,9 +628,9 @@ export class InteractionSystem {
     context: InteractionContext
   ): number {
     return (
-      (initiator.personality.friendliness * 0.3 +
-        initiator.personality.empathy * 0.2 +
-        target.personality.openness * 0.2 +
+      ((initiator.personality.traits.get('friendliness') ?? 0) * 0.3 +
+        (initiator.personality.traits.get('empathy') ?? 0) * 0.2 +
+        (target.personality.traits.get('openness') ?? 0) * 0.2 +
         (context.socialContext?.relationship || 0) * 0.3) /
       2
     );
@@ -503,8 +643,8 @@ export class InteractionSystem {
   ): number {
     return (
       (initiator.stats.charisma * 0.3 +
-        initiator.personality.trustworthiness * 0.3 +
-        target.personality.openness * 0.2 +
+        (initiator.personality.traits.get('trustworthiness') ?? 0) * 0.3 +
+        (target.personality.traits.get('openness') ?? 0) * 0.2 +
         (context.socialContext?.relationship || 0) * 0.2) /
       2
     );
@@ -516,9 +656,9 @@ export class InteractionSystem {
     context: InteractionContext
   ): number {
     return (
-      (initiator.personality.leadership * 0.3 +
+      ((initiator.personality.traits.get('leadership') ?? 0) * 0.3 +
         initiator.stats.charisma * 0.3 +
-        target.personality.conformity * 0.2 +
+        (target.personality.traits.get('conformity') ?? 0) * 0.2 +
         (context.socialContext?.relationship || 0) * 0.2) /
       2
     );
@@ -569,29 +709,6 @@ export class InteractionSystem {
     }
   }
 
-  private async updateEmotionalStates(result: InteractionResult): Promise<void> {
-    for (const emotion of result.outcome.effects.emotions || []) {
-      await this.emotionSystem.updateEmotionalState(
-        emotion.npcId,
-        emotion.emotion,
-        emotion.intensity,
-        result.context
-      );
-    }
-  }
-
-  private async updateReputations(result: InteractionResult): Promise<void> {
-    if (result.outcome.effects.reputation) {
-      for (const participantId of result.participants) {
-        await this.reputationSystem.updateReputation(
-          participantId,
-          result.outcome.effects.reputation,
-          result.context
-        );
-      }
-    }
-  }
-
   private calculateMemoryImportance(result: InteractionResult, emotionalImpact: number): number {
     const baseImportance = 0.5;
     const emotionalWeight = 0.3;
@@ -607,4 +724,12 @@ export class InteractionSystem {
       Math.abs(result.outcome.effects.relationship || 0) * relationshipWeight
     );
   }
+}
+
+// --- Performance Metrics Integration Stub ---
+// See docs/performance/interaction_system_targets.md for required metrics and targets.
+// TODO: Integrate real-time metrics logging for: active interactions, response times, memory/CPU usage, bandwidth, error rates.
+export function logInteractionSystemMetrics(metrics: any) {
+  // Placeholder: send metrics to monitoring dashboard or log to file
+  // Example: metrics = { active: 42, latency: 15, memory: 1.2, cpu: 5, bandwidth: 8, errors: 0 }
 } 

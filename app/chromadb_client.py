@@ -119,3 +119,7 @@ class ChromaDBClient:
 
 # Initialize the client
 client = ChromaDBClient()
+
+# Export collections for direct import
+short_term_collection = client.short_term_collection
+long_term_collection = client.long_term_collection

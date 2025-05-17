@@ -8,7 +8,7 @@ import random
 from sqlalchemy.orm import Session
 from app.core.database import db
 from app.core.models.npc import NPC
-from app.core.models.faction import Faction
+from app.core.models.world import Faction
 
 class NPCLoyalty:
     """Handles NPC loyalty and faction relationships."""

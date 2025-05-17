@@ -1,0 +1,114 @@
+# Visual DM CI Workflow
+# For full architecture, see docs/ci-cd-architecture.md
+
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    - cron: '0 2 * * 0'  # Every Sunday at 2am UTC
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        ports: [5432:5432]
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://test:test@localhost:5432/test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/tests/requirements-test.txt
+      - name: Run flake8
+        run: flake8 backend/
+      - name: Run bandit
+        run: bandit -r backend/
+      - name: Run pytest
+        run: pytest --cov=backend
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: backend/htmlcov/
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-logs
+          path: backend/.pytest_cache/
+
+  unity-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Unity Test Runner
+        uses: game-ci/unity-test-runner@v3
+        with:
+          projectPath: Visual_DM/Visual_DM
+          testMode: all
+      - name: Upload Unity test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: unity-test-results
+          path: Visual_DM/Visual_DM/TestResults/
+
+  weekly-scan:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/tests/requirements-test.txt
+      - name: Run flake8
+        run: flake8 backend/ | tee flake8.log
+      - name: Run bandit
+        run: bandit -r backend/ | tee bandit.log
+      - name: Run Locust performance test (headless)
+        run: |
+          cd backend/tests/performance
+          locust -f locustfile.py --headless -u 10 -r 2 -t1m --host=http://localhost:8000 | tee locust.log || true
+      - name: Upload scan artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-scan-logs
+          path: |
+            flake8.log
+            bandit.log
+            backend/tests/performance/locust.log
+
+  notify:
+    if: failure()
+    runs-on: ubuntu-latest
+    needs: [backend-tests, unity-tests, weekly-scan]
+    steps:
+      - name: Notify Slack (placeholder)
+        run: |
+          echo "CI pipeline failed. Please check the logs."
+          # Integrate with Slack/email as per docs/ci-cd-architecture.md 

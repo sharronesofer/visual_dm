@@ -1,0 +1,25 @@
+%% Mermaid diagram: Interaction & POI Evolution System Overview
+
+graph TD
+    A[Interaction System]
+    B[POI Evolution System]
+    C[EventBus]
+    D[POIManager]
+    E[DialogueManager]
+    F[EmotionSystem]
+    G[ReputationSystem]
+    H[MemoryManager]
+    I[GroupFormationSystem]
+    J[EconomicAgentSystem]
+
+    A -- Interacts with --> E
+    A -- Interacts with --> F
+    A -- Interacts with --> G
+    A -- Interacts with --> H
+    A -- Interacts with --> I
+    A -- Interacts with --> J
+    A -- Emits/Receives Events --> C
+    B -- Emits/Receives Events --> C
+    B -- Manages --> D
+    C -- Broadcasts Events --> A
+    C -- Broadcasts Events --> B 

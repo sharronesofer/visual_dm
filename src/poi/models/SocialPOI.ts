@@ -1,5 +1,6 @@
 import { BasePOI } from './BasePOI';
 import { POIType, SocialSubtype, Coordinates, ThematicElements } from '../types/POITypes';
+import { ReputationAuditLogger } from '../../systems/reputation/ReputationAuditLogger';
 
 // Re-export the SocialSubtype enum
 export { SocialSubtype };
@@ -71,18 +72,18 @@ export class SocialPOI extends BasePOI {
     thematicElements: ThematicElements
   ) {
     super(id, name, POIType.SOCIAL, subtype, coordinates, thematicElements);
-    
+
     // Initialize social-specific properties
     this.npcData = new Map<string, NPC>();
     this.questData = new Map<string, Quest>();
     this.factions = new Map<string, Faction>();
     this.economyLevel = this.calculateInitialEconomyLevel();
     this.populationDensity = this.calculateInitialPopulation();
-    
+
     // Set social-specific default values
     this.boundingBox = { width: 2, height: 2, depth: 2 }; // Social areas have standard size
     this.canExpand = true;
-    
+
     // Add default expansion rules for social areas
     this.expansionRules = [
       {
@@ -181,7 +182,7 @@ export class SocialPOI extends BasePOI {
     if (quest && !quest.properties.isComplete) {
       quest.properties.isComplete = true;
       this.trackChange('modification', `Completed quest: ${questId}`);
-      
+
       // Apply reputation changes if specified
       if (quest.properties.rewards?.reputation) {
         this.adjustFactionReputation(
@@ -221,11 +222,21 @@ export class SocialPOI extends BasePOI {
   adjustFactionReputation(factionId: string, change: number): boolean {
     const faction = this.factions.get(factionId);
     if (faction) {
+      const oldReputation = faction.properties.playerReputation;
       faction.properties.playerReputation = Math.max(
         -100,
         Math.min(100, faction.properties.playerReputation + change)
       );
       this.trackChange('modification', `Adjusted faction reputation: ${factionId}`);
+      // Audit log
+      ReputationAuditLogger.log({
+        timestamp: new Date().toISOString(),
+        sourceSystem: 'SocialPOI',
+        targetEntity: factionId,
+        valueChange: faction.properties.playerReputation - oldReputation,
+        context: `old: ${oldReputation}, new: ${faction.properties.playerReputation}, delta: ${change}`,
+        callingSystem: 'SocialPOI.adjustFactionReputation'
+      });
       return true;
     }
     return false;
@@ -255,23 +266,23 @@ export class SocialPOI extends BasePOI {
   // Override deserialize to handle social-specific properties
   deserialize(data: Record<string, unknown>): void {
     super.deserialize(data);
-    
+
     if (Array.isArray(data.npcData)) {
       this.npcData = new Map(data.npcData);
     }
-    
+
     if (Array.isArray(data.questData)) {
       this.questData = new Map(data.questData);
     }
-    
+
     if (Array.isArray(data.factions)) {
       this.factions = new Map(data.factions);
     }
-    
+
     if (typeof data.economyLevel === 'number') {
       this.economyLevel = data.economyLevel;
     }
-    
+
     if (typeof data.populationDensity === 'number') {
       this.populationDensity = data.populationDensity;
     }
@@ -295,7 +306,7 @@ export class SocialPOI extends BasePOI {
   private validateNPCDistribution(): boolean {
     // Check if NPC roles make sense for the area type
     const npcRoles = new Set(Array.from(this.npcData.values()).map(npc => npc.role));
-    
+
     switch (this.subtype as SocialSubtype) {
       case SocialSubtype.MARKET:
         return npcRoles.has('merchant');
@@ -331,7 +342,7 @@ export class SocialPOI extends BasePOI {
   private calculateInitialEconomyLevel(): number {
     // Base economy on thematic elements and subtype
     let baseEconomy = 5; // Default middle economy
-    
+
     switch (this.subtype as SocialSubtype) {
       case SocialSubtype.MARKET:
       case SocialSubtype.GUILD:
@@ -346,14 +357,14 @@ export class SocialPOI extends BasePOI {
       default:
         break;
     }
-    
+
     return Math.min(10, Math.max(1, baseEconomy));
   }
 
   private calculateInitialPopulation(): number {
     // Base population on subtype and economy
     let basePopulation = this.economyLevel;
-    
+
     switch (this.subtype as SocialSubtype) {
       case SocialSubtype.VILLAGE:
         basePopulation += 2;
@@ -367,7 +378,7 @@ export class SocialPOI extends BasePOI {
       default:
         break;
     }
-    
+
     return Math.min(10, basePopulation);
   }
 

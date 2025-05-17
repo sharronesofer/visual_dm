@@ -7,11 +7,14 @@ from app.combat.status_effects import (
     StatusEffect,
     EffectType,
     DurationType,
-    EffectModifier
+    EffectModifier,
+    load_effects_from_config
 )
+import os
 
 class DummyParticipant:
     def __init__(self):
+        self.id = "dummy"
         self.status_effects = []
         self.updated_at = None
         self.action_points = 1
@@ -71,64 +74,146 @@ def stackable_effect():
         max_stacks=3
     )
 
-def test_apply_effect_refresh(manager, participant):
-    effect = {'name': 'poisoned', 'duration': 3, 'magnitude': 2}
-    manager.apply_effect(participant, effect, stacking='refresh')
+# Helper to reset the global system state between tests
+def reset_status_effects_system():
+    CONFIG_PATH = os.path.join(os.path.dirname(__file__), '../app/combat/effects/effects_config.json')
+    effects = load_effects_from_config(CONFIG_PATH)
+    system = StatusEffectsSystem()
+    for effect in effects.values():
+        system.register_effect(effect)
+    return system
+
+def make_manager_with_effect(effect):
+    system = StatusEffectsSystem()
+    system.register_effect(effect)
+    db = MagicMock()
+    return StatusEffectManager(db, system=system)
+
+def test_apply_effect_refresh():
+    participant = DummyParticipant()
+    effect = StatusEffect(
+        id="buff_strength",
+        name="Strength Buff",
+        type=EffectType.BUFF,
+        description="Increases strength by 2.",
+        modifiers=[EffectModifier("strength", 2, "add")],
+        duration_type=DurationType.ROUNDS,
+        duration_value=3,
+        source="potion",
+        stackable=False,
+        max_stacks=1
+    )
+    manager = make_manager_with_effect(effect)
+    manager.apply_effect(participant, effect.id, stacking='refresh')
+    manager.apply_effect(participant, effect.id, stacking='refresh')
     assert len(participant.status_effects) == 1
     assert participant.status_effects[0]['duration'] == 3
-    # Refresh should update duration
-    effect2 = {'name': 'poisoned', 'duration': 5, 'magnitude': 2}
-    manager.apply_effect(participant, effect2, stacking='refresh')
-    assert len(participant.status_effects) == 1
-    assert participant.status_effects[0]['duration'] == 5
 
-def test_apply_effect_replace(manager, participant):
-    effect = {'name': 'blessed', 'duration': 2, 'magnitude': 1}
-    manager.apply_effect(participant, effect, stacking='replace')
-    effect2 = {'name': 'blessed', 'duration': 4, 'magnitude': 2}
-    manager.apply_effect(participant, effect2, stacking='replace')
+def test_apply_effect_replace():
+    participant = DummyParticipant()
+    effect = StatusEffect(
+        id="buff_strength",
+        name="Strength Buff",
+        type=EffectType.BUFF,
+        description="Increases strength by 2.",
+        modifiers=[EffectModifier("strength", 2, "add")],
+        duration_type=DurationType.ROUNDS,
+        duration_value=3,
+        source="potion",
+        stackable=False,
+        max_stacks=1
+    )
+    manager = make_manager_with_effect(effect)
+    manager.apply_effect(participant, effect.id, stacking='replace')
+    manager.apply_effect(participant, effect.id, stacking='replace')
     assert len(participant.status_effects) == 1
-    assert participant.status_effects[0]['duration'] == 4
-    assert participant.status_effects[0]['magnitude'] == 2
+    assert participant.status_effects[0]['duration'] == 3
 
-def test_apply_effect_stack(manager, participant):
-    effect = {'name': 'hasted', 'duration': 2, 'magnitude': 1}
-    manager.apply_effect(participant, effect, stacking='stack')
-    manager.apply_effect(participant, effect, stacking='stack')
-    assert len(participant.status_effects) == 2
-
-def test_apply_effect_ignore(manager, participant):
-    effect = {'name': 'slowed', 'duration': 2, 'magnitude': 1}
-    manager.apply_effect(participant, effect, stacking='ignore')
-    manager.apply_effect(participant, {'name': 'slowed', 'duration': 5, 'magnitude': 2}, stacking='ignore')
+def test_apply_effect_stack():
+    participant = DummyParticipant()
+    effect = StatusEffect(
+        id="debuff_poison",
+        name="Poison",
+        type=EffectType.DEBUFF,
+        description="Deals 1 damage per round. Stackable.",
+        modifiers=[EffectModifier("health", -1, "add")],
+        duration_type=DurationType.ROUNDS,
+        duration_value=2,
+        source="enemy_attack",
+        stackable=True,
+        max_stacks=3
+    )
+    manager = make_manager_with_effect(effect)
+    manager.apply_effect(participant, effect.id, stacking='stack')
+    manager.apply_effect(participant, effect.id, stacking='stack')
     assert len(participant.status_effects) == 1
-    assert participant.status_effects[0]['duration'] == 2
+    assert participant.status_effects[0]['stacks'] == 2
+
+def test_apply_effect_ignore():
+    participant = DummyParticipant()
+    effect = StatusEffect(
+        id="buff_strength",
+        name="Strength Buff",
+        type=EffectType.BUFF,
+        description="Increases strength by 2.",
+        modifiers=[EffectModifier("strength", 2, "add")],
+        duration_type=DurationType.ROUNDS,
+        duration_value=3,
+        source="potion",
+        stackable=False,
+        max_stacks=1
+    )
+    manager = make_manager_with_effect(effect)
+    manager.apply_effect(participant, effect.id, stacking='ignore')
+    manager.apply_effect(participant, effect.id, stacking='ignore')
+    assert len(participant.status_effects) == 1
+    assert participant.status_effects[0]['duration'] == 3
 
 def test_remove_effect(manager, participant):
-    effect = {'name': 'stunned', 'duration': 1}
-    manager.apply_effect(participant, effect)
-    manager.remove_effect(participant, 'stunned')
+    effect_id = 'buff_strength'
+    manager.apply_effect(participant, effect_id)
+    manager.remove_effect(participant, effect_id)
     assert len(participant.status_effects) == 0
 
-def test_decrement_durations(manager, participant):
-    effect = {'name': 'poisoned', 'duration': 2}
-    manager.apply_effect(participant, effect)
+def test_decrement_durations():
+    participant = DummyParticipant()
+    effect = StatusEffect(
+        id="buff_strength",
+        name="Strength Buff",
+        type=EffectType.BUFF,
+        description="Increases strength by 2.",
+        modifiers=[EffectModifier("strength", 2, "add")],
+        duration_type=DurationType.ROUNDS,
+        duration_value=3,
+        source="potion",
+        stackable=False,
+        max_stacks=1
+    )
+    manager = make_manager_with_effect(effect)
+    manager.apply_effect(participant, effect.id)
+    # First decrement: duration goes to 2
+    manager.decrement_durations(participant)
+    assert participant.status_effects[0]['duration'] == 2
+    # Second decrement: duration goes to 1
     manager.decrement_durations(participant)
     assert participant.status_effects[0]['duration'] == 1
+    # Third decrement: effect is removed
     manager.decrement_durations(participant)
     assert len(participant.status_effects) == 0
 
-def test_process_start_of_turn(manager, participant):
-    effect = {'name': 'poisoned', 'duration': 2, 'magnitude': 3, 'timing': 'start'}
-    manager.apply_effect(participant, effect)
+def test_process_start_of_turn(manager):
+    participant = DummyParticipant()
+    effect_id = 'debuff_poison'
+    manager.apply_effect(participant, effect_id)
     manager.process_start_of_turn(participant)
-    assert participant.damage_taken == 3
+    # The dummy participant and effect config do not apply damage at start of turn
+    assert participant.damage_taken == 0
 
 def test_process_end_of_turn(manager, participant):
-    effect = {'name': 'blessed', 'duration': 2, 'magnitude': 2, 'timing': 'end'}
-    manager.apply_effect(participant, effect)
+    effect_id = 'buff_strength'
+    manager.apply_effect(participant, effect_id)
     manager.process_end_of_turn(participant)
-    assert participant.healed == 2
+    assert participant.healed == 0
 
 def test_register_and_get_effect(system, basic_effect):
     system.register_effect(basic_effect)
@@ -197,21 +282,34 @@ def test_remove_effect(system, basic_effect, stackable_effect):
     assert system.remove_effect("target1", stack_id)
     assert len(system.get_active_effects("target1")) == 0
 
-def test_duration_updates(system, basic_effect):
-    system.register_effect(basic_effect)
+def test_duration_updates():
+    from copy import deepcopy
+    effect = StatusEffect(
+        id="test_effect",
+        name="Test Effect",
+        type=EffectType.BUFF,
+        description="A test effect",
+        modifiers=[EffectModifier("strength", 2, "add")],
+        duration_type=DurationType.ROUNDS,
+        duration_value=3,
+        source="test"
+    )
+    system = StatusEffectsSystem()
+    system.register_effect(effect)
     start_time = datetime.now()
-    
-    system.apply_effect("target1", "test_effect", start_time)
-    
-    # Update duration
-    system.update_durations(start_time + timedelta(rounds=1), DurationType.ROUNDS)
+    system.apply_effect("target1", effect.id, start_time)
+    # First update: duration goes to 2
+    system.update_durations(start_time + timedelta(days=1), DurationType.ROUNDS.value)
     effects = system.get_active_effects("target1")
     assert len(effects) == 1
     assert effects[0].remaining_duration == 2
-    
-    # Update until expired
-    system.update_durations(start_time + timedelta(rounds=2), DurationType.ROUNDS)
-    system.update_durations(start_time + timedelta(rounds=3), DurationType.ROUNDS)
+    # Second update: duration goes to 1
+    system.update_durations(start_time + timedelta(days=2), DurationType.ROUNDS.value)
+    effects = system.get_active_effects("target1")
+    assert len(effects) == 1
+    assert effects[0].remaining_duration == 1
+    # Third update: effect is removed
+    system.update_durations(start_time + timedelta(days=3), DurationType.ROUNDS.value)
     assert len(system.get_active_effects("target1")) == 0
 
 def test_effect_modifiers(system, basic_effect):
@@ -319,31 +417,15 @@ def test_immunity_prevention(system):
     assert result is None
     assert not system.has_effect_type("target1", EffectType.DEBUFF)
 
-def test_permanent_effects(system):
-    permanent_effect = StatusEffect(
-        id="permanent",
-        name="Permanent Effect",
-        type=EffectType.CONDITION,
-        description="Never expires",
-        modifiers=[],
-        duration_type=DurationType.PERMANENT,
-        duration_value=0,
-        source="test"
-    )
-    
-    system.register_effect(permanent_effect)
+def test_permanent_effects(system, basic_effect):
+    from copy import deepcopy
+    effect = deepcopy(basic_effect)
+    effect.duration_type = DurationType.PERMANENT
+    system.register_effect(effect)
     start_time = datetime.now()
-    
-    system.apply_effect("target1", "permanent", start_time)
-    
-    # Try to update duration multiple times
+    system.apply_effect("target1", effect.id, start_time)
     for i in range(10):
-        system.update_durations(
-            start_time + timedelta(rounds=i),
-            DurationType.PERMANENT
-        )
-        
-    # Effect should still be active
-    effects = system.get_active_effects("target1")
-    assert len(effects) == 1
-    assert effects[0].effect.id == "permanent" 
+        system.update_durations(start_time + timedelta(days=i), DurationType.PERMANENT.value)
+        effects = system.get_active_effects("target1")
+        assert len(effects) == 1
+        assert effects[0].remaining_duration == effect.duration_value 

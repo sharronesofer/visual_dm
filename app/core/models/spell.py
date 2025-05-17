@@ -13,6 +13,7 @@ from app.core.models.base import BaseModel
 class Spell(BaseModel):
     """Model for spells in the game."""
     __tablename__ = 'spells'
+    __table_args__ = {'extend_existing': True}
     
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
@@ -30,7 +31,8 @@ class Spell(BaseModel):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    effects = relationship('SpellEffect', back_populates='spell')
+    spell_effects = relationship('SpellEffect', back_populates='spell')
+    characters = relationship('Character', secondary='character_spells', back_populates='spells')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -58,7 +60,7 @@ class Spell(BaseModel):
 
     def get_effects(self) -> List['SpellEffect']:
         """Get all effects associated with this spell."""
-        return self.effects
+        return self.spell_effects
 
     def get_requirements(self) -> Dict:
         """Get any requirements for casting this spell."""
@@ -67,6 +69,7 @@ class Spell(BaseModel):
 class SpellEffect(db.Model):
     """Model for spell effects in the game."""
     __tablename__ = 'spell_effects'
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
     spell_id = Column(Integer, ForeignKey('spells.id'), nullable=False)
@@ -80,7 +83,7 @@ class SpellEffect(db.Model):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    spell = relationship('Spell', back_populates='effects')
+    spell = relationship('Spell', back_populates='spell_effects')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

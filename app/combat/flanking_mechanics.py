@@ -4,15 +4,14 @@ This includes position analysis, flanking bonuses, and opportunity attacks.
 """
 
 from typing import List, Tuple, Dict, Any, Optional
-from app.core.models.combat import CombatParticipant, Combat
 from app.combat.status_effects_utils import check_flanking
-from app.combat.combat_utils import calculate_damage
 from app.core.database import db
 
 def process_opportunity_attack(
-    attacker: CombatParticipant,
-    target: CombatParticipant
+    attacker,
+    target
 ) -> Dict[str, Any]:
+    from app.core.models.combat import CombatParticipant, Combat
     """
     Process an opportunity attack when a target moves out of an attacker's reach.
     
@@ -55,6 +54,7 @@ def process_opportunity_attack(
 
 class FlankingHandler:
     def __init__(self, combat_id: int):
+        from app.core.models.combat import Combat
         self.combat = Combat.query.get(combat_id)
         if not self.combat:
             raise ValueError(f"Combat with id {combat_id} not found")
@@ -62,16 +62,8 @@ class FlankingHandler:
     def get_flanking_participants(
         self,
         target_id: int
-    ) -> List[CombatParticipant]:
-        """
-        Get all participants that are flanking a target.
-        
-        Args:
-            target_id: ID of the target participant
-            
-        Returns:
-            List of participants that are flanking the target
-        """
+    ) -> List:
+        from app.core.models.combat import CombatParticipant
         target = CombatParticipant.query.get(target_id)
         if not target:
             return []
@@ -99,12 +91,7 @@ class FlankingHandler:
         return flanking_participants
 
     def apply_flanking_effects(self, target_id: int) -> None:
-        """
-        Apply flanking status effects to all participants flanking a target.
-        
-        Args:
-            target_id: ID of the target participant
-        """
+        from app.core.models.combat import CombatParticipant
         flanking_participants = self.get_flanking_participants(target_id)
         
         # Remove old flanking effects from everyone
@@ -136,18 +123,8 @@ class FlankingHandler:
         moving_participant_id: int,
         old_position: Tuple[int, int],
         new_position: Tuple[int, int]
-    ) -> List[CombatParticipant]:
-        """
-        Check if a movement triggers any opportunity attacks.
-        
-        Args:
-            moving_participant_id: ID of the participant moving
-            old_position: Starting position (q, r)
-            new_position: Ending position (q, r)
-            
-        Returns:
-            List of participants that can make opportunity attacks
-        """
+    ) -> List:
+        from app.core.models.combat import CombatParticipant
         attackers = []
         
         # Get all participants in combat except the moving one

@@ -6,9 +6,21 @@ from unittest.mock import MagicMock, patch
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from sqlalchemy.orm import Session
+import tempfile
+import gzip
+import json
+import hashlib
+import importlib.util
+import sys
 
 # Type variable for generic database model
 T = TypeVar('T')
+
+# Dynamically import db_health.py for isolated testing
+spec = importlib.util.spec_from_file_location("db_health", os.path.abspath("backend/app/utils/db_health.py"))
+db_health = importlib.util.module_from_spec(spec)
+sys.modules["db_health"] = db_health
+spec.loader.exec_module(db_health)
 
 class TestUtils:
     """Base test utilities class with common helper methods."""
@@ -197,4 +209,79 @@ def mock_db():
 @pytest.fixture
 def utc_now():
     """Fixture to get consistent UTC datetime."""
-    return TestUtils.utc_now() 
+    return TestUtils.utc_now()
+
+@pytest.fixture
+def temp_backup_file():
+    with tempfile.NamedTemporaryFile(delete=False) as f:
+        f.write(b"test backup data")
+        yield f.name
+    os.remove(f.name)
+
+@pytest.fixture
+def temp_manifest_file(temp_backup_file):
+    hash_val = db_health.hash_file(temp_backup_file)
+    manifest = {"hash": hash_val}
+    with tempfile.NamedTemporaryFile(delete=False, mode='w') as f:
+        json.dump(manifest, f)
+        f.flush()
+        os.fsync(f.fileno())
+        fname = f.name
+    yield fname
+    os.remove(fname)
+
+def test_hash_file(temp_backup_file):
+    h = db_health.hash_file(temp_backup_file)
+    assert isinstance(h, str) and len(h) == 64
+
+def test_verify_manifest_success(temp_backup_file, temp_manifest_file):
+    assert db_health.verify_manifest(temp_backup_file, temp_manifest_file)
+
+def test_verify_manifest_hash_mismatch(temp_backup_file):
+    with tempfile.NamedTemporaryFile(delete=False, mode='w') as f:
+        json.dump({"hash": "bad" * 16}, f)
+        manifest_path = f.name
+    assert not db_health.verify_manifest(temp_backup_file, manifest_path)
+    os.remove(manifest_path)
+
+def test_verify_manifest_missing():
+    assert db_health.verify_manifest("nofile", "missing_manifest.json")
+
+def test_decompress_file(tmp_path):
+    src = tmp_path / "test.gz"
+    dst = tmp_path / "out.txt"
+    with gzip.open(src, 'wb') as f:
+        f.write(b"hello world")
+    db_health.decompress_file(str(src), str(dst))
+    with open(dst, 'rb') as f:
+        assert f.read() == b"hello world"
+
+def test_decrypt_file(monkeypatch, tmp_path):
+    src = tmp_path / "enc.bin"
+    dst = tmp_path / "dec.txt"
+    key = b"0" * 32
+    class DummyFernet:
+        def __init__(self, k): pass
+        def decrypt(self, data): return b"decrypted"
+    monkeypatch.setattr(db_health, "Fernet", DummyFernet)
+    with open(src, 'wb') as f:
+        f.write(b"encrypted")
+    db_health.decrypt_file(str(src), str(dst), key)
+    with open(dst, 'rb') as f:
+        assert f.read() == b"decrypted"
+
+def test_verify_backup_success(monkeypatch, temp_backup_file, temp_manifest_file):
+    monkeypatch.setattr(db_health, "ENCRYPTION_KEY", None)
+    assert db_health.verify_backup(temp_backup_file, temp_manifest_file)
+
+def test_verify_backup_hash_mismatch(monkeypatch, temp_backup_file):
+    monkeypatch.setattr(db_health, "ENCRYPTION_KEY", None)
+    with tempfile.NamedTemporaryFile(delete=False, mode='w') as f:
+        json.dump({"hash": "bad" * 16}, f)
+        manifest_path = f.name
+    assert not db_health.verify_backup(temp_backup_file, manifest_path)
+    os.remove(manifest_path)
+
+def test_verify_backup_error(monkeypatch):
+    monkeypatch.setattr(db_health, "ENCRYPTION_KEY", None)
+    assert not db_health.verify_backup("/nonexistent/file", None) 

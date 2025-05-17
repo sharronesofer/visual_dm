@@ -4,6 +4,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import QueuePool
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
 # Get database URL from environment variable
 DATABASE_URL = os.getenv(
@@ -49,4 +50,18 @@ def get_db() -> Session:
     try:
         yield db
     finally:
-        db.close() 
+        db.close()
+
+def _get_async_url():
+    url = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/visualdm")
+    if url.startswith("postgresql://") and "+asyncpg" not in url:
+        return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    return url
+
+DATABASE_URL_async = _get_async_url()
+engine_async = create_async_engine(DATABASE_URL_async, echo=True, future=True)
+AsyncSessionLocal = sessionmaker(engine_async, class_=AsyncSession, expire_on_commit=False)
+
+async def get_db_async():
+    async with AsyncSessionLocal() as session:
+        yield session 

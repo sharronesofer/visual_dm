@@ -26,6 +26,8 @@ export interface Room {
   floor: number;
   dimensions: Dimensions;
   position: Location;
+  residents?: string[]; // List of character IDs with residency in this room
+  accessPermissions?: Record<string, { type: 'owner' | 'resident' | 'key' | 'custom', expiresAt?: number }>; // Permissions per character
 }
 
 /**
@@ -67,6 +69,9 @@ export interface BuildingState {
 export interface BuildingMetadata {
   description?: string;
   owner?: string;
+  residents?: string[]; // List of character IDs with residency
+  accessPermissions?: Record<string, { type: 'owner' | 'resident' | 'key' | 'custom', expiresAt?: number }>; // Permissions per character
+  keys?: Record<string, { holderId: string, expiresAt?: number }>; // Key assignments
   constructionDate?: Date;
   lastRenovation?: Date;
   customFields?: Record<string, any>;

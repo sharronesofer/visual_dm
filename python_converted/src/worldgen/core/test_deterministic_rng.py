@@ -10,7 +10,7 @@ import os
 # Add the project root to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../')))
 
-from python_converted.src.worldgen.core.simple_test import DeterministicRNG, ISeedConfig
+from simple_test import DeterministicRNG, ISeedConfig
 
 class TestDeterministicRNG(unittest.TestCase):
     """Test cases for DeterministicRNG class"""

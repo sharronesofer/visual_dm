@@ -15,7 +15,7 @@ from pathlib import Path
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 
-from app.core.persistence.serialization import serialize, deserialize, SerializedData, SerializationFormat, CompressionType
+from app.core.persistence.serialization import serialize, deserialize, SerializedData, SerializationFormat, CompressionType, extract_scene_dependency_graph, resolve_component_references
 from app.core.persistence.version_control import WorldVersionControl, VersionMetadata
 from app.core.persistence.world_persistence import WorldPersistenceManager, FileSystemStorageStrategy
 
@@ -220,6 +220,104 @@ class TestFileSystemStorageStrategy(unittest.TestCase):
         versions = self.storage.list_versions(world_id)
         self.assertIn(version_id, versions)
 
+    def test_save_world_disk_full(self):
+        """
+        Test save_world with simulated disk full (IOError on write).
+        """
+        from app.core.persistence.world_persistence import FileSystemStorageStrategy
+        import builtins
+        world_id = "disk_full_world"
+        storage = FileSystemStorageStrategy(self.temp_dir)
+        data = serialize({"world_id": world_id, "foo": "bar"})
+        # Patch open to raise IOError
+        with patch("builtins.open", side_effect=IOError("Disk full")):
+            result = storage.save_world(world_id, data)
+            self.assertFalse(result)
+
+    def test_save_world_permission_error(self):
+        """
+        Test save_world with permission error (PermissionError on write).
+        """
+        from app.core.persistence.world_persistence import FileSystemStorageStrategy
+        import builtins
+        world_id = "perm_error_world"
+        storage = FileSystemStorageStrategy(self.temp_dir)
+        data = serialize({"world_id": world_id, "foo": "bar"})
+        # Patch open to raise PermissionError
+        with patch("builtins.open", side_effect=PermissionError("No permission")):
+            result = storage.save_world(world_id, data)
+            self.assertFalse(result)
+
+    def test_load_world_corrupted_file_and_backup(self):
+        """
+        Test load_world with corrupted file (simulate unreadable file, ensure backup is loaded if available).
+        """
+        from app.core.persistence.world_persistence import FileSystemStorageStrategy
+        world_id = "corrupt_world"
+        storage = FileSystemStorageStrategy(self.temp_dir)
+        # Create a valid backup
+        backup_dir = Path(self.temp_dir) / "backups" / world_id
+        backup_dir.mkdir(parents=True, exist_ok=True)
+        backup_path = backup_dir / f"{world_id}_20220101T000000.json"
+        with open(backup_path, "wb") as f:
+            f.write(b"{\"world_id\": \"corrupt_world\", \"foo\": \"backup\"}")
+        # Patch open to raise error for main file, but not for backup
+        orig_open = open
+        def fake_open(path, mode="r", *args, **kwargs):
+            if str(path).endswith(f"{world_id}.json"):
+                raise IOError("Corrupted file")
+            return orig_open(path, mode, *args, **kwargs)
+        with patch("builtins.open", side_effect=fake_open):
+            loaded = storage.load_world(world_id)
+            self.assertIsNotNone(loaded)
+            self.assertIn(b"backup", loaded.data)
+
+    def test_backup_created_and_pruned(self):
+        """
+        Test that backup is created before save and old backups are pruned.
+        """
+        from app.core.persistence.world_persistence import FileSystemStorageStrategy
+        world_id = "backup_test_world"
+        storage = FileSystemStorageStrategy(self.temp_dir, retention_count=2)
+        data = serialize({"world_id": world_id, "foo": "bar"})
+        # Save multiple times to create backups
+        for _ in range(4):
+            storage.save_world(world_id, data)
+            time.sleep(0.01)  # Ensure timestamp changes
+        backup_dir = Path(self.temp_dir) / "backups" / world_id
+        backups = sorted(backup_dir.glob(f"{world_id}_*.json"))
+        self.assertLessEqual(len(backups), 2)
+
+    def test_logging_on_error_and_recovery(self):
+        """
+        Test that all errors and recovery attempts are logged.
+        """
+        from app.core.persistence.world_persistence import FileSystemStorageStrategy
+        import logging
+        world_id = "log_test_world"
+        storage = FileSystemStorageStrategy(self.temp_dir)
+        data = serialize({"world_id": world_id, "foo": "bar"})
+        # Patch logging to capture logs
+        with patch.object(logging, "error") as mock_error, patch.object(logging, "warning") as mock_warning, patch.object(logging, "info") as mock_info:
+            # Simulate save error
+            with patch("builtins.open", side_effect=IOError("Disk full")):
+                storage.save_world(world_id, data)
+            mock_error.assert_called()
+            # Simulate load error and recovery
+            backup_dir = Path(self.temp_dir) / "backups" / world_id
+            backup_dir.mkdir(parents=True, exist_ok=True)
+            backup_path = backup_dir / f"{world_id}_20220101T000000.json"
+            with open(backup_path, "wb") as f:
+                f.write(b"{\"world_id\": \"log_test_world\", \"foo\": \"backup\"}")
+            orig_open = open
+            def fake_open(path, mode="r", *args, **kwargs):
+                if str(path).endswith(f"{world_id}.json"):
+                    raise IOError("Corrupted file")
+                return orig_open(path, mode, *args, **kwargs)
+            with patch("builtins.open", side_effect=fake_open):
+                storage.load_world(world_id)
+            mock_warning.assert_called()
+
 
 class TestWorldPersistenceManager(unittest.TestCase):
     """Test world persistence manager."""
@@ -401,6 +499,94 @@ class TestWorldPersistenceManager(unittest.TestCase):
         finally:
             # Shut down manager
             short_interval_manager.shutdown()
+
+    def test_partial_scene_restoration_basic(self):
+        """
+        Test loading a subset of components with dependencies from mock world_data.
+        """
+        # Mock world_data
+        world_data = {
+            'A': {'dependencies': ['B', 'C']},
+            'B': {'dependencies': ['C']},
+            'C': {},
+            'D': {'dependencies': ['A']},
+        }
+        # Simulate storage and deserialization
+        class DummyStorage:
+            def load_world(self, scene_id):
+                class DummySerialized: pass
+                return DummySerialized()
+        def dummy_deserialize(serialized):
+            return {'world_data': world_data}
+        mgr = WorldPersistenceManager.__new__(WorldPersistenceManager)
+        mgr.storage = DummyStorage()
+        import app.core.persistence.world_persistence as wp
+        wp.deserialize = dummy_deserialize
+        # Load only A (should also load B and C)
+        loaded = mgr.load_scene_partial('dummy', ['A'])
+        assert set(loaded.keys()) == {'A', 'B', 'C'}
+        # All references should be valid
+        resolve_component_references(loaded, log_missing=False)
+        for cid, comp in loaded.items():
+            for dep in comp.get('dependencies', []):
+                assert dep in loaded
+
+    def test_partial_scene_restoration_circular(self):
+        """
+        Test circular dependencies: ensure no infinite loop, all required components are loaded.
+        """
+        # Mock world_data
+        world_data = {
+            'X': {'dependencies': ['Y']},
+            'Y': {'dependencies': ['Z']},
+            'Z': {'dependencies': ['X']},
+            'W': {},
+        }
+        # Simulate storage and deserialization
+        class DummyStorage:
+            def load_world(self, scene_id):
+                class DummySerialized: pass
+                return DummySerialized()
+        def dummy_deserialize(serialized):
+            return {'world_data': world_data}
+        mgr = WorldPersistenceManager.__new__(WorldPersistenceManager)
+        mgr.storage = DummyStorage()
+        import app.core.persistence.world_persistence as wp
+        wp.deserialize = dummy_deserialize
+        # Load X (should load X, Y, Z)
+        loaded = mgr.load_scene_partial('dummy', ['X'])
+        assert set(loaded.keys()) == {'X', 'Y', 'Z'}
+        resolve_component_references(loaded, log_missing=False)
+        for cid, comp in loaded.items():
+            for dep in comp.get('dependencies', []):
+                assert dep in loaded
+
+    def test_partial_scene_restoration_missing(self):
+        """
+        Test missing dependencies: references to missing components are set to None and warning is logged.
+        """
+        # Mock world_data
+        world_data = {
+            'A': {'dependencies': ['B', 'MISSING']},
+            'B': {},
+        }
+        # Simulate storage and deserialization
+        class DummyStorage:
+            def load_world(self, scene_id):
+                class DummySerialized: pass
+                return DummySerialized()
+        def dummy_deserialize(serialized):
+            return {'world_data': world_data}
+        mgr = WorldPersistenceManager.__new__(WorldPersistenceManager)
+        mgr.storage = DummyStorage()
+        import app.core.persistence.world_persistence as wp
+        wp.deserialize = dummy_deserialize
+        loaded = mgr.load_scene_partial('dummy', ['A'])
+        # After reference resolution, 'MISSING' should be removed from dependencies
+        resolve_component_references(loaded, log_missing=False)
+        assert 'MISSING' not in loaded['A']['dependencies']
+        assert 'B' in loaded
+        assert 'A' in loaded
 
 
 if __name__ == "__main__":

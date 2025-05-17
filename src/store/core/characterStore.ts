@@ -8,6 +8,7 @@ import {
 } from '../../types/character';
 import { createPersistence } from '../utils/persistence';
 import { createValidator } from '../utils/validation';
+import { ExtendedCharacterCustomization } from '../../animation/CharacterCustomization';
 
 interface CharacterStore {
   // State
@@ -18,12 +19,21 @@ interface CharacterStore {
   validationErrors: IValidationError[];
   isLoading: boolean;
   error: Error | null;
+  /**
+   * Modular/mesh-based character customization state (for advanced UI)
+   */
+  customization: ExtendedCharacterCustomization | null;
 
   // Actions
   initializeCharacter: (name: string) => void;
   resetCharacter: () => void;
   setCharacterName: (name: string) => void;
   setCharacterDescription: (description: string) => void;
+
+  // Customization actions
+  setCustomization: (customization: ExtendedCharacterCustomization) => void;
+  updateCustomization: (partial: Partial<ExtendedCharacterCustomization>) => void;
+  resetCustomization: () => void;
 
   // Background management
   addBackground: (backgroundId: string) => void;
@@ -93,6 +103,24 @@ export const useCharacterStore = create<CharacterStore>()((set, get) => ({
   validationErrors: [],
   isLoading: false,
   error: null,
+  customization: null,
+
+  // Customization actions
+  setCustomization: (customization: ExtendedCharacterCustomization) => {
+    set({ customization });
+    persistence.saveState('customization', customization);
+  },
+  updateCustomization: (partial: Partial<ExtendedCharacterCustomization>) => {
+    set(state => {
+      const updated = { ...state.customization, ...partial } as ExtendedCharacterCustomization;
+      persistence.saveState('customization', updated);
+      return { customization: updated };
+    });
+  },
+  resetCustomization: () => {
+    set({ customization: null });
+    persistence.removeState('customization');
+  },
 
   // Character initialization and basic management
   initializeCharacter: async (name: string) => {
@@ -260,9 +288,9 @@ export const useCharacterStore = create<CharacterStore>()((set, get) => ({
       skills: { ...state.skills, [skill.id]: skill },
       character: character
         ? {
-            ...character,
-            skills: { ...character.skills, [skill.id]: 0 },
-          }
+          ...character,
+          skills: { ...character.skills, [skill.id]: 0 },
+        }
         : character,
     }));
   },

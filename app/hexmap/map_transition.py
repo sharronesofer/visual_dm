@@ -5,7 +5,7 @@ Functions for transitioning between region and tactical maps.
 from typing import Optional, Tuple, List, Dict
 from .hex_grid import HexGrid
 from .tactical_hex_grid import TacticalHexGrid
-from app.core.models.region import Region
+from app.core.models.world import Region
 
 def region_to_tactical(
     region_grid: HexGrid,

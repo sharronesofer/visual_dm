@@ -1,0 +1,66 @@
+name: Python Backend CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/python-backend.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/python-backend.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
+    strategy:
+      matrix:
+        python-version: [3.11]
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: 1.7.1
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+ 
+    - name: Install dependencies
+      run: |
+        poetry install --no-interaction
+
+    - name: Lint with flake8
+      run: |
+        poetry run flake8 --count --statistics
+
+    - name: Format check with black
+      run: |
+        poetry run black --check .
+
+    - name: Test with pytest
+      run: |
+        poetry run pytest 

@@ -8,6 +8,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.core.database import db
 from app.core.models.base import BaseModel
+from sqlalchemy.dialects.postgresql import UUID
 
 class SaveGame(BaseModel):
     """Model for game saves."""
@@ -28,7 +29,7 @@ class SaveGame(BaseModel):
     save_metadata = Column(JSON, default=dict)  # Additional metadata
     
     # Foreign Keys
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     user = relationship('User', back_populates='save_games')
     
     def to_dict(self) -> Dict[str, Any]:

@@ -22,8 +22,8 @@ from .IWorldGenerator import (
     RegionTemplate
 )
 from .DeterministicRNG import DeterministicRNG
-from .GeneratorRegistry import GeneratorRegistry
-from .GenerationPipeline import GenerationPipeline
+# from .GeneratorRegistry import GeneratorRegistry
+# from .GenerationPipeline import GenerationPipeline
 
 __all__ = [
     'GeneratorType',
@@ -39,6 +39,6 @@ __all__ = [
     'IProceduralRegionGenerator',
     'RegionTemplate',
     'DeterministicRNG',
-    'GeneratorRegistry',
-    'GenerationPipeline'
+    # 'GeneratorRegistry',
+    # 'GenerationPipeline'
 ] 

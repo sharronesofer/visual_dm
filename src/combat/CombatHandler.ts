@@ -1,6 +1,9 @@
 import { TacticalHexGrid } from '../hexmap/TacticalHexGrid';
 import { CombatParticipant } from './CombatParticipant';
 import { EnvironmentalInteractionSystem } from './EnvironmentalInteractionSystem';
+import { EventBus as CoreEventBus } from '../core/interfaces/types/events';
+import { POIEvents } from '../poi/types/POIEvents';
+import { TypedEventEmitter } from '../utils/TypedEventEmitter';
 
 export class CombatHandler {
   private grid: TacticalHexGrid;
@@ -11,6 +14,17 @@ export class CombatHandler {
     this.grid = grid;
     this.participants = new Map();
     this.environmentSystem = new EnvironmentalInteractionSystem(grid);
+
+    // Use a typed EventBus for POI events
+    const POIEventBus = CoreEventBus.getInstance() as TypedEventEmitter<POIEvents>;
+
+    // Subscribe to POI evolution events for War system integration
+    POIEventBus.on('poi:evolved', ({ poiId, poi, trigger, changes, version }) => {
+      // Example: Log the event
+      console.log(`[War Integration] POI evolved: ${poiId}, trigger: ${trigger}, changes:`, changes);
+      // TODO: Update combat objectives, environmental effects, or battle outcomes based on evolved POI state
+      // For example, if a POI becomes more fortified, adjust battle difficulty
+    });
   }
 
   // Add a participant to combat

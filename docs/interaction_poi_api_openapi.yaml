@@ -1,0 +1,258 @@
+openapi: 3.0.3
+info:
+  title: Interaction & POI Evolution API
+  version: 1.0.0
+  description: >
+    API for managing Points of Interest (POIs) and NPC interactions, supporting event-driven integration between the Interaction System and POI Evolution System.
+servers:
+  - url: /api/v1
+paths:
+  /pois:
+    get:
+      summary: List all POIs
+      responses:
+        '200':
+          description: Array of POIs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/POI'
+    post:
+      summary: Create a new POI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POICreate'
+      responses:
+        '201':
+          description: Created POI
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/POI'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /pois/{id}:
+    get:
+      summary: Get POI details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: POI details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/POI'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Update a POI
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POIUpdate'
+      responses:
+        '200':
+          description: Updated POI
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/POI'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      summary: Delete a POI
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: POI deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /interactions:
+    post:
+      summary: Create a new interaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InteractionContext'
+      responses:
+        '201':
+          description: Interaction created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InteractionContext'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /interactions/{id}:
+    get:
+      summary: Get interaction details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Interaction details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InteractionContext'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    POI:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        state:
+          type: string
+        location:
+          type: string
+        metadata:
+          type: object
+    POICreate:
+      type: object
+      required: [name, state, location]
+      properties:
+        name:
+          type: string
+        state:
+          type: string
+        location:
+          type: string
+        metadata:
+          type: object
+    POIUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          type: string
+        location:
+          type: string
+        metadata:
+          type: object
+    InteractionContext:
+      type: object
+      properties:
+        npcId:
+          type: string
+        targetId:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        data:
+          type: object
+        location:
+          type: string
+        time:
+          type: integer
+        witnesses:
+          type: array
+          items:
+            type: string
+        socialContext:
+          type: object
+          properties:
+            relationship:
+              type: number
+            groupContext:
+              type: object
+              properties:
+                groupId:
+                  type: string
+                role:
+                  type: string
+            reputationImpact:
+              type: number
+            emotionalContext:
+              type: object
+              properties:
+                mood:
+                  type: string
+                intensity:
+                  type: number
+        economicContext:
+          type: object
+          properties:
+            marketConditions:
+              type: object
+              properties:
+                supply:
+                  type: number
+                demand:
+                  type: number
+            resourceValues:
+              type: object
+              additionalProperties:
+                type: number
+            tradeHistory:
+              type: object
+              properties:
+                success:
+                  type: number
+                total:
+                  type: number
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+security:
+  - BearerAuth: [] 

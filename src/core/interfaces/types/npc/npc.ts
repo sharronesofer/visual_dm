@@ -155,4 +155,23 @@ export interface NPCData {
     purposeWeights: Map<string, number>;
     minTrustThreshold: number;
   };
+}
+
+/**
+ * StatisticalCrowdModel: Represents a pooled/statistical group of NPCs for LOD purposes.
+ * Used to optimize simulation by representing distant NPCs as a group rather than individuals.
+ */
+export interface StatisticalCrowdModel {
+  id: string; // Unique identifier for the crowd model
+  npcIds: string[]; // IDs of NPCs represented by this model
+  position: Position; // Central position of the crowd
+  density: number; // Number of NPCs per area unit
+  averageMovement: { x: number; y: number }; // Average movement vector
+  dominantBehaviors: string[]; // List of dominant behaviors in the group
+  faction?: Faction; // Optional: Faction if all NPCs share one
+  state: 'active' | 'dormant' | 'transitioning'; // LOD state
+  lastUpdate: number; // Timestamp of last update
+  // Additional pooled stats (optional)
+  averageStats?: Partial<NPCStats>;
+  averagePersonality?: Partial<NPCPersonality>;
 } 

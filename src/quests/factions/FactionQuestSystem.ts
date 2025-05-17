@@ -4,6 +4,7 @@ import { ConsequenceSeverity } from '../consequences/ConsequenceSystem';
 import { FactionType, FactionProfile, FactionStanding } from '../../types/factions/faction';
 import { FactionQuestTemplate, FactionQuestConfig } from './types';
 import { WorldStateChange } from '../consequences/ConsequenceSystem';
+import { ReputationAuditLogger } from '../../systems/reputation/ReputationAuditLogger';
 
 /**
  * Configuration for the faction quest system
@@ -52,7 +53,7 @@ export class FactionQuestSystem {
    */
   registerFaction(profile: FactionProfile): void {
     this.factions.set(profile.id, profile);
-    
+
     // Initialize relationships with other factions
     for (const [otherId, standing] of Object.entries(profile.relationships)) {
       const otherFaction = this.factions.get(otherId);
@@ -135,10 +136,10 @@ export class FactionQuestSystem {
     if (!faction) return [];
 
     const competingQuests: QuestTemplate[] = [];
-    
+
     // Find opposing factions
     const opposingFactions = Array.from(this.factions.values())
-      .filter(other => 
+      .filter(other =>
         other.id !== faction.id &&
         faction.relationships[other.id] <= -this.config.mutuallyExclusiveThreshold
       );
@@ -201,6 +202,16 @@ export class FactionQuestSystem {
       outcome,
       choices
     );
+
+    // Audit log
+    ReputationAuditLogger.log({
+      timestamp: new Date().toISOString(),
+      sourceSystem: 'FactionQuestSystem',
+      targetEntity: factionId,
+      valueChange: standing.reputation,
+      context: `questId: ${questId}, outcome: ${outcome}, choices: ${choices.join(',')}`,
+      callingSystem: 'FactionQuestSystem.updateStandings'
+    });
   }
 
   /**
@@ -218,13 +229,13 @@ export class FactionQuestSystem {
 
     // Check basic reputation requirement
     if (template.minimumReputation &&
-        standing.reputation < template.minimumReputation) {
+      standing.reputation < template.minimumReputation) {
       return false;
     }
 
     // Check tier requirement
     if (template.minimumTier &&
-        standing.tier < template.minimumTier) {
+      standing.tier < template.minimumTier) {
       return false;
     }
 
@@ -249,7 +260,7 @@ export class FactionQuestSystem {
 
     // Get base quests
     const baseQuests = this.getBaseQuestsForTier(standing.tier);
-    
+
     // Filter and modify based on availability
     return baseQuests
       .filter(quest => this.isQuestAvailable(quest, factionId))
@@ -261,7 +272,7 @@ export class FactionQuestSystem {
    */
   getPlayerStandings(playerId: string): Map<FactionType, number> {
     const standings = new Map<FactionType, number>();
-    
+
     // Get all faction standings for the player
     for (const [factionId, faction] of this.factions) {
       const standing = this.playerStandings.get(playerId);
@@ -269,7 +280,7 @@ export class FactionQuestSystem {
         standings.set(factionId as FactionType, standing.reputation);
       }
     }
-    
+
     return standings;
   }
 
@@ -326,7 +337,7 @@ export class FactionQuestSystem {
       modified.items = [
         ...(modified.items || []),
         faction.specialResources[
-          Math.floor(Math.random() * faction.specialResources.length)
+        Math.floor(Math.random() * faction.specialResources.length)
         ]
       ];
     }
@@ -412,10 +423,20 @@ export class FactionQuestSystem {
     standing: FactionStanding,
     change: number
   ): void {
+    const oldReputation = standing.reputation;
     standing.reputation = Math.max(
       -100,
       Math.min(100, standing.reputation + change)
     );
+    // Audit log
+    ReputationAuditLogger.log({
+      timestamp: new Date().toISOString(),
+      sourceSystem: 'FactionQuestSystem',
+      targetEntity: 'FactionStanding',
+      valueChange: standing.reputation - oldReputation,
+      context: `old: ${oldReputation}, new: ${standing.reputation}, delta: ${change}`,
+      callingSystem: 'FactionQuestSystem.adjustReputation'
+    });
   }
 
   private updateTierProgress(standing: FactionStanding): void {
@@ -467,7 +488,7 @@ export class FactionQuestSystem {
   ): boolean {
     // Check if the choice is considered special for this faction
     return faction.specialResources.includes(choice) ||
-           choice.startsWith(`${faction.id}_special_`);
+      choice.startsWith(`${faction.id}_special_`);
   }
 
   private calculateActionImpact(
@@ -522,7 +543,7 @@ export class FactionQuestSystem {
   ): QuestTemplate[] {
     // Get base quests for the current tier
     const baseQuests = this.getBaseQuestsForTier(standing.tier);
-    
+
     // Filter and modify based on faction preferences
     return baseQuests
       .filter(quest => this.checkQuestRequirements(quest, standing))
@@ -534,8 +555,8 @@ export class FactionQuestSystem {
     standing: FactionStanding
   ): QuestTemplate[] {
     const opposingFactions = this.getOpposingFactions(faction);
-    
-    return opposingFactions.flatMap(opposing => 
+
+    return opposingFactions.flatMap(opposing =>
       this.generateQuestsForFaction(opposing, {
         ...standing,
         reputation: -standing.reputation // Invert reputation for opposing factions
@@ -548,7 +569,7 @@ export class FactionQuestSystem {
     faction: FactionProfile
   ): any[] {
     const alternatives = [];
-    
+
     // Generate alternatives based on faction values and objective type
     switch (objective.type) {
       case 'fetch':
@@ -564,7 +585,7 @@ export class FactionQuestSystem {
             }
           });
         }
-        
+
         // Combat-based alternative for power-focused factions
         if (faction.values.power > 0.5) {
           alternatives.push({
@@ -592,7 +613,7 @@ export class FactionQuestSystem {
             }
           });
         }
-        
+
         // Honor-based alternative for traditional factions
         if (faction.values.tradition > 0.5) {
           alternatives.push({
@@ -620,7 +641,7 @@ export class FactionQuestSystem {
             }
           });
         }
-        
+
         // Strategy-based alternative for knowledge-focused factions
         if (faction.values.knowledge > 0.5) {
           alternatives.push({
@@ -774,7 +795,7 @@ export class FactionQuestSystem {
    * Get factions that oppose the given faction
    */
   getOpposingFactions(faction: FactionProfile | FactionType): FactionProfile[] {
-    const factionProfile = typeof faction === 'string' 
+    const factionProfile = typeof faction === 'string'
       ? this.factions.get(faction)
       : faction;
 
@@ -783,7 +804,7 @@ export class FactionQuestSystem {
     }
 
     return Array.from(this.factions.values())
-      .filter(other => 
+      .filter(other =>
         other.id !== factionProfile.id &&
         (factionProfile.relationships.get(other.id) || 0) <= -this.config.mutuallyExclusiveThreshold
       );
@@ -800,19 +821,19 @@ export class FactionQuestSystem {
 
     // Check standing requirements
     if (faction.standing < factionRequirements.minimumStanding ||
-        faction.standing > factionRequirements.maximumStanding) {
+      faction.standing > factionRequirements.maximumStanding) {
       return false;
     }
 
     // Check reputation if specified
     if (factionRequirements.minimumReputation !== undefined &&
-        (quest.requirements.minimumReputation || 0) < factionRequirements.minimumReputation) {
+      (quest.requirements.minimumReputation || 0) < factionRequirements.minimumReputation) {
       return false;
     }
 
     // Check tier if specified
     if (factionRequirements.minimumTier !== undefined &&
-        faction.tier < factionRequirements.minimumTier) {
+      faction.tier < factionRequirements.minimumTier) {
       return false;
     }
 
@@ -916,7 +937,7 @@ export class FactionQuestSystem {
   ): void {
     const faction = this.factions.get(factionId);
     const otherFaction = this.factions.get(otherFactionId);
-    
+
     if (faction && otherFaction) {
       faction.relationships.set(otherFactionId, value);
       otherFaction.relationships.set(factionId, value);
@@ -947,13 +968,13 @@ export class FactionQuestSystem {
   ): boolean {
     // Check reputation requirement
     if (quest.requirements.minimumReputation &&
-        standing.reputation < quest.requirements.minimumReputation) {
+      standing.reputation < quest.requirements.minimumReputation) {
       return false;
     }
 
     // Check tier requirement
     if (quest.minimumTier &&
-        standing.tier < quest.minimumTier) {
+      standing.tier < quest.minimumTier) {
       return false;
     }
 

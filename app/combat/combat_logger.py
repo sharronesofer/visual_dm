@@ -2,7 +2,8 @@ from typing import Dict, List, Optional, Union
 from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
-from app.combat.damage_engine import DamageType, AttackType
+from app.core.enums import DamageType
+from app.combat.damage_engine import AttackType
 
 class LogLevel(Enum):
     DEBUG = "debug"

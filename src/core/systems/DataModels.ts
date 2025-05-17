@@ -351,6 +351,8 @@ export interface POI extends BaseEntity, Taggable {
     discoveryRequirements?: Record<string, any>;
     entrances: { position: { x: number, y: number }, description: string }[];
     interiorMapId?: string;
+    discoveredBy?: string[];
+    visitedBy?: string[];
 }
 
 // ------------------------------

@@ -602,4 +602,72 @@ export class EventBus {
         }
         this.log(EventBusLogLevel.INFO, 'Circuit breaker manually reset for handler', { handler });
     }
+
+    // --- Event Replay and State Snapshot API (for multiplayer resynchronization) ---
+
+    /**
+     * Retrieve events from the replay buffer by event ID range (inclusive)
+     * @param fromEventId Start event ID (inclusive)
+     * @param toEventId End event ID (inclusive, optional)
+     * @returns Array of ISceneEvent
+     */
+    public getEventsByIdRange(fromEventId: number, toEventId?: number): ISceneEvent[] {
+        // Assume each event in buffer has a unique, incrementing eventId property
+        return this.eventReplayBuffer.filter(e => {
+            const id = (e as any).eventId;
+            return id >= fromEventId && (toEventId === undefined || id <= toEventId);
+        });
+    }
+
+    /**
+     * Retrieve events from the replay buffer by timestamp range (inclusive)
+     * @param fromTimestamp Start timestamp (inclusive)
+     * @param toTimestamp End timestamp (inclusive, optional)
+     * @returns Array of ISceneEvent
+     */
+    public getEventsByTimestamp(fromTimestamp: number, toTimestamp?: number): ISceneEvent[] {
+        return this.eventReplayBuffer.filter(e => {
+            return e.timestamp >= fromTimestamp && (toTimestamp === undefined || e.timestamp <= toTimestamp);
+        });
+    }
+
+    /**
+     * Generate a full state snapshot for a given scene or system
+     * @param sceneId Scene or system identifier
+     * @returns Serialized state snapshot (object)
+     */
+    public generateStateSnapshot(sceneId?: string): Record<string, any> {
+        // Integration point: implement actual state serialization logic here
+        // For now, return a stub
+        return { sceneId, timestamp: Date.now(), state: {} };
+    }
+
+    /**
+     * Retrieve the latest state snapshot for a given scene or system
+     * @param sceneId Scene or system identifier
+     * @returns Serialized state snapshot (object) or undefined
+     */
+    public getLatestStateSnapshot(sceneId?: string): Record<string, any> | undefined {
+        // Integration point: retrieve from persistent storage or in-memory cache
+        // For now, return undefined
+        return undefined;
+    }
+
+    /**
+     * Prune expired events from the replay buffer based on retention policy
+     * @param maxAgeMs Maximum age in milliseconds to retain events
+     */
+    public pruneExpiredEvents(maxAgeMs: number): void {
+        const cutoff = Date.now() - maxAgeMs;
+        this.eventReplayBuffer = this.eventReplayBuffer.filter(e => e.timestamp >= cutoff);
+    }
+
+    /**
+     * Store a state snapshot (integration point for persistent storage)
+     * @param snapshot The snapshot object
+     */
+    public storeStateSnapshot(snapshot: Record<string, any>): void {
+        // Integration point: persist snapshot to disk, database, or cloud storage
+        // For now, this is a stub
+    }
 } 

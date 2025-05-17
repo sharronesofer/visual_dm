@@ -3,6 +3,8 @@ from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 import uuid
+import json
+import os
 
 class EffectType(Enum):
     """Types of status effects that can be applied to combatants."""
@@ -295,4 +297,46 @@ class StatusEffectsSystem:
         return any(
             instance.effect.type == effect_type
             for instance in self.active_effects.get(target_id, [])
-        ) 
+        )
+
+def load_effects_from_config(config_path: str) -> Dict[str, StatusEffect]:
+    """Load status effects from a JSON configuration file."""
+    with open(config_path, 'r') as f:
+        data = json.load(f)
+    effects = {}
+    for effect_data in data.get('effects', []):
+        try:
+            effect = StatusEffect(
+                id=effect_data['id'],
+                name=effect_data['name'],
+                type=EffectType(effect_data['type']),
+                description=effect_data.get('description', ''),
+                modifiers=[
+                    EffectModifier(
+                        attribute=mod['attribute'],
+                        value=mod['value'],
+                        operator=mod.get('operator', 'add')
+                    ) for mod in effect_data.get('modifiers', [])
+                ],
+                duration_type=DurationType(effect_data['duration_type']),
+                duration_value=effect_data['duration_value'],
+                source=effect_data.get('source', ''),
+                stackable=effect_data.get('stackable', False),
+                max_stacks=effect_data.get('max_stacks', 1),
+                immunities_granted=set(effect_data.get('immunities_granted', [])),
+                resistances_granted=effect_data.get('resistances_granted', {}),
+                custom_logic=effect_data.get('custom_logic', {})
+            )
+            effects[effect.id] = effect
+        except Exception as e:
+            print(f"Failed to load effect {effect_data.get('id', '<unknown>')}: {e}")
+    return effects
+
+# Example usage: load and register effects at startup
+if __name__ == "__main__":
+    config_path = os.path.join(os.path.dirname(__file__), 'effects', 'effects_config.json')
+    effects = load_effects_from_config(config_path)
+    system = StatusEffectsSystem()
+    for effect in effects.values():
+        system.register_effect(effect)
+    print(f"Loaded and registered {len(effects)} effects.") 

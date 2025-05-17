@@ -31,7 +31,7 @@ export interface POIEvents {
   'poi:exited': { poiId: string; actorId: string };
 
   // Query events
-  'poi:searched': { 
+  'poi:searched': {
     center: Coordinates;
     radius: number;
     type?: POIType;
@@ -40,9 +40,28 @@ export interface POIEvents {
   };
 
   // Error events
-  'poi:error': { 
-    type: 'validation' | 'registration' | 'deregistration' | 'modification' | 'query';
+  'poi:error': {
+    type: 'validation' | 'registration' | 'deregistration' | 'modification' | 'query' | 'capture';
     poiId?: string;
     error: Error;
   };
+
+  // Evolution events
+  /**
+   * Emitted when a POI evolves (e.g., state, thematic, or property change due to evolution rules)
+   * @version 1
+   */
+  'poi:evolved': { poiId: string; poi: IPOI; trigger: string; changes: Partial<IPOI>; version: number };
+
+  /**
+   * Emitted when a POI is captured (ownership or control changes)
+   * @version 1
+   */
+  'poi:captured': { poiId: string; poi: IPOI; captorId: string; previousOwnerId?: string; timestamp: number; version: number };
+
+  /**
+   * Emitted when a POI is destroyed (removed from the world, not just deactivated)
+   * @version 1
+   */
+  'poi:destroyed': { poiId: string; poi: IPOI; reason: string; timestamp: number; version: number };
 } 

@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from app.models.cleanup import CleanupEntry, CleanupRule
+from backend.app.models import CleanupEntry, CleanupRule
 from app.api.schemas.cleanup import (
     CleanupRuleCreate, CleanupRuleUpdate,
     CleanupEntryCreate, CleanupEntryUpdate,

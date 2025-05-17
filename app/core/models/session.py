@@ -5,13 +5,14 @@ Session model for managing user sessions.
 from datetime import datetime
 from app.core.database import db
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
 
 class Session(db.Model):
     """Session model for tracking user sessions."""
     __tablename__ = 'sessions'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
     token = db.Column(db.String(500), unique=True, nullable=False)
     device_info = db.Column(db.String(200))
     ip_address = db.Column(db.String(45))

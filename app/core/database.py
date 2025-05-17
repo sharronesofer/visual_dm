@@ -37,8 +37,8 @@ def init_db(app: Flask) -> None:
     from app.core.models.role import Role
     from app.core.models.session import Session
     from app.core.models.world import World
-    from app.core.models.region import Region
-    from app.core.models.resource import Resource
+    from app.core.models.world import Region
+    from app.core.models.world import Resource
     from app.core.models.trade_route import TradeRoute
     from app.core.models.base_model import BaseModel
     from app.core.models.quest import Quest, QuestStage, QuestDependency, QuestReward, QuestWorldImpact
@@ -46,7 +46,7 @@ def init_db(app: Flask) -> None:
     from app.core.models.character import Character
     from app.core.models.party import Party
     from app.core.models.location import Location
-    from app.core.models.faction import Faction
+    from app.core.models.world import Faction
     from app.core.models.weather_system import WeatherSystem
     from app.core.models.world_event import WorldEvent
     from app.core.models.status import StatusEffect
@@ -65,7 +65,7 @@ def init_db(app: Flask) -> None:
     from app.core.models.permission import Permission
     from app.core.models.item import Item
     # from app.core.models.relationships import Relationships
-    from app.core.models.magic import Spell
+    from app.core.models.spell import Spell
     # from app.core.models.equipment import Equipment
     from app.core.models.save import SaveGame
     from app.core.models.point_of_interest import PointOfInterest
@@ -78,11 +78,13 @@ def init_db(app: Flask) -> None:
     # from app.core.models.feats import Feats
 
     # Create tables
-    with app.app_context():
-        db.create_all()
+    # with app.app_context():
+    #     db.create_all()
 
-        # Create default roles
-        Role.create_default_roles()
+    #     # Create default roles
+    #     Role.create_default_roles()
+
+# NOTE: Migration required for Party.checksum and Party.schema_version columns (SHA-256 integrity and versioning fields)
 
 def create_tables(app: Flask) -> None:
     """

@@ -1,20 +1,23 @@
-import { Position } from '../types/common';
-import { 
-  BuildingStructure, 
-  BuildingElement, 
+import { Position } from '../core/interfaces/types/common';
+import {
+  BuildingStructure,
+  BuildingElement,
   Wall,
   BuildingPhysics,
   BUILDING_PHYSICS_DEFAULTS
-} from '../types/building';
+} from '../core/interfaces/types/building';
+import { RepairAndMaintenanceSystem } from './RepairAndMaintenanceSystem';
 
 export class BuildingStructuralSystem {
   private physics: BuildingPhysics;
+  private repairSystem: RepairAndMaintenanceSystem;
 
   constructor(physics: Partial<BuildingPhysics> = {}) {
     this.physics = {
       ...BUILDING_PHYSICS_DEFAULTS,
       ...physics
     };
+    this.repairSystem = new RepairAndMaintenanceSystem();
   }
 
   /**
@@ -23,8 +26,8 @@ export class BuildingStructuralSystem {
   calculateIntegrity(structure: BuildingStructure): number {
     // Get all load-bearing walls
     const loadBearingWalls = Array.from(structure.elements.values())
-      .filter((element): element is Wall => 
-        element.type === 'wall' && element.isLoadBearing
+      .filter((element): element is Wall =>
+        element && typeof element === 'object' && 'type' in element && element.type === 'wall' && (element as any).isLoadBearing
       );
 
     // Check if we have minimum required support points
@@ -49,14 +52,14 @@ export class BuildingStructuralSystem {
    * Calculate integrity based on support points and load-bearing walls
    */
   private calculateSupportPointIntegrity(
-    supportPoints: Position[], 
+    supportPoints: Position[],
     loadBearingWalls: Wall[]
   ): number {
     let supportIntegrity = 0;
 
     // Check each support point has at least one nearby load-bearing wall
     for (const point of supportPoints) {
-      const hasSupport = loadBearingWalls.some(wall => 
+      const hasSupport = loadBearingWalls.some(wall =>
         this.isNearby(point, wall.position)
       );
 
@@ -76,8 +79,10 @@ export class BuildingStructuralSystem {
     let totalMaxHealth = 0;
 
     for (const element of structure.elements.values()) {
-      totalHealth += element.health;
-      totalMaxHealth += element.maxHealth;
+      if (element && typeof element === 'object' && 'health' in element && 'maxHealth' in element) {
+        totalHealth += (element as any).health;
+        totalMaxHealth += (element as any).maxHealth;
+      }
     }
 
     return totalMaxHealth > 0 ? totalHealth / totalMaxHealth : 0;
@@ -91,8 +96,8 @@ export class BuildingStructuralSystem {
     const elements = Array.from(structure.elements.values());
 
     // Calculate total weight and center of mass
-    const totalWeight = elements.reduce((sum, element) => 
-      sum + this.physics.materialProperties[element.material].weight, 0
+    const totalWeight = elements.reduce((sum, element) =>
+      sum + (element && typeof element === 'object' && 'material' in element && this.physics.materialProperties[(element as any).material] ? this.physics.materialProperties[(element as any).material].weight : 0), 0
     );
 
     const centerOfMass = this.calculateCenterOfMass(elements);
@@ -118,15 +123,17 @@ export class BuildingStructuralSystem {
     let weightedY = 0;
 
     for (const element of elements) {
-      const weight = this.physics.materialProperties[element.material].weight;
-      totalWeight += weight;
-      weightedX += element.position.x * weight;
-      weightedY += element.position.y * weight;
+      if (element && typeof element === 'object' && 'material' in element && 'position' in element && this.physics.materialProperties[(element as any).material]) {
+        const weight = this.physics.materialProperties[(element as any).material].weight;
+        totalWeight += weight;
+        weightedX += (element as any).position.x * weight;
+        weightedY += (element as any).position.y * weight;
+      }
     }
 
     return {
-      x: weightedX / totalWeight,
-      y: weightedY / totalWeight
+      x: totalWeight > 0 ? weightedX / totalWeight : 0,
+      y: totalWeight > 0 ? weightedY / totalWeight : 0
     };
   }
 
@@ -141,6 +148,9 @@ export class BuildingStructuralSystem {
    * Calculate distance between two positions
    */
   private calculateDistance(a: Position, b: Position): number {
+    if (!a || !b || typeof a.x !== 'number' || typeof a.y !== 'number' || typeof b.x !== 'number' || typeof b.y !== 'number') {
+      return Infinity;
+    }
     const dx = a.x - b.x;
     const dy = a.y - b.y;
     return Math.sqrt(dx * dx + dy * dy);
@@ -202,7 +212,7 @@ export class BuildingStructuralSystem {
     // Sort elements by their health deficit (damaged elements first)
     const damagedElements = elements
       .filter(element => element.health < element.maxHealth)
-      .sort((a, b) => 
+      .sort((a, b) =>
         (a.maxHealth - a.health) - (b.maxHealth - b.health)
       );
 
@@ -221,5 +231,33 @@ export class BuildingStructuralSystem {
     }
 
     return repairs;
+  }
+
+  /**
+   * Apply maintenance effects to a building
+   */
+  applyMaintenanceEffects(structure: BuildingStructure): void {
+    this.repairSystem.applyMaintenanceEffects(structure);
+  }
+
+  /**
+   * Trigger a vendor repair workflow for a building
+   */
+  triggerVendorRepair(structure: BuildingStructure, vendorId: string): { cost: number; vendorId: string } {
+    return this.repairSystem.requestVendorRepair(structure, vendorId);
+  }
+
+  /**
+   * Confirm a vendor repair for a building
+   */
+  confirmVendorRepair(structure: BuildingStructure, vendorId: string): void {
+    this.repairSystem.confirmVendorRepair(structure, vendorId);
+  }
+
+  /**
+   * Get maintenance status of a building
+   */
+  getMaintenanceStatus(structure: BuildingStructure): string {
+    return (structure as any).maintenanceStatus || 'unknown';
   }
 } 

@@ -28,6 +28,11 @@ class BuildingProfile:
     memory_usage: Dict[str, int] = field(default_factory=dict)
     error_count: int = 0
     warnings: List[str] = field(default_factory=list)
+    # --- New profiling metrics ---
+    lod_transitions: int = 0
+    batch_sizes: Dict[str, int] = field(default_factory=dict)  # material_id -> batch size
+    draw_calls: int = 0
+    cache_utilization: Dict[str, int] = field(default_factory=dict)  # e.g., {'vao_cache': N, ...}
 
     @property
     def total_time(self) -> float:
@@ -50,7 +55,12 @@ class BuildingProfile:
             'component_times': self.component_times,
             'memory_usage': self.memory_usage,
             'error_count': self.error_count,
-            'warnings': self.warnings
+            'warnings': self.warnings,
+            # --- New metrics ---
+            'lod_transitions': self.lod_transitions,
+            'batch_sizes': self.batch_sizes,
+            'draw_calls': self.draw_calls,
+            'cache_utilization': self.cache_utilization
         }
 
 class BuildingProfiler:
@@ -153,7 +163,12 @@ class BuildingProfiler:
                     'p95_time': 0,
                     'component_stats': {},
                     'type_stats': {},
-                    'size_correlation': 0
+                    'size_correlation': 0,
+                    # New metrics
+                    'avg_lod_transitions': 0,
+                    'avg_draw_calls': 0,
+                    'avg_batch_size': {},
+                    'avg_cache_utilization': {}
                 }
             
             # Calculate overall timing statistics
@@ -192,6 +207,20 @@ class BuildingProfiler:
             else:
                 correlation = 0
             
+            # New metrics
+            lod_transitions = [p.lod_transitions for p in self.profiles.values()]
+            draw_calls = [p.draw_calls for p in self.profiles.values()]
+            # Aggregate batch sizes and cache utilization
+            batch_sizes = defaultdict(list)
+            cache_utils = defaultdict(list)
+            for p in self.profiles.values():
+                for k, v in p.batch_sizes.items():
+                    batch_sizes[k].append(v)
+                for k, v in p.cache_utilization.items():
+                    cache_utils[k].append(v)
+            avg_batch_size = {k: (sum(vs)/len(vs) if vs else 0) for k, vs in batch_sizes.items()}
+            avg_cache_utilization = {k: (sum(vs)/len(vs) if vs else 0) for k, vs in cache_utils.items()}
+            
             return {
                 'total_buildings': len(self.profiles),
                 'average_time': mean(times),
@@ -199,7 +228,12 @@ class BuildingProfiler:
                 'p95_time': quantiles(times, n=20)[18] if len(times) >= 20 else max(times),
                 'component_stats': component_stats,
                 'type_stats': type_averages,
-                'size_correlation': correlation
+                'size_correlation': correlation,
+                # New metrics
+                'avg_lod_transitions': mean(lod_transitions) if lod_transitions else 0,
+                'avg_draw_calls': mean(draw_calls) if draw_calls else 0,
+                'avg_batch_size': avg_batch_size,
+                'avg_cache_utilization': avg_cache_utilization
             }
     
     def reset_statistics(self) -> None:
@@ -208,6 +242,27 @@ class BuildingProfiler:
             self.profiles.clear()
             self.component_stats.clear()
             self.current_profile = None
+
+    # --- New metric logging methods ---
+    def log_lod_transition(self):
+        with self._lock:
+            if self.current_profile:
+                self.current_profile.lod_transitions += 1
+
+    def log_batch_size(self, material_id: str, size: int):
+        with self._lock:
+            if self.current_profile:
+                self.current_profile.batch_sizes[material_id] = size
+
+    def log_draw_call(self):
+        with self._lock:
+            if self.current_profile:
+                self.current_profile.draw_calls += 1
+
+    def log_cache_utilization(self, cache_name: str, count: int):
+        with self._lock:
+            if self.current_profile:
+                self.current_profile.cache_utilization[cache_name] = count
 
 # Global instance
 building_profiler = BuildingProfiler() 

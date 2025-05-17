@@ -11,29 +11,20 @@ from app.core.database import db
 from app.core.models.character import Character
 from app.core.models.user import User
 from app.core.models.party import Party
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.models.spell import Spell
 from app.core.models.inventory import InventoryItem
-from app.core.models.combat import Combat, CombatParticipant, CombatAction, CombatStats, CombatState, CombatEngine
 from app.core.models.save import SaveGame
 from app.combat.combat_utils import resolve_combat_action, apply_combat_effects
 from app.combat.combat_ram import ACTIVE_BATTLES
 from app.core.utils.error_utils import ValidationError, DatabaseError, NotFoundError
-from app.combat.ai_combat_utils import choose_action_gpt
 from app.combat.combat_class import Combatant
 from app.regions.worldgen_utils import attempt_rest
 from app.combat.combat_state_class import CombatState
 from uuid import uuid4
 from datetime import datetime
 from fastapi import APIRouter, HTTPException
-from visual_client.game.combat import (
-    calculate_damage,
-    calculate_attack_bonus,
-    apply_damage,
-    resolve_turn
-)
-from visual_client.game.narrative import narrate_combat_action
 
 combat_bp = Blueprint("combat", __name__)
 

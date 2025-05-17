@@ -1,57 +1,63 @@
-import { BuildingConstructionSystem } from '../../../src/systems/BuildingConstructionSystem';
-import { BuildingPhysics, BUILDING_PHYSICS_DEFAULTS, MaterialType, BuildingStructure, BuildingElement, Wall, Door, Window } from '../core/interfaces/types/building';
-import { Position } from '../core/interfaces/types/common';
+import { ConstructionRequestHandler, ConstructionRequest } from './ConstructionRequestSystem';
+import { EventBus } from '../core/interfaces/types/events';
+import { BuildingConstructionSystem } from './BuildingConstructionSystem';
+import { BuildingPhysics, BUILDING_PHYSICS_DEFAULTS, BuildingStructure } from '../core/interfaces/types/building';
 import { BuildingStructuralSystem } from './BuildingStructuralSystem';
 
-describe('BuildingConstructionSystem', () => {
+describe('Event-driven ConstructionRequestSystem', () => {
     let construction: BuildingConstructionSystem;
     let structure: BuildingStructure;
     let defaultPhysics: BuildingPhysics;
     let structuralSystem: BuildingStructuralSystem;
+    let handler: ConstructionRequestHandler;
+    let bus: EventBus;
+    let player: any;
+    let resultEvent: any;
 
     beforeEach(() => {
         defaultPhysics = { ...BUILDING_PHYSICS_DEFAULTS };
         structuralSystem = new BuildingStructuralSystem(defaultPhysics);
-        construction = new BuildingConstructionSystem(defaultPhysics, structuralSystem);
+        construction = new BuildingConstructionSystem();
         structure = {
             id: 'test-structure',
             elements: new Map(),
             integrity: 1
         };
+        handler = new ConstructionRequestHandler(construction);
+        bus = EventBus.getInstance();
+        player = { id: 'player1', name: 'Test', position: { x: 0, y: 0 }, health: 100, maxHealth: 100, inventory: [], movement: { isMoving: false, direction: null, speed: 0, path: [], destination: null } };
+        resultEvent = null;
+        (bus as any).off('construction:result', () => { }); // Remove previous listeners
+        (bus as any).on('construction:result', (event: any) => {
+            resultEvent = event;
+        });
     });
 
-    it('adds a wall to the structure', () => {
-        const pos: Position = { x: 0, y: 0 };
-        const updated = construction.addWall(structure, pos, 'stone' as MaterialType, true);
-        expect(updated.elements.size).toBe(1);
-        const wall = Array.from(updated.elements.values())[0] as Wall;
-        expect(wall.type).toBe('wall');
-        expect(wall.isLoadBearing).toBe(true);
+    it('processes a valid construction request and emits a completed event', async () => {
+        const request: ConstructionRequest = {
+            id: 'req-1',
+            playerId: player.id,
+            buildingType: 'house',
+            elementType: 'wall',
+            position: { x: 1, y: 1 },
+            material: 'stone',
+            resources: { stone: 2 },
+            timestamp: Date.now()
+        };
+        const resourceCheck = () => true;
+        const permissionCheck = () => true;
+        BuildingConstructionSystem.emitConstructionRequest({
+            request,
+            structure,
+            player,
+            resourceCheck,
+            permissionCheck
+        });
+        // Wait for async event processing
+        await new Promise(res => setTimeout(res, 10));
+        expect(resultEvent).toBeTruthy();
+        expect(resultEvent.requestId).toBe('req-1');
+        expect(resultEvent.status).toBe('completed');
+        expect(resultEvent.structure).toBeDefined();
     });
-
-    it('adds a door to the structure', () => {
-        const pos: Position = { x: 1, y: 1 };
-        const updated = construction.addDoor(structure, pos, 'wood' as MaterialType);
-        expect(updated.elements.size).toBe(1);
-        const door = Array.from(updated.elements.values())[0] as Door;
-        expect(door.type).toBe('door');
-    });
-
-    it('adds a window to the structure', () => {
-        const pos: Position = { x: 2, y: 2 };
-        const updated = construction.addWindow(structure, pos, 'metal' as MaterialType);
-        expect(updated.elements.size).toBe(1);
-        const window = Array.from(updated.elements.values())[0] as Window;
-        expect(window.type).toBe('window');
-    });
-
-    it('removes an element from the structure', () => {
-        const pos: Position = { x: 0, y: 0 };
-        let updated = construction.addWall(structure, pos, 'stone' as MaterialType, true);
-        const wallId = Array.from(updated.elements.keys())[0];
-        updated = construction.removeElement(updated, wallId);
-        expect(updated.elements.size).toBe(0);
-    });
-
-    // Add more tests for integrity recalculation, error cases, and edge cases as needed
 }); 

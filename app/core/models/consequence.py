@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from app.core.database import db
 from app.core.models.base import BaseModel
 from app.core.enums import InfractionSeverity, ConsequenceType
+from sqlalchemy.dialects.postgresql import UUID
 
 class Consequence(BaseModel):
     """Model for consequences applied to players."""
@@ -16,7 +17,7 @@ class Consequence(BaseModel):
     __table_args__ = {'extend_existing': True}
 
     # Foreign Keys
-    player_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    player_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     character_id = Column(Integer, ForeignKey('characters.id'), nullable=False)
     infraction_id = Column(Integer, ForeignKey('infractions.id'), nullable=True)
 

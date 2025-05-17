@@ -1,6 +1,7 @@
 // Core stores
 export { useCharacterStore } from './core/characterStore';
 export { usePoiStore } from './core/poiStore';
+export { useInteractionStore, useInteractionState, useInteractionSnapshots, useInteractionValidation, useInteractionDebug } from './core/interactionStore';
 
 // UI stores
 export { useWizardStore } from './ui/wizardStore';

@@ -237,6 +237,119 @@ def test_specific_functionality() -> Dict[str, bool]:
     
     return specific_tests
 
+def test_jsx_parsing():
+    """Test that the converter detects and parses a simple React functional component with JSX and outputs a Jinja2 template file."""
+    from ts2py import TypeScriptToPythonConverter
+    ts_code = '''
+    import React from "react";
+    function HelloWorld(props) {
+      return <div>Hello, {props.name}!</div>;
+    }
+    '''
+    converter = TypeScriptToPythonConverter()
+    py_code = converter.convert_content(ts_code)
+    print("DEBUG: py_code output was:\n", py_code)
+    assert "React/JSX components detected" in py_code
+    assert "Jinja2 templates generated and written to" in py_code
+    assert "<div>" in open(os.path.join(os.path.dirname(__file__), "templates/generated/hello-world.jinja2")).read()
+    assert "{{ props.name }}" in open(os.path.join(os.path.dirname(__file__), "templates/generated/hello-world.jinja2")).read()
+    print("test_jsx_parsing: PASS")
+
+def test_jsx_nested():
+    """Test nested JSX elements are converted to nested Jinja2."""
+    from ts2py import TypeScriptToPythonConverter
+    ts_code = '''
+    import React from "react";
+    function Nested() {
+      return (
+        <div>
+          <span>Hello</span>
+          <b>{42}</b>
+        </div>
+      );
+    }
+    '''
+    converter = TypeScriptToPythonConverter()
+    py_code = converter.convert_content(ts_code)
+    assert "<div>" in py_code and "<span>Hello</span>" in py_code and "<b>{{ 42 }}</b>" in py_code
+    print("test_jsx_nested: PASS")
+
+def test_jsx_fragment():
+    """Test React.Fragment is converted to flat Jinja2 output."""
+    from ts2py import TypeScriptToPythonConverter
+    ts_code = '''
+    import React from "react";
+    function Frag() {
+      return (
+        <React.Fragment>
+          <span>One</span>
+          <span>Two</span>
+        </React.Fragment>
+      );
+    }
+    '''
+    converter = TypeScriptToPythonConverter()
+    py_code = converter.convert_content(ts_code)
+    assert "<span>One</span>" in py_code and "<span>Two</span>" in py_code and "fragment" not in py_code
+    print("test_jsx_fragment: PASS")
+
+def test_jsx_conditional():
+    """Test conditional rendering in JSX is converted to Jinja2 if/else."""
+    from ts2py import TypeScriptToPythonConverter
+    ts_code = '''
+    import React from "react";
+    function Cond(props) {
+      return (
+        <div>{props.show ? <span>Yes</span> : <span>No</span>}</div>
+      );
+    }
+    '''
+    converter = TypeScriptToPythonConverter()
+    py_code = converter.convert_content(ts_code)
+    assert "{% if props.show %}" in py_code and "Yes" in py_code and "No" in py_code
+    print("test_jsx_conditional: PASS")
+
+def test_jsx_list_render():
+    """Test list rendering (map) in JSX is converted to Jinja2 for loop."""
+    from ts2py import TypeScriptToPythonConverter
+    ts_code = '''
+    import React from "react";
+    function List(props) {
+      return (
+        <ul>
+          {props.items.map(item => <li>{item}</li>)}
+        </ul>
+      );
+    }
+    '''
+    converter = TypeScriptToPythonConverter()
+    py_code = converter.convert_content(ts_code)
+    assert "{% for item in props.items %}" in py_code and "<li>{{ item }}</li>" in py_code
+    print("test_jsx_list_render: PASS")
+
+def test_jsx_template_file_written():
+    """Test that the converter writes a Jinja2 template file for a React component and the file content matches expected output."""
+    import os
+    from ts2py import TypeScriptToPythonConverter
+    ts_code = '''
+    import React from "react";
+    function HelloWorld(props) {
+      return <div>Hello, {props.name}!</div>;
+    }
+    '''
+    converter = TypeScriptToPythonConverter()
+    py_code = converter.convert_content(ts_code)
+    # Check output message
+    assert "Jinja2 templates generated and written to" in py_code
+    # Check file existence
+    out_dir = os.path.join(os.path.dirname(__file__), "templates", "generated")
+    out_path = os.path.join(out_dir, "hello-world.jinja2")
+    assert os.path.exists(out_path)
+    with open(out_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    assert "<div>" in content and "{{ props.name }}" in content
+    print("test_jsx_template_file_written: PASS")
+
 def generate_test_report(base_dir: str, test_results: Dict[str, List[str]], specific_tests: Dict[str, bool]) -> None:
     """Generate a report of the test results"""
     print("Generating test report...")
@@ -350,6 +463,75 @@ Some common issues found during testing:
     
     print(f"Test report generated: {report_path}")
 
+def test_type_converter_basic():
+    from type_converter import TypeConverter
+    tc = TypeConverter()
+    # Primitive types
+    assert tc.convert('string') == 'str'
+    assert tc.convert('number') == 'float'
+    assert tc.convert('boolean') == 'bool'
+    assert tc.convert('any') == 'Any'
+    assert tc.convert('void') == 'None'
+    # Array
+    assert tc.convert('string[]') == 'List[str]'
+    assert tc.convert('number[]') == 'List[float]'
+    # Generics
+    assert tc.convert('Array<string>') == 'List[str]'
+    assert tc.convert('Map<string, number>') == 'Dict[str, float]'
+    # Union
+    assert tc.convert('string | number') == 'Union[str, float]'
+    # Nested generics
+    assert tc.convert('Array<Array<string>>') == 'List[List[str]]'
+    # Complex
+    assert tc.convert('Array<string | number>') == 'List[Union[str, float]]'
+    print('TypeConverter basic tests passed.')
+
+def test_type_converter_advanced():
+    from type_converter import TypeConverter
+    tc = TypeConverter()
+    # Intersection types
+    assert tc.convert('string & number') == 'Union[str, float]  # Intersection type, best-effort'
+    # Nested intersection and union
+    assert tc.convert('(string | number) & boolean') == 'Union[Union[str, float], bool]  # Intersection type, best-effort'
+    # Mapped types
+    assert tc.convert('{ [K in keyof T]: T[K] }') == 'Dict[str, T[K]]  # Mapped type, best-effort'
+    # Conditional types
+    assert tc.convert('T extends U ? X : Y') == 'Any  # Conditional type (T extends U ? X : Y), not directly supported'
+    # Utility types
+    assert tc.convert('Partial<string>') == 'Optional[str]'
+    assert tc.convert('Required<number>') == 'float'
+    assert tc.convert('Readonly<boolean>') == 'bool'
+    assert tc.convert('Record<string, number>') == 'Dict[str, float]'
+    assert tc.convert('Pick<Foo, "bar">') == 'Foo'
+    assert tc.convert('Omit<Foo, "baz">') == 'Foo'
+    # Nested generics and unions
+    assert tc.convert('Array<string | number>') == 'List[Union[str, float]]'
+    assert tc.convert('Partial<Array<string | number>>') == 'Optional[List[Union[str, float]]]'
+    print('TypeConverter advanced tests passed.')
+
+def test_type_converter_typing_extensions():
+    from type_converter import TypeConverter
+    tc = TypeConverter()
+    # Literal types
+    assert tc.convert("'foo' | 'bar' | 'baz'") == "Literal['foo', 'bar', 'baz']"
+    assert tc.convert("1 | 2 | 3") == "Literal[1, 2, 3]"
+    # Optional/Union handling
+    assert tc.convert('string | null') == 'Optional[str]'
+    assert tc.convert('number | undefined') == 'Optional[float]'
+    assert tc.convert('string | number | null') == 'Optional[Union[str, float]]'
+    # TypedDict (stub)
+    assert tc.convert('{ foo: string; bar: number }') == 'AutoTypedDict'
+    assert 'class AutoTypedDict(TypedDict):' in '\n'.join(tc.get_typed_dict_defs())
+    # Generic type (stub)
+    tc2 = TypeConverter()
+    assert tc2.convert('MyType<T>') == 'MyType[T]'
+    assert 'T' in tc2.get_type_vars()
+    # Import tracking
+    imports = tc.get_imports()
+    assert any('Literal' in imp for imp in imports)
+    assert any('TypedDict' in imp for imp in imports)
+    print('TypeConverter typing extensions tests passed.')
+
 def main():
     """Main entry point"""
     import argparse
@@ -376,11 +558,17 @@ def main():
     # Test specific functionality
     specific_tests = test_specific_functionality()
     
+    # Test JSX parsing
+    test_jsx_parsing()
+    
     # Generate test report
     test_stats["end_time"] = time.time()
     generate_test_report(args.dir, test_results, specific_tests)
     
     print("Testing complete!")
+    test_type_converter_basic()
+    test_type_converter_advanced()
+    test_type_converter_typing_extensions()
 
 if __name__ == "__main__":
     main() 

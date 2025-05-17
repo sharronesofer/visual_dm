@@ -301,8 +301,8 @@ export class InventoryPanel {
         case 'type':
           return a.type.localeCompare(b.type);
         case 'rarity':
-          return Object.values(ItemRarity).indexOf(b.rarity) - 
-                 Object.values(ItemRarity).indexOf(a.rarity);
+          return Object.values(ItemRarity).indexOf(b.rarity) -
+            Object.values(ItemRarity).indexOf(a.rarity);
         default:
           return 0;
       }
@@ -361,5 +361,270 @@ export class InventoryPanel {
     this.tooltipElement.remove();
     this.container.innerHTML = '';
     this.listeners = [];
+  }
+}
+
+/**
+ * LODConfigPanel: Artist-facing UI for editing LOD configuration.
+ * (Stub implementation for future UI/UX work)
+ */
+export class LODConfigPanel {
+  private container: HTMLElement;
+  private config: any; // Should be WeatherLODConfig
+  private effectTypes: string[] = [];
+  private listeners: Array<() => void> = [];
+
+  constructor(containerId: string, effectTypes: string[] = []) {
+    const element = document.getElementById(containerId);
+    if (!element) {
+      throw new Error(`Container element with id '${containerId}' not found`);
+    }
+    this.container = element;
+    this.effectTypes = effectTypes;
+    this.initializePanel();
+  }
+
+  /**
+   * Initialize the LOD config editor panel UI.
+   * (Stub: Add controls for each effect type and LOD level)
+   */
+  private initializePanel(): void {
+    this.container.innerHTML = '';
+    this.container.className = 'lod-config-panel';
+    // TODO: Add controls for editing thresholds, quality params, transition distances
+    // TODO: Add real-time preview button
+    // TODO: Add load/save JSON config buttons
+    // TODO: Add presets dropdown
+    // TODO: Add validation feedback
+  }
+
+  /**
+   * Load LOD config from JSON.
+   */
+  public loadConfig(json: string) {
+    try {
+      this.config = JSON.parse(json);
+      this.notifyListeners();
+      this.render();
+    } catch (e) {
+      // TODO: Show error to user
+    }
+  }
+
+  /**
+   * Save current config to JSON.
+   */
+  public saveConfig(): string {
+    return JSON.stringify(this.config, null, 2);
+  }
+
+  /**
+   * Apply a preset configuration.
+   */
+  public applyPreset(preset: any) {
+    // TODO: Implement preset logic
+    this.config = { ...preset };
+    this.notifyListeners();
+    this.render();
+  }
+
+  /**
+   * Validate current config and show feedback.
+   */
+  public validateConfig(): boolean {
+    // TODO: Implement validation logic
+    return true;
+  }
+
+  /**
+   * Add a listener for config changes.
+   */
+  public addListener(listener: () => void) {
+    this.listeners.push(listener);
+  }
+
+  /**
+   * Remove a listener.
+   */
+  public removeListener(listener: () => void) {
+    this.listeners = this.listeners.filter(l => l !== listener);
+  }
+
+  private notifyListeners() {
+    for (const l of this.listeners) l();
+  }
+
+  /**
+   * Render the panel UI (stub).
+   */
+  public render() {
+    // TODO: Render controls for each effect type and LOD level
+  }
+
+  /**
+   * Show real-time preview of LOD changes (stub).
+   */
+  public showPreview() {
+    // TODO: Integrate with WeatherLODManager for live preview
+  }
+}
+
+/**
+ * NPCLODConfigPanel: Developer UI for visualizing and configuring NPC LOD system.
+ * - Adjust LOD thresholds, update priorities, simulation params
+ * - Real-time preview, load/save config, presets, validation
+ * - Visualize current LOD state and CPU heatmap
+ */
+export class NPCLODConfigPanel {
+  private container: HTMLElement;
+  private config: any = {};
+  private listeners: Array<() => void> = [];
+  private previewCallback: (() => void) | null = null;
+  private lodState: Record<string, string> = {};
+  private heatmapData: number[][] = [];
+
+  constructor(containerId: string) {
+    const element = document.getElementById(containerId);
+    if (!element) throw new Error(`Container element with id '${containerId}' not found`);
+    this.container = element;
+    this.initializePanel();
+  }
+
+  private initializePanel(): void {
+    this.container.innerHTML = '';
+    this.container.className = 'npc-lod-config-panel';
+    // --- Controls ---
+    const controls = document.createElement('div');
+    controls.className = 'npc-lod-controls';
+    // LOD thresholds
+    controls.innerHTML += `
+      <label>To Statistical: <input type="number" id="lod-to-statistical" value="300" min="50" max="2000" step="10"></label>
+      <label>To Individual: <input type="number" id="lod-to-individual" value="150" min="10" max="1000" step="10"></label>
+      <label>Pooling Aggressiveness: <input type="range" id="lod-pooling" min="0" max="1" step="0.01" value="0.5"></label>
+      <label>Transition Delay (ms): <input type="number" id="lod-transition-delay" value="500" min="0" max="5000" step="50"></label>
+      <button id="npc-lod-preview">Preview</button>
+      <button id="npc-lod-load">Load Config</button>
+      <button id="npc-lod-save">Save Config</button>
+      <select id="npc-lod-presets">
+        <option value="default">Default</option>
+        <option value="performance">Performance</option>
+        <option value="quality">Quality</option>
+      </select>
+      <span id="npc-lod-validation"></span>
+    `;
+    this.container.appendChild(controls);
+    // --- LOD State Visualization ---
+    const lodStateDiv = document.createElement('div');
+    lodStateDiv.className = 'npc-lod-state';
+    lodStateDiv.innerHTML = '<h4>Current NPC LOD State</h4><div id="npc-lod-state-list"></div>';
+    this.container.appendChild(lodStateDiv);
+    // --- Heatmap Visualization ---
+    const heatmapDiv = document.createElement('div');
+    heatmapDiv.className = 'npc-lod-heatmap';
+    heatmapDiv.innerHTML = '<h4>CPU Usage Heatmap</h4><canvas id="npc-lod-heatmap-canvas" width="200" height="100"></canvas>';
+    this.container.appendChild(heatmapDiv);
+    // --- Event Listeners ---
+    controls.querySelector('#npc-lod-preview')?.addEventListener('click', () => this.previewCallback?.());
+    controls.querySelector('#npc-lod-load')?.addEventListener('click', () => this.loadConfigFromPrompt());
+    controls.querySelector('#npc-lod-save')?.addEventListener('click', () => this.saveConfigToFile());
+    controls.querySelector('#npc-lod-presets')?.addEventListener('change', (e) => this.applyPreset((e.target as HTMLSelectElement).value));
+    // Input change listeners
+    ['lod-to-statistical', 'lod-to-individual', 'lod-pooling', 'lod-transition-delay'].forEach(id => {
+      controls.querySelector(`#${id}`)?.addEventListener('input', () => this.handleConfigChange());
+    });
+    this.renderLODState();
+    this.renderHeatmap();
+    this.addCSS();
+  }
+
+  private handleConfigChange() {
+    // Read values from inputs and update config
+    const toStat = +(this.container.querySelector('#lod-to-statistical') as HTMLInputElement).value;
+    const toInd = +(this.container.querySelector('#lod-to-individual') as HTMLInputElement).value;
+    const pooling = +(this.container.querySelector('#lod-pooling') as HTMLInputElement).value;
+    const delay = +(this.container.querySelector('#lod-transition-delay') as HTMLInputElement).value;
+    this.config = { toStatistical: toStat, toIndividual: toInd, poolingAggressiveness: pooling, transitionDelay: delay };
+    this.validateConfig();
+    this.notifyListeners();
+  }
+
+  private validateConfig(): boolean {
+    const valid = this.config.toStatistical > this.config.toIndividual && this.config.toIndividual > 0;
+    const validation = this.container.querySelector('#npc-lod-validation') as HTMLElement;
+    validation.textContent = valid ? '✔️' : '❌ LOD thresholds invalid';
+    return valid;
+  }
+
+  public addListener(listener: () => void) { this.listeners.push(listener); }
+  public removeListener(listener: () => void) { this.listeners = this.listeners.filter(l => l !== listener); }
+  private notifyListeners() { for (const l of this.listeners) l(); }
+
+  public setPreviewCallback(cb: () => void) { this.previewCallback = cb; }
+
+  public loadConfig(json: string) {
+    try { this.config = JSON.parse(json); this.updateInputsFromConfig(); this.notifyListeners(); } catch { }
+  }
+  public saveConfig(): string { return JSON.stringify(this.config, null, 2); }
+  private loadConfigFromPrompt() {
+    const json = prompt('Paste NPC LOD config JSON:');
+    if (json) this.loadConfig(json);
+  }
+  private saveConfigToFile() {
+    const blob = new Blob([this.saveConfig()], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'npc_lod_config.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  public applyPreset(preset: string) {
+    if (preset === 'performance') this.config = { toStatistical: 600, toIndividual: 300, poolingAggressiveness: 0.9, transitionDelay: 200 };
+    else if (preset === 'quality') this.config = { toStatistical: 200, toIndividual: 80, poolingAggressiveness: 0.2, transitionDelay: 800 };
+    else this.config = { toStatistical: 300, toIndividual: 150, poolingAggressiveness: 0.5, transitionDelay: 500 };
+    this.updateInputsFromConfig(); this.notifyListeners();
+  }
+  private updateInputsFromConfig() {
+    (this.container.querySelector('#lod-to-statistical') as HTMLInputElement).value = this.config.toStatistical;
+    (this.container.querySelector('#lod-to-individual') as HTMLInputElement).value = this.config.toIndividual;
+    (this.container.querySelector('#lod-pooling') as HTMLInputElement).value = this.config.poolingAggressiveness;
+    (this.container.querySelector('#lod-transition-delay') as HTMLInputElement).value = this.config.transitionDelay;
+    this.validateConfig();
+  }
+  public setLODState(state: Record<string, string>) { this.lodState = state; this.renderLODState(); }
+  private renderLODState() {
+    const list = this.container.querySelector('#npc-lod-state-list');
+    if (!list) return;
+    list.innerHTML = Object.entries(this.lodState).map(([id, lod]) => `<div>${id}: <span class="lod-level lod-${lod}">${lod}</span></div>`).join('');
+  }
+  public setHeatmapData(data: number[][]) { this.heatmapData = data; this.renderHeatmap(); }
+  private renderHeatmap() {
+    const canvas = this.container.querySelector('#npc-lod-heatmap-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const rows = this.heatmapData.length, cols = this.heatmapData[0]?.length || 0;
+    const w = canvas.width / (cols || 1), h = canvas.height / (rows || 1);
+    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+      const v = this.heatmapData[y][x];
+      ctx.fillStyle = `rgba(255,0,0,${Math.min(1, v)})`;
+      ctx.fillRect(x * w, y * h, w, h);
+    }
+  }
+  private addCSS() {
+    const style = document.createElement('style');
+    style.textContent = `
+      .npc-lod-config-panel { background: #181c24; color: #fff; padding: 18px; border-radius: 10px; width: 420px; font-family: sans-serif; }
+      .npc-lod-controls label { display: block; margin: 8px 0; }
+      .npc-lod-controls input[type=number], .npc-lod-controls input[type=range] { margin-left: 8px; }
+      .npc-lod-controls button, .npc-lod-controls select { margin: 8px 4px 8px 0; }
+      .npc-lod-state { margin-top: 18px; }
+      .npc-lod-state .lod-level { font-weight: bold; margin-left: 8px; }
+      .npc-lod-state .lod-ultra { color: #00eaff; }
+      .npc-lod-state .lod-high { color: #00ff00; }
+      .npc-lod-state .lod-medium { color: #ffff00; }
+      .npc-lod-state .lod-low { color: #ff9900; }
+      .npc-lod-state .lod-verylow { color: #ff0000; }
+      .npc-lod-heatmap { margin-top: 18px; }
+    `;
+    document.head.appendChild(style);
   }
 } 

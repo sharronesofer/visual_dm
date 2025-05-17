@@ -183,6 +183,12 @@ export const CACHE_CONFIG = {
     ALGORITHM: 'AES-256-GCM',
     KEY_SIZE: 256,
   },
+
+  /** Cache namespace for key prefixing */
+  NAMESPACE: 'app',
+
+  /** Prune threshold for in-memory cache */
+  PRUNE_THRESHOLD: 100,
 } as const;
 
 /**

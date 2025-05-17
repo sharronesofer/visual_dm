@@ -1,7 +1,11 @@
-import { NPCData } from '../../types/npc/npc';
-import { InteractionContext, InteractionType } from './InteractionSystem';
+import { NPCData } from '../../core/interfaces/types/npc/npc';
+import { InteractionContext } from './InteractionSystem';
 import { EmotionSystem } from './EmotionSystem';
 import { MemoryManager } from '../memory/MemoryManager';
+import { DialogueGenerationService } from '../../dialogue/DialogueGenerationService';
+import { ConversationContextManager } from '../../dialogue/ConversationContextManager';
+import { ResponseCacheManager } from '../../dialogue/ResponseCacheManager';
+import { DialogueConfigurationManager } from '../../dialogue/config/DialogueConfigurationManager';
 
 export interface DialogueResponse {
   message: string;
@@ -14,56 +18,79 @@ export interface DialogueResponse {
 export class DialogueManager {
   private emotionSystem: EmotionSystem;
   private memoryManager: MemoryManager;
+  private dialogueService: DialogueGenerationService;
+  private contextManager: ConversationContextManager;
+  private cacheManager: ResponseCacheManager;
+  private configManager: DialogueConfigurationManager;
 
-  constructor(emotionSystem: EmotionSystem, memoryManager: MemoryManager) {
+  constructor(
+    emotionSystem: EmotionSystem,
+    memoryManager: MemoryManager,
+    dialogueService: DialogueGenerationService,
+    contextManager: ConversationContextManager,
+    cacheManager: ResponseCacheManager,
+    configManager: DialogueConfigurationManager
+  ) {
     this.emotionSystem = emotionSystem;
     this.memoryManager = memoryManager;
+    this.dialogueService = dialogueService;
+    this.contextManager = contextManager;
+    this.cacheManager = cacheManager;
+    this.configManager = configManager;
   }
 
   public async generateDialogue(
     npc: NPCData,
     context: InteractionContext
-  ): Promise<DialogueResponse> {
-    // Get emotional state for dialogue tone
-    const emotionalState = await this.emotionSystem.getCurrentEmotionalState(npc.id);
-    
-    // Get relevant memories for context
-    const relevantMemories = await this.memoryManager.getRelevantMemories(
-      npc.id,
-      context.type,
-      context.targetId
-    );
-
-    let response: DialogueResponse;
-
-    switch (context.type) {
-      case InteractionType.MENTORING:
-        response = await this.generateMentoringDialogue(npc, context, emotionalState);
-        break;
-      case InteractionType.CONFLICT_RESOLUTION:
-        response = await this.generateConflictResolutionDialogue(npc, context, emotionalState);
-        break;
-      case InteractionType.SOCIAL_BONDING:
-        response = await this.generateSocialBondingDialogue(npc, context, emotionalState);
-        break;
-      case InteractionType.INFORMATION_SHARING:
-        response = await this.generateInformationSharingDialogue(npc, context, emotionalState);
-        break;
-      case InteractionType.GROUP_DECISION:
-        response = await this.generateGroupDecisionDialogue(npc, context, emotionalState);
-        break;
-      default:
-        response = await this.generateDefaultDialogue(npc, context, emotionalState);
+  ): Promise<any> {
+    const scenario = context.type?.toLowerCase() || 'default';
+    let promptTemplate = this.configManager.getPromptTemplate(scenario) || this.configManager.getPromptTemplate('default') || '';
+    const prompt = promptTemplate
+      .replace(/{{npcName}}/g, npc.name)
+      .replace(/{{npcRole}}/g, (npc.groupAffiliations?.[0]?.role || 'npc'));
+    const contextWindow = this.contextManager.getContext();
+    let cacheStatus: 'hit' | 'miss' = 'miss';
+    let gptMetadata: import('../../dialogue/types').DialogueMetadata | undefined = undefined;
+    let error: string | undefined = undefined;
+    let message: string = '';
+    let tone = 'neutral';
+    let emotionalState = 'neutral';
+    let contextSnapshot = [...contextWindow];
+    // Check cache
+    const cached = this.cacheManager.get(prompt, contextWindow);
+    if (cached) {
+      cacheStatus = 'hit';
+      message = cached;
+      this.contextManager.addTurn('npc', cached);
+    } else {
+      // Generate dialogue using config
+      const response = await this.dialogueService.generateDialogue(prompt, contextWindow, this.configManager.getConfig());
+      if (response.error) {
+        error = response.error;
+        message = '[Error generating dialogue]';
+      } else {
+        message = response.text;
+        gptMetadata = {
+          tokensUsed: response.usage?.total_tokens || 0,
+          model: this.configManager.getConfig().model,
+          responseTimeMs: 0 // Optionally measure
+        };
+        this.cacheManager.set(prompt, contextWindow, response.text, gptMetadata);
+        this.contextManager.addTurn('npc', response.text);
+      }
     }
-
-    // Adjust tone based on relationship and personality
-    response.tone = this.adjustToneForRelationship(
-      response.tone,
-      context.socialContext?.relationship || 0,
-      npc.personality
-    );
-
-    return response;
+    // Optionally, get cache analytics
+    const cacheAnalytics = this.cacheManager.getAnalytics();
+    return {
+      message,
+      tone,
+      emotionalState,
+      cacheStatus,
+      gptMetadata,
+      error,
+      contextSnapshot,
+      cacheAnalytics
+    };
   }
 
   private async generateMentoringDialogue(
@@ -73,11 +100,11 @@ export class DialogueManager {
   ): Promise<DialogueResponse> {
     const { effectiveness } = context.data;
     const teachingStyle = this.getTeachingStyle(npc.personality);
-    
+
     let message = '';
     let tone = '';
     let followUp: string[] = [];
-    
+
     if (effectiveness > 0.7) {
       message = `${this.getEncouragement(teachingStyle)} Let me explain this concept clearly...`;
       tone = 'patient and encouraging';
@@ -112,11 +139,11 @@ export class DialogueManager {
   ): Promise<DialogueResponse> {
     const { resolutionChance, conflict } = context.data;
     const approach = this.getConflictResolutionApproach(npc.personality);
-    
+
     let message = '';
     let tone = '';
     let followUp: string[] = [];
-    
+
     if (resolutionChance > 0.6) {
       message = `I believe we can find a solution that works for everyone...`;
       tone = 'diplomatic and constructive';
@@ -151,11 +178,11 @@ export class DialogueManager {
   ): Promise<DialogueResponse> {
     const { bondingScore, activity } = context.data;
     const socialStyle = this.getSocialStyle(npc.personality);
-    
+
     let message = '';
     let tone = '';
     let followUp: string[] = [];
-    
+
     if (bondingScore > 0.7) {
       message = `I've really enjoyed ${activity} with you. It's been wonderful...`;
       tone = 'warm and genuine';
@@ -190,11 +217,11 @@ export class DialogueManager {
   ): Promise<DialogueResponse> {
     const { sharingEffectiveness, information } = context.data;
     const trustLevel = context.socialContext?.relationship || 0;
-    
+
     let message = '';
     let tone = '';
     let followUp: string[] = [];
-    
+
     if (sharingEffectiveness > 0.7) {
       message = `I trust you with this information...`;
       tone = 'confidential and sincere';
@@ -229,11 +256,11 @@ export class DialogueManager {
   ): Promise<DialogueResponse> {
     const { influenceScore, proposal } = context.data;
     const leadershipStyle = this.getLeadershipStyle(npc.personality);
-    
+
     let message = '';
     let tone = '';
     let followUp: string[] = [];
-    
+
     if (influenceScore > 0.7) {
       message = `I believe this proposal offers significant benefits for the group...`;
       tone = 'confident and persuasive';
@@ -262,30 +289,30 @@ export class DialogueManager {
   }
 
   private getTeachingStyle(personality: NPCData['personality']): string {
-    if (personality.empathy > 0.7) return 'nurturing';
-    if (personality.intelligence > 0.7) return 'analytical';
-    if (personality.charisma > 0.7) return 'inspiring';
+    if ((personality.traits.get('empathy') ?? 0) > 0.7) return 'nurturing';
+    if ((personality.traits.get('intelligence') ?? 0) > 0.7) return 'analytical';
+    if ((personality.traits.get('charisma') ?? 0) > 0.7) return 'inspiring';
     return 'practical';
   }
 
   private getConflictResolutionApproach(personality: NPCData['personality']): string {
-    if (personality.diplomacy > 0.7) return 'mediator';
-    if (personality.assertiveness > 0.7) return 'direct';
-    if (personality.empathy > 0.7) return 'empathetic';
+    if ((personality.traits.get('diplomacy') ?? 0) > 0.7) return 'mediator';
+    if ((personality.traits.get('assertiveness') ?? 0) > 0.7) return 'direct';
+    if ((personality.traits.get('empathy') ?? 0) > 0.7) return 'empathetic';
     return 'pragmatic';
   }
 
   private getSocialStyle(personality: NPCData['personality']): string {
-    if (personality.extraversion > 0.7) return 'outgoing';
-    if (personality.empathy > 0.7) return 'supportive';
-    if (personality.charisma > 0.7) return 'charming';
+    if ((personality.traits.get('extraversion') ?? 0) > 0.7) return 'outgoing';
+    if ((personality.traits.get('empathy') ?? 0) > 0.7) return 'supportive';
+    if ((personality.traits.get('charisma') ?? 0) > 0.7) return 'charming';
     return 'reserved';
   }
 
   private getLeadershipStyle(personality: NPCData['personality']): string {
-    if (personality.leadership > 0.7) return 'authoritative';
-    if (personality.empathy > 0.7) return 'democratic';
-    if (personality.intelligence > 0.7) return 'strategic';
+    if ((personality.traits.get('leadership') ?? 0) > 0.7) return 'authoritative';
+    if ((personality.traits.get('empathy') ?? 0) > 0.7) return 'democratic';
+    if ((personality.traits.get('intelligence') ?? 0) > 0.7) return 'strategic';
     return 'collaborative';
   }
 
@@ -305,13 +332,13 @@ export class DialogueManager {
     personality: NPCData['personality']
   ): string {
     if (relationship > 0.8) {
-      return personality.friendliness > 0.7 ? 'warm and familiar' : 'respectful and friendly';
+      return (personality.traits.get('friendliness') ?? 0) > 0.7 ? 'warm and familiar' : 'respectful and friendly';
     } else if (relationship > 0.5) {
-      return personality.friendliness > 0.7 ? 'friendly and open' : 'polite and professional';
+      return (personality.traits.get('friendliness') ?? 0) > 0.7 ? 'friendly and open' : 'polite and professional';
     } else if (relationship > 0.2) {
-      return personality.cautiousness > 0.7 ? 'reserved and formal' : 'neutral and professional';
+      return (personality.traits.get('cautiousness') ?? 0) > 0.7 ? 'reserved and formal' : 'neutral and professional';
     } else {
-      return personality.aggressiveness > 0.7 ? 'distant and guarded' : 'formal and detached';
+      return (personality.traits.get('aggressiveness') ?? 0) > 0.7 ? 'distant and guarded' : 'formal and detached';
     }
   }
 

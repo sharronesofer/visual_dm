@@ -9,9 +9,9 @@ import {
   ThematicElements
 } from '../types/POITypes';
 import { IPOI } from '../interfaces/IPOI';
-import { DungeonPOI, DungeonSubType } from '../models/DungeonPOI';
-import { ExplorationPOI, ExplorationSubType } from '../models/ExplorationPOI';
-import { SocialPOI, SocialSubType } from '../models/SocialPOI';
+import { DungeonPOI } from '../models/DungeonPOI';
+import { ExplorationPOI } from '../models/ExplorationPOI';
+import { SocialPOI } from '../models/SocialPOI';
 import { BasePOI } from '../models/BasePOI';
 
 /**
@@ -46,9 +46,17 @@ export class POIFactory {
   /**
    * Create a new POI instance based on type and subtype
    */
-  public createPOI(type: POIType, subType: POISubtype, config: any = {}): IPOI {
+  public createPOI(type: POIType.DUNGEON, subType: DungeonSubtype, config?: any): IPOI;
+  public createPOI(type: POIType.EXPLORATION, subType: ExplorationSubtype, config?: any): IPOI;
+  public createPOI(type: POIType.SOCIAL, subType: SocialSubtype, config?: any): IPOI;
+  public createPOI(type: POIType, subType: POISubtype, config?: any): IPOI;
+  public createPOI(
+    type: POIType,
+    subType: any,
+    config: any = {}
+  ): IPOI {
     const cacheKey = this.getCacheKey(type, subType, config);
-    
+
     // Check template cache first
     if (this.templateCache.has(cacheKey)) {
       return this.clonePOI(this.templateCache.get(cacheKey)!);
@@ -64,22 +72,40 @@ export class POIFactory {
     let poi: IPOI;
     switch (type) {
       case POIType.DUNGEON:
-        if (!Object.values(DungeonSubtype).includes(subType as DungeonSubtype)) {
-          throw new Error(`Invalid dungeon subtype: ${subType}`);
+        if (!(Object.values(DungeonSubtype) as string[]).includes(subType as string)) {
+          throw new Error(`Invalid DungeonSubtype: ${subType}`);
         }
-        poi = new DungeonPOI(subType as DungeonSubtype, config);
+        poi = new DungeonPOI(
+          config.id || uuidv4(),
+          config.name || 'Dungeon',
+          subType as DungeonSubtype,
+          config.coordinates || { x: 0, y: 0, z: 0, level: 0 },
+          config.thematicElements || { biome: '', climate: '', era: '', culture: '', dangerLevel: 1, lighting: 'dim', themes: [] }
+        ) as unknown as IPOI;
         break;
       case POIType.EXPLORATION:
-        if (!Object.values(ExplorationSubtype).includes(subType as ExplorationSubtype)) {
-          throw new Error(`Invalid exploration subtype: ${subType}`);
+        if (!(Object.values(ExplorationSubtype) as string[]).includes(subType as string)) {
+          throw new Error(`Invalid ExplorationSubtype: ${subType}`);
         }
-        poi = new ExplorationPOI(subType as ExplorationSubtype, config);
+        poi = new ExplorationPOI(
+          config.id || uuidv4(),
+          config.name || 'Exploration',
+          subType as ExplorationSubtype,
+          config.coordinates || { x: 0, y: 0, z: 0, level: 0 },
+          config.thematicElements || { biome: '', climate: '', era: '', culture: '', dangerLevel: 1, lighting: 'dim', themes: [] }
+        ) as unknown as IPOI;
         break;
       case POIType.SOCIAL:
-        if (!Object.values(SocialSubtype).includes(subType as SocialSubtype)) {
-          throw new Error(`Invalid social subtype: ${subType}`);
+        if (!(Object.values(SocialSubtype) as string[]).includes(subType as string)) {
+          throw new Error(`Invalid SocialSubtype: ${subType}`);
         }
-        poi = new SocialPOI(subType as SocialSubtype, config);
+        poi = new SocialPOI(
+          config.id || uuidv4(),
+          config.name || 'Social',
+          subType as SocialSubtype,
+          config.coordinates || { x: 0, y: 0, z: 0, level: 0 },
+          config.thematicElements || { biome: '', climate: '', era: '', culture: '', dangerLevel: 1, lighting: 'dim', themes: [] }
+        ) as unknown as IPOI;
         break;
       default:
         throw new Error(`Unsupported POI type: ${type}`);
@@ -118,7 +144,7 @@ export class POIFactory {
 
     // Create POI instance
     const poi = this.createPOI(data.type as POIType, data.subType as POISubtype);
-    
+
     // Load the data into the POI
     if (poi instanceof BasePOI) {
       poi.deserialize(data);
@@ -171,7 +197,7 @@ export class POIFactory {
         validSubTypes = Object.values(SocialSubtype);
         break;
     }
-    
+
     if (!validSubTypes.includes(data.subType)) {
       throw new Error(`Invalid POI subType ${data.subType} for type ${data.type}`);
     }

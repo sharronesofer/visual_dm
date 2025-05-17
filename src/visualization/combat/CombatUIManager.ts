@@ -3,6 +3,8 @@ import { ActionMenuSystem, CombatAction } from './ActionMenuSystem';
 import { TargetingSystem, TargetEntity } from './TargetingSystem';
 import { StatusEffectRenderer, StatusEffect } from './StatusEffectRenderer';
 import { CombatLogDisplay, CombatLogEntry } from './CombatLogDisplay';
+import { CombatInventoryUI } from './CombatInventoryUI';
+import { QuickSlotManager } from './QuickSlotManager';
 
 export class CombatUIManager {
   private container: HTMLElement;
@@ -11,6 +13,8 @@ export class CombatUIManager {
   private targetingSystem!: TargetingSystem;
   private statusEffectRenderer!: StatusEffectRenderer;
   private combatLogDisplay!: CombatLogDisplay;
+  private combatInventoryUI!: CombatInventoryUI;
+  private quickSlotManager!: QuickSlotManager;
 
   constructor(containerId: string) {
     const element = document.getElementById(containerId);
@@ -46,12 +50,22 @@ export class CombatUIManager {
     combatLogContainer.id = 'combat-log';
     combatLogContainer.className = 'combat-log-container';
 
+    const inventoryContainer = document.createElement('div');
+    inventoryContainer.id = 'combat-inventory';
+    inventoryContainer.className = 'combat-inventory-container';
+
+    const quickSlotContainer = document.createElement('div');
+    quickSlotContainer.id = 'combat-quick-slots';
+    quickSlotContainer.className = 'combat-quick-slots-container';
+
     // Initialize subcomponents (stubs for now)
     this.turnOrderDisplay = new TurnOrderDisplay('combat-turn-order');
     this.actionMenuSystem = new ActionMenuSystem('combat-action-menu');
     this.targetingSystem = new TargetingSystem('combat-targeting');
     this.statusEffectRenderer = new StatusEffectRenderer('combat-status-effects');
     this.combatLogDisplay = new CombatLogDisplay('combat-log');
+    this.combatInventoryUI = new CombatInventoryUI('combat-inventory');
+    this.quickSlotManager = new QuickSlotManager('combat-quick-slots');
 
     // Add components to container
     this.container.appendChild(turnOrderContainer);
@@ -59,6 +73,8 @@ export class CombatUIManager {
     this.container.appendChild(targetingContainer);
     this.container.appendChild(statusEffectContainer);
     this.container.appendChild(combatLogContainer);
+    this.container.appendChild(inventoryContainer);
+    this.container.appendChild(quickSlotContainer);
 
     // TODO: Add CSS styles for layout and appearance
   }

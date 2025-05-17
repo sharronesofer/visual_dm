@@ -5,7 +5,8 @@ from typing import Dict, List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from ..models import CleanupRule, CleanupEntry, CloudProvider
+from backend.app.models.cleanup import CleanupRule, CleanupEntry
+from ..models import CloudProvider
 from ..collectors import AWSCollector, GCPCollector, AzureCollector
 
 class CleanupMonitorService:

@@ -42,6 +42,7 @@ export interface RegionCell {
     elevation?: number;
     /** Optional moisture value (0-1) */
     moisture?: number;
+    buildingId?: string;
 }
 
 /**
@@ -72,6 +73,11 @@ export interface Region {
         generatorType: GeneratorType;
         /** Parameters used during generation */
         parameters: Record<string, any>;
+    };
+    buildings?: Building[];
+    buildingMetadata?: {
+        placementRules?: BuildingPlacementRule[];
+        materialStyles?: BuildingMaterialStyle[];
     };
 }
 
@@ -115,6 +121,13 @@ export interface RegionGeneratorOptions extends IGeneratorOptions {
         maxResources?: number;
         /** Allow resources to be placed only on specific terrain types */
         allowedTerrains?: TerrainType[];
+    };
+    buildings?: {
+        maxBuildings?: number;
+        allowedTypes?: string[];
+        placementRules?: BuildingPlacementRule[];
+        materialStyles?: BuildingMaterialStyle[];
+        customizationHooks?: Record<string, any>;
     };
 }
 
@@ -163,4 +176,141 @@ export interface RegionTemplate {
         y: number;
         amount: number;
     }[];
-} 
+}
+
+/**
+ * Represents a building in a region
+ */
+export interface Building {
+    id: string;
+    templateId: string;
+    x: number;
+    y: number;
+    elevation?: number;
+    rotation?: number;
+    biome?: string;
+    terrainType?: TerrainType;
+    foundationType?: string;
+    material: string;
+    style: string;
+    integrity: number;
+    customization?: Record<string, any>;
+}
+
+/**
+ * Placement rule for buildings
+ */
+export interface BuildingPlacementRule {
+    allowedTerrains: TerrainType[];
+    requiredResources?: string[];
+    minDistanceToWater?: number;
+    maxSlope?: number;
+    minElevation?: number;
+    maxElevation?: number;
+    populationDensityLimit?: number;
+    biomeTypes?: string[];
+    customRuleFn?: (cell: RegionCell, context: any) => boolean;
+}
+
+/**
+ * Material and style definition for buildings
+ *
+ * - Extensible for modding: add new materials/styles at runtime
+ * - Supports biome/region/resource dependencies
+ * - Allows for texture/model variants for environmental adaptation
+ */
+export interface BuildingMaterialStyle {
+    material: string;
+    style: string;
+    biome?: string;
+    region?: string;
+    resourceDependencies?: string[];
+    textureVariant?: string;
+    modelVariant?: string;
+    // Modding extension point
+    [key: string]: any;
+}
+
+/**
+ * Placement rule for buildings (extended for rule engine)
+ */
+export interface PlacementRule {
+    id: string;
+    description?: string;
+    allowedBiomes?: string[];
+    allowedTerrains?: TerrainType[];
+    minDistanceToResource?: { resourceType: string; minDistance: number }[];
+    maxDistanceToResource?: { resourceType: string; maxDistance: number }[];
+    minPopulationDensity?: number;
+    maxPopulationDensity?: number;
+    customRuleFn?: (cell: RegionCell, context: PlacementRuleContext) => boolean | PlacementRuleResult;
+    priority?: number; // For conflict resolution
+    isHardRule?: boolean; // If true, blocks placement
+}
+
+export interface PlacementRuleContext {
+    cells: RegionCell[];
+    buildings: Building[];
+    resources: Resource[];
+    densityMap?: number[][];
+    [key: string]: any;
+}
+
+export interface PlacementRuleResult {
+    valid: boolean;
+    failedRules?: string[];
+    reasons?: string[];
+    advisory?: string[];
+    score?: number;
+}
+
+export interface PlacementRuleEngine {
+    evaluate(cell: RegionCell, context: PlacementRuleContext, rules: PlacementRule[]): PlacementRuleResult;
+    findValidLocations(context: PlacementRuleContext, rules: PlacementRule[]): RegionCell[];
+}
+
+/**
+ * Hook type for building generation events
+ */
+export type BuildingGenerationHook = (
+    phase: 'pre' | 'post',
+    buildingParams: Partial<Building>,
+    context: PlacementRuleContext
+) => void | Partial<Building>;
+
+/**
+ * Serializable configuration object for building customizations
+ */
+export interface BuildingCustomizationConfig {
+    id: string;
+    buildingType: string;
+    parameters: Record<string, any>;
+    version: string;
+    createdAt: string;
+    updatedAt?: string;
+}
+
+/**
+ * API for registering custom building generators and modifiers
+ */
+export interface BuildingCustomizationAPI {
+    registerHook(hook: BuildingGenerationHook): void;
+    unregisterHook(hook: BuildingGenerationHook): void;
+    getHooks(): BuildingGenerationHook[];
+    applyCustomization(config: BuildingCustomizationConfig): void;
+    getCustomizations(): BuildingCustomizationConfig[];
+    registerGenerator(type: string, generator: (...args: any[]) => Building): void;
+    registerModifier(type: string, modifier: (building: Building) => Building): void;
+    getGenerators(): Record<string, (...args: any[]) => Building>;
+    getModifiers(): Record<string, (building: Building) => Building>;
+}
+
+/**
+ * Plugin type for style/material system (see StyleMaterialSystem.ts)
+ */
+export type StyleMaterialPlugin = (context: {
+    cell: RegionCell;
+    resources: Resource[];
+    environment: any;
+    current: { material: string; style: string; textureVariant?: string; modelVariant?: string };
+}) => Partial<{ material: string; style: string; textureVariant: string; modelVariant: string }>; 

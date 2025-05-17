@@ -1,10 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+// @ts-ignore
 import { LatLng } from 'leaflet';
-import WebSocketService, {
-  MapMarker as WSMapMarker,
-  WebSocketMessage,
-} from '../services/WebSocketService';
+// @ts-ignore
+let WebSocketService: any;
+try {
+  WebSocketService = require('../services/WebSocketService').default;
+} catch (e) {
+  WebSocketService = {};
+}
+import { MarketSystem } from '../systems/economy/MarketSystem';
+import { MarketData } from '../systems/economy/EconomicTypes';
 
 interface MapMarker {
   id: string;
@@ -40,6 +46,52 @@ const convertMarkerToWS = (marker: MapMarker): WSMapMarker => ({
   ...marker,
   position: { lat: marker.position.lat, lng: marker.position.lng },
 });
+
+// Utility to convert MarketData to MapMarker
+export function marketToMapMarker(market: MarketData): Omit<MapMarker, 'id'> {
+  return {
+    position: new LatLng(market.location.x, market.location.y),
+    title: market.name,
+    description: `Specialization: ${(market.specialization || []).join(', ') || 'General'}\nReputation: ${market.reputation}`
+  };
+}
+
+// Utility to sync all markets as map markers
+export function syncMarketMarkers(marketSystem: MarketSystem, addMarker: (marker: Omit<MapMarker, 'id'>) => void) {
+  const markets = marketSystem.getDiscoveredMarkets ? marketSystem.getDiscoveredMarkets() : [];
+  for (const market of markets) {
+    addMarker(marketToMapMarker(market));
+  }
+}
+
+// Fallback types for WSMapMarker and WebSocketMessage if import is missing
+// Remove if available from WebSocketService
+export type WSMapMarker = {
+  id: string;
+  position: { lat: number; lng: number };
+  title: string;
+  description: string;
+};
+export type WebSocketMessage = {
+  type: string;
+  data: any;
+  timestamp?: string;
+};
+
+// Fetch discovered markets from backend and add as markers
+export async function fetchDiscoveredMarkets(addMarker: (marker: Omit<MapMarker, 'id'>) => void) {
+  try {
+    const response = await fetch('/api/markets/discovered');
+    if (!response.ok) throw new Error('Failed to fetch discovered markets');
+    const result = await response.json();
+    const markets = result.data || [];
+    for (const market of markets) {
+      addMarker(marketToMapMarker(market));
+    }
+  } catch (err) {
+    console.error('Error fetching discovered markets:', err);
+  }
+}
 
 export const useMapStore = create<MapState>()(
   persist(
@@ -80,6 +132,30 @@ export const useMapStore = create<MapState>()(
               center: convertToLatLng(message.data.center),
               zoom: message.data.zoom,
             });
+            break;
+          case 'system':
+            // Handle market discovery notification
+            if (
+              message.data &&
+              message.data.entityType === 'market' &&
+              message.data.metadata && message.data.metadata.discovered
+            ) {
+              // Show notification (replace with a better notification system if available)
+              window.alert(
+                `New market discovered: ${message.data.data.name}`
+              );
+              // Add the new market as a marker
+              const newMarker = {
+                ...marketToMapMarker(message.data.data),
+                id: Math.random().toString(36).substr(2, 9),
+              };
+              set(state => ({
+                markers: [
+                  ...state.markers,
+                  newMarker
+                ],
+              }));
+            }
             break;
         }
       };
@@ -129,6 +205,19 @@ export const useMapStore = create<MapState>()(
         initializeWebSocket: () => {
           ws.addMessageHandler(handleWebSocketMessage);
           ws.connect();
+          // After connecting, fetch discovered markets and add as markers
+          fetchDiscoveredMarkets((marker) => {
+            const newMarker = {
+              ...marker,
+              id: Math.random().toString(36).substr(2, 9),
+            };
+            set(state => ({
+              markers: [
+                ...state.markers,
+                newMarker
+              ],
+            }));
+          });
         },
       };
     },

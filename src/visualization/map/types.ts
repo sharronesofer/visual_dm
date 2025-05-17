@@ -77,4 +77,22 @@ export interface MapUpdateEvent {
   data: any;
 }
 
-export type MapEventListener = (event: MapInteractionEvent | MapUpdateEvent) => void; 
+export type MapEventListener = (event: MapInteractionEvent | MapUpdateEvent) => void;
+
+// Utility to convert MarketData to MapObject for market markers
+export function marketToMapObject(market: any): MapObject {
+  return {
+    id: market.id,
+    type: 'market',
+    position: { x: market.location.x, y: market.location.y },
+    size: { width: 1, height: 1 },
+    elevation: 0,
+    interactive: true,
+    data: {
+      name: market.name,
+      specialization: market.specialization || [],
+      reputation: market.reputation,
+      schedule: market.schedule
+    }
+  };
+} 

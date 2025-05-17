@@ -6,7 +6,7 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 from dataclasses import dataclass, field
 from app.core.database import db
-from app.core.utils.cache_utils import CacheManager
+from app.core.utils.cache import Cache
 from app.core.utils.error_utils import DatabaseError
 
 @dataclass
@@ -33,7 +33,7 @@ class Quest:
     region_id: Optional[str] = None
     
     # Cache manager instance
-    _cache: CacheManager = field(default_factory=CacheManager)
+    _cache: Cache = field(default_factory=Cache)
     
     # Indexed fields for frequent queries
     _indexed_fields = {

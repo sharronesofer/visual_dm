@@ -1,6 +1,6 @@
 """Validation models for Item-related API requests."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, ClassVar
 from pydantic import BaseModel, Field, validator
 from enum import Enum
 from datetime import datetime
@@ -168,8 +168,8 @@ class ItemQueryParams(BaseModel, PaginationValidationMixin, SortValidationMixin,
     max_weight: Optional[float] = Field(None, ge=0)
     tags: Optional[List[str]] = None
     
-    valid_sort_fields = ['name', 'type', 'rarity', 'status', 'value', 'weight', 'quantity', 'created_at', 'updated_at']
-    valid_filters = {
+    valid_sort_fields: ClassVar = ['name', 'type', 'rarity', 'status', 'value', 'weight', 'quantity', 'created_at', 'updated_at']
+    valid_filters: ClassVar = {
         'type': ItemType,
         'rarity': ItemRarity,
         'status': ItemStatus,
@@ -182,21 +182,21 @@ class ItemQueryParams(BaseModel, PaginationValidationMixin, SortValidationMixin,
     }
     
     @validator('min_value', 'max_value')
-    def validate_value_range(cls, v, values, field):
+    def validate_value_range(cls, v):
         """Validate value range if both min and max are provided."""
         if v is not None:
-            min_value = values.get('min_value')
-            max_value = values.get('max_value')
+            min_value = cls.model_fields['min_value'].default
+            max_value = cls.model_fields['max_value'].default
             if min_value is not None and max_value is not None and min_value > max_value:
                 raise ValueError("min_value cannot be greater than max_value")
         return v
     
     @validator('min_weight', 'max_weight')
-    def validate_weight_range(cls, v, values, field):
+    def validate_weight_range(cls, v):
         """Validate weight range if both min and max are provided."""
         if v is not None:
-            min_weight = values.get('min_weight')
-            max_weight = values.get('max_weight')
+            min_weight = cls.model_fields['min_weight'].default
+            max_weight = cls.model_fields['max_weight'].default
             if min_weight is not None and max_weight is not None and min_weight > max_weight:
                 raise ValueError("min_weight cannot be greater than max_weight")
         return v

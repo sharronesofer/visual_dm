@@ -4,11 +4,11 @@ This includes range calculations, attack validation, and special effects.
 """
 
 from typing import List, Tuple, Dict, Any, Optional
-from app.core.models.combat import CombatParticipant, Combat
 from app.core.database import db
 
 class ReachWeaponHandler:
     def __init__(self, combat_id: int):
+        from app.core.models.combat import Combat
         self.combat = Combat.query.get(combat_id)
         if not self.combat:
             raise ValueError(f"Combat with id {combat_id} not found")
@@ -28,6 +28,7 @@ class ReachWeaponHandler:
         Returns:
             Tuple of (is_valid, reason_if_invalid)
         """
+        from app.core.models.combat import CombatParticipant
         attacker = CombatParticipant.query.get(attacker_id)
         target = CombatParticipant.query.get(target_id)
         
@@ -69,6 +70,7 @@ class ReachWeaponHandler:
         Returns:
             Dict of effect modifiers to apply to the attack
         """
+        from app.core.models.combat import CombatParticipant
         attacker = CombatParticipant.query.get(attacker_id)
         if not attacker:
             return {}
@@ -111,6 +113,7 @@ class ReachWeaponHandler:
         Returns:
             List of (q, r) coordinates that are threatened
         """
+        from app.core.models.combat import CombatParticipant
         participant = CombatParticipant.query.get(participant_id)
         if not participant:
             return []
@@ -133,7 +136,7 @@ class ReachWeaponHandler:
                         
         return threatened
 
-    def _get_attack_range(self, participant: CombatParticipant) -> int:
+    def _get_attack_range(self, participant) -> int:
         """Get the attack range for a participant's reach weapon."""
         base_range = 1  # Default melee range
         
@@ -154,7 +157,7 @@ class ReachWeaponHandler:
                 
         return base_range
 
-    def _has_minimum_range(self, participant: CombatParticipant) -> bool:
+    def _has_minimum_range(self, participant) -> bool:
         """Check if the participant's weapon has a minimum range requirement."""
         if not participant.status_effects:
             return False
@@ -167,7 +170,7 @@ class ReachWeaponHandler:
                 
         return False
 
-    def _get_reach_weapon_type(self, participant: CombatParticipant) -> Optional[str]:
+    def _get_reach_weapon_type(self, participant) -> Optional[str]:
         """Get the type of reach weapon a participant is using."""
         if not participant.status_effects:
             return None

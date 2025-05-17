@@ -1,6 +1,6 @@
 """Validation models for Faction-related API requests."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, ClassVar
 from pydantic import BaseModel, Field, validator
 from enum import Enum
 from datetime import datetime
@@ -107,12 +107,12 @@ class FactionCreateRequest(BaseModel):
     metadata: Optional[Dict] = Field(default_factory=dict)
     
     @validator('leader_id', 'headquarters_id', 'parent_faction_id')
-    def validate_entity_ids(cls, v, field):
+    def validate_entity_ids(cls, v):
         """Validate entity IDs if provided."""
         if v is not None:
             result = validate_id(v)
             if not result.is_valid:
-                raise ValueError(f"Invalid {field.name}: {result.errors[0]['error']}")
+                raise ValueError(f"Invalid {v}: {result.errors[0]['error']}")
         return v
     
     @validator('relationships')
@@ -164,12 +164,12 @@ class FactionUpdateRequest(BaseModel):
     metadata: Optional[Dict] = None
     
     @validator('leader_id', 'headquarters_id', 'parent_faction_id')
-    def validate_entity_ids(cls, v, field):
+    def validate_entity_ids(cls, v):
         """Validate entity IDs if provided."""
         if v is not None:
             result = validate_id(v)
             if not result.is_valid:
-                raise ValueError(f"Invalid {field.name}: {result.errors[0]['error']}")
+                raise ValueError(f"Invalid {v}: {result.errors[0]['error']}")
         return v
     
     @validator('relationships')
@@ -221,8 +221,8 @@ class FactionQueryParams(BaseModel, PaginationValidationMixin, SortValidationMix
     min_military_strength: Optional[int] = Field(None, ge=0, le=100)
     tags: Optional[List[str]] = None
     
-    valid_sort_fields = ['name', 'type', 'status', 'alignment', 'influence_radius', 'member_count', 'wealth_rating', 'military_strength', 'created_at', 'updated_at']
-    valid_filters = {
+    valid_sort_fields: ClassVar = ['name', 'type', 'status', 'alignment', 'influence_radius', 'member_count', 'wealth_rating', 'military_strength', 'created_at', 'updated_at']
+    valid_filters: ClassVar = {
         'type': FactionType,
         'status': FactionStatus,
         'alignment': FactionAlignment,

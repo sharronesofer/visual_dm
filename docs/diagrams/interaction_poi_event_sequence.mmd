@@ -1,0 +1,12 @@
+%% Mermaid sequence diagram: Event flow between Interaction System and POI Evolution System
+
+sequenceDiagram
+    participant IS as Interaction System
+    participant ES as EventBus
+    participant PS as POI Evolution System
+
+    IS->>ES: Emit interaction:completed
+    ES->>PS: Forward interaction event
+    PS->>ES: Emit poi:evolved
+    ES->>IS: Forward poi:evolved event
+    Note over IS,PS: Both systems update state based on events 

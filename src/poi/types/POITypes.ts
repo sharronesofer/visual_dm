@@ -14,7 +14,9 @@ export enum POIType {
   SETTLEMENT = 'SETTLEMENT',
   DUNGEON = 'DUNGEON',
   LANDMARK = 'LANDMARK',
-  RESOURCE = 'RESOURCE'
+  RESOURCE = 'RESOURCE',
+  EXPLORATION = 'EXPLORATION',
+  SOCIAL = 'SOCIAL'
 }
 
 /**
@@ -51,6 +53,32 @@ export enum POISubtype {
   QUARRY = 'QUARRY',
   LUMBER_CAMP = 'LUMBER_CAMP',
   HUNTING_GROUND = 'HUNTING_GROUND'
+}
+
+// Dungeon subtypes
+export enum DungeonSubtype {
+  CAVE = 'CAVE',
+  RUIN = 'RUIN',
+  TEMPLE = 'TEMPLE',
+  FORTRESS = 'FORTRESS',
+  CRYPT = 'CRYPT',
+  MINE = 'MINE'
+}
+
+// Exploration subtypes
+export enum ExplorationSubtype {
+  WILDERNESS = 'WILDERNESS',
+  LANDMARK = 'LANDMARK',
+  MOUNTAIN = 'MOUNTAIN',
+  GROVE = 'GROVE'
+}
+
+// Social subtypes
+export enum SocialSubtype {
+  VILLAGE = 'VILLAGE',
+  MARKET = 'MARKET',
+  GUILD = 'GUILD',
+  CASTLE = 'CASTLE'
 }
 
 /**

@@ -30,6 +30,7 @@ export class CharacterUIController {
     showTraits: true,
     showProgression: true
   };
+  private equipmentSwitching: boolean = false;
 
   constructor(containerId: string) {
     const element = document.getElementById(containerId);
@@ -145,8 +146,17 @@ export class CharacterUIController {
     // Equipment events with improved type checking
     this.equipmentManager.addListener((event: CharacterUIEvent) => {
       if (!this.currentCharacter) return;
-
       switch (event.type) {
+        case 'preSwitch': {
+          this.equipmentSwitching = true;
+          this.setEquipmentSlotsDisabled(true);
+          break;
+        }
+        case 'postSwitch': {
+          this.equipmentSwitching = false;
+          this.setEquipmentSlotsDisabled(false);
+          break;
+        }
         case 'equip': {
           const { item, slot } = event.data;
           if (this.isValidEquipmentSlot(slot)) {
@@ -160,7 +170,6 @@ export class CharacterUIController {
           }
           break;
         }
-
         case 'unequip': {
           const { slot } = event.data;
           if (this.isValidEquipmentSlot(slot)) {
@@ -364,5 +373,15 @@ export class CharacterUIController {
     this.inventoryPanel.dispose();
     this.skillTreeRenderer.dispose();
     this.container.innerHTML = '';
+  }
+
+  private setEquipmentSlotsDisabled(disabled: boolean): void {
+    const equipmentContainer = document.getElementById('character-equipment');
+    if (!equipmentContainer) return;
+    const slots = equipmentContainer.getElementsByClassName('equipment-slot');
+    Array.from(slots).forEach(slot => {
+      (slot as HTMLElement).style.pointerEvents = disabled ? 'none' : '';
+      (slot as HTMLElement).style.opacity = disabled ? '0.5' : '1';
+    });
   }
 } 

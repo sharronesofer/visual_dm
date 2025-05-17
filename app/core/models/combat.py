@@ -2,13 +2,15 @@
 Combat-related models and data structures.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union, ClassVar
 from dataclasses import dataclass, field
 from sqlalchemy import Integer, String, Float, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import db
 from app.core.models.base import BaseModel
-from app.hexmap.tactical_hex_grid import TacticalHexGrid
+from app.core.enums import DamageType
+from datetime import datetime
+import math
 
 """
 Consolidated Combat models.
@@ -22,7 +24,199 @@ from datetime import datetime
 from app.core.database import db
 from app.core.models.base import BaseModel
 from app.hexmap.tactical_hex_grid import TacticalHexGrid
-import math
+
+@dataclass
+class DamageComposition:
+    """
+    Represents a composition of multiple damage types and their respective amounts.
+    Example: {DamageType.FIRE: 10, DamageType.PHYSICAL: 5}
+    """
+    amounts: Dict[DamageType, float] = field(default_factory=dict)
+
+    def add(self, damage_type: DamageType, amount: float) -> None:
+        self.amounts[damage_type] = self.amounts.get(damage_type, 0) + amount
+
+    def total(self) -> float:
+        return sum(self.amounts.values())
+
+    def serialize(self) -> Dict[str, Any]:
+        return {dt.value: amt for dt, amt in self.amounts.items()}
+
+    @staticmethod
+    def deserialize(data: Dict[str, Any]) -> 'DamageComposition':
+        comp = DamageComposition()
+        for k, v in data.items():
+            comp.add(DamageType(k), v)
+        return comp
+
+    def __getitem__(self, damage_type: DamageType) -> float:
+        return self.amounts.get(damage_type, 0)
+
+    def __setitem__(self, damage_type: DamageType, amount: float) -> None:
+        self.amounts[damage_type] = amount
+
+    def __contains__(self, damage_type: DamageType) -> bool:
+        return damage_type in self.amounts
+
+    def items(self):
+        return self.amounts.items()
+
+    def copy(self) -> 'DamageComposition':
+        return DamageComposition(amounts=self.amounts.copy())
+
+    def combine(self, other: 'DamageComposition') -> 'DamageComposition':
+        result = self.copy()
+        for dt, amt in other.amounts.items():
+            result.add(dt, amt)
+        return result
+
+    def is_empty(self) -> bool:
+        return not self.amounts
+
+class DamageEffectivenessMatrix:
+    """
+    Stores the effectiveness multipliers for each (attacker_type, defender_type) pair.
+    Used to define type interactions (e.g., fire vs. ice = 2.0, fire vs. fire = 0.5).
+    Supports serialization, deserialization, versioning, and application to DamageComposition.
+    Designed for integration with designer tools and visual editors.
+    """
+    def __init__(self, matrix=None, version=1):
+        # matrix: Dict[DamageType, Dict[DamageType, float]]
+        self.matrix = matrix or {}
+        self.version = version
+
+    def set_effectiveness(self, attacker_type, defender_type, multiplier):
+        if attacker_type not in self.matrix:
+            self.matrix[attacker_type] = {}
+        self.matrix[attacker_type][defender_type] = multiplier
+
+    def get_effectiveness(self, attacker_type, defender_type):
+        return self.matrix.get(attacker_type, {}).get(defender_type, 1.0)
+
+    def serialize(self):
+        # Convert to a JSON-serializable dict (use .value for enums)
+        return {
+            'version': self.version,
+            'matrix': {
+                atk.value if hasattr(atk, 'value') else str(atk): {
+                    defn.value if hasattr(defn, 'value') else str(defn): mult
+                    for defn, mult in defn_map.items()
+                }
+                for atk, defn_map in self.matrix.items()
+            }
+        }
+
+    @classmethod
+    def deserialize(cls, data):
+        from app.core.enums import DamageType
+        version = data.get('version', 1)
+        matrix = {}
+        for atk, defn_map in data['matrix'].items():
+            atk_enum = DamageType(atk)
+            matrix[atk_enum] = {}
+            for defn, mult in defn_map.items():
+                defn_enum = DamageType(defn)
+                matrix[atk_enum][defn_enum] = mult
+        return cls(matrix=matrix, version=version)
+
+    def apply_to_composition(self, composition, defender_type):
+        # Returns a new DamageComposition with effectiveness multipliers applied
+        from app.core.models.combat import DamageComposition
+        result = DamageComposition()
+        for dt, amt in composition.amounts.items():
+            mult = self.get_effectiveness(dt, defender_type)
+            result.add(dt, amt * mult)
+        return result
+
+    def bump_version(self):
+        self.version += 1
+
+class ResistanceComponent:
+    """
+    Component for managing resistances and vulnerabilities for an entity.
+    Supports:
+    - Percentage-based resistance/vulnerability (e.g., 0.5 for 50% reduction, -0.2 for 20% vulnerability)
+    - Flat reduction (e.g., -10 for -10 damage taken)
+    - Permanent, temporary, and conditional resistances
+    - Stacking and runtime modification
+    """
+    def __init__(self):
+        # Structure: {damage_type: {"percent": [..], "flat": [..]}}
+        self._resistances = {}
+        self._vulnerabilities = {}
+        self._temporary = []  # List of (damage_type, kind, value, duration)
+
+    def add_resistance(self, damage_type: str, value: float, kind: str = "percent", duration: int = None):
+        """Add a resistance. kind: 'percent' or 'flat'. duration=None for permanent."""
+        if kind not in ("percent", "flat"):
+            raise ValueError("kind must be 'percent' or 'flat'")
+        if damage_type not in self._resistances:
+            self._resistances[damage_type] = {"percent": [], "flat": []}
+        self._resistances[damage_type][kind].append(value)
+        if duration:
+            self._temporary.append((damage_type, kind, value, duration))
+
+    def add_vulnerability(self, damage_type: str, value: float, kind: str = "percent", duration: int = None):
+        if kind not in ("percent", "flat"):
+            raise ValueError("kind must be 'percent' or 'flat'")
+        if damage_type not in self._vulnerabilities:
+            self._vulnerabilities[damage_type] = {"percent": [], "flat": []}
+        self._vulnerabilities[damage_type][kind].append(value)
+        if duration:
+            self._temporary.append((damage_type, kind, value, duration, True))
+
+    def remove_resistance(self, damage_type: str, value: float, kind: str = "percent"):
+        if damage_type in self._resistances and value in self._resistances[damage_type][kind]:
+            self._resistances[damage_type][kind].remove(value)
+
+    def remove_vulnerability(self, damage_type: str, value: float, kind: str = "percent"):
+        if damage_type in self._vulnerabilities and value in self._vulnerabilities[damage_type][kind]:
+            self._vulnerabilities[damage_type][kind].remove(value)
+
+    def tick(self):
+        """Reduce duration of temporary resistances, remove expired."""
+        still_active = []
+        for entry in self._temporary:
+            if len(entry) == 4:
+                damage_type, kind, value, duration = entry
+                is_vuln = False
+            else:
+                damage_type, kind, value, duration, is_vuln = entry
+            duration -= 1
+            if duration > 0:
+                still_active.append((damage_type, kind, value, duration) if not is_vuln else (damage_type, kind, value, duration, True))
+            else:
+                if is_vuln:
+                    self.remove_vulnerability(damage_type, value, kind)
+                else:
+                    self.remove_resistance(damage_type, value, kind)
+        self._temporary = still_active
+
+    def get_total_resistance(self, damage_type: str) -> float:
+        """Sum all percent resistances for a type (clamped 0-1)."""
+        vals = self._resistances.get(damage_type, {"percent": []})["percent"]
+        return max(0.0, min(1.0, sum(vals)))
+
+    def get_total_flat_resistance(self, damage_type: str) -> float:
+        vals = self._resistances.get(damage_type, {"flat": []})["flat"]
+        return sum(vals)
+
+    def get_total_vulnerability(self, damage_type: str) -> float:
+        vals = self._vulnerabilities.get(damage_type, {"percent": []})["percent"]
+        return max(0.0, sum(vals))
+
+    def get_total_flat_vulnerability(self, damage_type: str) -> float:
+        vals = self._vulnerabilities.get(damage_type, {"flat": []})["flat"]
+        return sum(vals)
+
+    def query(self, damage_type: str) -> Dict[str, float]:
+        """Return all modifiers for a given type."""
+        return {
+            "percent_resistance": self.get_total_resistance(damage_type),
+            "flat_resistance": self.get_total_flat_resistance(damage_type),
+            "percent_vulnerability": self.get_total_vulnerability(damage_type),
+            "flat_vulnerability": self.get_total_flat_vulnerability(damage_type),
+        }
 
 class CombatState(db.Model):
     """Model for tracking combat state."""
@@ -248,11 +442,33 @@ class CombatParticipant(db.Model):
         self.reaction_available = False
 
 class CombatEngine:
-    """Engine for handling combat logic."""
-    
-    def __init__(self, combat_state: CombatState):
+    """
+    Engine for handling combat logic.
+    All damage (attacks, spells, effects) is routed through the advanced DamageCalculator and event-driven pipeline.
+    To extend or modify damage logic, register new pipeline modifiers or update the DamageCalculator configuration.
+    Legacy direct damage logic is deprecated.
+    """
+    def __init__(self, combat_state: CombatState, status_system=None, battlefield=None, effectiveness_matrix=None):
         self.combat_state = combat_state
         self.participants = combat_state.participants
+        self.status_system = status_system or StatusEffectsSystem()
+        self.battlefield = battlefield or BattlefieldConditionsManager()
+        self.damage_calculator = DamageCalculator(
+            status_system=self.status_system,
+            battlefield=self.battlefield,
+            combat_stats_lookup=self._lookup_stats,
+            effectiveness_matrix=effectiveness_matrix
+        )
+
+    def _lookup_stats(self, participant_id):
+        # Find participant by ID and return their character/npc combat_stats
+        p = next((p for p in self.participants if p.id == participant_id), None)
+        if p:
+            if p.character and hasattr(p.character, 'combat_stats'):
+                return p.character.combat_stats
+            elif p.npc and hasattr(p.npc, 'combat_stats'):
+                return p.npc.combat_stats
+        return None
 
     def roll_initiative(self) -> None:
         """Roll initiative for all participants."""
@@ -271,6 +487,12 @@ class CombatEngine:
         if not current_actor:
             return {'error': 'No current actor'}
 
+        # --- Natural Language Action Handling ---
+        if action.get('type') == 'natural_language':
+            handler = CombatActionHandler(self.combat_state)
+            result = handler.process_action(action)
+            return result
+
         result = {
             'success': True,
             'actor_id': current_actor.id,
@@ -281,18 +503,60 @@ class CombatEngine:
         # Process action
         if action['type'] == 'attack':
             target = next(p for p in self.participants if p.id == action['target_id'])
-            damage = self._calculate_damage(current_actor, action)
-            target.take_damage(damage)
+            # Use new DamageCalculator for attack
+            comp = None
+            base_damage = action.get('damage', 0)
+            damage_type = action.get('damage_type', DamageType.PHYSICAL)
+            # Compose multi-type if bonus_damage present
+            bonus_damage = action.get('bonus_damage', None)
+            if bonus_damage:
+                from app.core.models.combat import DamageComposition
+                comp = DamageComposition()
+                comp.add(damage_type, base_damage)
+                for dt, amt in bonus_damage.items():
+                    comp.add(dt, amt)
+            else:
+                comp = base_damage
+            # Calculate damage using pipeline
+            roll = self.damage_calculator.calculate_damage(
+                attacker_id=current_actor.id,
+                target_id=target.id,
+                damage=comp,
+                damage_type=damage_type
+            )
+            target.take_damage(roll.total_damage)
             result['effects'].append({
                 'type': 'damage',
                 'target_id': target.id,
-                'amount': damage
+                'amount': roll.total_damage,
+                'composition': roll.composition.serialize() if hasattr(roll.composition, 'serialize') else roll.composition
             })
         elif action['type'] == 'spell':
             spell = self._get_spell(action['spell_id'])
             for effect in spell.effects:
-                effect_result = effect.apply(current_actor)
-                result['effects'].append(effect_result)
+                # If effect is damage, use pipeline
+                if hasattr(effect, 'damage') and hasattr(effect, 'damage_type'):
+                    target = current_actor  # Default to self if not specified
+                    if hasattr(effect, 'target_id'):
+                        target = next((p for p in self.participants if p.id == effect.target_id), current_actor)
+                    comp = effect.damage
+                    damage_type = effect.damage_type
+                    roll = self.damage_calculator.calculate_damage(
+                        attacker_id=current_actor.id,
+                        target_id=target.id,
+                        damage=comp,
+                        damage_type=damage_type
+                    )
+                    target.take_damage(roll.total_damage)
+                    result['effects'].append({
+                        'type': 'damage',
+                        'target_id': target.id,
+                        'amount': roll.total_damage,
+                        'composition': roll.composition.serialize() if hasattr(roll.composition, 'serialize') else roll.composition
+                    })
+                else:
+                    effect_result = effect.apply(current_actor)
+                    result['effects'].append(effect_result)
 
         # Advance turn
         self.combat_state.next_turn()
@@ -312,11 +576,23 @@ class CombatEngine:
             return (participant.npc.dexterity - 10) // 2
 
     def _calculate_damage(self, attacker: CombatParticipant, action: Dict) -> int:
-        """Calculate damage for an attack."""
+        # Deprecated: use DamageCalculator instead
         base_damage = action.get('damage', 0)
-        if self._roll_d20() == 20:  # Critical hit
-            base_damage *= 2
-        return base_damage
+        damage_type = action.get('damage_type', DamageType.PHYSICAL)
+        comp = base_damage
+        if 'bonus_damage' in action:
+            from app.core.models.combat import DamageComposition
+            comp = DamageComposition()
+            comp.add(damage_type, base_damage)
+            for dt, amt in action['bonus_damage'].items():
+                comp.add(dt, amt)
+        roll = self.damage_calculator.calculate_damage(
+            attacker_id=attacker.id,
+            target_id=action['target_id'],
+            damage=comp,
+            damage_type=damage_type
+        )
+        return roll.total_damage
 
     def _get_spell(self, spell_id: int) -> 'Spell':
         """Get a spell by ID."""
@@ -443,6 +719,10 @@ class CombatStats(BaseModel):
     critical_chance = Column(Float, default=0.05)
     critical_damage = Column(Float, default=1.5)
 
+    # Resistances and Vulnerabilities (per damage type, 0.0-1.0 for resist, 0.0+ for vuln)
+    resistances = Column(JSON, default=dict)  # e.g., {"fire": 0.5, "cold": 0.2}
+    vulnerabilities = Column(JSON, default=dict)  # e.g., {"fire": 0.5, "cold": 0.2}
+
     # Status
     is_in_combat = Column(Boolean, default=False)
     is_stunned = Column(Boolean, default=False)
@@ -454,6 +734,9 @@ class CombatStats(BaseModel):
     character = relationship("Character", back_populates="combat_stats")
     npc_id = Column(Integer, ForeignKey('npcs.id'), nullable=True)
     npc = relationship("NPC", back_populates="combat_stats", foreign_keys=[npc_id])
+
+    # New field
+    resistance_component: ClassVar[Optional[ResistanceComponent]] = None
 
     def heal(self, amount: int) -> int:
         """
@@ -511,6 +794,38 @@ class CombatStats(BaseModel):
         self.is_bleeding = False
         self.save()
 
+    def set_resistance(self, damage_type: str, value: float) -> None:
+        if self.resistance_component:
+            self.resistance_component.add_resistance(damage_type, value, kind="percent")
+        else:
+            if not self.resistances:
+                self.resistances = {}
+            self.resistances[damage_type] = value
+        self.save()
+
+    def get_resistance(self, damage_type: str) -> float:
+        if self.resistance_component:
+            return self.resistance_component.get_total_resistance(damage_type)
+        if not self.resistances:
+            return 0.0
+        return float(self.resistances.get(damage_type, 0.0))
+
+    def set_vulnerability(self, damage_type: str, value: float) -> None:
+        if self.resistance_component:
+            self.resistance_component.add_vulnerability(damage_type, value, kind="percent")
+        else:
+            if not self.vulnerabilities:
+                self.vulnerabilities = {}
+            self.vulnerabilities[damage_type] = value
+        self.save()
+
+    def get_vulnerability(self, damage_type: str) -> float:
+        if self.resistance_component:
+            return self.resistance_component.get_total_vulnerability(damage_type)
+        if not self.vulnerabilities:
+            return 0.0
+        return float(self.vulnerabilities.get(damage_type, 0.0))
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert combat stats to dictionary"""
         base_dict = super().to_dict()
@@ -538,6 +853,8 @@ class CombatStats(BaseModel):
             'is_in_combat': self.is_in_combat,
             'is_stunned': self.is_stunned,
             'is_poisoned': self.is_poisoned,
-            'is_bleeding': self.is_bleeding
+            'is_bleeding': self.is_bleeding,
+            'resistances': self.resistances,
+            'vulnerabilities': self.vulnerabilities
         }
         return {**base_dict, **combat_dict} 

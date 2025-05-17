@@ -10,25 +10,20 @@ from app.core.database import db
 from app.core.models.character import Character
 from app.core.models.user import User
 from app.core.models.party import Party
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.models.spell import Spell
 from app.core.models.inventory import InventoryItem
 from app.core.models.combat import CombatStats
 from app.core.models.save import SaveGame
-from app.core.models.social import SocialInteraction, CharacterRelationship
 from app.core.utils.error_utils import ValidationError, DatabaseError, NotFoundError
 from app.core.utils.pagination import Paginator
-from app.social.social_utils import (
-    process_social_interaction,
-    update_relationship,
-    get_relationship_status
-)
 from datetime import datetime, timedelta
 import random
 from flask import current_app
 from app.core.utils.cache import cached
 from app.core.utils.http_cache import cache_control, etag, last_modified
+from app.core.services.faction_service import FactionRelationshipService
 
 social_bp = Blueprint('social', __name__)
 
@@ -41,7 +36,7 @@ def interact():
     """Process a social interaction between characters."""
     try:
         data = request.get_json()
-        interaction = SocialInteraction(**data)
+        interaction = Interaction(**data)
         result = process_social_interaction(interaction)
         return jsonify(result), 200
     except ValidationError as e:
@@ -50,34 +45,36 @@ def interact():
         return jsonify({'error': str(e)}), 500
 
 @social_bp.route('/relationships', methods=['GET'])
-@cached(timeout=LIST_CACHE_TIMEOUT, key_prefix='relationships')
-@cache_control(max_age=300)  # 5 minutes
-@etag
 def get_relationships():
-    """Get paginated list of character relationships."""
+    """Get paginated list of relationships between any two entities."""
     try:
-        # Get pagination parameters
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 25, type=int)
-        
-        # Create query with eager loading
-        query = CharacterRelationship.query.options(
-            joinedload(CharacterRelationship.character),
-            joinedload(CharacterRelationship.related_character)
+        entity_id = request.args.get('entity_id', type=int)
+        entity_type = request.args.get('entity_type', type=str)
+        include_incoming = request.args.get('include_incoming', 'false').lower() == 'true'
+        relationship_type = request.args.get('relationship_type')
+        min_value = request.args.get('min_value', type=int)
+        query = FactionRelationshipService.get_entity_relationships(
+            entity_id=entity_id,
+            entity_type=entity_type,
+            relationship_type=relationship_type,
+            min_value=min_value,
+            include_incoming=include_incoming
         )
-        
-        # Apply filters if provided
-        if 'character_id' in request.args:
-            query = query.filter(CharacterRelationship.character_id == request.args.get('character_id', type=int))
-        if 'type' in request.args:
-            query = query.filter(CharacterRelationship.type == request.args.get('type'))
-        
-        # Create paginator and return response
-        paginator = Paginator(query, page, per_page)
-        return jsonify(paginator.get_response())
-        
+        # Paginate manually
+        total = len(query)
+        start = (page - 1) * per_page
+        end = start + per_page
+        results = [rel.to_dict() for rel in query[start:end]]
+        return jsonify({
+            'results': results,
+            'total': total,
+            'page': page,
+            'per_page': per_page
+        })
     except Exception as e:
-        raise DatabaseError(f"Error fetching relationships: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 @social_bp.route('/relationships/<int:relationship_id>', methods=['GET'])
 @cached(timeout=DETAIL_CACHE_TIMEOUT, key_prefix='relationship_detail')
@@ -104,39 +101,31 @@ def get_relationship(relationship_id: int):
         raise DatabaseError(f"Error fetching relationship {relationship_id}: {str(e)}")
 
 @social_bp.route('/interactions', methods=['GET'])
-@cached(timeout=LIST_CACHE_TIMEOUT, key_prefix='interactions')
-@cache_control(max_age=300)  # 5 minutes
-@etag
 def get_interactions():
-    """Get paginated list of social interactions."""
+    """Get paginated list of interactions between any two entities."""
     try:
-        # Get pagination parameters
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 25, type=int)
-        
-        # Create query with eager loading
-        query = SocialInteraction.query.options(
-            joinedload(SocialInteraction.relationship),
-            joinedload(SocialInteraction.initiator),
-            joinedload(SocialInteraction.target)
-        )
-        
-        # Apply filters if provided
-        if 'character_id' in request.args:
-            char_id = request.args.get('character_id', type=int)
-            query = query.filter(
-                (SocialInteraction.initiator_id == char_id) |
-                (SocialInteraction.target_id == char_id)
-            )
-        if 'type' in request.args:
-            query = query.filter(SocialInteraction.type == request.args.get('type'))
-        
-        # Create paginator and return response
-        paginator = Paginator(query, page, per_page)
-        return jsonify(paginator.get_response())
-        
+        entity1_id = request.args.get('entity1_id', type=int)
+        entity1_type = request.args.get('entity1_type', type=str)
+        entity2_id = request.args.get('entity2_id', type=int)
+        entity2_type = request.args.get('entity2_type', type=str)
+        from app.social.models.social import Interaction
+        query = Interaction.query
+        if entity1_id and entity1_type:
+            query = query.filter_by(entity1_id=entity1_id, entity1_type=entity1_type)
+        if entity2_id and entity2_type:
+            query = query.filter_by(entity2_id=entity2_id, entity2_type=entity2_type)
+        total = query.count()
+        results = [i.to_dict() for i in query.offset((page-1)*per_page).limit(per_page)]
+        return jsonify({
+            'results': results,
+            'total': total,
+            'page': page,
+            'per_page': per_page
+        })
     except Exception as e:
-        raise DatabaseError(f"Error fetching interactions: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 @social_bp.route('/interactions/<int:interaction_id>', methods=['GET'])
 @cached(timeout=DETAIL_CACHE_TIMEOUT, key_prefix='interaction_detail')
@@ -146,10 +135,10 @@ def get_interactions():
 def get_interaction(interaction_id: int):
     """Get detailed interaction information."""
     try:
-        interaction = SocialInteraction.query.options(
-            joinedload(SocialInteraction.relationship),
-            joinedload(SocialInteraction.initiator),
-            joinedload(SocialInteraction.target)
+        interaction = Interaction.query.options(
+            joinedload(Interaction.relationship),
+            joinedload(Interaction.initiator),
+            joinedload(Interaction.target)
         ).get(interaction_id)
         
         if not interaction:
@@ -164,81 +153,54 @@ def get_interaction(interaction_id: int):
 
 @social_bp.route('/relationships', methods=['POST'])
 def create_relationship():
-    """Create a new character relationship."""
+    """Create a new relationship between any two entities."""
     try:
         data = request.get_json()
-        
-        # Validate required fields
-        required_fields = ['character_id', 'related_character_id', 'type']
+        required_fields = ['entity1_id', 'entity1_type', 'entity2_id', 'entity2_type']
         for field in required_fields:
             if field not in data:
-                raise ValidationError(f"Missing required field: {field}")
-        
-        # Create relationship
-        relationship = CharacterRelationship(
-            character_id=data['character_id'],
-            related_character_id=data['related_character_id'],
-            type=data['type'],
-            status=data.get('status', 'active')
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        rel = FactionRelationshipService.set_relationship(
+            entity1_id=data['entity1_id'],
+            entity1_type=data['entity1_type'],
+            entity2_id=data['entity2_id'],
+            entity2_type=data['entity2_type'],
+            relationship_type=data.get('relationship_type'),
+            relationship_value=data.get('relationship_value', 0),
+            metadata=data.get('metadata', {})
         )
-        
-        db.session.add(relationship)
-        db.session.commit()
-        
-        # Clear relationship list cache when new relationship is added
-        cache = current_app.extensions.get('redis_cache')
-        if cache:
-            cache.clear_pattern('cache:relationships:*')
-        
-        return jsonify(relationship.to_dict()), 201
-        
-    except ValidationError as e:
-        raise e
+        return jsonify(rel.to_dict()), 201
     except Exception as e:
-        db.session.rollback()
-        raise DatabaseError(f"Error creating relationship: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 @social_bp.route('/interactions', methods=['POST'])
 def create_interaction():
-    """Create a new social interaction."""
+    """Create a new interaction between any two entities."""
     try:
         data = request.get_json()
-        
-        # Validate required fields
-        required_fields = ['initiator_id', 'target_id', 'type', 'relationship_id']
+        required_fields = ['entity1_id', 'entity1_type', 'entity2_id', 'entity2_type', 'interaction_type']
         for field in required_fields:
             if field not in data:
-                raise ValidationError(f"Missing required field: {field}")
-        
-        # Create interaction
-        interaction = SocialInteraction(
-            initiator_id=data['initiator_id'],
-            target_id=data['target_id'],
-            type=data['type'],
-            relationship_id=data['relationship_id'],
-            details=data.get('details', {})
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        from app.social.models.social import Interaction, EntityType
+        interaction = Interaction(
+            entity1_id=data['entity1_id'],
+            entity1_type=EntityType(data['entity1_type']),
+            entity2_id=data['entity2_id'],
+            entity2_type=EntityType(data['entity2_type']),
+            interaction_type=data['interaction_type'],
+            outcome=data.get('outcome'),
+            impact=data.get('impact')
         )
-        
         db.session.add(interaction)
         db.session.commit()
-        
-        # Clear interaction list cache and relationship detail cache
-        cache = current_app.extensions.get('redis_cache')
-        if cache:
-            cache.clear_pattern('cache:interactions:*')
-            cache.clear_pattern(f'cache:relationship_detail:*{interaction.relationship_id}*')
-        
         return jsonify(interaction.to_dict()), 201
-        
-    except ValidationError as e:
-        raise e
     except Exception as e:
-        db.session.rollback()
-        raise DatabaseError(f"Error creating interaction: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 @social_bp.route('/relationships/<int:relationship_id>', methods=['PUT'])
 def update_relationship(relationship_id: int):
-    """Update relationship information."""
+    """Update relationship information by ID."""
     try:
         relationship = CharacterRelationship.query.get(relationship_id)
         if not relationship:
@@ -247,7 +209,7 @@ def update_relationship(relationship_id: int):
         data = request.get_json()
         
         # Update fields
-        for field in ['type', 'status']:
+        for field in ['relationship_type', 'relationship_value', 'metadata']:
             if field in data:
                 setattr(relationship, field, data[field])
         
@@ -269,16 +231,16 @@ def update_relationship(relationship_id: int):
 
 @social_bp.route('/interactions/<int:interaction_id>', methods=['PUT'])
 def update_interaction(interaction_id: int):
-    """Update interaction information."""
+    """Update interaction information by ID."""
     try:
-        interaction = SocialInteraction.query.get(interaction_id)
+        interaction = Interaction.query.get(interaction_id)
         if not interaction:
             raise NotFoundError(f"Interaction {interaction_id} not found")
             
         data = request.get_json()
         
         # Update fields
-        for field in ['type', 'details']:
+        for field in ['interaction_type', 'outcome', 'impact']:
             if field in data:
                 setattr(interaction, field, data[field])
         
@@ -301,7 +263,7 @@ def update_interaction(interaction_id: int):
 
 @social_bp.route('/relationships/<int:relationship_id>', methods=['DELETE'])
 def delete_relationship(relationship_id: int):
-    """Delete a relationship."""
+    """Delete a relationship by ID."""
     try:
         relationship = CharacterRelationship.query.get(relationship_id)
         if not relationship:
@@ -328,9 +290,9 @@ def delete_relationship(relationship_id: int):
 
 @social_bp.route('/interactions/<int:interaction_id>', methods=['DELETE'])
 def delete_interaction(interaction_id: int):
-    """Delete an interaction."""
+    """Delete an interaction by ID."""
     try:
-        interaction = SocialInteraction.query.get(interaction_id)
+        interaction = Interaction.query.get(interaction_id)
         if not interaction:
             raise NotFoundError(f"Interaction {interaction_id} not found")
             

@@ -9,8 +9,11 @@ import {
   Transaction
 } from './EconomicTypes';
 import { MarketSystem } from './MarketSystem';
-import { NPCData } from '../../types/npc/npc';
+import { NPCData } from '../../core/interfaces/types/npc/npc';
 import { SpatialGrid } from '../../utils/SpatialGrid';
+import { EventBus } from '../../core/interfaces/types/events';
+import { ReputationAuditLogger } from '../reputation/ReputationAuditLogger';
+import { EconomicAgentResourceManagementSystem } from './EconomicAgentResourceManagementSystem';
 
 export class EconomicAgentSystem {
   private agents: Map<string, EconomicAgent>;
@@ -19,13 +22,24 @@ export class EconomicAgentSystem {
   private readonly TRADE_SEARCH_RADIUS = 50;
   private readonly PRODUCTION_CHECK_INTERVAL = 5000; // 5 seconds
   private readonly TRADE_CHECK_INTERVAL = 10000; // 10 seconds
+  private resourceSystem: EconomicAgentResourceManagementSystem;
 
   constructor(marketSystem: MarketSystem, spatialGrid: SpatialGrid) {
     this.agents = new Map();
     this.marketSystem = marketSystem;
     this.spatialGrid = spatialGrid;
+    this.resourceSystem = new EconomicAgentResourceManagementSystem();
     this.startProductionLoop();
     this.startTradingLoop();
+
+    // Subscribe to POI evolution events for Economy integration
+    // TODO: Integrate with POI evolution events if/when supported by EventBus/SceneEventTypes
+    // EventBus.getInstance().on('poi:evolved', ({ poiId, poi, trigger, changes, version }) => {
+    //   // Example: Log the event
+    //   console.log(`[Economy Integration] POI evolved: ${poiId}, trigger: ${trigger}, changes:`, changes);
+    //   // TODO: Update market data, resource generation, or agent roles based on evolved POI state
+    //   // For example, if a resource POI increases output, adjust market supply
+    // });
   }
 
   /**
@@ -106,16 +120,16 @@ export class EconomicAgentSystem {
   /**
    * Execute a trade between two agents
    */
-  public executeTrade(
+  public async executeTrade(
     buyerId: string,
     offerId: string,
     quantity: number,
     marketId?: string
-  ): boolean {
+  ): Promise<boolean> {
     const buyer = this.agents.get(buyerId);
     if (!buyer) return false;
 
-    const transaction = this.marketSystem.executeTrade(
+    const transaction = await this.marketSystem.executeTrade(
       offerId,
       buyerId,
       quantity,
@@ -184,8 +198,17 @@ export class EconomicAgentSystem {
   private updateReputation(agentId: string, changeAmount: number): void {
     const agent = this.agents.get(agentId);
     if (!agent) return;
-
+    const oldReputation = agent.reputation;
     agent.reputation = Math.max(0, Math.min(100, agent.reputation + changeAmount));
+    // Audit log
+    ReputationAuditLogger.log({
+      timestamp: new Date().toISOString(),
+      sourceSystem: 'EconomicAgentSystem',
+      targetEntity: agentId,
+      valueChange: agent.reputation - oldReputation,
+      context: `old: ${oldReputation}, new: ${agent.reputation}, delta: ${changeAmount}`,
+      callingSystem: 'EconomicAgentSystem.updateReputation'
+    });
   }
 
   /**
@@ -272,20 +295,9 @@ export class EconomicAgentSystem {
   }
 
   /**
-   * Start the trading behavior loop
-   */
-  private startTradingLoop(): void {
-    setInterval(() => {
-      for (const agent of this.agents.values()) {
-        this.checkTrading(agent);
-      }
-    }, this.TRADE_CHECK_INTERVAL);
-  }
-
-  /**
    * Check and update trading behavior for an agent
    */
-  private checkTrading(agent: EconomicAgent): void {
+  private async checkTrading(agent: EconomicAgent): Promise<void> {
     if (!agent.role.tradingPreferences) return;
 
     const { preferredResources, preferredProducts, priceMarkup } = agent.role.tradingPreferences;
@@ -319,15 +331,26 @@ export class EconomicAgentSystem {
       if (currentQuantity < 10) { // Maintain minimum stock
         const basePrice = this.getBasePrice(itemType);
         const offers = this.findBestOffers(agent.id, itemType, basePrice * 1.5);
-        
+
         for (const offer of offers) {
           if (agent.currency >= offer.pricePerUnit * offer.quantity) {
-            this.executeTrade(agent.id, offer.id, offer.quantity);
+            await this.executeTrade(agent.id, offer.id, offer.quantity);
             break;
           }
         }
       }
     }
+  }
+
+  /**
+   * Start the trading behavior loop
+   */
+  private startTradingLoop(): void {
+    setInterval(() => {
+      for (const agent of this.agents.values()) {
+        this.checkTrading(agent);
+      }
+    }, this.TRADE_CHECK_INTERVAL);
   }
 
   /**
@@ -364,4 +387,29 @@ export class EconomicAgentSystem {
       };
     }
   }
+
+  /**
+   * Allocate resources to an agent (stub)
+   */
+  public allocateResourceToAgent(agentId: string, resourceId: string, quantity: number): boolean {
+    // TODO: Implement allocation logic using resourceSystem
+    return this.resourceSystem.reserveResource(agentId, resourceId, quantity);
+  }
+
+  /**
+   * Log resource consumption for an agent (stub)
+   */
+  public logAgentResourceConsumption(agentId: string, resourceId: string, quantity: number): void {
+    this.resourceSystem.logConsumption(agentId, resourceId, quantity);
+  }
+
+  /**
+   * Get agent's resource consumption history (stub)
+   */
+  public getAgentResourceConsumption(agentId: string, resourceId: string) {
+    // Filter consumption log for this agent
+    return this.resourceSystem.getConsumption(resourceId).filter(c => c.agentId === agentId);
+  }
+
+  // TODO: Add more integration points for resource efficiency, scarcity response, and scenario-based distribution
 } 

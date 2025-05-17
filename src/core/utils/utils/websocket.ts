@@ -13,6 +13,29 @@ interface WebSocketOptions {
   onError?: (error: Error) => void;
 }
 
+// --- Event Replay and State Resynchronization Logic ---
+
+const LAST_EVENT_ID_KEY = 'last_event_id';
+const LAST_EVENT_TIMESTAMP_KEY = 'last_event_timestamp';
+const USER_ID_KEY = 'user_id'; // Integration point: set this after login/auth
+
+function getLastEventId(): number | null {
+  const val = localStorage.getItem(LAST_EVENT_ID_KEY);
+  return val ? parseInt(val, 10) : null;
+}
+function setLastEventId(id: number) {
+  localStorage.setItem(LAST_EVENT_ID_KEY, id.toString());
+}
+function getLastEventTimestamp(): string | null {
+  return localStorage.getItem(LAST_EVENT_TIMESTAMP_KEY);
+}
+function setLastEventTimestamp(ts: string) {
+  localStorage.setItem(LAST_EVENT_TIMESTAMP_KEY, ts);
+}
+function getUserId(): string | null {
+  return localStorage.getItem(USER_ID_KEY);
+}
+
 export class WebSocketClient {
   private ws: WebSocket | null = null;
   private reconnectAttempts = 0;
@@ -24,10 +47,10 @@ export class WebSocketClient {
     autoReconnect: true,
     maxReconnectAttempts: 5,
     reconnectDelay: 1000,
-    onMessage: () => {},
-    onConnect: () => {},
-    onDisconnect: () => {},
-    onError: () => {},
+    onMessage: () => { },
+    onConnect: () => { },
+    onDisconnect: () => { },
+    onError: () => { },
   };
 
   constructor(options: WebSocketOptions = {}) {
@@ -58,6 +81,17 @@ export class WebSocketClient {
       logger.info('WebSocket connected');
       this.reconnectAttempts = 0;
       this.options.onConnect();
+      // --- On reconnect, send replay request ---
+      const user_id = getUserId();
+      const last_event_id = getLastEventId();
+      const last_seen = getLastEventTimestamp();
+      if (user_id) {
+        this.send('reconnect', {
+          user_id,
+          last_event_id,
+          last_seen,
+        });
+      }
     };
 
     this.ws.onclose = () => {
@@ -67,7 +101,7 @@ export class WebSocketClient {
     };
 
     this.ws.onerror = event => {
-      logger.error('WebSocket error:', event);
+      logger.error('WebSocket error');
       this.handleError(new Error('WebSocket error'));
     };
 
@@ -85,6 +119,27 @@ export class WebSocketClient {
    * Handle incoming messages
    */
   private handleMessage(message: IWebSocketMessage): void {
+    // --- Handle replay and state resync messages ---
+    if (message.type === 'initial_state') {
+      // Integration point: apply snapshot to local state
+      // Example: EventBus.getInstance().applySnapshot(message.payload)
+      setLastEventTimestamp(message.payload.timestamp || new Date().toISOString());
+      setLastEventId(0); // Reset event ID if needed
+      logger.info('Applied initial state snapshot from server');
+      return;
+    }
+    if (message.type === 'event') {
+      // Integration point: apply event to local state
+      // Example: EventBus.getInstance().emit(message.payload)
+      if (message.payload.event_id) {
+        setLastEventId(message.payload.event_id);
+      }
+      if (message.payload.timestamp) {
+        setLastEventTimestamp(message.payload.timestamp);
+      }
+      logger.info('Applied replayed event from server', message.payload);
+      return;
+    }
     // Call the general message handler
     this.options.onMessage(message);
 

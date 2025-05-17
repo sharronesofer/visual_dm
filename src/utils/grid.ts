@@ -31,10 +31,10 @@ export class GridManager {
     if (!this.isValidPosition(position)) {
       return;
     }
-    
+
     const cell = this.grid.cells[position.y][position.x];
     cell.cellType = type;
-    
+
     // Update walkable status based on cell type
     cell.walkable = type !== CellType.WALL && type !== CellType.BLOCKED;
   }
@@ -48,7 +48,7 @@ export class GridManager {
 
   public isValidPosition(position: GridPosition): boolean {
     return position.x >= 0 && position.x < this.grid.dimensions.width &&
-           position.y >= 0 && position.y < this.grid.dimensions.height;
+      position.y >= 0 && position.y < this.grid.dimensions.height;
   }
 
   public getWidth(): number {
@@ -73,7 +73,7 @@ export class GridManager {
   public toSerializedData(): any {
     return {
       dimensions: this.grid.dimensions,
-      cells: this.grid.cells.map(row => 
+      cells: this.grid.cells.map(row =>
         row.map(cell => ({
           cellType: cell.cellType,
           isOccupied: cell.isOccupied,
@@ -93,5 +93,21 @@ export class GridManager {
       }))
     );
     return manager;
+  }
+
+  // Placeholder: should be replaced with actual lookup logic or dependency injection
+  public getBuildingById(buildingId: string): any /* Building */ {
+    // TODO: Implement actual building lookup
+    return null;
+  }
+
+  public getRoomById(roomId: string): any /* Room */ {
+    // TODO: Implement actual room lookup
+    return null;
+  }
+
+  public getDoorById(doorId: string): any /* Door */ {
+    // TODO: Implement actual door lookup
+    return null;
   }
 } 

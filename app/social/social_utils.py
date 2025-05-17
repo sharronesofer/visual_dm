@@ -5,197 +5,89 @@ Social interaction and relationship utility functions.
 from typing import Dict, List, Optional, Union, Any
 import random
 from app.rules.calculation_utils import calculate_save_dc
-from app.social.social_models import SocialInteraction, CharacterRelationship
 from app.core.database import db
 from app.core.utils.error_utils import ValidationError, NotFoundError
+from app.social.models.social import Reputation, EntityType
+from sqlalchemy.orm.exc import NoResultFound
+from datetime import datetime
+from app.core.utils.gpt.client import GPTClient
 
-def update_relationship(relationship: CharacterRelationship) -> Dict[str, Any]:
-    """Update a relationship between characters."""
-    try:
-        db.session.add(relationship)
-        db.session.commit()
-        return {
-            'success': True,
-            'relationship_id': relationship.id,
-            'status': get_relationship_status(relationship)
-        }
-    except Exception as e:
-        db.session.rollback()
-        raise ValidationError(f"Error updating relationship: {str(e)}")
+def get_reputation_between_entities(source_id: int, source_type: str, target_id: int, target_type: str):
+    """Fetch the reputation record between two entities."""
+    return Reputation.query.filter_by(
+        source_entity_id=source_id,
+        source_entity_type=EntityType(source_type),
+        target_entity_id=target_id,
+        target_entity_type=EntityType(target_type)
+    ).first()
 
-def get_relationship_status(relationship: CharacterRelationship) -> Dict[str, Any]:
-    """Get the current status of a relationship."""
-    return {
-        'relationship_type': relationship.relationship_type,
-        'trust_level': relationship.trust_level,
-        'respect_level': relationship.respect_level
+def get_all_reputations_for_entity(entity_id: int, entity_type: str, as_source: bool = True):
+    """Fetch all reputation records where the entity is source or target."""
+    if as_source:
+        return Reputation.query.filter_by(
+            source_entity_id=entity_id,
+            source_entity_type=EntityType(entity_type)
+        ).all()
+    else:
+        return Reputation.query.filter_by(
+            target_entity_id=entity_id,
+            target_entity_type=EntityType(entity_type)
+        ).all()
+
+def summarize_reputation_history(source_id: int, source_type: str, target_id: int, target_type: str, as_dict: bool = False):
+    """Summarize the reputation history between two entities."""
+    rep = get_reputation_between_entities(source_id, source_type, target_id, target_type)
+    if not rep:
+        return {} if as_dict else "No reputation history."
+    summary_dict = {
+        'value': rep.value,
+        'strength': rep.strength,
+        'last_updated': rep.last_updated,
+        'context': rep.context
     }
+    if as_dict:
+        return summary_dict
+    return f"Reputation value: {rep.value}, strength: {rep.strength}, last updated: {rep.last_updated}, context: {rep.context}"
 
-def process_social_interaction(interaction: SocialInteraction) -> Dict[str, Any]:
-    """Process a social interaction between characters."""
+def gpt_summarize_reputation(source_id: int, source_type: str, target_id: int, target_type: str):
+    """Generate a GPT-based summary of reputation between two entities, using strength-based intensifiers."""
+    rep = get_reputation_between_entities(source_id, source_type, target_id, target_type)
+    if not rep:
+        return "No reputation history."
+
+    # Choose intensifier based on strength
+    strength = rep.strength or 0
+    if strength < 20:
+        intensifier = "is rumored to be"
+        confidence = "uncertain"
+    elif strength < 60:
+        intensifier = "is known to be"
+        confidence = "moderate"
+    else:
+        intensifier = "is infamous for" if (rep.value and rep.value < 0) else "is renowned for"
+        confidence = "established"
+
+    # Compose prompt
+    system_prompt = (
+        "You are a fantasy world narrator. Summarize the reputation between two entities for a game master or player. "
+        "Use immersive, in-universe language. Adjust the confidence and detail of your summary based on the 'strength' value. "
+        "If strength is low, use uncertain/rumor language. If high, be confident and specific."
+    )
+    user_prompt = (
+        f"Source Entity: {source_type} (ID: {source_id})\n"
+        f"Target Entity: {target_type} (ID: {target_id})\n"
+        f"Reputation Value: {rep.value}\n"
+        f"Rank: {rep.rank}\n"
+        f"Strength: {rep.strength} ({confidence})\n"
+        f"Last Updated: {rep.last_updated}\n"
+        f"Change Source: {rep.change_source}\n"
+        f"Context: {rep.context or 'N/A'}\n"
+        f"Summary Template: The target {intensifier} ... (fill in details based on above)."
+    )
     try:
-        db.session.add(interaction)
-        db.session.commit()
-        
-        # Update or create relationship
-        relationship = CharacterRelationship.query.filter_by(
-            character_id=interaction.character_id,
-            target_id=interaction.target_id
-        ).first()
-        
-        if not relationship:
-            relationship = CharacterRelationship(
-                character_id=interaction.character_id,
-                target_id=interaction.target_id,
-                relationship_type='neutral'
-            )
-            db.session.add(relationship)
-        
-        # Update relationship based on interaction
-        update_relationship_from_interaction(relationship, interaction)
-        db.session.commit()
-        
-        return {
-            'success': True,
-            'interaction_id': interaction.id,
-            'relationship_status': get_relationship_status(relationship)
-        }
+        gpt = GPTClient()
+        summary = gpt.call(system_prompt, user_prompt, max_tokens=120)
+        return summary
     except Exception as e:
-        db.session.rollback()
-        raise ValidationError(f"Error processing interaction: {str(e)}")
-
-def update_relationship_from_interaction(relationship: CharacterRelationship, interaction: SocialInteraction) -> None:
-    """Update relationship metrics based on an interaction."""
-    # Define interaction type effects
-    interaction_effects = {
-        'greeting': {'trust': 1, 'respect': 0},
-        'help': {'trust': 2, 'respect': 1},
-        'trade': {'trust': 1, 'respect': 1},
-        'quest': {'trust': 0, 'respect': 2},
-        'hostile': {'trust': -2, 'respect': -1}
-    }
-    
-    if interaction.interaction_type in interaction_effects:
-        effects = interaction_effects[interaction.interaction_type]
-        relationship.trust_level = max(-100, min(100, relationship.trust_level + effects['trust']))
-        relationship.respect_level = max(-100, min(100, relationship.respect_level + effects['respect']))
-
-class SocialInteraction:
-    def __init__(self, npc_id: str, relationship_status: str = "neutral"):
-        self.npc_id = npc_id
-        self.relationship_status = relationship_status  # "ally", "neutral", "enemy"
-        self.base_dc = 10
-        self.modifiers = {
-            "relationship": {
-                "ally": -5,
-                "neutral": 0,
-                "enemy": 5
-            },
-            "request_difficulty": {
-                "very_easy": -2,
-                "easy": -1,
-                "moderate": 0,
-                "hard": 2,
-                "very_hard": 5
-            },
-            "circumstances": {
-                "favorable": -2,
-                "neutral": 0,
-                "unfavorable": 2
-            },
-            "evidence_leverage": {
-                "strong": -2,
-                "moderate": -1,
-                "none": 0,
-                "against": 2
-            }
-        }
-
-    def calculate_dc(self, 
-                    request_difficulty: str,
-                    circumstances: str,
-                    evidence_leverage: str) -> int:
-        """Calculate the final DC for a social interaction."""
-        dc = self.base_dc
-        dc += self.modifiers["relationship"][self.relationship_status]
-        dc += self.modifiers["request_difficulty"][request_difficulty]
-        dc += self.modifiers["circumstances"][circumstances]
-        dc += self.modifiers["evidence_leverage"][evidence_leverage]
-        return max(5, min(30, dc))  # Clamp between 5 and 30
-
-    def perform_social_check(self,
-                           character: Dict,
-                           skill: str,
-                           dc: int,
-                           advantage: bool = False,
-                           disadvantage: bool = False) -> Dict:
-        """Perform a social skill check with optional advantage/disadvantage."""
-        # Get character's relevant ability score
-        ability = "CHA"  # Default for social skills
-        ability_score = character.get(ability, 10)
-        
-        # Calculate modifier
-        modifier = (ability_score - 10) // 2
-        
-        # Add proficiency bonus if character has the skill
-        if skill.lower() in [s.lower() for s in character.get("skills", [])]:
-            modifier += 2
-            
-        # Roll the check
-        roll1 = random.randint(1, 20)
-        roll2 = random.randint(1, 20) if (advantage or disadvantage) else None
-        
-        if advantage:
-            roll = max(roll1, roll2)
-        elif disadvantage:
-            roll = min(roll1, roll2)
-        else:
-            roll = roll1
-            
-        total = roll + modifier
-        success = total >= dc
-        
-        return {
-            "skill": skill,
-            "roll": roll,
-            "roll2": roll2 if roll2 else None,
-            "modifier": modifier,
-            "total": total,
-            "dc": dc,
-            "success": success,
-            "margin": total - dc
-        }
-
-    def get_interaction_result(self,
-                             character: Dict,
-                             skill: str,
-                             request_difficulty: str,
-                             circumstances: str,
-                             evidence_leverage: str,
-                             advantage: bool = False,
-                             disadvantage: bool = False) -> Dict:
-        """Get the complete result of a social interaction."""
-        dc = self.calculate_dc(request_difficulty, circumstances, evidence_leverage)
-        check_result = self.perform_social_check(
-            character, skill, dc, advantage, disadvantage
-        )
-        
-        # Determine degree of success/failure
-        margin = check_result["margin"]
-        if check_result["success"]:
-            if margin >= 10:
-                degree = "critical_success"
-            elif margin >= 5:
-                degree = "great_success"
-            else:
-                degree = "success"
-        else:
-            if margin <= -10:
-                degree = "critical_failure"
-            elif margin <= -5:
-                degree = "great_failure"
-            else:
-                degree = "failure"
-                
-        check_result["degree"] = degree
-        return check_result 
+        # Fallback to basic summary
+        return f"[GPT error: {e}] Reputation value: {rep.value}, strength: {rep.strength}, last updated: {rep.last_updated}, context: {rep.context}" 

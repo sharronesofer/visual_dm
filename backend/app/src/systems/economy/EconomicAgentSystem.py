@@ -1,303 +1,225 @@
 from typing import Any, List
+from .RiskAssessor import RiskAssessor, RiskToleranceProfile
+from .OpportunityEvaluator import OpportunityEvaluator
+from .GoalManager import GoalManager, Goal
+from .EconomicTypes import EconomicAgent, EconomicRole, ResourceType, ProductType, ProductionRecipe, TradeOffer, Transaction
 
+class EconomicAgentSystem:
+    def __init__(self, market_system, spatial_grid):
+        self.agents = {}
+        self.market_system = market_system
+        self.spatial_grid = spatial_grid
+        self.TRADE_SEARCH_RADIUS = 50
+        self.PRODUCTION_CHECK_INTERVAL = 5000
+        self.TRADE_CHECK_INTERVAL = 10000
+        self.goal_managers = {}  # agent_id -> GoalManager
+        # Optionally: start production/trading loops if needed
 
-  EconomicAgent,
-  EconomicRole,
-  ResourceType,
-  ProductType,
-  ProductionRecipe,
-  TradeOffer,
-  Transaction
-} from './EconomicTypes'
-class EconomicAgentSystem {
-  private agents: Map<string, EconomicAgent>
-  private marketSystem: MarketSystem
-  private spatialGrid: SpatialGrid
-  private readonly TRADE_SEARCH_RADIUS = 50
-  private readonly PRODUCTION_CHECK_INTERVAL = 5000 
-  private readonly TRADE_CHECK_INTERVAL = 10000 
-  constructor(marketSystem: MarketSystem, spatialGrid: SpatialGrid) {
-    this.agents = new Map()
-    this.marketSystem = marketSystem
-    this.spatialGrid = spatialGrid
-    this.startProductionLoop()
-    this.startTradingLoop()
-  }
-  /**
-   * Initialize a new economic agent for an NPC
-   */
-  public initializeAgent(npc: NPCData, role: EconomicRole): void {
-    const agent: EconomicAgent = {
-      id: npc.id,
-      role,
-      inventory: new Map(),
-      currency: 1000, 
-      reputation: 50, 
-      activeOffers: new Set(),
-      productionQueue: [],
-      lastTransaction: 0
-    }
-    this.agents.set(agent.id, agent)
-  }
-  /**
-   * Start production for an agent if they have available recipes
-   */
-  public startProduction(agentId: str, recipeId: str): bool {
-    const agent = this.agents.get(agentId)
-    if (!agent || !agent.role.productionRecipes) return false
-    const recipe = agent.role.productionRecipes.find(r => r.output.type === recipeId)
-    if (!recipe) return false
-    if (!this.hasRequiredResources(agent, recipe)) return false
-    this.consumeResources(agent, recipe)
-    agent.productionQueue.push({
-      recipeId,
-      startedAt: Date.now(),
-      completesAt: Date.now() + recipe.productionTime,
-      inputs: recipe.inputs
-    })
-    return true
-  }
-  /**
-   * Create a trade offer for an agent
-   */
-  public createTradeOffer(
-    agentId: str,
-    itemType: ResourceType | ProductType,
-    quantity: float,
-    pricePerUnit: float
-  ): str | null {
-    const agent = this.agents.get(agentId)
-    if (!agent) return null
-    const currentQuantity = agent.inventory.get(itemType) || 0
-    if (currentQuantity < quantity) return null
-    const offerId = this.marketSystem.createOffer(
-      agentId,
-      itemType,
-      quantity,
-      pricePerUnit
-    )
-    if (offerId) {
-      agent.activeOffers.add(offerId)
-      agent.inventory.set(itemType, currentQuantity - quantity)
-    }
-    return offerId
-  }
-  /**
-   * Execute a trade between two agents
-   */
-  public executeTrade(
-    buyerId: str,
-    offerId: str,
-    quantity: float,
-    marketId?: str
-  ): bool {
-    const buyer = this.agents.get(buyerId)
-    if (!buyer) return false
-    const transaction = this.marketSystem.executeTrade(
-      offerId,
-      buyerId,
-      quantity,
-      marketId
-    )
-    if (transaction) {
-      const seller = this.agents.get(transaction.sellerId)
-      if (seller) {
-        buyer.currency -= transaction.pricePerUnit * quantity
-        this.addToInventory(buyer, transaction.itemType, quantity)
-        buyer.lastTransaction = transaction.timestamp
-        seller.currency += transaction.pricePerUnit * quantity
-        seller.lastTransaction = transaction.timestamp
-        seller.activeOffers.delete(offerId)
-        return true
-      }
-    }
-    return false
-  }
-  /**
-   * Find the best trade offers for an agent
-   */
-  public findBestOffers(
-    agentId: str,
-    itemType: ResourceType | ProductType,
-    maxPrice: float
-  ): TradeOffer[] {
-    const agent = this.agents.get(agentId)
-    if (!agent) return []
-    const nearbyAgents = this.spatialGrid
-      .getEntitiesInRange(agent.id, this.TRADE_SEARCH_RADIUS)
-      .map(id => this.agents.get(id))
-      .filter((a): a is EconomicAgent => a !== undefined)
-    const relevantOffers: List[TradeOffer] = []
-    for (const nearbyAgent of nearbyAgents) {
-      for (const offerId of nearbyAgent.activeOffers) {
-        const offer = this.marketSystem.getOffer(offerId)
-        if (
-          offer &&
-          offer.itemType === itemType &&
-          offer.pricePerUnit <= maxPrice
-        ) {
-          relevantOffers.push(offer)
-        }
-      }
-    }
-    return relevantOffers.sort((a, b) => a.pricePerUnit - b.pricePerUnit)
-  }
-  /**
-   * Update agent's reputation based on successful trades
-   */
-  private updateReputation(agentId: str, changeAmount: float): void {
-    const agent = this.agents.get(agentId)
-    if (!agent) return
-    agent.reputation = Math.max(0, Math.min(100, agent.reputation + changeAmount))
-  }
-  /**
-   * Check if agent has required resources for a recipe
-   */
-  private hasRequiredResources(
-    agent: EconomicAgent,
-    recipe: ProductionRecipe
-  ): bool {
-    for (const [resource, amount] of recipe.inputs) {
-      const available = agent.inventory.get(resource) || 0
-      if (available < amount) return false
-    }
-    return true
-  }
-  /**
-   * Consume resources for production
-   */
-  private consumeResources(
-    agent: EconomicAgent,
-    recipe: ProductionRecipe
-  ): void {
-    for (const [resource, amount] of recipe.inputs) {
-      const available = agent.inventory.get(resource) || 0
-      agent.inventory.set(resource, available - amount)
-    }
-  }
-  /**
-   * Add items to agent's inventory
-   */
-  private addToInventory(
-    agent: EconomicAgent,
-    itemType: ResourceType | ProductType,
-    quantity: float
-  ): void {
-    const current = agent.inventory.get(itemType) || 0
-    agent.inventory.set(itemType, current + quantity)
-  }
-  /**
-   * Start the production checking loop
-   */
-  private startProductionLoop(): void {
-    setInterval(() => {
-      for (const agent of this.agents.values()) {
-        this.checkProduction(agent)
-      }
-    }, this.PRODUCTION_CHECK_INTERVAL)
-  }
-  /**
-   * Check and complete production for an agent
-   */
-  private checkProduction(agent: EconomicAgent): void {
-    const now = Date.now()
-    const completedProductions = agent.productionQueue.filter(
-      p => p.completesAt <= now
-    )
-    for (const production of completedProductions) {
-      const recipe = agent.role.productionRecipes?.find(
-        r => r.output.type === production.recipeId
-      )
-      if (recipe) {
-        const success = Math.random() > recipe.failureChance
-        if (success) {
-          this.addToInventory(
-            agent,
-            recipe.output.type,
-            recipe.output.quantity
-          )
-        }
-      }
-      agent.productionQueue = agent.productionQueue.filter(
-        p => p !== production
-      )
-    }
-  }
-  /**
-   * Start the trading behavior loop
-   */
-  private startTradingLoop(): void {
-    setInterval(() => {
-      for (const agent of this.agents.values()) {
-        this.checkTrading(agent)
-      }
-    }, this.TRADE_CHECK_INTERVAL)
-  }
-  /**
-   * Check and update trading behavior for an agent
-   */
-  private checkTrading(agent: EconomicAgent): void {
-    if (!agent.role.tradingPreferences) return
-    const { preferredResources, preferredProducts, priceMarkup } = agent.role.tradingPreferences
-    for (const [itemType, quantity] of agent.inventory) {
-      if (quantity > 0) {
-        const basePrice = this.getBasePrice(itemType as ResourceType | ProductType)
-        const sellingPrice = basePrice * (1 + priceMarkup)
-        if (
-          agent.activeOffers.size < 5 && 
-          (preferredResources.includes(itemType as ResourceType) ||
-            preferredProducts.includes(itemType as ProductType))
-        ) {
-          this.createTradeOffer(
-            agent.id,
-            itemType as ResourceType | ProductType,
-            quantity,
-            sellingPrice
-          )
-        }
-      }
-    }
-    const desiredItems = [...preferredResources, ...preferredProducts]
-    for (const itemType of desiredItems) {
-      const currentQuantity = agent.inventory.get(itemType) || 0
-      if (currentQuantity < 10) { 
-        const basePrice = this.getBasePrice(itemType)
-        const offers = this.findBestOffers(agent.id, itemType, basePrice * 1.5)
-        for (const offer of offers) {
-          if (agent.currency >= offer.pricePerUnit * offer.quantity) {
-            this.executeTrade(agent.id, offer.id, offer.quantity)
-            break
-          }
-        }
-      }
-    }
-  }
-  /**
-   * Get base price for an item type
-   */
-  private getBasePrice(itemType: ResourceType | ProductType): float {
-    const priceData = this.marketSystem.getPriceStats(itemType)
-    return priceData ? priceData.averagePrice : 100 
-  }
-  public async processTrade(
-    agentId: str,
-    targetId: str,
-    offer: Any
-  ): Promise<any> {
-    try {
-      const result = {
-        value: offer.economic.value,
-        success: true,
-        items: offer.economic.items
-      }
-      return result
-    } catch (error) {
-      console.error('Error processing trade:', error)
-      return {
-        value: 0,
-        success: false,
-        error: 'Failed to process trade'
-      }
-    }
-  }
-} 
+    def initialize_agent(self, npc, role: EconomicRole):
+        agent = EconomicAgent(
+            id=npc.id,
+            role=role,
+            inventory={},
+            currency=1000,
+            reputation=50,
+            activeOffers=set(),
+            productionQueue=[],
+            lastTransaction=0
+        )
+        self.agents[agent.id] = agent
+        self.goal_managers[agent.id] = GoalManager(agent.id)
+
+    def evaluate_transaction_risk(self, agent_id: str, transaction: dict, market_volatility: float = 0.0, counterparty_reliability: float = 1.0) -> float:
+        """
+        Evaluate the risk score for a given agent and transaction using the RiskAssessor.
+        """
+        agent = self.agents.get(agent_id)
+        if not agent:
+            return 100.0  # Max risk if agent not found
+        resource_levels = getattr(agent, 'inventory', None)
+        risk_assessor = RiskAssessor(agent)
+        return risk_assessor.calculate_risk_score(
+            transaction=transaction,
+            market_volatility=market_volatility,
+            counterparty_reliability=counterparty_reliability,
+            resource_levels=resource_levels
+        )
+
+    def make_decision(self, agent_id: str, opportunities: list, env_factors: dict = None) -> dict:
+        """
+        Main decision-making method for an agent.
+        - Uses goals, opportunity evaluation, and risk assessment.
+        - Returns the selected opportunity and reasoning.
+        """
+        agent = self.agents.get(agent_id)
+        if not agent:
+            return {'decision': None, 'reason': 'Agent not found'}
+        goal_manager = self.goal_managers.get(agent_id)
+        if not goal_manager:
+            return {'decision': None, 'reason': 'No goal manager'}
+        # Adjust goals based on environment
+        if env_factors:
+            goal_manager.adjust_goals_based_on_environment(env_factors)
+        current_goals = goal_manager.get_active_goals()
+        agent_goals = [g.name for g in current_goals]
+        # Evaluate opportunities
+        evaluator = OpportunityEvaluator(agent)
+        ranked = evaluator.rank_opportunities(opportunities, agent_goals=agent_goals)
+        # Filter by risk
+        risk_assessor = RiskAssessor(agent)
+        for opp in ranked:
+            risk = risk_assessor.calculate_risk_score(opp.get('transaction', {}))
+            if risk < 70:  # Acceptable risk threshold
+                # Update goal progress/satisfaction (simple example)
+                for g in current_goals:
+                    if g.name in opp.get('goal_tags', []):
+                        goal_manager.update_goal_progress(g.name, min(1.0, g.progress + 0.2))
+                        goal_manager.update_goal_satisfaction(g.name, min(1.0, g.satisfaction + 0.2))
+                return {'decision': opp, 'reason': f'Best opportunity with risk {risk:.1f}'}
+        return {'decision': None, 'reason': 'No acceptable opportunities'}
+
+    def start_production(self, agent_id, recipe_id):
+        agent = self.agents.get(agent_id)
+        if not agent or not agent.role.productionRecipes:
+            return False
+        recipe = next((r for r in agent.role.productionRecipes if r.output.type == recipe_id), None)
+        if not recipe:
+            return False
+        if not self.has_required_resources(agent, recipe):
+            return False
+        self.consume_resources(agent, recipe)
+        agent.productionQueue.append({
+            'recipeId': recipe_id,
+            'startedAt': time.time(),
+            'completesAt': time.time() + recipe.productionTime,
+            'inputs': recipe.inputs
+        })
+        return True
+
+    def create_trade_offer(self, agent_id, item_type, quantity, price_per_unit):
+        agent = self.agents.get(agent_id)
+        if not agent:
+            return None
+        current_quantity = agent.inventory.get(item_type) or 0
+        if current_quantity < quantity:
+            return None
+        offer_id = self.market_system.create_offer(agent_id, item_type, quantity, price_per_unit)
+        if offer_id:
+            agent.activeOffers.add(offer_id)
+            agent.inventory.set(item_type, current_quantity - quantity)
+        return offer_id
+
+    def execute_trade(self, buyer_id, offer_id, quantity, market_id=None):
+        buyer = self.agents.get(buyer_id)
+        if not buyer:
+            return False
+        transaction = self.market_system.execute_trade(offer_id, buyer_id, quantity, market_id)
+        if transaction:
+            seller = self.agents.get(transaction.sellerId)
+            if seller:
+                buyer.currency -= transaction.pricePerUnit * quantity
+                self.add_to_inventory(buyer, transaction.itemType, quantity)
+                buyer.lastTransaction = transaction.timestamp
+                seller.currency += transaction.pricePerUnit * quantity
+                seller.lastTransaction = transaction.timestamp
+                seller.activeOffers.delete(offer_id)
+                return True
+        return False
+
+    def find_best_offers(self, agent_id, item_type, max_price):
+        agent = self.agents.get(agent_id)
+        if not agent:
+            return []
+        nearby_agents = self.spatial_grid.get_entities_in_range(agent_id, self.TRADE_SEARCH_RADIUS)
+        relevant_offers = []
+        for nearby_agent_id in nearby_agents:
+            nearby_agent = self.agents.get(nearby_agent_id)
+            if nearby_agent:
+                for offer_id in nearby_agent.activeOffers:
+                    offer = self.market_system.get_offer(offer_id)
+                    if offer and offer.itemType == item_type and offer.pricePerUnit <= max_price:
+                        relevant_offers.append(offer)
+        return sorted(relevant_offers, key=lambda o: o.pricePerUnit)
+
+    def update_reputation(self, agent_id, change_amount):
+        agent = self.agents.get(agent_id)
+        if agent:
+            agent.reputation = max(0, min(100, agent.reputation + change_amount))
+
+    def has_required_resources(self, agent, recipe):
+        for resource, amount in recipe.inputs:
+            available = agent.inventory.get(resource) or 0
+            if available < amount:
+                return False
+        return True
+
+    def consume_resources(self, agent, recipe):
+        for resource, amount in recipe.inputs:
+            available = agent.inventory.get(resource) or 0
+            agent.inventory.set(resource, available - amount)
+
+    def add_to_inventory(self, agent, item_type, quantity):
+        current = agent.inventory.get(item_type) or 0
+        agent.inventory.set(item_type, current + quantity)
+
+    def start_production_loop(self):
+        set_interval(lambda: [self.check_production(agent) for agent in self.agents.values()], self.PRODUCTION_CHECK_INTERVAL)
+
+    def check_production(self, agent):
+        now = time.time()
+        completed_productions = [p for p in agent.productionQueue if p['completesAt'] <= now]
+        for production in completed_productions:
+            recipe = next((r for r in agent.role.productionRecipes if r.output.type == production['recipeId']), None)
+            if recipe:
+                success = random() > recipe.failureChance
+                if success:
+                    self.add_to_inventory(agent, recipe.output.type, recipe.output.quantity)
+            agent.productionQueue = [p for p in agent.productionQueue if p != production]
+
+    def start_trading_loop(self):
+        set_interval(lambda: [self.check_trading(agent) for agent in self.agents.values()], self.TRADE_CHECK_INTERVAL)
+
+    def check_trading(self, agent):
+        if not agent.role.tradingPreferences:
+            return
+        {preferred_resources, preferred_products, price_markup} = agent.role.tradingPreferences
+        for item_type, quantity in agent.inventory.items():
+            if quantity > 0:
+                base_price = self.get_base_price(item_type)
+                selling_price = base_price * (1 + price_markup)
+                if agent.activeOffers.size < 5 and (
+                    item_type in preferred_resources or
+                    item_type in preferred_products
+                ):
+                    self.create_trade_offer(agent.id, item_type, quantity, selling_price)
+
+        desired_items = list(preferred_resources) + list(preferred_products)
+        for item_type in desired_items:
+            current_quantity = agent.inventory.get(item_type) or 0
+            if current_quantity < 10:
+                base_price = self.get_base_price(item_type)
+                offers = self.find_best_offers(agent.id, item_type, base_price * 1.5)
+                for offer in offers:
+                    if agent.currency >= offer.pricePerUnit * offer.quantity:
+                        self.execute_trade(agent.id, offer.id, offer.quantity)
+                        break
+
+    def get_base_price(self, item_type):
+        price_data = self.market_system.get_price_stats(item_type)
+        return price_data['averagePrice'] if price_data else 100
+
+    def process_trade(self, agent_id, target_id, offer):
+        try:
+            result = {
+                'value': offer['economic']['value'],
+                'success': True,
+                'items': offer['economic']['items']
+            }
+            return result
+        except Exception as e:
+            print('Error processing trade:', e)
+            return {
+                'value': 0,
+                'success': False,
+                'error': 'Failed to process trade'
+            } 

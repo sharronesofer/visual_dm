@@ -2,7 +2,8 @@ from typing import Dict, List, Optional, Union
 from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
-from app.combat.damage_engine import DamageType, AttackType
+from app.core.enums import DamageType
+from app.combat.damage_engine import AttackType
 from app.combat.combat_logger import CombatLogger, LogCategory, LogLevel
 from app.combat.state_manager import CombatStateManager
 from app.combat.loot_generator import LootGenerator, LootResult

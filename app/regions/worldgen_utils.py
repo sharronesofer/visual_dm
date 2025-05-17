@@ -2,7 +2,7 @@
 World generation utilities with improved maintainability.
 """
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 import random
 import math
 from dataclasses import dataclass

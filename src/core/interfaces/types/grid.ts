@@ -14,6 +14,8 @@ export interface GridCell {
   isOccupied: boolean;
   occupiedBy: string | null;
   buildingId?: string | null;
+  roomId?: string | null;
+  doorId?: string | null;
 }
 
 export enum CellType {

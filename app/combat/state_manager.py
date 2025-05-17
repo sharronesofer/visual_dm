@@ -1,7 +1,8 @@
 from typing import Dict, List, Optional
 from datetime import datetime
 from dataclasses import dataclass, asdict
-from app.combat.damage_engine import DamageType, AttackType
+from app.core.enums import DamageType
+from app.combat.damage_engine import AttackType
 from app.combat.combat_logger import LogCategory, LogLevel, CombatLogger
 
 @dataclass

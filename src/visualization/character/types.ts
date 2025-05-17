@@ -32,6 +32,16 @@ export interface SkillTreeNode {
   unlocked: boolean;
 }
 
+export enum EquipmentState {
+  EQUIPPED = 'equipped',
+  BROKEN = 'broken',
+  DISABLED = 'disabled',
+  EMPOWERED = 'empowered',
+  DAMAGED = 'damaged',
+  REPAIRED = 'repaired',
+  // Add more as needed
+}
+
 export interface InventoryItem {
   id: string;
   name: string;
@@ -43,6 +53,9 @@ export interface InventoryItem {
   icon: string;
   stackable: boolean;
   quantity: number;
+  state?: EquipmentState;
+  durability?: number; // 0-100 or similar
+  maxDurability?: number;
 }
 
 export enum ItemType {
@@ -148,7 +161,7 @@ export interface CharacterUIOptions {
 export type CharacterEventListener = (event: CharacterUIEvent) => void;
 
 export interface CharacterUIEvent {
-  type: 'select' | 'equip' | 'unequip' | 'useItem' | 'learnSkill' | 'levelUp';
+  type: 'select' | 'equip' | 'unequip' | 'useItem' | 'learnSkill' | 'levelUp' | 'preSwitch' | 'postSwitch' | 'equipmentStateChange';
   character: Character;
   data?: any;
 } 

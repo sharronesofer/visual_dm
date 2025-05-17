@@ -94,12 +94,14 @@ class Material:
         self.use_texture = diffuse_texture is not None
 
 class BatchRenderer:
-    """Handles efficient rendering of batched geometry."""
+    """Handles efficient rendering of batched geometry with configurable cache size and LRU eviction."""
     
-    def __init__(self):
+    def __init__(self, cache_size_limit: int = 32):
         self.shader_program = self._create_shader_program()
-        self.vao_cache: Dict[str, Tuple[int, int, int]] = {}  # material_id -> (vao, vbo, ebo)
+        self.vao_cache: Dict[str, List[Tuple[int, int, int]]] = {}  # material_id -> list of (vao, vbo, ebo)
         self.materials: Dict[str, Material] = {}
+        self.cache_size_limit = cache_size_limit
+        self._vao_usage_order: List[Tuple[str, int]] = []  # (material_id, batch_idx)
         
         # Get uniform locations
         self.uniforms = {
@@ -126,46 +128,62 @@ class BatchRenderer:
         
         return program
     
+    def set_cache_size_limit(self, limit: int):
+        """Set the maximum number of VAOs allowed in the cache."""
+        self.cache_size_limit = limit
+        self._evict_if_needed()
+
+    def _evict_if_needed(self):
+        """Evict least recently used VAOs if cache exceeds the size limit."""
+        total_vaos = sum(len(batches) for batches in self.vao_cache.values())
+        while total_vaos > self.cache_size_limit and self._vao_usage_order:
+            # Pop the least recently used
+            material_id, batch_idx = self._vao_usage_order.pop(0)
+            if material_id in self.vao_cache and batch_idx < len(self.vao_cache[material_id]):
+                vao, vbo, ebo = self.vao_cache[material_id][batch_idx]
+                glDeleteVertexArrays(1, [vao])
+                glDeleteBuffers(1, [vbo])
+                glDeleteBuffers(1, [ebo])
+                del self.vao_cache[material_id][batch_idx]
+                if not self.vao_cache[material_id]:
+                    del self.vao_cache[material_id]
+                logger.info(f"Evicted VAO batch {batch_idx} for material {material_id} due to cache size limit.")
+            total_vaos = sum(len(batches) for batches in self.vao_cache.values())
+
     @building_profiler.track_component("buffer_creation")
     def create_buffers(
         self,
         material_id: str,
-        vertices: np.ndarray,
-        indices: np.ndarray
+        batch_data: List[Tuple[np.ndarray, np.ndarray]]
     ) -> None:
-        """Create VAO, VBO, and EBO for a batch."""
-        # Create and bind VAO
-        vao = glGenVertexArrays(1)
-        glBindVertexArray(vao)
-        
-        # Create and bind VBO
-        vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, vbo)
-        glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
-        
-        # Create and bind EBO
-        ebo = glGenBuffers(1)
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
-        
-        # Set up vertex attributes
-        # Position
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(0))
-        glEnableVertexAttribArray(0)
-        # Normal
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(12))
-        glEnableVertexAttribArray(1)
-        # Texture coordinates
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(24))
-        glEnableVertexAttribArray(2)
-        
-        # Unbind
-        glBindVertexArray(0)
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
-        
-        # Store in cache
-        self.vao_cache[material_id] = (vao, vbo, ebo)
+        """
+        Create VAO, VBO, and EBO for each batch of a material.
+        Applies LRU eviction if cache size limit is exceeded.
+        """
+        if material_id not in self.vao_cache:
+            self.vao_cache[material_id] = []
+        for batch_idx, (vertices, indices) in enumerate(batch_data):
+            vao = glGenVertexArrays(1)
+            glBindVertexArray(vao)
+            vbo = glGenBuffers(1)
+            glBindBuffer(GL_ARRAY_BUFFER, vbo)
+            glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
+            ebo = glGenBuffers(1)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(0))
+            glEnableVertexAttribArray(0)
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(12))
+            glEnableVertexAttribArray(1)
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(24))
+            glEnableVertexAttribArray(2)
+            glBindVertexArray(0)
+            glBindBuffer(GL_ARRAY_BUFFER, 0)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
+            self.vao_cache[material_id].append((vao, vbo, ebo))
+            self._vao_usage_order.append((material_id, len(self.vao_cache[material_id]) - 1))
+            self._evict_if_needed()
+        building_profiler.log_cache_utilization('vao_cache', sum(len(v) for v in self.vao_cache.values()))
     
     def set_material(self, material_id: str, material: Material) -> None:
         """Set material properties for a batch."""
@@ -181,22 +199,20 @@ class BatchRenderer:
         light_pos: np.ndarray,
         view_pos: np.ndarray,
         light_color: np.ndarray,
-        num_indices: int
+        num_indices_list: List[int]
     ) -> None:
-        """Render a batch with the given material and transforms."""
+        """
+        Render all batches for a material.
+        num_indices_list: list of index counts for each batch.
+        """
         if material_id not in self.vao_cache:
             logger.warning(f"No geometry found for material {material_id}")
             return
-        
         material = self.materials.get(material_id)
         if not material:
             logger.warning(f"No material found for {material_id}")
             return
-        
-        # Use shader program
         glUseProgram(self.shader_program)
-        
-        # Set uniforms
         glUniformMatrix4fv(self.uniforms['model'], 1, GL_FALSE, model_matrix)
         glUniformMatrix4fv(self.uniforms['view'], 1, GL_FALSE, view_matrix)
         glUniformMatrix4fv(self.uniforms['projection'], 1, GL_FALSE, projection_matrix)
@@ -205,19 +221,14 @@ class BatchRenderer:
         glUniform3fv(self.uniforms['light_color'], 1, light_color)
         glUniform3fv(self.uniforms['object_color'], 1, material.color)
         glUniform1i(self.uniforms['use_texture'], material.use_texture)
-        
-        # Bind texture if using one
         if material.use_texture:
             glActiveTexture(GL_TEXTURE0)
             glBindTexture(GL_TEXTURE_2D, material.diffuse_texture)
-        
-        # Bind VAO and draw
-        vao, _, _ = self.vao_cache[material_id]
-        glBindVertexArray(vao)
-        glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, None)
-        
-        # Cleanup
-        glBindVertexArray(0)
+        for (vao, _, _), num_indices in zip(self.vao_cache[material_id], num_indices_list):
+            glBindVertexArray(vao)
+            glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, None)
+            building_profiler.log_draw_call()
+            glBindVertexArray(0)
         if material.use_texture:
             glBindTexture(GL_TEXTURE_2D, 0)
     
@@ -245,22 +256,21 @@ class OptimizedMeshRenderer:
             'ceiling': Material(color=(0.95, 0.95, 0.95))
         }
     
-    def initialize(self, mesh_data: Dict[str, Tuple[np.ndarray, np.ndarray]]) -> None:
-        """Initialize renderer with mesh data."""
+    def initialize(self, mesh_data: Dict[str, List[Tuple[np.ndarray, np.ndarray]]]) -> None:
+        """
+        Initialize renderer with mesh data.
+        mesh_data: dict of material_id -> list of (vertices, indices) batches.
+        """
         if self.initialized:
             logger.warning("Renderer already initialized")
             return
-        
-        for material_id, (vertices, indices) in mesh_data.items():
-            self.batch_renderer.create_buffers(material_id, vertices, indices)
-            
-            # Use default material if available, otherwise create a new one
+        for material_id, batch_list in mesh_data.items():
+            self.batch_renderer.create_buffers(material_id, batch_list)
             material = self.default_materials.get(
-                material_id.split('_')[0],  # Get base material type
-                Material()  # Default gray if no specific material
+                material_id.split('_')[0],
+                Material()
             )
             self.batch_renderer.set_material(material_id, material)
-        
         self.initialized = True
     
     @building_profiler.track_component("render_frame")
@@ -270,29 +280,23 @@ class OptimizedMeshRenderer:
         projection_matrix: np.ndarray,
         light_pos: np.ndarray,
         view_pos: np.ndarray,
-        mesh_data: Dict[str, Tuple[np.ndarray, np.ndarray]]
+        mesh_data: Dict[str, List[Tuple[np.ndarray, np.ndarray]]]
     ) -> None:
-        """Render a complete frame."""
+        """
+        Render a complete frame.
+        mesh_data: dict of material_id -> list of (vertices, indices) batches.
+        """
         if not self.initialized:
             logger.error("Renderer not initialized")
             return
-        
-        # Clear buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        
-        # Set up basic OpenGL state
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
         glCullFace(GL_BACK)
-        
-        # Use white light
         light_color = np.array([1.0, 1.0, 1.0])
-        
-        # Render each batch
-        for material_id, (vertices, indices) in mesh_data.items():
-            # For now, use identity model matrix
+        for material_id, batch_list in mesh_data.items():
             model_matrix = np.identity(4)
-            
+            num_indices_list = [indices.shape[0] for _, indices in batch_list]
             self.batch_renderer.render(
                 material_id,
                 model_matrix,
@@ -301,7 +305,7 @@ class OptimizedMeshRenderer:
                 light_pos,
                 view_pos,
                 light_color,
-                len(indices)
+                num_indices_list
             )
     
     def cleanup(self) -> None:

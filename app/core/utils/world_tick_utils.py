@@ -6,7 +6,7 @@ Provides functionality for world time progression and event generation.
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 import logging
-from app.core.models.region import Region
+from app.core.models.world import Region
 from app.core.models.quest import Quest
 from app.core.utils.event_utils import EventUtils
 from app.core.utils.base_manager import BaseManager
@@ -17,7 +17,7 @@ except ImportError:
     class World:
         id = None
         current_time = None
-from app.core.models.faction import Faction
+from app.core.models.world import Faction
 
 logger = logging.getLogger(__name__)
 
@@ -422,7 +422,7 @@ def process_region_day(region: Region) -> Dict[str, Any]:
 
 def get_world_state(session) -> Dict:
     """Get current state of the world."""
-    from app.core.models.region import Region  # Lazy import
+    from app.core.models.world import Region  # Lazy import
     
     regions = session.query(Region).all()
     return {

@@ -151,4 +151,41 @@ export interface EconomicEvent {
   };
   startTime: number;
   description: string;
+}
+
+// --- Bundled/Multi-Item Trade Support ---
+
+/**
+ * Represents a bundled trade offer containing multiple items as a single atomic package.
+ */
+export interface BundledTradeOffer {
+  id: string;
+  sellerId: string;
+  items: Array<{
+    itemType: ResourceType | ProductType;
+    quantity: number;
+    pricePerUnit: number;
+    minimumQuantity?: number;
+    negotiable?: boolean;
+  }>;
+  totalPrice: number; // Total price for the bundle (could be sum or discounted)
+  expiresAt: number;
+  negotiable: boolean;
+}
+
+/**
+ * Represents a bundled transaction for multiple items traded atomically.
+ */
+export interface BundledTransaction {
+  id: string;
+  timestamp: number;
+  buyerId: string;
+  sellerId: string;
+  items: Array<{
+    itemType: ResourceType | ProductType;
+    quantity: number;
+    pricePerUnit: number;
+  }>;
+  totalPrice: number;
+  marketId?: string;
 } 

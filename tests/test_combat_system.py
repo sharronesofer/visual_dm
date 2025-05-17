@@ -1,7 +1,8 @@
 import pytest
 from unittest.mock import Mock, patch
 from app.core.combat import CombatSystem
-from app.combat.damage_engine import DamageType, AttackType, DamageResult
+from app.core.enums import DamageType
+from app.combat.damage_engine import AttackType, DamageResult
 
 @pytest.fixture
 def mock_app():

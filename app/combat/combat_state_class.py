@@ -4,7 +4,6 @@ Provides functionality for tracking and managing combat state.
 """
 
 from typing import Dict, List, Optional
-from app.core.models.combat import CombatState, CombatParticipant, CombatEngine
 from app.core.models.character import Character
 from app.core.models.npc import NPC
 from app.core.database import db
@@ -12,7 +11,8 @@ from app.core.database import db
 class CombatStateManager:
     """Manager class for handling combat state."""
     
-    def __init__(self, combat_state: CombatState):
+    def __init__(self, combat_state):
+        from app.core.models.combat import CombatEngine
         self.combat_state = combat_state
         self.engine = CombatEngine(combat_state)
 
@@ -37,6 +37,7 @@ class CombatStateManager:
 
     def update_participant(self, participant_id: int, updates: Dict) -> Dict:
         """Update a participant's state."""
+        from app.core.models.combat import CombatParticipant
         participant = CombatParticipant.query.get(participant_id)
         if not participant or participant.combat_state_id != self.combat_state.id:
             raise ValueError("Participant not found in combat")
@@ -50,6 +51,7 @@ class CombatStateManager:
 
     def add_status_effect(self, participant_id: int, effect: str, duration: int) -> Dict:
         """Add a status effect to a participant."""
+        from app.core.models.combat import CombatParticipant
         participant = CombatParticipant.query.get(participant_id)
         if not participant or participant.combat_state_id != self.combat_state.id:
             raise ValueError("Participant not found in combat")
@@ -60,6 +62,7 @@ class CombatStateManager:
 
     def remove_status_effect(self, participant_id: int, effect: str) -> Dict:
         """Remove a status effect from a participant."""
+        from app.core.models.combat import CombatParticipant
         participant = CombatParticipant.query.get(participant_id)
         if not participant or participant.combat_state_id != self.combat_state.id:
             raise ValueError("Participant not found in combat")

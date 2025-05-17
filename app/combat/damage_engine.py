@@ -1,3 +1,5 @@
+# DEPRECATED: Use app/combat/damage_calculator.py for all new damage calculations.
+# This file is retained for legacy support and will be removed in a future release.
 from typing import Dict, Optional, List, Union
 from datetime import datetime
 from enum import Enum
@@ -5,18 +7,7 @@ from dataclasses import dataclass
 from app.core.models.combat import CombatStats
 from app.core.models.character import Character
 from app.core.models.npc import NPC
-
-class DamageType(Enum):
-    PHYSICAL = "physical"
-    MAGICAL = "magical"
-    FIRE = "fire"
-    COLD = "cold"
-    LIGHTNING = "lightning"
-    POISON = "poison"
-    PSYCHIC = "psychic"
-    FORCE = "force"
-    RADIANT = "radiant"
-    NECROTIC = "necrotic"
+from app.core.enums import DamageType
 
 class AttackType(Enum):
     MELEE = "melee"

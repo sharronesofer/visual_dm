@@ -228,4 +228,20 @@ class SceneLoaderManager:
                 self.load_queue.get()
             self.progress.clear()
             self.callbacks.clear()
-        self.logger.info("[SceneLoaderManager] All pending scene loads cancelled.") 
+        self.logger.info("[SceneLoaderManager] All pending scene loads cancelled.")
+
+    def wait_for_all(self, timeout: float = 10.0):
+        """
+        Block until all queued scene loads are complete or until timeout (in seconds) is reached.
+        This is intended for use in tests and integration scenarios.
+        """
+        start = time.time()
+        while True:
+            with self.lock:
+                queue_empty = self.load_queue.empty()
+                all_done = all(progress == 100.0 for progress in self.progress.values())
+            if queue_empty and all_done:
+                break
+            if time.time() - start > timeout:
+                break
+            time.sleep(0.05) 

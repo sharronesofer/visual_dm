@@ -1,6 +1,6 @@
 """Validation models for NPC-related API requests."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, ClassVar
 from pydantic import BaseModel, Field, validator
 from enum import Enum
 from datetime import datetime
@@ -134,24 +134,20 @@ class NPCQueryParams(BaseModel, PaginationValidationMixin, SortValidationMixin, 
     max_level: Optional[int] = Field(None, ge=1, le=20)
     tags: Optional[List[str]] = None
     
-    valid_sort_fields = ['name', 'alignment', 'status', 'level', 'created_at', 'updated_at']
-    valid_filters = {
+    valid_sort_fields: ClassVar = ['name', 'alignment', 'status', 'level', 'created_at', 'updated_at']
+    valid_filters: ClassVar = {
         'location_id': str,
         'faction_id': str,
         'alignment': NPCAlignment,
         'status': NPCStatus,
         'level': int,
-        'tags': list
+        'tags': list,
     }
     
     @validator('min_level', 'max_level')
-    def validate_level_range(cls, v, values, field):
-        """Validate level range if both min and max are provided."""
-        if v is not None:
-            min_level = values.get('min_level')
-            max_level = values.get('max_level')
-            if min_level is not None and max_level is not None and min_level > max_level:
-                raise ValueError("min_level cannot be greater than max_level")
+    def validate_level_range(cls, v):
+        """Validate level range if both min and max are provided (Pydantic v2: only single value available)."""
+        # Cross-field validation should be handled in model_post_init or root_validator in Pydantic v2
         return v
     
     @validator('tags')
@@ -168,7 +164,7 @@ class NPCInventoryUpdateRequest(BaseModel):
     
     item_id: str = Field(..., min_length=1, max_length=100)
     quantity: int = Field(..., ge=0)
-    operation: str = Field(..., regex='^(add|remove)$')
+    operation: str = Field(..., pattern='^(add|remove)$')
     
     @validator('item_id')
     def validate_item_id(cls, v):

@@ -64,6 +64,12 @@ from .faction_validators import (
     FactionRelationshipUpdateRequest
 )
 
+def validate_request(request):
+    return request
+
+def validate_response(response):
+    return response
+
 __all__ = [
     # Base validators
     'PaginationValidationMixin',

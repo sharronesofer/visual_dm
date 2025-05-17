@@ -1,0 +1,10 @@
+mcp.json
+mcp.json.backup-1746307031372
+rules
+
+.cursor/rules:
+cursor_rules.mdc
+cursor_rules_hex_asset_system.mdc
+dev_workflow.mdc
+self_improve.mdc
+taskmaster.mdc

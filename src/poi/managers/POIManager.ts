@@ -4,6 +4,7 @@ import { IPOI } from '../interfaces/IPOI';
 import { POIFactory } from '../factories/POIFactory';
 import { POIType, POISubtype, Coordinates } from '../types/POITypes';
 import { POIEvents } from '../types/POIEvents';
+import { EventBus } from '../../core/interfaces/types/events';
 
 interface SpatialQueryOptions {
   center: Coordinates;
@@ -34,6 +35,8 @@ export class POIManager extends TypedEventEmitter<POIEvents> {
   private relationships: Map<string, POIRelationship>;
   private spatialIndex: Map<string, Coordinates>;
   private factory: POIFactory;
+  private deregisteredPOIs: Set<string> = new Set();
+  private lastCaptor: Map<string, string> = new Map();
 
   private constructor() {
     super();
@@ -62,17 +65,17 @@ export class POIManager extends TypedEventEmitter<POIEvents> {
     config: any = {}
   ): IPOI {
     const poi = this.factory.createPOI(type, subType, config);
-    
+
     try {
       if (!poi.validate()) {
         throw new Error(`Invalid POI configuration for type ${type} and subtype ${subType}`);
       }
-      
+
       this.emit('poi:created', { poi });
       this.registerPOI(poi);
       return poi;
     } catch (error) {
-      this.emit('poi:error', { 
+      this.emit('poi:error', {
         type: 'validation',
         poiId: poi.id,
         error: error instanceof Error ? error : new Error('Unknown error during POI creation')
@@ -82,7 +85,8 @@ export class POIManager extends TypedEventEmitter<POIEvents> {
   }
 
   /**
-   * Register an existing POI with the manager
+   * Register a POI with the manager
+   * @param poi - The POI to register
    */
   public registerPOI(poi: IPOI): void {
     try {
@@ -111,10 +115,66 @@ export class POIManager extends TypedEventEmitter<POIEvents> {
   }
 
   /**
-   * Remove a POI from the manager
+   * Retrieve a POI by ID
+   * @param poiId - The ID of the POI
+   * @returns The POI instance or undefined
    */
-  public deregisterPOI(poiId: string): boolean {
+  public getPOI(poiId: string): IPOI | undefined {
+    return this.activePOIs.get(poiId);
+  }
+
+  /**
+   * Capture a POI (ownership/control change)
+   * Idempotent: Only emits if captor is different from current owner.
+   * Atomic: All state changes are performed before event emission.
+   * @param poiId - The ID of the POI
+   * @param captorId - The ID of the new owner
+   * @param previousOwnerId - The ID of the previous owner (optional)
+   * @returns True if capture event was emitted, false otherwise
+   */
+  public capturePOI(poiId: string, captorId: string, previousOwnerId?: string): boolean {
     try {
+      const poi = this.activePOIs.get(poiId);
+      if (!poi) return false;
+      if (this.lastCaptor.get(poiId) === captorId) return false;
+      this.lastCaptor.set(poiId, captorId);
+      // Ownership logic (update properties, etc.) can be added here
+      // Idempotency: Only emit if captor is different from current owner
+      if ((poi as any).ownerId && (poi as any).ownerId === captorId) {
+        return false;
+      }
+      (poi as any).ownerId = captorId;
+      // Emit capture event (versioned)
+      this.emit('poi:captured', {
+        poiId,
+        poi,
+        captorId,
+        previousOwnerId,
+        timestamp: Date.now(),
+        version: 1
+      });
+      return true;
+    } catch (error) {
+      this.emit('poi:error', {
+        type: 'capture',
+        poiId,
+        error: error instanceof Error ? error : new Error('Unknown error during POI capture')
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Deregister (destroy) a POI
+   * Idempotent: Only emits if POI is still present.
+   * Atomic: All state changes are performed before event emission.
+   * @param poiId - The ID of the POI
+   * @param reason - Reason for destruction
+   * @returns True if destroyed event was emitted, false otherwise
+   */
+  public deregisterPOI(poiId: string, reason: string = 'removed'): boolean {
+    try {
+      if (this.deregisteredPOIs.has(poiId)) return false;
       const poi = this.activePOIs.get(poiId);
       if (!poi) return false;
 
@@ -126,7 +186,7 @@ export class POIManager extends TypedEventEmitter<POIEvents> {
           const parentRel = this.relationships.get(relationship.parentId);
           if (parentRel) {
             parentRel.childIds = parentRel.childIds.filter(id => id !== poiId);
-            this.emit('poi:parentRemoved', { 
+            this.emit('poi:parentRemoved', {
               childId: poiId,
               previousParentId: relationship.parentId
             });
@@ -158,7 +218,16 @@ export class POIManager extends TypedEventEmitter<POIEvents> {
       this.spatialIndex.delete(poiId);
       this.relationships.delete(poiId);
 
+      this.deregisteredPOIs.add(poiId);
       this.emit('poi:deregistered', { poiId });
+      // Emit destruction event (versioned) only if POI was present and not already deregistered
+      this.emit('poi:destroyed', {
+        poiId,
+        poi,
+        reason,
+        timestamp: Date.now(),
+        version: 1
+      });
       return true;
     } catch (error) {
       this.emit('poi:error', {
@@ -362,5 +431,16 @@ export class POIManager extends TypedEventEmitter<POIEvents> {
     const dy = a.y - b.y;
     const dz = a.z - b.z;
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  }
+
+  /**
+   * Override emit to also forward POI events to the global EventBus
+   */
+  public emit<E extends keyof POIEvents>(event: E, payload: POIEvents[E]): boolean {
+    // Emit locally (for POIManager listeners)
+    const localResult = super.emit(event, payload);
+    // Forward to global EventBus (for cross-system integration)
+    EventBus.getInstance().emit(event as string, payload as any);
+    return localResult;
   }
 } 

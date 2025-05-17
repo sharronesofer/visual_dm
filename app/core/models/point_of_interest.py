@@ -28,9 +28,14 @@ class PointOfInterest(BaseModel):
     
     # Relationships
     region = relationship('Region', back_populates='points_of_interest')
-    owner = relationship('app.core.models.faction.Faction', back_populates='owned_locations')
+    owner = relationship('Faction', back_populates='owned_locations')
     # npcs = relationship('NPC', back_populates='location')
     # quests = relationship('app.core.models.quest.Quest', back_populates='location')
+
+    # Evolution relationships
+    states = relationship('POIState', back_populates='poi', cascade='all, delete-orphan')
+    transitions = relationship('POITransition', back_populates='poi', cascade='all, delete-orphan')
+    histories = relationship('POIHistory', back_populates='poi', cascade='all, delete-orphan')
     
     def __repr__(self):
         return f'<PointOfInterest {self.name}>' 

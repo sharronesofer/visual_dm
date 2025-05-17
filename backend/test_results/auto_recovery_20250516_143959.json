@@ -1,0 +1,78 @@
+{
+  "alert_data": {
+    "name": "Service Not Responding",
+    "severity": "P2",
+    "system": "web_server",
+    "description": "Web service not responding to health checks",
+    "value": 0,
+    "unit": "responses",
+    "threshold": 1
+  },
+  "result": {
+    "action": "auto_recovered",
+    "alert": {
+      "name": "Service Not Responding",
+      "severity": "P2",
+      "system": "web_server",
+      "description": "Web service not responding to health checks",
+      "value": 0,
+      "unit": "responses",
+      "threshold": 1,
+      "id": "7d965326-2890-4eda-97c2-5682ad0fd40f",
+      "created_at": "2025-05-16T18:39:59.819008+00:00",
+      "status": "auto_recovered",
+      "auto_recovery_attempts": {
+        "restart_service": 1
+      },
+      "history": [
+        {
+          "timestamp": "2025-05-16T18:39:59.819206+00:00",
+          "event": "auto_recovery_attempted",
+          "action": "restart_service",
+          "attempt": 1,
+          "max_attempts": 2
+        },
+        {
+          "timestamp": "2025-05-16T18:39:59.819570+00:00",
+          "event": "auto_recovery_succeeded",
+          "action": "restart_service"
+        }
+      ],
+      "resolved_at": "2025-05-16T18:39:59.819568+00:00"
+    },
+    "recovery": {
+      "success": true,
+      "action": "restart_service",
+      "alert": {
+        "name": "Service Not Responding",
+        "severity": "P2",
+        "system": "web_server",
+        "description": "Web service not responding to health checks",
+        "value": 0,
+        "unit": "responses",
+        "threshold": 1,
+        "id": "7d965326-2890-4eda-97c2-5682ad0fd40f",
+        "created_at": "2025-05-16T18:39:59.819008+00:00",
+        "status": "auto_recovered",
+        "auto_recovery_attempts": {
+          "restart_service": 1
+        },
+        "history": [
+          {
+            "timestamp": "2025-05-16T18:39:59.819206+00:00",
+            "event": "auto_recovery_attempted",
+            "action": "restart_service",
+            "attempt": 1,
+            "max_attempts": 2
+          },
+          {
+            "timestamp": "2025-05-16T18:39:59.819570+00:00",
+            "event": "auto_recovery_succeeded",
+            "action": "restart_service"
+          }
+        ],
+        "resolved_at": "2025-05-16T18:39:59.819568+00:00"
+      }
+    }
+  }
+}

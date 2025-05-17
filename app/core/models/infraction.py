@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from app.core.database import db
 from app.core.models.base import BaseModel
 from app.core.enums import InfractionType, InfractionSeverity
+from sqlalchemy.dialects.postgresql import UUID
 
 class Infraction(BaseModel):
     """Model for player infractions."""
@@ -16,7 +17,7 @@ class Infraction(BaseModel):
     __table_args__ = {'extend_existing': True}
 
     # Foreign Keys
-    player_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    player_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     character_id = Column(Integer, ForeignKey('characters.id'), nullable=False)
     target_npc_id = Column(Integer, ForeignKey('npcs.id'), nullable=True)
 

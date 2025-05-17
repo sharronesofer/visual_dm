@@ -3,3 +3,72 @@ description:
 globs:
 alwaysApply: false
 ---
+- **Hex Asset System Best Practices**
+  - Use `HexAssetCache`, `HexAssetRenderer`, and `HexAssetManager` for all hex-based asset management and rendering.
+  - Ensure all public methods have clear docstrings and type hints.
+  - Cache keys should be descriptive and include asset type (e.g., `terrain_{type}`, `feature_{name}`).
+  - Use `@dataclass` for cache entries and metadata objects for clarity and type safety.
+  - Always handle errors with `handle_component_error` and appropriate `ErrorSeverity`.
+  - All cache and renderer methods must be covered by unit and integration tests (see [test_hex_asset_cache.py](mdc:tests/test_hex_asset_cache.py), [test_hex_asset_renderer.py](mdc:tests/test_hex_asset_renderer.py), [test_asset_system_integration.py](mdc:tests/test_asset_system_integration.py)).
+  - Renderer must support layering: base, feature, overlay, effect, and UI, with correct order (see `layer_order`).
+  - Metadata manager should support flexible search and return results as dicts for test compatibility.
+  - Use SQLite for persistent metadata storage, with schema matching [hex_asset_metadata.py](mdc:visual_client/core/managers/hex_asset_metadata.py).
+  - All new asset types or categories must be added to the manager and tested.
+
+```python
+# ✅ DO: Use descriptive cache keys
+cache.put(f"terrain_{terrain_type}", surface)
+
+# ✅ DO: Cover all public methods with tests
+assert cache.get("test_asset") is not None
+
+# ❌ DON'T: Store raw surfaces without metadata or type info
+cache["foo"] = surface  # Not allowed
+```
+
+- **Rule Maintenance**
+  - Update this rule when new asset types, cache strategies, or renderer features are added.
+  - Add new test examples as coverage expands.
+  - Cross-reference [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) and [self_improve.mdc](mdc:.cursor/rules/self_improve.mdc) for structure and improvement triggers.
+
+- **Data-Driven POI System**
+  - **DO:** Load POI definitions from JSON/config files using `POIManager.loadPOIConfig(location)`
+    - Example:
+      ```typescript
+      const config = await POIManager.loadPOIConfig('poi-123');
+      ```
+  - **DO:** Register POIs from config objects using `POIManager.registerPOIFromConfig(config)`
+    - Example:
+      ```typescript
+      const poiMap = poiManager.registerPOIFromConfig(config);
+      ```
+  - **DO:** Integrate POI discovery with quest objectives of type `EXPLORE` or `DISCOVER` in `QuestManager`
+    - Example:
+      ```typescript
+      if ((objective.type === 'EXPLORE' || objective.type === 'DISCOVER') && objective.location) {
+        const config = await POIManager.loadPOIConfig(objective.location);
+        if (config) {
+          poiManager.registerPOIFromConfig(config);
+        }
+      }
+      ```
+  - **DO:** Handle missing or malformed POI configs gracefully (log warnings, do not throw)
+    - Example:
+      ```typescript
+      if (!config) {
+        console.warn(`[QuestManager] POI config not found for location: ${objective.location}`);
+      }
+      ```
+  - **DO:** Write integration tests for POI config loading and quest-to-POI registration
+    - See: [`POIManager.integration.test.ts`](mdc:backend/core/poi/tests/POIManager.integration.test.ts), [`QuestManager.integration.test.ts`](mdc:backend/core/quests/__tests__/QuestManager.integration.test.ts)
+  - **DON'T:** Hardcode POI data in code; always use config-driven patterns
+  - **DON'T:** Omit error handling for missing configs
+
+- **Cross-References:**
+  - See [dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc) for the full iterative implementation and testing process
+  - See [self_improve.mdc](mdc:.cursor/rules/self_improve.mdc) for rule maintenance and pattern update guidelines
+
+- **Rule Maintenance:**
+  - Update this rule as new POI types, config patterns, or quest integration methods emerge
+  - Add DO/DON'T examples from actual code and tests
+  - Cross-link to related rules and documentation

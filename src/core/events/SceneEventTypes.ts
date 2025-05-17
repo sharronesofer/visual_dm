@@ -37,6 +37,17 @@ export enum SceneEventType {
     TERRAIN_LOADED = 'terrain_loaded',
     TERRAIN_UNLOADED = 'terrain_unloaded',
     BIOME_CHANGED = 'biome_changed',
+
+    // Cross-system integration events
+    TRANSACTION_COMPLETED = 'transaction_completed',
+    REPUTATION_CHANGED = 'reputation_changed',
+    ITEM_ACQUIRED = 'item_acquired',
+    ITEM_REMOVED = 'item_removed',
+    ITEM_MODIFIED = 'item_modified',
+    VALIDATION_FAILED = 'validation_failed',
+    VALIDATION_PASSED = 'validation_passed',
+    ERROR_EVENT = 'error_event',
+    VALIDATION_EVENT = 'validation_event',
 }
 
 /**
@@ -134,4 +145,45 @@ export interface RegionEvent extends ISceneEvent {
 export interface WorldgenEvent extends ISceneEvent {
     type: SceneEventType.TERRAIN_LOADED | SceneEventType.TERRAIN_UNLOADED | SceneEventType.BIOME_CHANGED;
     details: Record<string, any>;
+}
+
+// --- System-Specific Event Interfaces ---
+export interface TransactionEvent extends ISceneEvent {
+    type: SceneEventType.TRANSACTION_COMPLETED;
+    transactionType: 'purchase' | 'sale' | 'transfer';
+    amount: number;
+    fromAgentId: string;
+    toAgentId: string;
+    timestamp: number;
+    metadata?: Record<string, any>;
+}
+
+export interface ReputationChangeEvent extends ISceneEvent {
+    type: SceneEventType.REPUTATION_CHANGED;
+    change: number;
+    reason: string;
+    subjectId: string;
+    timestamp: number;
+    milestone?: string;
+}
+
+export interface ItemEvent extends ISceneEvent {
+    type: SceneEventType.ITEM_ACQUIRED | SceneEventType.ITEM_REMOVED | SceneEventType.ITEM_MODIFIED;
+    itemId: string;
+    action: 'acquired' | 'removed' | 'modified';
+    quantity?: number;
+    ownerId: string;
+    timestamp: number;
+    details?: Record<string, any>;
+}
+
+/**
+ * Validation event: Emitted on validation error, warning, or info
+ */
+export interface ValidationEvent extends ISceneEvent {
+    type: SceneEventType.VALIDATION_EVENT;
+    level: 'error' | 'warning' | 'info';
+    ruleName: string;
+    message: string;
+    contextData?: Record<string, any>;
 } 

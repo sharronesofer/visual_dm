@@ -241,7 +241,7 @@ class DeterministicRNG:
             >>> print(all(0 <= v < 1 for v in values))
             True
         """
-        return abs(self.next()) / 0x7FFFFFFF
+        return abs(self.next()) / 0x100000000
     
     def uniform(self, min_val: float, max_val: float) -> float:
         """

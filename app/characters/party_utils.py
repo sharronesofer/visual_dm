@@ -1,4 +1,3 @@
-
 #This module handles all party data logic—creating parties, managing membership, updating Firebase, tracking XP, and handling abandonment. It interacts deeply with firebase, npc, and party systems, and touches on world indirectly through character XP and level attributes.
 
 from uuid import uuid4
@@ -6,6 +5,7 @@ from datetime import datetime
 from typing import List, Dict, Union
 from firebase_admin import db
 from app.memory.memory_utils import log_permanent_memory
+from app.core.repositories.party_repository import PartyRepository
 
 def create_party(player_id, npc_ids):
     party_id = f"party_{player_id}"
@@ -98,3 +98,9 @@ def abandon_party(npc_id):
 
             return True
     return False
+
+# Example usage (replace direct session/Party usage):
+# repo = PartyRepository(session)
+# repo.create_party(party_data)
+# repo.update_party(party_id, update_data)
+# repo.delete_party(party_id)

@@ -1,0 +1,26 @@
+@startuml
+' Data Flow Diagram: Interaction System
+
+actor User
+rectangle UI
+rectangle InteractionSystem
+rectangle GameEngine
+rectangle DataStore
+rectangle ExternalAPI
+
+User --> UI : Input Data
+UI --> InteractionSystem : User Commands
+InteractionSystem --> GameEngine : Processed Actions
+GameEngine --> DataStore : Persist State
+DataStore --> GameEngine : Retrieve State
+InteractionSystem --> ExternalAPI : Fetch/Send Data
+ExternalAPI --> InteractionSystem : Data Response
+InteractionSystem --> UI : Output/Feedback
+
+' Legend
+legend right
+  --> = Data flow
+  rectangle = System/Component
+endlegend
+
+@enduml

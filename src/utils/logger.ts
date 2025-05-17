@@ -3,6 +3,9 @@
  * @module logger
  */
 
+// DEPRECATED: Use UnifiedLogger from src/logging/Logger.ts instead
+import { logger as unifiedLogger } from '../logging/Logger';
+
 /**
  * Log levels
  */
@@ -41,10 +44,7 @@ export class Logger {
    * Get logger instance (singleton)
    */
   public static getInstance(): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
-    }
-    return Logger.instance;
+    return new Logger();
   }
 
   /**
@@ -115,7 +115,15 @@ export class Logger {
   }
 }
 
-/**
- * Default logger instance
- */
-export const logger = new Logger('root');
+// Old API compatibility
+export const logger = {
+  debug: (msg: string, meta?: Record<string, any>) => unifiedLogger.debug(msg, meta),
+  info: (msg: string, meta?: Record<string, any>) => unifiedLogger.info(msg, meta),
+  warn: (msg: string, meta?: Record<string, any>) => unifiedLogger.warn(msg, meta),
+  error: (msg: string, meta?: Record<string, any>) => unifiedLogger.error(msg, meta),
+  child: (prefix: string) => unifiedLogger.child(prefix),
+  setLevel: (level: any) => unifiedLogger.setLevel(level),
+  getLevel: () => unifiedLogger.getLevel(),
+};
+
+// For migration: import { logger } from 'src/utils/logger' still works, but uses the new system.

@@ -1,0 +1,1 @@
+scripts/ts_conversion/test_outputs/regionMap.py:4:2: E999 SyntaxError: invalid syntax

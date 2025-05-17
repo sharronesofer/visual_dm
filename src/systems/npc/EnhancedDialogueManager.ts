@@ -6,6 +6,7 @@ import { DialogueResponse } from '../../types/npc/DialogueManager';
 import { GPTServiceWrapper } from '../../core/services/GPTServiceWrapper';
 import { LLMErrorHandler, LLMErrorType, LLMErrorContext } from '../../core/services/LLMErrorHandler';
 import { LoggerService } from '../../core/services/LoggerService';
+import { DialogueConfigurationManager } from '../../dialogue/config/DialogueConfigurationManager';
 
 export class EnhancedDialogueManager {
   private emotionSystem: EmotionSystem;
@@ -13,6 +14,7 @@ export class EnhancedDialogueManager {
   private gptService: GPTServiceWrapper;
   private errorHandler: LLMErrorHandler;
   private logger: LoggerService;
+  private configManager: DialogueConfigurationManager;
 
   // Pre-defined fallback responses for different dialogue types
   private fallbackResponses: Record<string, string[]> = {
@@ -60,13 +62,14 @@ export class EnhancedDialogueManager {
     ]
   };
 
-  constructor(emotionSystem: EmotionSystem, memoryManager: MemoryManager) {
+  constructor(emotionSystem: EmotionSystem, memoryManager: MemoryManager, configManager: DialogueConfigurationManager) {
     this.emotionSystem = emotionSystem;
     this.memoryManager = memoryManager;
     this.gptService = GPTServiceWrapper.getInstance();
     this.errorHandler = LLMErrorHandler.getInstance();
     this.logger = LoggerService.getInstance();
-    
+    this.configManager = configManager;
+
     // Update the error handler with our dialogue-specific fallbacks
     this.errorHandler.updateConfig({
       fallbackLibrary: {
@@ -84,9 +87,17 @@ export class EnhancedDialogueManager {
     npc: NPCData,
     context: InteractionContext
   ): Promise<DialogueResponse> {
+    // Use scenario-based prompt template if available
+    const scenario = context.type?.toLowerCase() || 'default';
+    let promptTemplate = this.configManager.getPromptTemplate(scenario) || this.configManager.getPromptTemplate('default') || '';
+    // Replace template variables
+    const prompt = promptTemplate
+      .replace(/{{npcName}}/g, npc.name)
+      .replace(/{{npcRole}}/g, (npc.groupAffiliations?.[0]?.role || 'npc'));
+
     // Get emotional state for dialogue tone
     const emotionalState = await this.emotionSystem.getCurrentEmotionalState(npc.id);
-    
+
     // Get relevant memories for context
     const relevantMemories = await this.memoryManager.getRelevantMemories(
       npc.id,
@@ -97,25 +108,8 @@ export class EnhancedDialogueManager {
     let response: DialogueResponse;
 
     try {
-      switch (context.type) {
-        case InteractionType.MENTORING:
-          response = await this.generateMentoringDialogue(npc, context, emotionalState);
-          break;
-        case InteractionType.CONFLICT_RESOLUTION:
-          response = await this.generateConflictResolutionDialogue(npc, context, emotionalState);
-          break;
-        case InteractionType.SOCIAL_BONDING:
-          response = await this.generateSocialBondingDialogue(npc, context, emotionalState);
-          break;
-        case InteractionType.INFORMATION_SHARING:
-          response = await this.generateInformationSharingDialogue(npc, context, emotionalState);
-          break;
-        case InteractionType.GROUP_DECISION:
-          response = await this.generateGroupDecisionDialogue(npc, context, emotionalState);
-          break;
-        default:
-          response = await this.generateDefaultDialogue(npc, context, emotionalState);
-      }
+      // Generate dialogue using config
+      const response = await this.gptService.generateCompletion(prompt, [], this.configManager.getConfig());
 
       // Adjust tone based on relationship and personality
       response.tone = this.adjustToneForRelationship(
@@ -147,36 +141,6 @@ export class EnhancedDialogueManager {
   }
 
   /**
-   * Generate dialogue using GPT service with error handling
-   */
-  private async generateDialogueWithPrompt(
-    npc: NPCData,
-    prompt: string,
-    contextType: string,
-    emotionalState: string
-  ): Promise<string> {
-    try {
-      // Use the GPTServiceWrapper for LLM interactions which handles errors internally
-      return await this.gptService.generateText(prompt, {
-        maxTokens: 200,
-        temperature: 0.7,
-        contextType,
-        characterId: npc.id,
-        gameState: {
-          npcType: npc.type,
-          personality: npc.personality,
-          emotionalState
-        }
-      });
-    } catch (error) {
-      // This catch should rarely be hit as GPTServiceWrapper handles most errors,
-      // but we have it as an extra safety measure
-      this.logger.error('Failed to generate dialogue even with error handling', { error, npcId: npc.id, contextType });
-      return this.getFallbackDialogueText(contextType);
-    }
-  }
-
-  /**
    * Create a fallback response when dialogue generation fails
    */
   private createFallbackResponse(
@@ -186,7 +150,7 @@ export class EnhancedDialogueManager {
   ): DialogueResponse {
     const message = this.getFallbackDialogueText(contextType);
     const tone = this.getFallbackTone(npc.personality, contextType);
-    
+
     return {
       message,
       tone,
@@ -281,284 +245,38 @@ export class EnhancedDialogueManager {
     return 'default';
   }
 
-  /**
-   * The following methods are enhanced versions of the original DialogueManager methods,
-   * now using the GPTServiceWrapper for robust error handling
-   */
-
-  private async generateMentoringDialogue(
-    npc: NPCData,
-    context: InteractionContext,
-    emotionalState: string
-  ): Promise<DialogueResponse> {
-    const { effectiveness = 0.5 } = context.data || {};
-    const teachingStyle = this.getTeachingStyle(npc.personality);
-    
-    // Build a prompt for GPT
-    const prompt = `
-      Generate a mentoring dialogue for an NPC named ${npc.name} who is a ${npc.type} with ${teachingStyle} teaching style.
-      The NPC is currently in a ${emotionalState} emotional state.
-      The teaching effectiveness is ${effectiveness > 0.7 ? 'high' : 'moderate to low'}.
-      The dialogue should convey mentorship and guidance appropriate to the character.
-      Response should be about 2-3 sentences long and in first person.
-    `;
-    
-    const message = await this.generateDialogueWithPrompt(npc, prompt, 'mentoring', emotionalState);
-    
-    const followUp = [
-      'Would you like me to elaborate on any part?',
-      'Let\'s practice this concept together.',
-      'How does this align with your understanding?'
-    ];
-    
-    const tone = effectiveness > 0.7 ? 'patient and encouraging' : 'methodical and supportive';
-    
-    return {
-      message,
-      tone,
-      emotionalState,
-      followUp,
-      subtext: `Teaching effectiveness: ${effectiveness}`
-    };
-  }
-
-  private async generateConflictResolutionDialogue(
-    npc: NPCData,
-    context: InteractionContext,
-    emotionalState: string
-  ): Promise<DialogueResponse> {
-    const { resolutionChance = 0.5, conflict = 'unspecified dispute' } = context.data || {};
-    const approach = this.getConflictResolutionApproach(npc.personality);
-    
-    // Build a prompt for GPT
-    const prompt = `
-      Generate a conflict resolution dialogue for an NPC named ${npc.name} who is a ${npc.type} with a ${approach} approach to conflict.
-      The NPC is currently in a ${emotionalState} emotional state.
-      The conflict involves: "${conflict}"
-      The chance of resolution is ${resolutionChance > 0.6 ? 'high' : 'uncertain'}.
-      The dialogue should reflect their attempt to resolve the conflict.
-      Response should be about 2-3 sentences long and in first person.
-    `;
-    
-    const message = await this.generateDialogueWithPrompt(npc, prompt, 'conflict_resolution', emotionalState);
-    
-    const followUp = resolutionChance > 0.6
-      ? [
-          'What are your thoughts on this approach?',
-          'How can we make this work for you?',
-          'Let\'s focus on our shared goals.'
-        ]
-      : [
-          'What are your main concerns?',
-          'Let\'s take a step back and reassess.',
-          'Perhaps we can find some common ground.'
-        ];
-    
-    const tone = resolutionChance > 0.6 ? 'diplomatic and constructive' : 'cautious but open';
-    
-    return {
-      message,
-      tone,
-      emotionalState,
-      followUp,
-      subtext: `Conflict resolution approach: ${approach}`
-    };
-  }
-
-  private async generateSocialBondingDialogue(
-    npc: NPCData,
-    context: InteractionContext,
-    emotionalState: string
-  ): Promise<DialogueResponse> {
-    const { bondingScore = 0.5, activity = 'spending time together' } = context.data || {};
-    const socialStyle = this.getSocialStyle(npc.personality);
-    
-    // Build a prompt for GPT
-    const prompt = `
-      Generate a social bonding dialogue for an NPC named ${npc.name} who is a ${npc.type} with a ${socialStyle} social style.
-      The NPC is currently in a ${emotionalState} emotional state.
-      They have been ${activity} with the player.
-      The bonding score is ${bondingScore > 0.7 ? 'high' : 'moderate to low'}.
-      The dialogue should reflect their feelings about the social interaction.
-      Response should be about 2-3 sentences long and in first person.
-    `;
-    
-    const message = await this.generateDialogueWithPrompt(npc, prompt, 'social_bonding', emotionalState);
-    
-    const followUp = bondingScore > 0.7
-      ? [
-          'We should do this again sometime.',
-          'What other interests do we share?',
-          'This has been really enjoyable.'
-        ]
-      : [
-          'What are your thoughts on this?',
-          'Perhaps we could try something different next time.',
-          'Tell me more about your interests.'
-        ];
-    
-    const tone = bondingScore > 0.7 ? 'warm and genuine' : 'polite and measured';
-    
-    return {
-      message,
-      tone,
-      emotionalState,
-      followUp,
-      subtext: `Social bonding style: ${socialStyle}`
-    };
-  }
-
-  private async generateInformationSharingDialogue(
-    npc: NPCData,
-    context: InteractionContext,
-    emotionalState: string
-  ): Promise<DialogueResponse> {
-    const { sharingEffectiveness = 0.5, information = 'general knowledge' } = context.data || {};
-    const trustLevel = context.socialContext?.relationship || 0;
-    
-    // Build a prompt for GPT
-    const prompt = `
-      Generate an information sharing dialogue for an NPC named ${npc.name} who is a ${npc.type} with trust level ${trustLevel}/100.
-      The NPC is currently in a ${emotionalState} emotional state.
-      The information to share is about: "${information}"
-      The sharing effectiveness is ${sharingEffectiveness > 0.7 ? 'high' : 'moderate to low'}.
-      The dialogue should convey information appropriate to the trust level.
-      Response should be about 2-3 sentences long and in first person.
-    `;
-    
-    const message = await this.generateDialogueWithPrompt(npc, prompt, 'information_sharing', emotionalState);
-    
-    const followUp = sharingEffectiveness > 0.7
-      ? [
-          'Is there anything specific you want to know about this?',
-          'I can elaborate if you\'re interested.',
-          'What do you make of this information?'
-        ]
-      : [
-          'I hope that helps somewhat.',
-          'That\'s about all I know on the subject.',
-          'Do you need any clarification?'
-        ];
-    
-    const tone = sharingEffectiveness > 0.7 ? 'confidential and sincere' : 'cautious and reserved';
-    
-    return {
-      message,
-      tone,
-      emotionalState,
-      followUp,
-      subtext: `Trust level: ${trustLevel}/100`
-    };
-  }
-
-  private async generateGroupDecisionDialogue(
-    npc: NPCData,
-    context: InteractionContext,
-    emotionalState: string
-  ): Promise<DialogueResponse> {
-    const { influenceScore = 0.5, decision = 'unspecified matter' } = context.data || {};
-    const leadershipStyle = this.getLeadershipStyle(npc.personality);
-    
-    // Build a prompt for GPT
-    const prompt = `
-      Generate a group decision dialogue for an NPC named ${npc.name} who is a ${npc.type} with a ${leadershipStyle} leadership style.
-      The NPC is currently in a ${emotionalState} emotional state.
-      The decision involves: "${decision}"
-      The NPC's influence score is ${influenceScore > 0.7 ? 'high' : 'moderate to low'}.
-      The dialogue should reflect their approach to group decision-making.
-      Response should be about 2-3 sentences long and in first person.
-    `;
-    
-    const message = await this.generateDialogueWithPrompt(npc, prompt, 'group_decision', emotionalState);
-    
-    const followUp = influenceScore > 0.7
-      ? [
-          'What are your thoughts on this plan?',
-          'Let\'s proceed if everyone agrees.',
-          'Does anyone have concerns to address?'
-        ]
-      : [
-          'What alternatives should we consider?',
-          'I\'d like to hear everyone\'s perspective.',
-          'We need to carefully weigh our options.'
-        ];
-    
-    const tone = influenceScore > 0.7 ? 'confident and decisive' : 'thoughtful and inclusive';
-    
-    return {
-      message,
-      tone,
-      emotionalState,
-      followUp,
-      subtext: `Leadership style: ${leadershipStyle}`
-    };
-  }
-
-  private async generateDefaultDialogue(
-    npc: NPCData,
-    context: InteractionContext,
-    emotionalState: string
-  ): Promise<DialogueResponse> {
-    const relationshipLevel = context.socialContext?.relationship || 0;
-    
-    // Build a prompt for GPT
-    const prompt = `
-      Generate a general dialogue for an NPC named ${npc.name} who is a ${npc.type}.
-      The NPC is currently in a ${emotionalState} emotional state.
-      The relationship level with the player is ${relationshipLevel}/100.
-      Response should be about 2-3 sentences long, appropriate to the relationship level, and in first person.
-    `;
-    
-    const message = await this.generateDialogueWithPrompt(npc, prompt, 'default', emotionalState);
-    
-    const followUp = [
-      'Is there something specific you needed?',
-      'How can I assist you today?',
-      'Was there anything else?'
-    ];
-    
-    const tone = relationshipLevel > 70 ? 'friendly and open' : relationshipLevel > 30 ? 'neutral and polite' : 'distant and reserved';
-    
-    return {
-      message,
-      tone,
-      emotionalState,
-      followUp
-    };
-  }
-
   // The following utility methods are from the original DialogueManager
-  
+
   private getTeachingStyle(personality: NPCData['personality']): string {
     // Simple mapping of personality traits to teaching styles
     return personality.conscientiousness > 70 ? 'methodical' :
-           personality.openness > 70 ? 'explorative' :
-           personality.agreeableness > 70 ? 'supportive' :
-           'pragmatic';
+      personality.openness > 70 ? 'explorative' :
+        personality.agreeableness > 70 ? 'supportive' :
+          'pragmatic';
   }
 
   private getConflictResolutionApproach(personality: NPCData['personality']): string {
     // Simple mapping of personality traits to conflict resolution approaches
     return personality.agreeableness > 70 ? 'collaborative' :
-           personality.extraversion > 70 ? 'direct' :
-           personality.neuroticism > 70 ? 'cautious' :
-           'analytical';
+      personality.extraversion > 70 ? 'direct' :
+        personality.neuroticism > 70 ? 'cautious' :
+          'analytical';
   }
 
   private getSocialStyle(personality: NPCData['personality']): string {
     // Simple mapping of personality traits to social styles
     return personality.extraversion > 70 ? 'outgoing' :
-           personality.agreeableness > 70 ? 'warm' :
-           personality.openness > 70 ? 'curious' :
-           'reserved';
+      personality.agreeableness > 70 ? 'warm' :
+        personality.openness > 70 ? 'curious' :
+          'reserved';
   }
 
   private getLeadershipStyle(personality: NPCData['personality']): string {
     // Simple mapping of personality traits to leadership styles
     return personality.conscientiousness > 70 ? 'organized' :
-           personality.extraversion > 70 ? 'inspirational' :
-           personality.agreeableness > 70 ? 'democratic' :
-           'pragmatic';
+      personality.extraversion > 70 ? 'inspirational' :
+        personality.agreeableness > 70 ? 'democratic' :
+          'pragmatic';
   }
 
   private adjustToneForRelationship(

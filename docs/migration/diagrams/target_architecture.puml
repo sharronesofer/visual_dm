@@ -1,0 +1,32 @@
+@startuml
+!define RECTANGLE class
+
+RECTANGLE Python_Backend {
+  +FastAPI Service
+  +World Generation
+  +Data Models
+  +Webhook Handler
+}
+
+RECTANGLE Unity_Frontend {
+  +C# Scripts
+  +UI System
+  +Network Client
+  +Runtime World Loader
+}
+
+Python_Backend <.. Unity_Frontend : REST/Webhook (JSON)
+
+note right of Python_Backend
+  - Exposes REST API for world data
+  - Handles webhook requests from Unity
+  - Manages persistent game state
+end note
+
+note left of Unity_Frontend
+  - Renders 2D world (SpriteRenderer)
+  - Handles user input and UI
+  - Communicates with backend at runtime
+end note
+
+@enduml

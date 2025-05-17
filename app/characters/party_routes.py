@@ -9,6 +9,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from fastapi import APIRouter, HTTPException
 from visual_client.game.character import should_abandon as visual_client_should_abandon
+from app.core.repositories.party_repository import PartyRepository
 
 party_bp = Blueprint("party", __name__)
 

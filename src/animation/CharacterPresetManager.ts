@@ -1,19 +1,26 @@
 // CharacterPresetManager.ts
 // Manages saving and loading of character customization presets
 
-import { CharacterCustomization, BodyType } from './CharacterCustomization';
+import {
+  CharacterCustomization,
+  ExtendedCharacterCustomization,
+  ExtendedCharacterCustomizationSerializer,
+  CHARACTER_CUSTOMIZATION_VERSION,
+  BodyType,
+} from './CharacterCustomization';
 import { CharacterCustomizationManager } from './CharacterCustomization';
 import { CharacterCustomizationFactory } from './CharacterCustomizationFactory';
 
 /**
- * Interface for a saved character preset.
+ * Interface for a saved character preset (supports modular/mesh-based customization).
  */
 export interface CharacterPreset {
   id: string;
   name: string;
   description?: string;
   tags?: string[];
-  customization: CharacterCustomization;
+  customization: CharacterCustomization | ExtendedCharacterCustomization;
+  version?: number; // Serialization version
   createdAt: number;
   updatedAt: number;
 }
@@ -31,26 +38,29 @@ export class CharacterPresetManager {
   }
 
   /**
-   * Save a new character preset.
+   * Save a new character preset (supports modular/mesh-based customization).
    */
   public savePreset(
     id: string,
     name: string,
-    customization: CharacterCustomization,
+    customization: CharacterCustomization | ExtendedCharacterCustomization,
     description?: string,
     tags?: string[]
   ): CharacterPreset {
     const now = Date.now();
+    const version = (customization as any).meshSlots || (customization as any).blendShapes || (customization as any).materials
+      ? CHARACTER_CUSTOMIZATION_VERSION
+      : undefined;
     const preset: CharacterPreset = {
       id,
       name,
       description,
       tags,
       customization,
+      version,
       createdAt: now,
       updatedAt: now,
     };
-
     this.presets.set(id, preset);
     this.persistPresets();
     return preset;
@@ -128,27 +138,33 @@ export class CharacterPresetManager {
   }
 
   /**
-   * Load presets from storage.
+   * Load presets from storage, migrating old formats if needed.
    */
   private loadPresets(): void {
     try {
       const storedData = localStorage.getItem(CharacterPresetManager.STORAGE_KEY);
       if (storedData) {
         const presets = JSON.parse(storedData) as CharacterPreset[];
-        this.presets = new Map(presets.map(preset => [preset.id, preset]));
+        // Migrate old presets if needed
+        const migrated = presets.map(preset => {
+          if (preset.version === undefined && (preset.customization as any).meshSlots) {
+            // Add version to legacy modular presets
+            return { ...preset, version: CHARACTER_CUSTOMIZATION_VERSION };
+          }
+          return preset;
+        });
+        this.presets = new Map(migrated.map(preset => [preset.id, preset]));
       } else {
-        // Initialize with default presets if storage is empty
         this.initializeDefaultPresets();
       }
     } catch (error) {
       console.error('Failed to load character presets:', error);
-      // Initialize with defaults on error
       this.initializeDefaultPresets();
     }
   }
 
   /**
-   * Save presets to storage.
+   * Save presets to storage using JSON serialization.
    */
   private persistPresets(): void {
     try {

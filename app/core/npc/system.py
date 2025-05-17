@@ -9,8 +9,8 @@ from sqlalchemy.orm import Session
 from flask import current_app
 from app.core.database import db
 from app.core.models.npc import NPC
-from app.core.models.faction import Faction
-from app.core.models.region import Region
+from app.core.models.world import Faction
+from app.core.models.world import Region
 from app.core.npc.relationships import NPCRelationships
 from app.core.npc.loyalty import NPCLoyalty
 from app.core.npc.travel import NPCTravel

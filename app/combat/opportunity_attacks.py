@@ -4,12 +4,11 @@ This includes movement-based triggers, reach weapons, and special abilities.
 """
 
 from typing import List, Tuple, Dict, Any, Optional
-from app.core.models.combat import CombatParticipant, Combat
-from app.combat.combat_utils import calculate_damage
 from app.core.database import db
 
 class OpportunityAttackHandler:
     def __init__(self, combat_id: int):
+        from app.core.models.combat import Combat
         self.combat = Combat.query.get(combat_id)
         if not self.combat:
             raise ValueError(f"Combat with id {combat_id} not found")
@@ -29,6 +28,7 @@ class OpportunityAttackHandler:
         Returns:
             List of dicts containing attacker info and trigger positions
         """
+        from app.core.models.combat import CombatParticipant
         if len(movement_path) < 2:
             return []
             
@@ -84,6 +84,7 @@ class OpportunityAttackHandler:
         Returns:
             List of attack results
         """
+        from app.core.models.combat import CombatParticipant
         results = []
         target = CombatParticipant.query.get(moving_participant_id)
         
@@ -110,6 +111,7 @@ class OpportunityAttackHandler:
 
     def reset_opportunity_attacks(self) -> None:
         """Reset opportunity attack usage for all participants at start of round."""
+        from app.core.models.combat import CombatParticipant
         participants = CombatParticipant.query.filter_by(
             combat_id=self.combat.id
         ).all()
@@ -125,7 +127,7 @@ class OpportunityAttackHandler:
             
         db.session.commit()
 
-    def _has_made_opportunity_attack(self, participant: CombatParticipant) -> bool:
+    def _has_made_opportunity_attack(self, participant) -> bool:
         """Check if a participant has already made an opportunity attack this round."""
         if not participant.status_effects:
             return False
@@ -135,7 +137,7 @@ class OpportunityAttackHandler:
             for effect in participant.status_effects
         )
 
-    def _mark_opportunity_attack_used(self, participant: CombatParticipant) -> None:
+    def _mark_opportunity_attack_used(self, participant) -> None:
         """Mark that a participant has used their opportunity attack this round."""
         if not participant.status_effects:
             participant.status_effects = []
@@ -147,7 +149,7 @@ class OpportunityAttackHandler:
         
         db.session.commit()
 
-    def _get_attack_range(self, participant: CombatParticipant) -> int:
+    def _get_attack_range(self, participant) -> int:
         """Get the attack range for a participant, considering equipment and effects."""
         base_range = 1  # Default melee range
         
@@ -188,8 +190,8 @@ class OpportunityAttackHandler:
 
     def _execute_opportunity_attack(
         self,
-        attacker: CombatParticipant,
-        target: CombatParticipant,
+        attacker,
+        target,
         trigger_position: Tuple[int, int]
     ) -> Dict[str, Any]:
         """

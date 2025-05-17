@@ -7,29 +7,77 @@ import {
   GroupDecision,
   GroupDecisionType,
   GROUP_CONSTANTS
-} from '../../types/npc/group';
-import { MemoryEvent, MemoryEventType } from '../../types/npc/memory';
-import { NPCData } from '../../types/npc/npc';
+} from '../../core/interfaces/types/npc/group';
+import { MemoryEvent, MemoryEventType } from '../../core/interfaces/types/npc/memory';
+import { NPCData, StatisticalCrowdModel } from '../../core/interfaces/types/npc/npc';
+import { SpatialGrid } from '../../utils/SpatialGrid';
+import { EventBus } from '../../core/interfaces/types/events';
+import { ResourceMonitor } from '../../core/performance/ResourceMonitor';
+import { EmotionSystem } from './EmotionSystem';
+import { ReputationSystem } from './ReputationSystem';
+import { ReputationAuditLogger } from '../reputation/ReputationAuditLogger';
 
-export interface GroupManager {
-  getGroup(groupId: string): Group | undefined;
-  createGroup(members: NPCData[]): Group;
-  addMember(groupId: string, member: NPCData): void;
-  removeMember(groupId: string, memberId: string): void;
-  getNPC(npcId: string): NPCData | undefined;
-  removeGroup(groupId: string): Promise<void>;
-  updateGroup(group: Group): void;
-  listGroups(): Group[];
-  getGroupsForNPC(npcId: string): Group[];
-}
+// export interface GroupManagerInterface {
+//   getGroup(groupId: string): Group | undefined;
+//   createGroup(name: string, type: GroupType, description: string, leaderId: string, leaderData: NPCData): Group;
+//   addMember(groupId: string, member: NPCData): void;
+//   removeMember(groupId: string, memberId: string): void;
+//   getNPC(npcId: string): NPCData | undefined;
+//   removeGroup(groupId: string): Promise<void>;
+//   updateGroup(group: Group): void;
+//   listGroups(): Group[];
+//   getGroupsForNPC(npcId: string): Group[];
+// }
 
 export class GroupManager {
   private groups: Map<string, Group>;
   private npcToGroups: Map<string, Set<string>>; // npcId -> set of groupIds
+  private crowdModels: Map<string, StatisticalCrowdModel> = new Map();
+  private spatialGrid: SpatialGrid = new SpatialGrid(100);
+  private lodDistances: [number, number] = [300, 150]; // [toStatistical, toIndividual]
+
+  // --- Event-driven NPC update system ---
+  private npcUpdateQueue: Array<{ npcId: string; priority: number }> = [];
+  private updating: boolean = false;
+
+  private npcs: Map<string, NPCData> = new Map();
+
+  // --- Dynamic simulation fidelity system ---
+  private importantNPCs: Set<string> = new Set();
+
+  private emotionSystem = new EmotionSystem();
+  private reputationSystem = new ReputationSystem();
 
   constructor() {
     this.groups = new Map();
     this.npcToGroups = new Map();
+    // Subscribe to player movement events for event-driven LOD updates
+    EventBus.getInstance().on('player:move' as any, (event: any) => {
+      // TODO: Replace 'player:move' with the actual event type for player movement if different
+      const pos = event?.position || event?.newPosition;
+      if (pos && typeof pos.x === 'number' && typeof pos.y === 'number') {
+        this.updateLODs(pos, this.lodDistances);
+      }
+    });
+    // Periodically process LOD transitions for smooth blending
+    setInterval(() => this.processTransitions(), 100);
+    // Subscribe to NPC-related events
+    EventBus.getInstance().on('npc:needsUpdate' as any, (event: any) => {
+      // Schedule with high priority (e.g., 0)
+      this.scheduleNPCUpdate(event.npcId, 0);
+    });
+    EventBus.getInstance().on('npc:proximityChange' as any, (event: any) => {
+      // Schedule with priority based on proximity (e.g., event.priority)
+      this.scheduleNPCUpdate(event.npcId, event.priority ?? 1);
+    });
+    EventBus.getInstance().on('npc:interaction' as any, (event: any) => {
+      // Schedule with medium priority
+      this.scheduleNPCUpdate(event.npcId, 2);
+    });
+    // Start periodic monitoring for dynamic LOD adjustment
+    setInterval(() => {
+      this.monitorAndAdjustLOD();
+    }, 2000);
   }
 
   /**
@@ -39,31 +87,58 @@ export class GroupManager {
     name: string,
     type: GroupType,
     description: string,
-    leaderId: string
+    leaderId: string,
+    leaderData: NPCData
   ): Group {
+    const now = Date.now();
+    const leaderMember: GroupMember = {
+      ...leaderData,
+      role: GroupRole.LEADER,
+      joinedAt: now,
+      contributionScore: 0,
+      relationshipScores: new Map(),
+      name: leaderData.name || 'Leader',
+      faction: leaderData.faction || undefined,
+      position: leaderData.position || { x: 0, y: 0 },
+      // Add other required fields as needed
+    };
+    this.npcs.set(leaderId, leaderData);
     const group: Group = {
       id: uuidv4(),
       name,
       type,
       description,
       leaderId,
-      members: new Map(),
-      createdAt: Date.now(),
-      lastActive: Date.now(),
-      reputation: GROUP_CONSTANTS.DEFAULT_REPUTATION
+      members: new Map([[leaderId, leaderMember]]),
+      createdAt: now,
+      lastActive: now,
+      reputation: GROUP_CONSTANTS.DEFAULT_REPUTATION,
+      hierarchy: {
+        leaderId,
+        deputyIds: [],
+        advisorIds: [],
+        subgroups: [],
+      },
+      resources: {
+        wealth: 0,
+        territory: [],
+        assets: new Map(),
+        sharedInventory: new Map(),
+        accessPermissions: new Map(),
+      },
+      goals: [],
+      relationships: new Map(),
+      factionAffiliation: undefined,
+      activeDecisions: [],
+      decisionHistory: [],
+      meetingSchedule: undefined,
+      disbandConditions: undefined, // Use undefined or provide required object if needed
+      decisions: [],
+      formationTime: now,
+      dissolutionConditions: [],
     };
-
-    // Add leader as first member
-    const leaderMember: GroupMember = {
-      id: leaderId,
-      role: GroupRole.LEADER,
-      joinedAt: group.createdAt,
-      contribution: 100 // Leaders start with max contribution
-    };
-
-    group.members.set(leaderId, leaderMember);
     this.groups.set(group.id, group);
-
+    this.addNpcToGroupIndex(leaderId, group.id);
     return group;
   }
 
@@ -72,28 +147,26 @@ export class GroupManager {
    */
   public addMember(
     groupId: string,
-    memberId: string,
+    memberData: NPCData,
     role: GroupRole = GroupRole.MEMBER
   ): boolean {
     const group = this.groups.get(groupId);
     if (!group) return false;
-
-    // Check if member already exists
-    if (group.members.has(memberId)) return false;
-
-    // Check if group is full
-    if (group.members.size >= GROUP_CONSTANTS.MAX_MEMBERS) return false;
-
+    const now = Date.now();
     const member: GroupMember = {
-      id: memberId,
+      ...memberData,
       role,
-      joinedAt: Date.now(),
-      contribution: 0
+      joinedAt: now,
+      contributionScore: 0,
+      relationshipScores: new Map(),
+      name: memberData.name || 'Member',
+      faction: memberData.faction || undefined,
+      position: memberData.position || { x: 0, y: 0 },
+      // Add other required fields as needed
     };
-
-    group.members.set(memberId, member);
-    group.lastActive = Date.now();
-
+    group.members.set(memberData.id, member);
+    this.npcs.set(memberData.id, memberData);
+    this.addNpcToGroupIndex(memberData.id, groupId);
     return true;
   }
 
@@ -156,7 +229,7 @@ export class GroupManager {
     const member = group.members.get(memberId);
     if (!member) return false;
 
-    member.contribution = Math.max(0, Math.min(100, member.contribution + contributionDelta));
+    member.contributionScore = Math.max(0, Math.min(100, member.contributionScore + contributionDelta));
     group.lastActive = Date.now();
     return true;
   }
@@ -190,11 +263,21 @@ export class GroupManager {
     const group = this.groups.get(groupId);
     if (!group) return false;
 
+    const oldReputation = group.reputation;
     group.reputation = Math.max(
       GROUP_CONSTANTS.MIN_REPUTATION,
       Math.min(GROUP_CONSTANTS.MAX_REPUTATION, group.reputation + delta)
     );
     group.lastActive = Date.now();
+    // Audit log
+    ReputationAuditLogger.log({
+      timestamp: new Date().toISOString(),
+      sourceSystem: 'GroupManager',
+      targetEntity: groupId,
+      valueChange: group.reputation - oldReputation,
+      context: `old: ${oldReputation}, new: ${group.reputation}, delta: ${delta}`,
+      callingSystem: 'GroupManager.updateGroupReputation'
+    });
     return true;
   }
 
@@ -231,7 +314,7 @@ export class GroupManager {
     for (const group of this.groups.values()) {
       for (const member of group.members.values()) {
         if (member.role !== GroupRole.LEADER) {
-          member.contribution *= (1 - GROUP_CONSTANTS.CONTRIBUTION_DECAY_RATE);
+          member.contributionScore *= (1 - GROUP_CONSTANTS.CONTRIBUTION_DECAY_RATE);
         }
       }
     }
@@ -331,25 +414,8 @@ export class GroupManager {
   ): boolean {
     const group = this.groups.get(groupId);
     if (!group) return false;
-
     const member = group.members.get(npcId);
     if (!member) return false;
-
-    member.influence = Math.max(0, Math.min(100, member.influence + amount));
-    member.activityLog.push({
-      id: uuidv4(),
-      timestamp: Date.now(),
-      type: MemoryEventType.FACTION_EVENT,
-      importance: Math.abs(amount),
-      participants: [npcId],
-      details: {
-        description: reason,
-        emotionalImpact: amount > 0 ? 5 : -5
-      },
-      tags: ['influence_change', amount > 0 ? 'gain' : 'loss']
-    });
-
-    group.lastActive = Date.now();
     return true;
   }
 
@@ -418,14 +484,14 @@ export class GroupManager {
         if (decision.affectedMembers.length > 0) {
           const newLeaderId = decision.affectedMembers[0];
           const oldLeaderId = group.leaderId;
-          
+
           // Update roles
           const newLeader = group.members.get(newLeaderId);
           const oldLeaderMember = group.members.get(oldLeaderId);
           if (newLeader && oldLeaderMember) {
             newLeader.role = GroupRole.LEADER;
             oldLeaderMember.role = GroupRole.ADVISOR;
-            
+
             // Update leader
             group.leaderId = newLeaderId;
           }
@@ -439,7 +505,7 @@ export class GroupManager {
         break;
 
       // Add more implementation logic for other decision types
-      
+
       default:
         // Log unhandled decision type
         console.warn(`Unhandled decision type: ${decision.type}`);
@@ -454,7 +520,7 @@ export class GroupManager {
     if (!group) return;
 
     const members = Array.from(group.members.values());
-    
+
     members.forEach(member => {
       members.forEach(otherMember => {
         if (member.id === otherMember.id) return;
@@ -479,7 +545,7 @@ export class GroupManager {
     group.members.forEach((member, memberId) => {
       const lastActivity = member.activityLog[member.activityLog.length - 1]?.timestamp || member.joinedAt;
       const daysSinceActivity = (now - lastActivity) / (24 * 60 * 60 * 1000);
-      
+
       if (daysSinceActivity > 1) {
         const decayAmount = member.influence * GROUP_CONSTANTS.INFLUENCE_DECAY_RATE * daysSinceActivity;
         this.updateMemberInfluence(
@@ -628,5 +694,283 @@ export class GroupManager {
     });
 
     return true;
+  }
+
+  /**
+   * Create a new statistical crowd model from a set of NPC IDs and a central position
+   */
+  public createStatisticalCrowdModel(npcIds: string[], position: { x: number; y: number }): StatisticalCrowdModel {
+    const id = `crowd_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    const density = npcIds.length; // For now, 1 NPC per area unit
+    const averageMovement = { x: 0, y: 0 }; // Placeholder, can be computed from NPCs
+    const dominantBehaviors: string[] = []; // Placeholder, can be computed from NPCs
+    const model: StatisticalCrowdModel = {
+      id,
+      npcIds,
+      position,
+      density,
+      averageMovement,
+      dominantBehaviors,
+      state: 'active',
+      lastUpdate: Date.now(),
+    };
+    this.crowdModels.set(id, model);
+    this.spatialGrid.addEntity(id, position.x, position.y);
+    // Emit crowd-level emotion and reputation events
+    const emotion = this.emotionSystem.processCrowdEmotion(model);
+    const reputation = this.reputationSystem.processCrowdReputation(model, 'world'); // 'world' as placeholder target
+    // TODO: Add 'crowd:emotionUpdate' and 'crowd:reputationUpdate' to EventMap for type safety
+    // @ts-expect-error: Custom event type not in EventMap yet
+    EventBus.getInstance().emit('crowd:emotionUpdate', { crowdId: id, emotion });
+    // @ts-expect-error: Custom event type not in EventMap yet
+    EventBus.getInstance().emit('crowd:reputationUpdate', { crowdId: id, reputation });
+    return model;
+  }
+
+  /**
+   * Update a statistical crowd model with new data
+   */
+  public updateStatisticalCrowdModel(crowdId: string, updates: Partial<StatisticalCrowdModel>): void {
+    const model = this.crowdModels.get(crowdId);
+    if (!model) return;
+    Object.assign(model, updates);
+    if (updates.position) {
+      this.spatialGrid.updateEntity(crowdId, updates.position.x, updates.position.y);
+    }
+    model.lastUpdate = Date.now();
+    // Emit updated crowd-level emotion and reputation events
+    const emotion = this.emotionSystem.processCrowdEmotion(model);
+    const reputation = this.reputationSystem.processCrowdReputation(model, 'world');
+    // TODO: Add 'crowd:emotionUpdate' and 'crowd:reputationUpdate' to EventMap for type safety
+    // @ts-expect-error: Custom event type not in EventMap yet
+    EventBus.getInstance().emit('crowd:emotionUpdate', { crowdId: crowdId, emotion });
+    // @ts-expect-error: Custom event type not in EventMap yet
+    EventBus.getInstance().emit('crowd:reputationUpdate', { crowdId: crowdId, reputation });
+  }
+
+  /**
+   * Dissolve a statistical crowd model and remove it from the system
+   */
+  public dissolveStatisticalCrowdModel(crowdId: string): boolean {
+    const model = this.crowdModels.get(crowdId);
+    if (!model) return false;
+    this.crowdModels.delete(crowdId);
+    this.spatialGrid.removeEntity(crowdId);
+    // TODO: Add 'crowd:dissolved' to EventMap for type safety
+    // @ts-expect-error: Custom event type not in EventMap yet
+    EventBus.getInstance().emit('crowd:dissolved', { crowdId });
+    return true;
+  }
+
+  /**
+   * Get a statistical crowd model by ID
+   */
+  public getStatisticalCrowdModel(crowdId: string): StatisticalCrowdModel | undefined {
+    return this.crowdModels.get(crowdId);
+  }
+
+  /**
+   * Get all crowd models within a given radius of a center point
+   */
+  public getCrowdModelsInArea(center: { x: number; y: number }, radius: number): StatisticalCrowdModel[] {
+    const ids = this.spatialGrid.getNearbyEntities(center, radius);
+    return ids
+      .map(id => this.crowdModels.get(id))
+      .filter((model): model is StatisticalCrowdModel => !!model);
+  }
+
+  /**
+   * Convert a set of NPCs to a statistical crowd model (for LOD pooling)
+   */
+  public convertNPCsToStatisticalModel(npcIds: string[]): StatisticalCrowdModel {
+    // Compute central position as average
+    const npcs = npcIds
+      .map(id => this.getNPC(id))
+      .filter((npc): npc is NPCData => !!npc);
+    const positions = npcs.map(npc => npc.position);
+    const count = positions.length;
+    const center = positions.reduce((acc, pos) => ({ x: acc.x + pos.x, y: acc.y + pos.y }), { x: 0, y: 0 });
+    const avgPos = count > 0 ? { x: center.x / count, y: center.y / count } : { x: 0, y: 0 };
+
+    // Compute average movement vector
+    const movements = npcs.map(npc => (npc as any).movement || { x: 0, y: 0 });
+    const avgMovement = movements.length > 0
+      ? movements.reduce((acc, m) => ({ x: acc.x + m.x, y: acc.y + m.y }), { x: 0, y: 0 })
+      : { x: 0, y: 0 };
+    if (movements.length > 0) {
+      avgMovement.x /= movements.length;
+      avgMovement.y /= movements.length;
+    }
+
+    // Compute dominant behaviors (most common currentBehavior string)
+    const behaviorCounts: Record<string, number> = {};
+    for (const npc of npcs) {
+      const behavior = (npc as any).currentBehavior || 'idle';
+      behaviorCounts[behavior] = (behaviorCounts[behavior] || 0) + 1;
+    }
+    const sortedBehaviors = Object.entries(behaviorCounts).sort((a, b) => b[1] - a[1]);
+    const dominantBehaviors = sortedBehaviors.slice(0, 3).map(([behavior]) => behavior);
+
+    // Create the statistical crowd model
+    const model = this.createStatisticalCrowdModel(npcIds, avgPos);
+    model.averageMovement = avgMovement;
+    model.dominantBehaviors = dominantBehaviors;
+    this.crowdModels.set(model.id, model);
+    return model;
+  }
+
+  /**
+   * Convert a statistical crowd model back to individual NPCs (for LOD unpooling)
+   */
+  public convertStatisticalModelToNPCs(crowdId: string): string[] {
+    const model = this.getStatisticalCrowdModel(crowdId);
+    if (!model) return [];
+    this.dissolveStatisticalCrowdModel(crowdId);
+    return model.npcIds;
+  }
+
+  /**
+   * Update LODs for all NPCs and crowd models based on player position and LOD distances
+   * lodDistances: [individualToStatistical, statisticalToIndividual]
+   * - NPCs beyond individualToStatistical are pooled into a statistical model
+   * - Statistical models within statisticalToIndividual are dissolved back to individuals
+   */
+  public updateLODs(playerPosition: { x: number; y: number }, lodDistances: [number, number]): void {
+    const [toStatistical, toIndividual] = lodDistances;
+    // 1. Pool distant NPCs into statistical models
+    const cellSize = this.spatialGrid['cellSize'] || 100;
+    const grid = new Map<string, string[]>(); // cellKey -> npcIds
+    for (const [npcId, pos] of this.spatialGrid['entityPositions']) {
+      const dist = Math.sqrt(
+        Math.pow(pos.x - playerPosition.x, 2) +
+        Math.pow(pos.y - playerPosition.y, 2)
+      );
+      if (dist > toStatistical) {
+        const cellKey = this.spatialGrid['getCellKey'](pos.x, pos.y);
+        if (!grid.has(cellKey)) grid.set(cellKey, []);
+        grid.get(cellKey)!.push(npcId);
+      }
+    }
+    for (const npcIds of grid.values()) {
+      if (npcIds.length > 2) {
+        const model = this.convertNPCsToStatisticalModel(npcIds);
+        model.state = 'transitioning';
+        (model as any).transitionStart = Date.now();
+        npcIds.forEach(id => this.spatialGrid.removeEntity(id));
+      }
+    }
+    // 2. Unpool statistical models that are now close to the player
+    for (const [crowdId, model] of this.crowdModels.entries()) {
+      const dist = Math.sqrt(
+        Math.pow(model.position.x - playerPosition.x, 2) +
+        Math.pow(model.position.y - playerPosition.y, 2)
+      );
+      if (dist < toIndividual && model.state !== 'transitioning') {
+        model.state = 'transitioning';
+        (model as any).transitionStart = Date.now();
+        setTimeout(() => {
+          const npcIds = this.convertStatisticalModelToNPCs(crowdId);
+          npcIds.forEach(id => {
+            const npc = this.getNPC(id);
+            if (npc) this.spatialGrid.addEntity(id, npc.position.x, npc.position.y);
+          });
+        }, 500);
+      }
+    }
+  }
+
+  /**
+   * Set the LOD thresholds for statistical pooling and unpooling
+   */
+  public setLODThresholds(toStatistical: number, toIndividual: number): void {
+    this.lodDistances = [toStatistical, toIndividual];
+  }
+
+  /**
+   * Process smooth transitions for crowd models (e.g., fade in/out, staged updates)
+   */
+  private processTransitions(): void {
+    const now = Date.now();
+    for (const [crowdId, model] of this.crowdModels.entries()) {
+      if (model.state === 'transitioning' && (now - (model as any).transitionStart < 500)) {
+        // Still transitioning, do nothing
+        continue;
+      }
+      if (model.state === 'transitioning' && (now - (model as any).transitionStart >= 500)) {
+        // Finalize transition
+        model.state = 'active';
+        delete (model as any).transitionStart;
+      }
+    }
+  }
+
+  /**
+   * Schedule an NPC for update with a given priority (lower = higher priority).
+   * If already in the queue, reprioritize.
+   */
+  public scheduleNPCUpdate(npcId: string, priority: number): void {
+    const existing = this.npcUpdateQueue.find(entry => entry.npcId === npcId);
+    if (existing) {
+      existing.priority = Math.min(existing.priority, priority); // Use the highest priority
+    } else {
+      this.npcUpdateQueue.push({ npcId, priority });
+    }
+    // Sort by priority (lowest first)
+    this.npcUpdateQueue.sort((a, b) => a.priority - b.priority);
+    this.processNPCUpdateQueue();
+  }
+
+  /**
+   * Process the NPC update queue, updating NPCs in priority order.
+   * Ensures only one update loop runs at a time.
+   */
+  private async processNPCUpdateQueue(): Promise<void> {
+    if (this.updating) return;
+    this.updating = true;
+    while (this.npcUpdateQueue.length > 0) {
+      const { npcId } = this.npcUpdateQueue.shift()!;
+      const npc = this.getNPC(npcId);
+      if (npc) {
+        // Call the NPC's update logic here (implement as needed)
+        // Example: npc.updateState();
+        // TODO: Integrate with actual NPC update logic
+      }
+      // Optionally: yield to event loop for responsiveness
+      await new Promise(res => setTimeout(res, 0));
+    }
+    this.updating = false;
+  }
+
+  public getNPC(npcId: string): NPCData | undefined {
+    return this.npcs.get(npcId);
+  }
+
+  /**
+   * Set the list of important NPCs that should always be simulated at full fidelity.
+   */
+  public setImportantNPCs(ids: string[]): void {
+    this.importantNPCs = new Set(ids);
+  }
+
+  /**
+   * Monitor system resources and adjust LOD thresholds dynamically.
+   * Called periodically (every 2 seconds).
+   */
+  private async monitorAndAdjustLOD(): Promise<void> {
+    const metrics = await ResourceMonitor.getInstance()['gatherResourceMetrics']?.();
+    if (!metrics) return;
+    let [toStatistical, toIndividual] = this.lodDistances;
+    // Adjust LOD distances based on CPU usage
+    if (metrics.cpuUsage > 80) {
+      // System under heavy load: increase LOD distances (more pooling)
+      toStatistical = Math.min(toStatistical + 50, 1000);
+      toIndividual = Math.min(toIndividual + 25, 500);
+    } else if (metrics.cpuUsage < 50) {
+      // System has headroom: decrease LOD distances (more detail)
+      toStatistical = Math.max(toStatistical - 50, 100);
+      toIndividual = Math.max(toIndividual - 25, 50);
+    }
+    // Clamp to sensible min/max
+    this.lodDistances = [toStatistical, toIndividual];
   }
 } 

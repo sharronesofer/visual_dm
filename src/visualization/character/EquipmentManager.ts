@@ -1,4 +1,4 @@
-import { Character, Equipment, InventoryItem, ItemType, CharacterUIEvent } from './types';
+import { Character, Equipment, InventoryItem, ItemType, CharacterUIEvent, EquipmentState } from './types';
 
 export class EquipmentManager {
   private container: HTMLElement;
@@ -7,6 +7,11 @@ export class EquipmentManager {
   private tooltipElement: HTMLElement;
   private currentCharacter: Character | null = null;
   private listeners: ((event: CharacterUIEvent) => void)[] = [];
+  private switchCooldown: boolean = false;
+  private cooldownDuration: number = 1000; // ms, can be made configurable
+  private lastSwitchTime: number = 0;
+  private switchingSlot: keyof Equipment | null = null;
+  private stateValidators: Array<(item: InventoryItem, character: Character) => boolean> = [];
 
   constructor(containerId: string) {
     const element = document.getElementById(containerId);
@@ -165,6 +170,60 @@ export class EquipmentManager {
         pointer-events: none;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
       }
+
+      .equipment-slot.switch-anim {
+        animation: switchFade 0.6s cubic-bezier(0.4,0,0.2,1);
+        box-shadow: 0 0 8px 2px #8f8;
+      }
+      @keyframes switchFade {
+        0% { background: #222; }
+        50% { background: #8f8; }
+        100% { background: rgba(255,255,255,0.05); }
+      }
+      .equipment-slot.cooldown-flash {
+        animation: cooldownFlash 0.4s;
+        border: 2px solid #f88;
+      }
+      @keyframes cooldownFlash {
+        0% { border-color: #f88; }
+        50% { border-color: #fff; }
+        100% { border-color: #f88; }
+      }
+      .state-overlay {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        font-size: 18px;
+        color: #f88;
+        pointer-events: none;
+        z-index: 2;
+        text-shadow: 0 0 4px #000;
+      }
+      .state-overlay.empowered { color: #8ff; }
+      .state-overlay.damaged { color: #ff8; }
+      .state-overlay.repaired { color: #8f8; }
+      .durability-bar {
+        position: absolute;
+        bottom: 2px;
+        left: 2px;
+        width: 90%;
+        height: 6px;
+        background: #222;
+        border-radius: 3px;
+        overflow: hidden;
+        z-index: 1;
+      }
+      .durability-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #8f8, #ff8, #f88);
+        border-radius: 3px;
+        transition: width 0.2s;
+      }
+      .slot-item.broken { filter: grayscale(1) brightness(0.7); }
+      .slot-item.disabled { filter: grayscale(1) opacity(0.5); }
+      .slot-item.empowered { box-shadow: 0 0 8px 2px #8ff; }
+      .slot-item.damaged { box-shadow: 0 0 8px 2px #ff8; }
+      .slot-item.repaired { box-shadow: 0 0 8px 2px #8f8; }
     `;
     document.head.appendChild(style);
   }
@@ -208,7 +267,34 @@ export class EquipmentManager {
 
   private equipItem(item: InventoryItem, slot: keyof Equipment): void {
     if (!this.currentCharacter) return;
+    if (this.switchCooldown) {
+      this.flashCooldown(slot);
+      return;
+    }
+    // Pre-switch event hook
+    this.notifyListeners({
+      type: 'preSwitch',
+      character: this.currentCharacter,
+      data: { item, slot }
+    });
+    this.switchingSlot = slot;
+    this.switchCooldown = true;
+    this.lastSwitchTime = Date.now();
+    this.animateSwitch(slot);
+    setTimeout(() => {
+      this.performEquip(item, slot);
+      this.switchCooldown = false;
+      this.switchingSlot = null;
+      // Post-switch event hook
+      this.notifyListeners({
+        type: 'postSwitch',
+        character: this.currentCharacter,
+        data: { item, slot }
+      });
+    }, this.cooldownDuration);
+  }
 
+  private performEquip(item: InventoryItem, slot: keyof Equipment): void {
     // Validate item type for slot
     const validTypes: Record<keyof Equipment, ItemType[]> = {
       weapon: [ItemType.WEAPON],
@@ -216,56 +302,91 @@ export class EquipmentManager {
       accessory1: [ItemType.ACCESSORY],
       accessory2: [ItemType.ACCESSORY]
     };
-
     if (!validTypes[slot].includes(item.type)) {
       console.warn(`Invalid item type ${item.type} for slot ${slot}`);
       return;
     }
-
     // Unequip current item if any
-    const currentItem = this.currentCharacter.equipment[slot];
+    const currentItem = this.currentCharacter!.equipment[slot];
     if (currentItem) {
       this.notifyListeners({
         type: 'unequip',
-        character: this.currentCharacter,
+        character: this.currentCharacter!,
         data: { item: currentItem, slot }
       });
     }
-
     // Equip new item
     this.notifyListeners({
       type: 'equip',
-      character: this.currentCharacter,
+      character: this.currentCharacter!,
       data: { item, slot }
     });
-
     // Update display
     this.updateEquipmentDisplay();
   }
 
+  private animateSwitch(slot: keyof Equipment): void {
+    // Add a CSS class to the slot for animation
+    const slotElement = this.equipmentContainer.querySelector(`.equipment-slot[data-slot="${slot}"]`);
+    if (slotElement) {
+      slotElement.classList.add('switch-anim');
+      setTimeout(() => {
+        slotElement.classList.remove('switch-anim');
+      }, 600); // Animation duration in ms
+    }
+  }
+
+  private flashCooldown(slot: keyof Equipment): void {
+    // Visual feedback for cooldown (e.g., shake or red border)
+    const slotElement = this.equipmentContainer.querySelector(`.equipment-slot[data-slot="${slot}"]`);
+    if (slotElement) {
+      slotElement.classList.add('cooldown-flash');
+      setTimeout(() => {
+        slotElement.classList.remove('cooldown-flash');
+      }, 400);
+    }
+  }
+
   private updateEquipmentDisplay(): void {
     if (!this.currentCharacter) return;
-
     const slots = this.equipmentContainer.getElementsByClassName('equipment-slot');
     Array.from(slots).forEach(slot => {
-      const slotName = slot.dataset.slot as keyof Equipment;
-      const itemContainer = slot.querySelector('.slot-item') as HTMLElement;
+      const slotElement = slot as HTMLElement;
+      const slotName = slotElement.dataset.slot as keyof Equipment;
+      const itemContainer = slotElement.querySelector('.slot-item') as HTMLElement;
       const item = this.currentCharacter!.equipment[slotName];
-
+      itemContainer.innerHTML = '';
+      itemContainer.classList.remove('equipped', 'broken', 'disabled', 'empowered', 'damaged', 'repaired');
       if (item) {
+        // Main icon
         itemContainer.innerHTML = `<img src="${item.icon}" alt="${item.name}">`;
         itemContainer.classList.add('equipped');
-
-        // Add tooltip and unequip functionality
+        // State overlay
+        if (item.state) {
+          itemContainer.classList.add(item.state);
+          if (item.state === EquipmentState.BROKEN) {
+            itemContainer.innerHTML += '<span class="state-overlay" title="Broken">&#9888;</span>';
+          } else if (item.state === EquipmentState.DISABLED) {
+            itemContainer.innerHTML += '<span class="state-overlay" title="Disabled">&#9940;</span>';
+          } else if (item.state === EquipmentState.EMPOWERED) {
+            itemContainer.innerHTML += '<span class="state-overlay empowered" title="Empowered">&#9889;</span>';
+          } else if (item.state === EquipmentState.DAMAGED) {
+            itemContainer.innerHTML += '<span class="state-overlay damaged" title="Damaged">&#128165;</span>';
+          } else if (item.state === EquipmentState.REPAIRED) {
+            itemContainer.innerHTML += '<span class="state-overlay repaired" title="Repaired">&#128295;</span>';
+          }
+        }
+        // Durability bar
+        if (typeof item.durability === 'number' && typeof item.maxDurability === 'number') {
+          const percent = Math.round((item.durability / item.maxDurability) * 100);
+          itemContainer.innerHTML += `<div class="durability-bar" title="Durability: ${item.durability}/${item.maxDurability}"><div class="durability-fill" style="width:${percent}%"></div></div>`;
+        }
+        // Tooltip and unequip
         itemContainer.addEventListener('mouseenter', (e) => this.showItemTooltip(e, item));
         itemContainer.addEventListener('mouseleave', () => this.hideTooltip());
         itemContainer.addEventListener('click', () => this.unequipItem(slotName));
-      } else {
-        itemContainer.innerHTML = '';
-        itemContainer.classList.remove('equipped');
       }
     });
-
     this.updateCharacterPreview();
   }
 
@@ -358,5 +479,36 @@ export class EquipmentManager {
     this.tooltipElement.remove();
     this.container.innerHTML = '';
     this.listeners = [];
+  }
+
+  public setEquipmentState(item: InventoryItem, state: EquipmentState): void {
+    item.state = state;
+    this.updateEquipmentDisplay();
+    if (this.currentCharacter) {
+      this.notifyListeners({
+        type: 'equipmentStateChange',
+        character: this.currentCharacter!,
+        data: { item, state }
+      });
+    }
+  }
+
+  public updateDurability(item: InventoryItem, delta: number): void {
+    if (typeof item.durability !== 'number' || typeof item.maxDurability !== 'number') return;
+    item.durability = Math.max(0, Math.min(item.maxDurability, item.durability + delta));
+    if (item.durability === 0) {
+      this.setEquipmentState(item, EquipmentState.BROKEN);
+    } else if (item.state === EquipmentState.BROKEN && item.durability > 0) {
+      this.setEquipmentState(item, EquipmentState.REPAIRED);
+    }
+    this.updateEquipmentDisplay();
+  }
+
+  public addStateValidator(validator: (item: InventoryItem, character: Character) => boolean): void {
+    this.stateValidators.push(validator);
+  }
+
+  private validateEquipmentState(item: InventoryItem, character: Character): boolean {
+    return this.stateValidators.every(validator => validator(item, character));
   }
 } 

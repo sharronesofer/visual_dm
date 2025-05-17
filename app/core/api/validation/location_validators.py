@@ -1,6 +1,6 @@
 """Validation models for Location-related API requests."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, ClassVar
 from pydantic import BaseModel, Field, validator
 from enum import Enum
 from datetime import datetime
@@ -203,8 +203,8 @@ class LocationQueryParams(BaseModel, PaginationValidationMixin, SortValidationMi
     has_coordinates: Optional[bool] = None
     tags: Optional[List[str]] = None
     
-    valid_sort_fields = ['name', 'type', 'status', 'created_at', 'updated_at']
-    valid_filters = {
+    valid_sort_fields: ClassVar = ['name', 'type', 'status', 'created_at', 'updated_at']
+    valid_filters: ClassVar = {
         'type': LocationType,
         'status': LocationStatus,
         'parent_id': str,
@@ -226,7 +226,7 @@ class LocationConnectionRequest(BaseModel):
     """Validation model for location connection requests."""
     
     target_location_id: str = Field(..., min_length=1, max_length=100)
-    connection_type: str = Field(..., regex='^(add|remove)$')
+    connection_type: str = Field(..., pattern='^(add|remove)$')
     bidirectional: bool = Field(default=True)
     
     @validator('target_location_id')

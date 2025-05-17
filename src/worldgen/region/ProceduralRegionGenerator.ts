@@ -6,8 +6,17 @@ import {
     RegionGeneratorOptions,
     TerrainType,
     POI,
-    Resource
+    Resource,
+    Building,
+    BuildingPlacementRule,
+    BuildingMaterialStyle,
+    PlacementRule,
+    PlacementRuleContext,
+    PlacementRuleResult
 } from './RegionGeneratorInterfaces';
+import { DefaultPlacementRuleEngine } from './PlacementRuleEngine';
+import { BuildingCustomizationAPIInstance } from './BuildingCustomizationAPI';
+import { selectMaterialAndStyle } from './StyleMaterialSystem';
 
 /**
  * Implementation of a procedural region generator
@@ -34,6 +43,7 @@ export class ProceduralRegionGenerator extends BaseRegionGenerator {
         const terrainRng = random.createChild('terrain');
         const poiRng = random.createChild('poi');
         const resourceRng = random.createChild('resource');
+        const buildingRng = random.createChild('building');
 
         // Generate cells with terrain
         const cells = this.generateTerrainCells(width, height, options, terrainRng);
@@ -43,6 +53,9 @@ export class ProceduralRegionGenerator extends BaseRegionGenerator {
 
         // Generate resources
         const resources = this.generateResources(cells, pointsOfInterest, options, resourceRng);
+
+        // Generate buildings
+        const { buildings, buildingMetadata } = this.generateBuildings(cells, resources, options, buildingRng);
 
         // Create the region
         return {
@@ -54,6 +67,8 @@ export class ProceduralRegionGenerator extends BaseRegionGenerator {
             cells,
             pointsOfInterest,
             resources,
+            buildings,
+            buildingMetadata,
             metadata: {
                 seed: random.getSeedConfig().seed,
                 generatorType: this.generatorType,
@@ -62,7 +77,8 @@ export class ProceduralRegionGenerator extends BaseRegionGenerator {
                     height,
                     terrain: options.terrain || {},
                     pointsOfInterest: options.pointsOfInterest || {},
-                    resources: options.resources || {}
+                    resources: options.resources || {},
+                    buildings: options.buildings || {}
                 }
             }
         };
@@ -363,5 +379,173 @@ export class ProceduralRegionGenerator extends BaseRegionGenerator {
         }
 
         return resources;
+    }
+
+    /**
+     * Generate buildings for the region
+     * @param cells Array of region cells
+     * @param resources Array of resources
+     * @param options Generation options
+     * @param random Random number generator
+     * @returns Object with buildings array and buildingMetadata
+     */
+    private generateBuildings(
+        cells: RegionCell[],
+        resources: Resource[],
+        options: RegionGeneratorOptions,
+        random: IRandomGenerator
+    ): { buildings: Building[]; buildingMetadata: any } {
+        const buildingOptions = options.buildings || {};
+        const maxBuildings = buildingOptions.maxBuildings || 50;
+        const allowedTypes = buildingOptions.allowedTypes || ['default'];
+        const ruleEngine = new DefaultPlacementRuleEngine();
+        const placementRules: PlacementRule[] = (buildingOptions.placementRules as any) || [
+            { allowedTerrains: ['plains', 'forest', 'urban', 'mountain'] }
+        ];
+        const materialStyles: BuildingMaterialStyle[] = buildingOptions.materialStyles || [
+            { material: 'wood', style: 'default' },
+            { material: 'stone', style: 'mountain', biome: 'mountain' },
+            { material: 'clay', style: 'desert', biome: 'desert' }
+        ];
+        const customizationHooks = buildingOptions.customizationHooks || {};
+
+        const buildings: Building[] = [];
+        const usedCells = new Set<string>();
+        let attempts = 0;
+        const maxAttempts = maxBuildings * 20;
+
+        // Helper: select material/style
+        function selectMaterialStyle(cell: RegionCell): BuildingMaterialStyle {
+            // Prefer biome/terrain match
+            for (const ms of materialStyles) {
+                if (ms.biome && cell.terrain === ms.biome) return ms;
+            }
+            // Fallback to first
+            return materialStyles[0];
+        }
+
+        // Helper: get cell key
+        function cellKey(x: number, y: number) { return `${x},${y}`; }
+
+        // Main building placement loop
+        while (buildings.length < maxBuildings && attempts < maxAttempts) {
+            attempts++;
+            // Pick a random cell
+            const idx = random.randomInt(0, cells.length - 1);
+            const cell = cells[idx];
+            const key = cellKey(cell.x, cell.y);
+            if (usedCells.has(key)) continue;
+            // Avoid water, steep slopes, and edge cases
+            if (cell.terrain === 'water' || (cell.elevation !== undefined && cell.elevation < 0.05)) continue;
+            // Placement rules (new engine)
+            const context: PlacementRuleContext = { cells, buildings, resources };
+            const ruleResult: PlacementRuleResult = ruleEngine.evaluate(cell, context, placementRules);
+            if (!ruleResult.valid) {
+                continue;
+            }
+            // --- Customization API: pre-generation hooks ---
+            let buildingParams: Partial<Building> = {
+                id: `building-${buildings.length}`,
+                templateId: allowedTypes[0],
+                x: cell.x,
+                y: cell.y,
+                elevation: cell.elevation,
+                rotation: random.randomInt(0, 3) * 90,
+                biome: cell.terrain,
+                terrainType: cell.terrain
+            };
+            for (const hook of BuildingCustomizationAPIInstance.getHooks()) {
+                const result = hook('pre', buildingParams, context);
+                if (result) {
+                    buildingParams = { ...buildingParams, ...result };
+                }
+            }
+            // Terrain adaptation: check slope (neighboring elevation difference)
+            const neighbors = cells.filter(c => Math.abs(c.x - cell.x) <= 1 && Math.abs(c.y - cell.y) <= 1 && !(c.x === cell.x && c.y === cell.y));
+            let maxSlope = 0;
+            let avgSlope = 0;
+            let slopeCount = 0;
+            for (const n of neighbors) {
+                if (n.elevation !== undefined && cell.elevation !== undefined) {
+                    const slope = Math.abs(cell.elevation - n.elevation);
+                    if (slope > maxSlope) maxSlope = slope;
+                    avgSlope += slope;
+                    slopeCount++;
+                }
+            }
+            avgSlope = slopeCount > 0 ? avgSlope / slopeCount : 0;
+            if (maxSlope > 0.2) continue; // Too steep for building
+            // Foundation adaptation
+            let foundationType = 'standard';
+            let foundationDepth = 1;
+            let materialStrength = 1;
+            if (maxSlope > 0.1) {
+                foundationType = 'stilted';
+                foundationDepth = 3;
+                materialStrength = 0.8;
+            } else if (cell.terrain === 'mountain') {
+                foundationType = 'anchored';
+                foundationDepth = 2;
+                materialStrength = 1.2;
+            }
+            // Entrance adaptation: flag if any neighbor has significant elevation difference
+            let requiresEntranceStair = false;
+            for (const n of neighbors) {
+                if (n.elevation !== undefined && cell.elevation !== undefined) {
+                    if (Math.abs(cell.elevation - n.elevation) > 0.1) {
+                        requiresEntranceStair = true;
+                        break;
+                    }
+                }
+            }
+            // Material/style selection (now using StyleMaterialSystem)
+            const environment = {
+                temperature: cell.moisture !== undefined ? 1 - cell.moisture : 0.5, // Example: inverse of moisture
+                humidity: cell.moisture !== undefined ? cell.moisture : 0.5,
+                altitude: cell.elevation !== undefined ? cell.elevation : 0.5
+            };
+            const matStyleResult = selectMaterialAndStyle(cell, resources, environment);
+            // Customization config
+            let customization = {};
+            // --- Customization API: post-generation hooks ---
+            let building: Building = {
+                ...buildingParams,
+                foundationType,
+                material: matStyleResult.material,
+                style: matStyleResult.style,
+                integrity: 1,
+                customization,
+                foundationDepth,
+                materialStrength,
+                slope: avgSlope,
+                requiresEntranceStair,
+                textureVariant: matStyleResult.textureVariant,
+                modelVariant: matStyleResult.modelVariant
+            } as any;
+            for (const hook of BuildingCustomizationAPIInstance.getHooks()) {
+                const result = hook('post', building, context);
+                if (result) {
+                    building = { ...building, ...result };
+                }
+            }
+            buildings.push(building);
+            usedCells.add(key);
+        }
+
+        // Chunked generation and LOD metadata (stub for future optimization)
+        const buildingMetadata = {
+            placementRules,
+            materialStyles,
+            chunking: {
+                chunkSize: 16,
+                totalChunks: Math.ceil(Math.sqrt(buildings.length) / 16)
+            },
+            lod: {
+                levels: [0, 1, 2],
+                strategy: 'distance-based'
+            }
+        };
+
+        return { buildings, buildingMetadata };
     }
 } 

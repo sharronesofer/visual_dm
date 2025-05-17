@@ -18,6 +18,14 @@ from pathlib import Path
 from .error_handler import handle_component_error, ErrorSeverity
 from .asset_manager import AssetManager
 from visual_client.core.events.scene_events import SceneEventSystem, SceneEventType, SceneEvent, create_event
+from app.core.persistence.serialization import serialize, deserialize, SerializedData
+from .serializable import Serializable
+
+try:
+    from app.core.models.entity import Entity
+except ImportError:
+    class Entity:
+        pass  # Minimal stub for testing
 
 logger = logging.getLogger(__name__)
 
@@ -140,6 +148,42 @@ class SceneAsset:
         self.loaded = True
         self.last_used = time.time()
         return True
+
+    def to_dict(self) -> dict:
+        """
+        Serialize the SceneAsset for persistence. The actual asset object is not serialized (reference only).
+        """
+        return {
+            'asset_id': self.asset_id,
+            'asset_type': self.asset_type,
+            'size': self.size,
+            'priority': self.priority.value if hasattr(self.priority, 'value') else self.priority,
+            'scene_id': self.scene_id,
+            'last_used': self.last_used,
+            'ref_count': self.ref_count,
+            'position': self.position,
+            'loaded': self.loaded,
+            # 'asset': None  # Not serialized; should be restored by asset manager if needed
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'SceneAsset':
+        """
+        Deserialize a SceneAsset from persisted data. The asset object is not restored here.
+        """
+        obj = cls(
+            asset_id=data['asset_id'],
+            asset_type=data['asset_type'],
+            asset=None,  # Asset must be reloaded by asset manager
+            size=data['size'],
+            priority=AssetPriority(data['priority']) if 'priority' in data else AssetPriority.MEDIUM,
+            scene_id=data.get('scene_id')
+        )
+        obj.last_used = data.get('last_used', obj.last_used)
+        obj.ref_count = data.get('ref_count', 1)
+        obj.position = tuple(data.get('position', (0, 0)))
+        obj.loaded = data.get('loaded', True)
+        return obj
 
 class MemoryBudget:
     """Manages memory budget and tracking for scene assets."""
@@ -1079,3 +1123,50 @@ class SceneManager:
         distance = ((position[0] - player_pos[0]) ** 2 + (position[1] - player_pos[1]) ** 2) ** 0.5
         lod = self.asset_manager.select_lod_level(distance, self.lod_thresholds)
         return self.asset_manager.load_image_lod(asset_id, lod) 
+
+    def serialize_scene(self, scene_id: str) -> SerializedData:
+        """
+        Serialize the complete state of a scene, including configuration, assets, and relationships.
+        Returns a SerializedData object with versioning and compression.
+        """
+        if scene_id not in self.scenes:
+            raise ValueError(f"Scene {scene_id} not registered")
+        scene_data = self.scenes[scene_id]
+        # Gather asset data
+        assets = self.scene_assets.get(scene_id, {})
+        assets_dict = {aid: asset.to_dict() if hasattr(asset, 'to_dict') else {} for aid, asset in assets.items()}
+        # Compose hierarchical scene state
+        state = {
+            'scene_id': scene_id,
+            'scene_data': scene_data,
+            'assets': assets_dict,
+            'preloaded': scene_id in self.preloaded_scenes,
+            'active': self.active_scene == scene_id,
+        }
+        # Optionally add more relationships/fields as needed
+        return serialize(state, metadata={'scene_id': scene_id})
+
+    def deserialize_scene(self, scene_id: str, data: SerializedData) -> None:
+        """
+        Restore a scene's state from a SerializedData object, including configuration and assets.
+        Handles version compatibility and migration.
+        """
+        state = deserialize(data)
+        if not isinstance(state, dict) or 'scene_id' not in state:
+            raise ValueError("Invalid scene state data")
+        # Restore scene config
+        self.scenes[scene_id] = state['scene_data']
+        # Restore assets
+        assets_dict = state.get('assets', {})
+        self.scene_assets[scene_id] = {}
+        for aid, asset_data in assets_dict.items():
+            # Assume SceneAsset implements Serializable
+            asset = SceneAsset.from_dict(asset_data) if hasattr(SceneAsset, 'from_dict') else None
+            if asset:
+                self.scene_assets[scene_id][aid] = asset
+        # Restore preloaded/active state
+        if state.get('preloaded'):
+            self.preloaded_scenes.add(scene_id)
+        if state.get('active'):
+            self.active_scene = scene_id
+        # Optionally restore more relationships/fields as needed 

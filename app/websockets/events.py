@@ -15,17 +15,37 @@ connection_registry: Dict[str, Dict] = {}
 HEARTBEAT_INTERVAL = 20  # seconds
 HEARTBEAT_TIMEOUT = 60   # seconds
 
+# Global event log (in-memory for now; replace with persistent storage in production)
+EVENT_LOG = []  # Each event: { 'event_id': int, 'timestamp': datetime, ... }
+EVENT_ID_COUNTER = 1
+EVENT_LOG_MAX_SIZE = 10000  # Prune oldest events if exceeded
+
+# Global state snapshots (in-memory; replace with persistent storage in production)
+STATE_SNAPSHOTS = {}  # Keyed by user_id or scene_id
+
 # Add last-seen and session info to registry
 def update_last_seen(sid):
     connection_registry[sid]['last_seen'] = datetime.utcnow()
 
 def get_initial_state_for_user(user_id):
-    # Stub: return initial state snapshot for user
-    return {'rooms': [], 'subscriptions': []}
+    # Return the latest state snapshot for the user, or a default stub
+    entry = STATE_SNAPSHOTS.get(user_id)
+    if entry:
+        return entry['snapshot']
+    # Default stub (replace with real serialization)
+    return {'rooms': [], 'subscriptions': [], 'state': {}, 'timestamp': datetime.utcnow().isoformat()}
 
-def get_missed_events_for_user(user_id, since):
-    # Stub: return list of missed events since 'since' timestamp
-    return []
+def get_missed_events_for_user(user_id, since_event_id=None, since_timestamp=None, max_events=500):
+    # Return all events after the given event_id or timestamp
+    if since_event_id is not None:
+        events = [e for e in EVENT_LOG if e['event_id'] > since_event_id]
+    elif since_timestamp is not None:
+        events = [e for e in EVENT_LOG if e['timestamp'] > since_timestamp]
+    else:
+        events = EVENT_LOG[:]
+    # Optionally filter by user/scene if needed
+    # events = [e for e in events if e.get('user_id') == user_id or ...]
+    return events[:max_events]
 
 def start_heartbeat_thread(socketio):
     def heartbeat_loop():
@@ -134,16 +154,27 @@ def register_socketio_events(socketio: SocketIO):
         """Handle client reconnection, resync state and missed events."""
         sid = request.sid
         user_id = data.get('user_id')
-        last_seen = data.get('last_seen')
+        last_seen_event_id = data.get('last_event_id')
+        last_seen_timestamp = data.get('last_seen')
         logger.info(f'User {user_id} reconnected (sid={sid})')
         connection_registry[sid] = {'user_id': user_id, 'last_seen': datetime.utcnow()}
-        # Send initial state
-        state = get_initial_state_for_user(user_id)
-        emit('initial_state', state)
-        # Replay missed events (stub)
-        missed_events = get_missed_events_for_user(user_id, last_seen)
-        for event in missed_events:
-            emit('event', event, room=sid)
+        # Get missed events
+        missed_events = get_missed_events_for_user(user_id, since_event_id=last_seen_event_id, since_timestamp=last_seen_timestamp)
+        # If too many missed events, send snapshot + subsequent events
+        if len(missed_events) >= 500:
+            snapshot = get_initial_state_for_user(user_id)
+            emit('initial_state', snapshot)
+            # Send only the most recent events after the snapshot
+            if 'timestamp' in snapshot:
+                recent_events = [e for e in missed_events if e['timestamp'] > snapshot['timestamp']]
+            else:
+                recent_events = missed_events[-100:]
+            for event in recent_events:
+                emit('event', event, room=sid)
+        else:
+            # Send missed events only
+            for event in missed_events:
+                emit('event', event, room=sid)
 
     # On connect, send initial state
     orig_handle_connect = handle_connect
@@ -175,5 +206,26 @@ def register_socketio_events(socketio: SocketIO):
 
     # Stubs for analytics, rate limiting, missed event replay
     # TODO: Implement analytics collection, per-client rate limiting, missed event storage/replay
+
+    # Add more event handlers as needed for future subtasks 
+
+    # --- Utility functions for event replay and snapshotting ---
+    def log_event(event):
+        global EVENT_ID_COUNTER
+        event = dict(event)  # Defensive copy
+        event['event_id'] = EVENT_ID_COUNTER
+        event['timestamp'] = datetime.utcnow()
+        EVENT_LOG.append(event)
+        EVENT_ID_COUNTER += 1
+        # Prune old events
+        if len(EVENT_LOG) > EVENT_LOG_MAX_SIZE:
+            EVENT_LOG.pop(0)
+
+    def save_state_snapshot(user_id, snapshot):
+        # Integration point: persist to disk/db/cloud
+        STATE_SNAPSHOTS[user_id] = {
+            'snapshot': snapshot,
+            'timestamp': datetime.utcnow()
+        }
 
     # Add more event handlers as needed for future subtasks 

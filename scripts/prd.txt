@@ -1639,3 +1639,63 @@ This project involves creating a set of tools to automatically convert TypeScrip
 - Steam Overlay integration techniques
 - Steam achievements and leaderboard API access
 - Save data and Cloud storage integration 
+
+# Visual_DM Feat Prerequisites Audit and Rebalance PRD
+
+## Project Overview
+Visual_DM is a digital dungeon master assistant with a comprehensive character and combat management system. This PRD covers the specific task of auditing and rebalancing the feat prerequisites within the system.
+
+## Objectives
+- Conduct a comprehensive audit of all feats in the system
+- Rebalance prerequisites to improve game balance
+- Create meaningful progression paths for character development
+- Ensure appropriate feat availability at all character levels
+
+## Requirements
+
+### Functional Requirements
+
+1. **Feat Audit System**
+   - Analyze all existing feats in the system
+   - Identify feats with inappropriate prerequisites
+   - Document current prerequisites and their impact on game balance
+   - Create a comprehensive report of all feats requiring adjustment
+
+2. **Prerequisite Rebalancing**
+   - Adjust stat requirements to appropriate levels for each feat
+   - Balance level requirements to create logical progression
+   - Implement coherent feat-to-feat requirement chains
+   - Ensure class and race requirements are logical and balanced
+   - Modify skill requirements to match feat power levels
+
+3. **Progression Path Design**
+   - Create clear progression paths for different character types
+   - Design multi-tier feat chains that reward character specialization
+   - Implement safeguards against overpowered combinations
+   - Ensure meaningful choices at all character levels
+
+4. **Documentation and Visualization**
+   - Update all feat documentation with new prerequisites
+   - Create visual progression trees for players to understand feat paths
+   - Document design decisions for future reference
+   - Provide guidance for both players and developers on the new prerequisites system
+
+### Technical Requirements
+
+1. **Implementation Approach**
+   - Update the FeatPrerequisite class in app/core/models/feats.py
+   - Modify all feat templates in app/core/models/feat_templates.py
+   - Ensure backward compatibility with existing character data
+   - Implement unit tests for all prerequisite logic
+
+2. **Performance Considerations**
+   - Prerequisite checking should have minimal performance impact
+   - Ensure efficient validation of complex prerequisite chains
+   - Optimize data structures for prerequisite storage
+
+## Success Criteria
+- All feats have appropriate prerequisites relative to their power level
+- Clear progression paths exist for all major character archetypes
+- Prerequisites create meaningful character development choices
+- Character builds remain balanced at all progression stages
+- Documentation clearly explains feat prerequisites and progression paths 

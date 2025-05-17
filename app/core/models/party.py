@@ -1,5 +1,9 @@
 """
 Party model for game parties.
+
+Transaction-based persistence is required for all state-changing operations.
+Data integrity is enforced via a SHA-256 checksum stored in the 'checksum' column.
+All modifications should be atomic and validated before commit.
 """
 
 from typing import Dict, Any, List, Optional
@@ -31,6 +35,9 @@ class Party(BaseModel):
     members = relationship('Character', back_populates='party', foreign_keys='Character.party_id', cascade='all, delete-orphan')
     region = relationship('Region', back_populates='parties', foreign_keys=[region_id])
     
+    checksum = Column(String(64), nullable=True)  # SHA-256 checksum for integrity
+    schema_version = Column(String(16), nullable=False, default='1.0.0')  # Schema version for versioning
+    
     def to_dict(self) -> Dict[str, Any]:
         """Convert model to dictionary."""
         return {
@@ -45,31 +52,33 @@ class Party(BaseModel):
             'region_id': self.region_id,
             'members': [member.to_dict() for member in self.members],
             'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'updated_at': self.updated_at.isoformat(),
+            'checksum': self.checksum,  # Include checksum for integrity
+            'schema_version': self.schema_version
         }
 
     def __repr__(self):
         return f'<Party {self.name}>'
 
-    def add_member(self, character_id: str) -> bool:
-        """Add a character to the party if there's space."""
+    def add_member(self, character) -> bool:
+        """Add a Character object to the party if there's space."""
         if len(self.members) >= self.max_size:
             return False
-        if character_id not in self.members:
-            self.members.append(character_id)
+        if character not in self.members:
+            self.members.append(character)
             return True
         return False
 
-    def remove_member(self, character_id: str) -> bool:
-        """Remove a character from the party."""
-        if character_id in self.members:
-            self.members.remove(character_id)
+    def remove_member(self, character) -> bool:
+        """Remove a Character object from the party."""
+        if character in self.members:
+            self.members.remove(character)
             return True
         return False
 
-    def is_member(self, character_id: str) -> bool:
-        """Check if a character is a member of the party."""
-        return character_id in self.members
+    def is_member(self, character) -> bool:
+        """Check if a Character object is a member of the party."""
+        return character in self.members
 
     def get_size(self) -> int:
         """Get the current size of the party."""
@@ -81,17 +90,17 @@ class Party(BaseModel):
 
     def add_to_shared_inventory(self, item_id: str, quantity: int = 1) -> None:
         """Add an item to the party's shared inventory."""
-        if item_id in self.shared_inventory:
-            self.shared_inventory[item_id] += quantity
+        if item_id in self.inventory:
+            self.inventory[item_id] += quantity
         else:
-            self.shared_inventory[item_id] = quantity
+            self.inventory[item_id] = quantity
 
     def remove_from_shared_inventory(self, item_id: str, quantity: int = 1) -> bool:
         """Remove an item from the party's shared inventory."""
-        if item_id in self.shared_inventory:
-            if self.shared_inventory[item_id] >= quantity:
-                self.shared_inventory[item_id] -= quantity
-                if self.shared_inventory[item_id] == 0:
-                    del self.shared_inventory[item_id]
+        if item_id in self.inventory:
+            if self.inventory[item_id] >= quantity:
+                self.inventory[item_id] -= quantity
+                if self.inventory[item_id] == 0:
+                    del self.inventory[item_id]
                 return True
         return False 

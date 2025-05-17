@@ -17,8 +17,11 @@ import {
     POIStatus,
     TerrainType
 } from './DataModels';
-import { EventBus } from '../core/events/EventBus';
-import { SceneEventType, ISceneEvent } from '../core/events/SceneEventTypes';
+import { BuildingSystem } from '../../systems/BuildingSystem';
+import { SocialSubtype } from '../../poi/types/POITypes';
+import { MarketSystem } from '../../systems/economy/MarketSystem';
+// import { EventBus } from '../core/events/EventBus';
+// import { SceneEventType, ISceneEvent } from '../core/events/SceneEventTypes';
 
 // Additional interfaces for the world system
 export interface MapRegion extends BaseEntity {
@@ -85,34 +88,6 @@ export interface WorldGenerationOptions {
 }
 
 /**
- * Event subscriber for world system integration with scene events
- */
-class WorldgenEventSubscriber {
-    constructor(private worldSystem: WorldSystem) {
-        const eventBus = EventBus.getInstance();
-        // Subscribe to relevant scene event types
-        eventBus.on(SceneEventType.SCENE_LOADED, this.handleSceneEvent.bind(this));
-        eventBus.on(SceneEventType.SCENE_UNLOADED, this.handleSceneEvent.bind(this));
-        eventBus.on(SceneEventType.SCENE_ACTIVATED, this.handleSceneEvent.bind(this));
-        eventBus.on(SceneEventType.SCENE_DEACTIVATED, this.handleSceneEvent.bind(this));
-        eventBus.on(SceneEventType.SCENE_OBJECT_ADDED, this.handleSceneEvent.bind(this));
-        eventBus.on(SceneEventType.SCENE_OBJECT_REMOVED, this.handleSceneEvent.bind(this));
-        eventBus.on(SceneEventType.COORDINATES_CHANGED, this.handleSceneEvent.bind(this));
-        eventBus.on(SceneEventType.BOUNDARY_CROSSED, this.handleSceneEvent.bind(this));
-    }
-
-    /**
-     * Handle scene events and trigger worldgen-specific updates
-     */
-    private async handleSceneEvent(event: ISceneEvent): Promise<void> {
-        // Log the event for monitoring
-        console.log('[WorldgenEventSubscriber] Received scene event:', event.type, event);
-        // TODO: Implement worldgen-specific update logic based on event type
-        // Example: if (event.type === SceneEventType.SCENE_OBJECT_ADDED) { ... }
-    }
-}
-
-/**
  * WorldSystem handles world generation, map management, and point of interest functionality
  */
 export class WorldSystem extends BaseSystemManager {
@@ -122,14 +97,15 @@ export class WorldSystem extends BaseSystemManager {
     public tileRepository: Repository<MapTile>;
     public poiRepository: Repository<POI>;
 
-    constructor(config: SystemConfig) {
+    private buildingSystem?: BuildingSystem;
+
+    constructor(config: SystemConfig, buildingSystem?: BuildingSystem) {
         super({
             ...config,
             name: config.name || 'WorldSystem',
             dependencies: []
         });
-        // Register the event subscriber for scene events
-        new WorldgenEventSubscriber(this);
+        this.buildingSystem = buildingSystem;
     }
 
     /**
@@ -518,12 +494,15 @@ export class WorldSystem extends BaseSystemManager {
                     description: `A ${poiType.toLowerCase()} in the ${region.name}.`,
                     type: poiType,
                     size: this.getPOISizeForType(poiType),
-                    status: POIStatus.HIDDEN,
-                    regionId: region.id,
+                    status: POIStatus.UNDISCOVERED,
+                    region: region.name,
                     position: { x, y },
-                    discoveredBy: [],
-                    visitedBy: [],
-                    tags: [poiType.toLowerCase(), region.terrain.toLowerCase()]
+                    tags: [poiType.toLowerCase(), region.terrain.toLowerCase()],
+                    difficulty: region.difficulty || 10,
+                    inhabitants: [],
+                    loot: [],
+                    associatedQuestIds: [],
+                    entrances: []
                 };
 
                 const createdPOI = await this.poiRepository.create(poi);
@@ -592,33 +571,35 @@ export class WorldSystem extends BaseSystemManager {
     private getPOITypeForTerrain(terrain: TerrainType): POIType {
         const poiTypes = [
             POIType.SETTLEMENT,
-            POIType.RUIN,
-            POIType.LANDMARK,
             POIType.DUNGEON,
-            POIType.SPECIAL
+            POIType.LANDMARK,
+            POIType.RESOURCE,
+            POIType.ENCOUNTER,
+            POIType.QUEST,
+            POIType.SECRET
         ];
 
         // Weight the selection based on terrain
-        let weights: number[] = [25, 20, 30, 15, 10]; // Default weights
+        let weights: number[] = [25, 20, 30, 15, 10, 5, 5]; // Default weights
 
         switch (terrain) {
             case TerrainType.DESERT:
-                weights = [15, 35, 25, 15, 10];
+                weights = [15, 35, 25, 15, 10, 5, 5];
                 break;
             case TerrainType.FOREST:
-                weights = [20, 15, 35, 20, 10];
+                weights = [20, 15, 35, 20, 10, 5, 5];
                 break;
             case TerrainType.MOUNTAIN:
-                weights = [10, 25, 30, 30, 5];
+                weights = [10, 25, 30, 30, 5, 5, 5];
                 break;
             case TerrainType.PLAIN:
-                weights = [35, 15, 30, 10, 10];
+                weights = [35, 15, 30, 10, 10, 5, 5];
                 break;
             case TerrainType.WATER:
-                weights = [15, 10, 45, 5, 25];
+                weights = [15, 10, 45, 5, 25, 5, 5];
                 break;
             case TerrainType.URBAN:
-                weights = [70, 5, 15, 5, 5];
+                weights = [70, 5, 15, 5, 5, 5, 5];
                 break;
         }
 
@@ -645,11 +626,6 @@ export class WorldSystem extends BaseSystemManager {
                 const settlementSizes = [POISize.TINY, POISize.SMALL, POISize.MEDIUM, POISize.LARGE];
                 const settlementWeights = [20, 40, 30, 10];
                 return this.weightedRandom(settlementSizes, settlementWeights);
-
-            case POIType.RUIN:
-                const ruinSizes = [POISize.TINY, POISize.SMALL, POISize.MEDIUM, POISize.LARGE];
-                const ruinWeights = [30, 35, 25, 10];
-                return this.weightedRandom(ruinSizes, ruinWeights);
 
             case POIType.DUNGEON:
                 const dungeonSizes = [POISize.TINY, POISize.SMALL, POISize.MEDIUM, POISize.LARGE];
@@ -693,22 +669,18 @@ export class WorldSystem extends BaseSystemManager {
                 'Greenfield', 'Riverdale', 'Oakridge', 'Stonehaven', 'Pinecrest',
                 'Meadowbrook', 'Eastwatch', 'Westport', 'Northkeep', 'Southford'
             ],
-            [POIType.RUIN]: [
-                'Forgotten', 'Ancient', 'Lost', 'Abandoned', 'Ruined',
-                'Crumbling', 'Forsaken', 'Shattered', 'Haunted', 'Decayed'
+            [POIType.DUNGEON]: [
+                'Darkdeep', 'Shadowfell', 'Gloomhaven', 'Dreadpeak', 'Grimhold',
+                'Doomvault', 'Netherdepth', 'Blackcrypt', 'Fellcavern', 'Direlair'
             ],
             [POIType.LANDMARK]: [
                 'Whispering', 'Towering', 'Glimmering', 'Watchful', 'Eternal',
                 'Silent', 'Majestic', 'Sacred', 'Ancient', 'Solitary'
             ],
-            [POIType.DUNGEON]: [
-                'Darkdeep', 'Shadowfell', 'Gloomhaven', 'Dreadpeak', 'Grimhold',
-                'Doomvault', 'Netherdepth', 'Blackcrypt', 'Fellcavern', 'Direlair'
-            ],
-            [POIType.SPECIAL]: [
-                'Mystical', 'Enchanted', 'Arcane', 'Blessed', 'Cursed',
-                'Ethereal', 'Celestial', 'Primal', 'Eldritch', 'Fabled'
-            ]
+            [POIType.RESOURCE]: [],
+            [POIType.ENCOUNTER]: [],
+            [POIType.QUEST]: [],
+            [POIType.SECRET]: []
         };
 
         // Second parts based on POI type
@@ -717,22 +689,18 @@ export class WorldSystem extends BaseSystemManager {
                 'Village', 'Town', 'Hamlet', 'Outpost', 'Camp',
                 'Fort', 'Keep', 'Refuge', 'Haven', 'Landing'
             ],
-            [POIType.RUIN]: [
-                'Ruins', 'Remnants', 'Citadel', 'Temple', 'Palace',
-                'Fortress', 'Castle', 'Catacombs', 'Monument', 'Sanctum'
+            [POIType.DUNGEON]: [
+                'Dungeon', 'Cave', 'Mine', 'Cavern', 'Labyrinth',
+                'Tomb', 'Crypt', 'Lair', 'Den', 'Abyss'
             ],
             [POIType.LANDMARK]: [
                 'Peak', 'Grove', 'Stone', 'Tree', 'Spire',
                 'Monolith', 'Arch', 'Falls', 'Pillar', 'Vista'
             ],
-            [POIType.DUNGEON]: [
-                'Dungeon', 'Cave', 'Mine', 'Cavern', 'Labyrinth',
-                'Tomb', 'Crypt', 'Lair', 'Den', 'Abyss'
-            ],
-            [POIType.SPECIAL]: [
-                'Nexus', 'Portal', 'Altar', 'Spring', 'Circle',
-                'Obelisk', 'Shrine', 'Wellspring', 'Gateway', 'Sanctum'
-            ]
+            [POIType.RESOURCE]: [],
+            [POIType.ENCOUNTER]: [],
+            [POIType.QUEST]: [],
+            [POIType.SECRET]: []
         };
 
         // Terrain-based modifiers
@@ -775,28 +743,25 @@ export class WorldSystem extends BaseSystemManager {
     }
 
     /**
-     * Get region by ID
-     */
-    public async getRegion(regionId: string): Promise<MapRegion | null> {
-        return this.regionRepository.findById(regionId);
-    }
-
-    /**
      * Get all regions for a map
      */
     public async getRegionsForMap(mapId: string): Promise<MapRegion[]> {
-        const map = await this.getWorldMap(mapId);
-        if (!map) return [];
-
-        return this.regionRepository.findByIds(map.regionIds);
+        return this.regionRepository.findBy('mapId', mapId);
     }
 
     /**
      * Get tile at a specific position
      */
-    public async getTileAt(x: number, y: number): Promise<MapTile | null> {
+    public async getTileAt(x: number, y: number, mapId?: string): Promise<MapTile | null> {
+        if (!mapId) {
+            // If no mapId specified, get the first map
+            const maps = await this.mapRepository.findAll();
+            if (maps.length === 0) return null;
+            mapId = maps[0].id;
+        }
+
         const tiles = await this.tileRepository.query(
-            tile => tile.x === x && tile.y === y
+            t => t.mapId === mapId && t.x === x && t.y === y
         );
 
         return tiles.length > 0 ? tiles[0] : null;
@@ -810,51 +775,55 @@ export class WorldSystem extends BaseSystemManager {
     }
 
     /**
-     * Get all POIs in a region
-     */
-    public async getPOIsInRegion(regionId: string): Promise<POI[]> {
-        return this.poiRepository.findBy('region', regionId);
-    }
-
-    /**
      * Mark a tile as explored
      */
-    public async exploreTile(x: number, y: number, entityId: string): Promise<boolean> {
-        const tile = await this.getTileAt(x, y);
-        if (!tile) return false;
+    public async exploreTile(x: number, y: number, entityId: string, mapId?: string): Promise<MapTile | null> {
+        const tile = await this.getTileAt(x, y, mapId);
+        if (!tile) return null;
 
-        // Update explored status
-        await this.tileRepository.update(tile.id, { explored: true });
+        if (!tile.explored || !tile.exploredBy.includes(entityId)) {
+            // Update tile as explored
+            const updatedTile = await this.tileRepository.update(
+                tile.id,
+                {
+                    explored: true,
+                    exploredBy: [...tile.exploredBy, entityId]
+                }
+            );
 
-        // Emit tile explored event
-        await this.emitEvent({
-            type: 'tile:explored',
-            source: this.name,
-            timestamp: Date.now(),
-            data: {
-                tile,
-                position: { x, y },
-                entityId
+            if (updatedTile) {
+                // Emit tile explored event
+                await this.emitEvent({
+                    type: 'tile:explored',
+                    source: this.name,
+                    timestamp: Date.now(),
+                    data: {
+                        tile: updatedTile,
+                        entityId
+                    }
+                });
+
+                // If tile has a POI and the POI is hidden, make it visible
+                if (updatedTile.poiId) {
+                    const poi = await this.poiRepository.findById(updatedTile.poiId);
+                    if (poi && poi.status === POIStatus.UNDISCOVERED) {
+                        await this.discoverPOI(poi.id, entityId);
+                    }
+                }
             }
-        });
 
-        // Check if POI is discovered
-        if (tile.poiId) {
-            const poi = await this.poiRepository.findById(tile.poiId);
-            if (poi && poi.status === POIStatus.UNDISCOVERED) {
-                await this.discoverPOI(poi.id, entityId);
-            }
+            return updatedTile;
         }
 
-        return true;
+        return tile;
     }
 
     /**
      * Discover a POI
      */
-    public async discoverPOI(poiId: string, entityId: string): Promise<boolean> {
+    public async discoverPOI(poiId: string, entityId: string): Promise<POI | null> {
         const poi = await this.poiRepository.findById(poiId);
-        if (!poi) return false;
+        if (!poi) return null;
 
         // Update status to visible (not yet visited)
         await this.poiRepository.update(poiId, { status: POIStatus.VISIBLE });
@@ -870,15 +839,21 @@ export class WorldSystem extends BaseSystemManager {
             }
         });
 
-        return true;
+        // If the POI is a market, notify the MarketSystem
+        if (poi.type === POIType.SOCIAL && poi.subtype === SocialSubtype.MARKET) {
+            // TODO: Replace with correct MarketSystem instance if needed
+            MarketSystem.getInstance().notifyMarketDiscovered(poi.id);
+        }
+
+        return poi;
     }
 
     /**
      * Visit a POI
      */
-    public async visitPOI(poiId: string, entityId: string): Promise<boolean> {
+    public async visitPOI(poiId: string, entityId: string): Promise<POI | null> {
         const poi = await this.poiRepository.findById(poiId);
-        if (!poi) return false;
+        if (!poi) return null;
 
         // Update status to visited
         await this.poiRepository.update(poiId, { status: POIStatus.VISITED });
@@ -894,7 +869,7 @@ export class WorldSystem extends BaseSystemManager {
             }
         });
 
-        return true;
+        return poi;
     }
 
     /**
@@ -903,9 +878,27 @@ export class WorldSystem extends BaseSystemManager {
     public async getTilesInArea(
         centerX: number,
         centerY: number,
-        radius: number
+        radius: number,
+        mapId?: string
     ): Promise<MapTile[]> {
-        return this.tileRepository.query(tile => {
+        if (!mapId) {
+            // If no mapId specified, get the first map
+            const maps = await this.mapRepository.findAll();
+            if (maps.length === 0) return [];
+            mapId = maps[0].id;
+        }
+
+        // First get tiles in the bounding square for efficiency
+        const tiles = await this.getTilesInRect(
+            centerX - radius,
+            centerY - radius,
+            centerX + radius,
+            centerY + radius,
+            mapId
+        );
+
+        // Then filter to only include tiles within the radius
+        return tiles.filter(tile => {
             const dx = tile.x - centerX;
             const dy = tile.y - centerY;
             const distanceSquared = dx * dx + dy * dy;
@@ -960,46 +953,14 @@ export class WorldSystem extends BaseSystemManager {
      * Get information about a map
      */
     public async getMap(mapId: string): Promise<GameMap | null> {
-        return this.mapRepository.get(mapId);
+        return this.mapRepository.findById(mapId);
     }
 
     /**
      * Get all maps
      */
     public async getAllMaps(): Promise<GameMap[]> {
-        return this.mapRepository.getAll();
-    }
-
-    /**
-     * Get a region by ID
-     */
-    public async getRegion(regionId: string): Promise<MapRegion | null> {
-        return this.regionRepository.get(regionId);
-    }
-
-    /**
-     * Get all regions for a map
-     */
-    public async getRegionsForMap(mapId: string): Promise<MapRegion[]> {
-        return this.regionRepository.findBy('mapId', mapId);
-    }
-
-    /**
-     * Get a single tile at specific coordinates
-     */
-    public async getTileAt(x: number, y: number, mapId?: string): Promise<MapTile | null> {
-        if (!mapId) {
-            // If no mapId specified, get the first map
-            const maps = await this.mapRepository.getAll();
-            if (maps.length === 0) return null;
-            mapId = maps[0].id;
-        }
-
-        const tiles = await this.tileRepository.query(
-            t => t.mapId === mapId && t.x === x && t.y === y
-        );
-
-        return tiles.length > 0 ? tiles[0] : null;
+        return this.mapRepository.findAll();
     }
 
     /**
@@ -1014,7 +975,7 @@ export class WorldSystem extends BaseSystemManager {
     ): Promise<MapTile[]> {
         if (!mapId) {
             // If no mapId specified, get the first map
-            const maps = await this.mapRepository.getAll();
+            const maps = await this.mapRepository.findAll();
             if (maps.length === 0) return [];
             mapId = maps[0].id;
         }
@@ -1027,51 +988,10 @@ export class WorldSystem extends BaseSystemManager {
     }
 
     /**
-     * Get tiles in a circular area
-     */
-    public async getTilesInArea(
-        centerX: number,
-        centerY: number,
-        radius: number,
-        mapId?: string
-    ): Promise<MapTile[]> {
-        if (!mapId) {
-            // If no mapId specified, get the first map
-            const maps = await this.mapRepository.getAll();
-            if (maps.length === 0) return [];
-            mapId = maps[0].id;
-        }
-
-        // First get tiles in the bounding square for efficiency
-        const tiles = await this.getTilesInRect(
-            centerX - radius,
-            centerY - radius,
-            centerX + radius,
-            centerY + radius,
-            mapId
-        );
-
-        // Then filter to only include tiles within the radius
-        return tiles.filter(tile => {
-            const dx = tile.x - centerX;
-            const dy = tile.y - centerY;
-            const distanceSquared = dx * dx + dy * dy;
-            return distanceSquared <= radius * radius;
-        });
-    }
-
-    /**
-     * Get a POI by ID
-     */
-    public async getPOI(poiId: string): Promise<POI | null> {
-        return this.poiRepository.get(poiId);
-    }
-
-    /**
      * Get all POIs in a region
      */
     public async getPOIsInRegion(regionId: string): Promise<POI[]> {
-        return this.poiRepository.findBy('regionId', regionId);
+        return this.poiRepository.findBy('region', regionId);
     }
 
     /**
@@ -1092,7 +1012,7 @@ export class WorldSystem extends BaseSystemManager {
         const tile = await this.getTileAt(x, y, mapId);
         if (!tile || !tile.poiId) return [];
 
-        const poi = await this.poiRepository.get(tile.poiId);
+        const poi = await this.poiRepository.findById(tile.poiId);
         return poi ? [poi] : [];
     }
 
@@ -1118,174 +1038,11 @@ export class WorldSystem extends BaseSystemManager {
         // Get all POIs
         const pois: POI[] = [];
         for (const poiId of poiIds) {
-            const poi = await this.poiRepository.get(poiId);
+            const poi = await this.poiRepository.findById(poiId);
             if (poi) pois.push(poi);
         }
 
         return pois;
-    }
-
-    /**
-     * Update a tile as explored
-     */
-    public async exploreTile(
-        x: number,
-        y: number,
-        entityId: string,
-        mapId?: string
-    ): Promise<MapTile | null> {
-        const tile = await this.getTileAt(x, y, mapId);
-        if (!tile) return null;
-
-        if (!tile.explored || !tile.exploredBy.includes(entityId)) {
-            // Update tile as explored
-            const updatedTile = await this.tileRepository.update(
-                tile.id,
-                {
-                    explored: true,
-                    exploredBy: [...tile.exploredBy, entityId]
-                }
-            );
-
-            if (updatedTile) {
-                // Emit tile explored event
-                await this.emitEvent({
-                    type: 'tile:explored',
-                    source: this.name,
-                    timestamp: Date.now(),
-                    data: {
-                        tile: updatedTile,
-                        entityId
-                    }
-                });
-
-                // If tile has a POI and the POI is hidden, make it visible
-                if (updatedTile.poiId) {
-                    const poi = await this.poiRepository.get(updatedTile.poiId);
-                    if (poi && poi.status === POIStatus.HIDDEN) {
-                        await this.discoverPOI(poi.id, entityId);
-                    }
-                }
-            }
-
-            return updatedTile;
-        }
-
-        return tile;
-    }
-
-    /**
-     * Discover a POI (make it visible)
-     */
-    public async discoverPOI(
-        poiId: string,
-        entityId: string
-    ): Promise<POI | null> {
-        const poi = await this.poiRepository.get(poiId);
-        if (!poi) return null;
-
-        // Already discovered by this entity
-        if (poi.discoveredBy.includes(entityId)) {
-            return poi;
-        }
-
-        // Update POI status to visible
-        const updatedPOI = await this.poiRepository.update(
-            poiId,
-            {
-                status: POIStatus.VISIBLE,
-                discoveredBy: [...poi.discoveredBy, entityId]
-            }
-        );
-
-        if (updatedPOI) {
-            // Emit POI discovered event
-            await this.emitEvent({
-                type: 'poi:discovered',
-                source: this.name,
-                timestamp: Date.now(),
-                data: {
-                    poi: updatedPOI,
-                    entityId
-                }
-            });
-
-            // Check if the POI is in a region, and if so, discover the region too
-            if (updatedPOI.regionId) {
-                const region = await this.regionRepository.get(updatedPOI.regionId);
-                if (region && (!region.discoveredBy || !region.discoveredBy.includes(entityId))) {
-                    await this.regionRepository.update(
-                        region.id,
-                        {
-                            discoveredBy: [...(region.discoveredBy || []), entityId]
-                        }
-                    );
-
-                    // Emit region discovered event
-                    await this.emitEvent({
-                        type: 'region:discovered',
-                        source: this.name,
-                        timestamp: Date.now(),
-                        data: {
-                            region,
-                            entityId
-                        }
-                    });
-                }
-            }
-        }
-
-        return updatedPOI;
-    }
-
-    /**
-     * Visit a POI (mark as visited)
-     */
-    public async visitPOI(
-        poiId: string,
-        entityId: string
-    ): Promise<POI | null> {
-        const poi = await this.poiRepository.get(poiId);
-        if (!poi) return null;
-
-        // Already visited by this entity
-        if (poi.visitedBy.includes(entityId)) {
-            return poi;
-        }
-
-        // Update POI as visited
-        const updatedPOI = await this.poiRepository.update(
-            poiId,
-            {
-                status: POIStatus.ACTIVE,
-                visitedBy: [...poi.visitedBy, entityId]
-            }
-        );
-
-        if (updatedPOI) {
-            // Emit POI visited event
-            await this.emitEvent({
-                type: 'poi:visited',
-                source: this.name,
-                timestamp: Date.now(),
-                data: {
-                    poi: updatedPOI,
-                    entityId
-                }
-            });
-        }
-
-        return updatedPOI;
-    }
-
-    /**
-     * Update POI status
-     */
-    public async updatePOIStatus(
-        poiId: string,
-        status: POIStatus
-    ): Promise<POI | null> {
-        return this.poiRepository.update(poiId, { status });
     }
 
     /**
@@ -1306,6 +1063,17 @@ export class WorldSystem extends BaseSystemManager {
         const tile = await this.getTileAt(x, y, mapId);
         if (!tile || !tile.regionId) return null;
 
-        return this.regionRepository.get(tile.regionId);
+        return this.regionRepository.findById(tile.regionId);
+    }
+
+    /**
+     * Process a world tick, including building deterioration
+     */
+    public async processWorldTick(): Promise<void> {
+        // ... existing world tick logic ...
+        if (this.buildingSystem) {
+            this.buildingSystem.processHourlyDeterioration(1); // Default amount, can be parameterized
+        }
+        // ... rest of tick logic ...
     }
 } 

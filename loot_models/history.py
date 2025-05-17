@@ -8,6 +8,7 @@ from sqlalchemy import Column, Integer, String, Float, JSON, DateTime, ForeignKe
 from sqlalchemy.orm import relationship
 from loot_models.base import LootBase
 import enum
+from sqlalchemy.dialects.postgresql import UUID
 
 class LootSourceType(str, enum.Enum):
     """Enumeration of loot source types."""
@@ -39,7 +40,7 @@ class LootHistory(LootBase):
     source_id = Column(String(50))  # ID of the container/shop/enemy/etc
     item_id = Column(Integer, ForeignKey('loot_items.id'), nullable=False)
     quantity = Column(Integer, default=1)
-    player_id = Column(Integer, ForeignKey('users.id'))  # Null for generation events
+    player_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))  # Null for generation events
     character_id = Column(Integer, ForeignKey('characters.id'))  # Null for generation events
     location_id = Column(Integer, ForeignKey('loot_locations.id'))
     danger_level = Column(Integer)

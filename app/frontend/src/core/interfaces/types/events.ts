@@ -97,6 +97,53 @@ export interface EventSubscriptionOptions {
 }
 
 /**
+ * --- Construction System Events ---
+ */
+export interface ConstructionStartEvent {
+  type: 'construction:start';
+  buildingId: string;
+  duration: number;
+  timestamp: number;
+  source: string;
+}
+
+export interface ConstructionCancelEvent {
+  type: 'construction:cancel';
+  buildingId: string;
+  timestamp: number;
+  source: string;
+}
+
+export interface ConstructionProgressEvent {
+  type: 'construction:progress';
+  buildingId: string;
+  progress: import('../../../systems/ConstructionProgressSystem').ConstructionProgress;
+  timestamp: number;
+  source: string;
+}
+
+export interface TickEvent {
+  type: 'tick';
+  timestamp: number;
+  source: string;
+}
+
+export interface ConstructionValidationErrorEvent {
+  type: 'construction:validationError';
+  buildingId: string;
+  errors: string[];
+  timestamp: number;
+  source: string;
+}
+
+export interface ConstructionCompleteEvent {
+  type: 'construction:complete';
+  buildingId: string;
+  timestamp: number;
+  source: string;
+}
+
+/**
  * Event map type
  */
 export type EventMap = {
@@ -117,6 +164,12 @@ export type EventMap = {
   [MediaEventType.PROCESS_PROGRESS]: MediaEvent;
   [MediaEventType.PROCESS_COMPLETE]: MediaEvent;
   [MediaEventType.PROCESS_ERROR]: MediaEvent;
+  'construction:start': ConstructionStartEvent;
+  'construction:cancel': ConstructionCancelEvent;
+  'construction:progress': ConstructionProgressEvent;
+  'tick': TickEvent;
+  'construction:validationError': ConstructionValidationErrorEvent;
+  'construction:complete': ConstructionCompleteEvent;
 };
 
 /**

@@ -1,0 +1,108 @@
+{
+  "alert_data": {
+    "name": "Low Disk Space Warning",
+    "severity": "P4",
+    "system": "backup_server",
+    "description": "Disk usage on backup server exceeded 70%",
+    "value": 72,
+    "unit": "%",
+    "threshold": 70,
+    "impact": "No immediate impact, but requires cleanup within the next week"
+  },
+  "result": {
+    "action": "processed",
+    "alert": {
+      "name": "Low Disk Space Warning",
+      "severity": "P4",
+      "system": "backup_server",
+      "description": "Disk usage on backup server exceeded 70%",
+      "value": 72,
+      "unit": "%",
+      "threshold": 70,
+      "impact": "No immediate impact, but requires cleanup within the next week",
+      "id": "e4c1d9e8-98ea-44ee-acaa-c3f69bb4fdcb",
+      "created_at": "2025-05-16T18:39:59.686600+00:00",
+      "status": "new",
+      "current_escalation_level": "initial_response",
+      "initial_response_at": "2025-05-16T18:39:59.686617+00:00",
+      "initial_targets": [
+        {
+          "role": "primary_oncall",
+          "description": "Primary On-Call Engineer",
+          "notification_methods": [
+            "pagerduty_primary",
+            "slack_dm",
+            "sms",
+            "email"
+          ]
+        }
+      ],
+      "initial_actions": [
+        "create_ticket"
+      ],
+      "initial_automations": [
+        "assign_ticket_id"
+      ],
+      "history": [
+        {
+          "timestamp": "2025-05-16T18:39:59.686621+00:00",
+          "event": "alert_received",
+          "targets": [
+            "primary_oncall"
+          ],
+          "actions": [
+            "create_ticket"
+          ],
+          "automations": [
+            "assign_ticket_id"
+          ]
+        }
+      ]
+    },
+    "notifications": {
+      "success": [
+        {
+          "channel": "email",
+          "targets": [
+            "oncall@example.com",
+            "primary_oncall@example.com"
+          ],
+          "timestamp": "2025-05-16T18:39:59.686896+00:00"
+        },
+        {
+          "channel": "slack",
+          "targets": [
+            "@primary_oncall",
+            "#incidents"
+          ],
+          "timestamp": "2025-05-16T18:39:59.687112+00:00"
+        },
+        {
+          "channel": "sms",
+          "targets": [],
+          "timestamp": "2025-05-16T18:39:59.687237+00:00"
+        },
+        {
+          "channel": "pagerduty",
+          "targets": [
+            "pagerduty_primary"
+          ],
+          "timestamp": "2025-05-16T18:39:59.687424+00:00"
+        }
+      ],
+      "failure": []
+    },
+    "automations": {
+      "success": [
+        {
+          "automation": "assign_ticket_id",
+          "result": {
+            "ticket_id": "TICKET-5473C2A5"
+          },
+          "timestamp": "2025-05-16T18:39:59.687519+00:00"
+        }
+      ],
+      "failure": []
+    }
+  }
+}

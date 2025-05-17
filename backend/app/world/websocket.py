@@ -1,12 +1,15 @@
 """WebSocket manager for real-time updates."""
 
-from typing import Dict, Set, Optional, Any
+from typing import Dict, Set, Optional, Any, List
 import json
 import asyncio
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect, Depends, status
+from fastapi.responses import JSONResponse
 from .region import RegionManager
 from .viewport import ViewportManager
 from .renderer import RegionRenderer
+from backend.app.core.security import decode_access_token
+import time
 
 class ConnectionManager:
     """Manages WebSocket connections and broadcasts."""
@@ -211,3 +214,173 @@ class WorldStateManager:
         # Send updates to affected clients
         for client_id in affected_clients:
             await self.send_viewport_update(client_id) 
+
+class ChannelManager:
+    """Manages topic/channel-based subscriptions and message routing."""
+    def __init__(self):
+        self.channels: Dict[str, Set[str]] = {}  # channel -> set of client_ids
+        self.client_channels: Dict[str, Set[str]] = {}  # client_id -> set of channels
+
+    def subscribe(self, client_id: str, channel: str):
+        self.channels.setdefault(channel, set()).add(client_id)
+        self.client_channels.setdefault(client_id, set()).add(channel)
+
+    def unsubscribe(self, client_id: str, channel: str):
+        if channel in self.channels:
+            self.channels[channel].discard(client_id)
+            if not self.channels[channel]:
+                del self.channels[channel]
+        if client_id in self.client_channels:
+            self.client_channels[client_id].discard(channel)
+            if not self.client_channels[client_id]:
+                del self.client_channels[client_id]
+
+    def get_channels(self, client_id: str) -> Set[str]:
+        return self.client_channels.get(client_id, set())
+
+    def get_clients(self, channel: str) -> Set[str]:
+        return self.channels.get(channel, set())
+
+class PresenceManager:
+    """Tracks online status, last activity, typing indicators."""
+    def __init__(self):
+        self.online: Dict[str, float] = {}  # client_id -> last seen timestamp
+        self.typing: Set[str] = set()
+
+    def set_online(self, client_id: str):
+        self.online[client_id] = time.time()
+
+    def set_offline(self, client_id: str):
+        if client_id in self.online:
+            del self.online[client_id]
+        self.typing.discard(client_id)
+
+    def set_typing(self, client_id: str, is_typing: bool):
+        if is_typing:
+            self.typing.add(client_id)
+        else:
+            self.typing.discard(client_id)
+
+    def is_online(self, client_id: str) -> bool:
+        return client_id in self.online
+
+    def get_last_seen(self, client_id: str) -> Optional[float]:
+        return self.online.get(client_id)
+
+    def is_typing(self, client_id: str) -> bool:
+        return client_id in self.typing
+
+class EventSchemas:
+    """Defines event schemas for notifications, updates, errors."""
+    @staticmethod
+    def notification(message: str, level: str = "info", data: Optional[dict] = None):
+        return {"type": "notification", "level": level, "message": message, "data": data or {}}
+
+    @staticmethod
+    def error(message: str, code: int = 400):
+        return {"type": "error", "message": message, "code": code}
+
+    @staticmethod
+    def presence(client_id: str, online: bool, last_seen: Optional[float] = None):
+        return {"type": "presence", "client_id": client_id, "online": online, "last_seen": last_seen}
+
+    @staticmethod
+    def typing(client_id: str, is_typing: bool):
+        return {"type": "typing", "client_id": client_id, "is_typing": is_typing}
+
+# Extend ConnectionManager for JWT auth, channel, and presence
+class ExtendedConnectionManager(ConnectionManager):
+    def __init__(self):
+        super().__init__()
+        self.channel_manager = ChannelManager()
+        self.presence_manager = PresenceManager()
+        self.message_queues: Dict[str, List[dict]] = {}  # client_id -> queued messages
+
+    async def connect(self, websocket: WebSocket, token: str, client_id: str, width: float, height: float):
+        # JWT authentication
+        try:
+            payload = decode_access_token(token)
+            user_id = payload.get("sub")
+            if not user_id:
+                await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+                return
+        except Exception:
+            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            return
+        await websocket.accept()
+        self.active_connections[client_id] = websocket
+        self.presence_manager.set_online(client_id)
+        self.channel_manager.subscribe(client_id, f"user:{client_id}")  # auto-subscribe to personal channel
+        viewport = ViewportManager(width, height)
+        self.client_viewports[client_id] = viewport
+        self.client_renderers[client_id] = RegionRenderer(viewport)
+        # Deliver queued messages if any
+        if client_id in self.message_queues:
+            for msg in self.message_queues[client_id]:
+                await websocket.send_json(msg)
+            del self.message_queues[client_id]
+
+    def disconnect(self, client_id: str):
+        super().disconnect(client_id)
+        self.presence_manager.set_offline(client_id)
+        # Remove from all channels
+        for channel in list(self.channel_manager.get_channels(client_id)):
+            self.channel_manager.unsubscribe(client_id, channel)
+
+    async def send_channel_message(self, message: dict, channel: str):
+        for client_id in self.channel_manager.get_clients(channel):
+            await self.send_personal_message(message, client_id)
+
+    async def send_personal_message(self, message: dict, client_id: str):
+        if client_id in self.active_connections:
+            try:
+                await self.active_connections[client_id].send_json(message)
+            except WebSocketDisconnect:
+                self.disconnect(client_id)
+        else:
+            # Queue message for offline clients
+            self.message_queues.setdefault(client_id, []).append(message)
+
+# FastAPI WebSocket endpoint
+from fastapi import APIRouter
+router = APIRouter()
+
+manager = ExtendedConnectionManager()
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    # Expect query params: token, client_id, width, height
+    token = websocket.query_params.get("token")
+    client_id = websocket.query_params.get("client_id")
+    width = float(websocket.query_params.get("width", 800))
+    height = float(websocket.query_params.get("height", 600))
+    await manager.connect(websocket, token, client_id, width, height)
+    try:
+        while True:
+            data = await websocket.receive_json()
+            # Handle subscription, presence, typing, etc.
+            msg_type = data.get("type")
+            if msg_type == "subscribe":
+                channel = data.get("channel")
+                if channel:
+                    manager.channel_manager.subscribe(client_id, channel)
+            elif msg_type == "unsubscribe":
+                channel = data.get("channel")
+                if channel:
+                    manager.channel_manager.unsubscribe(client_id, channel)
+            elif msg_type == "typing":
+                is_typing = data.get("is_typing", False)
+                manager.presence_manager.set_typing(client_id, is_typing)
+                await manager.send_channel_message(EventSchemas.typing(client_id, is_typing), f"user:{client_id}")
+            elif msg_type == "ping":
+                await websocket.send_json({"type": "pong"})
+            # ... handle other message types (viewport, region, etc.) ...
+            else:
+                await manager.handle_client_message(client_id, msg_type, data)
+    except WebSocketDisconnect:
+        manager.disconnect(client_id)
+
+# TODO: Move channel, presence, and event schema classes to their own modules for maintainability.
+# TODO: Add persistent subscription storage for reconnects.
+# TODO: Add more robust error handling and logging.
+# TODO: Add unit/integration tests for all new features. 

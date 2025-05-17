@@ -1,5 +1,4 @@
 from typing import Dict, List, Optional
-from .social_utils import SocialInteraction
 
 class SocialConsequences:
     CONSEQUENCES = {
