@@ -19,7 +19,10 @@
   - `Neutral900`: #121212
 
 **Accessibility:**
+- All color pairs must meet WCAG AA/AAA contrast for text.
 - Use `Colors.MeetsWcagAA(a, b)` and `Colors.MeetsWcagAAA(a, b)` to check contrast ratios at runtime.
+- Colorblind-friendly palettes are available and can be toggled at runtime (see AccessibilitySettingsPanel).
+- All color assignments must use design tokens, never hardcoded values.
 
 ## Typography
 
@@ -77,6 +80,14 @@
 - Subscribe to `ThemeManager.OnThemeChanged` to update UI elements.
 - Store theme-specific tokens in static classes or ScriptableObjects.
 
+## Accessibility Guidance
+- **Color Contrast:** All text/background color pairs must pass WCAG 2.1 AA/AAA. Use provided helpers to validate at runtime.
+- **Colorblind Modes:** Use the AccessibilitySettingsPanel to toggle colorblind-friendly palettes. All UI must remain clear and distinguishable in all modes.
+- **Scaling:** All font sizes and UI elements must respond to global scaling and font size changes. Test with AccessibilitySettingsPanel.
+- **Focus Indicators:** All focusable elements must display a visible focus ring using the Focus color token.
+- **Screen Reader:** All text must be accessible via the `ScreenReaderLabel` property on UI components.
+- **Testing:** Test theme switching, colorblind mode, and scaling in PlayMode and automated tests.
+
 ## Usage Example (C#)
 
 ```csharp
@@ -103,4 +114,5 @@ ThemeManager.OnThemeChanged += (theme) => { /* update UI */ };
 ## Accessibility
 - All color pairs must meet WCAG AA/AAA contrast for text.
 - Use provided helper methods to validate at runtime.
-- Test theme switching and token application in PlayMode tests. 
+- Colorblind mode and scaling are managed via AccessibilitySettingsPanel.
+- Test theme switching, colorblind mode, and scaling in PlayMode tests. 

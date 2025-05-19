@@ -9,3 +9,20 @@
 | CacheWarmer         | Backend   | 1. Trigger cache warming process<br>2. Inspect cache state                | Cache is populated as expected                        | Test with empty/large datasets           | Pending            |
 | RedisCacheService   | Backend   | 1. Store and retrieve data via Redis<br>2. Simulate cache failures        | Data is correctly cached and retrieved                | Test with Redis unavailable              | Pending            |
 | useMapStore         | Unity     | 1. Interact with map in Unity client<br>2. Observe state changes          | Map state updates and UI reflect expected behavior    | Test with rapid/invalid user actions     | Pending            | 
+
+# Accessibility Manual Testing Checklist
+
+| Feature/Area                | Test Steps                                                                                 | Expected Outcome                                      | Edge Cases/Notes                        | Verification Status |
+|-----------------------------|------------------------------------------------------------------------------------------|-------------------------------------------------------|------------------------------------------|--------------------|
+| Screen Reader (Unity)       | 1. Enable screen reader<br>2. Navigate all UI<br>3. Verify all text is read aloud         | All visible text is accessible to screen reader        | Test with dynamic text, overlays         | Pending            |
+| Keyboard Navigation (Unity) | 1. Use Tab/Shift+Tab, arrows, Enter/Space to navigate/activate UI                        | All UI is fully navigable and operable by keyboard     | Test with modals, nested panels          | Pending            |
+| Gamepad Navigation (Unity)  | 1. Use gamepad to navigate/activate UI                                                    | All UI is fully navigable and operable by gamepad      | Test with disconnected/reconnected pad   | Pending            |
+| Color Contrast (Unity)      | 1. Inspect all text/background pairs<br>2. Use color contrast tool                       | All pairs meet WCAG 2.1 AA/AAA                        | Test with theme switching, overlays      | Pending            |
+| Colorblind Mode (Unity)     | 1. Toggle colorblind mode<br>2. Inspect all UI for clarity                              | UI remains clear and distinguishable in all modes      | Test all supported colorblind types      | Pending            |
+| UI Scaling (Unity)          | 1. Adjust UI scale/font size in settings<br>2. Inspect all UI                            | All UI and text scale appropriately                   | Test with extreme scaling                | Pending            |
+| Subtitles/Captions (Unity)  | 1. Trigger all audio feedback<br>2. Verify subtitles/captions appear                    | All audio has accurate, timely captions                | Test with overlapping audio events       | Pending            |
+| Multi-Modal Feedback (Unity)| 1. Trigger success/error/info/warning events<br>2. Verify visual/audio/haptic feedback   | All feedback is delivered in all enabled modalities    | Test with feedback disabled in settings  | Pending            |
+| Accessibility Settings      | 1. Open settings panel<br>2. Toggle all accessibility options<br>3. Verify effect        | All settings apply immediately and persist as needed   | Test with rapid toggling, edge cases     | Pending            |
+| Error Messages (Backend)    | 1. Trigger errors via API<br>2. Inspect JSON response                                  | Error messages are clear, actionable, and structured   | Test with missing/invalid fields         | Pending            |
+| Validation Feedback (Backend)| 1. Submit invalid data via API<br>2. Inspect validation errors                         | Validation errors include field, type, suggestion      | Test with multiple/compound errors       | Pending            |
+| Accessibility Endpoints (Backend)| 1. Fetch/set accessibility settings via API<br>2. Inspect responses                | Endpoints are accessible, responses are well-formed    | Test with invalid/unsupported settings   | Pending            | 

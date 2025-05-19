@@ -65,8 +65,8 @@
   ```python
   try:
       risky_operation()
-  except Exception:
-      pass  # Silent failure
+  except Exception as e:
+      print(f"Error: {e}")  # Log the error instead of silent failure
   ```
 - **Corrected Example:**
   ```python

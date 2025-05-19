@@ -63,20 +63,20 @@ class BoundingBox:
 ```python
 class SpatialEntity:
     def get_id(self):
-        """Return unique identifier for this entity"""
-        pass
+        """Return unique identifier for this entity (should be a string or integer primary key).\n\nBest practice: Use a UUID, database ID, or other globally unique identifier.\nExample: return self.id\n"""
+        raise NotImplementedError("get_id must be implemented by subclasses")
     
     def get_bounding_box(self):
-        """Return BoundingBox for this entity"""
-        pass
+        """Return BoundingBox for this entity.\n\nBest practice: Return a BoundingBox object representing the entity's spatial extent.\nExample: return BoundingBox(self.x, self.y, self.x + self.width, self.y + self.height)\n"""
+        raise NotImplementedError("get_bounding_box must be implemented by subclasses")
     
     def get_position(self):
-        """Return center Position for this entity"""
-        pass
+        """Return center Position for this entity.\n\nBest practice: Return a Position object (with x, y) representing the entity's center.\nExample: return Position(self.x + self.width/2, self.y + self.height/2)\n"""
+        raise NotImplementedError("get_position must be implemented by subclasses")
     
     def get_entity_type(self):
-        """Return the type of this entity (character, building, etc.)"""
-        pass
+        """Return the type of this entity (e.g., 'character', 'building', etc.).\n\nBest practice: Return a string or enum indicating the entity type.\nExample: return 'character'\n"""
+        raise NotImplementedError("get_entity_type must be implemented by subclasses")
 ```
 
 ### 3.3 SpatialIndex Core Implementation

@@ -213,20 +213,22 @@ pos_tuple = (global_pos.x, global_pos.y, global_pos.z)
 from visual_client.core.utils.coordinates import GlobalCoord, LocalCoord
 
 def get_player_position() -> GlobalCoord:
-    # Implementation...
-    return player_pos
+    """Return the player's current global position as a GlobalCoord object.\n\nBest practice: Always return a proper GlobalCoord, not a tuple.\nExample:\n    return player.position\n"""
+    # Implementation would retrieve the player's position from the game state
+    return player.position
 
 def move_entity(entity_id: str, position: GlobalCoord) -> None:
-    # Implementation...
+    """Move the specified entity to the given global position.\n\nBest practice: Validate the position using coordinate_validation, update the entity's position in the world state, and trigger any necessary event hooks.\nExample:\n    errors = cv.validate_value(position)\n    if errors:\n        raise ValueError(f"Invalid position: {errors}")\n    world_state.update_entity_position(entity_id, position)\n"""
+    # Implementation would update the entity's position in the world state
     pass
 
 # ❌ DON'T: Use generic types for coordinates
 def get_player_position() -> tuple:
-    # Implementation...
-    return (x, y, z)
+    # TODO: Return player position as a tuple
+    pass
 
 def move_entity(entity_id: str, position) -> None:
-    # Implementation...
+    # TODO: Implement entity movement logic
     pass
 ```
 

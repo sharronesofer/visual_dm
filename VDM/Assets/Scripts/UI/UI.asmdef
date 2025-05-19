@@ -1,0 +1,6 @@
+{
+  "name": "VisualDM.UI",
+  "references": ["Net", "VisualDM.Data", "VisualDM.Core", "VisualDM.Systems", "VisualDM.World", "VisualDM.Entities"],
+  "includePlatforms": ["Editor", "WindowsStandalone64", "macOSStandalone", "LinuxStandalone64", "macOSStandalone"],
+  "allowUnsafeCode": false
+} 

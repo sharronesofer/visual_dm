@@ -1,34 +1,49 @@
-# Inventory Management System Documentation
+# assets/equipment/
 
-## Overview
-This documentation provides a comprehensive guide to the architecture, components, integration, usage, and testing of the Inventory Management System. It is intended for developers, integrators, and stakeholders who need to understand, extend, or maintain the system.
+This folder contains all equipment, item, and gear assets for the game. Store images for weapons, armor, consumables, and other equipment here.
 
-## Table of Contents
-1. [System Architecture](system-architecture.md)
-2. [Core Components and Class Structure](core-components.md)
-3. [API Reference and Integration Points](api-reference.md)
-4. [Usage Examples and Best Practices](usage-examples.md)
-5. [Testing Strategy](testing.md)
-6. [Glossary](#glossary)
-7. [Version Information and Changelog](#version-information-and-changelog)
+## Subfolder Structure
 
----
+- `weapons/` — Swords, bows, staves, etc.
+- `armor/` — Helmets, chestplates, boots, etc.
+- `consumables/` — Potions, scrolls, food, etc.
 
-## Glossary
-- **InventoryRepository:** Main interface for inventory CRUD and transactional operations.
-- **InventoryContainer:** Encapsulates inventory logic, constraints, and stacking.
-- **InventoryValidator:** Validates all inventory operations for correctness and integrity.
-- **RecoveryManager:** Detects and fixes data inconsistencies, manages backup/restore.
-- **InventoryEventBus:** Event bus for integration with external systems.
-- **Logging Framework:** Captures all critical operations and state changes.
-- **InventoryQueryInterface:** Thread-safe, read-only access for external systems.
-- **AttributeContainer:** Encapsulates item attributes with validation and serialization.
+## Naming Conventions
 
-## Version Information and Changelog
-- **Current Version:** 1.0.0
-- **Changelog:**
-  - v1.0.0: Initial release with full feature set, documentation, and test coverage.
+- Weapons: `weapon_[type]_[variant].png` (e.g., `weapon_sword_001.png`)
+- Armor: `armor_[type]_[variant].png` (e.g., `armor_helmet_01.png`)
+- Consumables: `consumable_[type]_[variant].png` (e.g., `consumable_potion_01.png`)
+- Use lowercase and underscores for all file and folder names.
 
----
+# Visual DM UI Documentation
 
-For detailed information, refer to each section above. For questions or contributions, please consult the contributing guidelines or contact the maintainers.
+## Accessibility
+
+Visual DM is designed to be accessible to all users, including those with disabilities. Key accessibility features include:
+- Full keyboard and gamepad navigation for all UI
+- Screen reader support for all visible text
+- Colorblind-friendly palettes and runtime color contrast validation
+- UI scaling and font resizing
+- Subtitles/captions for all audio feedback
+- Multi-modal feedback (visual, audio, haptic)
+- Accessible error and validation messages in the backend
+
+**How to Use:**
+- Open the Accessibility Settings Panel from the main menu or with `Ctrl+Alt+A`
+- Toggle colorblind mode, adjust scaling, enable/disable screen reader, and configure feedback
+- All settings apply immediately and persist as needed
+
+**More Information:**
+- [Accessibility Guide](./accessibility.md)
+- [Component Library](./component-library.md)
+- [Design System](./design-system.md)
+
+For questions or additional needs, contact the development team or open an issue.
+
+## Combat System (Canonical)
+
+- See `VDM/Assets/Scripts/Combat/` for the canonical, modular, extensible combat system implementation.
+- Fully compliant with `/docs/Development_Bible.md` and `/docs/CombatSystem_API.md`.
+- Backend API: `/backend/app/api/combat.py` (FastAPI, Pydantic models, `/combat/state` GET/POST).
+- Unity integration: 100% runtime, no scene/prefab/tag dependencies, entry point is `GameLoader.cs` in `Bootstrap.unity`.
+- For extension and usage, see the README in the combat directory.

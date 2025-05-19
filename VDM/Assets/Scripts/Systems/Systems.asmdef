@@ -1,0 +1,6 @@
+{
+  "name": "VisualDM.Systems",
+  "references": ["Net", "VisualDM.Data"],
+  "includePlatforms": ["Editor", "WindowsStandalone64", "macOSStandalone", "LinuxStandalone64", "macOSStandalone"],
+  "allowUnsafeCode": false
+} 

@@ -1,0 +1,9 @@
+{
+  "name": "VisualDM.Tests",
+  "references": ["VisualDM.Core", "VisualDM.Systems", "VisualDM.UI", "VisualDM.World", "VisualDM.Entities"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "includePlatforms": ["Editor"],
+  "allowUnsafeCode": false,
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+  "autoReferenced": false
+} 

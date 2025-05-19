@@ -122,7 +122,32 @@ POIEventBus.on('poi:evolved', ({ poiId, poi, trigger, changes, version }) => {
 ---
 
 ## Open Questions / TODOs
-- Add logic for additional POI types (dungeon, landmark, resource) in integration systems.
-- Expand event bus implementation for robust decoupling.
-- Document authentication and rate limiting for all integration APIs.
-- Add more detailed sequence diagrams as systems evolve. 
+
+### 1. Add logic for additional POI types (dungeon, landmark, resource) in integration systems
+- **Best Practice:** For each new POI type, define a clear data schema and event payload. Update all integration systems (NPC, Economy, War, Memory) to handle new POI types by subscribing to the `poi:evolved` event and implementing type-specific logic. Document the expected behaviors and edge cases for each POI type in the integration system's documentation.
+- **Next Steps:**
+  - Extend the POI data model to include new types and their attributes.
+  - Update event handlers in each system to process new POI types.
+  - Add unit and integration tests for each new POI type.
+  - Document the integration logic and provide usage examples.
+
+### 2. Expand event bus implementation for robust decoupling
+- **Best Practice:** Use a strongly-typed, asynchronous event bus with support for event versioning, filtering, and error handling. Ensure all systems interact with the event bus via well-defined interfaces. Implement circuit breakers and retry logic for cross-system calls. Document the event bus API and provide code samples for subscribing and publishing events.
+- **Next Steps:**
+  - Refactor the event bus to support async event delivery and filtering.
+  - Add error handling, logging, and monitoring for event propagation.
+  - Provide a reference implementation and usage guide in the documentation.
+
+### 3. Document authentication and rate limiting for all integration APIs
+- **Best Practice:** Require JWT or API key authentication for all external API endpoints. Implement rate limiting using a middleware or API gateway. Document authentication requirements, rate limits, and error responses in the API reference section. Provide example requests and error handling strategies.
+- **Next Steps:**
+  - Add authentication and rate limiting middleware to all integration APIs.
+  - Update API documentation with authentication and rate limiting details.
+  - Add tests for authentication failures and rate limit exceedance.
+
+### 4. Add more detailed sequence diagrams as systems evolve
+- **Best Practice:** Maintain up-to-date sequence diagrams for all major integration flows. Use a standard diagramming tool (e.g., Mermaid, PlantUML) and store diagrams in the documentation repo. Update diagrams whenever integration logic changes. Reference diagrams in relevant documentation sections.
+- **Next Steps:**
+  - Create or update sequence diagrams for new or changed integration flows.
+  - Review diagrams for accuracy during code reviews.
+  - Link diagrams from API and integration documentation. 

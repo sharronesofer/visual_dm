@@ -13,7 +13,7 @@
 - Event-driven and async patterns are used, which improves logical flow and clarity.
 
 **Weaknesses:**
-- Several scripts contain `TODO`, `FIXME`, and `HACK` comments, indicating incomplete features or technical debt.
+- Several scripts contain technical debt markers (e.g., `TODO`, `FIXME`, `HACK`, `XXX`), indicating incomplete features or areas needing refactor. These should be systematically tracked and resolved as part of ongoing maintenance, with priority given to core systems and UI/quest logic.
 - Some UI and quest-related scripts have inconsistent comment styles and lack summary documentation.
 - Occasional long methods and deeply nested logic (notably in UI panels and quest management) reduce readability.
 
@@ -28,9 +28,9 @@
 - Security best practices (e.g., path normalization, input validation) are present in file and network code.
 
 **Weaknesses:**
-- Some scripts (e.g., `WebSocketClient`) have incomplete message parsing logic (`TODO`).
+- Some scripts (e.g., `WebSocketClient`) have incomplete message parsing logic, as indicated by technical debt comments. These should be reviewed and completed or removed as appropriate.
 - UI code occasionally mixes logic and presentation, which can hinder maintainability.
-- Not all scripts are fully covered by unit or integration tests (as inferred from TODOs).
+- Not all scripts are fully covered by unit or integration tests (as inferred from technical debt markers).
 
 ---
 
@@ -42,8 +42,7 @@
 - The storage system is pluggable, allowing for future backend or cloud storage integration.
 
 **Weaknesses:**
-- Some UI and quest management scripts are monolithic and could benefit from further decomposition.
-- Technical debt in the form of `TODO`/`HACK` comments may impede future extensibility if not addressed.
+- Some UI and quest management scripts are monolithic and could benefit from further decomposition. Technical debt markers should be resolved as part of refactoring efforts.
 
 ---
 
@@ -55,7 +54,7 @@
 - Error handling and logging are present in critical systems.
 
 **Weaknesses:**
-- Incomplete features and technical debt (as marked) may increase maintenance burden.
+- Incomplete features and technical debt (as marked) may increase maintenance burden. All technical debt should be logged and tracked in a dedicated issue tracker, with regular review and prioritization.
 - Some scripts lack sufficient inline documentation or summary comments.
 - Occasional tight coupling between UI and logic in certain panels.
 
@@ -69,7 +68,7 @@
 - No unnecessary allocations or blocking calls in core systems.
 
 **Weaknesses:**
-- Some UI update loops and quest logic may benefit from further profiling and optimization.
+- Some UI update loops and quest logic may benefit from further profiling and optimization. Technical debt comments should be reviewed for potential performance improvements.
 - No evidence of automated performance regression testing (though performance tests are mentioned).
 
 ---
@@ -82,8 +81,8 @@
 - Monitoring and alerting for runtime errors and performance issues.
 
 **Weaknesses:**
-- Some UI and quest scripts lack comprehensive error handling.
-- Not all edge cases are covered, as indicated by `TODO`/`FIXME` comments.
+- Some UI and quest scripts lack comprehensive error handling. Technical debt markers should be used to identify and address missing error handling.
+- Not all edge cases are covered, as indicated by technical debt comments.
 
 ---
 
@@ -95,7 +94,7 @@
 - Monitoring and storage systems have clear usage and extension documentation.
 
 **Weaknesses:**
-- Some scripts (especially UI and quest-related) lack summary comments and usage examples.
+- Some scripts (especially UI and quest-related) lack summary comments and usage examples. Technical debt markers should be resolved by adding appropriate documentation.
 - Incomplete documentation for certain runtime-generated UI components.
 
 ---
@@ -108,7 +107,7 @@
 - Test coverage goals are documented.
 
 **Weaknesses:**
-- Some scripts are not fully covered by tests (as indicated by TODOs).
+- Some scripts are not fully covered by tests (as indicated by technical debt markers). All technical debt related to testing should be addressed as part of ongoing test coverage improvements.
 - No evidence of automated code style or static analysis enforcement in the build pipeline.
 
 ---
@@ -131,8 +130,11 @@
 ## Actionable Recommendations (Prioritized)
 
 1. **Address Technical Debt**
-   - Systematically resolve all `TODO`, `FIXME`, `HACK`, and `XXX` comments, prioritizing those in core systems and UI/quest logic.
-   - Track remaining debt in a dedicated issue tracker.
+   - Systematically search for and resolve all `TODO`, `FIXME`, `HACK`, and `XXX` comments in the codebase. Use automated tools or scripts to identify these markers.
+   - For each instance, either complete the implementation, refactor the code, or document a clear plan for resolution. Remove obsolete or misleading comments.
+   - Track all remaining technical debt in a dedicated issue tracker (e.g., GitHub Issues, Jira) with clear descriptions, priorities, and owners.
+   - Prioritize resolution of technical debt in core systems and UI/quest logic, as these have the greatest impact on maintainability and user experience.
+   - Regularly review and update the technical debt log as part of sprint planning and code reviews.
 
 2. **Improve Documentation**
    - Add XML summary comments and usage examples to all scripts, especially UI and quest-related code.

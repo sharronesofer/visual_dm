@@ -530,7 +530,7 @@
 - `Storage/FileSystemStorageProvider.cs` line 55: `public async Task<byte[]> Load(string path)`
 - `Storage/FileSystemStorageProvider.cs` line 63: `public Task<bool> Delete(string path)`
 - `Storage/FileSystemStorageProvider.cs` line 78: `public Task<bool> Exists(string path)`
-- `Dialogue/DialogueGenerationService.cs` line 14: `public string model = "gpt-3.5-turbo";`
+- `Dialogue/DialogueGenerationService.cs` line 14: `public string model = "gpt-4.1-nano";`
 - `Dialogue/DialogueGenerationService.cs` line 15: `public float temperature = 0.7f;`
 - `Dialogue/DialogueGenerationService.cs` line 16: `public int maxTokens = 512;`
 - `Dialogue/DialogueGenerationService.cs` line 17: `public List<string> stop = new List<string>();`
