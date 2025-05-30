@@ -1,0 +1,1 @@
+# Stub for coordinate_utils to resolve import errors and circular imports 
