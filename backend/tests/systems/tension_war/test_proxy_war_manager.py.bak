@@ -1,0 +1,324 @@
+"""
+Tests for the ProxyWarManager service
+"""
+
+import unittest
+from unittest.mock import MagicMock, patch
+import uuid
+import random
+
+from backend.systems.tension_war.services.proxy_war_manager import ProxyWarManager
+from backend.systems.tension_war.models.proxy_war import ProxyWarStatus
+
+
+class TestProxyWarManager(unittest.TestCase):
+    """Test suite for the ProxyWarManager service."""
+
+    def setUp(self):
+        """Set up for the tests."""
+        self.event_dispatcher_mock = MagicMock()
+        with patch(
+            "backend.systems.events.EventDispatcher.get_instance",
+            return_value=self.event_dispatcher_mock,
+        ):
+            self.proxy_war_manager = ProxyWarManager()
+
+        # Set the random seed for predictable results
+        random.seed(42)
+
+    def test_start_proxy_war(self):
+        """Test starting a new proxy war."""
+        # Arrange
+        sponsor_faction_id = str(uuid.uuid4())
+        target_region_id = str(uuid.uuid4())
+        target_faction_id = str(uuid.uuid4())
+        proxy_group_data = {
+            "name": "Freedom Fighters of Arendelle",
+            "size": 150,
+            "strength": 0.6,
+            "ideology": "revolutionary",
+            "public_goals": "regional autonomy",
+        }
+        funding_level = 0.7
+
+        # Act
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.3,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.5,
+        ):
+            proxy_war = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id,
+                target_region_id,
+                target_faction_id,
+                proxy_group_data,
+                funding_level,
+            )
+
+        # Assert
+        self.assertIsNotNone(proxy_war)
+        self.assertEqual(proxy_war["sponsor_faction_id"], sponsor_faction_id)
+        self.assertEqual(proxy_war["target_region_id"], target_region_id)
+        self.assertEqual(proxy_war["target_faction_id"], target_faction_id)
+        self.assertEqual(proxy_war["proxy_group"], proxy_group_data)
+        self.assertEqual(proxy_war["funding_level"], funding_level)
+        self.assertEqual(proxy_war["status"], ProxyWarStatus.Active.value)
+        self.assertEqual(proxy_war["discovery_risk"], 0.3)
+        self.assertEqual(proxy_war["effectiveness"], 0.5)
+        self.assertFalse(proxy_war["is_discovered"])
+
+        # Check that it's stored in the manager
+        self.assertIn(proxy_war["id"], self.proxy_war_manager._proxy_wars)
+
+        # Check that the event was dispatched
+        self.event_dispatcher_mock.publish_sync.assert_called()
+
+    def test_get_proxy_war(self):
+        """Test getting a proxy war by ID."""
+        # Arrange
+        sponsor_faction_id = str(uuid.uuid4())
+        target_region_id = str(uuid.uuid4())
+        target_faction_id = str(uuid.uuid4())
+
+        # Create a proxy war
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.3,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.5,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.generate_proxy_group_name",
+            return_value="Freedom Fighters",
+        ):
+            proxy_war = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id, target_region_id, target_faction_id
+            )
+
+        # Act
+        retrieved_proxy_war = self.proxy_war_manager.get_proxy_war(proxy_war["id"])
+
+        # Assert
+        self.assertEqual(retrieved_proxy_war, proxy_war)
+
+    def test_get_proxy_wars_by_sponsor(self):
+        """Test getting proxy wars by sponsor."""
+        # Arrange
+        sponsor_faction_id = str(uuid.uuid4())
+        target_region_id = str(uuid.uuid4())
+        target_faction_id_1 = str(uuid.uuid4())
+        target_faction_id_2 = str(uuid.uuid4())
+
+        # Create proxy wars
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.3,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.5,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.generate_proxy_group_name",
+            return_value="Freedom Fighters",
+        ):
+            proxy_war_1 = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id, target_region_id, target_faction_id_1
+            )
+            proxy_war_2 = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id, target_region_id, target_faction_id_2
+            )
+
+        # Act
+        sponsored_proxy_wars = self.proxy_war_manager.get_proxy_wars_by_sponsor(
+            sponsor_faction_id
+        )
+
+        # Assert
+        self.assertEqual(len(sponsored_proxy_wars), 2)
+        self.assertIn(proxy_war_1, sponsored_proxy_wars)
+        self.assertIn(proxy_war_2, sponsored_proxy_wars)
+
+    def test_update_funding_level(self):
+        """Test updating proxy war funding level."""
+        # Arrange
+        sponsor_faction_id = str(uuid.uuid4())
+        target_region_id = str(uuid.uuid4())
+        target_faction_id = str(uuid.uuid4())
+
+        # Create a proxy war
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.3,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.5,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.generate_proxy_group_name",
+            return_value="Freedom Fighters",
+        ):
+            proxy_war = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id,
+                target_region_id,
+                target_faction_id,
+                funding_level=0.5,
+            )
+
+        new_funding_level = 0.8
+
+        # Act
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.4,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.7,
+        ):
+            updated_proxy_war = self.proxy_war_manager.update_funding_level(
+                proxy_war["id"], new_funding_level
+            )
+
+        # Assert
+        self.assertEqual(updated_proxy_war["funding_level"], new_funding_level)
+        self.assertEqual(updated_proxy_war["discovery_risk"], 0.4)
+        self.assertEqual(updated_proxy_war["effectiveness"], 0.7)
+        self.assertGreater(len(updated_proxy_war["events"]), 0)
+        self.assertEqual(updated_proxy_war["events"][-1]["type"], "funding_changed")
+
+        # The event dispatcher should have been called
+        self.event_dispatcher_mock.publish_sync.assert_called()
+
+    def test_check_discovery_not_discovered(self):
+        """Test check discovery when proxy war is not discovered."""
+        # Arrange
+        sponsor_faction_id = str(uuid.uuid4())
+        target_region_id = str(uuid.uuid4())
+        target_faction_id = str(uuid.uuid4())
+
+        # Create a proxy war with very low discovery risk
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.01,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.5,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.generate_proxy_group_name",
+            return_value="Freedom Fighters",
+        ):
+            proxy_war = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id,
+                target_region_id,
+                target_faction_id,
+                funding_level=0.2,
+            )
+
+        # Mock the random roll to ensure no discovery
+        with patch("random.random", return_value=0.9):
+            # Set a low evidence gain rate so discovery evidence doesn't trigger discovery
+            self.proxy_war_manager.config.evidence_gain_rate = 0.1
+            self.proxy_war_manager.config.evidence_threshold = 1.0
+
+            # Act
+            checked_proxy_war = self.proxy_war_manager.check_discovery(proxy_war["id"])
+
+        # Assert
+        self.assertFalse(checked_proxy_war["is_discovered"])
+        # Evidence should have increased
+        self.assertGreater(checked_proxy_war["discovery_evidence"], 0)
+
+    def test_check_discovery_is_discovered(self):
+        """Test check discovery when proxy war is discovered."""
+        # Arrange
+        sponsor_faction_id = str(uuid.uuid4())
+        target_region_id = str(uuid.uuid4())
+        target_faction_id = str(uuid.uuid4())
+
+        # Create a proxy war with high discovery risk
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.8,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.5,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.generate_proxy_group_name",
+            return_value="Freedom Fighters",
+        ):
+            proxy_war = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id,
+                target_region_id,
+                target_faction_id,
+                funding_level=0.9,
+            )
+
+        # Mock the random roll to ensure discovery
+        with patch("random.random", return_value=0.1):
+            # Act
+            checked_proxy_war = self.proxy_war_manager.check_discovery(proxy_war["id"])
+
+        # Assert
+        self.assertTrue(checked_proxy_war["is_discovered"])
+        self.assertGreater(checked_proxy_war["discovery_evidence"], 0)
+        self.assertGreater(len(checked_proxy_war["events"]), 0)
+        self.assertEqual(checked_proxy_war["events"][-1]["type"], "discovered")
+
+        # The event dispatcher should have been called
+        self.event_dispatcher_mock.publish_sync.assert_called()
+
+    def test_end_proxy_war(self):
+        """Test ending a proxy war."""
+        # Arrange
+        sponsor_faction_id = str(uuid.uuid4())
+        target_region_id = str(uuid.uuid4())
+        target_faction_id = str(uuid.uuid4())
+
+        # Create a proxy war
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_discovery_risk",
+            return_value=0.3,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.calculate_proxy_war_effectiveness",
+            return_value=0.5,
+        ), patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.generate_proxy_group_name",
+            return_value="Freedom Fighters",
+        ):
+            proxy_war = self.proxy_war_manager.start_proxy_war(
+                sponsor_faction_id, target_region_id, target_faction_id
+            )
+
+        reason = "diplomatic pressure"
+        outcome_details = {
+            "concessions_made": True,
+            "territorial_changes": False,
+            "reputation_impact": -10,
+        }
+
+        # Act
+        with patch(
+            "backend.systems.tension_war.utils.proxy_war_utils.evaluate_proxy_war_impact",
+            return_value={
+                "reputation_changes": {"sponsor": -5, "target": 2},
+                "territorial_changes": [],
+                "population_changes": {},
+            },
+        ):
+            ended_proxy_war = self.proxy_war_manager.end_proxy_war(
+                proxy_war["id"], reason, outcome_details
+            )
+
+        # Assert
+        self.assertEqual(ended_proxy_war["status"], ProxyWarStatus.Ended.value)
+        self.assertIsNotNone(ended_proxy_war["end_date"])
+        self.assertEqual(ended_proxy_war["end_reason"], reason)
+        self.assertEqual(ended_proxy_war["outcome"], outcome_details)
+        self.assertGreater(len(ended_proxy_war["events"]), 0)
+        self.assertEqual(ended_proxy_war["events"][-1]["type"], "ended")
+
+        # The event dispatcher should have been called
+        self.event_dispatcher_mock.publish_sync.assert_called()
+
+
+if __name__ == "__main__":
+    unittest.main()

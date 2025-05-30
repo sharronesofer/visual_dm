@@ -1,0 +1,439 @@
+"""
+Unit tests for the CraftingService.
+"""
+
+import unittest
+from unittest.mock import Mock, patch, MagicMock, mock_open
+import json
+import os
+import tempfile
+from pathlib import Path
+
+from backend.systems.crafting.services.crafting_service import CraftingService
+from backend.systems.crafting.models.recipe import CraftingRecipe
+from backend.systems.crafting.models.ingredient import CraftingIngredient
+from backend.systems.crafting.models.result import CraftingResult
+from backend.systems.crafting.models.station import CraftingStation
+
+
+class TestCraftingService(unittest.TestCase):
+    """Test cases for the CraftingService class."""
+
+    def setUp(self):
+        """Set up test fixtures."""
+        # Create test data
+        self.recipe_data = {
+            "iron_sword": {
+                "name": "Iron Sword",
+                "description": "A basic iron sword, effective in combat.",
+                "skill_required": "smithing",
+                "min_skill_level": 2,
+                "station_required": "smithy",
+                "station_level": 1,
+                "ingredients": [
+                    {
+                        "item_id": "iron_ingot",
+                        "quantity": 3,
+                        "is_consumed": True,
+                        "substitution_groups": {"low_quality": {"scrap_metal": 5}},
+                    },
+                    {"item_id": "leather_strip", "quantity": 2, "is_consumed": True},
+                ],
+                "results": [
+                    {"item_id": "iron_sword", "quantity": 1, "probability": 1.0}
+                ],
+                "is_hidden": False,
+                "is_enabled": True,
+                "discovery_methods": ["smith_mentor"],
+                "metadata": {
+                    "base_experience": 15,
+                    "quality_modifiers": {"damage": 2, "durability": 5},
+                },
+            }
+        }
+
+        self.station_data = {
+            "basic_smithy": {
+                "name": "Basic Smithy",
+                "description": "A simple forge for basic metalworking.",
+                "type": "smithy",
+                "level": 1,
+                "metadata": {
+                    "required_space": 4,
+                    "build_materials": {"stone": 10, "iron": 5, "wood": 15},
+                    "allowed_categories": ["weapons", "armor", "tools"],
+                },
+            }
+        }
+
+        # Mock EventDispatcher
+        self.mock_event_dispatcher = Mock()
+
+        # Mock required services
+        self.mock_recipe_service = Mock()
+        self.mock_station_service = Mock()
+        self.mock_knowledge_service = Mock()
+        self.mock_experience_service = Mock()
+        self.mock_achievement_service = Mock()
+
+        # Configure mocks
+        self.mock_recipe_service._recipes = {"iron_sword": Mock()}
+        self.mock_recipe_service._recipes["iron_sword"].name = "Iron Sword"
+        self.mock_recipe_service._recipes["iron_sword"].skill_required = "smithing"
+        self.mock_recipe_service._recipes["iron_sword"].ingredients = [Mock(), Mock()]
+        self.mock_recipe_service._recipes["iron_sword"].results = [Mock()]
+        
+        self.mock_station_service._stations = {"basic_smithy": Mock()}
+        self.mock_station_service._stations["basic_smithy"].name = "Basic Smithy"
+        self.mock_station_service._stations["basic_smithy"].type = "smithy"
+        self.mock_station_service._stations["basic_smithy"].level = 1
+
+        # Patch dependencies
+        self.patches = [
+            patch(
+                "backend.systems.events.event_dispatcher.EventDispatcher.get_instance",
+                return_value=self.mock_event_dispatcher,
+            ),
+            patch("backend.systems.inventory.repository.InventoryItemRepository"),
+            patch("backend.core.database.db"),
+        ]
+
+        # Start all patches
+        for p in self.patches:
+            p.start()
+
+        # Create temporary directories for recipe and station data
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.recipe_dir = Path(self.temp_dir.name) / "recipes"
+        self.station_dir = Path(self.temp_dir.name) / "stations"
+        self.recipe_dir.mkdir()
+        self.station_dir.mkdir()
+
+        # Write test data to files
+        with open(self.recipe_dir / "test_recipes.json", "w") as f:
+            json.dump(self.recipe_data, f)
+
+        with open(self.station_dir / "test_stations.json", "w") as f:
+            json.dump(self.station_data, f)
+
+        # Set environment variables
+        os.environ["RECIPE_DIR"] = str(self.recipe_dir)
+        os.environ["STATION_DIR"] = str(self.station_dir)
+
+        # Create crafting service with mocked dependencies
+        self.crafting_service = CraftingService(
+            recipe_service=self.mock_recipe_service,
+            station_service=self.mock_station_service,
+            knowledge_service=self.mock_knowledge_service,
+            experience_service=self.mock_experience_service,
+            achievement_service=self.mock_achievement_service,
+        )
+
+    def tearDown(self):
+        """Clean up after tests."""
+        # Stop all patches
+        for p in self.patches:
+            p.stop()
+
+        # Clean up temporary directory
+        self.temp_dir.cleanup()
+
+        # Reset environment variables
+        if "RECIPE_DIR" in os.environ:
+            del os.environ["RECIPE_DIR"]
+        if "STATION_DIR" in os.environ:
+            del os.environ["STATION_DIR"]
+
+    def test_load_recipes(self):
+        """Test loading recipes from files."""
+        # Verify that recipes were loaded
+        self.assertIn("iron_sword", self.crafting_service._recipes)
+        recipe = self.crafting_service._recipes["iron_sword"]
+        self.assertEqual(recipe.name, "Iron Sword")
+        self.assertEqual(recipe.skill_required, "smithing")
+        self.assertEqual(len(recipe.ingredients), 2)
+        self.assertEqual(len(recipe.results), 1)
+
+    def test_load_stations(self):
+        """Test loading stations from files."""
+        # Verify that stations were loaded
+        self.assertIn("basic_smithy", self.crafting_service._stations)
+        station = self.crafting_service._stations["basic_smithy"]
+        self.assertEqual(station.name, "Basic Smithy")
+        self.assertEqual(station.type, "smithy")
+        self.assertEqual(station.level, 1)
+
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._is_recipe_known"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._is_recipe_available_to_character"
+    )
+    def test_get_available_recipes(self, mock_available, mock_known):
+        """Test getting available recipes for a character."""
+        # Configure mocks
+        mock_known.return_value = True
+        mock_available.return_value = True
+
+        # Call method
+        recipes = self.crafting_service.get_available_recipes(
+            "character1", {"smithing": 5}
+        )
+
+        # Verify result
+        self.assertEqual(len(recipes), 1)
+        self.assertIn("iron_sword", recipes)
+
+        # Verify mocks were called
+        mock_known.assert_called_once()
+        mock_available.assert_called_once()
+
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._check_skill_requirements"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._check_station_requirements"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._validate_inventory"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._is_recipe_known"
+    )
+    def test_can_craft_success(
+        self, mock_known, mock_validate, mock_station, mock_skill
+    ):
+        """Test can_craft with all requirements met."""
+        # Configure mocks
+        mock_known.return_value = True
+        mock_skill.return_value = (True, "")
+        mock_station.return_value = (True, "")
+        mock_validate.return_value = (True, "")
+
+        # Call method
+        result, reason = self.crafting_service.can_craft(
+            character_id="character1",
+            recipe_id="iron_sword",
+            inventory_id="inventory1",
+            station_id="basic_smithy",
+            skills={"smithing": 5},
+        )
+
+        # Verify result
+        self.assertTrue(result)
+        self.assertEqual(reason, "")
+
+        # Verify mocks were called
+        mock_known.assert_called_once()
+        mock_skill.assert_called_once()
+        mock_station.assert_called_once()
+        mock_validate.assert_called_once()
+
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._check_skill_requirements"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._is_recipe_known"
+    )
+    def test_can_craft_skill_failure(self, mock_known, mock_skill):
+        """Test can_craft with skill requirements not met."""
+        # Configure mocks
+        mock_known.return_value = True
+        mock_skill.return_value = (False, "Insufficient smithing skill")
+
+        # Call method
+        result, reason = self.crafting_service.can_craft(
+            character_id="character1",
+            recipe_id="iron_sword",
+            inventory_id="inventory1",
+            station_id="basic_smithy",
+            skills={"smithing": 1},
+        )
+
+        # Verify result
+        self.assertFalse(result)
+        self.assertEqual(reason, "Insufficient smithing skill")
+
+        # Verify mocks were called
+        mock_known.assert_called_once()
+        mock_skill.assert_called_once()
+
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._is_recipe_known"
+    )
+    def test_can_craft_unknown_recipe(self, mock_known):
+        """Test can_craft with unknown recipe."""
+        # Configure mocks
+        mock_known.return_value = False
+
+        # Call method
+        result, reason = self.crafting_service.can_craft(
+            character_id="character1",
+            recipe_id="iron_sword",
+            inventory_id="inventory1",
+            station_id="basic_smithy",
+            skills={"smithing": 5},
+        )
+
+        # Verify result
+        self.assertFalse(result)
+        self.assertEqual(reason, "Recipe not known")
+
+        # Verify mocks were called
+        mock_known.assert_called_once()
+
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService.can_craft"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._process_ingredients"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._determine_craft_results"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._process_results"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._emit_crafting_started_event"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._emit_crafting_completed_event"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._calculate_crafting_experience"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._apply_crafting_experience"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._track_crafting_achievement"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._track_crafting_milestones"
+    )
+    def test_craft_success(
+        self,
+        mock_milestones,
+        mock_achievements,
+        mock_apply_exp,
+        mock_calc_exp,
+        mock_emit_completed,
+        mock_emit_started,
+        mock_process_results,
+        mock_determine_results,
+        mock_process_ingredients,
+        mock_can_craft,
+    ):
+        """Test successful crafting."""
+        # Configure mocks
+        mock_can_craft.return_value = (True, "")
+
+        craft_results = [{"item_id": "iron_sword", "quantity": 1, "quality": "NORMAL"}]
+        mock_determine_results.return_value = craft_results
+
+        mock_calc_exp.return_value = ("smithing", 15)
+
+        # Call method
+        result = self.crafting_service.craft(
+            character_id="character1",
+            recipe_id="iron_sword",
+            inventory_id="inventory1",
+            station_id="basic_smithy",
+            skills={"smithing": 5},
+        )
+
+        # Verify result
+        self.assertTrue(result["success"])
+        self.assertEqual(result["results"], craft_results)
+        self.assertEqual(result["skill_experience"]["skill"], "smithing")
+        self.assertEqual(result["skill_experience"]["experience_gained"], 15)
+
+        # Verify mocks were called
+        mock_can_craft.assert_called_once()
+        mock_emit_started.assert_called_once()
+        mock_process_ingredients.assert_called_once()
+        mock_determine_results.assert_called_once()
+        mock_process_results.assert_called_once()
+        mock_calc_exp.assert_called_once()
+        mock_apply_exp.assert_called_once()
+        mock_emit_completed.assert_called_once()
+        mock_achievements.assert_called_once()
+        mock_milestones.assert_called_once()
+
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService.can_craft"
+    )
+    @patch(
+        "backend.systems.crafting.services.crafting_service.CraftingService._emit_crafting_failed_event"
+    )
+    def test_craft_failure(self, mock_emit_failed, mock_can_craft):
+        """Test failed crafting."""
+        # Configure mocks
+        mock_can_craft.return_value = (False, "Insufficient materials")
+
+        # Call method
+        result = self.crafting_service.craft(
+            character_id="character1",
+            recipe_id="iron_sword",
+            inventory_id="inventory1",
+            station_id="basic_smithy",
+            skills={"smithing": 5},
+        )
+
+        # Verify result
+        self.assertFalse(result["success"])
+        self.assertEqual(result["message"], "Insufficient materials")
+
+        # Verify mocks were called
+        mock_can_craft.assert_called_once()
+        mock_emit_failed.assert_called_once()
+
+    def test_learn_recipe(self):
+        """Test learning a recipe."""
+        # Call method
+        result, message = self.crafting_service.learn_recipe("character1", "iron_sword")
+
+        # Verify result
+        self.assertTrue(result)
+        self.assertIn("learned", message.lower())
+
+        # Verify recipe is now known
+        self.assertIn("character1", self.crafting_service._known_recipes)
+        self.assertIn("iron_sword", self.crafting_service._known_recipes["character1"])
+
+    def test_learn_recipe_already_known(self):
+        """Test learning a recipe that is already known."""
+        # Set up known recipes
+        self.crafting_service._known_recipes["character1"] = set(["iron_sword"])
+
+        # Call method
+        result, message = self.crafting_service.learn_recipe("character1", "iron_sword")
+
+        # Verify result
+        self.assertTrue(result)
+        self.assertIn("already", message.lower())
+
+    @patch("random.choice")
+    def test_discover_recipe(self, mock_choice):
+        """Test discovering a recipe."""
+        # Configure mocks
+        mock_choice.return_value = "iron_sword"
+
+        # Call method
+        result, message, recipe_id = self.crafting_service.discover_recipe(
+            "character1", "smith_mentor", {"location": "blacksmith_shop"}
+        )
+
+        # Verify result
+        self.assertTrue(result)
+        self.assertEqual(recipe_id, "iron_sword")
+        self.assertIn("discovered", message.lower())
+
+        # Verify recipe is now known
+        self.assertIn("character1", self.crafting_service._known_recipes)
+        self.assertIn("iron_sword", self.crafting_service._known_recipes["character1"])
+
+
+if __name__ == "__main__":
+    unittest.main()

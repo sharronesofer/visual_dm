@@ -1,34 +1,41 @@
-## Description
+# Pull Request Description
 
-[Provide a brief description of the changes in this PR]
+## What does this PR do?
+<!-- Provide a brief summary of your changes and the problem it solves -->
 
-## Type of Change
-
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Documentation update
-- [ ] Code refactoring
+## Type of change
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+- [ ] Refactoring (code improvement without functional changes)
 - [ ] Performance improvement
-- [ ] Build/CI configuration change
-- [ ] Other (please describe):
 
-## Related Issues
+## Motivation and Context
+<!-- Why is this change required? What problem does it solve? -->
 
-[Reference any related issues using #issue-number]
+## How Has This Been Tested?
+<!-- Please describe the tests that you ran to verify your changes -->
+- [ ] Unit tests
+- [ ] Integration tests
+- [ ] Manual testing
 
-## Testing
+## Breaking Changes
+<!-- List any breaking changes and migration path if applicable -->
 
-[Describe the testing that was done for these changes]
-
-## Screenshots (if applicable)
-
-[Add screenshots to help explain your changes]
-
-## Checklist
-
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] I have updated the documentation accordingly
+## Checklist:
 - [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] My changes do not generate new warnings
-- [ ] I have checked the build/CI pipeline and it passes 
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] I have run the code through the code formatter
+- [ ] I have created or updated changesets for user-facing changes
+
+## Screenshots (if appropriate):
+<!-- Add screenshots to help explain your changes if relevant -->
+
+## Additional context
+<!-- Add any other context about the PR here --> 

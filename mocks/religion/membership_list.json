@@ -1,0 +1,42 @@
+[
+  {
+    "id": "3b5ea3cc-df0c-4aaa-bda6-9c8b8fe94182",
+    "created_at": "2025-05-10T01:34:25.010606Z",
+    "updated_at": "2025-05-24T01:34:25.010615Z",
+    "name": "Scientist",
+    "description": "Sort miss program color as final product.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "87efdaec-1adf-4f9f-93bd-b23c2625c115",
+    "created_at": "2025-05-18T01:34:25.010622Z",
+    "updated_at": "2025-05-26T01:34:25.010623Z",
+    "name": "Response",
+    "description": "Return measure billion imagine difference.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "3f8605bc-c723-4514-8e04-c6090af6353d",
+    "created_at": "2025-05-27T01:34:25.010628Z",
+    "updated_at": "2025-05-29T01:34:25.010630Z",
+    "name": "Voice",
+    "description": "Society east more money.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "666b0912-5046-4a30-822b-777015ec4e30",
+    "created_at": "2025-05-24T01:34:25.010635Z",
+    "updated_at": "2025-05-28T01:34:25.010636Z",
+    "name": "Capital",
+    "description": "Identify level base civil.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "5522886a-9a79-47bb-a407-d65e1c425525",
+    "created_at": "2025-05-14T01:34:25.010642Z",
+    "updated_at": "2025-05-28T01:34:25.010643Z",
+    "name": "Meet",
+    "description": "Summer everyone quality.",
+    "status": "ACTIVE"
+  }
+]

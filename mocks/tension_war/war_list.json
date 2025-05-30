@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cd0f7a5d-9852-4ebe-9366-305b1f7ee99e",
+    "created_at": "2025-05-28T01:34:25.034152Z",
+    "updated_at": "2025-05-26T01:34:25.034155Z",
+    "name": "Son",
+    "description": "Trade either law learn president company during including.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "6ba160da-f0b5-4b54-b2bd-49bef3dac123",
+    "created_at": "2025-05-08T01:34:25.034160Z",
+    "updated_at": "2025-05-25T01:34:25.034162Z",
+    "name": "Tree",
+    "description": "Phone under century role.",
+    "status": "PENDING"
+  },
+  {
+    "id": "ee7532e4-6203-4dd5-aa2d-1f6ab157c870",
+    "created_at": "2025-05-12T01:34:25.034166Z",
+    "updated_at": "2025-05-27T01:34:25.034168Z",
+    "name": "Us",
+    "description": "Outside environmental research through once own article.",
+    "status": "PENDING"
+  },
+  {
+    "id": "2bd5bc33-78d0-4879-be38-b4f8d6d1df86",
+    "created_at": "2025-05-27T01:34:25.034172Z",
+    "updated_at": "2025-05-25T01:34:25.034174Z",
+    "name": "Guy",
+    "description": "War head think education explain activity.",
+    "status": "PENDING"
+  },
+  {
+    "id": "402c946c-2981-4546-b28b-08fc0b356b19",
+    "created_at": "2025-05-19T01:34:25.034178Z",
+    "updated_at": "2025-05-29T01:34:25.034180Z",
+    "name": "South",
+    "description": "Power mean these.",
+    "status": "INACTIVE"
+  }
+]

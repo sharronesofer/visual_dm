@@ -1,0 +1,42 @@
+[
+  {
+    "id": "753ad7fa-d70d-40c9-bf09-bbbfc7f8a3ce",
+    "created_at": "2025-05-24T01:34:24.987278Z",
+    "updated_at": "2025-05-28T01:34:24.987286Z",
+    "name": "Movie",
+    "description": "Owner food on production.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "dda54460-1f82-4526-9957-279e35070cfc",
+    "created_at": "2025-05-15T01:34:24.987292Z",
+    "updated_at": "2025-05-24T01:34:24.987294Z",
+    "name": "Resource",
+    "description": "Drug analysis for probably organization technology cold.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "2211eb16-6739-463e-b150-a52986e11038",
+    "created_at": "2025-05-14T01:34:24.987298Z",
+    "updated_at": "2025-05-25T01:34:24.987300Z",
+    "name": "Reveal",
+    "description": "Hit line level money continue.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "747d9c61-e2dc-4769-9fea-3fce397a3ec4",
+    "created_at": "2025-05-02T01:34:24.987304Z",
+    "updated_at": "2025-05-29T01:34:24.987306Z",
+    "name": "Security",
+    "description": "Memory two suddenly fund together within course.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "98dc02dc-555b-42a3-91ca-622c1bc017f4",
+    "created_at": "2025-05-07T01:34:24.987310Z",
+    "updated_at": "2025-05-28T01:34:24.987311Z",
+    "name": "Money",
+    "description": "Line billion drop speech citizen economic.",
+    "status": "PENDING"
+  }
+]

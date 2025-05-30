@@ -1,0 +1,42 @@
+[
+  {
+    "id": "7a7f98fc-2fe1-4ed3-9b35-9ba8c3bfe474",
+    "created_at": "2025-05-20T01:34:25.022477Z",
+    "updated_at": "2025-05-24T01:34:25.022481Z",
+    "name": "Poor",
+    "description": "Town nice reason industry.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "d2a52ecd-afc9-408b-8b75-06b3cb9a7b5f",
+    "created_at": "2025-05-14T01:34:25.022487Z",
+    "updated_at": "2025-05-29T01:34:25.022489Z",
+    "name": "Position",
+    "description": "Service five speak condition even.",
+    "status": "PENDING"
+  },
+  {
+    "id": "6e215208-7f13-44a7-bb2e-4314b0ea47b2",
+    "created_at": "2025-05-05T01:34:25.022505Z",
+    "updated_at": "2025-05-27T01:34:25.022508Z",
+    "name": "Most",
+    "description": "Garden for card camera might.",
+    "status": "PENDING"
+  },
+  {
+    "id": "21c93e3a-a320-47e4-8cc1-8c62543315db",
+    "created_at": "2025-05-02T01:34:25.022513Z",
+    "updated_at": "2025-05-29T01:34:25.022514Z",
+    "name": "General",
+    "description": "Ready range clear scientist student.",
+    "status": "PENDING"
+  },
+  {
+    "id": "e5f6d915-d750-4385-92b0-401021410ce5",
+    "created_at": "2025-05-03T01:34:25.022532Z",
+    "updated_at": "2025-05-25T01:34:25.022538Z",
+    "name": "System",
+    "description": "Through friend around water put rule control cost.",
+    "status": "PENDING"
+  }
+]

@@ -1,0 +1,412 @@
+"""
+Tests for backend.systems.region.routers
+
+This module contains tests for the FastAPI routers in the region system.
+"""
+
+import pytest
+from unittest.mock import Mock, patch, MagicMock
+from fastapi.testclient import TestClient
+from fastapi import FastAPI, HTTPException, status
+
+from backend.systems.region.routers import region_router, get_region_service
+from backend.systems.region.models import Region
+from backend.systems.region.schemas import RegionResponseSchema
+
+
+@pytest.fixture
+def mock_region_service():
+    """Create a mock region service."""
+    service = MagicMock()
+    
+    # Mock region data that matches RegionResponseSchema
+    mock_region = MagicMock()
+    mock_region.id = 1
+    mock_region.name = "Test Region"
+    mock_region.x = 10
+    mock_region.y = 20
+    mock_region.biome_type = "forest"
+    mock_region.continent_id = 1
+    mock_region.elevation = 0.3
+    mock_region.temperature = 15.5
+    mock_region.humidity = 0.7
+    mock_region.resource_abundance = {"wood": 0.8, "herbs": 0.6}
+    mock_region.created_at = None
+    mock_region.updated_at = None
+    mock_region.neighbor_count = 4
+    mock_region.poi_count = 2
+    mock_region.population = 1000
+    
+    # Set up service methods to match router expectations
+    service.list_regions.return_value = [mock_region]
+    service.get_region.return_value = mock_region
+    service.create_region.return_value = mock_region
+    service.update_region.return_value = mock_region
+    service.delete_region.return_value = True
+    service.get_neighbors.return_value = [mock_region]  # Note: get_neighbors, not get_region_neighbors
+    service.get_region_pois.return_value = []
+    service.get_continent_regions.return_value = [mock_region]
+    service.get_regions_by_biome.return_value = [mock_region]
+    
+    return service
+
+
+@pytest.fixture
+def test_app(mock_region_service):
+    """Create a test FastAPI app with the region router."""
+    app = FastAPI()
+    
+    # Override the dependency
+    app.dependency_overrides[get_region_service] = lambda: mock_region_service
+    
+    # Include the router
+    app.include_router(region_router)
+    
+    return app
+
+
+@pytest.fixture
+def client(test_app):
+    """Create a test client."""
+    return TestClient(test_app)
+
+
+class TestRegionRouters:
+    """Tests for the region router endpoints."""
+
+    def test_list_regions(self, client, mock_region_service):
+        """Test listing regions."""
+        response = client.get("/regions/")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "regions" in data
+        assert "total" in data
+        assert "limit" in data
+        assert "offset" in data
+        assert len(data["regions"]) == 1
+        
+        # Check that service was called correctly
+        mock_region_service.list_regions.assert_called_once_with(
+            continent_id=None, biome_type=None, limit=50, offset=0
+        )
+
+    def test_list_regions_with_filters(self, client, mock_region_service):
+        """Test listing regions with filters."""
+        response = client.get("/regions/?continent_id=1&biome_type=forest&limit=10&offset=5")
+        
+        assert response.status_code == 200
+        
+        # Check that service was called with filters
+        mock_region_service.list_regions.assert_called_once_with(
+            continent_id=1, biome_type="forest", limit=10, offset=5
+        )
+
+    def test_list_regions_error(self, client, mock_region_service):
+        """Test listing regions with service error."""
+        mock_region_service.list_regions.side_effect = Exception("Database error")
+        
+        response = client.get("/regions/")
+        
+        assert response.status_code == 500
+        assert "Error retrieving regions" in response.json()["detail"]
+
+    def test_get_region(self, client, mock_region_service):
+        """Test getting a specific region."""
+        response = client.get("/regions/1")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert data["id"] == 1
+        assert data["name"] == "Test Region"
+        
+        # Check that service was called correctly
+        mock_region_service.get_region.assert_called_once_with(1)
+
+    def test_get_region_not_found(self, client, mock_region_service):
+        """Test getting a non-existent region."""
+        mock_region_service.get_region.return_value = None
+        
+        response = client.get("/regions/999")
+        
+        assert response.status_code == 404
+        assert "Region 999 not found" in response.json()["detail"]
+
+    def test_get_region_error(self, client, mock_region_service):
+        """Test getting a region with service error."""
+        mock_region_service.get_region.side_effect = Exception("Database error")
+        
+        response = client.get("/regions/1")
+        
+        assert response.status_code == 500
+        assert "Error retrieving region" in response.json()["detail"]
+
+    def test_create_region(self, client, mock_region_service):
+        """Test creating a new region."""
+        region_data = {
+            "name": "New Region",
+            "x": 15,
+            "y": 25,
+            "biome_type": "plains",
+            "continent_id": 1,
+            "temperature": 0.6,
+            "humidity": 0.4,
+            "elevation": 0.2
+        }
+        
+        response = client.post("/regions/", json=region_data)
+        
+        assert response.status_code == 201
+        data = response.json()
+        assert data["name"] == "Test Region"  # From mock
+        
+        # Check that service was called correctly
+        mock_region_service.create_region.assert_called_once()
+
+    def test_create_region_validation_error(self, client, mock_region_service):
+        """Test creating a region with validation error."""
+        mock_region_service.create_region.side_effect = ValueError("Invalid data")
+        
+        region_data = {
+            "name": "New Region",
+            "x": 10,
+            "y": 20,
+            "biome_type": "plains",
+            "continent_id": 1
+        }
+        
+        response = client.post("/regions/", json=region_data)
+        
+        assert response.status_code == 400
+        assert "Invalid data" in response.json()["detail"]
+
+    def test_create_region_error(self, client, mock_region_service):
+        """Test creating a region with service error."""
+        mock_region_service.create_region.side_effect = Exception("Database error")
+        
+        region_data = {
+            "name": "New Region",
+            "x": 10,
+            "y": 20,
+            "biome_type": "plains",
+            "continent_id": 1
+        }
+        
+        response = client.post("/regions/", json=region_data)
+        
+        assert response.status_code == 500
+        assert "Error creating region" in response.json()["detail"]
+
+    def test_update_region(self, client, mock_region_service):
+        """Test updating an existing region."""
+        update_data = {
+            "name": "Updated Region",
+            "temperature": 0.8
+        }
+        
+        response = client.put("/regions/1", json=update_data)
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert data["name"] == "Test Region"  # From mock
+        
+        # Check that service was called correctly
+        mock_region_service.update_region.assert_called_once()
+
+    def test_update_region_not_found(self, client, mock_region_service):
+        """Test updating a non-existent region."""
+        mock_region_service.update_region.return_value = None
+        
+        update_data = {"name": "Updated Region"}
+        
+        response = client.put("/regions/999", json=update_data)
+        
+        assert response.status_code == 404
+        assert "Region 999 not found" in response.json()["detail"]
+
+    def test_update_region_validation_error(self, client, mock_region_service):
+        """Test updating a region with validation error."""
+        mock_region_service.update_region.side_effect = ValueError("Invalid data")
+        
+        update_data = {"name": "Updated Region"}
+        
+        response = client.put("/regions/1", json=update_data)
+        
+        assert response.status_code == 400
+        assert "Invalid data" in response.json()["detail"]
+
+    def test_update_region_error(self, client, mock_region_service):
+        """Test updating a region with service error."""
+        mock_region_service.update_region.side_effect = Exception("Database error")
+        
+        update_data = {"name": "Updated Region"}
+        
+        response = client.put("/regions/1", json=update_data)
+        
+        assert response.status_code == 500
+        assert "Error updating region" in response.json()["detail"]
+
+    def test_delete_region(self, client, mock_region_service):
+        """Test deleting a region."""
+        response = client.delete("/regions/1")
+        
+        assert response.status_code == 204
+        
+        # Check that service was called correctly
+        mock_region_service.delete_region.assert_called_once_with(1)
+
+    def test_delete_region_not_found(self, client, mock_region_service):
+        """Test deleting a non-existent region."""
+        mock_region_service.delete_region.return_value = False
+        
+        response = client.delete("/regions/999")
+        
+        assert response.status_code == 404
+        assert "Region 999 not found" in response.json()["detail"]
+
+    def test_delete_region_error(self, client, mock_region_service):
+        """Test deleting a region with service error."""
+        mock_region_service.delete_region.side_effect = Exception("Database error")
+        
+        response = client.delete("/regions/1")
+        
+        assert response.status_code == 500
+        assert "Error deleting region" in response.json()["detail"]
+
+    def test_get_region_neighbors(self, client, mock_region_service):
+        """Test getting region neighbors."""
+        response = client.get("/regions/1/neighbors")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "regions" in data
+        assert len(data["regions"]) == 1
+        
+        # Check that service was called correctly
+        mock_region_service.get_neighbors.assert_called_once_with(1)
+
+    def test_get_region_neighbors_not_found(self, client, mock_region_service):
+        """Test getting neighbors for non-existent region."""
+        mock_region_service.get_neighbors.return_value = []
+        
+        response = client.get("/regions/999/neighbors")
+        
+        assert response.status_code == 200  # Empty list is still success
+        data = response.json()
+        assert len(data["regions"]) == 0
+
+    def test_get_region_neighbors_error(self, client, mock_region_service):
+        """Test getting region neighbors with service error."""
+        mock_region_service.get_neighbors.side_effect = Exception("Database error")
+        
+        response = client.get("/regions/1/neighbors")
+        
+        assert response.status_code == 500
+        assert "Error retrieving neighbors" in response.json()["detail"]
+
+    def test_get_region_pois(self, client, mock_region_service):
+        """Test getting region POIs."""
+        response = client.get("/regions/1/pois")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "pois" in data
+        assert "region_id" in data
+        assert "total" in data
+        
+        # Check that service was called correctly
+        mock_region_service.get_region_pois.assert_called_once_with(1, None)
+
+    def test_get_region_pois_with_filter(self, client, mock_region_service):
+        """Test getting region POIs with type filter."""
+        response = client.get("/regions/1/pois?poi_type=dungeon")
+        
+        assert response.status_code == 200
+        
+        # Check that service was called with filter
+        mock_region_service.get_region_pois.assert_called_once_with(1, "dungeon")
+
+    def test_get_region_pois_not_found(self, client, mock_region_service):
+        """Test getting POIs for non-existent region."""
+        mock_region_service.get_region_pois.return_value = []
+        
+        response = client.get("/regions/999/pois")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert data["total"] == 0
+
+    def test_get_region_pois_error(self, client, mock_region_service):
+        """Test getting region POIs with service error."""
+        mock_region_service.get_region_pois.side_effect = Exception("Database error")
+        
+        response = client.get("/regions/1/pois")
+        
+        assert response.status_code == 500
+        assert "Error retrieving POIs" in response.json()["detail"]
+
+    def test_get_continent_regions(self, client, mock_region_service):
+        """Test getting regions by continent."""
+        response = client.get("/regions/continent/1")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "regions" in data
+        assert len(data["regions"]) == 1
+        
+        # Check that service was called correctly
+        mock_region_service.get_continent_regions.assert_called_once_with(1)
+
+    def test_get_continent_regions_error(self, client, mock_region_service):
+        """Test getting continent regions with service error."""
+        mock_region_service.get_continent_regions.side_effect = Exception("Database error")
+        
+        response = client.get("/regions/continent/1")
+        
+        assert response.status_code == 500
+        assert "Error retrieving continent regions" in response.json()["detail"]
+
+    def test_get_regions_by_biome(self, client, mock_region_service):
+        """Test getting regions by biome type."""
+        response = client.get("/regions/biome/forest")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "regions" in data
+        assert len(data["regions"]) == 1
+        
+        # Check that service was called correctly
+        mock_region_service.get_regions_by_biome.assert_called_once_with(
+            "forest", 50, 0
+        )
+
+    def test_get_regions_by_biome_with_pagination(self, client, mock_region_service):
+        """Test getting regions by biome with pagination."""
+        response = client.get("/regions/biome/forest?limit=10&offset=5")
+        
+        assert response.status_code == 200
+        
+        # Check that service was called with pagination
+        mock_region_service.get_regions_by_biome.assert_called_once_with(
+            "forest", 10, 5
+        )
+
+    def test_get_regions_by_biome_error(self, client, mock_region_service):
+        """Test getting regions by biome with service error."""
+        mock_region_service.get_regions_by_biome.side_effect = Exception("Database error")
+        
+        response = client.get("/regions/biome/forest")
+        
+        assert response.status_code == 500
+        assert "Error retrieving biome regions" in response.json()["detail"]
+
+
+class TestDependencies:
+    """Tests for router dependencies."""
+
+    def test_get_region_service(self):
+        """Test the get_region_service dependency."""
+        with patch('backend.systems.region.service.region_service') as mock_service:
+            result = get_region_service()
+            
+            assert result == mock_service

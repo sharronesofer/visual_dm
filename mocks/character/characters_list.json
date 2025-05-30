@@ -1,0 +1,182 @@
+[
+  {
+    "id": "b31cdde0-40a0-40c4-9dff-97affe80d60d",
+    "created_at": "2025-05-27T01:34:24.943208Z",
+    "updated_at": "2025-05-29T01:34:24.943210Z",
+    "name": "Christopher Davis",
+    "race": "HUMAN",
+    "character_class": "CLERIC",
+    "level": 6,
+    "experience_points": 262210,
+    "stats": {
+      "strength": 12,
+      "dexterity": 16,
+      "constitution": 16,
+      "intelligence": 16,
+      "wisdom": 14,
+      "charisma": 15
+    },
+    "hit_points": {
+      "current": 43,
+      "maximum": 77
+    },
+    "location": {
+      "region_id": "4f0c4950-2228-4d6f-b7cf-0a95f6cbc376",
+      "coordinates": {
+        "q": 7,
+        "r": 5,
+        "s": -2
+      }
+    },
+    "background": "Law again marriage wall voice use usually authority subject recent later.",
+    "personality_traits": [
+      "prove",
+      "state",
+      "it"
+    ]
+  },
+  {
+    "id": "c1b1e22d-286e-462f-a15f-9807d4d0d986",
+    "created_at": "2025-05-12T01:34:24.943325Z",
+    "updated_at": "2025-05-27T01:34:24.943327Z",
+    "name": "Linda Downs",
+    "race": "ELF",
+    "character_class": "RANGER",
+    "level": 10,
+    "experience_points": 213774,
+    "stats": {
+      "strength": 8,
+      "dexterity": 9,
+      "constitution": 15,
+      "intelligence": 9,
+      "wisdom": 8,
+      "charisma": 9
+    },
+    "hit_points": {
+      "current": 68,
+      "maximum": 97
+    },
+    "location": {
+      "region_id": "2ae2add0-66a6-43be-9d79-129529638329",
+      "coordinates": {
+        "q": 10,
+        "r": 5,
+        "s": 3
+      }
+    },
+    "background": "Family quite our senior where pressure.",
+    "personality_traits": [
+      "weight",
+      "seem",
+      "make"
+    ]
+  },
+  {
+    "id": "4874b4ef-fc31-404b-93dd-f846a473bb9d",
+    "created_at": "2025-05-12T01:34:24.943439Z",
+    "updated_at": "2025-05-25T01:34:24.943441Z",
+    "name": "Ryan Robinson",
+    "race": "HALFLING",
+    "character_class": "RANGER",
+    "level": 16,
+    "experience_points": 319381,
+    "stats": {
+      "strength": 16,
+      "dexterity": 9,
+      "constitution": 11,
+      "intelligence": 15,
+      "wisdom": 11,
+      "charisma": 11
+    },
+    "hit_points": {
+      "current": 95,
+      "maximum": 103
+    },
+    "location": {
+      "region_id": "18b3da68-7e99-431d-b67c-091e2b9efcd1",
+      "coordinates": {
+        "q": -3,
+        "r": 8,
+        "s": 4
+      }
+    },
+    "background": "Short use activity certainly seven mission hair avoid find ten attention cup.",
+    "personality_traits": [
+      "determine",
+      "process",
+      "peace"
+    ]
+  },
+  {
+    "id": "288eb859-c0eb-474e-adc0-36977a09d9f5",
+    "created_at": "2025-05-01T01:34:24.943548Z",
+    "updated_at": "2025-05-25T01:34:24.943550Z",
+    "name": "Darlene Martin",
+    "race": "ELF",
+    "character_class": "RANGER",
+    "level": 2,
+    "experience_points": 353958,
+    "stats": {
+      "strength": 10,
+      "dexterity": 9,
+      "constitution": 18,
+      "intelligence": 16,
+      "wisdom": 8,
+      "charisma": 9
+    },
+    "hit_points": {
+      "current": 92,
+      "maximum": 89
+    },
+    "location": {
+      "region_id": "b57c8608-43de-46ec-8ad2-971c002461a5",
+      "coordinates": {
+        "q": 2,
+        "r": -5,
+        "s": -8
+      }
+    },
+    "background": "Business car add economic whole imagine green cause physical four miss inside usually.",
+    "personality_traits": [
+      "present",
+      "mean",
+      "beat"
+    ]
+  },
+  {
+    "id": "807524d3-3004-4686-abc9-d689e26f5be9",
+    "created_at": "2025-05-04T01:34:24.943655Z",
+    "updated_at": "2025-05-26T01:34:24.943656Z",
+    "name": "Daniel Higgins",
+    "race": "HALFLING",
+    "character_class": "FIGHTER",
+    "level": 10,
+    "experience_points": 42533,
+    "stats": {
+      "strength": 15,
+      "dexterity": 9,
+      "constitution": 10,
+      "intelligence": 17,
+      "wisdom": 10,
+      "charisma": 11
+    },
+    "hit_points": {
+      "current": 27,
+      "maximum": 67
+    },
+    "location": {
+      "region_id": "768f501f-c1d7-4666-8974-eae971762b24",
+      "coordinates": {
+        "q": -1,
+        "r": -7,
+        "s": -8
+      }
+    },
+    "background": "Note garden begin ask stage I appear them mind road move.",
+    "personality_traits": [
+      "woman",
+      "lot",
+      "sort"
+    ]
+  }
+]

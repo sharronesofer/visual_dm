@@ -1,0 +1,12 @@
+{
+  "assessment_summary": {
+    "total_import_issues": 0,
+    "total_test_issues": 0,
+    "total_compliance_issues": 0,
+    "files_fixed": 0
+  },
+  "import_issues": [],
+  "test_issues": [],
+  "compliance_issues": [],
+  "fixed_files": []
+}

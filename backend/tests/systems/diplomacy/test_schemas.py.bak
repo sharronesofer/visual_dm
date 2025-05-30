@@ -1,0 +1,489 @@
+"""
+Unit tests for Diplomacy System schemas.
+
+Tests the Pydantic schemas defined in backend/systems/diplomacy/schemas.py
+"""
+
+import pytest
+from datetime import datetime, timedelta
+from uuid import uuid4
+
+from pydantic import ValidationError
+
+from backend.systems.diplomacy.schemas import (
+    TreatyCreate,
+    TreatyUpdate,
+    TreatySchema,
+    NegotiationCreate,
+    NegotiationUpdate,
+    NegotiationSchema,
+    NegotiationOfferCreate,
+    NegotiationOfferSchema,
+    DiplomaticEventCreate,
+    DiplomaticEventSchema,
+    TreatyViolationCreate,
+    TreatyViolationSchema,
+    DiplomaticIncidentCreate,
+    DiplomaticIncidentSchema,
+    UltimatumCreate,
+    UltimatumUpdate,
+    UltimatumSchema,
+    SanctionCreate,
+    SanctionUpdate,
+    SanctionSchema,
+    FactionRelationshipSchema,
+)
+from backend.systems.diplomacy.models import (
+    TreatyType,
+    DiplomaticStatus,
+    NegotiationStatus,
+    DiplomaticIncidentType,
+    DiplomaticIncidentSeverity,
+    TreatyViolationType,
+    UltimatumStatus,
+    SanctionType,
+    SanctionStatus,
+)
+
+
+class TestTreatySchemas:
+    """Tests for Treaty-related schemas."""
+
+    def test_treaty_create_schema(self):
+        """Test TreatyCreate schema validation."""
+        # Valid data
+        start_date = datetime.utcnow()
+        end_date = start_date + timedelta(days=30)
+        parties = [str(uuid4()), str(uuid4())]
+
+        treaty_data = {
+            "name": "Defense Treaty",
+            "type": TreatyType.ALLIANCE.value,
+            "parties": parties,
+            "terms": {"mutual_defense": True, "trade_bonus": 0.1},
+            "end_date": end_date,
+            "is_public": True,
+        }
+
+        # Should validate without error
+        treaty = TreatyCreate(**treaty_data)
+
+        # Verify fields
+        assert treaty.name == "Defense Treaty"
+        assert treaty.type == TreatyType.ALLIANCE.value
+        assert treaty.parties == parties
+        assert treaty.terms["mutual_defense"] is True
+        assert treaty.end_date == end_date
+        assert treaty.is_public is True
+
+    def test_treaty_create_validation_error(self):
+        """Test TreatyCreate validation errors."""
+        # Invalid data - end_date before start_date
+        start_date = datetime.utcnow()
+        end_date = start_date - timedelta(days=1)  # End date before start date
+        parties = [str(uuid4()), str(uuid4())]
+
+        invalid_data = {
+            "name": "Invalid Treaty",
+            "type": TreatyType.ALLIANCE.value,
+            "parties": parties,
+            "start_date": start_date,
+            "end_date": end_date,
+        }
+
+        # Should raise validation error
+        with pytest.raises(ValidationError):
+            TreatyCreate(**invalid_data)
+
+    def test_treaty_schema(self):
+        """Test TreatySchema schema."""
+        # Valid data
+        treaty_id = str(uuid4())
+        start_date = datetime.utcnow()
+        end_date = start_date + timedelta(days=30)
+        parties = [str(uuid4()), str(uuid4())]
+
+        treaty_data = {
+            "id": treaty_id,
+            "name": "Defense Treaty",
+            "type": TreatyType.ALLIANCE.value,
+            "parties": parties,
+            "terms": {"mutual_defense": True, "trade_bonus": 0.1},
+            "start_date": start_date,
+            "end_date": end_date,
+            "is_active": True,
+            "is_public": True,
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow(),
+        }
+
+        # Should validate without error
+        treaty_response = TreatySchema(**treaty_data)
+
+        # Verify fields
+        assert treaty_response.id == treaty_id
+        assert treaty_response.name == "Defense Treaty"
+        assert treaty_response.type == TreatyType.ALLIANCE.value
+        assert treaty_response.parties == parties
+        assert treaty_response.terms["mutual_defense"] is True
+        assert treaty_response.start_date == start_date
+        assert treaty_response.end_date == end_date
+        assert treaty_response.is_active is True
+        assert treaty_response.is_public is True
+        assert isinstance(treaty_response.created_at, datetime)
+
+
+class TestNegotiationSchemas:
+    """Tests for Negotiation-related schemas."""
+
+    def test_negotiation_create_schema(self):
+        """Test NegotiationCreate schema validation."""
+        # Valid data
+        parties = [str(uuid4()), str(uuid4())]
+
+        negotiation_data = {
+            "parties": parties,
+            "initiator_id": parties[0],
+            "status": NegotiationStatus.PENDING.value,
+            "treaty_type": TreatyType.TRADE.value,
+            "metadata": {"importance": "high"},
+        }
+
+        # Should validate without error
+        negotiation = NegotiationCreate(**negotiation_data)
+
+        # Verify fields
+        assert negotiation.parties == parties
+        assert negotiation.initiator_id == parties[0]
+        assert negotiation.status == NegotiationStatus.PENDING.value
+        assert negotiation.treaty_type == TreatyType.TRADE.value
+        assert negotiation.metadata["importance"] == "high"
+
+    def test_negotiation_offer_create_schema(self):
+        """Test NegotiationOfferCreate schema validation."""
+        # Valid data
+        faction_id = str(uuid4())
+
+        offer_data = {
+            "faction_id": faction_id,
+            "terms": {"trade_tariff": 0.05, "resource_sharing": True},
+            "counter_offer_id": None,
+        }
+
+        # Should validate without error
+        offer = NegotiationOfferCreate(**offer_data)
+
+        # Verify fields
+        assert offer.faction_id == faction_id
+        assert offer.terms["trade_tariff"] == 0.05
+        assert offer.terms["resource_sharing"] is True
+        assert offer.counter_offer_id is None
+
+    def test_negotiation_schema(self):
+        """Test NegotiationSchema schema."""
+        # Valid data
+        negotiation_id = str(uuid4())
+        parties = [str(uuid4()), str(uuid4())]
+        offer_id = str(uuid4())
+
+        # Create offer
+        offer_data = {
+            "faction_id": parties[0],
+            "timestamp": datetime.utcnow(),
+            "terms": {"trade_tariff": 0.05},
+            "counter_offer_id": None,
+        }
+
+        negotiation_data = {
+            "id": negotiation_id,
+            "parties": parties,
+            "initiator_id": parties[0],
+            "status": NegotiationStatus.PENDING.value,
+            "treaty_type": TreatyType.TRADE.value,
+            "offers": [offer_data],
+            "current_offer_id": offer_id,
+            "start_date": datetime.utcnow(),
+            "metadata": {"importance": "high"},
+        }
+
+        # Should validate without error
+        negotiation_response = NegotiationSchema(**negotiation_data)
+
+        # Verify fields
+        assert negotiation_response.id == negotiation_id
+        assert negotiation_response.parties == parties
+        assert negotiation_response.initiator_id == parties[0]
+        assert negotiation_response.status == NegotiationStatus.PENDING.value
+        assert negotiation_response.treaty_type == TreatyType.TRADE.value
+        assert len(negotiation_response.offers) == 1
+        assert negotiation_response.current_offer_id == offer_id
+        assert negotiation_response.metadata["importance"] == "high"
+
+        # Verify offer was parsed correctly
+        offer = negotiation_response.offers[0]
+        assert offer.faction_id == parties[0]
+        assert offer.terms["trade_tariff"] == 0.05
+
+
+class TestDiplomaticEventSchemas:
+    """Tests for DiplomaticEvent-related schemas."""
+
+    def test_diplomatic_event_create_schema(self):
+        """Test DiplomaticEventCreate schema validation."""
+        # Valid data
+        factions = [str(uuid4()), str(uuid4())]
+
+        event_data = {
+            "event_type": "alliance_formed",
+            "factions": factions,
+            "description": "The factions formed a new alliance",
+            "severity": 75,
+            "public": True,
+            "metadata": {"ceremony_held": True},
+            "tension_change": {f"{factions[0]}_{factions[1]}": -50},
+        }
+
+        # Should validate without error
+        event = DiplomaticEventCreate(**event_data)
+
+        # Verify fields
+        assert event.event_type == "alliance_formed"
+        assert event.factions == factions
+        assert event.description == "The factions formed a new alliance"
+        assert event.severity == 75
+        assert event.public is True
+        assert event.metadata["ceremony_held"] is True
+        assert event.tension_change[f"{factions[0]}_{factions[1]}"] == -50
+
+    def test_diplomatic_event_response_schema(self):
+        """Test DiplomaticEventResponse schema."""
+        # Valid data
+        event_id = str(uuid4())
+        factions = [str(uuid4()), str(uuid4())]
+
+        event_data = {
+            "id": event_id,
+            "event_type": "alliance_formed",
+            "factions": factions,
+            "description": "The factions formed a new alliance",
+            "severity": 75,
+            "public": True,
+            "metadata": {"ceremony_held": True},
+            "tension_change": {f"{factions[0]}_{factions[1]}": -50},
+            "created_at": datetime.utcnow(),
+        }
+
+        # Should validate without error
+        event_response = DiplomaticEventSchema(**event_data)
+
+        # Verify fields
+        assert event_response.id == event_id
+        assert event_response.event_type == "alliance_formed"
+        assert event_response.factions == factions
+        assert event_response.description == "The factions formed a new alliance"
+        assert event_response.severity == 75
+        assert event_response.public is True
+        assert event_response.metadata["ceremony_held"] is True
+        assert event_response.tension_change[f"{factions[0]}_{factions[1]}"] == -50
+        assert isinstance(event_response.created_at, datetime)
+
+
+class TestRelationshipSchemas:
+    """Tests for Relationship-related schemas."""
+
+    def test_relationship_update_schema(self):
+        """Test RelationshipUpdate schema validation."""
+        # Valid data
+        relationship_data = {"status": DiplomaticStatus.ALLIANCE.value, "tension": -50}
+
+        # Should validate without error
+        relationship = RelationshipUpdate(**relationship_data)
+
+        # Verify fields
+        assert relationship.status == DiplomaticStatus.ALLIANCE.value
+        assert relationship.tension == -50
+
+    def test_relationship_response_schema(self):
+        """Test RelationshipResponse schema."""
+        # Valid data
+        faction_a_id = str(uuid4())
+        faction_b_id = str(uuid4())
+
+        relationship_data = {
+            "faction_a_id": faction_a_id,
+            "faction_b_id": faction_b_id,
+            "status": DiplomaticStatus.ALLIANCE.value,
+            "tension": -50,
+            "last_updated": datetime.utcnow(),
+            "last_status_change": datetime.utcnow() - timedelta(days=1),
+            "recent_events": [
+                {
+                    "event_id": str(uuid4()),
+                    "type": "alliance_formed",
+                    "date": datetime.utcnow().isoformat(),
+                }
+            ],
+        }
+
+        # Should validate without error
+        relationship_response = FactionRelationshipSchema(**relationship_data)
+
+        # Verify fields
+        assert relationship_response.faction_a_id == faction_a_id
+        assert relationship_response.faction_b_id == faction_b_id
+        assert relationship_response.status == DiplomaticStatus.ALLIANCE.value
+        assert relationship_response.tension == -50
+        assert isinstance(relationship_response.last_updated, datetime)
+        assert isinstance(relationship_response.last_status_change, datetime)
+        assert len(relationship_response.recent_events) == 1
+        assert "event_id" in relationship_response.recent_events[0]
+
+
+class TestViolationSchemas:
+    """Tests for TreatyViolation-related schemas."""
+
+    def test_treaty_violation_create_schema(self):
+        """Test TreatyViolationCreate schema validation."""
+        # Valid data
+        treaty_id = str(uuid4())
+        faction_id = str(uuid4())
+        reporter_id = str(uuid4())
+
+        violation_data = {
+            "treaty_id": treaty_id,
+            "violator_id": faction_id,
+            "violation_type": TreatyViolationType.MILITARY_BUILDUP.value,
+            "description": "Built forces beyond treaty limits",
+            "evidence": {"troop_counts": 5000, "treaty_limit": 3000},
+            "reported_by": reporter_id,
+            "severity": 80,
+        }
+
+        # Should validate without error
+        violation = TreatyViolationCreate(**violation_data)
+
+        # Verify fields
+        assert violation.treaty_id == treaty_id
+        assert violation.violator_id == faction_id
+        assert violation.violation_type == TreatyViolationType.MILITARY_BUILDUP.value
+        assert violation.description == "Built forces beyond treaty limits"
+        assert violation.evidence["troop_counts"] == 5000
+        assert violation.reported_by == reporter_id
+        assert violation.severity == 80
+
+    def test_treaty_violation_response_schema(self):
+        """Test TreatyViolationResponse schema."""
+        # Valid data
+        violation_id = str(uuid4())
+        treaty_id = str(uuid4())
+        faction_id = str(uuid4())
+        reporter_id = str(uuid4())
+
+        violation_data = {
+            "id": violation_id,
+            "treaty_id": treaty_id,
+            "violator_id": faction_id,
+            "violation_type": TreatyViolationType.MILITARY_BUILDUP.value,
+            "description": "Built forces beyond treaty limits",
+            "evidence": {"troop_counts": 5000, "treaty_limit": 3000},
+            "reported_by": reporter_id,
+            "severity": 80,
+            "acknowledged": False,
+            "resolved": False,
+            "created_at": datetime.utcnow(),
+        }
+
+        # Should validate without error
+        violation_response = TreatyViolationSchema(**violation_data)
+
+        # Verify fields
+        assert violation_response.id == violation_id
+        assert violation_response.treaty_id == treaty_id
+        assert violation_response.violator_id == faction_id
+        assert (
+            violation_response.violation_type
+            == TreatyViolationType.MILITARY_BUILDUP.value
+        )
+        assert violation_response.description == "Built forces beyond treaty limits"
+        assert violation_response.evidence["troop_counts"] == 5000
+        assert violation_response.reported_by == reporter_id
+        assert violation_response.severity == 80
+        assert violation_response.acknowledged is False
+        assert violation_response.resolved is False
+        assert isinstance(violation_response.created_at, datetime)
+
+
+class TestIncidentSchemas:
+    """Tests for DiplomaticIncident-related schemas."""
+
+    def test_diplomatic_incident_create_schema(self):
+        """Test DiplomaticIncidentCreate schema validation."""
+        # Valid data
+        perpetrator_id = str(uuid4())
+        victim_id = str(uuid4())
+        witnesses = [str(uuid4()), str(uuid4())]
+
+        incident_data = {
+            "incident_type": DiplomaticIncidentType.ESPIONAGE.value,
+            "perpetrator_id": perpetrator_id,
+            "victim_id": victim_id,
+            "description": "Caught spies from the perpetrator faction",
+            "evidence": {"spies_caught": 3, "documents_stolen": 2},
+            "severity": DiplomaticIncidentSeverity.MAJOR.value,
+            "tension_impact": 40,
+            "public": True,
+            "witnessed_by": witnesses,
+        }
+
+        # Should validate without error
+        incident = DiplomaticIncidentCreate(**incident_data)
+
+        # Verify fields
+        assert incident.incident_type == DiplomaticIncidentType.ESPIONAGE.value
+        assert incident.perpetrator_id == perpetrator_id
+        assert incident.victim_id == victim_id
+        assert incident.description == "Caught spies from the perpetrator faction"
+        assert incident.evidence["spies_caught"] == 3
+        assert incident.severity == DiplomaticIncidentSeverity.MAJOR.value
+        assert incident.tension_impact == 40
+        assert incident.public is True
+        assert incident.witnessed_by == witnesses
+
+    def test_diplomatic_incident_response_schema(self):
+        """Test DiplomaticIncidentResponse schema."""
+        # Valid data
+        incident_id = str(uuid4())
+        perpetrator_id = str(uuid4())
+        victim_id = str(uuid4())
+        witnesses = [str(uuid4()), str(uuid4())]
+
+        incident_data = {
+            "id": incident_id,
+            "incident_type": DiplomaticIncidentType.ESPIONAGE.value,
+            "perpetrator_id": perpetrator_id,
+            "victim_id": victim_id,
+            "description": "Caught spies from the perpetrator faction",
+            "evidence": {"spies_caught": 3, "documents_stolen": 2},
+            "severity": DiplomaticIncidentSeverity.MAJOR.value,
+            "tension_impact": 40,
+            "public": True,
+            "witnessed_by": witnesses,
+            "resolved": False,
+            "created_at": datetime.utcnow(),
+        }
+
+        # Should validate without error
+        incident_response = DiplomaticIncidentSchema(**incident_data)
+
+        # Verify fields
+        assert incident_response.id == incident_id
+        assert incident_response.incident_type == DiplomaticIncidentType.ESPIONAGE.value
+        assert incident_response.perpetrator_id == perpetrator_id
+        assert incident_response.victim_id == victim_id
+        assert incident_response.evidence["spies_caught"] == 3
+        assert incident_response.severity == DiplomaticIncidentSeverity.MAJOR.value
+        assert incident_response.tension_impact == 40
+        assert incident_response.public is True
+        assert incident_response.witnessed_by == witnesses
+        assert incident_response.resolved is False
+        assert isinstance(incident_response.created_at, datetime)

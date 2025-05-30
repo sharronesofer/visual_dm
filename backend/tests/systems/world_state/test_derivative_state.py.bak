@@ -1,0 +1,909 @@
+"""
+Tests for derivative state calculation functionality.
+
+This module tests the DerivativeStateCalculator, which calculates derived state
+variables based on dependencies and formulas.
+"""
+
+import unittest
+import os
+import sys
+from unittest.mock import MagicMock, patch
+from datetime import datetime
+import time
+
+# Add the parent directory to the path so we can import the world state system
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+
+# Import the system under test
+from backend.systems.world_state.features.derivative_state import (
+    DerivativeStateCalculator,
+    DerivedStateRule,
+    create_formula_calculator,
+)
+from backend.systems.world_state import WorldStateManager
+from backend.systems.world_state import StateCategory, WorldRegion
+
+
+class DerivativeStateCalculatorTest(unittest.TestCase):
+    """Tests for the DerivativeStateCalculator class."""
+
+    def setUp(self):
+        """Set up test environment before each test."""
+        # Mock the WorldStateManager
+        self.mock_manager = MagicMock(spec=WorldStateManager)
+
+        # Create a real calculator instance
+        self.calculator = DerivativeStateCalculator.get_instance()
+
+        # Mock the manager's get_state method
+        self.mock_manager.get_state.side_effect = self._mock_get_state
+
+        # Register the mock manager with the calculator
+        self.calculator.register_manager(self.mock_manager)
+
+        # Initialize the test state dictionary
+        self._test_state = {}
+
+        # Initialize the calculator
+        self.calculator.initialize()
+
+        # Clear any existing rules
+        self.calculator._rules = {}
+        self.calculator._rule_graph = {}
+        self.calculator._sorted_keys = []
+
+    def tearDown(self):
+        """Clean up after each test."""
+        # Reset the calculator's singleton instance
+        DerivativeStateCalculator._instance = None
+
+    def _mock_get_state(self, key):
+        """Mocked implementation of get_state to return values from test state."""
+        return self._test_state.get(key)
+
+    def _set_test_state(self, key, value):
+        """Helper method to set a value in the test state."""
+        self._test_state[key] = value
+
+    def test_singleton_pattern(self):
+        """Test that DerivativeStateCalculator follows the singleton pattern."""
+        # Getting the instance should return the same object
+        calc1 = DerivativeStateCalculator.get_instance()
+        calc2 = DerivativeStateCalculator.get_instance()
+        self.assertIs(calc1, calc2)
+
+        # Attempting direct instantiation should raise an error
+        with self.assertRaises(RuntimeError):
+            DerivativeStateCalculator()
+
+    def test_register_rule(self):
+        """Test registering a derived state rule."""
+        # Create a rule
+        rule = DerivedStateRule(
+            key="test.derived.sum",
+            dependencies=["test.base.a", "test.base.b"],
+            calculator=lambda deps: deps.get("test.base.a", 0)
+            + deps.get("test.base.b", 0),
+            category=StateCategory.CUSTOM,
+            tags=["test", "derived"],
+            description="Sum of A and B",
+        )
+
+        # Register the rule
+        self.calculator.register_rule(rule)
+
+        # Verify rule was registered
+        self.assertIn("test.derived.sum", self.calculator._rules)
+        self.assertEqual(rule, self.calculator._rules["test.derived.sum"])
+
+        # Verify rule graph was updated
+        self.assertIn("test.derived.sum", self.calculator._rule_graph)
+        self.assertEqual(
+            [], self.calculator._rule_graph["test.derived.sum"]
+        )  # No dependents yet
+
+        # Verify dependencies were added to the graph
+        self.assertIn("test.base.a", self.calculator._rule_graph)
+        self.assertIn("test.base.b", self.calculator._rule_graph)
+        self.assertIn("test.derived.sum", self.calculator._rule_graph["test.base.a"])
+        self.assertIn("test.derived.sum", self.calculator._rule_graph["test.base.b"])
+
+        # Verify sorted keys were updated
+        self.assertIn("test.derived.sum", self.calculator._sorted_keys)
+
+    def test_basic_derived_value_calculation(self):
+        """Test calculating a basic derived value."""
+        # Register a simple sum rule
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.sum",
+                dependencies=["test.base.a", "test.base.b"],
+                calculator=lambda deps: deps.get("test.base.a", 0)
+                + deps.get("test.base.b", 0),
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived"],
+                description="Sum of A and B",
+            )
+        )
+
+        # Set base values
+        self._set_test_state("test.base.a", 100)
+        self._set_test_state("test.base.b", 200)
+
+        # Calculate the derived value
+        result = self.calculator.get_derived_value("test.derived.sum")
+
+        # Verify result
+        self.assertEqual(300, result)
+
+        # Update a base value
+        self._set_test_state("test.base.a", 150)
+
+        # Recalculate
+        result = self.calculator.get_derived_value("test.derived.sum")
+
+        # Verify updated result
+        self.assertEqual(350, result)
+
+    def test_multi_level_dependencies(self):
+        """Test derived values that depend on other derived values."""
+        # Register first level rule
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.sum",
+                dependencies=["test.base.a", "test.base.b"],
+                calculator=lambda deps: deps.get("test.base.a", 0)
+                + deps.get("test.base.b", 0),
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived"],
+                description="Sum of A and B",
+            )
+        )
+
+        # Register second level rule
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.product",
+                dependencies=["test.derived.sum", "test.base.c"],
+                calculator=lambda deps: deps.get("test.derived.sum", 0)
+                * deps.get("test.base.c", 0),
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived"],
+                description="Product of Sum and C",
+            )
+        )
+
+        # Set base values
+        self._set_test_state("test.base.a", 10)
+        self._set_test_state("test.base.b", 20)
+        self._set_test_state("test.base.c", 5)
+
+        # Calculate the first level derived value
+        sum_result = self.calculator.get_derived_value("test.derived.sum")
+        self.assertEqual(30, sum_result)
+
+        # Calculate the second level derived value
+        product_result = self.calculator.get_derived_value("test.derived.product")
+        self.assertEqual(150, product_result)  # (10 + 20) * 5 = 150
+
+        # Update a base value that affects both levels
+        self._set_test_state("test.base.a", 15)
+
+        # Recalculate
+        sum_result = self.calculator.get_derived_value("test.derived.sum")
+        self.assertEqual(35, sum_result)  # 15 + 20 = 35
+
+        product_result = self.calculator.get_derived_value("test.derived.product")
+        self.assertEqual(175, product_result)  # (15 + 20) * 5 = 175
+
+    def test_circular_dependency_detection(self):
+        """Test that circular dependencies are detected and prevented."""
+        # Register rule A depends on B
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.a",
+                dependencies=["test.derived.b"],
+                calculator=lambda deps: deps.get("test.derived.b", 0) + 1,
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived"],
+                description="B + 1",
+            )
+        )
+
+        # Register rule B depends on C
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.b",
+                dependencies=["test.derived.c"],
+                calculator=lambda deps: deps.get("test.derived.c", 0) + 1,
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived"],
+                description="C + 1",
+            )
+        )
+
+        # Attempt to register rule C depends on A (would create a cycle)
+        with self.assertRaises(ValueError):
+            self.calculator.register_rule(
+                DerivedStateRule(
+                    key="test.derived.c",
+                    dependencies=["test.derived.a"],
+                    calculator=lambda deps: deps.get("test.derived.a", 0) + 1,
+                    category=StateCategory.CUSTOM,
+                    tags=["test", "derived"],
+                    description="A + 1",
+                )
+            )
+
+    def test_formula_calculator(self):
+        """Test the formula-based calculator creation."""
+        # Create a formula calculator
+        calc = create_formula_calculator("deps['a'] + deps['b'] * 2")
+
+        # Test the calculator
+        result = calc({"a": 10, "b": 20})
+        self.assertEqual(50, result)  # 10 + (20 * 2) = 50
+
+        # Test with missing values
+        result = calc({"a": 10})
+        self.assertEqual(10, result)  # No 'b', so treated as 0
+
+        # Test with complex formula
+        complex_calc = create_formula_calculator(
+            "round((deps.get('a', 0) / deps.get('total', 1)) * 100, 2)"
+        )
+        result = complex_calc({"a": 25, "total": 200})
+        self.assertEqual(12.5, result)  # (25 / 200) * 100 = 12.5
+
+    def test_handle_missing_dependencies(self):
+        """Test handling of missing dependencies."""
+        # Register a rule that handles missing values
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.safe_divide",
+                dependencies=["test.base.numerator", "test.base.denominator"],
+                calculator=lambda deps: (
+                    deps.get("test.base.numerator", 0)
+                    / deps.get("test.base.denominator", 1)
+                    if deps.get("test.base.denominator", 0) != 0
+                    else 0
+                ),
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived"],
+                description="Safe division of numerator by denominator",
+            )
+        )
+
+        # Test with both values present
+        self._set_test_state("test.base.numerator", 100)
+        self._set_test_state("test.base.denominator", 20)
+        result = self.calculator.get_derived_value("test.derived.safe_divide")
+        self.assertEqual(5, result)  # 100 / 20 = 5
+
+        # Test with missing numerator
+        self._set_test_state("test.base.numerator", None)
+        result = self.calculator.get_derived_value("test.derived.safe_divide")
+        self.assertEqual(0, result)  # 0 / 20 = 0
+
+        # Test with zero denominator
+        self._set_test_state("test.base.numerator", 100)
+        self._set_test_state("test.base.denominator", 0)
+        result = self.calculator.get_derived_value("test.derived.safe_divide")
+        self.assertEqual(0, result)  # Division by zero handled
+
+    def test_calculator_with_complex_return_value(self):
+        """Test a calculator that returns a complex object."""
+        # Register a rule that returns a dictionary
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.stats",
+                dependencies=["test.base.values"],
+                calculator=lambda deps: {
+                    "sum": sum(deps.get("test.base.values", [])),
+                    "count": len(deps.get("test.base.values", [])),
+                    "average": (
+                        sum(deps.get("test.base.values", []))
+                        / len(deps.get("test.base.values", []))
+                        if deps.get("test.base.values")
+                        else 0
+                    ),
+                },
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived", "complex"],
+                description="Statistics for a list of values",
+            )
+        )
+
+        # Test with a list of values
+        self._set_test_state("test.base.values", [10, 20, 30, 40, 50])
+        result = self.calculator.get_derived_value("test.derived.stats")
+
+        # Verify complex result
+        self.assertIsInstance(result, dict)
+        self.assertEqual(150, result["sum"])
+        self.assertEqual(5, result["count"])
+        self.assertEqual(30, result["average"])
+
+        # Test with empty list
+        self._set_test_state("test.base.values", [])
+        result = self.calculator.get_derived_value("test.derived.stats")
+        self.assertEqual(0, result["sum"])
+        self.assertEqual(0, result["count"])
+        self.assertEqual(0, result["average"])
+
+    def test_get_all_derived_keys(self):
+        """Test retrieving all derived state keys."""
+        # Register several rules
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.a",
+                dependencies=["test.base.a"],
+                calculator=lambda deps: deps.get("test.base.a", 0) * 2,
+                category=StateCategory.CUSTOM,
+                tags=["test"],
+                description="A * 2",
+            )
+        )
+
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.b",
+                dependencies=["test.base.b"],
+                calculator=lambda deps: deps.get("test.base.b", 0) * 3,
+                category=StateCategory.POPULATION,
+                tags=["test"],
+                description="B * 3",
+            )
+        )
+
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.c",
+                dependencies=["test.base.c"],
+                calculator=lambda deps: deps.get("test.base.c", 0) * 4,
+                category=StateCategory.ECONOMIC,
+                tags=["test"],
+                description="C * 4",
+            )
+        )
+
+        # Get all keys
+        all_keys = self.calculator.get_all_derived_keys()
+
+        # Verify result
+        self.assertEqual(3, len(all_keys))
+        self.assertIn("test.derived.a", all_keys)
+        self.assertIn("test.derived.b", all_keys)
+        self.assertIn("test.derived.c", all_keys)
+
+        # Get keys by category
+        custom_keys = self.calculator.get_all_derived_keys(
+            category=StateCategory.CUSTOM
+        )
+        self.assertEqual(1, len(custom_keys))
+        self.assertIn("test.derived.a", custom_keys)
+
+        population_keys = self.calculator.get_all_derived_keys(
+            category=StateCategory.POPULATION
+        )
+        self.assertEqual(1, len(population_keys))
+        self.assertIn("test.derived.b", population_keys)
+
+        # Get keys by tag
+        test_keys = self.calculator.get_all_derived_keys(tags=["test"])
+        self.assertEqual(3, len(test_keys))
+
+        # Get keys by prefix
+        prefix_keys = self.calculator.get_all_derived_keys(prefix="test.derived.a")
+        self.assertEqual(1, len(prefix_keys))
+        self.assertIn("test.derived.a", prefix_keys)
+
+    def test_caching_behavior(self):
+        """Test that calculated values are cached appropriately."""
+        # Create a calculator that increments a counter each time it's called
+        counter = {"count": 0}
+
+        def counting_calculator(deps):
+            counter["count"] += 1
+            return deps.get("test.base.value", 0) * 2
+
+        # Register a rule with the counting calculator
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.cached",
+                dependencies=["test.base.value"],
+                calculator=counting_calculator,
+                category=StateCategory.CUSTOM,
+                tags=["test"],
+                description="Cached value test",
+            )
+        )
+
+        # Set base value
+        self._set_test_state("test.base.value", 10)
+
+        # Get the derived value multiple times
+        for i in range(5):
+            result = self.calculator.get_derived_value("test.derived.cached")
+            self.assertEqual(20, result)
+
+        # Verify the calculator was only called once (due to caching)
+        self.assertEqual(1, counter["count"])
+
+        # Change the base value to invalidate the cache
+        self._set_test_state("test.base.value", 15)
+
+        # Get the derived value again
+        result = self.calculator.get_derived_value("test.derived.cached")
+        self.assertEqual(30, result)
+
+        # Verify the calculator was called again
+        self.assertEqual(2, counter["count"])
+
+    def test_unregister_rule(self):
+        """Test unregistering a derived state rule."""
+        # Register a rule
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.derived.removable",
+                dependencies=["test.base.a", "test.base.b"],
+                calculator=lambda deps: deps.get("test.base.a", 0)
+                + deps.get("test.base.b", 0),
+                category=StateCategory.CUSTOM,
+                tags=["test"],
+                description="Rule to be removed",
+            )
+        )
+
+        # Verify rule exists
+        self.assertIn("test.derived.removable", self.calculator._rules)
+
+        # Set base values and test calculation
+        self._set_test_state("test.base.a", 10)
+        self._set_test_state("test.base.b", 20)
+        result = self.calculator.get_derived_value("test.derived.removable")
+        self.assertEqual(30, result)
+
+        # Unregister the rule
+        self.calculator.unregister_rule("test.derived.removable")
+
+        # Verify rule no longer exists
+        self.assertNotIn("test.derived.removable", self.calculator._rules)
+
+        # Verify calculation fails now
+        with self.assertRaises(KeyError):
+            self.calculator.get_derived_value("test.derived.removable")
+
+        # Verify unregistering non-existent rule doesn't raise error
+        self.calculator.unregister_rule("nonexistent.rule")
+
+    def test_rule_metadata(self):
+        """Test retrieving rule metadata."""
+        # Register a rule with metadata
+        rule = DerivedStateRule(
+            key="test.derived.metadata",
+            dependencies=["test.base.a", "test.base.b"],
+            calculator=lambda deps: deps.get("test.base.a", 0)
+            + deps.get("test.base.b", 0),
+            category=StateCategory.CUSTOM,
+            tags=["test", "metadata"],
+            description="Rule with metadata",
+            region=WorldRegion.GLOBAL,
+        )
+
+        self.calculator.register_rule(rule)
+
+        # Get rule metadata
+        metadata = self.calculator.get_rule_metadata("test.derived.metadata")
+
+        # Verify metadata
+        self.assertEqual("test.derived.metadata", metadata["key"])
+        self.assertEqual(["test.base.a", "test.base.b"], metadata["dependencies"])
+        self.assertEqual(StateCategory.CUSTOM, metadata["category"])
+        self.assertEqual(["test", "metadata"], metadata["tags"])
+        self.assertEqual("Rule with metadata", metadata["description"])
+        self.assertEqual(WorldRegion.GLOBAL, metadata["region"])
+
+        # Test for non-existent rule
+        with self.assertRaises(KeyError):
+            self.calculator.get_rule_metadata("nonexistent.rule")
+
+    def test_rule_with_complex_dependencies(self):
+        """Test a rule with complex dependency handling."""
+        # Register a rule that uses regional population data
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="world.population.distribution",
+                dependencies=[
+                    "region.north.population",
+                    "region.south.population",
+                    "region.east.population",
+                    "region.west.population",
+                ],
+                calculator=lambda deps: {
+                    "total": sum(deps.values()),
+                    "regions": {
+                        "north": deps.get("region.north.population", 0),
+                        "south": deps.get("region.south.population", 0),
+                        "east": deps.get("region.east.population", 0),
+                        "west": deps.get("region.west.population", 0),
+                    },
+                    "percentages": {
+                        "north": (
+                            round(
+                                deps.get("region.north.population", 0)
+                                / sum(deps.values())
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values())
+                            else 0
+                        ),
+                        "south": (
+                            round(
+                                deps.get("region.south.population", 0)
+                                / sum(deps.values())
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values())
+                            else 0
+                        ),
+                        "east": (
+                            round(
+                                deps.get("region.east.population", 0)
+                                / sum(deps.values())
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values())
+                            else 0
+                        ),
+                        "west": (
+                            round(
+                                deps.get("region.west.population", 0)
+                                / sum(deps.values())
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values())
+                            else 0
+                        ),
+                    },
+                },
+                category=StateCategory.POPULATION,
+                tags=["population", "derived", "distribution"],
+                description="Population distribution by region",
+            )
+        )
+
+        # Set population values
+        self._set_test_state("region.north.population", 1000)
+        self._set_test_state("region.south.population", 2000)
+        self._set_test_state("region.east.population", 1500)
+        self._set_test_state("region.west.population", 500)
+
+        # Get distribution
+        result = self.calculator.get_derived_value("world.population.distribution")
+
+        # Verify complex calculation
+        self.assertEqual(5000, result["total"])
+        self.assertEqual(1000, result["regions"]["north"])
+        self.assertEqual(2000, result["regions"]["south"])
+        self.assertEqual(1500, result["regions"]["east"])
+        self.assertEqual(500, result["regions"]["west"])
+        self.assertEqual(20, result["percentages"]["north"])  # 1000/5000 * 100 = 20%
+        self.assertEqual(40, result["percentages"]["south"])  # 2000/5000 * 100 = 40%
+        self.assertEqual(30, result["percentages"]["east"])  # 1500/5000 * 100 = 30%
+        self.assertEqual(10, result["percentages"]["west"])  # 500/5000 * 100 = 10%
+
+    def test_complex_regional_data(self):
+        """Test derived values using complex data structures with regional data."""
+        # Register a rule that aggregates regional population data
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="world.population.regional_distribution",
+                dependencies=[
+                    "region.north.population",
+                    "region.south.population",
+                    "region.east.population",
+                    "region.west.population",
+                ],
+                calculator=lambda deps: {
+                    "total": sum(deps.values()),
+                    "regions": {
+                        "north": deps.get("region.north.population", 0),
+                        "south": deps.get("region.south.population", 0),
+                        "east": deps.get("region.east.population", 0),
+                        "west": deps.get("region.west.population", 0),
+                    },
+                    "percentages": {
+                        "north": (
+                            round(
+                                (
+                                    deps.get("region.north.population", 0)
+                                    / sum(deps.values())
+                                )
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values()) > 0
+                            else 0
+                        ),
+                        "south": (
+                            round(
+                                (
+                                    deps.get("region.south.population", 0)
+                                    / sum(deps.values())
+                                )
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values()) > 0
+                            else 0
+                        ),
+                        "east": (
+                            round(
+                                (
+                                    deps.get("region.east.population", 0)
+                                    / sum(deps.values())
+                                )
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values()) > 0
+                            else 0
+                        ),
+                        "west": (
+                            round(
+                                (
+                                    deps.get("region.west.population", 0)
+                                    / sum(deps.values())
+                                )
+                                * 100,
+                                2,
+                            )
+                            if sum(deps.values()) > 0
+                            else 0
+                        ),
+                    },
+                    "dominant_region": (
+                        max(deps.items(), key=lambda x: x[1])[0].split(".")[1]
+                        if deps
+                        else None
+                    ),
+                },
+                category=StateCategory.POPULATION,
+                tags=["population", "demographics", "regions", "derived"],
+                description="Regional population distribution and statistics",
+            )
+        )
+
+        # Register a rule for population density by region
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="world.population.density_by_region",
+                dependencies=[
+                    "world.population.regional_distribution",
+                    "region.north.area",
+                    "region.south.area",
+                    "region.east.area",
+                    "region.west.area",
+                ],
+                calculator=lambda deps: {
+                    "north": round(
+                        deps["world.population.regional_distribution"]["regions"][
+                            "north"
+                        ]
+                        / deps.get("region.north.area", 1),
+                        2,
+                    ),
+                    "south": round(
+                        deps["world.population.regional_distribution"]["regions"][
+                            "south"
+                        ]
+                        / deps.get("region.south.area", 1),
+                        2,
+                    ),
+                    "east": round(
+                        deps["world.population.regional_distribution"]["regions"][
+                            "east"
+                        ]
+                        / deps.get("region.east.area", 1),
+                        2,
+                    ),
+                    "west": round(
+                        deps["world.population.regional_distribution"]["regions"][
+                            "west"
+                        ]
+                        / deps.get("region.west.area", 1),
+                        2,
+                    ),
+                    "average": round(
+                        deps["world.population.regional_distribution"]["total"]
+                        / sum(
+                            [
+                                deps.get("region.north.area", 0),
+                                deps.get("region.south.area", 0),
+                                deps.get("region.east.area", 0),
+                                deps.get("region.west.area", 0),
+                            ]
+                        ),
+                        2,
+                    ),
+                },
+                category=StateCategory.POPULATION,
+                tags=["population", "density", "regions", "derived"],
+                description="Population density by region (population/area)",
+            )
+        )
+
+        # Set base values for regional populations
+        self._set_test_state("region.north.population", 1000)
+        self._set_test_state("region.south.population", 1500)
+        self._set_test_state("region.east.population", 800)
+        self._set_test_state("region.west.population", 2000)
+
+        # Set base values for regional areas
+        self._set_test_state("region.north.area", 500)  # square km
+        self._set_test_state("region.south.area", 600)
+        self._set_test_state("region.east.area", 300)
+        self._set_test_state("region.west.area", 800)
+
+        # Calculate regional distribution
+        result = self.calculator.get_derived_value(
+            "world.population.regional_distribution"
+        )
+
+        # Verify basic structure
+        self.assertIsInstance(result, dict)
+        self.assertIn("total", result)
+        self.assertIn("regions", result)
+        self.assertIn("percentages", result)
+        self.assertIn("dominant_region", result)
+
+        # Verify total calculation
+        self.assertEqual(5300, result["total"])  # Sum of all regional populations
+
+        # Verify regional data
+        self.assertEqual(1000, result["regions"]["north"])
+        self.assertEqual(1500, result["regions"]["south"])
+        self.assertEqual(800, result["regions"]["east"])
+        self.assertEqual(2000, result["regions"]["west"])
+
+        # Verify percentages (allowing small rounding differences)
+        self.assertAlmostEqual(
+            18.87, result["percentages"]["north"], places=1
+        )  # 1000/5300 * 100
+        self.assertAlmostEqual(
+            28.30, result["percentages"]["south"], places=1
+        )  # 1500/5300 * 100
+        self.assertAlmostEqual(
+            15.09, result["percentages"]["east"], places=1
+        )  # 800/5300 * 100
+        self.assertAlmostEqual(
+            37.74, result["percentages"]["west"], places=1
+        )  # 2000/5300 * 100
+
+        # Verify dominant region
+        self.assertEqual("west", result["dominant_region"])
+
+        # Calculate density by region
+        density = self.calculator.get_derived_value(
+            "world.population.density_by_region"
+        )
+
+        # Verify density calculations
+        self.assertEqual(2.0, density["north"])  # 1000/500
+        self.assertEqual(2.5, density["south"])  # 1500/600
+        self.assertAlmostEqual(2.67, density["east"], places=1)  # 800/300
+        self.assertEqual(2.5, density["west"])  # 2000/800
+        self.assertEqual(2.4, density["average"])  # 5300/2200
+
+        # Update a region's population and verify recalculation
+        self._set_test_state("region.north.population", 2500)
+
+        # Recalculate
+        updated_result = self.calculator.get_derived_value(
+            "world.population.regional_distribution"
+        )
+
+        # Verify updates
+        self.assertEqual(6800, updated_result["total"])  # Updated sum
+        self.assertEqual(
+            2500, updated_result["regions"]["north"]
+        )  # Updated north value
+        self.assertEqual(
+            "north", updated_result["dominant_region"]
+        )  # Dominant region now north
+
+        # Verify density is updated too
+        updated_density = self.calculator.get_derived_value(
+            "world.population.density_by_region"
+        )
+        self.assertEqual(5.0, updated_density["north"])  # 2500/500
+
+    def test_caching_optimization_performance(self):
+        """Test that the caching mechanism optimizes performance for expensive calculations."""
+        # Create a function that simulates an expensive calculation
+        calculation_count = 0
+
+        def expensive_calculator(deps):
+            nonlocal calculation_count
+            calculation_count += 1
+
+            # Simulate an expensive operation
+            time.sleep(0.01)
+
+            return sum(deps.values()) if deps else 0
+
+        # Register a rule with the expensive calculator
+        self.calculator.register_rule(
+            DerivedStateRule(
+                key="test.expensive.calculation",
+                dependencies=["test.base.a", "test.base.b", "test.base.c"],
+                calculator=expensive_calculator,
+                category=StateCategory.CUSTOM,
+                tags=["test", "derived", "expensive"],
+                description="Expensive calculation",
+            )
+        )
+
+        # Set base values
+        self._set_test_state("test.base.a", 100)
+        self._set_test_state("test.base.b", 200)
+        self._set_test_state("test.base.c", 300)
+
+        # First calculation should execute the expensive calculator
+        start_time = time.time()
+        result1 = self.calculator.get_derived_value("test.expensive.calculation")
+        first_calculation_time = time.time() - start_time
+
+        # The result should be correct
+        self.assertEqual(600, result1)
+
+        # Should have executed the calculator once
+        self.assertEqual(1, calculation_count)
+
+        # Second calculation should use the cached value and be much faster
+        start_time = time.time()
+        result2 = self.calculator.get_derived_value("test.expensive.calculation")
+        second_calculation_time = time.time() - start_time
+
+        # Result should still be correct
+        self.assertEqual(600, result2)
+
+        # Calculator should not have been called again
+        self.assertEqual(1, calculation_count)
+
+        # The second calculation should be significantly faster
+        self.assertLess(second_calculation_time, first_calculation_time / 10)
+
+        # Now change one of the dependencies
+        self._set_test_state("test.base.a", 150)
+
+        # This should invalidate the cache and trigger recalculation
+        start_time = time.time()
+        result3 = self.calculator.get_derived_value("test.expensive.calculation")
+        third_calculation_time = time.time() - start_time
+
+        # Result should be updated
+        self.assertEqual(650, result3)
+
+        # Calculator should have been called a second time
+        self.assertEqual(2, calculation_count)
+
+        # Third calculation should be slow again
+        self.assertGreaterEqual(third_calculation_time, first_calculation_time * 0.5)
+
+        # Multiple rapid calls should still use cache
+        for _ in range(5):
+            self.calculator.get_derived_value("test.expensive.calculation")
+
+        # Calculator should still have only been called twice
+        self.assertEqual(2, calculation_count)
+
+
+if __name__ == "__main__":
+    unittest.main()

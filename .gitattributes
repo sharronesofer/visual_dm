@@ -1,7 +1,0 @@
-# Set Git LFS for large binary files
-*.pack filter=lfs diff=lfs merge=lfs -text
-*.so filter=lfs diff=lfs merge=lfs -text
-*.dylib filter=lfs diff=lfs merge=lfs -text
-
-# Next.js build cache
-.next/cache/webpack/client-production/*.pack filter=lfs diff=lfs merge=lfs -text 

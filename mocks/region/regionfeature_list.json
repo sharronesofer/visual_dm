@@ -1,0 +1,42 @@
+[
+  {
+    "id": "5d5093df-dc4f-4d7a-81b6-90e9baa39a5b",
+    "created_at": "2025-05-24T01:34:24.971035Z",
+    "updated_at": "2025-05-28T01:34:24.971037Z",
+    "name": "Rate",
+    "description": "Focus cold government west.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "5ff584b5-759d-447a-b021-adb03c325f87",
+    "created_at": "2025-05-04T01:34:24.971041Z",
+    "updated_at": "2025-05-28T01:34:24.971043Z",
+    "name": "Agent",
+    "description": "During activity its official.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "211ce64a-b582-4294-a600-dd2437794296",
+    "created_at": "2025-05-26T01:34:24.971046Z",
+    "updated_at": "2025-05-28T01:34:24.971047Z",
+    "name": "Yeah",
+    "description": "Mission from reduce one nice.",
+    "status": "PENDING"
+  },
+  {
+    "id": "edd3f9e5-3bb7-42ee-b027-9ad58d51b75b",
+    "created_at": "2025-05-01T01:34:24.971051Z",
+    "updated_at": "2025-05-24T01:34:24.971052Z",
+    "name": "Need",
+    "description": "Next no sign because thought money whether.",
+    "status": "PENDING"
+  },
+  {
+    "id": "c413e21a-ca33-476a-a3e4-cf669c3fc827",
+    "created_at": "2025-05-15T01:34:24.971056Z",
+    "updated_at": "2025-05-26T01:34:24.971057Z",
+    "name": "Special",
+    "description": "Talk everyone character forward kid present.",
+    "status": "INACTIVE"
+  }
+]

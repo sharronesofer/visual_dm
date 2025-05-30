@@ -1,0 +1,82 @@
+{
+  "id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+  "created_at": "2025-05-07T01:34:24.937380Z",
+  "updated_at": "2025-05-28T01:34:24.937383Z",
+  "title": "Sharable motivating task-force",
+  "description": "Forward receive hot season. Leg loss similar start pick however. Wish feel of he among. Manage professor alone really himself brother hand. Brother industry read stand easy decide raise agent. Goal special audience former. Language although research phone.",
+  "arc_type": "TERTIARY",
+  "arc_status": "FAILED",
+  "arc_priority": "LOW",
+  "progression_method": "BRANCHING",
+  "metadata": {
+    "themes": [
+      "week",
+      "hour",
+      "along"
+    ],
+    "target_characters": [
+      "f7318780-65d1-4e79-9510-448cc72c791c",
+      "41d368de-dddc-4ea4-b4f5-3f26e49939be",
+      "fb194827-c13d-463b-b54c-8eb38e5337ef",
+      "dec34e20-f9e8-44b5-8a70-41d1eece0771"
+    ],
+    "regions": [
+      "599e7602-56f7-4b9e-8da8-ebfd74c37880",
+      "4f302dbd-87f4-441f-88bc-8e9de1a2012b"
+    ],
+    "estimated_duration": 41
+  },
+  "steps": [
+    {
+      "step_id": "a81ec062-af90-4d00-a6d1-15338028ca3a",
+      "step_number": 1,
+      "title": "Item beyond type.",
+      "description": "While like difference. Somebody enough west concern table. Federal hundred performance play.",
+      "completion_criteria": "Theory court source beat agreement capital.",
+      "completed": true,
+      "completion_date": "2025-05-24T01:34:24.937549Z"
+    },
+    {
+      "step_id": "91834495-823f-41a9-9ed4-34778435b0a1",
+      "step_number": 2,
+      "title": "Admit save star.",
+      "description": "Arrive it senior type. Under let central young eight air.",
+      "completion_criteria": "South administration throughout.",
+      "completed": false,
+      "completion_date": "2025-05-24T01:34:24.937590Z"
+    },
+    {
+      "step_id": "6b3dfd6a-d64c-4b68-a83c-37d8ffa2bd6e",
+      "step_number": 3,
+      "title": "Value question onto address natural task.",
+      "description": "Local interesting meet important marriage. Fish smile us international control put effect. Around morning sense.",
+      "completion_criteria": "Water particular beautiful individual his all so.",
+      "completed": false,
+      "completion_date": "2025-05-23T01:34:24.937637Z"
+    },
+    {
+      "step_id": "7baa8696-2647-47fb-97d3-5b0beb059daf",
+      "step_number": 4,
+      "title": "Heavy store from some month.",
+      "description": "Current third religious. Factor quickly yes card black picture provide.",
+      "completion_criteria": "Range financial dream author two.",
+      "completed": false,
+      "completion_date": "2025-05-27T01:34:24.937676Z"
+    },
+    {
+      "step_id": "f67e59a6-02c7-44ab-80c2-5cfc4e8a144f",
+      "step_number": 5,
+      "title": "Blue leader support only dream.",
+      "description": "Early billion price all politics suffer.",
+      "completion_criteria": "Sit difference season environment.",
+      "completed": true,
+      "completion_date": "2025-05-22T01:34:24.937708Z"
+    }
+  ],
+  "progression": {
+    "current_step": 3,
+    "completion_percentage": 42,
+    "stalled": true,
+    "last_activity": "2025-05-26T01:34:24.937710Z"
+  }
+}

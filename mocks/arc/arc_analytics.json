@@ -1,0 +1,12 @@
+{
+  "total_arcs": 112,
+  "active_arcs": 28,
+  "completion_rate": 0.6,
+  "average_duration": 29,
+  "most_common_failure_point": "Step 3 - Investigation",
+  "engagement_metrics": {
+    "player_retention": 0.87,
+    "average_session_time": 124,
+    "quest_completion_rate": 0.91
+  }
+}

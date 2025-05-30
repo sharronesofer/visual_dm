@@ -1,0 +1,42 @@
+[
+  {
+    "id": "daa42ad4-db58-4aa3-b4dd-18249546c4c0",
+    "created_at": "2025-05-26T01:34:25.044327Z",
+    "updated_at": "2025-05-29T01:34:25.044330Z",
+    "name": "Home",
+    "description": "Actually beautiful side choose.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "a44fd083-99d9-453c-81ae-a19aa082d631",
+    "created_at": "2025-05-04T01:34:25.044335Z",
+    "updated_at": "2025-05-26T01:34:25.044337Z",
+    "name": "Century",
+    "description": "Share control will fund ago look.",
+    "status": "PENDING"
+  },
+  {
+    "id": "34c5e517-1508-4cc0-9b67-eb6144e8a6b9",
+    "created_at": "2025-05-13T01:34:25.044341Z",
+    "updated_at": "2025-05-25T01:34:25.044343Z",
+    "name": "Social",
+    "description": "Analysis music never animal.",
+    "status": "PENDING"
+  },
+  {
+    "id": "f66f6bfb-f404-4c80-92d4-9c43d6656831",
+    "created_at": "2025-05-13T01:34:25.044347Z",
+    "updated_at": "2025-05-27T01:34:25.044349Z",
+    "name": "Thought",
+    "description": "However owner pull suggest expect two cut too.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "dd85c755-1340-480d-83f8-fdee5fbd0f51",
+    "created_at": "2025-05-01T01:34:25.044353Z",
+    "updated_at": "2025-05-27T01:34:25.044354Z",
+    "name": "Order",
+    "description": "Can reason hand bill movie wear.",
+    "status": "ACTIVE"
+  }
+]

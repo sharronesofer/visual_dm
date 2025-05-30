@@ -1,0 +1,42 @@
+[
+  {
+    "id": "d6447d8e-b442-4981-a338-7ff4ae027586",
+    "created_at": "2025-05-02T01:34:25.033627Z",
+    "updated_at": "2025-05-28T01:34:25.033632Z",
+    "name": "Morning",
+    "description": "Sing house knowledge range.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "2709606b-8eeb-4077-ae69-fc1688460df2",
+    "created_at": "2025-05-14T01:34:25.033638Z",
+    "updated_at": "2025-05-25T01:34:25.033640Z",
+    "name": "Beat",
+    "description": "Back again your pretty.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "6da8011d-c7eb-4327-8887-30130d1d54a0",
+    "created_at": "2025-05-21T01:34:25.033645Z",
+    "updated_at": "2025-05-26T01:34:25.033647Z",
+    "name": "Although",
+    "description": "Behavior type drug ground sign.",
+    "status": "PENDING"
+  },
+  {
+    "id": "5e3645bd-a46c-4919-9710-0248bc2a5378",
+    "created_at": "2025-05-11T01:34:25.033663Z",
+    "updated_at": "2025-05-24T01:34:25.033665Z",
+    "name": "Stuff",
+    "description": "Certainly manage kind large training.",
+    "status": "PENDING"
+  },
+  {
+    "id": "30f3bebc-6f22-469c-82b1-6ed8154dc9b8",
+    "created_at": "2025-05-19T01:34:25.033670Z",
+    "updated_at": "2025-05-24T01:34:25.033672Z",
+    "name": "Choice",
+    "description": "Up little morning hear ten mention.",
+    "status": "INACTIVE"
+  }
+]

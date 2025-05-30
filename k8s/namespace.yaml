@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: visual-dm
-  labels:
-    name: visual-dm
-    environment: production 

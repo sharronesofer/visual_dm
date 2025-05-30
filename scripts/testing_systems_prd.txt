@@ -1,0 +1,181 @@
+# Visual DM Backend Systems Testing and Fixing Project
+
+## Project Overview
+
+This project focuses on achieving 90% test coverage for all modules in `/backend/systems/` while fixing any errors, implementing missing logic, and ensuring proper import structure. The goal is to create a robust, well-tested backend system that follows the development guidelines outlined in the development_bible.md.
+
+## Core Requirements
+
+### 1. Test Coverage Goals
+- Achieve 90% test coverage for all modules in `/backend/systems/`
+- Fix all existing test errors and import issues
+- Ensure all tests are properly located in `/backend/tests/` structure
+- Remove any misplaced test directories within `/backend/systems/`
+
+### 2. Import Structure Cleanup
+- All Python imports should point to established subdirectories within `/backend/systems/`
+- Fix any imports pointing outside the `/backend/systems/` directory
+- Ensure canonical implementation patterns are followed
+- Remove any erroneous references to files in incorrect directories
+
+### 3. Missing Logic Implementation
+- Implement any missing logic using development_bible.md as the authoritative guide
+- Ensure all systems follow the design philosophy and technical framework
+- Implement missing functionality for character system, combat system, magic system, etc.
+- Follow the established patterns for each system type
+
+### 4. Error Resolution
+- Fix all test collection errors and import failures
+- Resolve ModuleNotFoundError issues
+- Fix pytest plugin definition errors
+- Ensure all tests can run successfully
+
+## Systems to be Tested and Fixed
+
+### Core Infrastructure Systems
+1. **Data System** - Already at 85% coverage, needs to reach 90%
+2. **Events System** - Core publish-subscribe infrastructure
+3. **Shared System** - Common utilities and cross-system functions
+4. **Storage System** - Persistent storage and save/load functionality
+
+### Game Logic Systems
+5. **Character System** - Character creation, attributes, skills, advancement
+6. **Combat System** - Tactical combat mechanics and damage calculation
+7. **Magic System** - Spellcasting, schools, resources, and effects
+8. **Equipment System** - Weapons, armor, magical items, and properties
+9. **Inventory System** - Item storage, weight, and categorization
+10. **Loot System** - Treasure generation and reward distribution
+
+### World Systems
+11. **World Generation System** - Procedural world creation
+12. **World State System** - Global state tracking and evolution
+13. **Region System** - Geographic regions and properties
+14. **POI System** - Points of interest with dynamic states
+15. **Time System** - Calendar, day/night cycles, and time-based events
+
+### NPC and Social Systems
+16. **NPC System** - Non-player character generation and behavior
+17. **Dialogue System** - Conversation trees and interactions
+18. **Faction System** - Organization relationships and influence
+19. **Diplomacy System** - Inter-faction relationships and negotiations
+20. **Memory System** - NPC memory of player actions and events
+21. **Population System** - Settlement demographics and growth
+
+### Economic and Resource Systems
+22. **Economy System** - Currency, trade, and market simulation
+23. **Crafting System** - Item creation through recipes and skills
+
+### Narrative and Content Systems
+24. **Quest System** - Mission generation, progression, and rewards
+25. **Rumor System** - Information propagation with varying accuracy
+26. **Motif System** - Narrative themes and recurring elements
+27. **Religion System** - Deities, practices, and divine intervention
+
+### Conflict and Tension Systems
+28. **Tension/War System** - Conflict escalation and battle simulation
+
+### Support Systems
+29. **Analytics System** - Gameplay data collection and analysis
+30. **Auth/User System** - Authentication and user management
+31. **LLM System** - AI integration for dynamic content
+
+## Technical Requirements
+
+### Testing Standards
+- Use pytest as the testing framework
+- Implement unit tests for individual functions and classes
+- Create integration tests for system interactions
+- Include edge case and error condition testing
+- Follow the test coverage requirements from development_bible.md
+
+### Code Quality Standards
+- Follow the modular design principles
+- Ensure proper error handling and logging
+- Implement proper type hints where applicable
+- Follow the established coding patterns and conventions
+
+### Import Structure Requirements
+- All imports must reference `/backend/systems/` subdirectories
+- No imports from outside the canonical system structure
+- Proper use of relative imports within systems
+- Clean separation between systems using the events system for loose coupling
+
+### Documentation Requirements
+- Update system documentation as logic is implemented
+- Ensure all new functions have proper docstrings
+- Update the development_bible.md if new patterns emerge
+- Document any deviations from the original design
+
+## Success Criteria
+
+1. **Coverage Achievement**: All systems reach 90% test coverage
+2. **Error Resolution**: All test collection and import errors are fixed
+3. **Logic Completeness**: All missing functionality is implemented according to development_bible.md
+4. **Import Compliance**: All imports follow the canonical structure
+5. **Test Organization**: All tests are properly located in `/backend/tests/` structure
+6. **System Integration**: All systems work together through proper event-based communication
+
+## Dependencies and Relationships
+
+The systems have natural dependencies that should be respected:
+
+### Foundation Layer (No dependencies)
+- Shared System
+- Events System
+- Data System
+- Storage System
+
+### Core Game Layer (Depends on Foundation)
+- Character System
+- Time System
+- World Generation System
+
+### Gameplay Layer (Depends on Core Game)
+- Combat System (depends on Character)
+- Magic System (depends on Character)
+- Equipment System (depends on Character)
+- Inventory System (depends on Character, Equipment)
+
+### World Simulation Layer (Depends on Gameplay)
+- Region System (depends on World Generation)
+- POI System (depends on Region, World Generation)
+- World State System (depends on POI, Region)
+
+### Social Layer (Depends on World Simulation)
+- NPC System (depends on Character, POI)
+- Faction System (depends on NPC)
+- Population System (depends on NPC, POI)
+
+### Interaction Layer (Depends on Social)
+- Dialogue System (depends on NPC)
+- Diplomacy System (depends on Faction)
+- Memory System (depends on NPC)
+
+### Economic Layer (Depends on Interaction)
+- Economy System (depends on Population, POI)
+- Crafting System (depends on Equipment, Economy)
+- Loot System (depends on Equipment, Economy)
+
+### Content Layer (Depends on Economic)
+- Quest System (depends on NPC, Faction, Economy)
+- Rumor System (depends on NPC, Population)
+- Religion System (depends on Faction, NPC)
+
+### Advanced Layer (Depends on Content)
+- Motif System (depends on Quest, NPC)
+- Tension/War System (depends on Faction, Diplomacy)
+
+### Support Layer (Can depend on any)
+- Analytics System
+- Auth/User System
+- LLM System
+
+## Implementation Approach
+
+1. **Foundation First**: Start with core infrastructure systems
+2. **Layer by Layer**: Work through dependency layers systematically
+3. **Test-Driven**: Write/fix tests before implementing missing logic
+4. **Incremental**: Complete each system fully before moving to dependents
+5. **Integration**: Test system interactions as layers are completed
+
+This approach ensures that dependencies are satisfied and that each system is fully functional before dependent systems are implemented. 

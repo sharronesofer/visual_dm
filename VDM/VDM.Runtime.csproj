@@ -1,0 +1,1426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{d95df1a0-bbe2-4d8e-b32b-e1ae136ff23e}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>VDM.Runtime</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>.</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_2022_3_62;UNITY_2022_3;UNITY_2022;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;UNITY_2022_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_NAVIGATION_PACKAGE_DEBUG_VISUALIZATION;ENABLE_NAVIGATION_HEIGHTMESH_RUNTIME_SUPPORT;ENABLE_NAVIGATION_UI_REQUIRES_PACKAGE;PLATFORM_STANDALONE;TEXTCORE_1_0_OR_NEWER;PLATFORM_STANDALONE_OSX;UNITY_STANDALONE_OSX;UNITY_STANDALONE;ENABLE_GAMECENTER;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;ENABLE_SPATIALTRACKING;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoConfig>true</NoConfig>
+    <NoStdLib>true</NoStdLib>
+    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
+    <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
+    <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
+  </PropertyGroup>
+  <ItemGroup>
+    <Analyzer Include="/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll" />
+    <Analyzer Include="/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationValidation.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorData.cs" />
+     <Compile Include="Assets/Scripts/Runtime/TurnManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/ItemManagementPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TemplateMetrics.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Components/Icon.cs" />
+     <Compile Include="Assets/Scripts/Runtime/TurnBasedCombatController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatEventBus.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Loot/LegendaryDropLogger.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TimeSystem/WeatherManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/ActionRequest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/GameStartedEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/GameEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MinimapView.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/BountyUIController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/TerrainTypeMapping.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStateBatcher.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Networking/TimeSystemWebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Memory/MemoryQuery.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/Tests/DynamicObstacleManagerTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/ICharacterSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Networking/API/RestApiClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/EventSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TimeSystem/WeatherVisualizer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/IEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifEnvironmentAdapter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationMemorySystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/IGlobalArcService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/PathfindingManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/DialogueGenerationService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/GridTypes.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/CalendarSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/Tests/PathCacheTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Models/Feat.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestManagerAPI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MapSelectionPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Services/TimeService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/TimeSystemFacade.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/TestBase.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Rivalry/GrudgeConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/RelationshipStateMachine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/RegionSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Rivalry/RivalRelationship.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/BountyHunterNPCFactory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifFactory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/NetworkUtility.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Rivalry/NemesisRelationship.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Consolidated/LegacyCompatibility.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/SystemBase.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/CharacterBuildOptimizerTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/Time/TimeSystemFacade.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/BeliefCalculator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/PanelBase.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Visualization/TooltipPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/CameraFollow.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/TimingConfiguration.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldRumorIntegration.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/SimulationDashboard.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/INPCTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/CharacterSnapshot.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Stubs/SystemsNamespace.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/RegistrationPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationMetrics.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/AutosaveManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCBase.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Rivalry/RelationshipMemory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/Combatant.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/FileSystemStorageProvider.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/Motif.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ArcRecoveryManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/RecurringEventSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/ModManagerPrefabCreator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/POIStateManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Managers/AnalyticsManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/StatisticalAnalysis.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/SystemManagerReadyEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStateCausalityManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/EventManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/NPCBase.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIStateNormal.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/POIManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/ObjectPool.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CharacterSheetModel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/Examples/EntityDataValidationRule.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/GameSessionView.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Performance/PerformanceManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/GestureNavigationManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifLifecycleEventTypes.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/Middleware/LoggingMiddleware.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RumorAnalytics.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/QuestDropManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Search/FilterBuilder.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/Inventory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Loot/LegendaryDropConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/PromptTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationRequestResponse.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifMigrationUtility.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/RivalProfile.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Analytics/AnalyticsController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/ArcToQuestMapper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DragAndDropUploadZone.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/TestScenes/ArcTestSceneManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TemplateVersion.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/SystemInitializedEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/DropCalculator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/CloudStorageProvider.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatEffectPipeline.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/Examples/InteractableNPC.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MemoryPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/War/ModConflictInfo.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Net/WebSocketMessageValidator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/QuestManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifValidator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/TensionWarPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/RegionMapController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifSpatialIndex.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/SpecialActionHandler.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorResponseHandlerTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIStateRuins.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/BountyHunterUIController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Input/ActionQueuePool.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Plugins/Examples/PluginTestCanvas.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestProgress.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DesignTokens/Colors.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Search/SearchInput.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Plugins/PluginManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TestCaseGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifVisualAdapter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/SimulatedCharacter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/TestScenes/CharacterTestSceneManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorPropagationSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/Tests/PathfindingManagerTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Models/FeatDataSet.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/ModularDataSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/CombatQuestTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/PowerAnalysisDashboard.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quest/QuestManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationTimeline.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/NPCManagementPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TemplateManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Search/SearchUIManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/AssetBundleManagerWindow.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/NarrativeConsistencyChecker.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/GenericScoringModule.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/LoginPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/NetworkPopulationManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/StateManagerClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MapView.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NemesisProfile.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/ModalDialog.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatHistoryPanelTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Components/Button.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/QuestState.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/SQLiteStorageProvider.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/WeatherState.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ArcStateValidator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/HexGridUtils.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/RegionWorldState.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/Examples/InteractionSystemDemo.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/IGlobalArcRepository.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/EntityManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatStateSnapshot.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/HexMapCameraController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifEventDispatcher.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/ContainerLootGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatHistoryDatabase.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatRecommendationEngineTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldGenerationClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Net/WebSocketMessage.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/ModManager/CasualModUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Networking/WorldStateWebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatActionHandlerRegistry.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Rivalry/GrudgePointManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/GameSessionFactory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/EventAndQuestManagers.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/InformationDistortionSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/War/SerializableWarState.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Plugins/Examples/UIExtensionPoint.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/InventoryUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/SidebarNavigation.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/LocationManagementPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Theft/POIExitDetector.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Components/Card.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RumorDecayConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FactionArcDTO.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/PriorityEventQueue.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/QuestVersionHistory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Processing/CharacterBuildOptimizer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Inventory/InventoryWebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/GridStreamer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationMonitoring.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/SocialCheck.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/IEffect.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/CollectionQuestTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/PathSmoother.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/SimulationManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/UserProfilePanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/Faction.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCMood.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/CharacterStats.cs" />
+     <Compile Include="Assets/Scripts/Runtime/NarrativeProgressionManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/GrudgePointManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/IPOIStateContext.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/Examples/DataConsistencyTestSuite.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/GridInterop.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/TestScenes/QuestTestSceneManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCTraitGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Population/PopulationClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationEffectConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/IEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/ICombatSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/InteractionUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/EconomyDashboardPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/InteractionManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/WorldManagementPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Net/WebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AssetReference.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Theft/TheftSystemBootstrapper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorPropagationSystemTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/EventTypes.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/NamespaceCompatibility.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/Examples/InteractableDoor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/HexCellPool.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TickSystem/TickManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ModGptBalancer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifPool.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/ValidationRule.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Dialogue/MotifDialogueAdapter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/EntityExtractor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/BaseSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ComplexityScorer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/GridPosition.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/ChunkManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/InventoryGiveTakeSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/SystemShutdownEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Components/RuntimeTextLabel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/IPathfindingAlgorithm.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CalendarPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Analytics/AnalyticsService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Loot/Item.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/SeasonSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FactionArc.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/JPSPathfinder.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/RelationshipUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifModels.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/ArcToQuestDebugTools.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Consolidated/AssetMigrationUtility.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/EventSystem/EventTypes.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/CharacterBuilderClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/ISerializationUtility.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Visualization/FeatTimelineVisualizer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Components/Checkbox.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/OnboardingPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCSpawner.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/Examples/TreasureChest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/UnitSelectionManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/RumorJournalUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MapAnnotationPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/EnemyLootGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/DynamicObstacleManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStateManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Stubs/AllStubs.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/FileUploadService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/GameLoader.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Input/InputBuffer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/LocationStateSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/BountyHunterManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ChainActionSystem/ChainActionUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WeatherManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/TimeManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/FileValidationService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIStateTransitionRuleSet.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStateTransactionManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TemplateRepository.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/CrimeTypeDefinition.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/UIMVCManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Faction/FactionArcMapper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WeatherEffectController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ValidationResult.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/IGPTRumorService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MapTooltip.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/SimulationReport.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MapAnnotation.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatLogger.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/BountyHunterNPC.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MonitoringDashboard.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/BreadcrumbNavigation.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/NPCPersonalityTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Faction/Faction.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/BountyHunterRewardSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/RumorManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/ServiceLocator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ChainActionSystem/ChainActionSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/SelectionPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CharacterBuildOptimizerPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatHistoryAnalyzerTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/SpriteAssetManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Analytics/AnalyticsClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/MemoryManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FactionLinkManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/Item.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatHistoryAnalyzer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/EntityManagerExample.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CharacterSheetFactory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/NPCTrust.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/WeatherManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Loot/LegendaryDropTest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Input/QueuePerformanceMonitor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Feedback/VisualFeedbackModule.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/CoreUtility.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RegionalArc.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/EncryptionService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Prompt/PromptService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/Entity.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IChaosEngine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RewardCalculationEngine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/QuestArchiveManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RumorEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/ModLoadedEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/NavigationBar.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationJobSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/CalendarSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IMarketSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/Middleware/EventFilterMiddleware.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Prompt/Examples/NPCGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ModValidationService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatEventTracker.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifTriggerManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IInventorySystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/SocialCheckSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/CharacterBuilderUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/MapData.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationMonitoringTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/HapticFeedbackService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStatePersistence.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/PriorityResolver.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RegionalArcDTO.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/SystemInitializer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIStateDeclining.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatHistoryPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/ChaosEngine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/War/ModConflictEntryUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Economy/ResourceDefinition.cs" />
+     <Compile Include="Assets/Scripts/Runtime/ActionProcessor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/TestSuite.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifCache.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/TimeEvents.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationMemoryAllocator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DesignTokens/Transitions.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/IEventSchedulerMiddleware.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CharacterSheetView.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ExplorationQuestTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/ActionPerformanceMonitor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IWorldSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/Quest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Components/MapAnnotationPrefab.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifBatchProcessor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifDashboardUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/NavigationService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/Location.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/FactionRelationshipSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/BountyHunterSpawnNotifier.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifLifecycleState.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/GameStoppedEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/EffectVisualizer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FactionRelationshipManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/IInteractable.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCDecisionSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RumorRecord.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/SystemEvents.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatAnalysisEngine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Plugins/Examples/ExamplePlugin.cs" />
+     <Compile Include="Assets/Scripts/Runtime/EntityTracker.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/UploadProgressBar.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/CombatManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/CombatManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/CharacterModel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MemoryUsageMonitor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/QuestManagementPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/DynamicGrid.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/IFeatScoringModule.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Prompt/PromptManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/HookEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/EventNotificationSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationRequestBrokerTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ModDataManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/PasswordResetPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/AuthenticationManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/DocumentationDemoManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ConditionEvaluator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/Tests/AStarPathfinderTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/StorageProvider.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatAction.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/SerializationHelper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/BeliefCalculatorTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifAdapter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Input/QueueVisualizer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/TurnQueue.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/FactionArc.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/HierarchicalPathfinder.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIState.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStateDebugTools.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifAsyncQueue.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestStage.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifNpcBehaviorAdapter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/EntityInspectorUIManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Processing/CharacterBuildOptimizerService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ModValidationClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/QuestState.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Relationship/RivalRelationship.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/GameTime.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Performance/SpatialPartitionGrid.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Memory/MemoryIntegrationPoints.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/FactionLinkManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIStateDungeon.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ObjectPool.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CharacterSheetController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatPowerCalculator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/Season.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/PersistenceManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Population/PopulationMetricsTracker.cs" />
+     <Compile Include="Assets/Scripts/Runtime/CombatTestSetup.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStateObserver.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/HookManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/WorldSeedReference.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/GameSessionController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/QuestItemDropData.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorResponseHandler.cs" />
+     <Compile Include="Assets/Scripts/Runtime/CombatUIManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/RegionWeatherSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RumorTruthEvaluator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifEvents.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Feedback/AudioFeedbackModule.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/RumorPropagationManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/GlobalArc.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/HexCoordinate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DesignTokens/Shadows.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/BountyManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/RegisterUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/UIManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/War/TensionModifierTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ChainActionSystem/BasicChainActions.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/AnalyticsManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/KnowledgeDiffusionSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/War/WarEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Performance/UnityPerformanceProfiler.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifTransactionManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifDispatcher.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Rumor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DesignTokens/ThemeManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatAchievementEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestSerialization.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/DefendActionHandler.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MotifStateMachine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/GlobalArcManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CharacterSheetDemo.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorIndicator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/BasicCombatSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Components/InputField.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/Rumor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifDialogueProvider.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Networking/EntityWebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/WorldSeed.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Bootstrap/GameLoader.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/GameManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/LRUCache.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/Tests/HierarchicalPathfinderTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Population/PopulationEvents.cs" />
+     <Compile Include="Assets/Scripts/Runtime/OptimizedNarrativeProgressionManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Search/EntityResultDisplay.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIStateIndicator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/EffectResolutionManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Rendering/OptimizedMeshRenderer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/EffectPipeline.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/CityMapController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/GestureArea.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Weather/WeatherSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Models/Role.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/WarManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/BasicCombatTarget.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationCancellationHandler.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/InteractionType.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatRecommendationEngine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ThreadPoolManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/PathfindingSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/Models/WorldSeed.cs" />
+     <Compile Include="Assets/Scripts/Runtime/PlayerMovement.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/GridManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/WorldTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldEventListener.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldStateSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ModDataLoader.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatDatabaseService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AssetBundleManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Faction/FactionArc.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/EntityInspectorManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/EventBus.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifConflictResolver.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/PathCache.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/JSchemaWrapper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/MotifEvents.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WeatherSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Services/BackendAPIService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestStageManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/StorageExceptions.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/GridChunk.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifMusicAdapter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifDialogueAdapter.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/Examples/CounterEffect.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/PerformanceTest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Networking/MapWebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/BelievabilityCalculator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Theft/StolenStateManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/ModDataManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/BreadcrumbItem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ArcPersistenceManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Plugins/Examples/PluginSystemTest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/Time/TimeSpeed.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/MetricsApiClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Memory/NPCMemorySystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/GameLoader.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/FeatHistory/FeatEventTrackerTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DesignTokens/Spacing.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/FactionSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/TestManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Visualization/TimelineEdge.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Networking/AnalyticsServiceWebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/ModManager/TechnicalModUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Debug/ModDataTester.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestStateMachine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RewardGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatEffect.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Visualization/TimelineNode.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/CombatQuestIntegration.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DesignTokens/Borders.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ConditionalConsequenceSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestDependencyGraph.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/PityCalculator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifCacheManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/CollisionSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/ModManager/SelectionItemUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Loot/LootSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ConsequencePropagationSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Net/WebSocketConnectionStatus.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/InteractionEvents.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Net/WebSocketManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/BountyHunterDialogue.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/WorldStateExample.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/POIDefinition.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationStateSync.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/IStorable.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/Examples/EntityCreationPerformanceTest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/InputValidator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/Examples/AuraEffect.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/EventManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Loot/LegendaryDropCalculator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Stubs/SystemBase.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Net/WebSocketStatusIndicator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/TestScenes/DialogueTestSceneManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/ModManager/ModEntryUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/CooldownManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatDebugInterface.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/EventSystem/EventBus.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/EventCaptureManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Feedback/FeedbackManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Interaction/BaseInteractable.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/HookAnalytics.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RumorTransformationConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationStateSyncTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/MotifSystem/IMotifObserver.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/DamageSync.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Input/ActionQueue.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/InMemoryGlobalArcRepository.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/ModManager/ModManagerUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCBehaviorModifier.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/QuestItemDropConfigEditor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Arc/ArcHttpClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestArchiveManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationStateBuffer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Memory/MemoryEventDispatcher.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifRuleEngine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/POI/POIStateAbandoned.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/StorageUtils.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ModSynchronizer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/GameSessionBootstrapper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/GlobalArcMapper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/Tests/PathSmootherTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/WeatherDefinition.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RumorProcessingManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationThreadingConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DialogueService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/PlayerDropAttemptTracker.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/TemplateSelector.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/DesignTokens/Typography.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Networking/WebSocketManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Services/RelationshipService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestDesignerTools.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/BountyHunterSpawnPointSelector.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/BountyNotificationSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Motif/MotifManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/Character.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Theft/TheftBountyCalculator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/EventDispatcher.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Relationship/NemesisRelationship.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestMemorySystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ParallelSkinningJob.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Consolidated/MigrationRegistry.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/PathfindingTypes.cs" />
+     <Compile Include="Assets/Scripts/Runtime/StateValidator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifApiClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/TestScenes/BaseTestSceneManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Data/ModConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Events/AnalyticsEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/CombatActionType.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/HookPriorityQueue.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Data/Quest.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/AttackActionHandler.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/WorldManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/EffectType.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/MapManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/EconomySystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Consolidated/CodeAnalyzer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/QuestDependencyManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/DocumentationManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Quests/QuestItemDropConfig.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/WitnessManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/CharacterStats.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationSyncSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/GameLoader.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/OptimizedMotifEngine.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/BountyHunterAIController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Feedback/HapticFeedbackModule.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/InventoryFeedbackSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/PathNode.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/NPCPersonality.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/MapWebSocketClient.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/ICombatActionHandler.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/GameSavedEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/Motif.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationTask.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Search/SearchResultsDisplay.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Models/FeatCategory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/DialogueContextManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/ArcStateData.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/InventorySystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Theft/ItemValueManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/TestManagerBootstrap.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Quest/QuestSystemTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Models/CharacterBuild.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldRegionRenderer.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/QuestManagerAPI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/MotifBehaviorModifier.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Characters/NPCGenerator.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/GameSessionModel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Entities/FactionArc.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/SystemManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/Tests/JPSPathfinderTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/AnimationBlendManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/PopulationManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Combat/ActionPipeline.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Consolidated/Tests/ConsolidationTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorAnalytics.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/EventSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Pathfinding/AStarPathfinder.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/GlobalArcDTO.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/EventSchedulerMiddlewareManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Managers/StateManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Integration/IntegrationBootstrap.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/BottomTabNavigation.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/RegionalArcMapper.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/Events/GameLoadedEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Performance/PerformanceMonitor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Storage/StorageFactory.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/SpriteLoader.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/PostUploadProcessor.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/StateManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/World/WorldTimeSystem.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Bounty/WitnessNPCController.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/GlobalArcService.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Time/TimeUnits.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Visualization/Tests/FeatTimelineVisualizerPlayModeTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/MemoryBudgetManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/CombatTrackerPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Core/IEvent.cs" />
+     <Compile Include="Assets/Scripts/Runtime/War/WarOutcomeTemplate.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Inventory/InventoryManager.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/Navigation/WizardPanel.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Rumor/RumorDataTests.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Testing/TestResult.cs" />
+     <Compile Include="Assets/Scripts/Runtime/UI/LoginUI.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Timeline/Models/Playstyle.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Systems/Plugins/Examples/DataProviderExtensionPoint.cs" />
+     <Compile Include="Assets/Scripts/Runtime/Motif/OptimizedMotifAdapter.cs" />
+     <None Include="Assets/Scripts/Runtime/VDM.Runtime.asmdef" />
+    <Reference Include="UnityEngine">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AIModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ARModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ARModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AccessibilityModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AndroidJNIModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AndroidJNIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClothModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterInputModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClusterInputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterRendererModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ContentLoadModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ContentLoadModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CrashReportingModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CrashReportingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.DSPGraphModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.DSPGraphModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.DirectorModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.DirectorModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GIModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GameCenterModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GameCenterModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GridModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GridModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.HotReloadModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.HotReloadModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.LocalizationModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.LocalizationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PerformanceReportingModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.PerformanceReportingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ProfilerModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ProfilerModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PropertiesModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.PropertiesModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ScreenCaptureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SharedInternalsModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteMaskModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteShapeModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SpriteShapeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StreamingModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.StreamingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SubstanceModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SubstanceModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SubsystemsModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SubsystemsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TLSModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TLSModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TerrainModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainPhysicsModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TerrainPhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreFontEngineModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TextCoreFontEngineModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreTextEngineModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TextCoreTextEngineModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TilemapModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TilemapModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UmbraModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UmbraModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityAnalyticsCommonModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityAnalyticsCommonModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityConnectModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityConnectModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityCurlModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityCurlModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityTestProtocolModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityTestProtocolModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VFXModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VFXModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VRModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VehiclesModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VehiclesModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VideoModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VirtualTexturingModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VirtualTexturingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.WindModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.WindModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.XRModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.CoreModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.DeviceSimulatorModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.DiagnosticsModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.DiagnosticsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.EditorToolbarModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.EditorToolbarModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.GraphViewModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.GraphViewModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.PresetsUIModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.PresetsUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.QuickSearchModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.QuickSearchModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.SceneTemplateModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SceneTemplateModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.SceneViewModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SceneViewModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.TextCoreFontEngineModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TextCoreFontEngineModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.TextCoreTextEngineModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TextCoreTextEngineModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UIBuilderModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UIBuilderModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UIElementsModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UIElementsSamplesModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UIElementsSamplesModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UnityConnectModule">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UnityConnectModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Graphs">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.OSXStandalone.Extensions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.YamlDotNet">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.visualscripting@1.9.6/Editor/VisualScripting.Core/Dependencies/YamlDotNet/Unity.VisualScripting.YamlDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Collections.LowLevel.ILSupport">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.collections@2.5.1/Unity.Collections.LowLevel.ILSupport/Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="ReportGeneratorMerged">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.testtools.codecoverage@1.2.6/lib/ReportGenerator/ReportGeneratorMerged.dll</HintPath>
+    </Reference>
+    <Reference Include="unityplastic">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.collab-proxy@2.7.1/Lib/Editor/unityplastic.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Plastic.Antlr3.Runtime">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.collab-proxy@2.7.1/Lib/Editor/Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Plastic.Newtonsoft.Json">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.collab-proxy@2.7.1/Lib/Editor/Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="log4netPlastic">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.collab-proxy@2.7.1/Lib/Editor/log4netPlastic.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.IonicZip">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.visualscripting@1.9.6/Editor/VisualScripting.Core/Dependencies/DotNetZip/Unity.VisualScripting.IonicZip.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.visualscripting@1.9.6/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.2.1/Runtime/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.TextureAssets">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.visualscripting@1.9.6/Editor/VisualScripting.Core/EditorAssetResources/Unity.VisualScripting.TextureAssets.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.nuget.mono-cecil@1.11.4/Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="netstandard">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/ref/2.1.0/netstandard.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.AppContext">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.AppContext.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Concurrent">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.Concurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.NonGeneric">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.NonGeneric.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Specialized">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.Specialized.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.EventBasedAsync">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.EventBasedAsync.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.TypeConverter">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.TypeConverter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Console">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Common">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Data.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Contracts">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Debug">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Debug.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.FileVersionInfo">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.FileVersionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Process">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Process.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.StackTrace.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.TextWriterTraceListener">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.TextWriterTraceListener.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Tools">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.TraceSource">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.TraceSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Tracing">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Tracing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Drawing.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Dynamic.Runtime">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Dynamic.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization.Calendars">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Globalization.Calendars.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization.Extensions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Globalization.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.ZipFile">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.DriveInfo">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.DriveInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Watcher">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.Watcher.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.IsolatedStorage">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.IsolatedStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.MemoryMappedFiles">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.MemoryMappedFiles.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Pipes">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.Pipes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.UnmanagedMemoryStream">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.UnmanagedMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq.Expressions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.Expressions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq.Parallel">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.Parallel.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq.Queryable">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.Queryable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.NameResolution">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.NameResolution.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.NetworkInformation">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.NetworkInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Ping">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Ping.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Requests">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Security">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Sockets">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Sockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.WebHeaderCollection">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.WebHeaderCollection.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.WebSockets.Client">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.WebSockets.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.WebSockets">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Net.WebSockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ObjectModel">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.ObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.DispatchProxy">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.DispatchProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Emit.ILGeneration">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Emit.ILGeneration.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Emit.Lightweight">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Emit.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Emit">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Emit.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Extensions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Resources.Reader">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Resources.Reader.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Resources.ResourceManager">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Resources.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Resources.Writer">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Resources.Writer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.VisualC">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.CompilerServices.VisualC.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Handles">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Handles.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.InteropServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Numerics">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Formatters">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Formatters.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Json">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Xml">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Claims">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Claims.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Csp">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Csp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Principal.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.SecureString">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Security.SecureString.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.Extensions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Text.Encoding.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Text.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.RegularExpressions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Text.RegularExpressions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Overlapped">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Overlapped.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Parallel">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Tasks.Parallel.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Thread">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Thread.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.ThreadPool">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.ThreadPool.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Timer">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Timer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.ReaderWriter">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XDocument">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XPath.XDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XPath.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XmlDocument">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XmlDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XmlSerializer">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XmlSerializer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.WindowsRuntime">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/Extensions/2.0.0/System.Runtime.InteropServices.WindowsRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.ComponentModel.Composition.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.IO.Compression.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Runtime.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.ServiceModel.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Transactions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Xml.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Serialization">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/System.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib">
+        <HintPath>/Applications/Unity/Hub/Editor/2022.3.62f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Netcode.Runtime">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/ScriptAssemblies/Unity.Netcode.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+        <HintPath>/Users/Sharrone/Visual_DM/VDM/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

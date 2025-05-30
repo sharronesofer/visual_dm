@@ -1,0 +1,42 @@
+[
+  {
+    "id": "279a503b-0b50-41ef-880f-431436050b09",
+    "created_at": "2025-05-25T01:34:24.935981Z",
+    "updated_at": "2025-05-28T01:34:24.935985Z",
+    "name": "Worry",
+    "description": "Former ago major.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "de15107c-99c7-48d7-a670-d989a8f4d023",
+    "created_at": "2025-05-17T01:34:24.935991Z",
+    "updated_at": "2025-05-29T01:34:24.935993Z",
+    "name": "Free",
+    "description": "Stand owner information let couple consumer four.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "20cf1392-94bd-4836-9128-ba1d431075f9",
+    "created_at": "2025-05-14T01:34:24.936002Z",
+    "updated_at": "2025-05-27T01:34:24.936004Z",
+    "name": "Soon",
+    "description": "Professional option compare visit.",
+    "status": "PENDING"
+  },
+  {
+    "id": "f6804428-7dee-4673-973e-232881b6198d",
+    "created_at": "2025-05-02T01:34:24.936009Z",
+    "updated_at": "2025-05-29T01:34:24.936011Z",
+    "name": "Almost",
+    "description": "Place song argue politics technology conference gun.",
+    "status": "PENDING"
+  },
+  {
+    "id": "75c8840f-08cf-49d4-9d96-79c28e91b4aa",
+    "created_at": "2025-05-07T01:34:24.936015Z",
+    "updated_at": "2025-05-26T01:34:24.936017Z",
+    "name": "Process",
+    "description": "Reason experience strategy.",
+    "status": "PENDING"
+  }
+]

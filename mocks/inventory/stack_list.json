@@ -1,0 +1,42 @@
+[
+  {
+    "id": "a3771e23-4ecb-4990-9443-efaaf50e7e8a",
+    "created_at": "2025-05-09T01:34:24.957690Z",
+    "updated_at": "2025-05-29T01:34:24.957691Z",
+    "name": "Per",
+    "description": "Better former impact term.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "89ea0049-a3a8-4512-9e3c-ac9b7d10a299",
+    "created_at": "2025-05-10T01:34:24.957695Z",
+    "updated_at": "2025-05-29T01:34:24.957697Z",
+    "name": "After",
+    "description": "Agreement state send.",
+    "status": "PENDING"
+  },
+  {
+    "id": "6938b2df-f6c7-4b8e-bcd0-f5d22a17c520",
+    "created_at": "2025-05-24T01:34:24.957700Z",
+    "updated_at": "2025-05-27T01:34:24.957701Z",
+    "name": "Step",
+    "description": "Black people guess quite.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "7452d08f-87b3-4290-a8ed-0609d2c4eebf",
+    "created_at": "2025-05-20T01:34:24.957705Z",
+    "updated_at": "2025-05-24T01:34:24.957706Z",
+    "name": "Sit",
+    "description": "Opportunity certainly positive identify attorney.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "de15921d-b70c-49f0-a784-569bdf1805f1",
+    "created_at": "2025-05-25T01:34:24.957709Z",
+    "updated_at": "2025-05-27T01:34:24.957711Z",
+    "name": "Window",
+    "description": "Agreement often also play against third.",
+    "status": "ACTIVE"
+  }
+]

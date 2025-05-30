@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "description": "Event type definitions for the event-driven architecture",
+  "events": [
+    {
+      "id": "character_interaction",
+      "name": "Character Interaction",
+      "description": "Events triggered by character interactions",
+      "subtypes": ["conversation", "trade", "attack", "gift"]
+    },
+    {
+      "id": "world_event",
+      "name": "World Event",
+      "description": "Events that affect the world state",
+      "subtypes": ["natural_disaster", "festival", "war", "plague"]
+    },
+    {
+      "id": "faction_event",
+      "name": "Faction Event",
+      "description": "Events related to faction dynamics",
+      "subtypes": ["alliance_formed", "alliance_broken", "territory_claimed", "leader_changed"]
+    },
+    {
+      "id": "quest_event",
+      "name": "Quest Event",
+      "description": "Events related to quests",
+      "subtypes": ["quest_started", "quest_advanced", "quest_completed", "quest_failed"]
+    },
+    {
+      "id": "system_event",
+      "name": "System Event",
+      "description": "Events for core game systems",
+      "subtypes": ["memory_formed", "rumor_spread", "motif_triggered", "religion_ritual"]
+    }
+  ]
+} 

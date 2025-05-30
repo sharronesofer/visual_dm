@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "constants": {
+    "base_rates": {
+      "population_growth": 0.1,
+      "resource_generation": 1.0,
+      "decay_rate": 0.05
+    },
+    "thresholds": {
+      "population_soft_cap": 0.9,
+      "population_hard_cap": 1.0,
+      "minimum_population": 5
+    },
+    "multipliers": {
+      "global_population": 1.0,
+      "resource_scarcity": 1.0,
+      "event_frequency": 1.0
+    },
+    "economy": {
+      "base_trade_volume": 100,
+      "price_volatility": 0.1,
+      "inflation_rate": 0.02
+    },
+    "combat": {
+      "base_damage": 10,
+      "armor_effectiveness": 0.5,
+      "critical_chance": 0.05
+    }
+  }
+} 

@@ -1,0 +1,419 @@
+"""
+Unit tests for the GPT client service.
+
+These tests validate the GPT client's functionality:
+1. Initialization with different configurations
+2. Message formatting and request creation
+3. API request handling and response parsing
+4. Error handling and retries
+5. Text generation helpers
+"""
+
+import unittest
+import os
+import json
+from unittest.mock import patch, MagicMock, AsyncMock
+import asyncio
+import httpx
+
+from backend.systems.llm.services.gpt_client import (
+    GPTClient,
+    GPTModel,
+    MessageRole,
+    GPTMessage,
+    GPTRequest,
+    GPTResponse,
+)
+
+
+class TestGPTClient(unittest.TestCase):
+    """Unit tests for the GPTClient class."""
+
+    def setUp(self):
+        """Set up test environment."""
+        # Save original environment
+        self.original_api_key = os.environ.get("OPENAI_API_KEY")
+
+        # Set test environment variables
+        os.environ["OPENAI_API_KEY"] = "test-api-key"
+
+        # Reset singleton instance for each test
+        GPTClient._instance = None
+
+    def tearDown(self):
+        """Clean up after tests."""
+        # Restore original environment
+        if self.original_api_key:
+            os.environ["OPENAI_API_KEY"] = self.original_api_key
+        else:
+            del os.environ["OPENAI_API_KEY"]
+
+    def test_singleton_pattern(self):
+        """Test that GPTClient maintains singleton pattern."""
+        client1 = GPTClient.get_instance()
+        client2 = GPTClient.get_instance()
+        self.assertIs(client1, client2)
+
+        # Test direct instantiation also follows singleton pattern
+        client3 = GPTClient()
+        self.assertIs(client1, client3)
+
+    def test_initialization_with_env_var(self):
+        """Test client initialization using environment variables."""
+        client = GPTClient.get_instance()
+        self.assertEqual(client.api_key, "test-api-key")
+        self.assertEqual(client.base_url, "https://api.openai.com/v1/chat/completions")
+        self.assertEqual(client.retry_attempts, 3)
+        self.assertEqual(client.retry_delay, 1.0)
+        self.assertEqual(client.timeout, 60.0)
+
+    def test_initialization_with_params(self):
+        """Test client initialization with explicit parameters."""
+        # Reset singleton for this test
+        GPTClient._instance = None
+
+        client = GPTClient(
+            api_key="custom-api-key",
+            base_url="https://custom-api.example.com",
+            retry_attempts=5,
+            retry_delay=2.0,
+            timeout=30.0,
+        )
+
+        self.assertEqual(client.api_key, "custom-api-key")
+        self.assertEqual(client.base_url, "https://custom-api.example.com")
+        self.assertEqual(client.retry_attempts, 5)
+        self.assertEqual(client.retry_delay, 2.0)
+        self.assertEqual(client.timeout, 30.0)
+
+    def test_gpt_request_simple(self):
+        """Test GPTRequest.simple factory method."""
+        # Test with just prompt
+        req1 = GPTRequest.simple("Test prompt")
+        self.assertEqual(len(req1.messages), 1)
+        self.assertEqual(req1.messages[0].role, MessageRole.USER)
+        self.assertEqual(req1.messages[0].content, "Test prompt")
+        self.assertEqual(req1.model, GPTModel.GPT_4)
+
+        # Test with system prompt
+        req2 = GPTRequest.simple(
+            "Test prompt",
+            model=GPTModel.GPT_3_5_TURBO,
+            system_prompt="You are a helpful assistant",
+        )
+        self.assertEqual(len(req2.messages), 2)
+        self.assertEqual(req2.messages[0].role, MessageRole.SYSTEM)
+        self.assertEqual(req2.messages[0].content, "You are a helpful assistant")
+        self.assertEqual(req2.messages[1].role, MessageRole.USER)
+        self.assertEqual(req2.messages[1].content, "Test prompt")
+        self.assertEqual(req2.model, GPTModel.GPT_3_5_TURBO)
+
+    @patch("httpx.AsyncClient.post")
+    async def test_complete_success(self, mock_post):
+        """Test successful completion request."""
+        # Configure mock
+        mock_response = MagicMock()
+        mock_response.raise_for_status = MagicMock()
+        mock_response.json.return_value = {
+            "id": "test-id",
+            "choices": [{"message": {"content": "This is a test response."}}],
+            "usage": {"total_tokens": 10},
+        }
+        mock_post.return_value = mock_response
+
+        # Create request
+        request = GPTRequest.simple("Test prompt")
+
+        # Test complete method
+        client = GPTClient.get_instance()
+        response = await client.complete(request)
+
+        # Verify result
+        self.assertIsInstance(response, GPTResponse)
+        self.assertEqual(response.text, "This is a test response.")
+        self.assertEqual(response.model, GPTModel.GPT_4)
+        self.assertEqual(response.usage, {"total_tokens": 10})
+
+        # Verify the request
+        mock_post.assert_called_once()
+        kwargs = mock_post.call_args.kwargs
+        self.assertEqual(kwargs["headers"]["Authorization"], "Bearer test-api-key")
+        self.assertEqual(kwargs["timeout"], 60.0)
+
+        # Verify request payload
+        payload = json.loads(
+            json.dumps(kwargs["json"])
+        )  # Convert to JSON and back for normalization
+        self.assertEqual(payload["model"], GPTModel.GPT_4)
+        self.assertEqual(len(payload["messages"]), 1)
+        self.assertEqual(payload["messages"][0]["role"], "user")
+        self.assertEqual(payload["messages"][0]["content"], "Test prompt")
+
+    @patch("httpx.AsyncClient.post")
+    @patch("asyncio.sleep", new_callable=AsyncMock)  # Mock sleep to avoid waiting
+    async def test_retry_on_error(self, mock_sleep, mock_post):
+        """Test retry behavior on HTTP errors."""
+        # Configure mock to fail twice then succeed
+        error_response = MagicMock()
+        error_response.raise_for_status = MagicMock(
+            side_effect=httpx.HTTPStatusError(
+                "Error", request=MagicMock(), response=MagicMock()
+            )
+        )
+
+        success_response = MagicMock()
+        success_response.raise_for_status = MagicMock()
+        success_response.json.return_value = {
+            "choices": [{"message": {"content": "Success after retry"}}],
+            "usage": {"total_tokens": 5},
+        }
+
+        mock_post.side_effect = [error_response, error_response, success_response]
+
+        # Create request
+        request = GPTRequest.simple("Test prompt")
+
+        # Test complete method with retries
+        client = GPTClient.get_instance()
+        response = await client.complete(request)
+
+        # Verify the result
+        self.assertEqual(response.text, "Success after retry")
+
+        # Verify retry attempts
+        self.assertEqual(mock_post.call_count, 3)
+        self.assertEqual(mock_sleep.call_count, 2)
+
+    @patch("httpx.AsyncClient.post")
+    @patch("asyncio.sleep", new_callable=AsyncMock)
+    async def test_max_retries_exceeded(self, mock_sleep, mock_post):
+        """Test behavior when max retries are exceeded."""
+        # Configure mock to always fail
+        error_response = MagicMock()
+        error_response.raise_for_status = MagicMock(
+            side_effect=httpx.HTTPStatusError(
+                "Error", request=MagicMock(), response=MagicMock()
+            )
+        )
+
+        mock_post.return_value = error_response
+
+        # Create request
+        request = GPTRequest.simple("Test prompt")
+
+        # Test complete method with all retries failing
+        client = GPTClient.get_instance()
+
+        with self.assertRaises(httpx.HTTPStatusError):
+            await client.complete(request)
+
+        # Verify retry attempts
+        self.assertEqual(mock_post.call_count, 3)
+        self.assertEqual(mock_sleep.call_count, 2)
+
+    @patch("httpx.AsyncClient.post")
+    async def test_complete_with_string(self, mock_post):
+        """Test complete with string input instead of GPTRequest."""
+        # Configure mock
+        mock_response = MagicMock()
+        mock_response.raise_for_status = MagicMock()
+        mock_response.json.return_value = {
+            "choices": [{"message": {"content": "String input response"}}]
+        }
+        mock_post.return_value = mock_response
+
+        # Test complete method with string
+        client = GPTClient.get_instance()
+        response = await client.complete("String prompt")
+
+        # Verify result
+        self.assertEqual(response.text, "String input response")
+
+        # Verify the request
+        mock_post.assert_called_once()
+        kwargs = mock_post.call_args.kwargs
+        payload = json.loads(json.dumps(kwargs["json"]))
+        self.assertEqual(len(payload["messages"]), 1)
+        self.assertEqual(payload["messages"][0]["content"], "String prompt")
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.complete")
+    async def test_generate_text(self, mock_complete):
+        """Test generate_text helper method."""
+        # Configure mock
+        mock_complete.return_value = GPTResponse(
+            text="Generated text response",
+            model=GPTModel.GPT_4,
+            usage={"total_tokens": 10},
+        )
+
+        # Test generate_text method
+        client = GPTClient.get_instance()
+        result = await client.generate_text(
+            "Generate some text", system_prompt="You are a helpful assistant"
+        )
+
+        # Verify result
+        self.assertEqual(result, "Generated text response")
+
+        # Verify request to complete
+        mock_complete.assert_called_once()
+        request = mock_complete.call_args.args[0]
+        self.assertIsInstance(request, GPTRequest)
+        self.assertEqual(len(request.messages), 2)
+        self.assertEqual(request.messages[0].role, MessageRole.SYSTEM)
+        self.assertEqual(request.messages[0].content, "You are a helpful assistant")
+        self.assertEqual(request.messages[1].role, MessageRole.USER)
+        self.assertEqual(request.messages[1].content, "Generate some text")
+
+    @patch("httpx.AsyncClient.post")
+    async def test_different_response_formats(self, mock_post):
+        """Test handling different API response formats."""
+        # Test format with text field instead of message
+        mock_response1 = MagicMock()
+        mock_response1.raise_for_status = MagicMock()
+        mock_response1.json.return_value = {
+            "choices": [{"text": "Response with text field"}]
+        }
+
+        # Test format with unexpected structure
+        mock_response2 = MagicMock()
+        mock_response2.raise_for_status = MagicMock()
+        mock_response2.json.return_value = {
+            "choices": [{"unexpected": "Unexpected format"}]
+        }
+
+        # Test empty choices
+        mock_response3 = MagicMock()
+        mock_response3.raise_for_status = MagicMock()
+        mock_response3.json.return_value = {"choices": []}
+
+        # Setup mock to return different responses in sequence
+        mock_post.side_effect = [mock_response1, mock_response2, mock_response3]
+
+        # Test with text field format
+        client = GPTClient.get_instance()
+        response1 = await client.complete("Prompt 1")
+        self.assertEqual(response1.text, "Response with text field")
+
+        # Test with unexpected format
+        response2 = await client.complete("Prompt 2")
+        self.assertEqual(response2.text, str({"unexpected": "Unexpected format"}))
+
+        # Test with empty choices
+        response3 = await client.complete("Prompt 3")
+        self.assertEqual(response3.text, "")
+
+    @patch("httpx.AsyncClient.post")
+    async def test_network_error_handling(self, mock_post):
+        """Test handling of network errors."""
+        # Create a request
+        request = GPTRequest.simple("Test prompt")
+
+        # Setup mock to raise network error
+        mock_post.side_effect = httpx.ConnectError("Network error")
+
+        # Test error handling
+        client = GPTClient.get_instance()
+        with self.assertRaises(httpx.ConnectError):
+            await client.complete(request)
+
+    @patch("httpx.AsyncClient.post")
+    async def test_timeout_handling(self, mock_post):
+        """Test handling of request timeouts."""
+        # Create a request
+        request = GPTRequest.simple("Test prompt")
+
+        # Setup mock to raise timeout error
+        mock_post.side_effect = httpx.TimeoutException("Request timed out")
+
+        # Test error handling
+        client = GPTClient.get_instance()
+        with self.assertRaises(httpx.TimeoutException):
+            await client.complete(request)
+
+    def test_message_role_enum(self):
+        """Test the MessageRole enum values."""
+        self.assertEqual(MessageRole.SYSTEM, "system")
+        self.assertEqual(MessageRole.USER, "user")
+        self.assertEqual(MessageRole.ASSISTANT, "assistant")
+        self.assertEqual(MessageRole.FUNCTION, "function")
+
+    def test_gpt_model_enum(self):
+        """Test the GPTModel enum values."""
+        self.assertEqual(GPTModel.GPT_3_5_TURBO, "gpt-3.5-turbo")
+        self.assertEqual(GPTModel.GPT_4, "gpt-4")
+        self.assertEqual(GPTModel.GPT_4_TURBO, "gpt-4-turbo-preview")
+
+    def test_gpt_message_model(self):
+        """Test GPTMessage model creation and validation."""
+        # Test basic message
+        message = GPTMessage(role=MessageRole.USER, content="Test content")
+        self.assertEqual(message.role, MessageRole.USER)
+        self.assertEqual(message.content, "Test content")
+        self.assertIsNone(message.name)
+
+        # Test with optional name
+        message_with_name = GPTMessage(
+            role=MessageRole.FUNCTION, content="Function result", name="test_function"
+        )
+        self.assertEqual(message_with_name.role, MessageRole.FUNCTION)
+        self.assertEqual(message_with_name.content, "Function result")
+        self.assertEqual(message_with_name.name, "test_function")
+
+    def test_gpt_request_model(self):
+        """Test GPTRequest model creation and validation."""
+        # Create message
+        message = GPTMessage(role=MessageRole.USER, content="Test content")
+
+        # Test request with custom settings
+        request = GPTRequest(
+            model=GPTModel.GPT_4,
+            messages=[message],
+            max_tokens=500,
+            temperature=0.3,
+            top_p=0.9,
+            frequency_penalty=0.5,
+            presence_penalty=0.2,
+            stop=["STOP"],
+        )
+
+        self.assertEqual(request.model, GPTModel.GPT_4)
+        self.assertEqual(len(request.messages), 1)
+        self.assertEqual(request.messages[0].content, "Test content")
+        self.assertEqual(request.max_tokens, 500)
+        self.assertEqual(request.temperature, 0.3)
+        self.assertEqual(request.top_p, 0.9)
+        self.assertEqual(request.frequency_penalty, 0.5)
+        self.assertEqual(request.presence_penalty, 0.2)
+        self.assertEqual(request.stop, ["STOP"])
+
+    def test_gpt_response_model(self):
+        """Test GPTResponse model creation and validation."""
+        # Test basic response
+        response = GPTResponse(
+            text="Test response", model=GPTModel.GPT_4, usage={"total_tokens": 15}
+        )
+
+        self.assertEqual(response.text, "Test response")
+        self.assertEqual(response.model, GPTModel.GPT_4)
+        self.assertEqual(response.usage, {"total_tokens": 15})
+        self.assertIsNone(response.raw)
+
+        # Test with raw data
+        raw_data = {"choices": [{"message": {"content": "Raw response"}}]}
+        response_with_raw = GPTResponse(
+            text="Processed response",
+            model=GPTModel.GPT_3_5_TURBO,
+            usage={"total_tokens": 10},
+            raw=raw_data,
+        )
+
+        self.assertEqual(response_with_raw.text, "Processed response")
+        self.assertEqual(response_with_raw.model, GPTModel.GPT_3_5_TURBO)
+        self.assertEqual(response_with_raw.usage, {"total_tokens": 10})
+        self.assertEqual(response_with_raw.raw, raw_data)
+
+
+# Run this using a test runner that can handle async tests
+if __name__ == "__main__":
+    unittest.main()

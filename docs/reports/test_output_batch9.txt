@@ -1,0 +1,2198 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+testpaths: backend/tests
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+00:07:26 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
+00:07:26 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
+00:07:26 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
+00:07:26 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+00:07:26 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
+00:07:26 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
+00:07:26 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
+00:07:26 [INFO] backend.systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+00:07:26 [INFO] backend.systems.data.loaders.game_data_registry: Loaded 13 biomes
+00:07:26 [INFO] backend.systems.data.loaders.game_data_registry: Loaded 44 adjacency rules
+00:07:26 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: backend/data/entities
+00:07:26 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: backend/data/items
+00:07:27 [INFO] backend.systems.rumor.repository: RumorRepository initialized with storage at data/rumors/
+00:07:27 [INFO] backend.systems.rumor.repository: RumorRepository sync singleton created with storage at data/rumors/
+00:07:27 [INFO] backend.systems.rumor.service: RumorService instance configured.
+00:07:27 [INFO] backend.systems.rumor.service: RumorService sync singleton instance created.
+00:07:27 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
+00:07:27 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+00:07:27 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+00:07:28 [INFO] root: World Generator initialized.
+00:07:28 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
+00:07:28 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
+00:07:28 [INFO] systems.combat.effect_visualizer: EffectVisualizer initialized
+00:07:28 [INFO] systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+00:07:28 [INFO] systems.llm.core.dm_core: DungeonMaster initialized
+00:07:28 [WARNING] systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+00:07:28 [WARNING] systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+00:07:29 [WARNING] backend.systems.religion.services: Faction system not available, faction integration will be disabled
+00:07:29 [WARNING] backend.systems.religion.services: Quest system not available, quest integration will be disabled
+00:07:29 [WARNING] systems.shared.rules: Unknown balance constant: version
+00:07:29 [WARNING] systems.shared.rules: Unknown balance constant: constants
+00:07:29 [INFO] root: World Generator initialized.
+collected 2617 items / 24 skipped
+
+backend/tests/systems/analytics/test_analytics_service.py::TestAnalyticsService::test_async_operation 
+-------------------------------- live log call ---------------------------------
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /var/folders/h_/z194ymn925vfps1_w2pqt77c0000gp/T/tmpgkiqyfuu
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_analytics_service.py::TestAnalyticsService::test_dataset_generation 
+-------------------------------- live log call ---------------------------------
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /var/folders/h_/z194ymn925vfps1_w2pqt77c0000gp/T/tmpq2exwvej
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: Dataset generation requested with filters: start_date=2025-05-17 04:07:29.550150, end_date=2025-05-24 04:07:29.550154, event_types=['MemoryEvent'], entity_id=None, filters=None
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: Generated dataset with 0 events.
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_analytics_service.py::TestAnalyticsService::test_event_transformation 
+-------------------------------- live log call ---------------------------------
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /var/folders/h_/z194ymn925vfps1_w2pqt77c0000gp/T/tmpwe_2rvrj
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_analytics_service.py::TestAnalyticsService::test_event_type_constants 
+-------------------------------- live log call ---------------------------------
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /var/folders/h_/z194ymn925vfps1_w2pqt77c0000gp/T/tmpvp0u89b1
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_analytics_service.py::TestAnalyticsService::test_middleware_integration 
+-------------------------------- live log call ---------------------------------
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /var/folders/h_/z194ymn925vfps1_w2pqt77c0000gp/T/tmpj80kn588
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService registered as middleware with EventDispatcher
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_analytics_service.py::TestAnalyticsService::test_singleton_pattern 
+-------------------------------- live log call ---------------------------------
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /var/folders/h_/z194ymn925vfps1_w2pqt77c0000gp/T/tmpvljocy_s
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_analytics_service.py::TestAnalyticsService::test_structured_event_logging 
+-------------------------------- live log call ---------------------------------
+00:07:29 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /var/folders/h_/z194ymn925vfps1_w2pqt77c0000gp/T/tmpc0ymjn42
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_event_integration.py::TestAnalyticsEventIntegration::test_all_event_types_mapped PASSED [  0%]
+backend/tests/systems/analytics/test_event_integration.py::TestAnalyticsEventIntegration::test_background_processing PASSED [  0%]
+backend/tests/systems/analytics/test_event_integration.py::TestAnalyticsEventIntegration::test_event_mapping_memory_event PASSED [  0%]
+backend/tests/systems/analytics/test_event_integration.py::TestAnalyticsEventIntegration::test_event_mapping_rumor_event PASSED [  0%]
+backend/tests/systems/analytics/test_event_integration.py::TestAnalyticsEventIntegration::test_middleware_passthrough PASSED [  0%]
+backend/tests/systems/analytics/test_event_integration.py::TestAnalyticsEventIntegration::test_middleware_registration PASSED [  0%]
+backend/tests/systems/analytics/test_event_integration.py::TestAnalyticsEventIntegration::test_register_with_event_system PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_base_event_model PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_custom_event PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_event_inheritance PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_event_serialization PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_event_type_mapping_completeness PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_game_end_event PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_game_start_event PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_get_event_model PASSED [  0%]
+backend/tests/systems/analytics/test_schemas.py::TestAnalyticsSchemas::test_memory_event PASSED [  0%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_aggregate_events_by_time_avg 
+-------------------------------- live log call ---------------------------------
+00:07:29 [WARNING] backend.systems.analytics.utils: Field metadata.damage not found in event
+PASSED                                                                   [  0%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_aggregate_events_by_time_count PASSED [  0%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_aggregate_events_by_time_invalid_interval PASSED [  0%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_aggregate_events_by_time_sum 
+-------------------------------- live log call ---------------------------------
+00:07:29 [WARNING] backend.systems.analytics.utils: Field metadata.damage not found in event
+PASSED                                                                   [  1%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_filter_events_by_metadata_callback PASSED [  1%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_filter_events_by_metadata_dict PASSED [  1%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_generate_llm_training_dataset_basic PASSED [  1%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_generate_llm_training_dataset_with_filtering PASSED [  1%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_generate_llm_training_dataset_with_output_file PASSED [  1%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_get_analytics_data_path PASSED [  1%]
+backend/tests/systems/analytics/test_utils.py::TestAnalyticsUtils::test_summarize_analytics_storage PASSED [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_login_endpoint 
+-------------------------------- live log setup --------------------------------
+00:07:29 [INFO] backend.systems.shared.database.session: Successfully imported auth models for test session
+00:07:29 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+00:07:29 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+00:07:29 [WARNING] passlib.handlers.bcrypt: (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+ERROR                                                                    [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_login_with_invalid_credentials 
+-------------------------------- live log setup --------------------------------
+00:07:30 [INFO] backend.systems.shared.database.session: Successfully imported auth models for test session
+00:07:30 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+00:07:30 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+ERROR                                                                    [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_protected_endpoint 
+-------------------------------- live log setup --------------------------------
+00:07:30 [INFO] backend.systems.shared.database.session: Successfully imported auth models for test session
+00:07:30 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+00:07:30 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+ERROR                                                                    [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_protected_endpoint_without_token 
+-------------------------------- live log call ---------------------------------
+00:07:30 [INFO] httpx: HTTP Request: GET http://testserver/auth/me "HTTP/1.1 404 Not Found"
+FAILED                                                                   [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_protected_endpoint_with_invalid_token 
+-------------------------------- live log call ---------------------------------
+00:07:30 [INFO] httpx: HTTP Request: GET http://testserver/auth/me "HTTP/1.1 404 Not Found"
+FAILED                                                                   [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_token_expiry 
+-------------------------------- live log setup --------------------------------
+00:07:30 [INFO] backend.systems.shared.database.session: Successfully imported auth models for test session
+00:07:30 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+00:07:30 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+ERROR                                                                    [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_user_role_permissions 
+-------------------------------- live log setup --------------------------------
+00:07:31 [INFO] backend.systems.shared.database.session: Successfully imported auth models for test session
+00:07:31 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+00:07:31 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+ERROR                                                                    [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_user_without_permission 
+-------------------------------- live log setup --------------------------------
+00:07:31 [INFO] backend.systems.shared.database.session: Successfully imported auth models for test session
+00:07:31 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+00:07:31 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+ERROR                                                                    [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_token_verification 
+-------------------------------- live log setup --------------------------------
+00:07:31 [INFO] backend.systems.shared.database.session: Successfully imported auth models for test session
+00:07:31 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+00:07:31 [WARNING] backend.systems.shared.database.session: Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+ERROR                                                                    [  1%]
+backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_current_active_user_dependency PASSED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_create_auth_relationship FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_update_auth_relationship FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_remove_auth_relationship FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_get_auth_relationship FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_check_permission_with_permission FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_check_permission_without_permission FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_add_permission FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_remove_permission FAILED [  1%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_set_ownership PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_get_user_characters FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_get_character_users FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_bulk_create_auth_relationships FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_bulk_remove_auth_relationships FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_transfer_ownership FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_check_multi_character_permission PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_get_current_active_user_valid_token PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_get_current_active_user_invalid_token PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_get_current_active_user_missing_subject PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_check_system_access PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_check_system_access_with_restricted_system FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_check_permissions_placeholder PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_check_permissions_with_missing_permissions FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_password_service.py::TestPasswordService::test_password_hashing PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_password_service.py::TestPasswordService::test_password_verification_with_correct_password PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_password_service.py::TestPasswordService::test_password_verification_with_incorrect_password PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_password_service.py::TestPasswordService::test_empty_password_handling PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_password_service.py::TestPasswordService::test_different_hashes_for_same_password PASSED [  2%]
+backend/tests/systems/auth_user/unit/test_password_service.py::TestPasswordService::test_long_password_handling FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_creation ERROR [  2%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_name_unique_constraint ERROR [  2%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_user_relationship ERROR [  2%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_permission_relationship ERROR [  2%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_inheritance_from_core_base_model FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_repr FAILED [  2%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_creation ERROR [  3%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_name_unique_constraint ERROR [  3%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_role_relationship ERROR [  3%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_inheritance_from_core_base_model FAILED [  3%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_repr FAILED [  3%]
+backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_role_with_multiple_permissions ERROR [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_password_strength_valid PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_password_strength_too_short PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_password_strength_no_numbers PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_password_strength_no_uppercase PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_password_strength_no_lowercase PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_password_strength_no_special_chars PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_email_format_valid PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_email_format_invalid FAILED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_username_format_valid PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_username_format_too_short PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_username_format_too_long PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_username_format_invalid_chars PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_create_access_token PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_verify_valid_token PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_verify_expired_token PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_verify_invalid_token PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_verify_token_with_wrong_key FAILED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_token_with_custom_expiry PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_default_expiry_time FAILED [  3%]
+backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_token_additional_claims PASSED [  3%]
+backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_creation ERROR [  4%]
+backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_email_unique_constraint ERROR [  4%]
+backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_role_relationship ERROR [  4%]
+backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_inheritance_from_core_base_model FAILED [  4%]
+backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_repr FAILED [  4%]
+backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_password_reset_fields ERROR [  4%]
+backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_is_active_default ERROR [  4%]
+backend/tests/systems/character/test_character_builder.py::test_init_defaults PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_init_with_data PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_set_race PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_set_race_unknown PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_assign_attribute PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_assign_attribute_unknown PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_add_feat PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_add_feat_unknown PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_assign_skill PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_assign_skill_unknown PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_is_valid_complete PASSED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_is_valid_incomplete FAILED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_finalize FAILED [  4%]
+backend/tests/systems/character/test_character_builder.py::test_save_new_character FAILED [  4%]
+
+==================================== ERRORS ====================================
+__________ ERROR at setup of TestAuthIntegration.test_login_endpoint ___________
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109caac90>
+db_session = <sqlalchemy.orm.session.Session object at 0x11cd92e90>
+
+    @pytest.fixture
+    def test_user(self, db_session):
+        """Create a test user for authentication tests."""
+        # Create a user
+        password = "TestPassword123!"
+        password_hash = get_password_hash(password)
+>       user = User(email="test@example.com", password_hash=password_hash)
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4255: in _do_configure_registries
+    mapper._post_configure_properties()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2418: in _post_configure_properties
+    prop.init()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/interfaces.py:589: in init
+    self.do_init()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/relationships.py:1656: in do_init
+    self._setup_entity()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/relationships.py:1866: in _setup_entity
+    self._clsregistry_resolve_name(argument)(),
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/clsregistry.py:516: in _resolve_name
+    rval = d[token]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/_collections.py:345: in __missing__
+    self[key] = val = self.creator(key)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/clsregistry.py:463: in _access_cls
+    return _determine_container(key, decl_class_registry[key])
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/clsregistry.py:409: in _determine_container
+    value = value.attempt_get([], key)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.orm.clsregistry._MultipleClassMarker object at 0x11a0555c0>
+path = [], key = 'Role'
+
+    def attempt_get(self, path: List[str], key: str) -> Type[Any]:
+        if len(self.contents) > 1:
+>           raise exc.InvalidRequestError(
+                'Multiple classes found for path "%s" '
+                "in the registry of this declarative "
+                "base. Please use a fully module-qualified path."
+                % (".".join(path + [key]))
+            )
+E           sqlalchemy.exc.InvalidRequestError: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/clsregistry.py:219: InvalidRequestError
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.shared.database.session:session.py:126 Successfully imported auth models for test session
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+WARNING  passlib.handlers.bcrypt:bcrypt.py:622 (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+__ ERROR at setup of TestAuthIntegration.test_login_with_invalid_credentials ___
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x1099121d0>
+db_session = <sqlalchemy.orm.session.Session object at 0x11dd68410>
+
+    @pytest.fixture
+    def test_user(self, db_session):
+        """Create a test user for authentication tests."""
+        # Create a user
+        password = "TestPassword123!"
+        password_hash = get_password_hash(password)
+>       user = User(email="test@example.com", password_hash=password_hash)
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.shared.database.session:session.py:126 Successfully imported auth models for test session
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+________ ERROR at setup of TestAuthIntegration.test_protected_endpoint _________
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109cb8690>
+db_session = <sqlalchemy.orm.session.Session object at 0x1187d8f90>
+
+    @pytest.fixture
+    def test_user(self, db_session):
+        """Create a test user for authentication tests."""
+        # Create a user
+        password = "TestPassword123!"
+        password_hash = get_password_hash(password)
+>       user = User(email="test@example.com", password_hash=password_hash)
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.shared.database.session:session.py:126 Successfully imported auth models for test session
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+___________ ERROR at setup of TestAuthIntegration.test_token_expiry ____________
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109cb9990>
+db_session = <sqlalchemy.orm.session.Session object at 0x11a629250>
+
+    @pytest.fixture
+    def test_user(self, db_session):
+        """Create a test user for authentication tests."""
+        # Create a user
+        password = "TestPassword123!"
+        password_hash = get_password_hash(password)
+>       user = User(email="test@example.com", password_hash=password_hash)
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.shared.database.session:session.py:126 Successfully imported auth models for test session
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+_______ ERROR at setup of TestAuthIntegration.test_user_role_permissions _______
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109cb8b10>
+db_session = <sqlalchemy.orm.session.Session object at 0x11d951810>
+
+    @pytest.fixture
+    def test_user(self, db_session):
+        """Create a test user for authentication tests."""
+        # Create a user
+        password = "TestPassword123!"
+        password_hash = get_password_hash(password)
+>       user = User(email="test@example.com", password_hash=password_hash)
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.shared.database.session:session.py:126 Successfully imported auth models for test session
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+______ ERROR at setup of TestAuthIntegration.test_user_without_permission ______
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109cb9e90>
+db_session = <sqlalchemy.orm.session.Session object at 0x10e6b67d0>
+
+    @pytest.fixture
+    def test_user(self, db_session):
+        """Create a test user for authentication tests."""
+        # Create a user
+        password = "TestPassword123!"
+        password_hash = get_password_hash(password)
+>       user = User(email="test@example.com", password_hash=password_hash)
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.shared.database.session:session.py:126 Successfully imported auth models for test session
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+________ ERROR at setup of TestAuthIntegration.test_token_verification _________
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109cba250>
+db_session = <sqlalchemy.orm.session.Session object at 0x11a420f50>
+
+    @pytest.fixture
+    def test_user(self, db_session):
+        """Create a test user for authentication tests."""
+        # Create a user
+        password = "TestPassword123!"
+        password_hash = get_password_hash(password)
+>       user = User(email="test@example.com", password_hash=password_hash)
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.shared.database.session:session.py:126 Successfully imported auth models for test session
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
+WARNING  backend.systems.shared.database.session:session.py:138 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
+______________ ERROR at setup of TestRoleModel.test_role_creation ______________
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 12
+      def test_role_creation(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:12
+_______ ERROR at setup of TestRoleModel.test_role_name_unique_constraint _______
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 30
+      def test_role_name_unique_constraint(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:30
+_________ ERROR at setup of TestRoleModel.test_role_user_relationship __________
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 45
+      def test_role_user_relationship(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:45
+______ ERROR at setup of TestRoleModel.test_role_permission_relationship _______
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 62
+      def test_role_permission_relationship(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:62
+________ ERROR at setup of TestPermissionModel.test_permission_creation ________
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 107
+      def test_permission_creation(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:107
+_ ERROR at setup of TestPermissionModel.test_permission_name_unique_constraint _
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 125
+      def test_permission_name_unique_constraint(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:125
+___ ERROR at setup of TestPermissionModel.test_permission_role_relationship ____
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 140
+      def test_permission_role_relationship(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:140
+__ ERROR at setup of TestPermissionModel.test_role_with_multiple_permissions ___
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 181
+      def test_role_with_multiple_permissions(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:181
+______________ ERROR at setup of TestUserModel.test_user_creation ______________
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 15
+      def test_user_creation(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:15
+______ ERROR at setup of TestUserModel.test_user_email_unique_constraint _______
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 34
+      def test_user_email_unique_constraint(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:34
+_________ ERROR at setup of TestUserModel.test_user_role_relationship __________
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 49
+      def test_user_role_relationship(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:49
+__________ ERROR at setup of TestUserModel.test_password_reset_fields __________
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 90
+      def test_password_reset_fields(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:90
+_________ ERROR at setup of TestUserModel.test_user_is_active_default __________
+file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 109
+      def test_user_is_active_default(self, db_session):
+E       fixture 'db_session' not found
+>       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:109
+=================================== FAILURES ===================================
+__________ TestAuthIntegration.test_protected_endpoint_without_token ___________
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109cb8d10>
+app_client = <starlette.testclient.TestClient object at 0x107dab7d0>
+
+    def test_protected_endpoint_without_token(self, app_client):
+        """Test accessing a protected endpoint without a token."""
+        # Act
+        response = app_client.get("/auth/me")
+    
+        # Assert
+>       assert response.status_code == 401
+E       assert 404 == 401
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:121: AssertionError
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/auth/me "HTTP/1.1 404 Not Found"
+________ TestAuthIntegration.test_protected_endpoint_with_invalid_token ________
+
+self = <integration.test_auth_integration.TestAuthIntegration object at 0x109cb9350>
+app_client = <starlette.testclient.TestClient object at 0x119e80610>
+
+    def test_protected_endpoint_with_invalid_token(self, app_client):
+        """Test accessing a protected endpoint with an invalid token."""
+        # Arrange
+        headers = {"Authorization": "Bearer invalid_token"}
+    
+        # Act
+        response = app_client.get("/auth/me", headers=headers)
+    
+        # Assert
+>       assert response.status_code == 401
+E       assert 404 == 401
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/systems/auth_user/integration/test_auth_integration.py:133: AssertionError
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/auth/me "HTTP/1.1 404 Not Found"
+__________ TestAuthRelationshipService.test_create_auth_relationship ___________
+
+self = <AsyncMock name='create_relationship' id='4705505040'>
+args = ('user123', 'char123', ['view', 'edit'], True), kwargs = {}
+msg = "Expected 'create_relationship' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'create_relationship' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cc7f50>
+mock_create = <AsyncMock name='create_relationship' id='4705505040'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.create_relationship"
+    )
+    async def test_create_auth_relationship(self, mock_create):
+        """Test creating an auth relationship."""
+        # Arrange
+        mock_create.return_value = {
+            "id": "rel123",
+            "user_id": "user123",
+            "character_id": "char123",
+        }
+        user_id = "user123"
+        character_id = "char123"
+        permissions = ["view", "edit"]
+        is_owner = True
+    
+        # Act
+        result = await create_auth_relationship(
+            user_id, character_id, permissions, is_owner
+        )
+    
+        # Assert
+>       mock_create.assert_called_once_with(
+            user_id, character_id, permissions, is_owner
+        )
+E       AssertionError: Expected 'create_relationship' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:47: AssertionError
+__________ TestAuthRelationshipService.test_update_auth_relationship ___________
+
+self = <AsyncMock name='update_relationship' id='4808452560'>
+args = ('user123', 'char123', ['view', 'edit', 'delete']), kwargs = {}
+msg = "Expected 'update_relationship' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'update_relationship' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd0150>
+mock_update = <AsyncMock name='update_relationship' id='4808452560'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.update_relationship"
+    )
+    async def test_update_auth_relationship(self, mock_update):
+        """Test updating an auth relationship."""
+        # Arrange
+        mock_update.return_value = {
+            "id": "rel123",
+            "permissions": ["view", "edit", "delete"],
+        }
+        user_id = "user123"
+        character_id = "char123"
+        permissions = ["view", "edit", "delete"]
+    
+        # Act
+        result = await update_auth_relationship(user_id, character_id, permissions)
+    
+        # Assert
+>       mock_update.assert_called_once_with(user_id, character_id, permissions)
+E       AssertionError: Expected 'update_relationship' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:72: AssertionError
+__________ TestAuthRelationshipService.test_remove_auth_relationship ___________
+
+self = <AsyncMock name='remove_relationship' id='4491939472'>
+args = ('user123', 'char123'), kwargs = {}
+msg = "Expected 'remove_relationship' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'remove_relationship' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd0790>
+mock_remove = <AsyncMock name='remove_relationship' id='4491939472'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.remove_relationship"
+    )
+    async def test_remove_auth_relationship(self, mock_remove):
+        """Test removing an auth relationship."""
+        # Arrange
+        mock_remove.return_value = True
+        user_id = "user123"
+        character_id = "char123"
+    
+        # Act
+        result = await remove_auth_relationship(user_id, character_id)
+    
+        # Assert
+>       mock_remove.assert_called_once_with(user_id, character_id)
+E       AssertionError: Expected 'remove_relationship' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:90: AssertionError
+____________ TestAuthRelationshipService.test_get_auth_relationship ____________
+
+self = <AsyncMock name='get_relationship' id='4777155600'>
+args = ('user123', 'char123'), kwargs = {}
+msg = "Expected 'get_relationship' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'get_relationship' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd0ed0>
+mock_get = <AsyncMock name='get_relationship' id='4777155600'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_relationship"
+    )
+    async def test_get_auth_relationship(self, mock_get):
+        """Test getting an auth relationship."""
+        # Arrange
+        mock_get.return_value = {
+            "id": "rel123",
+            "user_id": "user123",
+            "character_id": "char123",
+            "permissions": ["view", "edit"],
+            "is_owner": True,
+        }
+        user_id = "user123"
+        character_id = "char123"
+    
+        # Act
+        result = await get_auth_relationship(user_id, character_id)
+    
+        # Assert
+>       mock_get.assert_called_once_with(user_id, character_id)
+E       AssertionError: Expected 'get_relationship' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:113: AssertionError
+______ TestAuthRelationshipService.test_check_permission_with_permission _______
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd1750>
+mock_check = <AsyncMock name='check_permission' id='4791738128'>
+mock_get = <AsyncMock name='get_relationship' id='4791730896'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_relationship"
+    )
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.check_permission"
+    )
+    async def test_check_permission_with_permission(self, mock_check, mock_get):
+        """Test checking permission when user has the permission."""
+        # Arrange
+        mock_get.return_value = {"permissions": ["view", "edit", "delete"]}
+        mock_check.return_value = True
+        user_id = "user123"
+        character_id = "char123"
+        permission = "edit"
+    
+        # Act
+>       result = await check_permission(user_id, character_id, permission)
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source_id = 'user123', target_id = 'char123', permission = 'edit'
+
+    @staticmethod
+    async def check_permission(
+        source_id: UserId, target_id: CharacterId, permission: str
+    ) -> bool:
+        """
+        Check if a user has a specific permission for a character.
+    
+        Args:
+            source_id: The ID of the user
+            target_id: The ID of the character
+            permission: The permission to check
+    
+        Returns:
+            True if the user has the permission, False otherwise
+        """
+        relationship = await AuthRelationshipService.get_relationship(
+            source_id, target_id
+        )
+        if relationship is None:
+            return False
+    
+        # Owners have all permissions
+>       if relationship["data"].get("owner", False):
+E       KeyError: 'data'
+
+backend/systems/auth_user/services/auth_relationships.py:171: KeyError
+_____ TestAuthRelationshipService.test_check_permission_without_permission _____
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd20d0>
+mock_get = <AsyncMock name='get_relationship' id='4808450256'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_relationship"
+    )
+    async def test_check_permission_without_permission(self, mock_get):
+        """Test checking permission when user doesn't have the permission."""
+        # Arrange
+        mock_get.return_value = {"permissions": ["view"]}
+        user_id = "user123"
+        character_id = "char123"
+        permission = "edit"
+    
+        # Act
+>       result = await check_permission(user_id, character_id, permission)
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source_id = 'user123', target_id = 'char123', permission = 'edit'
+
+    @staticmethod
+    async def check_permission(
+        source_id: UserId, target_id: CharacterId, permission: str
+    ) -> bool:
+        """
+        Check if a user has a specific permission for a character.
+    
+        Args:
+            source_id: The ID of the user
+            target_id: The ID of the character
+            permission: The permission to check
+    
+        Returns:
+            True if the user has the permission, False otherwise
+        """
+        relationship = await AuthRelationshipService.get_relationship(
+            source_id, target_id
+        )
+        if relationship is None:
+            return False
+    
+        # Owners have all permissions
+>       if relationship["data"].get("owner", False):
+E       KeyError: 'data'
+
+backend/systems/auth_user/services/auth_relationships.py:171: KeyError
+_______________ TestAuthRelationshipService.test_add_permission ________________
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd2a50>
+mock_update = <AsyncMock name='update_relationship' id='4778678480'>
+mock_get = <AsyncMock name='get_relationship' id='4778675856'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_relationship"
+    )
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.update_relationship"
+    )
+    async def test_add_permission(self, mock_update, mock_get):
+        """Test adding a permission to a relationship."""
+        # Arrange
+        mock_get.return_value = {"permissions": ["view"]}
+        mock_update.return_value = {"permissions": ["view", "edit"]}
+        user_id = "user123"
+        character_id = "char123"
+        permission = "edit"
+    
+        # Act
+>       result = await add_permission(user_id, character_id, permission)
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:177: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source_id = 'user123', target_id = 'char123', permission = 'edit'
+
+    @staticmethod
+    async def add_permission(
+        source_id: UserId, target_id: CharacterId, permission: str
+    ) -> Dict[str, Any]:
+        """
+        Add a permission to a user's relationship with a character.
+    
+        Args:
+            source_id: The ID of the user
+            target_id: The ID of the character
+            permission: The permission to add
+    
+        Returns:
+            The updated relationship
+        """
+        relationship = await AuthRelationshipService.get_relationship(
+            source_id, target_id
+        )
+        if relationship is None:
+            # If no relationship exists, create a new one with this permission
+            return await AuthRelationshipService.create_relationship(
+                source_id, target_id, permissions=[permission]
+            )
+    
+>       permissions = relationship["data"].get("permissions", [])
+E       KeyError: 'data'
+
+backend/systems/auth_user/services/auth_relationships.py:200: KeyError
+______________ TestAuthRelationshipService.test_remove_permission ______________
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd33d0>
+mock_update = <AsyncMock name='update_relationship' id='4705219792'>
+mock_get = <AsyncMock name='get_relationship' id='4790939856'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_relationship"
+    )
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.update_relationship"
+    )
+    async def test_remove_permission(self, mock_update, mock_get):
+        """Test removing a permission from a relationship."""
+        # Arrange
+        mock_get.return_value = {"permissions": ["view", "edit", "delete"]}
+        mock_update.return_value = {"permissions": ["view", "delete"]}
+        user_id = "user123"
+        character_id = "char123"
+        permission = "edit"
+    
+        # Act
+>       result = await remove_permission(user_id, character_id, permission)
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:200: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source_id = 'user123', target_id = 'char123', permission = 'edit'
+
+    @staticmethod
+    async def remove_permission(
+        source_id: UserId, target_id: CharacterId, permission: str
+    ) -> Dict[str, Any]:
+        """
+        Remove a permission from a user's relationship with a character.
+    
+        Args:
+            source_id: The ID of the user
+            target_id: The ID of the character
+            permission: The permission to remove
+    
+        Returns:
+            The updated relationship
+        """
+        relationship = await AuthRelationshipService.get_relationship(
+            source_id, target_id
+        )
+        if relationship is None:
+            # Can't remove from non-existent relationship
+            raise ValueError("Relationship does not exist")
+    
+>       permissions = relationship["data"].get("permissions", [])
+E       KeyError: 'data'
+
+backend/systems/auth_user/services/auth_relationships.py:231: KeyError
+_____________ TestAuthRelationshipService.test_get_user_characters _____________
+
+self = <AsyncMock name='get_user_characters' id='4780050320'>
+args = ('user123', True), kwargs = {}
+msg = "Expected 'get_user_characters' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'get_user_characters' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd46d0>
+mock_get = <AsyncMock name='get_user_characters' id='4780050320'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_user_characters"
+    )
+    async def test_get_user_characters(self, mock_get):
+        """Test getting all characters for a user."""
+        # Arrange
+        mock_get.return_value = [
+            {"character_id": "char123", "permissions": ["view", "edit"]},
+            {"character_id": "char456", "permissions": ["view"]},
+        ]
+        user_id = "user123"
+        include_permissions = True
+    
+        # Act
+        result = await get_user_characters(user_id, include_permissions)
+    
+        # Assert
+>       mock_get.assert_called_once_with(user_id, include_permissions)
+E       AssertionError: Expected 'get_user_characters' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:247: AssertionError
+_____________ TestAuthRelationshipService.test_get_character_users _____________
+
+self = <AsyncMock name='get_character_users' id='4735557840'>
+args = ('char123', True), kwargs = {}
+msg = "Expected 'get_character_users' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'get_character_users' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd5050>
+mock_get = <AsyncMock name='get_character_users' id='4735557840'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_character_users"
+    )
+    async def test_get_character_users(self, mock_get):
+        """Test getting all users for a character."""
+        # Arrange
+        mock_get.return_value = [
+            {"user_id": "user123", "permissions": ["view", "edit"], "is_owner": True},
+            {"user_id": "user456", "permissions": ["view"], "is_owner": False},
+        ]
+        character_id = "char123"
+        include_permissions = True
+    
+        # Act
+        result = await get_character_users(character_id, include_permissions)
+    
+        # Assert
+>       mock_get.assert_called_once_with(character_id, include_permissions)
+E       AssertionError: Expected 'get_character_users' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:269: AssertionError
+_______ TestAuthRelationshipService.test_bulk_create_auth_relationships ________
+
+self = <AsyncMock name='bulk_create_relationships' id='4722895952'>
+args = ([{'character_id': 'char123', 'permissions': ['view'], 'user_id': 'user123'}, {'character_id': 'char456', 'permissions': ['view', 'edit'], 'user_id': 'user123'}],)
+kwargs = {}
+msg = "Expected 'bulk_create_relationships' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'bulk_create_relationships' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd59d0>
+mock_bulk_create = <AsyncMock name='bulk_create_relationships' id='4722895952'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.bulk_create_relationships"
+    )
+    async def test_bulk_create_auth_relationships(self, mock_bulk_create):
+        """Test creating multiple auth relationships at once."""
+        # Arrange
+        mock_bulk_create.return_value = [
+            {"id": "rel123", "user_id": "user123", "character_id": "char123"},
+            {"id": "rel124", "user_id": "user123", "character_id": "char456"},
+        ]
+        relationships = [
+            {"user_id": "user123", "character_id": "char123", "permissions": ["view"]},
+            {
+                "user_id": "user123",
+                "character_id": "char456",
+                "permissions": ["view", "edit"],
+            },
+        ]
+    
+        # Act
+        result = await bulk_create_relationships(relationships)
+    
+        # Assert
+>       mock_bulk_create.assert_called_once_with(relationships)
+E       AssertionError: Expected 'bulk_create_relationships' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:299: AssertionError
+_______ TestAuthRelationshipService.test_bulk_remove_auth_relationships ________
+
+self = <AsyncMock name='bulk_remove_relationships' id='4737932368'>
+args = ([{'character_id': 'char123', 'user_id': 'user123'}, {'character_id': 'char456', 'user_id': 'user123'}],)
+kwargs = {}
+msg = "Expected 'bulk_remove_relationships' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'bulk_remove_relationships' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd6350>
+mock_bulk_remove = <AsyncMock name='bulk_remove_relationships' id='4737932368'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.bulk_remove_relationships"
+    )
+    async def test_bulk_remove_auth_relationships(self, mock_bulk_remove):
+        """Test removing multiple auth relationships at once."""
+        # Arrange
+        mock_bulk_remove.return_value = {"removed_count": 2}
+        relationships = [
+            {"user_id": "user123", "character_id": "char123"},
+            {"user_id": "user123", "character_id": "char456"},
+        ]
+    
+        # Act
+        result = await bulk_remove_relationships(relationships)
+    
+        # Assert
+>       mock_bulk_remove.assert_called_once_with(relationships)
+E       AssertionError: Expected 'bulk_remove_relationships' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:320: AssertionError
+_____________ TestAuthRelationshipService.test_transfer_ownership ______________
+
+self = <AsyncMock name='get_character_users' id='4791282448'>
+args = ('char123', True), kwargs = {}
+msg = "Expected 'get_character_users' to be called once. Called 0 times."
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'get_character_users' to be called once. Called 0 times.
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:950: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <unit.test_auth_relationships.TestAuthRelationshipService object at 0x109cd6c90>
+mock_update = <AsyncMock name='update_relationship' id='4459397584'>
+mock_set = <AsyncMock name='set_ownership' id='4729170512'>
+mock_get_users = <AsyncMock name='get_character_users' id='4791282448'>
+
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.get_character_users"
+    )
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.set_ownership"
+    )
+    @patch(
+        "backend.systems.auth_user.services.auth_relationships.AuthRelationshipService.update_relationship"
+    )
+    async def test_transfer_ownership(self, mock_update, mock_set, mock_get_users):
+        """Test transferring character ownership from one user to another."""
+        # Arrange
+        mock_get_users.return_value = [{"user_id": "user123", "is_owner": True}]
+        mock_set.return_value = {"user_id": "user123", "is_owner": False}
+        mock_update.return_value = {"user_id": "user456", "is_owner": True}
+    
+        character_id = "char123"
+        from_user_id = "user123"
+        to_user_id = "user456"
+        keep_original_permissions = True
+    
+        # Act
+        result = await transfer_ownership(
+            character_id, from_user_id, to_user_id, keep_original_permissions
+        )
+    
+        # Assert
+>       mock_get_users.assert_called_once_with(character_id, True)
+E       AssertionError: Expected 'get_character_users' to be called once. Called 0 times.
+
+backend/tests/systems/auth_user/unit/test_auth_relationships.py:350: AssertionError
+_______ TestAuthService.test_check_system_access_with_restricted_system ________
+
+self = <unit.test_auth_service.TestAuthService object at 0x109cdc750>
+mock_check_system_access = <AsyncMock name='check_system_access' id='4778715600'>
+
+    @patch("backend.systems.auth_user.services.auth_service.check_system_access")
+    async def test_check_system_access_with_restricted_system(
+        self, mock_check_system_access
+    ):
+        """Test system access check with a restricted system."""
+        # Arrange
+        mock_check_system_access.return_value = False
+        user_id = "user123"
+        system_name = "restricted_system"
+    
+        # Act
+        has_access = await check_system_access(user_id, system_name)
+    
+        # Assert
+>       assert has_access is False
+E       assert True is False
+
+backend/tests/systems/auth_user/unit/test_auth_service.py:95: AssertionError
+_______ TestAuthService.test_check_permissions_with_missing_permissions ________
+
+self = <unit.test_auth_service.TestAuthService object at 0x109cdd5d0>
+mock_check_permissions = <MagicMock name='check_permissions' id='4790358992'>
+
+    @patch("backend.systems.auth_user.services.auth_service.check_permissions")
+    def test_check_permissions_with_missing_permissions(self, mock_check_permissions):
+        """Test permission checking with missing permissions."""
+        # Arrange
+        user = {"id": "user123", "email": "test@example.com"}
+        required_permissions = ["admin", "superuser"]
+        mock_check_permissions.side_effect = AuthorizationError(
+            "Missing required permissions"
+        )
+    
+        # Act & Assert
+>       with pytest.raises(AuthorizationError) as exc_info:
+E       Failed: DID NOT RAISE <class 'backend.systems.shared.utils.common.error.AuthorizationError'>
+
+backend/tests/systems/auth_user/unit/test_auth_service.py:120: Failed
+_______________ TestPasswordService.test_long_password_handling ________________
+
+self = <unit.test_password_service.TestPasswordService object at 0x109ce88d0>
+
+    def test_long_password_handling(self):
+        """Test that very long passwords are handled appropriately."""
+        # Arrange
+        long_password = "x" * 100  # 100 character password
+    
+        # Act
+        hashed_long = get_password_hash(long_password)
+        is_valid = verify_password(long_password, hashed_long)
+    
+        # Assert
+        assert len(hashed_long) > 0
+        assert is_valid is True
+    
+        # Check that a slightly different long password doesn't match
+        slightly_different = "x" * 99 + "y"
+>       assert verify_password(slightly_different, hashed_long) is False
+E       AssertionError: assert True is False
+E        +  where True = verify_password('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxy', '$2b$12$6B5CX6ZapZqzvp.1BsztGeHMksrrBoHDBKqGUTvNyRDQwtDDDg03i')
+
+backend/tests/systems/auth_user/unit/test_password_service.py:101: AssertionError
+___________ TestRoleModel.test_role_inheritance_from_core_base_model ___________
+
+self = <unit.test_role_permission_models.TestRoleModel object at 0x109cea190>
+
+    def test_role_inheritance_from_core_base_model(self):
+        """Test that Role inherits correctly from CoreBaseModel."""
+        # Arrange & Act
+>       role = Role()
+
+backend/tests/systems/auth_user/unit/test_role_permission_models.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+_________________________ TestRoleModel.test_role_repr _________________________
+
+self = <unit.test_role_permission_models.TestRoleModel object at 0x109cea4d0>
+
+    def test_role_repr(self):
+        """Test the string representation of Role."""
+        # Arrange
+        role_id = uuid.uuid4()
+        name = "test_role"
+>       role = Role(id=role_id, name=name, description="Test role")
+
+backend/tests/systems/auth_user/unit/test_role_permission_models.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+_____ TestPermissionModel.test_permission_inheritance_from_core_base_model _____
+
+self = <unit.test_role_permission_models.TestPermissionModel object at 0x109cfc090>
+
+    def test_permission_inheritance_from_core_base_model(self):
+        """Test that Permission inherits correctly from CoreBaseModel."""
+        # Arrange & Act
+>       permission = Permission()
+
+backend/tests/systems/auth_user/unit/test_role_permission_models.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+___________________ TestPermissionModel.test_permission_repr ___________________
+
+self = <unit.test_role_permission_models.TestPermissionModel object at 0x109cfc690>
+
+    def test_permission_repr(self):
+        """Test the string representation of Permission."""
+        # Arrange
+        perm_id = uuid.uuid4()
+        name = "test_permission"
+>       permission = Permission(id=perm_id, name=name, description="Test permission")
+
+backend/tests/systems/auth_user/unit/test_role_permission_models.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+____________ TestSecurityService.test_validate_email_format_invalid ____________
+
+self = <unit.test_security_service.TestSecurityService object at 0x109cfdf10>
+
+    def test_validate_email_format_invalid(self):
+        """Test that invalid email formats fail validation."""
+        # Arrange
+        invalid_emails = [
+            "plainaddress",
+            "@missingusername.com",
+            "username@.com",
+            "username@domain.com.",
+            "username@domain..com",
+            "username@domain@domain.com",
+        ]
+    
+        # Act & Assert
+        for email in invalid_emails:
+            is_valid, error = ValidationService.validate_email_format(email)
+>           assert is_valid is False
+E           assert True is False
+
+backend/tests/systems/auth_user/unit/test_security_service.py:128: AssertionError
+______________ TestTokenService.test_verify_token_with_wrong_key _______________
+
+self = <unit.test_token_service.TestTokenService object at 0x109d44590>
+
+    @patch("backend.core.config.config.jwt.secret_key", "wrong_key")
+    def test_verify_token_with_wrong_key(self):
+        """Test that tokens signed with a different key are rejected."""
+        # Arrange
+        data = {"sub": "user123", "email": "test@example.com"}
+        expires_delta = timedelta(minutes=15)
+        token = create_access_token(data, expires_delta)
+    
+        # Reset the patch to use the correct key for verification
+        with patch("backend.core.config.config.jwt.secret_key", "correct_key"):
+            # Act
+            payload = verify_token(token)
+    
+            # Assert
+>           assert payload is None
+E           AssertionError: assert {'email': 'test@example.com', 'exp': 1748060558, 'sub': 'user123'} is None
+
+backend/tests/systems/auth_user/unit/test_token_service.py:88: AssertionError
+__________________ TestTokenService.test_default_expiry_time ___________________
+
+self = <unit.test_token_service.TestTokenService object at 0x109d45190>
+
+    def test_default_expiry_time(self):
+        """Test that tokens use default expiry time when not specified."""
+        # Arrange
+        data = {"sub": "user123", "email": "test@example.com"}
+    
+        # Act
+        token = create_access_token(data)  # No expiry specified
+        payload = verify_token(token)
+    
+        # Assert
+        assert payload is not None
+    
+        # Calculate expiry time (should be ~15 minutes from now)
+        expiry = datetime.fromtimestamp(payload["exp"])
+        now = datetime.utcnow()
+        difference = expiry - now
+    
+        # Default expiry should be between 14 and 15 minutes (to account for processing time)
+        assert difference < timedelta(minutes=15)
+>       assert difference > timedelta(minutes=14)
+E       assert datetime.timedelta(days=-1, seconds=73799, microseconds=433986) > datetime.timedelta(seconds=840)
+E        +  where datetime.timedelta(seconds=840) = timedelta(minutes=14)
+
+backend/tests/systems/auth_user/unit/test_token_service.py:131: AssertionError
+___________ TestUserModel.test_user_inheritance_from_core_base_model ___________
+
+self = <unit.test_user_model.TestUserModel object at 0x109d4c150>
+
+    def test_user_inheritance_from_core_base_model(self):
+        """Test that User inherits correctly from CoreBaseModel."""
+        # Arrange & Act
+>       user = User()
+
+backend/tests/systems/auth_user/unit/test_user_model.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+_________________________ TestUserModel.test_user_repr _________________________
+
+self = <unit.test_user_model.TestUserModel object at 0x109d4c750>
+
+    def test_user_repr(self):
+        """Test the string representation of User."""
+        # Arrange
+        user_id = uuid.uuid4()
+        email = "repr_test@example.com"
+>       user = User(id=user_id, email=email, password_hash="hashed")
+
+backend/tests/systems/auth_user/unit/test_user_model.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/state.py:566: in _initialize_instance
+    manager.dispatch.init(self, args, kwargs)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/event/attr.py:497: in __call__
+    fn(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4406: in _event_on_init
+    instrumenting_mapper._check_configure()
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:2401: in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4214: in _configure_registries
+    _do_configure_registries(registries, cascade)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+registries = set(), cascade = True
+
+    @util.preload_module("sqlalchemy.orm.decl_api")
+    def _do_configure_registries(
+        registries: Set[_RegistryType], cascade: bool
+    ) -> None:
+        registry = util.preloaded.orm_decl_api.registry
+    
+        orig = set(registries)
+    
+        for reg in registry._recurse_with_dependencies(registries):
+            has_skip = False
+    
+            for mapper in reg._mappers_to_configure():
+                run_configure = None
+    
+                for fn in mapper.dispatch.before_mapper_configured:
+                    run_configure = fn(mapper, mapper.class_)
+                    if run_configure is EXT_SKIP:
+                        has_skip = True
+                        break
+                if run_configure is EXT_SKIP:
+                    continue
+    
+                if getattr(mapper, "_configure_failed", False):
+                    e = sa_exc.InvalidRequestError(
+                        "One or more mappers failed to initialize - "
+                        "can't proceed with initialization of other "
+                        "mappers. Triggering mapper: '%s'. "
+                        "Original exception was: %s"
+                        % (mapper, mapper._configure_failed)
+                    )
+                    e._configure_failed = mapper._configure_failed  # type: ignore
+>                   raise e
+E                   sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(auth_users)]'. Original exception was: Multiple classes found for path "Role" in the registry of this declarative base. Please use a fully module-qualified path.
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/mapper.py:4251: InvalidRequestError
+___________________________ test_is_valid_incomplete ___________________________
+
+character_builder = <backend.systems.character.core.character_builder.CharacterBuilder object at 0x11cfac3d0>
+
+    def test_is_valid_incomplete(character_builder):
+        """Test validation with incomplete data."""
+        # Don't set name or race
+        assert character_builder.is_valid() is False
+    
+        # Set just the name
+        character_builder.character_name = "Test Character"
+        assert character_builder.is_valid() is False
+    
+        # Set just the race
+        character_builder = CharacterBuilder(race_data=MOCK_RACES_DATA)
+        character_builder.set_race("human")
+>       assert character_builder.is_valid() is False
+E       assert True is False
+E        +  where True = is_valid()
+E        +    where is_valid = <backend.systems.character.core.character_builder.CharacterBuilder object at 0x11cfac3d0>.is_valid
+
+backend/tests/systems/character/test_character_builder.py:218: AssertionError
+----------------------------- Captured stdout call -----------------------------
+❌ Validation: No race selected.
+❌ Validation: No race selected.
+________________________________ test_finalize _________________________________
+
+character_builder = <backend.systems.character.core.character_builder.CharacterBuilder object at 0x11cbcad90>
+
+    def test_finalize(character_builder):
+        """Test finalizing a character builder."""
+        # Set up a character
+        character_builder.character_name = "Test Character"
+        character_builder.set_race("human")
+        character_builder.assign_attribute("STR", 16)
+        character_builder.assign_skill("athletics")
+        character_builder.add_feat("alertness")
+    
+        # Finalize the character
+        character_data = character_builder.finalize()
+    
+        # Check core data is present
+        assert character_data["character_name"] == "Test Character"
+        assert character_data["race"] == "human"
+        assert character_data["attributes"]["STR"] == 16
+        assert "athletics" in character_data["skills"]
+        assert "alertness" in character_data["feats"]
+    
+        # Check derived attributes are calculated
+>       assert "hp" in character_data
+E       AssertionError: assert 'hp' in {'AC': 9, 'HP': 11, 'MP': 7, 'XP': 0, ...}
+
+backend/tests/systems/character/test_character_builder.py:241: AssertionError
+___________________________ test_save_new_character ____________________________
+
+character_builder = <backend.systems.character.core.character_builder.CharacterBuilder object at 0x11a36d7d0>
+mock_db_session = <MagicMock spec='Session' id='4723724624'>
+
+    def test_save_new_character(character_builder, mock_db_session):
+        """Test saving a new character to the database."""
+        # Set up a character
+        character_builder.character_name = "Test Character"
+        character_builder.set_race("human")
+    
+        # Mock Character model and query
+        mock_character = mock.MagicMock(spec=Character)
+        mock_character.id = 1
+        mock_character.uuid = "test-uuid"
+    
+        # Set up mock session to add and return our character
+        def side_effect_add(obj):
+            nonlocal mock_character
+            if isinstance(obj, Character):
+                # Check character fields were set correctly
+                assert obj.name == "Test Character"
+                assert obj.race == "human"
+                # Add the character to the session
+                mock_db_session.add_all.return_value = None
+                # Return the mock character
+                return mock_character
+    
+        mock_db_session.add.side_effect = side_effect_add
+        mock_db_session.commit.return_value = None
+        mock_db_session.refresh.return_value = None
+    
+        # Save the character
+        result = character_builder.save(mock_db_session)
+    
+        # Check the result
+>       assert result is mock_character
+E       AssertionError: assert <Character Test Character (None)> is <MagicMock spec='Character' id='4790632080'>
+
+backend/tests/systems/character/test_character_builder.py:276: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_protected_endpoint_without_token
+FAILED backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_protected_endpoint_with_invalid_token
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_create_auth_relationship
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_update_auth_relationship
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_remove_auth_relationship
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_get_auth_relationship
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_check_permission_with_permission
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_check_permission_without_permission
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_add_permission
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_remove_permission
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_get_user_characters
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_get_character_users
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_bulk_create_auth_relationships
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_bulk_remove_auth_relationships
+FAILED backend/tests/systems/auth_user/unit/test_auth_relationships.py::TestAuthRelationshipService::test_transfer_ownership
+FAILED backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_check_system_access_with_restricted_system
+FAILED backend/tests/systems/auth_user/unit/test_auth_service.py::TestAuthService::test_check_permissions_with_missing_permissions
+FAILED backend/tests/systems/auth_user/unit/test_password_service.py::TestPasswordService::test_long_password_handling
+FAILED backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_inheritance_from_core_base_model
+FAILED backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_repr
+FAILED backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_inheritance_from_core_base_model
+FAILED backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_repr
+FAILED backend/tests/systems/auth_user/unit/test_security_service.py::TestSecurityService::test_validate_email_format_invalid
+FAILED backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_verify_token_with_wrong_key
+FAILED backend/tests/systems/auth_user/unit/test_token_service.py::TestTokenService::test_default_expiry_time
+FAILED backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_inheritance_from_core_base_model
+FAILED backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_repr
+FAILED backend/tests/systems/character/test_character_builder.py::test_is_valid_incomplete
+FAILED backend/tests/systems/character/test_character_builder.py::test_finalize
+FAILED backend/tests/systems/character/test_character_builder.py::test_save_new_character
+ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_login_endpoint
+ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_login_with_invalid_credentials
+ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_protected_endpoint
+ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_token_expiry
+ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_user_role_permissions
+ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_user_without_permission
+ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py::TestAuthIntegration::test_token_verification
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_creation
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_name_unique_constraint
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_user_relationship
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::test_role_permission_relationship
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_creation
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_name_unique_constraint
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_permission_role_relationship
+ERROR backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::test_role_with_multiple_permissions
+ERROR backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_creation
+ERROR backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_email_unique_constraint
+ERROR backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_role_relationship
+ERROR backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_password_reset_fields
+ERROR backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::test_user_is_active_default
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 50 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+====== 30 failed, 75 passed, 24 skipped, 92 warnings, 20 errors in 16.89s ======

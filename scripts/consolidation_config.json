@@ -1,0 +1,158 @@
+{
+  "file_moves": [
+    {
+      "source": "Assets/Scripts/GameLoader.cs",
+      "destination": "Assets/Scripts/Core/ConsolidatedGameLoader.cs",
+      "update_namespaces": true,
+      "rename_class": "ConsolidatedGameLoader"
+    },
+    {
+      "source": "Assets/Scripts/VisualDM/GameLoader.cs",
+      "destination": "Assets/Scripts/Core/_Archive/VisualDMGameLoader.cs",
+      "update_namespaces": true
+    },
+    {
+      "source": "Assets/Scripts/VisualDM/Systems/GameLoader.cs",
+      "destination": "Assets/Scripts/Core/_Archive/SystemsGameLoader.cs",
+      "update_namespaces": true
+    },
+    {
+      "source": "Assets/Scripts/Core/GameLoader.cs",
+      "destination": "Assets/Scripts/Core/_Archive/CoreGameLoader.cs",
+      "update_namespaces": true
+    },
+    {
+      "source": "Assets/Scripts/World/GameLoader.cs",
+      "destination": "Assets/Scripts/Core/_Archive/WorldGameLoader.cs",
+      "update_namespaces": true
+    },
+    {
+      "source": "Assets/Scripts/VisualDM/Networking/NetworkManager.cs",
+      "destination": "Assets/Scripts/Networking/API/RestApiClient.cs",
+      "update_namespaces": true,
+      "rename_class": "RestApiClient"
+    },
+    {
+      "source": "Assets/VisualDM/Systems/EventManager.cs",
+      "destination": "Assets/Scripts/Systems/Events/EventManager.cs",
+      "update_namespaces": true,
+      "namespace": "VisualDM.Systems.Events"
+    },
+    {
+      "source": "Assets/Scripts/VisualDM/Systems/EventManager.cs",
+      "destination": "Assets/Scripts/Systems/Events/_Archive/VisualDMEventManager.cs",
+      "update_namespaces": true
+    },
+    {
+      "source": "Assets/Scripts/Systems/Events/EventDispatcher.cs",
+      "destination": "Assets/Scripts/Systems/Events/EventDispatcher.cs",
+      "update_namespaces": true,
+      "namespace": "VisualDM.Systems.Events"
+    },
+    {
+      "source": "Assets/Scripts/VisualDM/Systems/EventDispatcher.cs",
+      "destination": "Assets/Scripts/Systems/Events/_Archive/VisualDMEventDispatcher.cs",
+      "update_namespaces": true
+    },
+    {
+      "source": "Assets/VisualDM/Systems/StateManager.cs",
+      "destination": "Assets/Scripts/Systems/State/StateManager.cs",
+      "update_namespaces": true,
+      "namespace": "VisualDM.Systems.State"
+    },
+    {
+      "source": "Assets/Scripts/VisualDM/Systems/StateManager.cs",
+      "destination": "Assets/Scripts/Systems/State/_Archive/VisualDMStateManager.cs",
+      "update_namespaces": true
+    },
+    {
+      "source": "Assets/VisualDM/Systems/TimeManager.cs",
+      "destination": "Assets/Scripts/Systems/Time/TimeManager.cs",
+      "update_namespaces": true,
+      "namespace": "VisualDM.Systems.Time"
+    },
+    {
+      "source": "Assets/Scripts/Net/WebSocketClient.cs",
+      "destination": "Assets/Scripts/Networking/API/WebSocketClient.cs",
+      "update_namespaces": true,
+      "namespace": "VisualDM.Networking.API"
+    },
+    {
+      "source": "Assets/VisualDM/Network/Multiplayer/NetworkManager.cs",
+      "destination": "Assets/Scripts/Networking/Multiplayer/NetworkManager.cs",
+      "update_namespaces": true,
+      "namespace": "VisualDM.Networking.Multiplayer"
+    },
+    {
+      "source": "Assets/VisualDM/UI",
+      "destination": "Assets/Scripts/UI",
+      "update_namespaces": true,
+      "namespace_prefix": "VisualDM.UI",
+      "is_directory": true
+    },
+    {
+      "source": "Assets/VisualDM/Utils",
+      "destination": "Assets/Scripts/Utils",
+      "update_namespaces": true,
+      "namespace_prefix": "VisualDM.Utils",
+      "is_directory": true
+    },
+    {
+      "source": "Assets/VisualDM/World",
+      "destination": "Assets/Scripts/World",
+      "update_namespaces": true,
+      "namespace_prefix": "VisualDM.World",
+      "is_directory": true
+    },
+    {
+      "source": "Assets/VisualDM/Data",
+      "destination": "Assets/Scripts/Data",
+      "update_namespaces": true,
+      "namespace_prefix": "VisualDM.Data",
+      "is_directory": true
+    }
+  ],
+  
+  "directory_structure": [
+    "Assets/Scripts/Core",
+    "Assets/Scripts/Core/_Archive",
+    "Assets/Scripts/Networking",
+    "Assets/Scripts/Networking/API",
+    "Assets/Scripts/Networking/Multiplayer",
+    "Assets/Scripts/Systems",
+    "Assets/Scripts/Systems/Events",
+    "Assets/Scripts/Systems/Events/_Archive",
+    "Assets/Scripts/Systems/State",
+    "Assets/Scripts/Systems/State/_Archive",
+    "Assets/Scripts/Systems/Time",
+    "Assets/Scripts/UI",
+    "Assets/Scripts/Utils",
+    "Assets/Scripts/World",
+    "Assets/Scripts/Data"
+  ],
+  
+  "namespace_mappings": {
+    "VisualDM": "VisualDM",
+    "VisualDM.Systems": "VisualDM.Systems",
+    "VisualDM.Systems.Events": "VisualDM.Systems.Events",
+    "VisualDM.Systems.State": "VisualDM.Systems.State",
+    "VisualDM.Systems.Time": "VisualDM.Systems.Time",
+    "VisualDM.Networking": "VisualDM.Networking",
+    "VisualDM.Networking.API": "VisualDM.Networking.API",
+    "VisualDM.Networking.Multiplayer": "VisualDM.Networking.Multiplayer",
+    "VisualDM.Core": "VisualDM.Core",
+    "VisualDM.UI": "VisualDM.UI",
+    "VisualDM.Utils": "VisualDM.Utils",
+    "VisualDM.World": "VisualDM.World",
+    "VisualDM.Data": "VisualDM.Data"
+  },
+  
+  "bootstrap_scene_updates": {
+    "Assets/Scenes/Bootstrap.unity": {
+      "component_mappings": {
+        "GameLoader": "VisualDM.Core.ConsolidatedGameLoader",
+        "NetworkManager": "VisualDM.Networking.API.RestApiClient"
+      }
+    }
+  }
+} 

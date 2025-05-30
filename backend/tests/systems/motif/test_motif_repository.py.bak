@@ -1,0 +1,676 @@
+import pytest
+import os
+import json
+from unittest.mock import patch, MagicMock, mock_open
+from datetime import datetime, timedelta
+import tempfile
+import shutil
+
+from backend.systems.motif.repository import MotifRepository, Vector2
+from backend.systems.motif.models import (
+    Motif,
+    MotifCreate,
+    MotifUpdate,
+    MotifFilter,
+    MotifScope,
+    MotifLifecycle,
+    MotifCategory,
+)
+
+
+class TestMotifRepository:
+    """Test the MotifRepository for data storage and retrieval."""
+
+    @pytest.fixture
+    def temp_data_dir(self):
+        """Create a temporary directory for test data."""
+        temp_dir = tempfile.mkdtemp()
+        yield temp_dir
+        shutil.rmtree(temp_dir)
+
+    @pytest.fixture
+    def mock_motif(self):
+        """Create a test motif for use in tests."""
+        return Motif(
+            id="test-motif-id",
+            name="Test Motif",
+            description="A test motif for repository testing",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            lifecycle=MotifLifecycle.EMERGING,
+            intensity=5,
+            duration_days=14,
+            location={
+                "region_id": "test-region",
+                "position_x": 100.0,
+                "position_y": 200.0,
+                "radius": 50.0,
+            },
+        )
+
+    @pytest.fixture
+    def repo(self, temp_data_dir):
+        """Create a repository instance with the temporary directory."""
+        return MotifRepository(data_path=temp_data_dir)
+
+    def test_create_motif(self, repo, mock_motif):
+        """Test creating a motif in the repository."""
+        with patch.object(repo, "_save_motifs") as mock_save:
+            result = repo.create_motif(mock_motif)
+
+            # Check that the motif was saved
+            mock_save.assert_called_once()
+
+            # Check that the result matches the input
+            assert result.id == mock_motif.id
+            assert result.name == mock_motif.name
+            assert result.category == mock_motif.category
+
+    def test_get_motif(self, repo, mock_motif):
+        """Test retrieving a motif by ID."""
+        with patch.object(repo, "_load_motifs", return_value=[mock_motif]):
+            result = repo.get_motif(mock_motif.id)
+
+            assert result is not None
+            assert result.id == mock_motif.id
+            assert result.name == mock_motif.name
+
+            # Test with a non-existent ID
+            result = repo.get_motif("non-existent-id")
+            assert result is None
+
+    def test_update_motif(self, repo, mock_motif):
+        """Test updating a motif."""
+        with patch.object(
+            repo, "_load_motifs", return_value=[mock_motif]
+        ), patch.object(repo, "_save_motifs") as mock_save:
+
+            update_data = {
+                "name": "Updated Name",
+                "intensity": 8,
+                "lifecycle": MotifLifecycle.STABLE,
+            }
+
+            result = repo.update_motif(mock_motif.id, update_data)
+
+            assert result is not None
+            assert result.id == mock_motif.id
+            assert result.name == "Updated Name"
+            assert result.intensity == 8
+            assert result.lifecycle == MotifLifecycle.STABLE
+            mock_save.assert_called_once()
+
+            # Test with a non-existent ID
+            result = repo.update_motif("non-existent-id", update_data)
+            assert result is None
+
+    def test_delete_motif(self, repo, mock_motif):
+        """Test deleting a motif."""
+        with patch.object(
+            repo, "_load_motifs", return_value=[mock_motif]
+        ), patch.object(repo, "_save_motifs") as mock_save:
+
+            result = repo.delete_motif(mock_motif.id)
+
+            assert result is True
+            mock_save.assert_called_once()
+
+            # Test with a non-existent ID
+            result = repo.delete_motif("non-existent-id")
+            assert result is False
+
+    def test_get_all_motifs(self, repo, mock_motif):
+        """Test retrieving all motifs."""
+        with patch.object(repo, "_load_motifs", return_value=[mock_motif]):
+            result = repo.get_all_motifs()
+
+            assert len(result) == 1
+            assert result[0].id == mock_motif.id
+
+    def test_filter_motifs_by_category(self, repo):
+        """Test filtering motifs by category."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Chaos Motif",
+            description="A chaos motif",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="Betrayal Motif",
+            description="A betrayal motif",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=7,
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2]):
+            # Filter by CHAOS category
+            filter_params = MotifFilter(category=MotifCategory.CHAOS)
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+            assert result[0].category == MotifCategory.CHAOS
+
+            # Filter by multiple categories
+            filter_params = MotifFilter(
+                category=[MotifCategory.CHAOS, MotifCategory.BETRAYAL]
+            )
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 2
+
+    def test_filter_motifs_by_intensity(self, repo):
+        """Test filtering motifs by intensity range."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Low Intensity",
+            description="A low intensity motif",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=3,
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="High Intensity",
+            description="A high intensity motif",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=8,
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2]):
+            # Filter by min_intensity
+            filter_params = MotifFilter(min_intensity=5)
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+            assert result[0].intensity == 8
+
+            # Filter by max_intensity
+            filter_params = MotifFilter(max_intensity=5)
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+            assert result[0].intensity == 3
+
+            # Filter by both min and max
+            filter_params = MotifFilter(min_intensity=2, max_intensity=9)
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 2
+
+    def test_filter_motifs_by_lifecycle(self, repo):
+        """Test filtering motifs by lifecycle."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Emerging Motif",
+            description="An emerging motif",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            lifecycle=MotifLifecycle.EMERGING,
+            intensity=5,
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="Stable Motif",
+            description="A stable motif",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            lifecycle=MotifLifecycle.STABLE,
+            intensity=7,
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2]):
+            # Filter by EMERGING lifecycle
+            filter_params = MotifFilter(lifecycle=MotifLifecycle.EMERGING)
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+            assert result[0].lifecycle == MotifLifecycle.EMERGING
+
+    def test_get_global_motifs(self, repo):
+        """Test retrieving global motifs."""
+        global_motif = Motif(
+            id="test-global-motif",
+            name="Global Motif",
+            description="A global motif",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.GLOBAL,
+            intensity=7,
+        )
+
+        regional_motif = Motif(
+            id="test-regional-motif",
+            name="Regional Motif",
+            description="A regional motif",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+        )
+
+        with patch.object(
+            repo, "_load_motifs", return_value=[global_motif, regional_motif]
+        ):
+            result = repo.get_global_motifs()
+
+            assert len(result) == 1
+            assert result[0].id == "test-global-motif"
+            assert result[0].scope == MotifScope.GLOBAL
+
+    def test_get_regional_motifs(self, repo):
+        """Test retrieving motifs for a specific region."""
+        region1_motif = Motif(
+            id="test-region1-motif",
+            name="Region 1 Motif",
+            description="A motif for region 1",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+            location={
+                "region_id": "region1",
+                "position_x": 100.0,
+                "position_y": 200.0,
+                "radius": 50.0,
+            },
+        )
+
+        region2_motif = Motif(
+            id="test-region2-motif",
+            name="Region 2 Motif",
+            description="A motif for region 2",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=7,
+            location={
+                "region_id": "region2",
+                "position_x": 300.0,
+                "position_y": 400.0,
+                "radius": 50.0,
+            },
+        )
+
+        with patch.object(
+            repo, "_load_motifs", return_value=[region1_motif, region2_motif]
+        ):
+            result = repo.get_regional_motifs("region1")
+
+            assert len(result) == 1
+            assert result[0].id == "test-region1-motif"
+            assert result[0].location.region_id == "region1"
+
+    def test_get_motifs_at_position(self, repo):
+        """Test retrieving motifs that affect a specific position."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Motif 1",
+            description="A motif at position 1",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+            location={
+                "region_id": "region1",
+                "position_x": 100.0,
+                "position_y": 200.0,
+                "radius": 50.0,
+            },
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="Motif 2",
+            description="A motif at position 2",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=7,
+            location={
+                "region_id": "region2",
+                "position_x": 300.0,
+                "position_y": 400.0,
+                "radius": 50.0,
+            },
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2]):
+            # Position within radius of motif1
+            result = repo.get_motifs_at_position(Vector2(120.0, 220.0))
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+
+            # Position within radius of motif2
+            result = repo.get_motifs_at_position(Vector2(320.0, 420.0))
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+
+            # Position outside radius of both motifs
+            result = repo.get_motifs_at_position(Vector2(500.0, 500.0))
+
+            assert len(result) == 0
+
+    def test_file_operations(self, temp_data_dir):
+        """Test actual file operations with temporary directory."""
+        repo = MotifRepository(data_path=temp_data_dir)
+
+        # Create a motif
+        motif = Motif(
+            name="File Test Motif",
+            description="Testing file operations",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+        )
+
+        # Save the motif
+        created_motif = repo.create_motif(motif)
+
+        # Check that the file exists
+        motifs_file = os.path.join(temp_data_dir, "motifs.json")
+        assert os.path.exists(motifs_file)
+
+        # Load the file and check contents
+        with open(motifs_file, "r") as f:
+            data = json.load(f)
+            assert len(data) == 1
+            assert data[0]["name"] == "File Test Motif"
+            assert data[0]["id"] == created_motif.id
+
+        # Get the motif by ID
+        retrieved_motif = repo.get_motif(created_motif.id)
+        assert retrieved_motif is not None
+        assert retrieved_motif.id == created_motif.id
+        assert retrieved_motif.name == "File Test Motif"
+
+        # Update the motif
+        update_data = {"name": "Updated File Test Motif"}
+        updated_motif = repo.update_motif(created_motif.id, update_data)
+        assert updated_motif.name == "Updated File Test Motif"
+
+        # Check that the update was saved
+        with open(motifs_file, "r") as f:
+            data = json.load(f)
+            assert data[0]["name"] == "Updated File Test Motif"
+
+        # Delete the motif
+        deleted = repo.delete_motif(created_motif.id)
+        assert deleted is True
+
+        # Check that the file is now empty
+        with open(motifs_file, "r") as f:
+            data = json.load(f)
+            assert len(data) == 0
+
+    def test_filter_motifs_by_tags(self, repo):
+        """Test filtering motifs by tags."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Motif with Combat Tags",
+            description="A motif with combat tags",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+            tags=["combat", "danger", "action"],
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="Motif with Politics Tags",
+            description="A motif with politics tags",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=7,
+            tags=["politics", "intrigue", "power"],
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2]):
+            # Filter by combat tag
+            filter_params = MotifFilter(tags=["combat"])
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+
+            # Filter by politics tag
+            filter_params = MotifFilter(tags=["politics"])
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+
+            # Filter by multiple tags (matching both motifs)
+            filter_params = MotifFilter(tags=["combat", "power"])
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 2
+
+    def test_filter_motifs_by_metadata(self, repo):
+        """Test filtering motifs by metadata."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Player Action Motif",
+            description="A motif triggered by player action",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+            metadata={"origin": "player_action", "severity": "high"},
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="System Generated Motif",
+            description="A motif generated by the system",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=7,
+            metadata={"origin": "system", "severity": "medium"},
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2]):
+            # Filter by origin metadata
+            filter_params = MotifFilter(metadata={"origin": "player_action"})
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+
+            # Filter by severity metadata
+            filter_params = MotifFilter(metadata={"severity": "medium"})
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+
+            # Filter by multiple metadata fields
+            filter_params = MotifFilter(
+                metadata={"origin": "system", "severity": "medium"}
+            )
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+
+    def test_filter_motifs_by_date(self, repo):
+        """Test filtering motifs by creation and update dates."""
+        # Create motifs with different dates
+        now = datetime.utcnow()
+        yesterday = now - timedelta(days=1)
+        tomorrow = now + timedelta(days=1)
+
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Old Motif",
+            description="An older motif",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+            created_at=yesterday,
+            updated_at=yesterday,
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="New Motif",
+            description="A newer motif",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=7,
+            created_at=now,
+            updated_at=now,
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2]):
+            # Filter by created_after
+            filter_params = MotifFilter(created_after=yesterday + timedelta(hours=12))
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+
+            # Filter by created_before
+            filter_params = MotifFilter(created_before=yesterday + timedelta(hours=12))
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+
+            # Filter by updated_after
+            filter_params = MotifFilter(updated_after=yesterday + timedelta(hours=12))
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+
+    def test_filter_motifs_by_multiple_criteria(self, repo):
+        """Test filtering motifs by multiple criteria simultaneously."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="Complex Motif 1",
+            description="A complex motif matching multiple criteria",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+            lifecycle=MotifLifecycle.EMERGING,
+            tags=["combat", "danger"],
+            metadata={"origin": "player_action"},
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="Complex Motif 2",
+            description="Another complex motif",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.GLOBAL,
+            intensity=8,
+            lifecycle=MotifLifecycle.STABLE,
+            tags=["politics", "intrigue"],
+            metadata={"origin": "system"},
+        )
+
+        motif3 = Motif(
+            id="test-motif-3",
+            name="Complex Motif 3",
+            description="Yet another complex motif",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.LOCAL,
+            intensity=3,
+            lifecycle=MotifLifecycle.EMERGING,
+            tags=["environment", "nature"],
+            metadata={"origin": "event"},
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif1, motif2, motif3]):
+            # Complex filter combining multiple criteria
+            filter_params = MotifFilter(
+                category=MotifCategory.CHAOS,
+                lifecycle=MotifLifecycle.EMERGING,
+                min_intensity=4,
+                tags=["combat"],
+                metadata={"origin": "player_action"},
+            )
+
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-1"
+
+            # A different complex filter
+            filter_params = MotifFilter(
+                scope=MotifScope.GLOBAL, min_intensity=7, active_only=True
+            )
+
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 1
+            assert result[0].id == "test-motif-2"
+
+    def test_filter_motifs_with_sorting(self, repo):
+        """Test filtering motifs with sorting."""
+        motif1 = Motif(
+            id="test-motif-1",
+            name="A - First Alphabetically",
+            description="A test motif",
+            category=MotifCategory.CHAOS,
+            scope=MotifScope.REGIONAL,
+            intensity=5,
+        )
+
+        motif2 = Motif(
+            id="test-motif-2",
+            name="B - Second Alphabetically",
+            description="Another test motif",
+            category=MotifCategory.BETRAYAL,
+            scope=MotifScope.REGIONAL,
+            intensity=8,
+        )
+
+        motif3 = Motif(
+            id="test-motif-3",
+            name="C - Third Alphabetically",
+            description="Yet another test motif",
+            category=MotifCategory.HOPE,
+            scope=MotifScope.REGIONAL,
+            intensity=3,
+        )
+
+        with patch.object(repo, "_load_motifs", return_value=[motif3, motif1, motif2]):
+            # Sort by name ascending
+            filter_params = MotifFilter(sort_by="name", sort_order="asc")
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 3
+            assert result[0].id == "test-motif-1"  # A - First
+            assert result[1].id == "test-motif-2"  # B - Second
+            assert result[2].id == "test-motif-3"  # C - Third
+
+            # Sort by intensity descending
+            filter_params = MotifFilter(sort_by="intensity", sort_order="desc")
+            result = repo.filter_motifs(filter_params)
+
+            assert len(result) == 3
+            assert result[0].id == "test-motif-2"  # Intensity 8
+            assert result[1].id == "test-motif-1"  # Intensity 5
+            assert result[2].id == "test-motif-3"  # Intensity 3
+
+    def test_vector2_distance_calculation(self):
+        """Test the Vector2 distance calculation."""
+        v1 = Vector2(0.0, 0.0)
+        v2 = Vector2(3.0, 4.0)
+
+        # Distance should be 5.0 (Pythagorean theorem: 3-4-5 triangle)
+        assert v1.distance_to(v2) == 5.0
+
+        # Distance should be symmetrical
+        assert v2.distance_to(v1) == 5.0
+
+        # Distance to self should be 0
+        assert v1.distance_to(v1) == 0.0

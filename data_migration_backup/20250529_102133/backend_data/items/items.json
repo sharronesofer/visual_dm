@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "data": {
+    "basic_sword": {
+      "id": "basic_sword",
+      "name": "Basic Sword",
+      "type": "weapon",
+      "subtype": "sword",
+      "rarity": "common",
+      "value": 10,
+      "weight": 2,
+      "description": "A simple iron sword.",
+      "properties": {
+        "damage": "1d6",
+        "damage_type": "slashing"
+      }
+    },
+    "healing_potion": {
+      "id": "healing_potion",
+      "name": "Healing Potion",
+      "type": "consumable",
+      "subtype": "potion",
+      "rarity": "common",
+      "value": 50,
+      "weight": 0.5,
+      "description": "A small vial of red liquid that heals wounds.",
+      "properties": {
+        "effect": "heal",
+        "amount": "2d4+2"
+      }
+    },
+    "leather_armor": {
+      "id": "leather_armor",
+      "name": "Leather Armor",
+      "type": "armor",
+      "subtype": "light",
+      "rarity": "common",
+      "value": 10,
+      "weight": 10,
+      "description": "A simple set of leather armor.",
+      "properties": {
+        "armor_class": 11,
+        "stealth_disadvantage": false
+      }
+    }
+  }
+} 

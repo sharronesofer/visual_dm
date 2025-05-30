@@ -390,8 +390,8 @@ Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
 archives/tests/unit/test_character_builder_equipment.py:4: in <module>
-    from app.characters.character_builder_class import CharacterBuilder
-E   ModuleNotFoundError: No module named 'app'
+    from backend.systems.character.core.character_builder import CharacterBuilder
+E   ModuleNotFoundError: No module named 'backend.systems.character.core.character_builder'
 __ ERROR collecting archives/tests/validation/test_world_event_validation.py ___
 ImportError while importing test module '/Users/Sharrone/Visual_DM/archives/tests/validation/test_world_event_validation.py'.
 Hint: make sure your test modules/packages have valid Python names.
@@ -451,9 +451,9 @@ During handling of the above exception, another exception occurred:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
 backend/app/characters/test_character_builder.py:2: in <module>
-    from backend.app.characters.character_builder_class import CharacterBuilder
+    from backend.systems.character.core.character_builder import CharacterBuilder
 backend/app/characters/character_builder_class.py:2: in <module>
-    from backend.app.characters.character import Character
+    from backend.systems.character.core.character_model import Character
 backend/app/characters/character.py:4: in <module>
     from backend.app.models.base import Base
 backend/app/models/__init__.py:4: in <module>

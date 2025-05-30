@@ -1,1 +1,0 @@
-# Scene submodule for core systems (partitioning, streaming, etc.) 

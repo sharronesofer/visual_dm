@@ -1,0 +1,102 @@
+# Visual DM Population Control System - Product Requirements Document
+
+## Project Overview
+The Visual DM Population Control System needs to be implemented according to the Development Bible specifications. This system will manage NPC generation and population thresholds for Points of Interest (POIs), implementing dynamic birth rates, state transitions, and event emission based on population changes.
+
+## System Requirements
+
+### 1. Population Growth Formula
+- Implement the canonical formula: Monthly NPC Generation = BaseRate × (CurrentPopulation ÷ TargetPopulation) × GlobalMultiplier
+- Ensure growth rates are appropriate for different POI types
+- Implement soft caps at 90% of maximum population
+- Implement hard caps at maximum population
+- Prevent population from falling below minimum thresholds
+
+### 2. State Transition System
+- Implement canonical POI states: Normal, Declining, Abandoned, Ruins, Dungeon, Repopulating, Special
+- Define clear transition thresholds between states
+- Ensure proper event emission when state changes occur
+- Implement special handling for Dungeon and Repopulating states
+
+### 3. Resource Integration
+- Link population growth to resource availability
+- Implement resource consumption calculations based on population size
+- Handle resource shortages with appropriate state transitions
+- Track resource trends and adjust population accordingly
+
+### 4. Event System
+- Emit standardized events for all population changes
+- Emit events for state transitions
+- Ensure event payload contains all necessary information
+- Integrate with the global event system
+
+### 5. POI Type Transitions
+- Support conversion from "social" POIs to "combat" or "neutral" POIs when depopulated
+- Support conversion from "Dungeon/exploration" POIs to "social" POIs when repopulated
+- Ensure proper metadata updates during type transitions
+
+## Technical Requirements
+
+### Population Manager
+- Implement a centralized manager for handling population updates
+- Support batch processing of population changes
+- Ensure efficient monthly update calculations
+- Implement proper logging and debugging tools
+
+### State Handling
+- Create a clean state transition system
+- Prevent invalid state transitions
+- Ensure all state changes are properly tracked
+- Support custom handlers for specific state transitions
+
+### Resource System Integration
+- Implement interfaces for resource system communication
+- Calculate resource needs based on population
+- Handle resource allocation and shortages
+- Support resource trend analysis
+
+## Implementation Phases
+
+### Phase 1: Core Population Mechanics
+- Implement basic population growth formula
+- Set up population tracking for POIs
+- Implement initial state system
+- Create monthly update function
+
+### Phase 2: State Transition System
+- Implement full state machine for POI states
+- Add transition logic between states
+- Create state-specific behavior handlers
+- Implement event emission for state changes
+
+### Phase 3: Resource Integration
+- Connect population system to resources
+- Implement resource consumption calculations
+- Add handling for resource shortages
+- Implement resource trend analysis
+
+### Phase 4: Event System
+- Standardize all population-related events
+- Implement comprehensive event emission
+- Create listeners for external systems
+- Ensure proper event documentation
+
+### Phase 5: Testing and Validation
+- Create test scenarios for population growth
+- Test state transitions under various conditions
+- Validate resource integration
+- Ensure performance under load
+
+## Success Criteria
+- Population growth follows the canonical formula
+- State transitions occur at appropriate thresholds
+- Resource integration functions correctly
+- Events are properly emitted and handled
+- System performs efficiently at scale
+- All Development Bible requirements are met
+
+## Constraints
+- Maintain compatibility with existing systems
+- Ensure reasonable performance with large numbers of POIs
+- Support save/load functionality
+- Follow established code patterns and architecture 

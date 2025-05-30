@@ -1,0 +1,153 @@
+"""
+Tests for the TensionManager service in the tension_war system.
+"""
+
+import unittest
+from unittest.mock import patch, MagicMock, call
+from datetime import datetime
+
+# Direct import of modules
+import sys
+import os
+import random
+
+# Add parent directory to path if needed
+test_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(test_dir, "../../../"))
+
+# Import models directly
+from backend.systems.tension_war.models import TensionLevel
+
+
+# We'll create our DBInterface mock directly
+class MockDBInterface:
+    def __init__(self):
+        self.region_tensions = {"faction_a": 30, "faction_b": 50, "faction_c": -20}
+
+    def get_region_tensions(self, region_id):
+        return self.region_tensions.copy()
+
+    def set_region_tension(self, region_id, faction, value):
+        self.region_tensions[faction] = value
+        return value
+
+    def add_tension_history_entry(self, region_id, faction, value, reason):
+        # Just a mock implementation
+        pass
+
+
+# Now import TensionManager
+from backend.systems.tension_war.services.tension_manager import TensionManager
+
+
+class TestTensionManager(unittest.TestCase):
+    """Tests for the TensionManager service."""
+
+    def setUp(self):
+        """Set up test fixtures before each test method is called."""
+        # Create a TensionManager
+        self.manager = TensionManager()
+
+    def tearDown(self):
+        """Tear down test fixtures after each test method is called."""
+        # Clean up any test state
+        pass
+
+    def test_get_tension(self):
+        """Test getting tension values for a region."""
+        result = self.manager.get_tension("test_region")
+
+        # Verify the result structure
+        self.assertEqual(result["region_id"], "test_region")
+        self.assertIn("factions", result)
+        self.assertIn("last_updated", result)
+
+    def test_modify_tension(self):
+        """Test modifying tension for a faction in a region."""
+        # Set up faction data
+        faction_data = {"faction_a": "faction_1", "faction_b": "faction_2"}
+        value_change = 10
+
+        # Run the method under test
+        result = self.manager.modify_tension(
+            "test_region", faction_data, value_change, "test_reason"
+        )
+
+        # Verify the result structure
+        self.assertIn("region_id", result)
+        self.assertEqual(result["region_id"], "test_region")
+        self.assertIn("factions", result)
+        self.assertIn("last_updated", result)
+
+    def test_modify_tension_no_change(self):
+        """Test modification that doesn't change the tension."""
+        # Set up faction data with zero change
+        faction_data = {"faction_a": "faction_1", "faction_b": "faction_2"}
+
+        # Run the method under test with zero change
+        result = self.manager.modify_tension(
+            "test_region", faction_data, 0, "test_reason"
+        )
+
+        # Verify the result structure
+        self.assertEqual(result["region_id"], "test_region")
+        self.assertIn("factions", result)
+        self.assertIn("last_updated", result)
+
+    def test_reset_tension(self):
+        """Test resetting tension for all factions in a region."""
+        result = self.manager.reset_tension("test_region")
+
+        # Verify the result structure
+        self.assertEqual(result["region_id"], "test_region")
+        self.assertIn("factions", result)
+        self.assertIn("last_updated", result)
+
+        # The reset should create a fresh tension data with empty factions
+        self.assertEqual(result["factions"], {})
+
+    def test_decay_tension(self):
+        """Test decaying tension for all factions in a region."""
+        # Call the decay method with 1 day
+        result = self.manager.decay_tension("test_region", days=1)
+
+        # Verify the result structure
+        self.assertEqual(result["region_id"], "test_region")
+        self.assertIn("factions", result)
+        self.assertIn("last_updated", result)
+
+    def test_get_faction_tension(self):
+        """Test getting tension between two specific factions."""
+        # Test getting tension between two factions
+        tension = self.manager.get_faction_tension(
+            "test_region", "faction_a", "faction_b"
+        )
+
+        # Should return a float value
+        self.assertIsInstance(tension, float)
+        # Should be within the default tension range
+        self.assertGreaterEqual(tension, -100.0)
+        self.assertLessEqual(tension, 100.0)
+
+    def test_calculate_event_impact(self):
+        """Test calculating and applying tension changes from an event."""
+        # Set up test data
+        region_id = "test_region"
+        event_type = "border_skirmish"
+        event_severity = 0.5
+        affected_factions = [{"faction_a": "faction_1", "faction_b": "faction_2"}]
+        reason = "Border conflict"
+
+        # Call the method
+        result = self.manager.calculate_event_impact(
+            region_id, event_type, event_severity, affected_factions, reason
+        )
+
+        # Verify the result structure
+        self.assertEqual(result["region_id"], region_id)
+        self.assertIn("factions", result)
+        self.assertIn("last_updated", result)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,492 @@
+[
+  {
+    "id": "94b09bfc-a67c-4a12-89b2-251266a83d1d",
+    "created_at": "2025-05-03T01:34:24.952210Z",
+    "updated_at": "2025-05-28T01:34:24.952213Z",
+    "name": "Work Sword",
+    "description": "Say half owner I fight force member easy. Ago play discover politics century similar.",
+    "equipment_type": "TOOL",
+    "slot": "NECKLACE",
+    "rarity": "EPIC",
+    "stats": {
+      "attack_bonus": null,
+      "damage": null,
+      "armor_class": 15,
+      "stat_bonuses": {
+        "strength": 0,
+        "dexterity": 2,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 80,
+      "maximum": 100,
+      "wear_rate": 1.35
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "7a4749b6-8e98-4a0f-a2f2-04b4e55f399c",
+        "name": "Yes Enhancement",
+        "effect": "Two night analysis true summer.",
+        "magnitude": 5
+      },
+      {
+        "enchantment_id": "1ec1f98e-75af-43ac-9a63-256fe132026a",
+        "name": "Network Enhancement",
+        "effect": "Fund require street growth challenge figure hit.",
+        "magnitude": 2
+      },
+      {
+        "enchantment_id": "a28c8272-786e-489e-996d-26cd8b81e775",
+        "name": "Top Enhancement",
+        "effect": "People increase guess series reason write color.",
+        "magnitude": 2
+      }
+    ],
+    "identified": false,
+    "value": 9823
+  },
+  {
+    "id": "47cfcefd-7339-4282-9d82-c2477ff4b780",
+    "created_at": "2025-05-24T01:34:24.952312Z",
+    "updated_at": "2025-05-28T01:34:24.952313Z",
+    "name": "Student Staff",
+    "description": "Education wide address father two interview audience. Ask approach number mouth lead discuss.",
+    "equipment_type": "WEAPON",
+    "slot": "MAIN_HAND",
+    "rarity": "LEGENDARY",
+    "stats": {
+      "attack_bonus": 5,
+      "damage": "3d10",
+      "armor_class": 15,
+      "stat_bonuses": {
+        "strength": -2,
+        "dexterity": -1,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 91,
+      "maximum": 100,
+      "wear_rate": 1.19
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "5008525a-13c5-4f12-8baa-20e70d0de21b",
+        "name": "Lot Enhancement",
+        "effect": "Expert say election word simple level accept.",
+        "magnitude": 2
+      },
+      {
+        "enchantment_id": "2858b50b-ecf4-4c34-9fef-e03afc0f1475",
+        "name": "Relate Enhancement",
+        "effect": "Of free raise book.",
+        "magnitude": 1
+      },
+      {
+        "enchantment_id": "94503d88-09b0-4ebd-bd50-d59eb44b2a6f",
+        "name": "Lose Enhancement",
+        "effect": "Behavior majority produce hand skill why next.",
+        "magnitude": 1
+      }
+    ],
+    "identified": false,
+    "value": 6270
+  },
+  {
+    "id": "ec16be4d-8be9-49d9-b94a-21b4ccb27424",
+    "created_at": "2025-05-01T01:34:24.952410Z",
+    "updated_at": "2025-05-24T01:34:24.952412Z",
+    "name": "Drive Bow",
+    "description": "Manager across artist game enter he. Rise minute ahead world. Politics successful group quality very impact case. Cold onto happen figure specific hospital management peace.",
+    "equipment_type": "ACCESSORY",
+    "slot": "MAIN_HAND",
+    "rarity": "UNCOMMON",
+    "stats": {
+      "attack_bonus": 4,
+      "damage": "1d10",
+      "armor_class": 11,
+      "stat_bonuses": {
+        "strength": -1,
+        "dexterity": 1,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 72,
+      "maximum": 100,
+      "wear_rate": 0.16
+    },
+    "enchantments": [],
+    "identified": false,
+    "value": 7331
+  },
+  {
+    "id": "1c8f69c0-e983-4944-bbc2-bc6ec1054ac7",
+    "created_at": "2025-05-20T01:34:24.952463Z",
+    "updated_at": "2025-05-24T01:34:24.952464Z",
+    "name": "Child Armor",
+    "description": "Deep since her race relationship reflect show. Tend reach member democratic. Management threat measure head.",
+    "equipment_type": "ARMOR",
+    "slot": "FEET",
+    "rarity": "RARE",
+    "stats": {
+      "attack_bonus": 1,
+      "damage": "3d10",
+      "armor_class": null,
+      "stat_bonuses": {
+        "strength": -2,
+        "dexterity": 0,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 58,
+      "maximum": 100,
+      "wear_rate": 1.71
+    },
+    "enchantments": [],
+    "identified": true,
+    "value": 4097
+  },
+  {
+    "id": "4c5b4f6b-9a46-40a0-a137-190c52e47247",
+    "created_at": "2025-05-11T01:34:24.952506Z",
+    "updated_at": "2025-05-26T01:34:24.952508Z",
+    "name": "Enter Armor",
+    "description": "Medical foreign job consumer standard police.",
+    "equipment_type": "WEAPON",
+    "slot": "HANDS",
+    "rarity": "UNCOMMON",
+    "stats": {
+      "attack_bonus": null,
+      "damage": null,
+      "armor_class": 14,
+      "stat_bonuses": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": -2
+      }
+    },
+    "durability": {
+      "current": 63,
+      "maximum": 100,
+      "wear_rate": 1.23
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "0494e51d-ad35-4688-b9ca-77e7e62e546c",
+        "name": "Trip Enhancement",
+        "effect": "Dinner suddenly nothing wish perhaps yes.",
+        "magnitude": 1
+      },
+      {
+        "enchantment_id": "67659f05-1a39-46af-8311-768733c6ba06",
+        "name": "Want Enhancement",
+        "effect": "Song drive knowledge bar else miss later.",
+        "magnitude": 1
+      }
+    ],
+    "identified": false,
+    "value": 4403
+  },
+  {
+    "id": "5ac78f4d-d97e-4e5a-9e38-acf716b1b556",
+    "created_at": "2025-04-29T01:34:24.952574Z",
+    "updated_at": "2025-05-25T01:34:24.952575Z",
+    "name": "Event Armor",
+    "description": "Local above state film.",
+    "equipment_type": "ARMOR",
+    "slot": "RING",
+    "rarity": "COMMON",
+    "stats": {
+      "attack_bonus": 1,
+      "damage": "2d6",
+      "armor_class": 10,
+      "stat_bonuses": {
+        "strength": -1,
+        "dexterity": 2,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 73,
+      "maximum": 100,
+      "wear_rate": 0.39
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "5e936193-a6ad-4414-83a2-caa936192141",
+        "name": "Leader Enhancement",
+        "effect": "Size into win much event difference chair.",
+        "magnitude": 2
+      }
+    ],
+    "identified": false,
+    "value": 3982
+  },
+  {
+    "id": "1e0e5195-18b0-48fd-8917-87d9ed3dac86",
+    "created_at": "2025-05-16T01:34:24.952623Z",
+    "updated_at": "2025-05-29T01:34:24.952625Z",
+    "name": "Across Staff",
+    "description": "Bag guess wish simply collection. Town enjoy receive use follow time year all.",
+    "equipment_type": "TOOL",
+    "slot": "HANDS",
+    "rarity": "EPIC",
+    "stats": {
+      "attack_bonus": null,
+      "damage": "3d8",
+      "armor_class": null,
+      "stat_bonuses": {
+        "strength": 0,
+        "dexterity": 3,
+        "constitution": 3
+      }
+    },
+    "durability": {
+      "current": 75,
+      "maximum": 100,
+      "wear_rate": 1.16
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "905ae323-9f78-4d04-b17f-0e172b1012d1",
+        "name": "Special Enhancement",
+        "effect": "Travel audience present top.",
+        "magnitude": 4
+      },
+      {
+        "enchantment_id": "1ad0e012-879d-4549-aa70-b4556dc53ec0",
+        "name": "Read Enhancement",
+        "effect": "Suddenly or drive simple.",
+        "magnitude": 1
+      },
+      {
+        "enchantment_id": "5390b608-b2e6-4299-9319-897cae096114",
+        "name": "Finish Enhancement",
+        "effect": "Factor head performance word general standard air.",
+        "magnitude": 4
+      }
+    ],
+    "identified": false,
+    "value": 1586
+  },
+  {
+    "id": "0b3d0b8f-c640-425e-9fd7-d8b37cd3b7f1",
+    "created_at": "2025-05-20T01:34:24.952719Z",
+    "updated_at": "2025-05-25T01:34:24.952721Z",
+    "name": "Sense Staff",
+    "description": "Science son part finish yeah exactly direction rest. Could task water now past. Girl against material join risk.",
+    "equipment_type": "TOOL",
+    "slot": "HANDS",
+    "rarity": "EPIC",
+    "stats": {
+      "attack_bonus": null,
+      "damage": null,
+      "armor_class": 12,
+      "stat_bonuses": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 1
+      }
+    },
+    "durability": {
+      "current": 63,
+      "maximum": 100,
+      "wear_rate": 1.59
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "e2b173fc-7ccb-4e11-80a7-6858cce3acd3",
+        "name": "Get Enhancement",
+        "effect": "Top reach senior ready and open religious.",
+        "magnitude": 4
+      },
+      {
+        "enchantment_id": "6d22cc53-2470-412b-bd7e-55f87c34ebac",
+        "name": "Animal Enhancement",
+        "effect": "Sea final beyond then.",
+        "magnitude": 3
+      },
+      {
+        "enchantment_id": "0f1dcf7d-c050-4fa7-8359-023d7b4d7a57",
+        "name": "Full Enhancement",
+        "effect": "Consumer night far effort.",
+        "magnitude": 2
+      }
+    ],
+    "identified": true,
+    "value": 6092
+  },
+  {
+    "id": "67d78c69-82f9-4db1-b68c-8b6d6c73d1a5",
+    "created_at": "2025-05-14T01:34:24.952815Z",
+    "updated_at": "2025-05-27T01:34:24.952817Z",
+    "name": "Eye Shield",
+    "description": "Remain economy song reach. National manage growth newspaper size its. Morning thank right their soldier health less.",
+    "equipment_type": "ACCESSORY",
+    "slot": "HANDS",
+    "rarity": "EPIC",
+    "stats": {
+      "attack_bonus": 2,
+      "damage": "2d4",
+      "armor_class": null,
+      "stat_bonuses": {
+        "strength": 0,
+        "dexterity": 1,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 96,
+      "maximum": 100,
+      "wear_rate": 0.53
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "11021e39-fdc3-413a-95cb-52a48fa07083",
+        "name": "Live Enhancement",
+        "effect": "Sort final maybe thought.",
+        "magnitude": 4
+      }
+    ],
+    "identified": false,
+    "value": 5252
+  },
+  {
+    "id": "565302ef-25e8-4857-98d0-7f758795699a",
+    "created_at": "2025-05-12T01:34:24.952874Z",
+    "updated_at": "2025-05-28T01:34:24.952876Z",
+    "name": "Physical Bow",
+    "description": "Hair hospital growth whatever read.",
+    "equipment_type": "ARMOR",
+    "slot": "NECKLACE",
+    "rarity": "RARE",
+    "stats": {
+      "attack_bonus": null,
+      "damage": "2d4",
+      "armor_class": 18,
+      "stat_bonuses": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 75,
+      "maximum": 100,
+      "wear_rate": 1.38
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "755123e5-b48d-44eb-b3ae-73858a1b39c2",
+        "name": "Remain Enhancement",
+        "effect": "Eat about major whole.",
+        "magnitude": 3
+      },
+      {
+        "enchantment_id": "5cc09ab4-f074-4d50-9829-d3cf279f9c6c",
+        "name": "Forget Enhancement",
+        "effect": "After south long operation.",
+        "magnitude": 5
+      }
+    ],
+    "identified": false,
+    "value": 1233
+  },
+  {
+    "id": "56d0a86f-0724-442d-8964-3215056bd75d",
+    "created_at": "2025-05-17T01:34:24.952937Z",
+    "updated_at": "2025-05-25T01:34:24.952939Z",
+    "name": "Want Bow",
+    "description": "Account eight beat none might. Today tree travel they everyone office stand ball. Upon sea clearly heart body thus professor.",
+    "equipment_type": "TOOL",
+    "slot": "CHEST",
+    "rarity": "UNCOMMON",
+    "stats": {
+      "attack_bonus": null,
+      "damage": null,
+      "armor_class": null,
+      "stat_bonuses": {
+        "strength": 3,
+        "dexterity": 0,
+        "constitution": 0
+      }
+    },
+    "durability": {
+      "current": 72,
+      "maximum": 100,
+      "wear_rate": 1.63
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "b40445e9-5de4-4278-b1ad-bcc9d94e3735",
+        "name": "Both Enhancement",
+        "effect": "Finally condition look cut ball line education.",
+        "magnitude": 2
+      },
+      {
+        "enchantment_id": "ab4cb014-a1f1-4cd8-9209-347e569a0146",
+        "name": "Accept Enhancement",
+        "effect": "Cell mouth study any part.",
+        "magnitude": 4
+      },
+      {
+        "enchantment_id": "61e6b19d-b7ff-426d-a071-f67c5a75da8b",
+        "name": "Agreement Enhancement",
+        "effect": "Star into provide seven finally million nice.",
+        "magnitude": 2
+      }
+    ],
+    "identified": true,
+    "value": 7698
+  },
+  {
+    "id": "cef22f8b-dc76-4f10-b42d-b2779d7b0a3d",
+    "created_at": "2025-04-30T01:34:24.953087Z",
+    "updated_at": "2025-05-24T01:34:24.953088Z",
+    "name": "Man Shield",
+    "description": "Wife herself amount determine yourself. Main while just bar data show.",
+    "equipment_type": "ACCESSORY",
+    "slot": "NECKLACE",
+    "rarity": "RARE",
+    "stats": {
+      "attack_bonus": null,
+      "damage": null,
+      "armor_class": 15,
+      "stat_bonuses": {
+        "strength": 3,
+        "dexterity": 0,
+        "constitution": 3
+      }
+    },
+    "durability": {
+      "current": 76,
+      "maximum": 100,
+      "wear_rate": 1.68
+    },
+    "enchantments": [
+      {
+        "enchantment_id": "f42e4485-55b2-4f38-8a2b-7aceca040604",
+        "name": "Yeah Enhancement",
+        "effect": "Find science of write.",
+        "magnitude": 4
+      },
+      {
+        "enchantment_id": "192afe96-e003-4b76-958b-6afd8a1f64e6",
+        "name": "Knowledge Enhancement",
+        "effect": "Popular happy medical I.",
+        "magnitude": 3
+      },
+      {
+        "enchantment_id": "914b2492-15c1-4143-bf30-98e8a71f8d16",
+        "name": "With Enhancement",
+        "effect": "Past although attack store physical.",
+        "magnitude": 2
+      }
+    ],
+    "identified": false,
+    "value": 3508
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "description": "Faction type definitions for Visual DM",
+  "factions": [
+    {
+      "id": "kingdom",
+      "name": "Kingdom",
+      "description": "Large political entity with hierarchical structure",
+      "attributes": {
+        "hierarchy": "high",
+        "territoriality": "high",
+        "military_focus": "medium",
+        "economic_focus": "medium",
+        "religious_focus": "medium"
+      }
+    },
+    {
+      "id": "guild",
+      "name": "Guild",
+      "description": "Professional association focused on a specific trade or craft",
+      "attributes": {
+        "hierarchy": "medium",
+        "territoriality": "low",
+        "military_focus": "low",
+        "economic_focus": "high",
+        "religious_focus": "low"
+      }
+    },
+    {
+      "id": "cult",
+      "name": "Cult",
+      "description": "Religious group devoted to specific deity or belief system",
+      "attributes": {
+        "hierarchy": "medium",
+        "territoriality": "low",
+        "military_focus": "low",
+        "economic_focus": "low",
+        "religious_focus": "high"
+      }
+    },
+    {
+      "id": "tribe",
+      "name": "Tribe",
+      "description": "Loosely organized group united by cultural or ancestral ties",
+      "attributes": {
+        "hierarchy": "low",
+        "territoriality": "medium",
+        "military_focus": "medium",
+        "economic_focus": "low",
+        "religious_focus": "medium"
+      }
+    },
+    {
+      "id": "military_order",
+      "name": "Military Order",
+      "description": "Disciplined organization focused on combat and defense",
+      "attributes": {
+        "hierarchy": "high",
+        "territoriality": "medium",
+        "military_focus": "high",
+        "economic_focus": "low",
+        "religious_focus": "medium"
+      }
+    }
+  ]
+} 

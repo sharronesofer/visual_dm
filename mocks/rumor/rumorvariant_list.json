@@ -1,0 +1,42 @@
+[
+  {
+    "id": "5f67d6f2-0b74-4292-b62a-a84efa3b6791",
+    "created_at": "2025-05-23T01:34:25.031713Z",
+    "updated_at": "2025-05-24T01:34:25.031715Z",
+    "name": "Or",
+    "description": "Week try need.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "e3e44e39-1674-4293-8e16-95287d82d16e",
+    "created_at": "2025-05-24T01:34:25.031720Z",
+    "updated_at": "2025-05-25T01:34:25.031722Z",
+    "name": "Night",
+    "description": "Employee meeting sense power born product.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "9372d428-ff2e-40f2-8ee7-e12a41e530c5",
+    "created_at": "2025-05-03T01:34:25.031726Z",
+    "updated_at": "2025-05-27T01:34:25.031728Z",
+    "name": "Might",
+    "description": "Behavior not him cup suffer.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "cd9cb679-f2d5-4c37-bb7b-ee1117e31639",
+    "created_at": "2025-04-30T01:34:25.031732Z",
+    "updated_at": "2025-05-25T01:34:25.031734Z",
+    "name": "Cause",
+    "description": "Suffer everyone project bag lot give authority.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "e8d170d5-2c67-4352-aa7d-5e6411979964",
+    "created_at": "2025-05-25T01:34:25.031738Z",
+    "updated_at": "2025-05-24T01:34:25.031740Z",
+    "name": "Together",
+    "description": "Describe among behind study anything culture dinner.",
+    "status": "ACTIVE"
+  }
+]

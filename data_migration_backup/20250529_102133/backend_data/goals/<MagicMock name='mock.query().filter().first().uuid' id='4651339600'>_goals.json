@@ -1,0 +1,35 @@
+{
+  "character_id": "<MagicMock name='mock.query().filter().first().uuid' id='4651339600'>",
+  "goals": [
+    {
+      "goal_id": "185360cc-b17b-4966-a999-7faa6c8ace19",
+      "character_id": "<MagicMock name='mock.query().filter().first().uuid' id='4651339600'>",
+      "description": "Advance skills and abilities",
+      "goal_type": "GoalType.PERSONAL",
+      "priority": "GoalPriority.MEDIUM",
+      "status": "GoalStatus.ACTIVE",
+      "progress": 0.0,
+      "parent_goal_id": null,
+      "metadata": {},
+      "created_at": "2025-05-25T01:28:55.069294",
+      "updated_at": "2025-05-25T01:28:55.069297",
+      "subgoals": []
+    },
+    {
+      "goal_id": "c1a49637-9be9-4307-b1fb-11206d9f3dfe",
+      "character_id": "<MagicMock name='mock.query().filter().first().uuid' id='4651339600'>",
+      "description": "Build reputation in the world",
+      "goal_type": "GoalType.NARRATIVE",
+      "priority": "GoalPriority.LOW",
+      "status": "GoalStatus.ACTIVE",
+      "progress": 0.0,
+      "parent_goal_id": null,
+      "metadata": {
+        "long_term": true
+      },
+      "created_at": "2025-05-25T01:28:55.069860",
+      "updated_at": "2025-05-25T01:28:55.069860",
+      "subgoals": []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440003",
+  "event_type": "treaty_signed",
+  "factions": ["faction1", "faction2"],
+  "description": "Trade agreement signed between faction1 and faction2",
+  "timestamp": "2024-01-01T00:00:00Z",
+  "data": {
+    "treaty_id": "550e8400-e29b-41d4-a716-446655440000",
+    "treaty_type": "trade"
+  }
+} 

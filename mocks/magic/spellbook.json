@@ -1,0 +1,45 @@
+{
+  "id": "56944",
+  "owner_id": "a7c7a05d-e79a-4575-b8b1-c0cab7ea0369",
+  "owner_type": "character",
+  "spells": {
+    "0": {
+      "spell_id": "17384",
+      "mastery_level": 4,
+      "times_cast": 48,
+      "learned_date": "2025-02-25T01:34:24.959983Z"
+    },
+    "1": {
+      "spell_id": "11226",
+      "mastery_level": 1,
+      "times_cast": 19,
+      "learned_date": "2025-03-24T01:34:24.959987Z"
+    },
+    "2": {
+      "spell_id": "38996",
+      "mastery_level": 1,
+      "times_cast": 42,
+      "learned_date": "2025-04-25T01:34:24.959990Z"
+    },
+    "3": {
+      "spell_id": "90040",
+      "mastery_level": 1,
+      "times_cast": 14,
+      "learned_date": "2025-03-30T01:34:24.959992Z"
+    },
+    "4": {
+      "spell_id": "45450",
+      "mastery_level": 4,
+      "times_cast": 7,
+      "learned_date": "2025-04-13T01:34:24.959995Z"
+    },
+    "5": {
+      "spell_id": "70889",
+      "mastery_level": 4,
+      "times_cast": 20,
+      "learned_date": "2025-04-29T01:34:24.959997Z"
+    }
+  },
+  "created_at": "2025-04-29T01:34:24.959999Z",
+  "updated_at": "2025-05-28T01:34:24.960000Z"
+}

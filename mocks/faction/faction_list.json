@@ -1,0 +1,42 @@
+[
+  {
+    "id": "65db764b-94a7-4245-b10e-4d532fb8c95b",
+    "created_at": "2025-04-29T01:34:24.955226Z",
+    "updated_at": "2025-05-29T01:34:24.955229Z",
+    "name": "Fact",
+    "description": "Painting yard for radio.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "34b5cd87-7cc9-4548-adeb-a3cff598880a",
+    "created_at": "2025-05-01T01:34:24.955233Z",
+    "updated_at": "2025-05-24T01:34:24.955235Z",
+    "name": "Production",
+    "description": "Coach happen note rich.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "77e6c12f-00b2-46ff-a1d3-f2ccf096cb12",
+    "created_at": "2025-05-02T01:34:24.955239Z",
+    "updated_at": "2025-05-29T01:34:24.955241Z",
+    "name": "Watch",
+    "description": "Surface individual consumer red put social.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "8b1dc949-0192-446c-ad47-0d46c53ffe28",
+    "created_at": "2025-05-07T01:34:24.955244Z",
+    "updated_at": "2025-05-25T01:34:24.955246Z",
+    "name": "Respond",
+    "description": "Training western see economy.",
+    "status": "PENDING"
+  },
+  {
+    "id": "82fbae14-c353-42d0-a074-a533bc69d295",
+    "created_at": "2025-05-13T01:34:24.955249Z",
+    "updated_at": "2025-05-25T01:34:24.955251Z",
+    "name": "Reveal",
+    "description": "However keep loss.",
+    "status": "ACTIVE"
+  }
+]

@@ -1,0 +1,554 @@
+"""
+Unit tests for the GPT integration module.
+
+These tests validate the GPT integration functionality:
+1. System prompt formatting
+2. Context injection and management
+3. Response handling and processing
+4. Error handling and retries
+5. Integration with event systems
+"""
+
+import unittest
+import os
+import json
+import tempfile
+import shutil
+from datetime import datetime
+from unittest.mock import patch, MagicMock, AsyncMock
+
+from backend.systems.llm.core.gpt_integration import (
+    GPTIntegration,
+    GPTEvent,
+    format_prompt,
+    process_response,
+    get_system_prompt,
+    combine_contexts,
+)
+from backend.systems.llm.services.gpt_client import GPTClient, GPTRequest, GPTResponse
+from backend.systems.llm.core.event_integration import EventDispatcher
+
+
+class TestGPTIntegration(unittest.TestCase):
+    """Unit tests for the GPT integration module."""
+
+    def setUp(self):
+        """Set up test environment."""
+        # Create temporary data directory
+        self.temp_dir = tempfile.mkdtemp()
+        os.environ["VDM_DATA_DIR"] = self.temp_dir
+
+        # Create necessary subdirectories
+        os.makedirs(os.path.join(self.temp_dir, "prompts"), exist_ok=True)
+        os.makedirs(os.path.join(self.temp_dir, "system_prompts"), exist_ok=True)
+
+        # Reset singleton instances
+        EventDispatcher._instance = None
+        GPTClient._instance = None
+        GPTIntegration._instance = None
+
+        # Mock environment variable for API key
+        os.environ["OPENAI_API_KEY"] = "test-api-key"
+
+        # Get instances
+        self.event_dispatcher = EventDispatcher.get_instance()
+        self.gpt_client = GPTClient.get_instance()
+        self.gpt_integration = GPTIntegration.get_instance()
+
+        # Create test prompt files
+        self._create_test_prompt_files()
+
+    def tearDown(self):
+        """Clean up after tests."""
+        shutil.rmtree(self.temp_dir)
+        if "OPENAI_API_KEY" in os.environ:
+            del os.environ["OPENAI_API_KEY"]
+
+    def _create_test_prompt_files(self):
+        """Create test prompt template files."""
+        # Create a test system prompt template
+        dm_system_prompt = """You are an AI Dungeon Master for a high fantasy game.
+Your role is to provide rich, immersive descriptions and manage NPC interactions.
+
+Game world context:
+{{world_context}}
+
+Current region:
+{{region_context}}
+
+Remember to stay in character and maintain a consistent tone appropriate for a fantasy RPG.
+"""
+        system_prompt_file = os.path.join(
+            self.temp_dir, "system_prompts", "dm_system_prompt.txt"
+        )
+        with open(system_prompt_file, "w") as f:
+            f.write(dm_system_prompt)
+
+        # Create a test user prompt template
+        npc_dialogue_prompt = """The player is interacting with {{npc_name}}, a {{npc_description}}.
+
+Player context:
+{{player_context}}
+
+NPC context:
+{{npc_context}}
+
+Relationship:
+{{relationship_context}}
+
+Generate a dialogue response from {{npc_name}} that shows their personality and acknowledges the player's question.
+
+Player question: {{player_question}}
+"""
+        prompt_file = os.path.join(self.temp_dir, "prompts", "npc_dialogue.txt")
+        with open(prompt_file, "w") as f:
+            f.write(npc_dialogue_prompt)
+
+    def test_singleton_pattern(self):
+        """Test that GPTIntegration follows the singleton pattern."""
+        integration1 = GPTIntegration.get_instance()
+        integration2 = GPTIntegration.get_instance()
+        self.assertIs(integration1, integration2)
+        self.assertIs(integration1, self.gpt_integration)
+
+    def test_format_prompt(self):
+        """Test the format_prompt function."""
+        # Test with simple template and context
+        template = "Hello, {{name}}! You are {{age}} years old."
+        context = {"name": "Alice", "age": 30}
+
+        formatted = format_prompt(template, context)
+        self.assertEqual(formatted, "Hello, Alice! You are 30 years old.")
+
+        # Test with missing context variables
+        template = "Hello, {{name}}! Your ID is {{id}}."
+        context = {"name": "Bob"}
+
+        formatted = format_prompt(template, context)
+        self.assertEqual(formatted, "Hello, Bob! Your ID is {{id}}.")
+
+        # Test with complex nested variables
+        template = "Character: {{character.name}}, Class: {{character.class}}, Level: {{character.stats.level}}"
+        context = {
+            "character": {
+                "name": "Merlin",
+                "class": "Wizard",
+                "stats": {"level": 10, "strength": 8},
+            }
+        }
+
+        formatted = format_prompt(template, context)
+        self.assertEqual(formatted, "Character: Merlin, Class: Wizard, Level: 10")
+
+    def test_get_system_prompt(self):
+        """Test loading and formatting system prompts."""
+        # Test loading system prompt
+        prompt_name = "dm_system_prompt"
+        context = {
+            "world_context": "A world of magic and dragons",
+            "region_context": "A coastal city with busy ports",
+        }
+
+        # Get the system prompt
+        system_prompt = get_system_prompt(prompt_name, context, base_dir=self.temp_dir)
+
+        # Verify the prompt
+        self.assertIn("You are an AI Dungeon Master", system_prompt)
+        self.assertIn("A world of magic and dragons", system_prompt)
+        self.assertIn("A coastal city with busy ports", system_prompt)
+
+        # Test with missing prompt file
+        with self.assertRaises(FileNotFoundError):
+            get_system_prompt("non_existent_prompt", {}, base_dir=self.temp_dir)
+
+    def test_combine_contexts(self):
+        """Test combining multiple context dictionaries."""
+        # Test with simple contexts
+        context1 = {"name": "Alice", "role": "Player"}
+        context2 = {"location": "Tavern", "time": "Evening"}
+
+        combined = combine_contexts(context1, context2)
+        self.assertEqual(combined["name"], "Alice")
+        self.assertEqual(combined["role"], "Player")
+        self.assertEqual(combined["location"], "Tavern")
+        self.assertEqual(combined["time"], "Evening")
+
+        # Test with overlapping keys (later contexts should override)
+        context1 = {"name": "Alice", "level": 5}
+        context2 = {"name": "Bob", "class": "Warrior"}
+
+        combined = combine_contexts(context1, context2)
+        self.assertEqual(combined["name"], "Bob")  # Should be overridden
+        self.assertEqual(combined["level"], 5)
+        self.assertEqual(combined["class"], "Warrior")
+
+        # Test with nested dictionaries
+        context1 = {"player": {"name": "Charlie", "level": 7}}
+        context2 = {"player": {"class": "Rogue", "level": 8}}
+
+        combined = combine_contexts(context1, context2)
+        self.assertEqual(combined["player"]["name"], "Charlie")
+        self.assertEqual(combined["player"]["class"], "Rogue")
+        self.assertEqual(combined["player"]["level"], 8)  # Should be overridden
+
+    def test_process_response(self):
+        """Test processing GPT responses."""
+        # Test basic response
+        response_text = "This is a simple response"
+        processed = process_response(response_text)
+        self.assertEqual(processed, "This is a simple response")
+
+        # Test response with JSON markers
+        response_text = 'Some text before\n```json\n{"key": "value"}\n```\nText after'
+        processed = process_response(response_text, extract_json=True)
+        self.assertEqual(processed, {"key": "value"})
+
+        # Test response with JSON but not extracting
+        processed = process_response(response_text, extract_json=False)
+        self.assertEqual(processed, response_text)
+
+        # Test response with invalid JSON
+        response_text = "Some text\n```json\n{invalid json}\n```\nMore text"
+        processed = process_response(response_text, extract_json=True)
+        self.assertEqual(
+            processed, response_text
+        )  # Should return original if JSON is invalid
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.generate_text")
+    async def test_generate_text(self, mock_generate_text):
+        """Test the generate_text method."""
+        # Setup mock
+        mock_generate_text.return_value = "Generated response text"
+
+        # Call the method
+        response = await self.gpt_integration.generate_text(
+            prompt="Test prompt",
+            system_prompt="You are a test assistant",
+            model="gpt-4",
+            temperature=0.7,
+        )
+
+        # Verify the response
+        self.assertEqual(response, "Generated response text")
+
+        # Verify the call
+        mock_generate_text.assert_called_with(
+            prompt="Test prompt",
+            system_prompt="You are a test assistant",
+            model="gpt-4",
+            temperature=0.7,
+            max_tokens=None,
+        )
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.generate_text")
+    async def test_generate_text_with_template(self, mock_generate_text):
+        """Test generating text with a template."""
+        # Setup mock
+        mock_generate_text.return_value = "Innkeeper Bob says: Welcome, traveler!"
+
+        # Call with template
+        response = await self.gpt_integration.generate_text_with_template(
+            template_name="npc_dialogue",
+            context={
+                "npc_name": "Bob",
+                "npc_description": "the innkeeper",
+                "player_context": "Tired traveler looking for a room",
+                "npc_context": "Friendly but cautious",
+                "relationship_context": "Never met before",
+                "player_question": "Do you have any rooms available?",
+            },
+            system_prompt_name="dm_system_prompt",
+            system_prompt_context={
+                "world_context": "A medieval fantasy world",
+                "region_context": "A small village in the mountains",
+            },
+        )
+
+        # Verify the response
+        self.assertEqual(response, "Innkeeper Bob says: Welcome, traveler!")
+
+        # Verify the call with correct formatted prompts
+        mock_generate_text.assert_called_once()
+        args = mock_generate_text.call_args
+
+        # Prompt should contain the npc name and player question
+        self.assertIn("Bob", args[1]["prompt"])
+        self.assertIn("Do you have any rooms available?", args[1]["prompt"])
+
+        # System prompt should contain the world context
+        self.assertIn("medieval fantasy world", args[1]["system_prompt"])
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.generate_text")
+    async def test_generate_json(self, mock_generate_text):
+        """Test generating structured JSON responses."""
+        # Setup mock to return JSON string
+        mock_generate_text.return_value = """Here's the data:
+```json
+{
+  "name": "Test Character",
+  "stats": {
+    "strength": 15,
+    "intelligence": 12
+  },
+  "inventory": ["sword", "potion"]
+}
+```
+I hope this helps!
+"""
+
+        # Generate JSON
+        json_response = await self.gpt_integration.generate_json(
+            prompt="Generate character data",
+            expected_keys=["name", "stats", "inventory"],
+        )
+
+        # Verify JSON structure
+        self.assertIsInstance(json_response, dict)
+        self.assertEqual(json_response["name"], "Test Character")
+        self.assertEqual(json_response["stats"]["strength"], 15)
+        self.assertEqual(json_response["inventory"], ["sword", "potion"])
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.generate_text")
+    async def test_generate_text_events(self, mock_generate_text):
+        """Test that text generation triggers events."""
+        # Setup mock
+        mock_generate_text.return_value = "Generated response"
+
+        # Capture request and response events
+        request_event = None
+        response_event = None
+
+        def capture_request_event(event):
+            nonlocal request_event
+            if isinstance(event, GPTEvent) and event.event_type == "gpt.request":
+                request_event = event
+
+        def capture_response_event(event):
+            nonlocal response_event
+            if isinstance(event, GPTEvent) and event.event_type == "gpt.response":
+                response_event = event
+
+        # Subscribe to events
+        self.event_dispatcher.subscribe("gpt.request", capture_request_event)
+        self.event_dispatcher.subscribe("gpt.response", capture_response_event)
+
+        # Generate text
+        await self.gpt_integration.generate_text(
+            prompt="Test prompt",
+            system_prompt="Test system prompt",
+            event_metadata={"test_key": "test_value"},
+        )
+
+        # Verify request event
+        self.assertIsNotNone(request_event)
+        self.assertEqual(request_event.prompt, "Test prompt")
+        self.assertEqual(request_event.system_prompt, "Test system prompt")
+        self.assertEqual(request_event.metadata["test_key"], "test_value")
+
+        # Verify response event
+        self.assertIsNotNone(response_event)
+        self.assertEqual(response_event.response, "Generated response")
+        self.assertEqual(response_event.metadata["test_key"], "test_value")
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.generate_text")
+    async def test_error_handling(self, mock_generate_text):
+        """Test error handling during text generation."""
+        # Setup mock to raise an exception
+        mock_generate_text.side_effect = Exception("Test error")
+
+        # Capture error event
+        error_event = None
+
+        def capture_error_event(event):
+            nonlocal error_event
+            if isinstance(event, GPTEvent) and event.event_type == "gpt.error":
+                error_event = event
+
+        # Subscribe to error event
+        self.event_dispatcher.subscribe("gpt.error", capture_error_event)
+
+        # Call generate_text (should handle the exception)
+        response = await self.gpt_integration.generate_text(
+            prompt="Test prompt", error_fallback="Fallback response"
+        )
+
+        # Verify fallback response was returned
+        self.assertEqual(response, "Fallback response")
+
+        # Verify error event was published
+        self.assertIsNotNone(error_event)
+        self.assertEqual(error_event.prompt, "Test prompt")
+        self.assertIn("Test error", str(error_event.error))
+
+    def test_cache_mechanism(self):
+        """Test the prompt template caching."""
+        # Use a proper patch to count file reads instead of replacing the method
+        load_calls = []
+
+        # Patch the file open function to count calls
+        original_open = open
+
+        def counted_open(*args, **kwargs):
+            if len(args) > 0 and "npc_dialogue.txt" in str(args[0]):
+                load_calls.append(args[0])
+            return original_open(*args, **kwargs)
+
+        import builtins
+
+        builtins.open = counted_open
+
+        try:
+            # Load a template multiple times
+            template1 = self.gpt_integration.get_prompt_template("npc_dialogue")
+            template2 = self.gpt_integration.get_prompt_template("npc_dialogue")
+
+            # Check that the file was only read once due to caching
+            self.assertEqual(len(load_calls), 1)
+
+            # Check that templates are the same
+            self.assertEqual(template1, template2)
+
+            # Clear the cache
+            self.gpt_integration.clear_cache()
+
+            # Load again - should read the file again
+            template3 = self.gpt_integration.get_prompt_template("npc_dialogue")
+            self.assertEqual(len(load_calls), 2)
+
+        finally:
+            # Restore original open function
+            builtins.open = original_open
+
+    def test_load_template_error(self):
+        """Test error handling when loading non-existent templates."""
+        # Attempt to load a template that doesn't exist
+        with self.assertRaises(FileNotFoundError):
+            self.gpt_integration.get_prompt_template("non_existent_template")
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.generate_text")
+    async def test_multi_step_generation(self, mock_generate_text):
+        """Test multi-step text generation with context building."""
+        # Configure mock to return different responses for different calls
+        mock_generate_text.side_effect = [
+            "Step 1 response",
+            "Step 2 response",
+            "Final response",
+        ]
+
+        # Execute multi-step generation
+        context = {"initial": "data"}
+
+        # Step 1
+        context["step1_result"] = await self.gpt_integration.generate_text(
+            prompt="Step 1 prompt", system_prompt="System prompt 1"
+        )
+
+        # Step 2
+        context["step2_result"] = await self.gpt_integration.generate_text(
+            prompt=f"Step 2 prompt with {context['step1_result']}",
+            system_prompt="System prompt 2",
+        )
+
+        # Final step
+        final_result = await self.gpt_integration.generate_text(
+            prompt=f"Final prompt with {context['step2_result']}",
+            system_prompt="Final system prompt",
+        )
+
+        # Verify results
+        self.assertEqual(context["step1_result"], "Step 1 response")
+        self.assertEqual(context["step2_result"], "Step 2 response")
+        self.assertEqual(final_result, "Final response")
+
+        # Verify correct prompts were sent for each step
+        call_args_list = mock_generate_text.call_args_list
+        self.assertEqual(len(call_args_list), 3)
+
+        # Check first call
+        self.assertEqual(call_args_list[0][1]["prompt"], "Step 1 prompt")
+        self.assertEqual(call_args_list[0][1]["system_prompt"], "System prompt 1")
+
+        # Check second call
+        self.assertEqual(
+            call_args_list[1][1]["prompt"], "Step 2 prompt with Step 1 response"
+        )
+        self.assertEqual(call_args_list[1][1]["system_prompt"], "System prompt 2")
+
+        # Check third call
+        self.assertEqual(
+            call_args_list[2][1]["prompt"], "Final prompt with Step 2 response"
+        )
+        self.assertEqual(call_args_list[2][1]["system_prompt"], "Final system prompt")
+
+    @patch("builtins.open", side_effect=IOError("File read error"))
+    def test_prompt_file_error_handling(self, mock_open):
+        """Test error handling when prompt files cannot be read."""
+        # Attempt to load a template with a file reading error
+        with self.assertRaises(IOError):
+            self.gpt_integration.get_prompt_template("error_template")
+
+    @patch("os.path.exists", return_value=False)
+    def test_check_prompt_existence(self, mock_exists):
+        """Test checking if a prompt exists."""
+        # Check non-existent prompt
+        exists = self.gpt_integration.prompt_exists("non_existent_prompt")
+        self.assertFalse(exists)
+
+    def test_format_prompt_with_arrays(self):
+        """Test formatting prompts with array values."""
+        # Test with array in context
+        template = "Items: {{items}}"
+        context = {"items": ["sword", "shield", "potion"]}
+
+        formatted = format_prompt(template, context)
+        self.assertEqual(formatted, "Items: sword, shield, potion")
+
+        # Test with custom array formatter
+        def custom_formatter(arr):
+            return " | ".join(arr)
+
+        formatted = format_prompt(template, context, array_formatter=custom_formatter)
+        self.assertEqual(formatted, "Items: sword | shield | potion")
+
+    @patch("backend.systems.llm.services.gpt_client.GPTClient.generate_text")
+    async def test_generate_text_with_retry(self, mock_generate_text):
+        """Test text generation with retries."""
+        # Configure mock to fail twice then succeed
+        mock_generate_text.side_effect = [
+            Exception("First error"),
+            Exception("Second error"),
+            "Success after retries",
+        ]
+
+        # Generate text with retries
+        response = await self.gpt_integration.generate_text_with_retry(
+            prompt="Test prompt",
+            max_retries=3,
+            retry_delay=0.1,  # Short delay for tests
+        )
+
+        # Verify the successful response
+        self.assertEqual(response, "Success after retries")
+
+        # Verify correct number of attempts
+        self.assertEqual(mock_generate_text.call_count, 3)
+
+    def test_get_event_metadata(self):
+        """Test building event metadata."""
+        # Build basic metadata
+        metadata = self.gpt_integration.get_event_metadata(
+            context={"character_id": "player1", "npc_id": "npc1"},
+            template_name="dialogue",
+            additional_metadata={"action": "greet"},
+        )
+
+        # Verify metadata
+        self.assertEqual(metadata["template_name"], "dialogue")
+        self.assertEqual(metadata["character_id"], "player1")
+        self.assertEqual(metadata["npc_id"], "npc1")
+        self.assertEqual(metadata["action"], "greet")
+
+
+# Run the tests
+if __name__ == "__main__":
+    unittest.main()

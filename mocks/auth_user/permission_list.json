@@ -1,0 +1,42 @@
+[
+  {
+    "id": "133e9719-3256-453d-b25b-9d3c1681cbe3",
+    "created_at": "2025-05-17T01:34:24.942535Z",
+    "updated_at": "2025-05-24T01:34:24.942537Z",
+    "name": "Race",
+    "description": "Weight difference company little force country.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "0d191f05-7cc3-454a-a6a7-2d14b8e5afc7",
+    "created_at": "2025-04-30T01:34:24.942541Z",
+    "updated_at": "2025-05-26T01:34:24.942543Z",
+    "name": "Animal",
+    "description": "Support may five figure both.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "1adea592-6899-4d22-a218-8c2c8c5e70ca",
+    "created_at": "2025-05-01T01:34:24.942546Z",
+    "updated_at": "2025-05-25T01:34:24.942547Z",
+    "name": "Official",
+    "description": "Share under candidate eat travel wall.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "6689075b-b0e9-42c2-be05-97746a5b7566",
+    "created_at": "2025-05-09T01:34:24.942551Z",
+    "updated_at": "2025-05-28T01:34:24.942552Z",
+    "name": "Computer",
+    "description": "Organization responsibility decade the surface.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "0cfa0ef7-f169-41d9-82e2-c88eb40abc9d",
+    "created_at": "2025-05-24T01:34:24.942556Z",
+    "updated_at": "2025-05-28T01:34:24.942557Z",
+    "name": "Trip",
+    "description": "Establish cover happen to sister this without site.",
+    "status": "INACTIVE"
+  }
+]

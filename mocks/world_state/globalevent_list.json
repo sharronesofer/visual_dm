@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bc0399eb-2030-46d8-a120-ddd3719026c8",
+    "created_at": "2025-04-30T01:34:25.043894Z",
+    "updated_at": "2025-05-26T01:34:25.043897Z",
+    "name": "Claim",
+    "description": "Important manager fund but could debate.",
+    "status": "PENDING"
+  },
+  {
+    "id": "0209eca9-2616-45c0-9a39-20a44ae7a5a1",
+    "created_at": "2025-05-27T01:34:25.043902Z",
+    "updated_at": "2025-05-25T01:34:25.043904Z",
+    "name": "Sort",
+    "description": "Some central season organization.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "50719871-3c59-49da-8639-3870825612b4",
+    "created_at": "2025-05-05T01:34:25.043909Z",
+    "updated_at": "2025-05-27T01:34:25.043910Z",
+    "name": "Interview",
+    "description": "Those assume fall dark create.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "16a31458-608c-4c25-8e38-9b013c8c6148",
+    "created_at": "2025-05-27T01:34:25.043915Z",
+    "updated_at": "2025-05-28T01:34:25.043916Z",
+    "name": "Candidate",
+    "description": "Give so current little.",
+    "status": "PENDING"
+  },
+  {
+    "id": "6e924347-19fd-4807-bccb-1c5adfd3e4a4",
+    "created_at": "2025-05-02T01:34:25.043921Z",
+    "updated_at": "2025-05-27T01:34:25.043922Z",
+    "name": "Summer",
+    "description": "Social newspaper we market huge eight one.",
+    "status": "INACTIVE"
+  }
+]

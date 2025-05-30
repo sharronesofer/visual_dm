@@ -1,0 +1,937 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+testpaths: backend/tests
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+23:38:42 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
+23:38:42 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
+23:38:42 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
+23:38:42 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+23:38:42 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
+23:38:42 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
+23:38:42 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
+23:38:42 [INFO] backend.systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+23:38:43 [WARNING] backend.systems.data.loaders.game_data_registry: Biome file not found: backend/data/biomes/land_types.json
+23:38:43 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load biome data
+23:38:43 [WARNING] backend.systems.data.loaders.game_data_registry: Adjacency file not found: backend/data/biomes/adjacency.json
+23:38:43 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load adjacency rules
+23:38:43 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: backend/data/entities
+23:38:43 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: backend/data/items
+23:38:43 [INFO] backend.systems.rumor.repository: RumorRepository initialized with storage at data/rumors/
+23:38:43 [INFO] backend.systems.rumor.repository: RumorRepository sync singleton created with storage at data/rumors/
+23:38:43 [INFO] backend.systems.rumor.service: RumorService instance configured.
+23:38:43 [INFO] backend.systems.rumor.service: RumorService sync singleton instance created.
+23:38:43 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
+23:38:43 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+23:38:43 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+23:38:45 [INFO] root: World Generator initialized.
+23:38:46 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
+23:38:46 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
+23:38:46 [INFO] systems.combat.effect_visualizer: EffectVisualizer initialized
+23:38:46 [INFO] systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+23:38:46 [INFO] systems.llm.core.dm_core: DungeonMaster initialized
+23:38:46 [WARNING] systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+23:38:46 [WARNING] systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+23:38:47 [ERROR] backend.systems.loot.data_access: Error loading JSON file data/equipment/items.json: [Errno 2] No such file or directory: 'data/equipment/items.json'
+23:38:47 [WARNING] backend.systems.loot.data_access: Equipment data not found at canonical path data/equipment/items.json, falling back to legacy path.
+23:38:47 [ERROR] backend.systems.loot.data_access: Error loading JSON file rules_json/equipment.json: [Errno 2] No such file or directory: 'rules_json/equipment.json'
+23:38:48 [WARNING] backend.systems.religion.services: Faction system not available, faction integration will be disabled
+23:38:48 [WARNING] systems.shared.rules: Unknown balance constant: version
+23:38:48 [WARNING] systems.shared.rules: Unknown balance constant: constants
+23:38:49 [INFO] root: World Generator initialized.
+23:38:49 [WARNING] backend.systems.religion.services: Faction system not available, faction integration will be disabled
+collected 2418 items / 50 errors / 19 skipped
+
+==================================== ERRORS ====================================
+________ ERROR collecting backend/tests/systems/dialogue/test_cache.py _________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/systems/dialogue/test_cache.py:7: in <module>
+    from backend.systems.dialogue.cache import DialogueCache, get_dialogue_cache
+backend/systems/dialogue/__init__.py:14: in <module>
+    from backend.systems.dialogue.dialogue_system import (
+backend/systems/dialogue/dialogue_system.py:43: in <module>
+    from backend.systems.dialogue.quest_integration import DialogueQuestIntegration
+backend/systems/dialogue/quest_integration.py:13: in <module>
+    from backend.systems.quest.quest_manager import QuestManager
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+__________ ERROR collecting backend/tests/systems/llm/test_dm_core.py __________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/systems/llm/test_dm_core.py:39: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+______ ERROR collecting backend/tests/systems/motif/test_motif_router.py _______
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/systems/motif/test_motif_router.py:6: in <module>
+    from backend.main import app
+backend/main.py:27: in <module>
+    from backend.systems.quest import quest_api_router  # Import consolidated quest router
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+_______ ERROR collecting backend/tests/systems/quest/test_arc_manager.py _______
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/systems/quest/test_arc_manager.py:15: in <module>
+    from backend.systems.quest.arc_manager import ArcManager
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+___________ ERROR collecting backend/tests/systems/rumor/test_api.py ___________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/systems/rumor/test_api.py:14: in <module>
+    from backend.systems.rumor.api import router, get_rumor_service
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+_____ ERROR collecting backend/tests/systems/rumor/test_prompt_manager.py ______
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/systems/rumor/test_prompt_manager.py:10: in <module>
+    from backend.systems.rumor.prompt_manager import RumorPromptManager
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+______________ ERROR collecting backend/tests/test_api_router.py _______________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_api_router.py:12: in <module>
+    import systems.quest.api_router
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+_______ ERROR collecting backend/tests/test_auth_relationship_router.py ________
+backend/tests/test_auth_relationship_router.py:12: in <module>
+    import systems.auth_user.routers.auth_relationship_router
+backend/systems/auth_user/__init__.py:10: in <module>
+    from .models import User, Role, Permission
+backend/systems/auth_user/models/__init__.py:9: in <module>
+    from .user_models import (
+backend/systems/auth_user/models/user_models.py:22: in <module>
+    user_roles_table = Table(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'auth_user_roles' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+__________ ERROR collecting backend/tests/test_auth_relationships.py ___________
+backend/tests/test_auth_relationships.py:12: in <module>
+    import systems.auth_user.services.auth_relationships
+backend/systems/auth_user/__init__.py:10: in <module>
+    from .models import User, Role, Permission
+backend/systems/auth_user/models/__init__.py:9: in <module>
+    from .user_models import (
+backend/systems/auth_user/models/user_models.py:22: in <module>
+    user_roles_table = Table(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'auth_user_roles' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+______________ ERROR collecting backend/tests/test_auth_router.py ______________
+backend/tests/test_auth_router.py:12: in <module>
+    import systems.auth_user.routers.auth_router
+backend/systems/auth_user/__init__.py:10: in <module>
+    from .models import User, Role, Permission
+backend/systems/auth_user/models/__init__.py:9: in <module>
+    from .user_models import (
+backend/systems/auth_user/models/user_models.py:22: in <module>
+    user_roles_table = Table(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'auth_user_roles' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+_____________ ERROR collecting backend/tests/test_auth_service.py ______________
+backend/tests/test_auth_service.py:12: in <module>
+    import systems.auth_user.services.auth_service
+backend/systems/auth_user/__init__.py:10: in <module>
+    from .models import User, Role, Permission
+backend/systems/auth_user/models/__init__.py:9: in <module>
+    from .user_models import (
+backend/systems/auth_user/models/user_models.py:22: in <module>
+    user_roles_table = Table(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'auth_user_roles' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+________________ ERROR collecting backend/tests/test_cleanup.py ________________
+backend/tests/test_cleanup.py:12: in <module>
+    import systems.world_state.cleanup
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_______ ERROR collecting backend/tests/test_consolidated_state_models.py _______
+backend/tests/test_consolidated_state_models.py:12: in <module>
+    import systems.world_state.consolidated_state_models
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_______ ERROR collecting backend/tests/test_consolidated_world_models.py _______
+backend/tests/test_consolidated_world_models.py:12: in <module>
+    import systems.world_state.consolidated_world_models
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_________________ ERROR collecting backend/tests/test_demo.py __________________
+backend/tests/test_demo.py:12: in <module>
+    import systems.combat.demo
+backend/systems/combat/demo.py:64: in <module>
+    class MockSkill:
+backend/systems/combat/demo.py:70: in MockSkill
+    damage_type: DamageType = DamageType.PHYSICAL
+E   NameError: name 'DamageType' is not defined
+___________ ERROR collecting backend/tests/test_derivative_state.py ____________
+backend/tests/test_derivative_state.py:12: in <module>
+    import systems.world_state.features.derivative_state
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_______________ ERROR collecting backend/tests/test_endpoints.py _______________
+backend/tests/test_endpoints.py:12: in <module>
+    import systems.world_state.api.endpoints
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_____________ ERROR collecting backend/tests/test_faction_goal.py ______________
+backend/tests/test_faction_goal.py:12: in <module>
+    import systems.faction.models.faction_goal
+backend/systems/faction/models/faction_goal.py:28: in <module>
+    class FactionGoal(Base):
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_api.py:198: in __init__
+    _as_declarative(reg, cls, dict_)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:244: in _as_declarative
+    return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:325: in setup_mapping
+    return _ClassScanMapperConfig(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:576: in __init__
+    self._setup_table(table)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:1755: in _setup_table
+    table_cls(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'faction_goals' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+_______________ ERROR collecting backend/tests/test_handlers.py ________________
+backend/tests/test_handlers.py:12: in <module>
+    import systems.world_state.events_handlers.handlers
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+__________ ERROR collecting backend/tests/test_integration_example.py __________
+backend/tests/test_integration_example.py:12: in <module>
+    import systems.world_state.examples.integration_example
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+____________ ERROR collecting backend/tests/test_legacy_adapter.py _____________
+backend/tests/test_legacy_adapter.py:12: in <module>
+    import systems.combat.legacy_adapter
+backend/systems/combat/legacy_adapter.py:79: in <module>
+    @deprecated(replacement_func=apply_full_damage_calculation)
+E   NameError: name 'apply_full_damage_calculation' is not defined
+________________ ERROR collecting backend/tests/test_loader.py _________________
+backend/tests/test_loader.py:12: in <module>
+    import systems.world_state.loader
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_______________ ERROR collecting backend/tests/test_location.py ________________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_location.py:12: in <module>
+    import systems.character.inventory.location
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/inventory/location.py", line 54
+E       id = Column(Integer, primary_key=True)
+E   IndentationError: unexpected indent
+______________ ERROR collecting backend/tests/test_loot_routes.py ______________
+backend/systems/loot/data_access.py:71: in load_equipment_data
+    return load_json_file(CANONICAL_EQUIPMENT_PATH)
+backend/systems/loot/data_access.py:55: in load_json_file
+    with open(path, "r", encoding="utf-8") as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: 'data/equipment/items.json'
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_loot_routes.py:12: in <module>
+    import systems.loot.loot_routes
+backend/systems/loot/loot_routes.py:22: in <module>
+    equipment_list = load_equipment_data()
+backend/systems/loot/data_access.py:77: in load_equipment_data
+    return load_json_file(LEGACY_EQUIPMENT_PATH)
+backend/systems/loot/data_access.py:55: in load_json_file
+    with open(path, "r", encoding="utf-8") as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: 'rules_json/equipment.json'
+_________________ ERROR collecting backend/tests/test_main.py __________________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_main.py:12: in <module>
+    import main
+backend/main.py:27: in <module>
+    from backend.systems.quest import quest_api_router  # Import consolidated quest router
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+___________ ERROR collecting backend/tests/test_mod_synchronizer.py ____________
+backend/tests/test_mod_synchronizer.py:12: in <module>
+    import systems.world_state.mods.mod_synchronizer
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+______________ ERROR collecting backend/tests/test_monitoring.py _______________
+backend/tests/test_monitoring.py:12: in <module>
+    import systems.character.utils.monitoring
+backend/systems/character/utils/monitoring.py:21: in <module>
+    handlers=[logging.StreamHandler(), logging.FileHandler("logs/system.log")],
+../.pyenv/versions/3.11.5/lib/python3.11/logging/__init__.py:1181: in __init__
+    StreamHandler.__init__(self, self._open())
+../.pyenv/versions/3.11.5/lib/python3.11/logging/__init__.py:1213: in _open
+    return open_func(self.baseFilename, self.mode,
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/Sharrone/Visual_DM/logs/system.log'
+___________ ERROR collecting backend/tests/test_newspaper_system.py ____________
+backend/tests/test_newspaper_system.py:12: in <module>
+    import systems.world_state.utils.newspaper_system
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_____________ ERROR collecting backend/tests/test_npc_features.py ______________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_npc_features.py:12: in <module>
+    import systems.character.npc.npc_features
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/npc/npc_features.py", line 271
+E       ] 
+E       ^
+E   SyntaxError: unmatched ']'
+__________ ERROR collecting backend/tests/test_npc_leveling_utils.py ___________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_npc_leveling_utils.py:12: in <module>
+    import systems.character.npc.npc_leveling_utils
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/npc/npc_leveling_utils.py", line 60
+E       }
+E       ^
+E   SyntaxError: unmatched '}'
+__________ ERROR collecting backend/tests/test_optimized_worldgen.py ___________
+backend/tests/test_optimized_worldgen.py:12: in <module>
+    import systems.world_state.optimized_worldgen
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+___________ ERROR collecting backend/tests/test_progression_utils.py ___________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_progression_utils.py:12: in <module>
+    import systems.character.progression.progression_utils
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/progression_utils.py", line 23
+E       def apply_ability_score_increase(character: Character, ability: str) -> Dict[str, Any]:
+E   SyntaxError: expected 'except' or 'finally' block
+____________ ERROR collecting backend/tests/test_prompt_manager.py _____________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_prompt_manager.py:12: in <module>
+    import systems.rumor.prompt_manager
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+_______________ ERROR collecting backend/tests/test_religion.py ________________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_religion.py:10: in <module>
+    from backend.systems.religion import (
+backend/systems/religion/__init__.py:31: in <module>
+    from .services import (
+backend/systems/religion/services.py:47: in <module>
+    from backend.systems.quest import get_quest_service
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+_________________ ERROR collecting backend/tests/test_rumor.py _________________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_rumor.py:12: in <module>
+    import systems.rumor.models.rumor
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+________________ ERROR collecting backend/tests/test_scoring.py ________________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_scoring.py:12: in <module>
+    import systems.character.progression.scoring
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/scoring.py", line 53
+E       }
+E       ^
+E   SyntaxError: unmatched '}'
+_______________ ERROR collecting backend/tests/test_state_api.py _______________
+backend/tests/test_state_api.py:12: in <module>
+    import systems.world_state.api.state_api
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_____________ ERROR collecting backend/tests/test_state_storage.py _____________
+backend/tests/test_state_storage.py:12: in <module>
+    import systems.world_state.persistence.state_storage
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_________________ ERROR collecting backend/tests/test_stats.py _________________
+backend/tests/test_stats.py:12: in <module>
+    import systems.combat.models.stats
+backend/systems/combat/models/stats.py:13: in <module>
+    class CombatStats(CoreBaseModel):
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_api.py:198: in __init__
+    _as_declarative(reg, cls, dict_)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:244: in _as_declarative
+    return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:325: in setup_mapping
+    return _ClassScanMapperConfig(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:576: in __init__
+    self._setup_table(table)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py:1755: in _setup_table
+    table_cls(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'combat_stats' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+___________ ERROR collecting backend/tests/test_stress_test_utils.py ___________
+backend/tests/test_stress_test_utils.py:12: in <module>
+    import systems.world_state.utils.stress_test_utils
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_____________ ERROR collecting backend/tests/test_system_hooks.py ______________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_system_hooks.py:12: in <module>
+    import systems.quest.system_hooks
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+___________ ERROR collecting backend/tests/test_terrain_generator.py ___________
+backend/tests/test_terrain_generator.py:12: in <module>
+    import systems.world_state.utils.terrain_generator
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+______________ ERROR collecting backend/tests/test_tick_utils.py _______________
+backend/tests/test_tick_utils.py:12: in <module>
+    import systems.world_state.utils.tick_utils
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+______________ ERROR collecting backend/tests/test_user_models.py ______________
+backend/tests/test_user_models.py:12: in <module>
+    import systems.auth_user.models.user_models
+backend/systems/auth_user/__init__.py:10: in <module>
+    from .models import User, Role, Permission
+backend/systems/auth_user/models/__init__.py:9: in <module>
+    from .user_models import (
+backend/systems/auth_user/models/user_models.py:22: in <module>
+    user_roles_table = Table(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'auth_user_roles' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+__________ ERROR collecting backend/tests/test_validation_service.py ___________
+backend/tests/test_validation_service.py:12: in <module>
+    import systems.auth_user.services.validation_service
+backend/systems/auth_user/__init__.py:10: in <module>
+    from .models import User, Role, Permission
+backend/systems/auth_user/models/__init__.py:9: in <module>
+    from .user_models import (
+backend/systems/auth_user/models/user_models.py:22: in <module>
+    user_roles_table = Table(
+<string>:2: in __new__
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:429: in __new__
+    return cls._new(*args, **kw)
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/sqlalchemy/sql/schema.py:461: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'auth_user_roles' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+___________ ERROR collecting backend/tests/test_world_event_utils.py ___________
+backend/tests/test_world_event_utils.py:12: in <module>
+    import systems.world_state.utils.world_event_utils
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_____________ ERROR collecting backend/tests/test_world_routes.py ______________
+backend/tests/test_world_routes.py:12: in <module>
+    import systems.world_state.world_routes
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+__________ ERROR collecting backend/tests/test_world_state_manager.py __________
+backend/tests/test_world_state_manager.py:12: in <module>
+    import systems.world_state.world_state_manager
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_____________ ERROR collecting backend/tests/test_worldgen_api.py ______________
+backend/tests/test_worldgen_api.py:12: in <module>
+    import systems.world_state.worldgen_api
+backend/systems/world_state/__init__.py:93: in <module>
+    world_state_manager = WorldStateManager()
+backend/systems/world_state/consolidated_manager.py:66: in __init__
+    raise RuntimeError(
+E   RuntimeError: WorldStateManager is a singleton. Use get_instance() instead.
+_ ERROR collecting backend/tests/unit/systems/religion/test_membership_service.py _
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/unit/systems/religion/test_membership_service.py:11: in <module>
+    from backend.systems.religion.services import ReligionService, ReligionMembershipEvent
+backend/systems/religion/__init__.py:31: in <module>
+    from .services import (
+backend/systems/religion/services.py:47: in <module>
+    from backend.systems.quest import get_quest_service
+backend/systems/quest/__init__.py:14: in <module>
+    from .system_hooks import QuestSystemHooks
+backend/systems/quest/system_hooks.py:31: in <module>
+    from backend.systems.rumor import RumorService
+backend/systems/rumor/__init__.py:24: in <module>
+    from .schemas import (
+E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E       "example": {
+E   IndentationError: unexpected indent
+=========================== short test summary info ============================
+ERROR backend/tests/systems/dialogue/test_cache.py
+ERROR backend/tests/systems/llm/test_dm_core.py
+ERROR backend/tests/systems/motif/test_motif_router.py
+ERROR backend/tests/systems/quest/test_arc_manager.py
+ERROR backend/tests/systems/rumor/test_api.py
+ERROR backend/tests/systems/rumor/test_prompt_manager.py
+ERROR backend/tests/test_api_router.py
+ERROR backend/tests/test_auth_relationship_router.py - sqlalchemy.exc.Invalid...
+ERROR backend/tests/test_auth_relationships.py - sqlalchemy.exc.InvalidReques...
+ERROR backend/tests/test_auth_router.py - sqlalchemy.exc.InvalidRequestError:...
+ERROR backend/tests/test_auth_service.py - sqlalchemy.exc.InvalidRequestError...
+ERROR backend/tests/test_cleanup.py - RuntimeError: WorldStateManager is a si...
+ERROR backend/tests/test_consolidated_state_models.py - RuntimeError: WorldSt...
+ERROR backend/tests/test_consolidated_world_models.py - RuntimeError: WorldSt...
+ERROR backend/tests/test_demo.py - NameError: name 'DamageType' is not defined
+ERROR backend/tests/test_derivative_state.py - RuntimeError: WorldStateManage...
+ERROR backend/tests/test_endpoints.py - RuntimeError: WorldStateManager is a ...
+ERROR backend/tests/test_faction_goal.py - sqlalchemy.exc.InvalidRequestError...
+ERROR backend/tests/test_handlers.py - RuntimeError: WorldStateManager is a s...
+ERROR backend/tests/test_integration_example.py - RuntimeError: WorldStateMan...
+ERROR backend/tests/test_legacy_adapter.py - NameError: name 'apply_full_dama...
+ERROR backend/tests/test_loader.py - RuntimeError: WorldStateManager is a sin...
+ERROR backend/tests/test_location.py
+ERROR backend/tests/test_loot_routes.py - FileNotFoundError: [Errno 2] No suc...
+ERROR backend/tests/test_main.py
+ERROR backend/tests/test_mod_synchronizer.py - RuntimeError: WorldStateManage...
+ERROR backend/tests/test_monitoring.py - FileNotFoundError: [Errno 2] No such...
+ERROR backend/tests/test_newspaper_system.py - RuntimeError: WorldStateManage...
+ERROR backend/tests/test_npc_features.py
+ERROR backend/tests/test_npc_leveling_utils.py
+ERROR backend/tests/test_optimized_worldgen.py - RuntimeError: WorldStateMana...
+ERROR backend/tests/test_progression_utils.py
+ERROR backend/tests/test_prompt_manager.py
+ERROR backend/tests/test_religion.py
+ERROR backend/tests/test_rumor.py
+ERROR backend/tests/test_scoring.py
+ERROR backend/tests/test_state_api.py - RuntimeError: WorldStateManager is a ...
+ERROR backend/tests/test_state_storage.py - RuntimeError: WorldStateManager i...
+ERROR backend/tests/test_stats.py - sqlalchemy.exc.InvalidRequestError: Table...
+ERROR backend/tests/test_stress_test_utils.py - RuntimeError: WorldStateManag...
+ERROR backend/tests/test_system_hooks.py
+ERROR backend/tests/test_terrain_generator.py - RuntimeError: WorldStateManag...
+ERROR backend/tests/test_tick_utils.py - RuntimeError: WorldStateManager is a...
+ERROR backend/tests/test_user_models.py - sqlalchemy.exc.InvalidRequestError:...
+ERROR backend/tests/test_validation_service.py - sqlalchemy.exc.InvalidReques...
+ERROR backend/tests/test_world_event_utils.py - RuntimeError: WorldStateManag...
+ERROR backend/tests/test_world_routes.py - RuntimeError: WorldStateManager is...
+ERROR backend/tests/test_world_state_manager.py - RuntimeError: WorldStateMan...
+ERROR backend/tests/test_worldgen_api.py - RuntimeError: WorldStateManager is...
+ERROR backend/tests/unit/systems/religion/test_membership_service.py
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 50 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+================= 19 skipped, 59 warnings, 50 errors in 8.01s ==================

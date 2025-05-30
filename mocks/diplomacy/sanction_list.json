@@ -1,0 +1,42 @@
+[
+  {
+    "id": "3f862b59-f2d4-4082-9e67-373d33910cb5",
+    "created_at": "2025-05-17T01:34:24.949338Z",
+    "updated_at": "2025-05-29T01:34:24.949340Z",
+    "name": "Hit",
+    "description": "First American story rise activity remain.",
+    "status": "PENDING"
+  },
+  {
+    "id": "850191ea-c975-43ca-ab13-f71a311eee8b",
+    "created_at": "2025-05-14T01:34:24.949343Z",
+    "updated_at": "2025-05-28T01:34:24.949344Z",
+    "name": "Away",
+    "description": "Join increase different part yeah watch couple.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "8735f058-ce76-4b49-b51b-2c0ec2072f43",
+    "created_at": "2025-05-10T01:34:24.949348Z",
+    "updated_at": "2025-05-26T01:34:24.949349Z",
+    "name": "Along",
+    "description": "Cut production size on career at.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "69c6a5c2-214e-4a17-bfd1-493e819fc8ae",
+    "created_at": "2025-05-23T01:34:24.949352Z",
+    "updated_at": "2025-05-26T01:34:24.949354Z",
+    "name": "Smile",
+    "description": "Poor recent country level.",
+    "status": "PENDING"
+  },
+  {
+    "id": "7198fdb2-cfa5-4152-b015-3faddcd8f624",
+    "created_at": "2025-05-19T01:34:24.949357Z",
+    "updated_at": "2025-05-28T01:34:24.949358Z",
+    "name": "Tell",
+    "description": "Summer else enter sure now.",
+    "status": "ACTIVE"
+  }
+]

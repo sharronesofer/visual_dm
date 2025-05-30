@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+22:55:24 [INFO] backend.systems.storage.json_storage: JSONStorageManager initialized with base path: /Users/Sharrone/Visual_DM/data
+22:55:24 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+collected 27 items / 1 error
+
+==================================== ERRORS ====================================
+___ ERROR collecting backend/tests/systems/memory/test_memory_categories.py ____
+ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/systems/memory/test_memory_categories.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+backend/tests/systems/memory/test_memory_categories.py:9: in <module>
+    from backend.systems.memory.models.memory_categories import MemoryCategory
+E   ModuleNotFoundError: No module named 'backend.systems.memory.models.memory_categories'
+------------------------------- Captured stdout --------------------------------
+🔑 Loaded GPT key from .env: sk-proj-if42...5uQA
+------------------------------- Captured stderr --------------------------------
+WARNING:root:Event system not available, using stub implementation
+INFO:backend.systems.storage.json_storage:JSONStorageManager initialized with base path: /Users/Sharrone/Visual_DM/data
+INFO:backend.systems.memory.memory_manager:MemoryManager initialized
+=============================== warnings summary ===============================
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+backend/systems/storage/events.py:13
+  /Users/Sharrone/Visual_DM/backend/systems/storage/events.py:13: DeprecationWarning: Importing from backend.systems.events.event_dispatcher is deprecated. Use backend.app.core.events.event_dispatcher instead.
+    from backend.systems.events.event_dispatcher import EventDispatcher
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441: PytestConfigWarning: Unknown config option: verbose
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR backend/tests/systems/memory/test_memory_categories.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+========================= 4 warnings, 1 error in 0.58s =========================
+
+
+Test Duration: 1.27 seconds
+Exit Code: 2

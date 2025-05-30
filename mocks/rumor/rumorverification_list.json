@@ -1,0 +1,42 @@
+[
+  {
+    "id": "50284738-caee-4a15-a689-eefc019a2947",
+    "created_at": "2025-05-26T01:34:25.032870Z",
+    "updated_at": "2025-05-25T01:34:25.032872Z",
+    "name": "High",
+    "description": "Happen possible use hear agree act might.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "9babdae2-7484-4263-b531-13d948245aae",
+    "created_at": "2025-05-01T01:34:25.032877Z",
+    "updated_at": "2025-05-28T01:34:25.032879Z",
+    "name": "So",
+    "description": "Short hope within end group.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "041ecb6b-5cf7-4e87-9627-d114e442c5d9",
+    "created_at": "2025-05-01T01:34:25.032883Z",
+    "updated_at": "2025-05-27T01:34:25.032885Z",
+    "name": "Machine",
+    "description": "Take represent candidate account.",
+    "status": "PENDING"
+  },
+  {
+    "id": "3944c1f8-a914-41e8-be71-e69c864ad041",
+    "created_at": "2025-05-13T01:34:25.032890Z",
+    "updated_at": "2025-05-24T01:34:25.032892Z",
+    "name": "Play",
+    "description": "Who seek strategy positive huge Democrat piece war.",
+    "status": "PENDING"
+  },
+  {
+    "id": "2830729b-25e9-4777-8ea5-3a79d5bfab0f",
+    "created_at": "2025-05-05T01:34:25.032896Z",
+    "updated_at": "2025-05-28T01:34:25.032898Z",
+    "name": "Enjoy",
+    "description": "Level once major people.",
+    "status": "PENDING"
+  }
+]

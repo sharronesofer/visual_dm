@@ -18,6 +18,38 @@ To enable deep modding and world creation, all core game-defining data should be
 | Religion/Diplom. | religion, diplomacy        | Religion, diplomacy, politics                 |
 | Tech/Custom      | technology, custom_rules   | Tech trees, modder overrides                  |
 
+## Two-Tier Modding System Vision
+
+The Visual DM modding system will follow a dual-track approach to accommodate different user types:
+
+### "True Modder" System
+For technical users who want deep control over custom content creation:
+- Direct JSON file editing and uploading with schema validation
+- Sprite/animation asset management with proper categorization
+- Integration with GPT for automated balance checking and system integration
+- Content ownership management and agreements
+- Comprehensive documentation for each file format and schema
+
+### "Casual Modder" GUI
+For non-technical users who want to create custom worlds without coding:
+- User-friendly interface with predefined assets
+- Selection panels for assets previously uploaded by "true modders"
+- Text fields for narrative content (factions, background stories, etc.)
+- Visual controls (dropdowns, sliders) for world generation parameters
+- Built-in limits to prevent conflicts and ensure balance
+
+### World Seed Generation
+The modding system primarily serves to generate world seeds rather than runtime mods:
+- Mods define a unique world/continent/server that remains consistent
+- Players can travel between worlds, bringing their character and equipment
+- No runtime enabling/disabling of mods - each world has its own predefined ruleset
+- Core game mechanics (leveling system, feat acquisition, skill systems) remain constant across worlds
+
+### Mod Repository and Marketplace
+- All mods will be stored in a central repository for selection
+- Future support for paid mods with revenue sharing for creators
+- Content moderation and validation to ensure quality and compatibility
+
 ## Long-term Vision
 - Develop a modder-friendly UI with sliders, visual options, and fields for non-technical users to build worlds.
 - Store all modder-created assets (sprites, templates, etc.) in a central repository for reuse in future worlds.

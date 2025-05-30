@@ -1,0 +1,128 @@
+{
+  "version": "1.0",
+  "data": {
+    "forest": {
+      "id": "forest",
+      "name": "Forest",
+      "description": "Dense woodland, high biodiversity.",
+      "tags": ["wet", "temperate"],
+      "color": "#228B22",
+      "motif_weights": { "discovery": 0.2, "prosperity": 0.1 }
+    },
+    "plains": {
+      "id": "plains",
+      "name": "Plains",
+      "description": "Open grasslands with sparse trees.",
+      "tags": ["dry", "temperate"],
+      "color": "#8F9779",
+      "motif_weights": { "prosperity": 0.3, "conflict": 0.1 }
+    },
+    "mountain": {
+      "id": "mountain",
+      "name": "Mountain",
+      "description": "Elevated terrain with rocky outcrops.",
+      "tags": ["dry", "cold"],
+      "color": "#A9A9A9",
+      "motif_weights": { "survival": 0.3, "discovery": 0.2 }
+    },
+    "swamp": {
+      "id": "swamp",
+      "name": "Swamp",
+      "description": "Wetland with trees and murky water.",
+      "tags": ["wet", "warm"],
+      "color": "#4F7942",
+      "motif_weights": { "mystery": 0.3, "survival": 0.2 }
+    },
+    "coast": {
+      "id": "coast",
+      "name": "Coast",
+      "description": "Land adjacent to a body of water.",
+      "tags": ["wet", "temperate"],
+      "color": "#ADD8E6",
+      "motif_weights": { "prosperity": 0.2, "discovery": 0.2 }
+    },
+    "desert": {
+      "id": "desert",
+      "name": "Desert",
+      "description": "Arid land with little vegetation.",
+      "tags": ["dry", "hot"],
+      "color": "#DEB887",
+      "motif_weights": { "survival": 0.4, "mystery": 0.1 }
+    },
+    "tundra": {
+      "id": "tundra",
+      "name": "Tundra",
+      "description": "Treeless region in the far north.",
+      "tags": ["dry", "cold"],
+      "color": "#F5F5F5",
+      "motif_weights": { "survival": 0.4, "mystery": 0.1 }
+    },
+    "jungle": {
+      "id": "jungle",
+      "name": "Jungle",
+      "description": "Dense, tropical forest with high rainfall.",
+      "tags": ["wet", "hot"],
+      "color": "#006400",
+      "motif_weights": { "discovery": 0.3, "survival": 0.2 }
+    },
+    "beach": {
+      "id": "beach",
+      "name": "Beach",
+      "description": "Sandy shoreline adjacent to water.",
+      "tags": ["wet", "temperate"],
+      "color": "#F5DEB3",
+      "motif_weights": { "prosperity": 0.1, "discovery": 0.1 }
+    },
+    "hills": {
+      "id": "hills",
+      "name": "Hills",
+      "description": "Elevated land with gentle slopes.",
+      "tags": ["dry", "temperate"],
+      "color": "#8B4513",
+      "motif_weights": { "prosperity": 0.2, "conflict": 0.1 }
+    },
+    "steppe": {
+      "id": "steppe",
+      "name": "Steppe",
+      "description": "Large, flat grassland with no trees.",
+      "tags": ["dry", "cold"],
+      "color": "#D2B48C",
+      "motif_weights": { "conflict": 0.2, "survival": 0.2 }
+    },
+    "marsh": {
+      "id": "marsh",
+      "name": "Marsh",
+      "description": "Wetland with herbaceous vegetation.",
+      "tags": ["wet", "temperate"],
+      "color": "#556B2F",
+      "motif_weights": { "mystery": 0.2, "survival": 0.1 }
+    },
+    "ocean": {
+      "id": "ocean",
+      "name": "Ocean",
+      "description": "Large body of saltwater.",
+      "tags": ["wet", "temperate"],
+      "color": "#0000CD",
+      "motif_weights": { "discovery": 0.3, "mystery": 0.2 },
+      "is_water": true
+    },
+    "lake": {
+      "id": "lake",
+      "name": "Lake",
+      "description": "Large body of freshwater surrounded by land.",
+      "tags": ["wet", "temperate"],
+      "color": "#4169E1",
+      "motif_weights": { "prosperity": 0.2, "peace": 0.2 },
+      "is_water": true
+    },
+    "river": {
+      "id": "river",
+      "name": "River",
+      "description": "Natural flowing watercourse.",
+      "tags": ["wet", "temperate"],
+      "color": "#6495ED",
+      "motif_weights": { "prosperity": 0.2, "peace": 0.1 },
+      "is_water": true
+    }
+  }
+} 

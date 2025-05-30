@@ -1,0 +1,444 @@
+"""Comprehensive tests for Arc System models"""
+
+import pytest
+from datetime import datetime, timedelta
+from uuid import uuid4, UUID
+
+from backend.systems.arc.models import (
+    Arc, ArcType, ArcStatus, ArcPriority,
+    ArcStep, ArcStepStatus, ArcStepType, ArcStepTag,
+    ArcProgression, ArcCompletionRecord, ArcCompletionResult, ProgressionMethod,
+    ArcQuestMapping, ArcSystemIntegration, SystemHookConfiguration, IntegrationStatus, QuestMappingType
+)
+
+
+class TestArc:
+    """Test the Arc model"""
+    
+    def test_arc_creation_minimal(self):
+        """Test creating an arc with minimal required fields"""
+        arc = Arc(
+            title="Test Arc",
+            description="A test arc",
+            arc_type=ArcType.CHARACTER,
+            starting_point="Beginning",
+            preferred_ending="Ending"
+        )
+        
+        assert arc.title == "Test Arc"
+        assert arc.description == "A test arc"
+        assert arc.arc_type == ArcType.CHARACTER
+        assert arc.status == ArcStatus.PENDING
+        assert arc.priority == ArcPriority.MEDIUM
+        assert arc.current_step == 0
+        assert arc.completion_percentage == 0.0
+        assert isinstance(arc.id, UUID)
+        assert isinstance(arc.created_at, datetime)
+    
+    def test_arc_creation_full(self):
+        """Test creating an arc with all fields"""
+        arc_id = uuid4()
+        deadline = datetime.utcnow() + timedelta(days=30)
+        
+        arc = Arc(
+            id=arc_id,
+            title="Full Test Arc",
+            description="A comprehensive test arc",
+            arc_type=ArcType.REGIONAL,
+            status=ArcStatus.ACTIVE,
+            priority=ArcPriority.HIGH,
+            starting_point="Complex beginning",
+            preferred_ending="Complex ending",
+            current_narrative="Current state",
+            region_id="test_region",
+            character_id="test_character",
+            npc_id="test_npc",
+            faction_ids=["faction1", "faction2"],
+            current_step=5,
+            total_steps=10,
+            completion_percentage=50.0,
+            time_sensitivity=0.9,
+            deadline=deadline,
+            stall_threshold_days=15,
+            classification_tags={"location": "test_location"},
+            system_hooks=["combat", "faction"],
+            generation_context={"theme": "mystery"},
+            previous_arc_history=["previous_arc_id"],
+            created_by="test_user"
+        )
+        
+        assert arc.id == arc_id
+        assert arc.status == ArcStatus.ACTIVE
+        assert arc.priority == ArcPriority.HIGH
+        assert arc.region_id == "test_region"
+        assert arc.character_id == "test_character"
+        assert arc.npc_id == "test_npc"
+        assert len(arc.faction_ids) == 2
+        assert arc.current_step == 5
+        assert arc.total_steps == 10
+        assert arc.completion_percentage == 50.0
+        assert arc.time_sensitivity == 0.9
+        assert arc.deadline == deadline
+        assert arc.stall_threshold_days == 15
+        assert "location" in arc.classification_tags
+        assert "combat" in arc.system_hooks
+        assert arc.generation_context["theme"] == "mystery"
+    
+    def test_update_timestamp(self):
+        """Test timestamp update functionality"""
+        arc = Arc(
+            title="Timestamp Test",
+            description="Testing timestamps",
+            arc_type=ArcType.GLOBAL,
+            starting_point="Start",
+            preferred_ending="End"
+        )
+        
+        original_updated = arc.updated_at
+        original_activity = arc.last_activity
+        
+        # Small delay to ensure different timestamps
+        import time
+        time.sleep(0.001)
+        
+        arc.update_timestamp()
+        
+        assert arc.updated_at > original_updated
+        assert arc.last_activity > original_activity
+        assert arc.cache_invalidated is True
+    
+    def test_is_time_sensitive(self):
+        """Test time sensitivity checking"""
+        # Not time sensitive
+        arc = Arc(
+            title="No Time",
+            description="Not time sensitive",
+            arc_type=ArcType.CHARACTER,
+            starting_point="Start",
+            preferred_ending="End"
+        )
+        assert not arc.is_time_sensitive()
+        
+        # Time sensitive with deadline
+        arc.time_sensitivity = 0.8
+        arc.deadline = datetime.utcnow() + timedelta(days=1)
+        assert arc.is_time_sensitive()
+        
+        # Time sensitive but no deadline
+        arc.deadline = None
+        assert not arc.is_time_sensitive()
+    
+    def test_is_stalled(self):
+        """Test stall detection"""
+        arc = Arc(
+            title="Stall Test",
+            description="Testing stall detection",
+            arc_type=ArcType.REGIONAL,
+            starting_point="Start",
+            preferred_ending="End",
+            status=ArcStatus.ACTIVE,
+            stall_threshold_days=7
+        )
+        
+        # Fresh arc shouldn't be stalled
+        assert not arc.is_stalled()
+        
+        # Old activity should be stalled
+        arc.last_activity = datetime.utcnow() - timedelta(days=10)
+        assert arc.is_stalled()
+        
+        # Non-active arcs can't be stalled
+        arc.status = ArcStatus.COMPLETED
+        assert not arc.is_stalled()
+    
+    def test_is_overdue(self):
+        """Test overdue detection"""
+        arc = Arc(
+            title="Overdue Test",
+            description="Testing overdue detection",
+            arc_type=ArcType.CHARACTER,
+            starting_point="Start",
+            preferred_ending="End"
+        )
+        
+        # Not time sensitive, can't be overdue
+        assert not arc.is_overdue()
+        
+        # Future deadline
+        arc.time_sensitivity = 0.8
+        arc.deadline = datetime.utcnow() + timedelta(days=1)
+        assert not arc.is_overdue()
+        
+        # Past deadline
+        arc.deadline = datetime.utcnow() - timedelta(days=1)
+        assert arc.is_overdue()
+    
+    def test_get_scope_identifier(self):
+        """Test scope identifier retrieval"""
+        # Regional arc
+        arc = Arc(
+            title="Regional",
+            description="Regional arc",
+            arc_type=ArcType.REGIONAL,
+            starting_point="Start",
+            preferred_ending="End",
+            region_id="test_region"
+        )
+        assert arc.get_scope_identifier() == "test_region"
+        
+        # Character arc
+        arc.arc_type = ArcType.CHARACTER
+        arc.character_id = "test_character"
+        assert arc.get_scope_identifier() == "test_character"
+        
+        # NPC arc
+        arc.arc_type = ArcType.NPC
+        arc.npc_id = "test_npc"
+        assert arc.get_scope_identifier() == "test_npc"
+        
+        # Global arc (no scope)
+        arc.arc_type = ArcType.GLOBAL
+        assert arc.get_scope_identifier() is None
+    
+    def test_add_system_hook(self):
+        """Test adding system hooks"""
+        arc = Arc(
+            title="Hook Test",
+            description="Testing system hooks",
+            arc_type=ArcType.GLOBAL,
+            starting_point="Start",
+            preferred_ending="End"
+        )
+        
+        # Add new hook
+        arc.add_system_hook("combat")
+        assert "combat" in arc.system_hooks
+        
+        # Adding duplicate shouldn't create duplicate
+        original_length = len(arc.system_hooks)
+        arc.add_system_hook("combat")
+        assert len(arc.system_hooks) == original_length
+    
+    def test_update_classification_tag(self):
+        """Test updating classification tags"""
+        arc = Arc(
+            title="Tag Test",
+            description="Testing classification tags",
+            arc_type=ArcType.REGIONAL,
+            starting_point="Start",
+            preferred_ending="End"
+        )
+        
+        # Add tag
+        arc.update_classification_tag("location", "test_location")
+        assert arc.classification_tags["location"] == "test_location"
+        
+        # Update existing tag
+        arc.update_classification_tag("location", "new_location")
+        assert arc.classification_tags["location"] == "new_location"
+
+
+class TestArcStep:
+    """Test the ArcStep model"""
+    
+    def test_arc_step_creation_minimal(self):
+        """Test creating an ArcStep with minimal required fields"""
+        arc_id = uuid4()
+        
+        step = ArcStep(
+            arc_id=arc_id,
+            step_index=1,
+            title="Test Step",
+            description="A test step",
+            narrative_text="This is a test narrative",
+            step_type=ArcStepType.DISCOVERY
+        )
+        
+        assert step.arc_id == arc_id
+        assert step.step_index == 1
+        assert step.title == "Test Step"
+        assert step.description == "A test step"
+        assert step.narrative_text == "This is a test narrative"
+        assert step.step_type == ArcStepType.DISCOVERY
+        assert step.status == ArcStepStatus.PENDING
+        assert isinstance(step.created_at, datetime)
+        assert isinstance(step.updated_at, datetime)
+
+    def test_arc_step_creation_full(self):
+        """Test creating an ArcStep with all fields"""
+        arc_id = uuid4()
+        
+        step = ArcStep(
+            arc_id=arc_id,
+            step_index=2,
+            title="Complex Step",
+            description="A complex test step",
+            narrative_text="This is a complex narrative",
+            step_type=ArcStepType.CHALLENGE,
+            status=ArcStepStatus.AVAILABLE,
+            completion_criteria={"enemies_defeated": 5},
+            success_conditions=["all_enemies_defeated", "no_allies_lost"],
+            failure_conditions=["player_defeated", "time_expired"],
+            quest_probability=0.8,
+            estimated_duration=7
+        )
+        
+        assert step.arc_id == arc_id
+        assert step.step_index == 2
+        assert step.title == "Complex Step"
+        assert step.step_type == ArcStepType.CHALLENGE
+        assert step.status == ArcStepStatus.AVAILABLE
+        assert step.completion_criteria == {"enemies_defeated": 5}
+        assert "all_enemies_defeated" in step.success_conditions
+        assert "player_defeated" in step.failure_conditions
+        assert step.quest_probability == 0.8
+        assert step.estimated_duration == 7
+
+    def test_arc_step_update_timestamp(self):
+        """Test updating ArcStep timestamp"""
+        arc_id = uuid4()
+        
+        step = ArcStep(
+            arc_id=arc_id,
+            step_index=1,
+            title="Test Step",
+            description="A test step",
+            narrative_text="Test narrative",
+            step_type=ArcStepType.NARRATIVE
+        )
+        
+        original_time = step.updated_at
+        
+        # Wait a small amount to ensure timestamp difference
+        import time
+        time.sleep(0.01)
+        
+        step.update_timestamp()
+        
+        assert step.updated_at > original_time
+
+    def test_arc_step_status_transitions(self):
+        """Test ArcStep status transitions"""
+        arc_id = uuid4()
+        
+        step = ArcStep(
+            arc_id=arc_id,
+            step_index=1,
+            title="Test Step",
+            description="A test step",
+            narrative_text="Test narrative",
+            step_type=ArcStepType.DISCOVERY
+        )
+        
+        # Test initial status
+        assert step.status == ArcStepStatus.PENDING
+        
+        # Test status change
+        step.status = ArcStepStatus.ACTIVE
+        assert step.status == ArcStepStatus.ACTIVE
+        
+        # Test completion
+        step.complete_step()
+        assert step.status == ArcStepStatus.COMPLETED
+        assert step.completed_at is not None
+
+
+class TestArcProgression:
+    """Test the ArcProgression model"""
+    
+    def test_arc_progression_creation(self):
+        """Test creating an ArcProgression"""
+        arc_id = uuid4()
+        
+        progression = ArcProgression(
+            arc_id=arc_id,
+            current_step_index=3,
+            completed_steps=[0, 1, 2],
+            participating_characters=["char1", "char2"],
+            total_quest_count=5,
+            successful_quests=3,
+            player_engagement_score=0.8
+        )
+        
+        assert progression.arc_id == arc_id
+        assert progression.current_step_index == 3
+        assert progression.completed_steps == [0, 1, 2]
+        assert progression.participating_characters == ["char1", "char2"]
+        assert progression.total_quest_count == 5
+        assert progression.successful_quests == 3
+        assert progression.player_engagement_score == 0.8
+        assert isinstance(progression.created_at, datetime)
+
+
+class TestArcSystemIntegration:
+    """Test ArcSystemIntegration model"""
+
+    def test_arc_system_integration_creation(self):
+        """Test creating an ArcSystemIntegration"""
+        arc_id = uuid4()
+        
+        integration = ArcSystemIntegration(
+            arc_id=arc_id,
+            quest_mappings=[uuid4(), uuid4()],
+            system_hooks=[uuid4()],
+            total_quests_generated=5,
+            successful_integrations=4,
+            failed_integrations=1,
+            overall_status=IntegrationStatus.ACTIVE,
+            health_score=0.8
+        )
+        
+        assert integration.arc_id == arc_id
+        assert len(integration.quest_mappings) == 2
+        assert len(integration.system_hooks) == 1
+        assert integration.total_quests_generated == 5
+        assert integration.successful_integrations == 4
+        assert integration.failed_integrations == 1
+        assert integration.overall_status == IntegrationStatus.ACTIVE
+        assert integration.health_score == 0.8
+        assert isinstance(integration.created_at, datetime)
+
+
+# Test Enums
+class TestEnums:
+    """Test Arc System enums"""
+    
+    def test_arc_type_enum(self):
+        """Test ArcType enum values"""
+        assert ArcType.GLOBAL == "global"
+        assert ArcType.REGIONAL == "regional"
+        assert ArcType.CHARACTER == "character"
+        assert ArcType.NPC == "npc"
+    
+    def test_arc_status_enum(self):
+        """Test ArcStatus enum values"""
+        assert ArcStatus.PENDING == "pending"
+        assert ArcStatus.ACTIVE == "active"
+        assert ArcStatus.STALLED == "stalled"
+        assert ArcStatus.FAILED == "failed"
+        assert ArcStatus.COMPLETED == "completed"
+        assert ArcStatus.ABANDONED == "abandoned"
+    
+    def test_arc_priority_enum(self):
+        """Test ArcPriority enum values"""
+        assert ArcPriority.LOW == "low"
+        assert ArcPriority.MEDIUM == "medium"
+        assert ArcPriority.HIGH == "high"
+        assert ArcPriority.URGENT == "urgent"
+    
+    def test_arc_step_type_enum(self):
+        """Test ArcStepType enum values"""
+        assert ArcStepType.NARRATIVE == "narrative"
+        assert ArcStepType.CHALLENGE == "challenge"
+        assert ArcStepType.DISCOVERY == "discovery"
+        assert ArcStepType.INTERACTION == "interaction"
+        assert ArcStepType.EXPLORATION == "exploration"
+        assert ArcStepType.DECISION == "decision"
+    
+    def test_arc_step_status_enum(self):
+        """Test ArcStepStatus enum values"""
+        assert ArcStepStatus.PENDING == "pending"
+        assert ArcStepStatus.ACTIVE == "active"
+        assert ArcStepStatus.COMPLETED == "completed"
+        assert ArcStepStatus.FAILED == "failed"
+        assert ArcStepStatus.SKIPPED == "skipped" 

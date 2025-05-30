@@ -1,0 +1,19 @@
+{
+  "character_id": "<MagicMock name='mock.query().filter().first().uuid' id='4487421648'>",
+  "goals": [
+    {
+      "goal_id": "c8cd1702-4f56-4720-bde1-66764b9d98a9",
+      "character_id": "<MagicMock name='mock.query().filter().first().uuid' id='4487421648'>",
+      "description": "A basic goal all characters start with",
+      "goal_type": "GoalType.PERSONAL",
+      "priority": "GoalPriority.HIGH",
+      "status": "GoalStatus.ACTIVE",
+      "progress": 0.0,
+      "parent_goal_id": null,
+      "metadata": {},
+      "created_at": "2025-05-25T02:43:05.490064",
+      "updated_at": "2025-05-25T02:43:05.490069",
+      "subgoals": []
+    }
+  ]
+}

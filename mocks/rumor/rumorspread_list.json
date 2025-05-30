@@ -1,0 +1,42 @@
+[
+  {
+    "id": "c2c422ff-df4f-4298-8815-7da8ba0e21f6",
+    "created_at": "2025-05-09T01:34:25.032433Z",
+    "updated_at": "2025-05-24T01:34:25.032437Z",
+    "name": "Crime",
+    "description": "Phone there sea prove.",
+    "status": "PENDING"
+  },
+  {
+    "id": "7a5e5b4b-58c1-4d51-9722-609d9f712302",
+    "created_at": "2025-05-07T01:34:25.032442Z",
+    "updated_at": "2025-05-29T01:34:25.032444Z",
+    "name": "Rule",
+    "description": "High learn second husband executive television.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "26ffdc89-f2ae-48e4-83ac-bdfc02b25489",
+    "created_at": "2025-05-15T01:34:25.032448Z",
+    "updated_at": "2025-05-24T01:34:25.032450Z",
+    "name": "Effect",
+    "description": "Accept position identify whose later they finally.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "46a5f21d-0f57-4b81-a33c-90212d746167",
+    "created_at": "2025-05-01T01:34:25.032454Z",
+    "updated_at": "2025-05-29T01:34:25.032456Z",
+    "name": "Agree",
+    "description": "When stock game president.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "0794c323-7871-4cd9-a180-16883a3624a6",
+    "created_at": "2025-05-15T01:34:25.032461Z",
+    "updated_at": "2025-05-24T01:34:25.032463Z",
+    "name": "Write",
+    "description": "Discussion choice since chance same unit.",
+    "status": "PENDING"
+  }
+]

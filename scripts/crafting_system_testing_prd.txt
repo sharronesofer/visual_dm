@@ -1,0 +1,92 @@
+# Crafting System Test Suite PRD
+
+## Overview
+This document outlines the testing requirements for the `/backend/systems/crafting` directory in the Visual DM project. The crafting system manages recipes, ingredients, crafting stations, and the crafting process with features like material substitution, quality-based results, and skill progression.
+
+## Testing Requirements
+
+### Unit Tests
+
+1. **Model Testing**
+   - Test CraftingRecipe model initialization, serialization, and validation
+   - Test CraftingIngredient model initialization and quantity management
+   - Test CraftingResult model initialization and quality-based outcomes
+   - Test CraftingStation model initialization and validation
+   - Test model relationships and references
+   - Test model inheritance from base classes
+   - Test string representations (__repr__, __str__)
+
+2. **CraftingService Testing**
+   - Test recipe loading and validation
+   - Test recipe discovery and learning functionality
+   - Test ingredient validation and substitution
+   - Test crafting station requirements
+   - Test crafting process execution
+   - Test quality calculation logic
+   - Test skill progression integration
+   - Test crafting failure handling
+   - Test resource consumption
+   - Test result generation
+   - Test edge cases (invalid recipes, missing ingredients)
+
+3. **Schema Testing**
+   - Test recipe schema validation
+   - Test station schema validation
+   - Test serialization/deserialization
+   - Test schema error handling
+   - Test schema version compatibility
+
+4. **Utility Testing**
+   - Test helper functions for material substitution
+   - Test quality modifiers
+   - Test probability calculations
+   - Test resource management utilities
+
+### Integration Tests
+
+1. **Complete Crafting Workflow**
+   - Test end-to-end crafting process
+   - Test recipe discovery → learning → crafting workflow
+   - Test integration with inventory system
+   - Test integration with skill system
+   - Test integration with notification system
+   - Test crafting with different quality ingredients
+   - Test crafting at different stations
+
+2. **Error Handling and Edge Cases**
+   - Test behavior with invalid recipes
+   - Test behavior with insufficient ingredients
+   - Test behavior with unavailable crafting stations
+   - Test behavior with insufficient skill levels
+   - Test concurrent crafting operations
+
+### Test Setup
+
+- Use pytest fixtures for test setup and dependency injection
+- Use mocking for external systems (inventory, skills, notifications)
+- Create sample recipes and stations for testing
+- Follow AAA pattern (Arrange-Act-Assert)
+- Use temporary files for testing file-based operations
+
+## Test File Structure
+
+1. `test_models.py` - Unit tests for data models (CraftingRecipe, CraftingIngredient, CraftingResult, CraftingStation)
+2. `test_crafting_service.py` - Unit tests for CraftingService with mocked dependencies
+3. `test_integration.py` - Integration tests for the complete crafting workflow
+4. `test_schemas.py` - Tests for schema validation
+
+## Deliverables
+
+1. Comprehensive test suite covering all components
+2. Test coverage report (target: 90% coverage)
+3. Documentation of testing approach and patterns
+4. Sample test data (recipes, ingredients, stations)
+
+## Acceptance Criteria
+
+1. All tests pass successfully
+2. Code coverage meets or exceeds 90% for the crafting system
+3. Tests handle edge cases and error conditions appropriately
+4. Test suite runs efficiently (completes in under 30 seconds)
+5. Tests are well-documented with clear purpose statements
+6. Both happy path and error scenarios are properly tested 

@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "description": "Item type definitions for Visual DM",
+  "items": [
+    {
+      "id": "weapon",
+      "name": "Weapon",
+      "description": "Items used to cause damage",
+      "subtypes": ["sword", "axe", "bow", "staff", "dagger"]
+    },
+    {
+      "id": "armor",
+      "name": "Armor",
+      "description": "Items used for protection",
+      "subtypes": ["light", "medium", "heavy", "shield"]
+    },
+    {
+      "id": "consumable",
+      "name": "Consumable",
+      "description": "Items that can be consumed for effects",
+      "subtypes": ["potion", "food", "scroll"]
+    },
+    {
+      "id": "material",
+      "name": "Material",
+      "description": "Raw materials for crafting",
+      "subtypes": ["ore", "herb", "hide", "wood", "gem"]
+    },
+    {
+      "id": "quest",
+      "name": "Quest Item",
+      "description": "Items related to quests",
+      "subtypes": ["key", "artifact", "document"]
+    }
+  ]
+} 

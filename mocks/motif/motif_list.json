@@ -1,0 +1,42 @@
+[
+  {
+    "id": "c3e3f456-93e2-4c84-8276-da12f63911ee",
+    "created_at": "2025-05-19T01:34:24.961683Z",
+    "updated_at": "2025-05-28T01:34:24.961685Z",
+    "name": "Take",
+    "description": "Improve can including value.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "226f3c87-d708-44ff-b575-6f290e9ae046",
+    "created_at": "2025-05-25T01:34:24.961688Z",
+    "updated_at": "2025-05-24T01:34:24.961690Z",
+    "name": "Process",
+    "description": "Prepare mind believe.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "4f6c3001-48d1-4504-b30c-6cdf6c6f8eca",
+    "created_at": "2025-05-08T01:34:24.961694Z",
+    "updated_at": "2025-05-27T01:34:24.961695Z",
+    "name": "Between",
+    "description": "Poor else good turn quite.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "2afe3696-3139-4390-94f5-2aee3a2da480",
+    "created_at": "2025-05-23T01:34:24.961698Z",
+    "updated_at": "2025-05-24T01:34:24.961700Z",
+    "name": "Finally",
+    "description": "Major wind thank until every.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "95e4b188-dba2-45ac-ae36-0c9db11c81c0",
+    "created_at": "2025-05-08T01:34:24.961703Z",
+    "updated_at": "2025-05-24T01:34:24.961705Z",
+    "name": "Member",
+    "description": "Financial up road consider thank him song.",
+    "status": "INACTIVE"
+  }
+]

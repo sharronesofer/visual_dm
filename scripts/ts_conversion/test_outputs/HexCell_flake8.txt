@@ -1,1 +1,0 @@
-scripts/ts_conversion/test_outputs/HexCell.py:6:16: E999 SyntaxError: invalid syntax

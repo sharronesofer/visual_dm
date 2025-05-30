@@ -1,0 +1,42 @@
+[
+  {
+    "id": "02159bd2-bc55-4e3a-9cf2-d72ebb67e901",
+    "created_at": "2025-05-07T01:34:24.971398Z",
+    "updated_at": "2025-05-29T01:34:24.971400Z",
+    "name": "Marriage",
+    "description": "Mother whom agency level whatever author our approach.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "dcd0e087-1f93-442e-8af7-120de9f46083",
+    "created_at": "2025-05-07T01:34:24.971404Z",
+    "updated_at": "2025-05-26T01:34:24.971405Z",
+    "name": "Behavior",
+    "description": "Generation team very.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "e0e5905f-abfb-464e-93aa-425c4d229854",
+    "created_at": "2025-05-13T01:34:24.971408Z",
+    "updated_at": "2025-05-25T01:34:24.971410Z",
+    "name": "Little",
+    "description": "Candidate class painting very.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "c6c065a9-9195-4d79-a4bd-c7db3a80e4ae",
+    "created_at": "2025-05-25T01:34:24.971413Z",
+    "updated_at": "2025-05-25T01:34:24.971414Z",
+    "name": "Design",
+    "description": "Attorney second four experience she hotel.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "ecda9acf-60ec-4c56-82a3-788abc2e951d",
+    "created_at": "2025-05-11T01:34:24.971418Z",
+    "updated_at": "2025-05-28T01:34:24.971419Z",
+    "name": "Same",
+    "description": "No defense and test list late.",
+    "status": "ACTIVE"
+  }
+]

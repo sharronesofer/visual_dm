@@ -1,0 +1,42 @@
+[
+  {
+    "id": "11161b29-e894-4b5e-a97b-573c1618a150",
+    "created_at": "2025-05-13T01:34:24.948419Z",
+    "updated_at": "2025-05-25T01:34:24.948421Z",
+    "name": "Hospital",
+    "description": "Someone let save parent position.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "73b75b4f-ffa6-4c93-858c-755db7c99db7",
+    "created_at": "2025-05-18T01:34:24.948425Z",
+    "updated_at": "2025-05-25T01:34:24.948426Z",
+    "name": "Floor",
+    "description": "Politics federal will on.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "c035936a-1af2-4b2c-adfe-23593524fbbf",
+    "created_at": "2025-05-18T01:34:24.948430Z",
+    "updated_at": "2025-05-26T01:34:24.948431Z",
+    "name": "Center",
+    "description": "Close never think executive apply gun.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "a35576f6-d113-4959-8bd6-0272908a3445",
+    "created_at": "2025-05-26T01:34:24.948435Z",
+    "updated_at": "2025-05-28T01:34:24.948436Z",
+    "name": "Deep",
+    "description": "Remember six question.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "2a278c8b-476c-484f-959c-42fefb6b0d0f",
+    "created_at": "2025-04-29T01:34:24.948439Z",
+    "updated_at": "2025-05-25T01:34:24.948441Z",
+    "name": "Ever",
+    "description": "Usually late throw five.",
+    "status": "PENDING"
+  }
+]

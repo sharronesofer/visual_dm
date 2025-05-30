@@ -1,0 +1,27 @@
+{
+  "test_results": [
+    {
+      "success": false,
+      "errors": [
+        "Test execution timed out"
+      ],
+      "warnings": [],
+      "collected_tests": 0,
+      "failed_tests": 0,
+      "passed_tests": 0,
+      "output": "TIMEOUT"
+    }
+  ],
+  "import_violations": [],
+  "duplicate_tests": [
+    [
+      "/Users/Sharrone/Visual_DM/backend/tests/systems/poi/test_utils.py",
+      "/Users/Sharrone/Visual_DM/backend/tests/systems/inventory/test_utils.py"
+    ],
+    [
+      "/Users/Sharrone/Visual_DM/backend/tests/systems/poi/test_utils.py",
+      "/Users/Sharrone/Visual_DM/backend/tests/systems/analytics/test_utils.py"
+    ]
+  ],
+  "timestamp": "/Users/Sharrone/Visual_DM/backend"
+}

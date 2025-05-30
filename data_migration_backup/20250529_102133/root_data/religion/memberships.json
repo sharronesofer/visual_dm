@@ -1,0 +1,789 @@
+{
+  "2bfc9d46-0b5f-4041-b9be-87d3b6ee494e": {
+    "id": "2bfc9d46-0b5f-4041-b9be-87d3b6ee494e",
+    "entity_id": "character123",
+    "religion_id": "f249689e-331f-4596-af89-0f798b6354b5",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:13:10.419666",
+    "last_activity_date": "2025-05-28 19:13:10.419666",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "9ee097a4-f32e-4a17-89ae-1646d3d07063": {
+    "id": "9ee097a4-f32e-4a17-89ae-1646d3d07063",
+    "entity_id": "character123",
+    "religion_id": "2efb7299-6019-4ea8-b8fc-14272945bb53",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:14:45.877406",
+    "last_activity_date": "2025-05-28 19:14:45.877408",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "830a24d5-1615-49d0-a369-b4d3861301b7": {
+    "id": "830a24d5-1615-49d0-a369-b4d3861301b7",
+    "entity_id": "character456",
+    "religion_id": "38bf13ec-fa46-4456-9293-66140113b919",
+    "entity_type": "character",
+    "devotion_level": 75,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:14:45.882747",
+    "last_activity_date": "2025-05-28 19:14:45.883653",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:14:45.882990",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        }
+      ],
+      "level_change_reason": "Increased devotion"
+    }
+  },
+  "3d1e4311-a749-4236-8e89-23b9987d4dd0": {
+    "id": "3d1e4311-a749-4236-8e89-23b9987d4dd0",
+    "entity_id": "character123",
+    "religion_id": "62fb782c-5fdc-4bd1-8de5-308f815722ca",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:16:36.571311",
+    "last_activity_date": "2025-05-28 19:16:36.571312",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "eb7e60b1-3a2b-46e9-8347-da85d1a1bf53": {
+    "id": "eb7e60b1-3a2b-46e9-8347-da85d1a1bf53",
+    "entity_id": "character456",
+    "religion_id": "da8f439e-cf78-4fc5-8ad6-73ddfdb4b0ef",
+    "entity_type": "character",
+    "devotion_level": 65,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:16:36.574713",
+    "last_activity_date": "2025-05-28 19:16:36.576676",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:16:36.576677",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "1f7d6d32-417c-4c4d-9f10-44778775e1c9": {
+    "id": "1f7d6d32-417c-4c4d-9f10-44778775e1c9",
+    "entity_id": "character456",
+    "religion_id": "9b039ced-7d46-4dc0-9b7d-410d4dff1c79",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:16:59.042690",
+    "last_activity_date": "2025-05-28 19:16:59.044695",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:16:59.043865",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:16:59.044697",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "981f57f0-4c23-498c-8241-b35bec90b2c9": {
+    "id": "981f57f0-4c23-498c-8241-b35bec90b2c9",
+    "entity_id": "character123",
+    "religion_id": "dd7c4a41-8971-4601-b0b8-68f11347c6ef",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:04.517427",
+    "last_activity_date": "2025-05-28 19:17:04.517428",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "79e67d3c-7e07-4991-a634-bdddd75fd9c5": {
+    "id": "79e67d3c-7e07-4991-a634-bdddd75fd9c5",
+    "entity_id": "character456",
+    "religion_id": "57a64b3e-b0bd-4508-bdca-fabe7e886f99",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:04.521347",
+    "last_activity_date": "2025-05-28 19:17:04.522987",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:17:04.521968",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:17:04.522988",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "a77c7801-73df-4ac0-87bd-22e0179179dd": {
+    "id": "a77c7801-73df-4ac0-87bd-22e0179179dd",
+    "entity_id": "character123",
+    "religion_id": "f2b3e6e5-d44a-487e-bff2-a665c39db610",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:12.958535",
+    "last_activity_date": "2025-05-28 19:17:12.958535",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "db754ba9-b882-4218-ba20-39767c5c62fb": {
+    "id": "db754ba9-b882-4218-ba20-39767c5c62fb",
+    "entity_id": "character456",
+    "religion_id": "8efd7a6f-c392-4f0d-9769-53a71cd0bc81",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:12.966004",
+    "last_activity_date": "2025-05-28 19:17:12.969279",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:17:12.967139",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:17:12.969281",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "1c83ec16-916a-4232-b3d9-df2c99927c37": {
+    "id": "1c83ec16-916a-4232-b3d9-df2c99927c37",
+    "entity_id": "character123",
+    "religion_id": "4a4ecb22-466d-40e5-b326-b7e0c9d9b2ea",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:21.881785",
+    "last_activity_date": "2025-05-28 19:17:21.881786",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "5331bc0d-ccdd-4451-9123-a53fbb8e01dd": {
+    "id": "5331bc0d-ccdd-4451-9123-a53fbb8e01dd",
+    "entity_id": "character456",
+    "religion_id": "b6c237d4-9f9a-4ce1-811c-93ea07bf382f",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:21.889400",
+    "last_activity_date": "2025-05-28 19:17:21.892796",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:17:21.890581",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:17:21.892798",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "d54bee47-2163-4681-8f43-d2bea10464a5": {
+    "id": "d54bee47-2163-4681-8f43-d2bea10464a5",
+    "entity_id": "character123",
+    "religion_id": "2c3b1c02-d10c-4872-8c19-e5e2e9ebfd64",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:28.114245",
+    "last_activity_date": "2025-05-28 19:17:28.114246",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "d127dae1-bf7f-463b-92f9-193408364b4e": {
+    "id": "d127dae1-bf7f-463b-92f9-193408364b4e",
+    "entity_id": "character456",
+    "religion_id": "2318e7f5-2957-4d8c-946c-6b5bd86aec33",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:17:28.120883",
+    "last_activity_date": "2025-05-28 19:17:28.124099",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:17:28.121888",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:17:28.124101",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "157b4e0e-7883-4600-bbcf-eba616618bb3": {
+    "id": "157b4e0e-7883-4600-bbcf-eba616618bb3",
+    "entity_id": "character1",
+    "religion_id": "330fc53f-a3ee-411d-90ce-764f59ed1543",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:20:25.145149",
+    "last_activity_date": "2025-05-28 19:20:25.145149",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "709a7959-3e8f-4544-bc9a-8e0eee8cc7da": {
+    "id": "709a7959-3e8f-4544-bc9a-8e0eee8cc7da",
+    "entity_id": "npc1",
+    "religion_id": "330fc53f-a3ee-411d-90ce-764f59ed1543",
+    "entity_type": "npc",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:20:25.146346",
+    "last_activity_date": "2025-05-28 19:20:25.146347",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "e389c338-dabd-42c2-9d8c-cbd6250d80ef": {
+    "id": "e389c338-dabd-42c2-9d8c-cbd6250d80ef",
+    "entity_id": "character456",
+    "religion_id": "2ea6b90a-35ef-4bf2-bd87-e91e5e46a668",
+    "entity_type": "character",
+    "devotion_level": 70,
+    "level": "zealot",
+    "conversion_date": "2025-05-28 19:20:25.150964",
+    "last_activity_date": "2025-05-28 19:20:25.151821",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "level_change_reason": "Extreme dedication"
+    }
+  },
+  "037fc553-31f1-4546-a8d4-62d25b092bef": {
+    "id": "037fc553-31f1-4546-a8d4-62d25b092bef",
+    "entity_id": "char1",
+    "religion_id": "e571a80d-7eec-4f91-8160-53f65298e971",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:20:25.170111",
+    "last_activity_date": "2025-05-28 19:20:25.170112",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "ebee96f4-cde6-4585-b5a1-39d6cc91e202": {
+    "id": "ebee96f4-cde6-4585-b5a1-39d6cc91e202",
+    "entity_id": "char2",
+    "religion_id": "e571a80d-7eec-4f91-8160-53f65298e971",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:20:25.171589",
+    "last_activity_date": "2025-05-28 19:20:25.171590",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "a0dc1def-aab7-4653-9e4f-42881b5bcdd8": {
+    "id": "a0dc1def-aab7-4653-9e4f-42881b5bcdd8",
+    "entity_id": "npc1",
+    "religion_id": "e571a80d-7eec-4f91-8160-53f65298e971",
+    "entity_type": "npc",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:20:25.172945",
+    "last_activity_date": "2025-05-28 19:20:25.172946",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "eba5f901-1ce7-444e-8b5d-7589782e03cd": {
+    "id": "eba5f901-1ce7-444e-8b5d-7589782e03cd",
+    "entity_id": "character123",
+    "religion_id": "2c4e80a0-df2b-4fb9-b072-f76c3acc49e5",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:20:25.178150",
+    "last_activity_date": "2025-05-28 19:20:25.178151",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "aa38f74e-0d0c-4efc-b841-cbf31688c576": {
+    "id": "aa38f74e-0d0c-4efc-b841-cbf31688c576",
+    "entity_id": "character456",
+    "religion_id": "f6219a86-8cc2-4929-969e-8e8ac1750372",
+    "entity_type": "character",
+    "devotion_level": 75,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:20:25.183826",
+    "last_activity_date": "2025-05-28 19:20:25.185641",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "777a69a9-6994-4fa7-aec5-3ed32c414ee2": {
+    "id": "777a69a9-6994-4fa7-aec5-3ed32c414ee2",
+    "entity_id": "character666",
+    "religion_id": "e6652ecc-00fc-4e99-a2e5-3ab8e1427527",
+    "entity_type": "character",
+    "devotion_level": 40,
+    "level": "zealot",
+    "conversion_date": "2025-05-28 19:20:25.344081",
+    "last_activity_date": "2025-05-28 19:20:25.348572",
+    "is_public": true,
+    "role": "high_priest",
+    "metadata": {
+      "updated": true
+    }
+  },
+  "6e07397c-5c3b-43ea-a679-2c79edbbab0b": {
+    "id": "6e07397c-5c3b-43ea-a679-2c79edbbab0b",
+    "entity_id": "character777",
+    "religion_id": "660cc301-f36b-4f63-a63b-2a1817a73e77",
+    "entity_type": "character",
+    "devotion_level": 45,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:20:25.362569",
+    "last_activity_date": "2025-05-28 19:20:25.371036",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:20:25.364790",
+          "change": 10,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:20:25.368758",
+          "change": 30,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:20:25.371038",
+          "change": -40,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "f9d8a1c5-20f3-49d5-b747-00bde27990d2": {
+    "id": "f9d8a1c5-20f3-49d5-b747-00bde27990d2",
+    "entity_id": "character888",
+    "religion_id": "04f659de-15e1-454f-b529-2468dad884bc",
+    "entity_type": "npc",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:20:25.377745",
+    "last_activity_date": "2025-05-28 19:20:25.377745",
+    "is_public": true,
+    "role": "priest",
+    "metadata": {}
+  },
+  "4afedd48-ff66-46a4-ae46-a2399af5fc73": {
+    "id": "4afedd48-ff66-46a4-ae46-a2399af5fc73",
+    "entity_id": "multi_member",
+    "religion_id": "9052a70a-4e13-4861-ba1b-9be05efe5690",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:20:25.391568",
+    "last_activity_date": "2025-05-28 19:20:25.391569",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "93ddd530-cd91-4e94-b26b-7c63b384ee6d": {
+    "id": "93ddd530-cd91-4e94-b26b-7c63b384ee6d",
+    "entity_id": "multi_member",
+    "religion_id": "506f867b-1bf5-40d1-80ed-7d2adff6d6ca",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:20:25.392939",
+    "last_activity_date": "2025-05-28 19:20:25.392940",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "5143f08e-d98e-4638-a696-3784abbff0e8": {
+    "id": "5143f08e-d98e-4638-a696-3784abbff0e8",
+    "entity_id": "character1",
+    "religion_id": "6ec05499-0a29-4289-b8bb-a86ecf42197e",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:24:27.395724",
+    "last_activity_date": "2025-05-28 19:24:27.395726",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "121e8f37-4a7c-4cbd-8c52-26918a4627dc": {
+    "id": "121e8f37-4a7c-4cbd-8c52-26918a4627dc",
+    "entity_id": "npc1",
+    "religion_id": "6ec05499-0a29-4289-b8bb-a86ecf42197e",
+    "entity_type": "npc",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:24:27.397705",
+    "last_activity_date": "2025-05-28 19:24:27.397707",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "ef04c87f-8023-4720-b470-48a7381d1353": {
+    "id": "ef04c87f-8023-4720-b470-48a7381d1353",
+    "entity_id": "character456",
+    "religion_id": "61b355ac-29bb-41ba-9354-7804ff1dffdb",
+    "entity_type": "character",
+    "devotion_level": 70,
+    "level": "zealot",
+    "conversion_date": "2025-05-28 19:24:27.404334",
+    "last_activity_date": "2025-05-28 19:24:27.405487",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "level_change_reason": "Extreme dedication"
+    }
+  },
+  "c1f8cb71-97df-482f-b082-4a3439d93ff5": {
+    "id": "c1f8cb71-97df-482f-b082-4a3439d93ff5",
+    "entity_id": "char1",
+    "religion_id": "011bdb8a-0536-4781-b8e5-81f77c14465c",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:24:27.432722",
+    "last_activity_date": "2025-05-28 19:24:27.432723",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "6b7e45cd-bc8b-4ae0-bafb-afec1c9b1111": {
+    "id": "6b7e45cd-bc8b-4ae0-bafb-afec1c9b1111",
+    "entity_id": "char2",
+    "religion_id": "011bdb8a-0536-4781-b8e5-81f77c14465c",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:24:27.434445",
+    "last_activity_date": "2025-05-28 19:24:27.434446",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "617e003b-248c-4df9-bdff-eb2191f8f083": {
+    "id": "617e003b-248c-4df9-bdff-eb2191f8f083",
+    "entity_id": "npc1",
+    "religion_id": "011bdb8a-0536-4781-b8e5-81f77c14465c",
+    "entity_type": "npc",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:24:27.436565",
+    "last_activity_date": "2025-05-28 19:24:27.436565",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "e35e8491-cb1e-472d-874c-023e6cef0539": {
+    "id": "e35e8491-cb1e-472d-874c-023e6cef0539",
+    "entity_id": "character123",
+    "religion_id": "656af12d-5a1e-4c9a-8aa2-348d3c31de89",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:24:27.445775",
+    "last_activity_date": "2025-05-28 19:24:27.445776",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "70404f49-cd2b-4ca9-83c7-e7731ef2d854": {
+    "id": "70404f49-cd2b-4ca9-83c7-e7731ef2d854",
+    "entity_id": "character456",
+    "religion_id": "690264f1-1aca-471d-b878-1574ba867e11",
+    "entity_type": "character",
+    "devotion_level": 75,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:24:27.453320",
+    "last_activity_date": "2025-05-28 19:24:27.456553",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "49e125fc-d84f-478a-80b9-3189cbee66ff": {
+    "id": "49e125fc-d84f-478a-80b9-3189cbee66ff",
+    "entity_id": "character666",
+    "religion_id": "fca4b2cc-5639-4cd8-b4a3-a4d0fdbfc020",
+    "entity_type": "character",
+    "devotion_level": 40,
+    "level": "zealot",
+    "conversion_date": "2025-05-28 19:24:27.514965",
+    "last_activity_date": "2025-05-28 19:24:27.516960",
+    "is_public": true,
+    "role": "high_priest",
+    "metadata": {
+      "updated": true
+    }
+  },
+  "49b77b44-6978-4935-949e-7722edd9f204": {
+    "id": "49b77b44-6978-4935-949e-7722edd9f204",
+    "entity_id": "character777",
+    "religion_id": "17aa8598-661c-4ec5-92cc-2f474517d60b",
+    "entity_type": "character",
+    "devotion_level": 45,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:24:27.526012",
+    "last_activity_date": "2025-05-28 19:24:27.532172",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:24:27.527858",
+          "change": 10,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:24:27.530131",
+          "change": 30,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:24:27.532173",
+          "change": -40,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "9bbadf4e-31df-4744-bd79-d1b5e044d5d7": {
+    "id": "9bbadf4e-31df-4744-bd79-d1b5e044d5d7",
+    "entity_id": "character888",
+    "religion_id": "7e7bd7ac-930f-4329-9a56-dab79e13435b",
+    "entity_type": "npc",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:24:27.541390",
+    "last_activity_date": "2025-05-28 19:24:27.541392",
+    "is_public": true,
+    "role": "priest",
+    "metadata": {}
+  },
+  "72fe7135-9a8a-4fdc-aa21-ea7b4c499d68": {
+    "id": "72fe7135-9a8a-4fdc-aa21-ea7b4c499d68",
+    "entity_id": "multi_member",
+    "religion_id": "b70a6f0e-95ba-45e3-a4dc-84f8ae911fc2",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:24:27.615746",
+    "last_activity_date": "2025-05-28 19:24:27.615746",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "89656bc9-2c0e-4e78-a034-bcebeaa2a0f5": {
+    "id": "89656bc9-2c0e-4e78-a034-bcebeaa2a0f5",
+    "entity_id": "multi_member",
+    "religion_id": "77280feb-d7d7-4766-81ba-91eb0b3142eb",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "devoted",
+    "conversion_date": "2025-05-28 19:24:27.617332",
+    "last_activity_date": "2025-05-28 19:24:27.617332",
+    "is_public": true,
+    "role": null,
+    "metadata": {}
+  },
+  "c1988845-f712-4ba8-93d2-ee6f0f3f2985": {
+    "id": "c1988845-f712-4ba8-93d2-ee6f0f3f2985",
+    "entity_id": "character123",
+    "religion_id": "e6e1389f-772d-4020-8e5c-433fb143fede",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:25:58.831802",
+    "last_activity_date": "2025-05-28 19:25:58.831802",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "9ded111a-8cd8-43fd-b839-a8bd257d90cf": {
+    "id": "9ded111a-8cd8-43fd-b839-a8bd257d90cf",
+    "entity_id": "character456",
+    "religion_id": "fb696b98-4a65-4ca1-8947-3abdd03ba7d4",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:25:58.842788",
+    "last_activity_date": "2025-05-28 19:25:58.849238",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:25:58.844971",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:25:58.849240",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "9f9f4a56-eb2a-46bc-b1b3-d306cb338590": {
+    "id": "9f9f4a56-eb2a-46bc-b1b3-d306cb338590",
+    "entity_id": "character123",
+    "religion_id": "f27d3ccb-9b42-4d76-87a0-a4a2a437dbd5",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:50:42.466872",
+    "last_activity_date": "2025-05-28 19:50:42.466872",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "0e8d7974-99c2-432a-9d81-e9fe9b5928ba": {
+    "id": "0e8d7974-99c2-432a-9d81-e9fe9b5928ba",
+    "entity_id": "character456",
+    "religion_id": "6e523c1a-ef93-477e-8012-572e207ded18",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:50:42.473418",
+    "last_activity_date": "2025-05-28 19:50:42.478289",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:50:42.475402",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:50:42.478290",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "564200d0-fd5e-4626-b973-1264d17fb4a5": {
+    "id": "564200d0-fd5e-4626-b973-1264d17fb4a5",
+    "entity_id": "character123",
+    "religion_id": "85c35d57-1537-4632-83d8-3a5ccff15e58",
+    "entity_type": "character",
+    "devotion_level": 50,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:50:50.436273",
+    "last_activity_date": "2025-05-28 19:50:50.436273",
+    "is_public": true,
+    "role": "acolyte",
+    "metadata": {}
+  },
+  "3b7c7e36-479a-4b73-8ae8-6a886b0d915a": {
+    "id": "3b7c7e36-479a-4b73-8ae8-6a886b0d915a",
+    "entity_id": "character456",
+    "religion_id": "9cecad0f-b351-45eb-a35f-abe02678a823",
+    "entity_type": "character",
+    "devotion_level": 35,
+    "level": "follower",
+    "conversion_date": "2025-05-28 19:50:50.448493",
+    "last_activity_date": "2025-05-28 19:50:50.455929",
+    "is_public": true,
+    "role": null,
+    "metadata": {
+      "devotion_history": [
+        {
+          "date": "2025-05-28T19:50:50.450979",
+          "change": 15,
+          "source": "event",
+          "reason": null
+        },
+        {
+          "date": "2025-05-28T19:50:50.455931",
+          "change": -20,
+          "source": "event",
+          "reason": null
+        }
+      ]
+    }
+  }
+}

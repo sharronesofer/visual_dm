@@ -1,0 +1,16 @@
+{
+  "8a167b42-3a09-4660-a382-1781845a444a": {
+    "goal_id": "8a167b42-3a09-4660-a382-1781845a444a",
+    "character_id": "6d5a15ae-de82-4d53-b080-d68b8d1661ac",
+    "description": "Try out new level 2 abilities",
+    "goal_type": "personal",
+    "priority": "medium",
+    "status": "active",
+    "progress": 0.0,
+    "parent_goal_id": null,
+    "metadata": {},
+    "created_at": "2025-05-25T03:39:40.094949",
+    "updated_at": "2025-05-25T03:39:40.094952",
+    "subgoals": []
+  }
+}

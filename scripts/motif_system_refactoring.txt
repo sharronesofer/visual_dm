@@ -1,0 +1,65 @@
+# Visual DM Motif System Refactoring PRD
+
+## Background
+The Motif System is a core component of Visual DM that manages narrative motifs influencing the game world. Motifs are recurring patterns or themes that affect various aspects of the world's behavior. The system also includes chaos functionality for narrative disruption and unpredictability.
+
+The current implementation has accumulated technical debt with multiple overlapping files providing similar functionality:
+- `manager.py` (1887 lines) vs `motif_manager.py` (579 lines)
+- `utils.py` (586 lines) vs `motif_utils.py` (580 lines)
+- Other files requiring consolidation include `models.py`, `repository.py`, `service.py`, `router.py`
+- Some legacy files marked for deprecation in the migration plan: `motif_engine_class.py`, `chaos_utils.py`, `motif_routes.py`
+
+## Objective
+Consolidate the Motif System codebase to eliminate duplication, improve maintainability, and create a clean architecture with clearer responsibilities for each component. The refactoring should preserve all existing functionality while removing duplicated code.
+
+## Requirements
+
+### Core Requirements
+1. Consolidate all model definitions into a single `models.py` file 
+2. Merge utility functions from `utils.py` and `motif_utils.py` into a single `utils.py` file
+3. Merge manager functionality from `manager.py` and `motif_manager.py` into a single `manager.py` file
+4. Update the repository, service, and router layers to work with the consolidated code
+5. Ensure the module's public interface (`__init__.py`) exposes all necessary components
+6. Maintain backward compatibility with existing API endpoints
+7. Preserve all functionality currently available in the system
+
+### Technical Requirements
+1. Clean separation of concerns following a layered architecture:
+   - Models: Data structures and validation
+   - Repository: Data persistence and retrieval
+   - Service: Business logic and orchestration
+   - Manager: High-level system control and interaction with other systems
+   - Router: API endpoints and request handling
+   - Utils: Helper functions and utilities
+
+2. Code quality:
+   - Add comprehensive docstrings to all components
+   - Ensure consistent naming conventions throughout the codebase
+   - Eliminate code duplication
+   - Improve error handling and logging
+
+3. Maintain backward compatibility:
+   - Existing API endpoints must continue to function
+   - Internal interfaces used by other systems must be preserved
+   - Event publications and subscriptions must continue to work correctly
+
+## Deliverables
+1. Consolidated `models.py` with all data models from both systems
+2. Consolidated `utils.py` with all utility functions
+3. Consolidated `manager.py` with all manager functionality
+4. Updated `repository.py`, `service.py`, and `router.py` files
+5. Updated `__init__.py` exposing all required components
+6. Removal of deprecated files after successful consolidation
+7. Documentation of the new architecture and component responsibilities
+
+## Technical Constraints
+1. The refactoring must maintain compatibility with the Python version used in the project
+2. The refactoring should not require changes to other systems outside the Motif System
+3. All tests must pass after the refactoring
+
+## Success Criteria
+1. All existing functionality is preserved
+2. Duplicated code is eliminated
+3. The codebase is more maintainable with clear responsibilities for each component
+4. The system's interfaces with other systems continue to work correctly
+5. No new bugs are introduced 

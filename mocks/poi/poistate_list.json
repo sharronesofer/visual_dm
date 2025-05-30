@@ -1,0 +1,42 @@
+[
+  {
+    "id": "3a765f50-fe79-44b5-b9e6-5089d49553ac",
+    "created_at": "2025-05-20T01:34:24.965932Z",
+    "updated_at": "2025-05-28T01:34:24.965934Z",
+    "name": "Region",
+    "description": "That cell discover organization factor design.",
+    "status": "PENDING"
+  },
+  {
+    "id": "c4519171-c51f-4305-967f-0eade3bfdef2",
+    "created_at": "2025-05-22T01:34:24.965938Z",
+    "updated_at": "2025-05-27T01:34:24.965939Z",
+    "name": "Collection",
+    "description": "Management feeling throw few.",
+    "status": "PENDING"
+  },
+  {
+    "id": "2cbdd0fb-013f-401f-aafd-8e793d84bd8e",
+    "created_at": "2025-05-15T01:34:24.965942Z",
+    "updated_at": "2025-05-26T01:34:24.965944Z",
+    "name": "Fund",
+    "description": "Create law activity offer debate account.",
+    "status": "PENDING"
+  },
+  {
+    "id": "5f0c19ef-eb61-4b09-9e26-4bf14e0658ae",
+    "created_at": "2025-05-09T01:34:24.965947Z",
+    "updated_at": "2025-05-27T01:34:24.965949Z",
+    "name": "Study",
+    "description": "Force type soon letter positive.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "f7522972-3820-4ba3-9453-28f81d02c3db",
+    "created_at": "2025-05-20T01:34:24.965952Z",
+    "updated_at": "2025-05-27T01:34:24.965953Z",
+    "name": "Time",
+    "description": "Reach within age thought military design dark.",
+    "status": "INACTIVE"
+  }
+]

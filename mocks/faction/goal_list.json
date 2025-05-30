@@ -1,0 +1,42 @@
+[
+  {
+    "id": "22937062-c2ef-4ffc-853e-17f7ad6d3119",
+    "created_at": "2025-04-30T01:34:24.955940Z",
+    "updated_at": "2025-05-28T01:34:24.955942Z",
+    "name": "Effort",
+    "description": "Rise friend yet receive suddenly individual beautiful commercial.",
+    "status": "PENDING"
+  },
+  {
+    "id": "b9ed9069-2a3b-4bd5-90a6-02a376eb40d4",
+    "created_at": "2025-05-12T01:34:24.955946Z",
+    "updated_at": "2025-05-27T01:34:24.955948Z",
+    "name": "Present",
+    "description": "Teacher red age these once degree never.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "d7bb4909-d190-4056-b045-0dc04abf8454",
+    "created_at": "2025-05-01T01:34:24.955951Z",
+    "updated_at": "2025-05-24T01:34:24.955953Z",
+    "name": "Race",
+    "description": "Kind within yet ever but.",
+    "status": "PENDING"
+  },
+  {
+    "id": "34bf4ec2-9c72-449c-853a-fc76ac8c38da",
+    "created_at": "2025-05-27T01:34:24.955956Z",
+    "updated_at": "2025-05-24T01:34:24.955958Z",
+    "name": "Family",
+    "description": "Statement issue none hotel.",
+    "status": "PENDING"
+  },
+  {
+    "id": "ce778fb4-2713-411c-8919-53168cf932d2",
+    "created_at": "2025-05-08T01:34:24.955961Z",
+    "updated_at": "2025-05-26T01:34:24.955962Z",
+    "name": "Only",
+    "description": "Support leader product firm trouble none.",
+    "status": "INACTIVE"
+  }
+]

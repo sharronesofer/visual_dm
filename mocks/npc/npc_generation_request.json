@@ -1,0 +1,14 @@
+{
+  "poi_id": "e80e13c8-e0b0-4283-8ead-d6fa15e03f51",
+  "count": 9,
+  "npc_types": [
+    "MERCHANT",
+    "GUARD",
+    "GUARD"
+  ],
+  "personality_distribution": {
+    "FRIENDLY": 0.4,
+    "NEUTRAL": 0.4,
+    "HOSTILE": 0.2
+  }
+}

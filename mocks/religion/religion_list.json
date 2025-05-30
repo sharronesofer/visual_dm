@@ -1,0 +1,42 @@
+[
+  {
+    "id": "ad674f57-bde4-4a7b-a102-c276eaf4440f",
+    "created_at": "2025-05-27T01:34:24.991268Z",
+    "updated_at": "2025-05-24T01:34:24.991270Z",
+    "name": "Return",
+    "description": "Offer expert sense light difficult recognize.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "03879b7c-858a-4941-ada4-983f84c2edb0",
+    "created_at": "2025-05-03T01:34:24.991275Z",
+    "updated_at": "2025-05-29T01:34:24.991277Z",
+    "name": "Choice",
+    "description": "Bar manage participant east doctor general easy.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "fb0b6209-aa7e-41f6-8259-914d8e18e033",
+    "created_at": "2025-04-30T01:34:24.991281Z",
+    "updated_at": "2025-05-28T01:34:24.991283Z",
+    "name": "Popular",
+    "description": "Rich good nearly brother.",
+    "status": "PENDING"
+  },
+  {
+    "id": "315bd2f6-3729-4fc3-a3b4-b5075abb9ad9",
+    "created_at": "2025-04-30T01:34:24.991287Z",
+    "updated_at": "2025-05-28T01:34:24.991288Z",
+    "name": "Maintain",
+    "description": "Figure product agent study example live market inside.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "eec6f08f-964b-4ae3-8b8c-f1507c6e04e0",
+    "created_at": "2025-05-10T01:34:24.991292Z",
+    "updated_at": "2025-05-24T01:34:24.991294Z",
+    "name": "Usually",
+    "description": "Game instead black contain.",
+    "status": "INACTIVE"
+  }
+]

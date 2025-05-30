@@ -1,0 +1,1018 @@
+# Visual DM World Generation Alignment PRD
+
+## Overview
+This PRD outlines the tasks required to update the world generation system to align with the specifications in the Development Bible. Several inconsistencies have been identified and need to be corrected to ensure proper world generation according to the canonical specifications.
+
+## Requirements
+
+### Continent Size Alignment
+- Update the continent size constants from the current 50-70 regions to 20-40 regions per continent as specified in the Development Bible.
+- Constants to modify: `CONTINENT_MIN_REGIONS` and `CONTINENT_MAX_REGIONS` in world_generation_utils.py.
+
+### POI Density Correction
+- Modify POI density constants to match Development Bible specifications: ~20 major POIs and 200-400 minor/nature squares per region.
+- Update the following constants in world_generation_utils.py:
+  - `MAJOR_POIS_PER_REGION`
+  - `MINOR_POIS_PER_REGION_MIN`
+  - `MINOR_POIS_PER_REGION_MAX`
+
+### Metropolis Region Claim Improvement
+- Fix the metropolis region claim function to ensure metropolises claim 2-3 adjacent region hexes with better contiguity.
+- Enhance the `claim_region_hexes_for_city` function to improve the visual pattern and ensure better connected claimed hexes.
+
+### Weather API Integration Enhancement
+- Enhance the weather API integration with a more robust procedural generation fallback.
+- Ensure the weather system correctly maps region coordinates to real-world lat/lon for API queries.
+
+### Biome Adjacency System Improvement
+- Improve the biome adjacency system to ensure realistic terrain transitions.
+- Add robust fallbacks in case of unexpected terrain configurations.
+
+### Minor/Nature Squares Generation
+- Add functionality to generate minor/nature squares as specified in the Development Bible (200-400 per region).
+- Implement appropriate variety and spacing for these squares.
+
+### Region Generation Integration
+- Update the region generation process to incorporate the minor squares generation.
+- Ensure the region data structure properly tracks both major POIs and minor squares.
+
+## Acceptance Criteria
+- All constants match Development Bible specifications.
+- Metropolis region claim function successfully claims 2-3 adjacent hexes in >90% of cases.
+- Weather system gracefully falls back to procedural generation when API is unavailable.
+- Biome adjacency creates realistic terrain transitions with proper fallbacks.
+- Regions generate with the correct number of major POIs and minor squares.
+- Documentation is updated to reflect the changes.
+
+## Technical Constraints
+- Maintain backward compatibility with existing saved worlds.
+- Ensure performance is not significantly impacted by the changes.
+- Follow existing code patterns and naming conventions.
+- Add appropriate logging and error handling.
+
+# Visual DM Time System Refactoring PRD
+
+## Overview
+The current Visual DM time system implementation has several inconsistencies with the development bible requirements. This project aims to refactor the time system to align it with the canonical architecture outlined in the development bible, ensuring proper integration with other systems, improved maintainability, and better event-driven design.
+
+## Core Requirements
+
+1. Implement a canonical time system that follows the development bible architecture:
+   - A singleton TimeManager class for central time management
+   - Support for different time units (tick, minute, hour, day, etc.)
+   - Variable time progression speeds (paused, slow, normal, fast)
+   - Calendar system with seasons, months, years, and eras
+   - Event scheduling at specific game times
+   - Recurring events with configurable intervals
+   - Event emission for time changes via canonical EventDispatcher
+   - Time-based conditions (day/night, seasons, etc.)
+   - Persistence with JSON storage for time state and scheduled events
+
+2. Address the identified issues with the current implementation:
+   - Integrate with the canonical EventBus instead of custom event emission
+   - Align TimeUnit and EventType enums with the canonical types in the Bible
+   - Decouple weather functionality from the time system
+   - Add proper middleware support to the EventScheduler
+   - Implement a priority queue for event scheduling
+   - Create proper event classes extending EventBase
+   - Add methods to emit standardized events
+
+## Technical Specifications
+
+### Time Units and Event Types
+- Ensure TimeUnit enum follows the canonical list: Tick, Second, Minute, Hour, Day, Month, Year, Season
+- Ensure EventType enum follows the canonical list: OneTime, RecurringDaily, RecurringWeekly, RecurringMonthly, RecurringYearly, SeasonChange, SpecialDate
+
+### Event Integration
+- Replace direct event callbacks with properly typed events that use the EventBus
+- Create TimeEvent classes that extend EventBase for different time-related events
+- Implement middleware support in the event scheduler
+- Use a priority queue for efficient event scheduling
+
+### Decoupling
+- Move weather functionality to a separate system
+- Ensure proper separation of concerns between time management, calendar management, and event scheduling
+
+### Persistence
+- Implement JSON serialization for time system state
+- Support save/load functionality for scheduled events and current time
+
+## Deliverables
+
+1. Refactored TimeManager/TimeSystem implementation
+2. Refactored Calendar system implementation
+3. Refactored RecurringEventSystem implementation with priority queue
+4. New TimeEvent classes that work with the EventBus
+5. Decoupled weather system
+6. Persistence implementation for the time system
+7. Unit tests covering the refactored components
+8. Documentation updates reflecting the architectural changes
+
+## Timeline and Priorities
+
+The refactoring should focus first on core time management functionality, followed by event scheduling, and lastly on persistence. Priorities should be:
+
+1. High: Proper integration with the canonical EventBus
+2. High: Implementing the proper TimeUnit and EventType enums
+3. Medium: Decoupling weather functionality
+4. Medium: Adding middleware support
+5. Medium: Implementing priority queue for event scheduling
+6. Low: Creating proper event classes
+7. Low: Adding persistence enhancements
+
+## Additional Considerations
+
+- Backward compatibility should be maintained where possible
+- Performance should be a key consideration, especially for event scheduling
+- Code should follow the project's style guidelines and naming conventions
+- Changes should be well-documented with comments explaining architectural decisions 
+
+# Technical Architecture
+
+## World Generation System Alignment
+1. Continent Generation
+   - Adjust continent size constants to match the Development Bible specification of 20-40 regions per continent
+   - Implement proper continent shape algorithms to create realistic landmasses
+
+2. Region System
+   - Configure region size and distribution according to canonical specifications
+   - Implement hexagonal region system with proper adjacency and connectivity
+
+3. Biome Assignment
+   - Create a modular biome adjacency system using adjacency.json
+   - Implement robust fallback mechanisms when adjacency data is unavailable
+   - Ensure biomes follow realistic natural patterns (mountains near highlands, deserts near savannas, etc.)
+
+4. Points of Interest Generation
+   - Metropolis generation with visual sprawl across 2-3 adjacent region hexes
+   - Major POI generation with appropriate distribution (~20 per region)
+   - Minor/nature square generation (200-400 per region) including:
+     - Groves, ruins, camps, landmarks, special terrain features
+     - Appropriate spacing and distribution algorithms
+
+5. Weather System
+   - Integrate with external weather API
+   - Implement procedural weather generation as fallback
+   - Ensure weather patterns are consistent with biomes
+
+## Data Models
+1. Region Data Structure
+   - ID, position, size, biome type
+   - List of contained POIs (major and minor)
+   - Adjacent region references
+
+2. POI Data Structure
+   - Type (metropolis, major, minor/nature)
+   - Position, size, visual representation
+   - Interaction properties
+
+3. Biome Adjacency Rules
+   - Probability mappings between biome types
+   - Default rules for fallback
+
+# Development Roadmap
+
+## Phase 1: Core System Alignment
+1. Update continent size constants from 50-70 to 20-40 regions
+2. Modify POI density constants to match specifications
+3. Fix metropolis region claim function for proper visual sprawl
+4. Enhance weather API integration with procedural fallbacks
+
+## Phase 2: Biome System Enhancement
+1. Improve biome adjacency system with proper loading from adjacency.json
+2. Create robust fallback mechanisms for biome rules
+3. Implement biome transition zones for more natural appearance
+
+## Phase 3: POI Generation Refinement
+1. Create new function for minor/nature square generation
+2. Implement various minor POI types (groves, ruins, camps, etc.)
+3. Update region generation to track minor POIs separately from major POIs
+4. Ensure proper POI spacing and distribution
+
+## Phase 4: Integration and Testing
+1. Integrate all updated systems
+2. Create comprehensive tests for world generation
+3. Validate output against Development Bible specifications
+4. Optimize performance for large world generation
+
+# Logical Dependency Chain
+1. Core constant updates (region sizes, POI densities)
+2. Biome adjacency system improvements
+3. Metropolis sprawl function updates
+4. Minor/nature square generation
+5. Weather system enhancement
+6. Integration and testing
+
+# Risks and Mitigations
+
+## Technical Challenges
+- Risk: Performance issues with high POI counts
+  Mitigation: Implement efficient spatial partitioning and lazy loading
+
+- Risk: Unrealistic biome distributions
+  Mitigation: Carefully tune adjacency rules and implement exception handling
+
+- Risk: Weather API reliability
+  Mitigation: Robust fallback to procedural generation with seamless transitions
+
+## Implementation Risks
+- Risk: Inconsistency between systems
+  Mitigation: Create comprehensive validation tests against Bible specifications
+
+- Risk: Visual artifacts at region boundaries
+  Mitigation: Implement smoothing algorithms at region transitions
+
+# Appendix
+
+## Development Bible References
+- Region specifications: 20-40 regions per continent
+- POI density: ~20 major POIs and 200-400 minor/nature squares per region
+- Metropolis visual representation: 2-3 adjacent region hexes
+- Biome adjacency: Modular system based on adjacency.json
+
+## System Dependencies
+- External weather API integration
+- Spatial indexing library for efficient POI queries
+- Procedural generation algorithms for terrain and feature placement 
+
+# Auth User System Testing PRD
+
+## Overview
+This document outlines the testing requirements for the `/backend/systems/auth_user` directory in the Visual DM project. The auth_user system handles user authentication, authorization, permissions, and related functionality.
+
+## Testing Requirements
+
+### Unit Tests
+1. **User Model Testing**
+   - Test User model creation, constraints, and properties
+   - Test email uniqueness constraint
+   - Test relationships with Role model
+   - Test inheritance from CoreBaseModel
+   - Test string representation (__repr__)
+   - Test password reset fields
+   - Test is_active flag
+
+2. **Role and Permission Models Testing**
+   - Test Role/Permission model creation, constraints, properties
+   - Test name uniqueness constraints
+   - Test relationship between Role and Permission models
+   - Test relationship between Role and User models
+   - Test inheritance from CoreBaseModel
+   - Test string representation (__repr__)
+   - Test adding multiple permissions to roles
+
+3. **Password Service Testing**
+   - Test password hashing functionality
+   - Test password verification with correct/incorrect passwords
+   - Test handling of empty passwords
+   - Test different hashes for same password
+   - Test long password handling
+
+4. **Token Service Testing**
+   - Test access token creation
+   - Test token verification (valid/invalid/expired)
+   - Test tokens with wrong signing key
+   - Test custom expiry times
+   - Test default expiry time
+   - Test additional claims in tokens
+
+5. **Auth Service Testing**
+   - Test current user retrieval with valid/invalid tokens
+   - Test system access checks
+   - Test permission checking
+
+6. **Security Service Testing**
+   - Test password strength validation
+   - Test email format validation
+   - Test username format validation
+
+7. **Utilities Testing**
+   - Test relationship management functions
+   - Test permission checking functions
+   - Test character access functions
+
+### Integration Tests
+1. **Authentication Flow**
+   - Test login endpoint
+   - Test protected endpoints with valid/invalid tokens
+   - Test token expiration
+   - Test permission-based access
+
+### Test Setup
+- Use pytest fixtures for database sessions
+- Use mocking for external dependencies
+- Follow AAA pattern (Arrange-Act-Assert)
+- Organize tests into logical groups
+
+## Deliverables
+1. Comprehensive test suite for all components
+2. Test coverage report
+3. Documentation of testing approach
+
+## Acceptance Criteria
+1. All tests pass successfully
+2. Code coverage of at least 85% for the auth_user system
+3. Tests follow best practices and coding standards
+4. Edge cases are properly handled 
+
+# Character System Test Suite Project
+
+## Project Overview
+This project aims to develop a comprehensive test suite for the character system in our game. The character system is a core component that handles character creation, relationships between characters, character moods, and character goals. The test suite will ensure that all services in the character system function correctly, handle edge cases appropriately, and maintain data integrity.
+
+## Requirements
+
+### Core Test Coverage Requirements
+1. Test all public methods in the CharacterService, RelationshipService, MoodService, and GoalService classes
+2. Each test should verify both successful operations and error handling
+3. Tests should use appropriate mocking to isolate the component being tested
+4. Implement both unit tests and integration tests where appropriate
+5. Achieve at least 85% code coverage across the character system
+
+### Specific Service Test Requirements
+
+#### CharacterService Tests
+- Test character creation, retrieval, updating, and deletion
+- Test character leveling and attribute modification
+- Test character inventory management
+- Test character relationship management methods
+- Test character mood methods
+- Test character goal methods
+- Test persistence and loading of character data
+
+#### CharacterBuilder Tests
+- Test initialization and validation
+- Test race, attribute, skill, and feat assignment
+- Test finalization and persistence
+- Test method chaining
+- Test hidden trait generation
+
+#### RelationshipService Tests
+- Test creating relationships between characters
+- Test retrieving relationships
+- Test updating relationship status and values
+- Test deleting relationships
+- Test specialized relationship functions (faction reputation, character affinity)
+
+#### MoodService Tests
+- Test getting character moods
+- Test adding mood modifiers
+- Test mood decay over time
+- Test mood effects on character behavior
+- Test persistence and loading of mood data
+
+#### GoalService Tests
+- Test adding goals to characters
+- Test retrieving character goals
+- Test updating goal status
+- Test goal completion and failure
+- Test goal prioritization
+- Test persistence and loading of goal data
+
+### Technical Implementation Requirements
+1. Use pytest as the testing framework
+2. Implement appropriate fixtures for test setup and teardown
+3. Use unittest.mock for mocking dependencies
+4. Organize tests in a logical structure that mirrors the system architecture
+5. Include docstrings that explain the purpose of each test
+6. Tests should be independent and not rely on the state from other tests
+
+## Deliverables
+1. Comprehensive test files for each service in the character system
+2. Documentation of testing approach and coverage
+3. CI integration to run tests automatically
+
+## Success Criteria
+1. All tests pass consistently
+2. Test coverage meets or exceeds 85%
+3. Tests run efficiently (complete in under 60 seconds)
+4. All edge cases and error conditions are properly tested 
+
+# Visual DM: Game Economy System Testing PRD
+
+## Project Overview
+Visual DM is a digital tabletop role-playing game platform with a complex economy system. The economy system is a critical component that manages resources, trading, shops, and market dynamics within the game world. This project focuses specifically on developing comprehensive test coverage for the backend economy modules.
+
+## Key Requirements
+
+### 1. Testing Framework Development
+- Implement a comprehensive suite of unit tests for all economy-related modules
+- Ensure tests cover all main functionality including resource management, trading, shops, and market dynamics
+- Use pytest as the primary testing framework
+- Achieve at least 85% code coverage across all economy modules
+
+### 2. Resource Management Testing
+- Test resource model creation, validation, and methods
+- Validate resource service functionality, particularly population impact calculations
+- Ensure correct resource API methods in the economy manager (get, create, update, delete)
+- Test resource state changes during game progression
+
+### 3. Trade System Testing
+- Verify trade route model functionality
+- Test trade route API methods in the economy manager
+- Ensure trade route creation, validation, and state transitions work correctly
+- Test edge cases such as invalid trade routes or resource constraints
+
+### 4. Shop System Testing
+- Test all shop-related API endpoints
+- Validate shop creation, updating, and deletion
+- Test shop item management (adding, updating, removing items)
+- Verify purchase functionality, including inventory and currency updates
+
+### 5. Economy Manager Testing
+- Test the singleton pattern implementation
+- Verify all API methods for resource, trade, and market management
+- Test process tick functionality that advances the economy state
+- Ensure proper event emission when economy state changes
+
+## Technical Constraints
+- All tests must be compatible with the existing project structure
+- Tests should minimize dependencies on external systems
+- Appropriate fixtures and mocks should be used for testing
+- Tests should be optimized for quick execution in CI/CD pipelines
+
+## System Architecture
+The economy system is structured into several key components:
+- Models: Define data structures for resources, trades, shops
+- Services: Implement business logic for each domain
+- Manager: Centralizes access to all economy subsystems
+- Routers: Expose API endpoints for client interaction
+- Utilities: Provide helper functions and shared tools
+
+## Success Criteria
+- All tests pass consistently in the CI/CD pipeline
+- Minimum 85% code coverage across economy modules
+- Comprehensive validation of normal operation and error handling
+- Documentation of testing approach and test cases
+
+# Visual_DM Faction System Testing PRD
+
+## Project Overview
+Visual_DM is a digital fantasy RPG world management system that includes a sophisticated faction system. This PRD outlines the testing requirements for the `/backend/systems/faction` directory, ensuring proper functionality of faction mechanics, relationships, and interactions.
+
+## Background
+The faction system is a core component of the game's political and diplomatic simulation. It manages relationships between different groups (factions) in the game world, their influence levels, tensions, and warfare conditions. The system needs comprehensive testing to ensure proper behavior under various conditions.
+
+## Requirements
+
+### 1. Faction Model Testing
+- Test validation of the Faction model and its fields
+- Verify proper handling of influence values (should be between 0-100)
+- Test proper validation of faction types (Major, Minor, Hidden)
+- Ensure faction names are unique and properly validated
+- Test faction color validation and assignment
+- Verify faction description handling
+
+### 2. Faction Relationship Testing
+- Test the FactionRelationship model representing relationships between two factions
+- Verify tension values are correctly constrained to the range of -100 to 100
+- Test treaty structure validation
+- Ensure proper handling of relationship types (Allied, Neutral, Hostile)
+- Verify bidirectional relationship consistency between factions
+
+### 3. Faction Repository Testing
+- Test CRUD operations for factions and faction relationships
+- Verify proper database interaction (using mocks)
+- Test query functionality for retrieving factions by various parameters
+- Ensure proper handling of faction relationship updates
+- Test faction influence radius calculations
+
+### 4. Faction Service Testing
+- Test business logic implementations in the FactionService
+- Verify event dispatching when factions change state
+- Test faction influence calculations in territories
+- Ensure proper handling of faction alliances and treaties
+- Test faction creation, update, and deletion workflows
+
+### 5. Tension/War Service Testing
+- Test the TensionWarService handling tension between factions
+- Verify war declaration mechanics when tension exceeds thresholds
+- Test peace treaty implementation and effects
+- Ensure proper tension decay over time
+- Test tension effects on faction relationships
+
+### 6. Faction Utility Testing
+- Test helper functions in faction_utils.py
+- Verify utility functions for calculating faction statistics
+- Test faction affinity calculations for NPCs
+- Ensure proper validation functions work correctly
+
+## Technical Specifications
+- All tests should be written using pytest
+- Implement appropriate fixtures for test setup/teardown
+- Use mocking (pytest-mock) to isolate components for testing
+- Tests should verify behavior according to the Development Bible specifications
+- Key mechanics to test include:
+  - Tension scale (-100 to +100)
+  - War declaration at high tension thresholds
+  - Affinity-based faction switching
+  - Influence decay over distance
+  - Proper event dispatching
+
+## Deliverables
+1. Comprehensive test files for each module in `/backend/systems/faction`
+2. Test coverage report showing adequate test coverage
+3. Documentation of any edge cases or potential improvements discovered during testing
+
+## Success Criteria
+- All tests pass consistently
+- Test coverage of at least 85% for the faction system
+- All key mechanics specified in the Development Bible are verified
+- Edge cases are properly handled and tested
+
+# Combat System Refactoring PRD
+
+## Project Overview
+The goal of this project is to refactor the `/backend/systems/combat` directory to make it more consistent, consolidated, and organized by removing duplicate modules and merging overlapping functionality.
+
+## Current Issues
+1. Multiple utility files with overlapping functionality:
+   - combat_utils.py
+   - combat_effects_utils.py
+   - status_effects_utils.py
+2. Redundant effect management code spread across multiple files
+3. Duplicate state management logic
+4. Test files mixed with implementation code
+
+## Requirements
+
+### Functional Requirements
+1. Maintain all existing functionality while improving code organization
+2. Consolidate utility functionality into a smaller number of well-organized files
+3. Create a unified effects management system
+4. Implement consistent state management
+5. Properly separate test files from implementation code
+
+### Technical Requirements
+1. Create a `unified_combat_utils.py` file that combines functionality from:
+   - combat_utils.py
+   - combat_effects_utils.py
+   - status_effects_utils.py
+2. Create a `unified_effects.py` file that consolidates all effect-related functionality
+3. Implement a consistent class hierarchy for different effect types
+4. Implement proper documentation and type hints throughout the code
+5. Ensure all existing functionality remains available with the same interfaces
+6. Update imports across the system to reference the new consolidated files
+
+### Non-Functional Requirements
+1. Code should be well-documented with docstrings and comments
+2. Files should follow a consistent naming and organization pattern
+3. Type hints should be used throughout the codebase
+4. Interfaces should be kept stable where possible to minimize changes required in other parts of the system
+
+## Success Criteria
+1. All existing functionality remains working
+2. Reduced number of files with clearer organization
+3. No duplicate code across the system
+4. Improved maintainability and readability
+5. Consistent patterns used throughout the codebase
+
+# Visual DM Motif System Refactoring PRD
+
+## Background
+The Motif System is a core component of Visual DM that manages narrative motifs influencing the game world. Motifs are recurring patterns or themes that affect various aspects of the world's behavior. The system also includes chaos functionality for narrative disruption and unpredictability.
+
+The current implementation has accumulated technical debt with multiple overlapping files providing similar functionality:
+- `manager.py` (1887 lines) vs `motif_manager.py` (579 lines)
+- `utils.py` (586 lines) vs `motif_utils.py` (580 lines)
+- Other files requiring consolidation include `models.py`, `repository.py`, `service.py`, `router.py`
+- Some legacy files marked for deprecation in the migration plan: `motif_engine_class.py`, `chaos_utils.py`, `motif_routes.py`
+
+## Objective
+Consolidate the Motif System codebase to eliminate duplication, improve maintainability, and create a clean architecture with clearer responsibilities for each component. The refactoring should preserve all existing functionality while removing duplicated code.
+
+## Requirements
+
+### Core Requirements
+1. Consolidate all model definitions into a single `models.py` file 
+2. Merge utility functions from `utils.py` and `motif_utils.py` into a single `utils.py` file
+3. Merge manager functionality from `manager.py` and `motif_manager.py` into a single `manager.py` file
+4. Update the repository, service, and router layers to work with the consolidated code
+5. Ensure the module's public interface (`__init__.py`) exposes all necessary components
+6. Maintain backward compatibility with existing API endpoints
+7. Preserve all functionality currently available in the system
+
+### Technical Requirements
+1. Clean separation of concerns following a layered architecture:
+   - Models: Data structures and validation
+   - Repository: Data persistence and retrieval
+   - Service: Business logic and orchestration
+   - Manager: High-level system control and interaction with other systems
+   - Router: API endpoints and request handling
+   - Utils: Helper functions and utilities
+
+2. Code quality:
+   - Add comprehensive docstrings to all components
+   - Ensure consistent naming conventions throughout the codebase
+   - Eliminate code duplication
+   - Improve error handling and logging
+
+3. Maintain backward compatibility:
+   - Existing API endpoints must continue to function
+   - Internal interfaces used by other systems must be preserved
+   - Event publications and subscriptions must continue to work correctly
+
+## Deliverables
+1. Consolidated `models.py` with all data models from both systems
+2. Consolidated `utils.py` with all utility functions
+3. Consolidated `manager.py` with all manager functionality
+4. Updated `repository.py`, `service.py`, and `router.py` files
+5. Updated `__init__.py` exposing all required components
+6. Removal of deprecated files after successful consolidation
+7. Documentation of the new architecture and component responsibilities
+
+## Technical Constraints
+1. The refactoring must maintain compatibility with the Python version used in the project
+2. The refactoring should not require changes to other systems outside the Motif System
+3. All tests must pass after the refactoring
+
+## Success Criteria
+1. All existing functionality is preserved
+2. Duplicated code is eliminated
+3. The codebase is more maintainable with clear responsibilities for each component
+4. The system's interfaces with other systems continue to work correctly
+5. No new bugs are introduced
+
+# Relationship System Refactoring PRD
+
+## Project Overview
+The Visual DM codebase currently has several duplicated and inconsistent relationship model implementations across different directories. This project aims to consolidate these implementations into a single, canonical relationship system that supports all entity relationship types and provides a consistent API across the codebase.
+
+## Current State
+1. Multiple relationship model implementations exist in:
+   - `/backend/app/characters/models/relationship.py`
+   - `/backend/systems/character/models/relationship.py`
+   - `/backend/systems/relationship/relationship_model.py` (marked as deprecated)
+
+2. Multiple relationship service implementations exist in:
+   - `/backend/app/characters/services/relationship_service.py`
+   - `/backend/systems/relationship/relationship_service.py` (marked as deprecated)
+   - `/backend/systems/faction/services/relationship_service.py`
+   - `/backend/systems/character/services/relationship_service.py`
+
+3. These implementations have inconsistent APIs, data models, and capabilities.
+
+## Desired Outcome
+1. A single, canonical relationship model implementation in `/backend/systems/relationship/models/relationship.py`
+2. A single, canonical relationship service in `/backend/systems/relationship/services/relationship_service.py`
+3. Updated references throughout the codebase to use the new canonical implementations
+4. Removal of deprecated and duplicate implementations
+5. Comprehensive tests to ensure the new implementation works correctly
+6. Documentation of the canonical relationship system API
+
+## Requirements
+1. The consolidated relationship model must support all relationship types found in existing implementations:
+   - Faction relationships (membership, reputation)
+   - Quest relationships (progress, status)
+   - Spatial relationships (distance, location)
+   - Authentication relationships (permissions, ownership)
+   - Character relationships (level, type)
+   - Religion relationships (devotion, rank)
+   - Diplomacy relationships (status, tension)
+   - Custom relationship types for future expansion
+
+2. The consolidated model must maintain compatibility with existing code by:
+   - Using string IDs for maximum compatibility
+   - Providing helper methods for all relationship types
+   - Including to_dict/from_dict methods for serialization
+
+3. The consolidated service must provide methods to:
+   - Create relationships of all types
+   - Query relationships by source, target, and type
+   - Update relationship data
+   - Delete relationships
+   - Convenient helpers for common operations (change reputation, update quest progress, etc.)
+
+4. The refactoring must not break existing functionality or APIs.
+
+5. All changes must be accompanied by comprehensive unit tests.
+
+## Technical Constraints
+1. Use SQLAlchemy for the database model
+2. Follow the existing project structure and naming conventions
+3. Maintain backward compatibility with existing code
+4. Use type annotations for improved code quality
+5. Update references to use the new canonical implementations
+6. Remove deprecated code only after all references have been updated
+
+## Success Criteria
+1. All duplicate relationship implementations are consolidated into the canonical implementation
+2. All existing functionality is preserved
+3. All tests pass
+4. The codebase has fewer relationship-related files
+5. Documentation clearly explains the new relationship system API
+
+# Overview  
+Visual Dungeon Master (Visual DM) is a comprehensive tabletop RPG campaign management tool that combines traditional game master features with advanced visual elements. It aims to solve the challenge of maintaining immersion and visual continuity in tabletop RPG sessions by providing dungeon masters with tools to create, manage, and present rich visual environments, characters, and encounters. This tool is for game masters and players who want to enhance their tabletop RPG experience with visual storytelling elements while reducing preparation time.
+
+# Core Features  
+## Dynamic World Building
+- **What it does**: Allows users to create and customize game worlds, regions, cities, and dungeons with visual maps
+- **Why it's important**: Provides a consistent visual reference for both GM and players to maintain immersion
+- **How it works**: Combines procedural generation with manual customization, offering templates and assets that can be modified
+
+## Character Management
+- **What it does**: Enables creation and tracking of player characters and NPCs with visual representations
+- **Why it's important**: Helps maintain consistent character visuals and stats throughout the campaign
+- **How it works**: Characters are created with a customizable avatar system and their stats, inventory, and backstory are linked to their visual representation
+
+## Encounter Design
+- **What it does**: Facilitates creation of combat and non-combat encounters with visual tactical maps
+- **Why it's important**: Simplifies the most preparation-intensive aspect of being a dungeon master
+- **How it works**: Drag-and-drop interface for placing characters, monsters, and environmental elements on maps
+
+## Narrative System
+- **What it does**: Organizes campaign storylines, quests, and plot points with visual story maps
+- **Why it's important**: Helps dungeon masters maintain complex narratives across multiple sessions
+- **How it works**: Visual node-based editor that connects plot points, NPCs, locations, and events
+
+## Visual Asset Library
+- **What it does**: Provides a searchable collection of maps, character tokens, monster illustrations, and environment props
+- **Why it's important**: Reduces the need for dungeon masters to create or source visual assets
+- **How it works**: Includes built-in assets with tagging system and allows importing custom assets
+
+# User Experience  
+## User Personas
+1. **Experienced Dungeon Master**: Values time-saving tools and integration with existing campaign materials
+2. **New Game Master**: Needs guidance on campaign creation and management
+3. **Visual-First DM**: Prioritizes the visual elements of storytelling and immersion
+4. **Technical Player**: Appreciates robust systems and automation to handle complex game mechanics
+
+## Key User Flows
+1. **Campaign Creation**: DM creates new campaign, establishes world settings, and defines primary narrative arcs
+2. **Session Preparation**: DM prepares locations, encounters, and story beats for upcoming session
+3. **Session Running**: DM presents prepared visual elements, tracks character states, and adapts to player choices
+4. **Campaign Management**: DM reviews past sessions and plans future developments
+
+## UI/UX Considerations
+- Intuitive interface that doesn't require extensive learning for basic functionality
+- Customizable workspace that adapts to different DM styles
+- Real-time visual sharing capabilities for online and hybrid sessions
+- Dark mode design to maintain atmosphere during play
+
+# Technical Architecture  
+## System Components
+- **Frontend**: React-based desktop application with Electron wrapper for cross-platform compatibility
+- **Backend**: Python backend system with modular components for different game features
+- **Database**: SQLite for local storage of campaign data with JSON serialization for complex objects
+- **Asset Management**: Local file system integration for storing and retrieving images and other assets
+- **Rendering Engine**: 2D rendering system for maps and visual elements with zoom, pan, and layer capabilities
+
+## Data Models
+- **Campaign**: Top-level container for all related game elements
+- **World**: Geographic model with regions, locations, and points of interest
+- **Character**: Player and non-player characters with attributes, inventory, and visual representation
+- **Encounter**: Combat and non-combat scenarios with participating entities and environmental conditions
+- **Narrative**: Story elements including quests, storylines, and plot points
+- **Asset**: Visual resources like maps, tokens, and environmental props
+
+## APIs and Integrations
+- **File System API**: For importing/exporting campaigns and custom assets
+- **Image Processing**: For manipulating and optimizing visual assets
+- **Random Generation**: For procedural content creation
+- **System Agnostic Rule Support**: Adapters for different RPG systems (D&D 5e, Pathfinder, etc.)
+
+## Infrastructure Requirements
+- **Cross-platform support**: Windows, macOS, and Linux
+- **Minimum Hardware**: Modern dual-core processor, 4GB RAM, 1GB free disk space
+- **Recommended Hardware**: Quad-core processor, 8GB RAM, SSD storage for asset loading speed
+- **Display**: Minimum 1080p resolution recommended for optimal interface usage
+
+# Development Roadmap  
+## MVP Requirements
+1. **Core Application Framework**
+   - Cross-platform desktop application shell
+   - Basic user interface with campaign management
+   - File system integration for saving/loading campaigns
+
+2. **Basic Visual Map Editor**
+   - 2D grid-based map creation and editing
+   - Layer system for background, objects, and tokens
+   - Simple brush and eraser tools
+   - Import functionality for custom map backgrounds
+
+3. **Character Token System**
+   - Basic character creation with visual representation
+   - Import custom token images
+   - Token placement and movement on maps
+   - Simple character sheet with core attributes
+
+4. **Session Management Tools**
+   - Save and load session states
+   - Basic initiative tracker for combat
+   - Simple notes system for DM reference
+
+## Future Enhancements
+1. **Advanced World Building**
+   - Procedural terrain and dungeon generation
+   - Hierarchical world organization (continents, regions, cities)
+   - Environmental effects and dynamic lighting
+
+2. **Enhanced Character Management**
+   - Character creation wizards for different game systems
+   - NPC personality and behavior generators
+   - Character relationship mapping
+
+3. **Tactical Combat Tools**
+   - Line-of-sight and cover calculations
+   - Range and area effect visualizations
+   - Automated enemy AI suggestions
+
+4. **Narrative Engine**
+   - Visual story mapping and branching narratives
+   - Quest and storyline tracking
+   - Player choice impact visualization
+
+5. **Asset Marketplace and Community Features**
+   - Sharing custom assets and campaigns
+   - Community voting and collections
+   - Optional subscription service for premium assets
+
+# Logical Dependency Chain
+1. **Foundation (First Development Phase)**
+   - Core application architecture and UI framework
+   - Basic file system and database implementation
+   - Simple map visualization and editing tools
+   - Minimal viable character representation system
+
+2. **Visual Tools (Second Development Phase)**
+   - Extended map editing capabilities
+   - Token placement and manipulation
+   - Basic asset organization system
+   - Improved UI for creative workflows
+
+3. **Game Management (Third Development Phase)**
+   - Initiative and combat tracking
+   - Character sheet integration
+   - Session state management
+   - Basic notes and reference tools
+
+4. **Advanced Features (Fourth Development Phase)**
+   - Procedural generation tools
+   - Narrative tracking system
+   - Rules integration for specific game systems
+   - Enhanced visual effects and animations
+
+# Risks and Mitigations  
+## Technical Challenges
+- **Risk**: Performance issues with large maps and many assets
+  **Mitigation**: Implement progressive loading, asset optimization, and level-of-detail rendering
+
+- **Risk**: Cross-platform compatibility issues
+  **Mitigation**: Use mature cross-platform frameworks and extensive testing on all target platforms
+
+- **Risk**: Complex UI becoming overwhelming for users
+  **Mitigation**: Focus on progressive disclosure, contextual interfaces, and comprehensive onboarding
+
+## MVP Scoping
+- **Risk**: Feature creep extending development time
+  **Mitigation**: Strict prioritization of features with clear MVP definition and regular scope reviews
+
+- **Risk**: Core functionality not being sufficiently useful without advanced features
+  **Mitigation**: Design each development phase to deliver complete, usable functionality even without later enhancements
+
+## Resource Constraints
+- **Risk**: Limited availability of quality visual assets
+  **Mitigation**: Start with a core set of versatile assets, develop a consistent art style, and plan for community contributions
+
+- **Risk**: Storage and memory requirements for asset-heavy application
+  **Mitigation**: Implement asset compression, streaming techniques, and modular loading
+
+# Appendix  
+## Technical Specifications
+- **Primary Programming Languages**: Python 3.8+ (backend), JavaScript/TypeScript (frontend with React)
+- **Build Tools**: Electron.js for desktop packaging, Poetry for Python dependency management
+- **Asset Formats**: PNG/JPEG for images, SVG for vector graphics, JSON for data exchange
+- **Database Schema**: SQLite with JSON storage for complex nested objects
+
+## Research Findings
+- Existing VTT (Virtual Tabletop) solutions focus primarily on online play rather than in-person assistance
+- Game masters spend an average of 1-3 hours preparing visual elements for each hour of gameplay
+- Most popular tabletop RPG system is D&D 5e, followed by Pathfinder 2e and Call of Cthulhu
+- Key pain points for DMs include:
+  - Time required to create consistent, high-quality visual aids
+  - Difficulty in organizing and retrieving prepared content during play
+  - Challenges in adapting prepared materials to unexpected player choices
+
+# Visual DM Data System Test Coverage Enhancement
+
+## Project Overview
+The Visual DM data system currently has insufficient test coverage (58%), which needs to be improved to at least 85%. This project focuses on enhancing test coverage for three critical modules with lower coverage: data_file_loader.py (65%), schema_validator.py (69%), and biome_schema.py (70%).
+
+## Objectives
+- Increase overall data system test coverage from 58% to at least 85%
+- Ensure all three target modules have at least 80% test coverage
+- Implement comprehensive test suites that cover edge cases, error handling, and full API functionality
+- Document testing standards and coverage requirements in the development bible
+- Create maintainable tests that can evolve with the codebase
+
+## Requirements
+
+### Technical Requirements
+- Create or enhance test files for each target module:
+  - test_data_file_loader.py
+  - test_schema_validator.py
+  - test_biome_schema.py
+- Tests must use the pytest framework
+- Include unit tests for all public methods and functions
+- Implement mocking for external dependencies to ensure isolated testing
+- Add tests for error handling and edge cases
+- Create fixtures for reusable test data
+- Maintain compatibility with existing test infrastructure
+
+### Documentation Requirements
+- Update test_coverage_summary.md with new coverage metrics
+- Add a section in development_bible.md on test coverage requirements
+- Document the testing approach for each module
+- Establish minimum coverage thresholds for different systems
+
+### Performance Requirements
+- Test execution time should not significantly increase
+- Tests should be efficient and not consume excessive resources
+
+## Success Criteria
+- Achieve 85% overall data system test coverage
+- All three target modules have at least 80% coverage
+- All tests pass successfully
+- Documentation is updated with latest coverage metrics and standards
+- Clear roadmap for further test improvements is established
+
+# Overview
+Visual DM is a digital Dungeon Master assistant application designed to help Game Masters manage tabletop role-playing games. The application has several systems including character management, inventory, and game mechanics. Currently, the project faces issues with model duplication across different modules and insufficient test coverage.
+
+# Core Features
+- **Model Deduplication**: Eliminate duplicate model definitions across the codebase, particularly for Item and Inventory models.
+- **SQLAlchemy Integration**: Properly configure SQLAlchemy ORM for all models to avoid table conflicts.
+- **Test Coverage Improvement**: Increase test coverage for the character system from 20% to at least 90%.
+- **Character System Enhancement**: Ensure character, inventory, and item relationships work correctly.
+
+# User Experience
+- **Game Masters**: Need reliable character and inventory management without data inconsistencies.
+- **Developers**: Need clean, maintainable code structure with proper model inheritance and relationships.
+- **Quality Assurance**: Need comprehensive test coverage to validate system functionality.
+
+# Technical Architecture
+## System Components
+- **Character System**: Manages character attributes, skills, and relationships.
+- **Inventory System**: Manages items, inventories, and their relationships to characters.
+- **Core Engine**: Provides common utilities and base classes.
+
+## Data Models
+- **Character**: Base character model with attributes and relationships.
+- **Item**: Canonical model should be in `backend/systems/inventory/models/item.py`.
+- **Inventory**: Container for items, linked to characters.
+
+## Infrastructure Requirements
+- SQLAlchemy ORM for database interactions.
+- SQLite for testing and development.
+- Pytest for test framework.
+
+# Development Roadmap
+## Phase 1: Model Cleanup
+- Identify all duplicate model definitions.
+- Establish canonical model locations.
+- Remove duplicates and replace with imports from canonical sources.
+- Fix table arguments to prevent SQLAlchemy conflicts.
+
+## Phase 2: Relationship Refactoring
+- Ensure proper relationship definitions between models.
+- Rename conflicting column names (e.g., 'items' to 'items_data').
+- Update all references to use the correct model fields.
+
+## Phase 3: Test Coverage Improvement
+- Identify gaps in existing tests.
+- Create new test cases for untested functionality.
+- Fix broken tests affected by model changes.
+- Implement integration tests for cross-system functionality.
+
+# Logical Dependency Chain
+1. Fix Item model duplication first (foundation).
+2. Address Inventory model relationships.
+3. Update Character system tests.
+4. Refactor any remaining model inconsistencies.
+5. Implement comprehensive test suite.
+
+# Risks and Mitigations
+## Technical Challenges
+- **Risk**: SQLAlchemy table conflicts even after model consolidation.
+- **Mitigation**: Use `__table_args__ = {"extend_existing": True}` and verify model imports.
+
+## Resource Constraints
+- **Risk**: Limited knowledge of the full codebase structure.
+- **Mitigation**: Create visual diagrams of model relationships for better understanding.
+
+## Testing Complexity
+- **Risk**: Tests may break after model refactoring.
+- **Mitigation**: Incremental changes with immediate test validation after each change.
+
+# Appendix
+## Current Model Duplications
+- Item model in:
+  - backend/systems/inventory/models/item.py (canonical)
+  - backend/systems/inventory/models.py (duplicate)
+  - backend/systems/character/inventory/inventory_models.py (duplicate)
+
+## Target Test Coverage
+- Character system: 90% (currently at 20%)
+- Inventory system: 90%
+- Overall backend: 80%

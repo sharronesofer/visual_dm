@@ -1,0 +1,185 @@
+[
+  {
+    "id": "99357",
+    "created_at": "2025-05-12T01:34:24.958679Z",
+    "updated_at": "2025-05-25T01:34:24.958681Z",
+    "name": "Daughter Shield",
+    "description": "Rise miss hit wind nor doctor before another. Near but Congress huge rate owner. Author contain several special.",
+    "school": "DIVINATION",
+    "domain": "DIVINE",
+    "narrative_power": 4.1,
+    "narrative_effects": {
+      "primary_effect": "Send say rate fact.",
+      "secondary_effects": [],
+      "duration": "INSTANT",
+      "range": "AREA"
+    }
+  },
+  {
+    "id": "23260",
+    "created_at": "2025-05-09T01:34:24.958731Z",
+    "updated_at": "2025-05-28T01:34:24.958733Z",
+    "name": "Push Shield",
+    "description": "Opportunity wait pretty gun know not PM bring. Parent alone federal put rise. Audience coach food lay point base.",
+    "school": "ABJURATION",
+    "domain": "DIVINE",
+    "narrative_power": 6.2,
+    "narrative_effects": {
+      "primary_effect": "Quickly ground red relate.",
+      "secondary_effects": [
+        "Tonight too local hand opportunity over."
+      ],
+      "duration": "TIMED",
+      "range": "AREA"
+    }
+  },
+  {
+    "id": "71269",
+    "created_at": "2025-05-20T01:34:24.958788Z",
+    "updated_at": "2025-05-26T01:34:24.958790Z",
+    "name": "Media Shield",
+    "description": "Enough increase event support PM. Hard book able large. Use course father far born significant husband because.",
+    "school": "DIVINATION",
+    "domain": "OCCULT",
+    "narrative_power": 8.4,
+    "narrative_effects": {
+      "primary_effect": "Discover or choose paper.",
+      "secondary_effects": [],
+      "duration": "CONCENTRATION",
+      "range": "SELF"
+    }
+  },
+  {
+    "id": "84159",
+    "created_at": "2025-05-02T01:34:24.958834Z",
+    "updated_at": "2025-05-29T01:34:24.958836Z",
+    "name": "Hit Shield",
+    "description": "Hot tend Democrat cultural wife growth later. Education particular room notice blood effort.",
+    "school": "ABJURATION",
+    "domain": "DIVINE",
+    "narrative_power": 1.1,
+    "narrative_effects": {
+      "primary_effect": "Subject despite possible material best.",
+      "secondary_effects": [
+        "Senior theory read.",
+        "War alone claim stop recently.",
+        "Success work event buy direction beat happy yeah."
+      ],
+      "duration": "TIMED",
+      "range": "SELF"
+    }
+  },
+  {
+    "id": "50088",
+    "created_at": "2025-05-04T01:34:24.958899Z",
+    "updated_at": "2025-05-24T01:34:24.958900Z",
+    "name": "Not Blast",
+    "description": "Record kind machine safe fall center quite. Cost last benefit crime open. Serve their discussion bed bad. Interview tonight run president government expect.",
+    "school": "EVOCATION",
+    "domain": "OCCULT",
+    "narrative_power": 1.5,
+    "narrative_effects": {
+      "primary_effect": "Major factor human opportunity future PM.",
+      "secondary_effects": [
+        "Star its issue foot."
+      ],
+      "duration": "INSTANT",
+      "range": "AREA"
+    }
+  },
+  {
+    "id": "59074",
+    "created_at": "2025-05-21T01:34:24.958959Z",
+    "updated_at": "2025-05-27T01:34:24.958961Z",
+    "name": "Able Shield",
+    "description": "Maybe gas girl leader. Window reach issue five over month approach. In wall very chance be. Traditional best attack organization above idea short. Message say same.",
+    "school": "ENCHANTMENT",
+    "domain": "DIVINE",
+    "narrative_power": 7.2,
+    "narrative_effects": {
+      "primary_effect": "What hospital case five green.",
+      "secondary_effects": [
+        "Represent system them similar spend national single.",
+        "Participant hundred we part view anything bad.",
+        "Soldier effect language kid election scientist."
+      ],
+      "duration": "PERMANENT",
+      "range": "TOUCH"
+    }
+  },
+  {
+    "id": "25289",
+    "created_at": "2025-05-05T01:34:24.959046Z",
+    "updated_at": "2025-05-26T01:34:24.959047Z",
+    "name": "How Heal",
+    "description": "Must animal with early enough song. None artist including marriage each drug learn. Your loss between north mother well side.",
+    "school": "CONJURATION",
+    "domain": "OCCULT",
+    "narrative_power": 3.4,
+    "narrative_effects": {
+      "primary_effect": "Public yes around manage board involve truth.",
+      "secondary_effects": [
+        "At ever but head.",
+        "Table table card.",
+        "Check test from."
+      ],
+      "duration": "PERMANENT",
+      "range": "RANGED"
+    }
+  },
+  {
+    "id": "19684",
+    "created_at": "2025-05-13T01:34:24.959119Z",
+    "updated_at": "2025-05-24T01:34:24.959120Z",
+    "name": "Lose Heal",
+    "description": "Treatment list seek analysis position trouble understand. Step six without voice responsibility pass program. Series character pattern big culture which goal. Themselves national discuss soldier.",
+    "school": "DIVINATION",
+    "domain": "DIVINE",
+    "narrative_power": 5.6,
+    "narrative_effects": {
+      "primary_effect": "Drug girl certain according.",
+      "secondary_effects": [
+        "Likely cell race push manage they heart.",
+        "Raise former bring or.",
+        "Statement final note institution music these prepare tree."
+      ],
+      "duration": "CONCENTRATION",
+      "range": "SELF"
+    }
+  },
+  {
+    "id": "49228",
+    "created_at": "2025-05-23T01:34:24.959195Z",
+    "updated_at": "2025-05-29T01:34:24.959197Z",
+    "name": "Finish Shield",
+    "description": "Charge miss impact seem reach pull feeling. Exist news receive.",
+    "school": "TRANSMUTATION",
+    "domain": "OCCULT",
+    "narrative_power": 1.6,
+    "narrative_effects": {
+      "primary_effect": "Through morning south there rich according hundred.",
+      "secondary_effects": [
+        "Between point set least range.",
+        "Chair part back history both human agree life."
+      ],
+      "duration": "TIMED",
+      "range": "SELF"
+    }
+  },
+  {
+    "id": "69951",
+    "created_at": "2025-04-30T01:34:24.959247Z",
+    "updated_at": "2025-05-28T01:34:24.959248Z",
+    "name": "Institution Bolt",
+    "description": "Against police store again. Attack top sit buy.",
+    "school": "NECROMANCY",
+    "domain": "NATURE",
+    "narrative_power": 7.6,
+    "narrative_effects": {
+      "primary_effect": "Pm stay religious assume offer very trial wall.",
+      "secondary_effects": [],
+      "duration": "PERMANENT",
+      "range": "TOUCH"
+    }
+  }
+]

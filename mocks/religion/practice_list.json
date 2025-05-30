@@ -1,0 +1,42 @@
+[
+  {
+    "id": "a347c251-0951-4e69-bcc8-e5d1fb7d77ae",
+    "created_at": "2025-05-22T01:34:25.019534Z",
+    "updated_at": "2025-05-27T01:34:25.019537Z",
+    "name": "Well",
+    "description": "Debate when challenge feeling begin industry cover.",
+    "status": "PENDING"
+  },
+  {
+    "id": "d2c32219-3409-4e70-beee-cf4a7b3e9d08",
+    "created_at": "2025-05-10T01:34:25.019542Z",
+    "updated_at": "2025-05-29T01:34:25.019544Z",
+    "name": "Friend",
+    "description": "Hold approach fund.",
+    "status": "PENDING"
+  },
+  {
+    "id": "9ac7fdf3-e696-42fb-ae5a-1113e9c5ed8a",
+    "created_at": "2025-05-09T01:34:25.019549Z",
+    "updated_at": "2025-05-26T01:34:25.019551Z",
+    "name": "Probably",
+    "description": "Recent seem subject example yet science kind.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "406217bc-07da-4fa1-95b9-5f6d57175500",
+    "created_at": "2025-05-27T01:34:25.019555Z",
+    "updated_at": "2025-05-24T01:34:25.019557Z",
+    "name": "Machine",
+    "description": "Listen usually message enter speech.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "17cc3bf2-9238-4810-94bb-7c2fd56ed17f",
+    "created_at": "2025-05-08T01:34:25.019561Z",
+    "updated_at": "2025-05-28T01:34:25.019563Z",
+    "name": "Chance",
+    "description": "Care field bill standard.",
+    "status": "INACTIVE"
+  }
+]

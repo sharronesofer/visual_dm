@@ -1,0 +1,110 @@
+"""
+Tests for the rumor prompt manager module.
+
+This module tests the RumorPromptManager class that handles
+prompt templates for rumor transformation.
+"""
+
+import unittest
+
+from backend.systems.rumor.prompt_manager import RumorPromptManager
+
+
+class TestRumorPromptManager(unittest.TestCase):
+    """Test case for the RumorPromptManager class."""
+
+    def test_build_prompt(self):
+        """Test building a prompt with the template."""
+        # Test with basic parameters
+        event = "The king was assassinated at the castle"
+        rumor = "Someone killed the king"
+        traits = "gossipy, anxious, distrustful"
+        distortion_level = 0.5
+
+        expected_prompt = (
+            "Given the following event: 'The king was assassinated at the castle', "
+            "and the current rumor: 'Someone killed the king', "
+            "transform the rumor as it might be retold by an NPC with the following traits: gossipy, anxious, distrustful. "
+            "Apply a distortion level of 0.5 (0=truthful, 1=wildly distorted). "
+            "Preserve the main theme, but allow for natural rumor evolution. "
+            "Output only the new rumor text."
+        )
+
+        prompt = RumorPromptManager.build_prompt(
+            event=event, rumor=rumor, traits=traits, distortion_level=distortion_level
+        )
+
+        self.assertEqual(prompt, expected_prompt)
+
+    def test_build_prompt_with_empty_values(self):
+        """Test building a prompt with empty values."""
+        # Test with empty parameters
+        event = ""
+        rumor = ""
+        traits = ""
+        distortion_level = 0.0
+
+        expected_prompt = (
+            "Given the following event: '', "
+            "and the current rumor: '', "
+            "transform the rumor as it might be retold by an NPC with the following traits: . "
+            "Apply a distortion level of 0.0 (0=truthful, 1=wildly distorted). "
+            "Preserve the main theme, but allow for natural rumor evolution. "
+            "Output only the new rumor text."
+        )
+
+        prompt = RumorPromptManager.build_prompt(
+            event=event, rumor=rumor, traits=traits, distortion_level=distortion_level
+        )
+
+        self.assertEqual(prompt, expected_prompt)
+
+    def test_build_prompt_with_special_characters(self):
+        """Test building a prompt with special characters."""
+        # Test with parameters containing special characters
+        event = "The king's crown was stolen!"
+        rumor = "Someone took the king's jewels..."
+        traits = "paranoid, \"conspiracy-minded\", 'suspicious'"
+        distortion_level = 0.8
+
+        expected_prompt = (
+            "Given the following event: 'The king's crown was stolen!', "
+            "and the current rumor: 'Someone took the king's jewels...', "
+            "transform the rumor as it might be retold by an NPC with the following traits: paranoid, \"conspiracy-minded\", 'suspicious'. "
+            "Apply a distortion level of 0.8 (0=truthful, 1=wildly distorted). "
+            "Preserve the main theme, but allow for natural rumor evolution. "
+            "Output only the new rumor text."
+        )
+
+        prompt = RumorPromptManager.build_prompt(
+            event=event, rumor=rumor, traits=traits, distortion_level=distortion_level
+        )
+
+        self.assertEqual(prompt, expected_prompt)
+
+    def test_build_prompt_extreme_distortion(self):
+        """Test building a prompt with extreme distortion levels."""
+        # Test with minimum distortion
+        event = "A merchant arrived at the town"
+        rumor = "New merchant in town"
+        traits = "honest, straightforward"
+        distortion_level = 0.0  # No distortion
+
+        prompt_min = RumorPromptManager.build_prompt(
+            event=event, rumor=rumor, traits=traits, distortion_level=distortion_level
+        )
+
+        self.assertIn("distortion level of 0.0", prompt_min)
+
+        # Test with maximum distortion
+        distortion_level = 1.0  # Maximum distortion
+
+        prompt_max = RumorPromptManager.build_prompt(
+            event=event, rumor=rumor, traits=traits, distortion_level=distortion_level
+        )
+
+        self.assertIn("distortion level of 1.0", prompt_max)
+
+
+if __name__ == "__main__":
+    unittest.main()

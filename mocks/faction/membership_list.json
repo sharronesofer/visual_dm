@@ -1,0 +1,42 @@
+[
+  {
+    "id": "dda4f612-e87c-41f7-92f0-cb4ff0e4d497",
+    "created_at": "2025-05-03T01:34:24.955580Z",
+    "updated_at": "2025-05-29T01:34:24.955583Z",
+    "name": "Compare",
+    "description": "Challenge news agreement base list government.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "97a8a855-b76e-4053-bbd0-f9fcb3d0fc7e",
+    "created_at": "2025-05-09T01:34:24.955587Z",
+    "updated_at": "2025-05-29T01:34:24.955588Z",
+    "name": "Candidate",
+    "description": "Animal stuff green who quite yard field.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "714247ce-a6df-45e1-871c-a17f3c2f500d",
+    "created_at": "2025-05-21T01:34:24.955592Z",
+    "updated_at": "2025-05-28T01:34:24.955593Z",
+    "name": "Use",
+    "description": "Threat toward simply stay history explain off anyone.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "2175a8be-e9c7-4cb3-a845-1b90be445ab8",
+    "created_at": "2025-05-01T01:34:24.955597Z",
+    "updated_at": "2025-05-25T01:34:24.955598Z",
+    "name": "Experience",
+    "description": "Leg own fear talk really.",
+    "status": "PENDING"
+  },
+  {
+    "id": "7e272ea9-d252-4ee8-b9b0-ea25fae9747a",
+    "created_at": "2025-05-18T01:34:24.955602Z",
+    "updated_at": "2025-05-28T01:34:24.955603Z",
+    "name": "Modern",
+    "description": "Rather cost those.",
+    "status": "INACTIVE"
+  }
+]

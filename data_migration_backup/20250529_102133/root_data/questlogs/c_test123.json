@@ -1,0 +1,43 @@
+[
+  {
+    "quest": {
+      "title": "Existing Quest",
+      "description": "An existing quest",
+      "objectives": [
+        {
+          "type": "talk",
+          "target": "npc",
+          "count": 1
+        }
+      ],
+      "rewards": {
+        "gold": 50,
+        "xp": 250
+      },
+      "status": "active"
+    },
+    "timestamp": "2023-01-01T00:00:00"
+  },
+  {
+    "quest": {
+      "title": "New Quest",
+      "description": "A new quest",
+      "objectives": [
+        {
+          "type": "kill",
+          "target": "monster",
+          "count": 10
+        }
+      ],
+      "rewards": {
+        "gold": 100,
+        "xp": 500
+      },
+      "status": "active"
+    },
+    "timestamp": "2023-01-02T00:00:00"
+  },
+  {
+    "timestamp": "2025-05-27T02:53:57.218378"
+  }
+]

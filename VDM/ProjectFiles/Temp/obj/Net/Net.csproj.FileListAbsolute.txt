@@ -1,0 +1,4 @@
+/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj/Net/Net.csproj.AssemblyReference.cache
+/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj/Net/Net.GeneratedMSBuildEditorConfig.editorconfig
+/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj/Net/Net.csproj.CoreCompileInputs.cache
+/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj/Net/Net.sourcelink.json

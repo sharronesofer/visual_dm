@@ -1,4 +1,0 @@
-visual_client/config/__init__.py
-visual_client/core/__init__.py
-visual_client/core/utils/__init__ .py
-visual_client/game/__init__.py

@@ -1,0 +1,530 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Visual DM World Seed Schema",
+    "description": "Schema for defining a seeded world, continent, or server in Visual DM",
+    "type": "object",
+    "required": ["version", "name", "metadata"],
+    "properties": {
+        "version": {
+            "type": "string",
+            "description": "Version of the world seed schema",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "name": {
+            "type": "string",
+            "description": "Name of the world/continent",
+            "minLength": 1
+        },
+        "metadata": {
+            "type": "object",
+            "description": "World/continent metadata",
+            "properties": {
+                "author": {
+                    "type": "string",
+                    "description": "Author of the world seed"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the world/continent"
+                },
+                "tags": {
+                    "type": "array",
+                    "description": "Tags for categorizing the world",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "created_at": {
+                    "type": "string",
+                    "description": "Creation timestamp (ISO format)",
+                    "format": "date-time"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "description": "Last update timestamp (ISO format)",
+                    "format": "date-time"
+                },
+                "settings": {
+                    "type": "object",
+                    "description": "Custom settings for this world",
+                    "additionalProperties": true
+                }
+            },
+            "required": ["author", "description"]
+        },
+        "world_settings": {
+            "type": "object",
+            "description": "Settings for world generation",
+            "properties": {
+                "seed": {
+                    "type": "string",
+                    "description": "Random seed for deterministic generation"
+                },
+                "continents": {
+                    "type": "integer",
+                    "description": "Number of continents to generate",
+                    "minimum": 1,
+                    "default": 1
+                },
+                "region_density": {
+                    "type": "number",
+                    "description": "Density of regions per continent (0.1-2.0)",
+                    "minimum": 0.1,
+                    "maximum": 2.0,
+                    "default": 1.0
+                },
+                "biome_distribution": {
+                    "type": "object",
+                    "description": "Adjustments to biome distribution",
+                    "additionalProperties": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10
+                    }
+                },
+                "river_settings": {
+                    "type": "object",
+                    "description": "Settings for river generation",
+                    "properties": {
+                        "river_density": {
+                            "type": "number",
+                            "description": "Density of rivers (0.0-2.0)",
+                            "minimum": 0,
+                            "maximum": 2,
+                            "default": 1.0
+                        },
+                        "min_length": {
+                            "type": "integer",
+                            "description": "Minimum river length",
+                            "minimum": 5,
+                            "default": 10
+                        },
+                        "max_length": {
+                            "type": "integer",
+                            "description": "Maximum river length",
+                            "minimum": 10,
+                            "default": 50
+                        }
+                    }
+                },
+                "coastline_settings": {
+                    "type": "object",
+                    "description": "Settings for coastline generation",
+                    "properties": {
+                        "smoothing_iterations": {
+                            "type": "integer",
+                            "description": "Number of smoothing iterations",
+                            "minimum": 0,
+                            "maximum": 5,
+                            "default": 2
+                        },
+                        "beach_width": {
+                            "type": "integer",
+                            "description": "Width of beaches",
+                            "minimum": 1,
+                            "maximum": 3,
+                            "default": 1
+                        }
+                    }
+                }
+            }
+        },
+        "modular_data_references": {
+            "type": "object",
+            "description": "References to modular data files for this world",
+            "properties": {
+                "biomes": {
+                    "type": "string",
+                    "description": "Path to biome definition file"
+                },
+                "adjacency": {
+                    "type": "string",
+                    "description": "Path to biome adjacency rules file"
+                },
+                "items": {
+                    "type": "string",
+                    "description": "Path to items definition file"
+                },
+                "creatures": {
+                    "type": "string",
+                    "description": "Path to creatures definition file"
+                },
+                "buildings": {
+                    "type": "string",
+                    "description": "Path to buildings definition file"
+                },
+                "poi_types": {
+                    "type": "string",
+                    "description": "Path to POI types definition file"
+                },
+                "resources": {
+                    "type": "string",
+                    "description": "Path to resources definition file"
+                },
+                "magic": {
+                    "type": "string",
+                    "description": "Path to magic definition file"
+                },
+                "quests": {
+                    "type": "string",
+                    "description": "Path to quest templates file"
+                },
+                "motifs": {
+                    "type": "string",
+                    "description": "Path to motifs definition file"
+                },
+                "dialogue": {
+                    "type": "string",
+                    "description": "Path to dialogue templates file"
+                },
+                "combat_rules": {
+                    "type": "string",
+                    "description": "Path to combat rules file"
+                },
+                "worldgen_rules": {
+                    "type": "string",
+                    "description": "Path to world generation rules file"
+                },
+                "religion": {
+                    "type": "string",
+                    "description": "Path to religion definition file"
+                },
+                "diplomacy": {
+                    "type": "string",
+                    "description": "Path to diplomacy definition file"
+                },
+                "custom": {
+                    "type": "object",
+                    "description": "Custom modular data references",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "factions": {
+            "type": "array",
+            "description": "Predefined factions in this world",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "type"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the faction"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the faction"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of faction",
+                        "enum": ["political", "religious", "guild", "criminal", "military", "academic", "arcane", "custom"]
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the faction"
+                    },
+                    "influence": {
+                        "type": "number",
+                        "description": "Global influence level (0-100)",
+                        "minimum": 0,
+                        "maximum": 100
+                    },
+                    "relationships": {
+                        "type": "object",
+                        "description": "Relationships with other factions",
+                        "additionalProperties": {
+                            "type": "number",
+                            "description": "Relationship value (-100 to +100)",
+                            "minimum": -100,
+                            "maximum": 100
+                        }
+                    },
+                    "territory": {
+                        "type": "array",
+                        "description": "Region IDs or coordinates where this faction has territory",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "custom_data": {
+                        "type": "object",
+                        "description": "Custom data for this faction",
+                        "additionalProperties": true
+                    }
+                }
+            }
+        },
+        "religions": {
+            "type": "array",
+            "description": "Predefined religions in this world",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "type"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the religion"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the religion"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of religion",
+                        "enum": ["polytheistic", "monotheistic", "animistic", "ancestor", "cult", "syncretic", "custom"]
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the religion"
+                    },
+                    "deities": {
+                        "type": "array",
+                        "description": "Deities or spiritual entities",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the deity"
+                                },
+                                "domain": {
+                                    "type": "string",
+                                    "description": "Domain or sphere of influence"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the deity"
+                                }
+                            },
+                            "required": ["name"]
+                        }
+                    },
+                    "influence": {
+                        "type": "number",
+                        "description": "Global influence level (0-100)",
+                        "minimum": 0,
+                        "maximum": 100
+                    },
+                    "custom_data": {
+                        "type": "object",
+                        "description": "Custom data for this religion",
+                        "additionalProperties": true
+                    }
+                }
+            }
+        },
+        "regions": {
+            "type": "array",
+            "description": "Predefined regions in this world",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "biome"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the region"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the region"
+                    },
+                    "biome": {
+                        "type": "string",
+                        "description": "Primary biome for this region"
+                    },
+                    "coordinates": {
+                        "type": "object",
+                        "description": "Coordinates in the world grid",
+                        "properties": {
+                            "x": {
+                                "type": "integer",
+                                "description": "X coordinate"
+                            },
+                            "y": {
+                                "type": "integer",
+                                "description": "Y coordinate"
+                            }
+                        },
+                        "required": ["x", "y"]
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the region"
+                    },
+                    "pois": {
+                        "type": "array",
+                        "description": "Points of Interest in this region",
+                        "items": {
+                            "type": "object",
+                            "required": ["id", "name", "type"],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Unique identifier for the POI"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the POI"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Type of POI",
+                                    "enum": ["city", "town", "village", "dungeon", "ruins", "temple", "outpost", "custom"]
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the POI"
+                                },
+                                "coordinates": {
+                                    "type": "object",
+                                    "description": "Coordinates within the region",
+                                    "properties": {
+                                        "x": {
+                                            "type": "integer",
+                                            "description": "X coordinate"
+                                        },
+                                        "y": {
+                                            "type": "integer",
+                                            "description": "Y coordinate"
+                                        }
+                                    },
+                                    "required": ["x", "y"]
+                                },
+                                "population": {
+                                    "type": "integer",
+                                    "description": "Population of the POI",
+                                    "minimum": 0
+                                },
+                                "faction_id": {
+                                    "type": "string",
+                                    "description": "ID of the controlling faction"
+                                },
+                                "custom_data": {
+                                    "type": "object",
+                                    "description": "Custom data for this POI",
+                                    "additionalProperties": true
+                                }
+                            }
+                        }
+                    },
+                    "motifs": {
+                        "type": "array",
+                        "description": "Active motifs in this region",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "custom_data": {
+                        "type": "object",
+                        "description": "Custom data for this region",
+                        "additionalProperties": true
+                    }
+                }
+            }
+        },
+        "canon_lists": {
+            "type": "object",
+            "description": "Lists of canonical elements in this world",
+            "properties": {
+                "biomes": {
+                    "type": "array",
+                    "description": "List of available biomes",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "poi_types": {
+                    "type": "array",
+                    "description": "List of available POI types",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "faction_types": {
+                    "type": "array",
+                    "description": "List of available faction types",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "religion_types": {
+                    "type": "array",
+                    "description": "List of available religion types",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "motifs": {
+                    "type": "array",
+                    "description": "List of available motifs",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "custom_lists": {
+                    "type": "object",
+                    "description": "Custom canonical lists",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "narrative_hooks": {
+            "type": "array",
+            "description": "Narrative elements that can be used in story generation",
+            "items": {
+                "type": "object",
+                "required": ["id", "type", "description"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the narrative hook"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of narrative hook",
+                        "enum": ["event", "character", "location", "item", "faction", "prophecy", "custom"]
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the narrative hook"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "description": "Tags for categorizing this hook",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "region_id": {
+                        "type": "string",
+                        "description": "ID of the associated region (if applicable)"
+                    },
+                    "faction_id": {
+                        "type": "string",
+                        "description": "ID of the associated faction (if applicable)"
+                    },
+                    "custom_data": {
+                        "type": "object",
+                        "description": "Custom data for this narrative hook",
+                        "additionalProperties": true
+                    }
+                }
+            }
+        },
+        "extensions": {
+            "type": "object",
+            "description": "Custom extensions to the world seed schema",
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": false
+} 

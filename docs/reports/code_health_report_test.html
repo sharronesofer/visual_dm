@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Code Health Analysis Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
+    h1 { color: #0066cc; }
+    h2 { color: #0066cc; margin-top: 30px; }
+    .summary { background-color: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .score { font-size: 24px; font-weight: bold; margin: 10px 0; }
+    .good { color: #4CAF50; }
+    .average { color: #FFC107; }
+    .poor { color: #F44336; }
+    table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    .stub-list { max-height: 400px; overflow-y: auto; margin: 20px 0; }
+    .bar-container { background-color: #eee; height: 25px; width: 100%; border-radius: 4px; margin: 5px 0; }
+    .bar { height: 100%; border-radius: 4px; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); grid-gap: 20px; margin: 20px 0; }
+    .metric-card { background-color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 15px; }
+    .category-A { background-color: #ffcdd2; }
+    .category-B { background-color: #fff9c4; }
+    .category-C { background-color: #dcedc8; }
+  </style>
+</head>
+<body>
+  <h1>Code Health Analysis Report</h1>
+  <div class='summary'>
+    <p><strong>Scan Date:</strong> 2025-05-18 12:40:00</p>
+    <p><strong>Directories Analyzed:</strong> 1</p>
+    <p><strong>Files Analyzed:</strong> 13014</p>
+    <p><strong>Total Stubs Found:</strong> 3192</p>
+    <p>Overall Code Quality Score: <span class='score average'>75.72/100</span></p>
+    <p>Combined Health Score: <span class='score average'>65.16/100</span></p>
+  </div>
+  <h2>Stub Distribution</h2>
+  <div class='metrics-grid'>
+    <div class='metric-card'>
+      <h3>Critical Stubs (A): 0</h3>
+      <div class='bar-container'>
+        <div class='bar category-A' style='width: 0%;'></div>
+      </div>
+      <p>These stubs are critical and mentioned in documentation or use explicit NotImplementedError.</p>
+    </div>
+    <div class='metric-card'>
+      <h3>Important Stubs (B): 0</h3>
+      <div class='bar-container'>
+        <div class='bar category-B' style='width: 0%;'></div>
+      </div>
+      <p>These stubs are important and have clear TODO markers.</p>
+    </div>
+    <div class='metric-card'>
+      <h3>Less Critical Stubs (C): 0</h3>
+      <div class='bar-container'>
+        <div class='bar category-C' style='width: 0%;'></div>
+      </div>
+      <p>These stubs are less critical placeholder implementations.</p>
+    </div>
+  </div>
+  <h2>Directory Breakdown</h2>
+  <table>
+    <tr>
+      <th>Directory</th>
+      <th>Files</th>
+      <th>Code Quality</th>
+      <th>Stubs</th>
+      <th>Health Score</th>
+    </tr>
+    <tr>
+      <td>/Users/Sharrone/Visual_DM/backend</td>
+      <td>13014</td>
+      <td class='average'>75.72/100</td>
+      <td>3192</td>
+      <td class='average'>65.15969571230983/100</td>
+    </tr>
+  </table>
+  <h2>Quality Metrics Breakdown</h2>
+  <div class='metrics-grid'>
+    <div class='metric-card'>
+      <h3>Readability</h3>
+      <div class='score average'>71.37/100</div>
+      <div class='bar-container'>
+        <div class='bar average' style='width: 71.37%; background-color: #FFC107;'></div>
+      </div>
+    </div>
+    <div class='metric-card'>
+      <h3>Best Practices</h3>
+      <div class='score good'>91.5/100</div>
+      <div class='bar-container'>
+        <div class='bar good' style='width: 91.5%; background-color: #4CAF50;'></div>
+      </div>
+    </div>
+    <div class='metric-card'>
+      <h3>Modularity</h3>
+      <div class='score good'>88.0/100</div>
+      <div class='bar-container'>
+        <div class='bar good' style='width: 88.0%; background-color: #4CAF50;'></div>
+      </div>
+    </div>
+    <div class='metric-card'>
+      <h3>Maintainability</h3>
+      <div class='score average'>70.0/100</div>
+      <div class='bar-container'>
+        <div class='bar average' style='width: 70.0%; background-color: #FFC107;'></div>
+      </div>
+    </div>
+    <div class='metric-card'>
+      <h3>Performance</h3>
+      <div class='score good'>87.5/100</div>
+      <div class='bar-container'>
+        <div class='bar good' style='width: 87.5%; background-color: #4CAF50;'></div>
+      </div>
+    </div>
+    <div class='metric-card'>
+      <h3>Error Handling</h3>
+      <div class='score average'>65.0/100</div>
+      <div class='bar-container'>
+        <div class='bar average' style='width: 65.0%; background-color: #FFC107;'></div>
+      </div>
+    </div>
+    <div class='metric-card'>
+      <h3>Documentation</h3>
+      <div class='score poor'>44.67/100</div>
+      <div class='bar-container'>
+        <div class='bar poor' style='width: 44.67%; background-color: #F44336;'></div>
+      </div>
+    </div>
+  </div>
+  <h2>Critical Stubs (Category A)</h2>
+  <div class='stub-list'>
+    <table>
+      <tr>
+        <th>File</th>
+        <th>Line</th>
+        <th>Function/Method</th>
+        <th>Type</th>
+        <th>Implementation</th>
+      </tr>
+    </table>
+  </div>
+  <h2>Recommendations</h2>
+  <ul>
+    <li><strong>Improve Documentation</strong> - The documentation score is 44.67/100. Consider adding or improving docstrings and comments.</li>
+    <li><strong>Improve Error Handling</strong> - The error handling score is 65.0/100. Add more comprehensive exception handling and recovery mechanisms.</li>
+  </ul>
+</body>
+</html>

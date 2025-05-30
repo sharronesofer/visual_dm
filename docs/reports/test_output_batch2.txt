@@ -1,0 +1,175 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+testpaths: backend/tests
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+23:47:53 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
+23:47:53 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
+23:47:54 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
+23:47:54 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+23:47:54 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
+23:47:54 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
+23:47:54 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
+23:47:54 [INFO] backend.systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Biome file not found: backend/data/biomes/land_types.json
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load biome data
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Adjacency file not found: backend/data/biomes/adjacency.json
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load adjacency rules
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: backend/data/entities
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: backend/data/items
+23:47:54 [INFO] backend.systems.rumor.repository: RumorRepository initialized with storage at data/rumors/
+23:47:54 [INFO] backend.systems.rumor.repository: RumorRepository sync singleton created with storage at data/rumors/
+23:47:54 [INFO] backend.systems.rumor.service: RumorService instance configured.
+23:47:54 [INFO] backend.systems.rumor.service: RumorService sync singleton instance created.
+23:47:54 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
+23:47:54 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+23:47:54 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+23:47:55 [INFO] root: World Generator initialized.
+23:47:55 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
+23:47:55 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
+23:47:55 [INFO] systems.combat.effect_visualizer: EffectVisualizer initialized
+23:47:55 [INFO] systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+23:47:56 [INFO] systems.llm.core.dm_core: DungeonMaster initialized
+23:47:56 [WARNING] systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+23:47:56 [WARNING] systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+23:47:56 [ERROR] backend.systems.loot.data_access: Error loading JSON file data/equipment/items.json: [Errno 2] No such file or directory: 'data/equipment/items.json'
+23:47:56 [WARNING] backend.systems.loot.data_access: Equipment data not found at canonical path data/equipment/items.json, falling back to legacy path.
+23:47:56 [ERROR] backend.systems.loot.data_access: Error loading JSON file rules_json/equipment.json: [Errno 2] No such file or directory: 'rules_json/equipment.json'
+23:47:57 [WARNING] backend.systems.religion.services: Faction system not available, faction integration will be disabled
+23:47:57 [WARNING] backend.systems.religion.services: Quest system not available, quest integration will be disabled
+23:47:57 [WARNING] systems.shared.rules: Unknown balance constant: version
+23:47:57 [WARNING] systems.shared.rules: Unknown balance constant: constants
+23:47:57 [INFO] root: World Generator initialized.
+collected 2605 items / 8 errors / 22 skipped
+
+==================================== ERRORS ====================================
+______________ ERROR collecting backend/tests/test_auth_router.py ______________
+backend/tests/test_auth_router.py:12: in <module>
+    import systems.auth_user.routers.auth_router
+backend/systems/auth_user/routers/auth_router.py:38: in <module>
+    async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+E   TypeError: <lambda>() missing 1 required positional argument: 'x'
+_________________ ERROR collecting backend/tests/test_demo.py __________________
+backend/tests/test_demo.py:12: in <module>
+    import systems.combat.demo
+backend/systems/combat/demo.py:66: in <module>
+    class MockSkill:
+backend/systems/combat/demo.py:77: in MockSkill
+    status_effect: Optional[StatusEffectType] = None
+E   NameError: name 'StatusEffectType' is not defined
+____________ ERROR collecting backend/tests/test_legacy_adapter.py _____________
+backend/tests/test_legacy_adapter.py:12: in <module>
+    import systems.combat.legacy_adapter
+backend/systems/combat/legacy_adapter.py:105: in <module>
+    @deprecated(replacement_func=resolve_combat_action)
+E   NameError: name 'resolve_combat_action' is not defined
+_______________ ERROR collecting backend/tests/test_location.py ________________
+backend/tests/test_location.py:12: in <module>
+    import systems.character.inventory.location
+backend/systems/character/inventory/location.py:34: in <module>
+    class Location(LootBase):
+backend/systems/character/inventory/location.py:50: in Location
+    def to_dict(self) -> Dict[str, Any]:
+E   NameError: name 'Dict' is not defined
+______________ ERROR collecting backend/tests/test_loot_routes.py ______________
+backend/systems/loot/data_access.py:71: in load_equipment_data
+    return load_json_file(CANONICAL_EQUIPMENT_PATH)
+backend/systems/loot/data_access.py:55: in load_json_file
+    with open(path, "r", encoding="utf-8") as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: 'data/equipment/items.json'
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_loot_routes.py:12: in <module>
+    import systems.loot.loot_routes
+backend/systems/loot/loot_routes.py:22: in <module>
+    equipment_list = load_equipment_data()
+backend/systems/loot/data_access.py:77: in load_equipment_data
+    return load_json_file(LEGACY_EQUIPMENT_PATH)
+backend/systems/loot/data_access.py:55: in load_json_file
+    with open(path, "r", encoding="utf-8") as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: 'rules_json/equipment.json'
+___________ ERROR collecting backend/tests/test_progression_utils.py ___________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_progression_utils.py:12: in <module>
+    import systems.character.progression.progression_utils
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/progression_utils.py", line 23
+E       def apply_ability_score_increase(character: Character, ability: str) -> Dict[str, Any]:
+E   SyntaxError: expected 'except' or 'finally' block
+________________ ERROR collecting backend/tests/test_scoring.py ________________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_scoring.py:12: in <module>
+    import systems.character.progression.scoring
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/scoring.py", line 53
+E       }
+E       ^
+E   SyntaxError: unmatched '}'
+_____________ ERROR collecting backend/tests/test_worldgen_api.py ______________
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/python.py:493: in importtestmodule
+    mod = import_path(
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+<frozen importlib._bootstrap>:1204: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+backend/tests/test_worldgen_api.py:12: in <module>
+    import systems.world_state.worldgen_api
+E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/world_state/worldgen_api.py", line 56
+E       "example": {
+E   IndentationError: unexpected indent
+=========================== short test summary info ============================
+ERROR backend/tests/test_auth_router.py - TypeError: <lambda>() missing 1 req...
+ERROR backend/tests/test_demo.py - NameError: name 'StatusEffectType' is not ...
+ERROR backend/tests/test_legacy_adapter.py - NameError: name 'resolve_combat_...
+ERROR backend/tests/test_location.py - NameError: name 'Dict' is not defined
+ERROR backend/tests/test_loot_routes.py - FileNotFoundError: [Errno 2] No suc...
+ERROR backend/tests/test_progression_utils.py
+ERROR backend/tests/test_scoring.py
+ERROR backend/tests/test_worldgen_api.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 8 errors during collection !!!!!!!!!!!!!!!!!!!!
+================== 22 skipped, 61 warnings, 8 errors in 4.25s ==================

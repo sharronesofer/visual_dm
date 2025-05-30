@@ -1,6 +1,0 @@
-{
-  "name": "VisualDM.Entities",
-  "references": ["VisualDM.Core", "VisualDM.Systems"],
-  "includePlatforms": ["Editor", "WindowsStandalone64", "macOSStandalone", "LinuxStandalone64", "macOSStandalone"],
-  "allowUnsafeCode": false
-} 

@@ -1,0 +1,40 @@
+{
+  "title": "Explore the Minor Artifact",
+  "description": "A quest in Green Valley",
+  "player_id": "player_123",
+  "location_id": "green_valley",
+  "theme": "exploration",
+  "difficulty": "easy",
+  "level": 1,
+  "type": "SideQuest",
+  "status": "available",
+  "steps": [
+    {
+      "id": 1,
+      "description": "Explore an unknown location",
+      "type": "explore",
+      "completed": false,
+      "required_items": [],
+      "required_skills": [],
+      "target_npc_id": null,
+      "target_location_id": null,
+      "target_item_id": null,
+      "target_enemy_id": null,
+      "target_enemy_type": null,
+      "quantity": 1,
+      "required_count": 1,
+      "current_count": 0,
+      "time_requirement": null,
+      "dialogue_id": null
+    }
+  ],
+  "rewards": {
+    "gold": 24,
+    "experience": 49,
+    "reputation": 4
+  },
+  "created_at": "2025-05-28T20:57:41.370821",
+  "updated_at": "2025-05-28T20:57:41.370822",
+  "data_version": 1,
+  "last_modified": "2025-05-28T16:57:41.370872"
+}

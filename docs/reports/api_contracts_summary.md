@@ -1,0 +1,484 @@
+# API Contract Extraction Summary - Task 43
+
+Generated: 2025-05-28T21:19:26.158908
+
+## Overview
+- **Total Systems**: 18
+- **Total Endpoints**: 381
+- **Total Paths**: 313
+- **OpenAPI Version**: 3.0.3
+
+## Systems Overview
+
+### Arc System
+- **Endpoints**: 29
+- **Description**: API endpoints for the arc system
+- **Endpoints**:
+  - `POST /arcs/` - Create a new arc
+  - `GET /arcs/` - Get arcs with optional filtering
+  - `GET /arcs/{arc_id}` - Get a specific arc by ID
+  - `PUT /arcs/{arc_id}` - Update an existing arc
+  - `DELETE /arcs/{arc_id}` - Delete an arc
+  - `POST /arcs/{arc_id}/activate` - Activate a pending arc
+  - `POST /arcs/{arc_id}/advance` - Advance arc to next step
+  - `POST /arcs/{arc_id}/fail-step` - Mark an arc step as failed
+  - `GET /arcs/{arc_id}/steps` - Get all steps for an arc
+  - `POST /arcs/{arc_id}/generate-steps` - Generate new steps for an arc
+  - `GET /arcs/{arc_id}/quest-opportunities` - Get quest generation opportunities for an arc
+  - `POST /arcs/{arc_id}/generate-quest` - Generate a quest from an arc step
+  - `GET /arcs/{arc_id}/progression` - Get progression information for an arc
+  - `POST /arcs/generate` - Generate a new arc using AI
+  - `GET /arcs/system/statistics` - Get overall arc system statistics
+  - `POST /arcs/system/check-stalled` - Check for and mark stalled arcs
+  - `GET /arcs/analytics/overview` - Get high-level analytics overview
+  - `GET /arcs/analytics/performance-metrics` - Get detailed performance metrics
+  - `GET /arcs/analytics/effectiveness/{arc_id}` - Get effectiveness report for a specific arc
+  - `GET /arcs/analytics/completion-trends` - Get arc completion trends over time
+  - `GET /arcs/analytics/failure-analysis` - Get analysis of arc failures and common failure patterns
+  - `GET /arcs/analytics/system-health` - Get overall system health metrics
+  - `GET /arcs/analytics/engagement-metrics` - Get player engagement metrics related to arcs
+  - `GET /arcs/analytics/bottlenecks` - Identify common progression bottlenecks in arcs
+  - `GET /arcs/analytics/success-patterns` - Analyze patterns in successfully completed arcs
+  - `GET /arcs/analytics/impact-assessment` - Assess the impact of specific arcs on the game world
+  - `GET /arcs/analytics/prediction-accuracy` - Get accuracy metrics for arc progression predictions
+  - `GET /arcs/analytics/cohort-analysis` - Perform cohort analysis on arc performance
+  - `POST /arcs/analytics/custom-report` - Generate a custom analytics report with specified filters and metrics
+
+### Auth_User System
+- **Endpoints**: 14
+- **Description**: API endpoints for the auth_user system
+- **Endpoints**:
+  - `GET /auth-relationships/{character_id}` - Get the auth relationship between the current user and a character
+  - `PUT /auth-relationships/{character_id}` - Update the auth relationship between the current user and a character
+  - `DELETE /auth-relationships/{character_id}` - Delete the auth relationship between the current user and a character
+  - `GET /auth-relationships/check/{character_id}/{permission}` - Check if the current user has a specific permission for a character
+  - `POST /auth-relationships/{character_id}/permissions` - Add a permission to the current user's relationship with a character
+  - `DELETE /auth-relationships/{character_id}/permissions/{permission}` - Remove a permission from the current user's relationship with a character
+  - `PUT /auth-relationships/{character_id}/ownership` - Set or remove ownership status for the current user's relationship with a character
+  - `POST /auth-relationships/{character_id}/transfer-ownership` - Transfer ownership of a character from the current user to another user
+  - `GET /auth-relationships/user/characters` - Get all characters that the current user has access to
+  - `GET /auth-relationships/character/{character_id}/users` - Get all users that have access to a character
+  - `POST /auth-relationships/check-multi` - Check if the current user has a specific permission for multiple characters
+  - `POST /auth/token` - OAuth2 compatible token login endpoint
+  - `GET /auth/me` - Get current user information
+  - `GET /auth/check-permission/{permission_name}` - Check if the current user has a specific permission
+
+### Character System
+- **Endpoints**: 25
+- **Description**: API endpoints for the character system
+- **Endpoints**:
+  - `POST /transform` - Transform Rumor
+  - `GET /characters/{character_id}/relationships` - Get all relationships for a character, optionally filtered by type
+  - `POST /characters/{character_id}/relationships` - Create a new relationship for a character
+  - `DELETE /characters/{character_id}/relationships/{target_id}/{relationship_type}` - Delete a specific relationship
+  - `GET /characters/{character_id}/relationships/faction` - Get all faction relationships for a character
+  - `POST /characters/{character_id}/relationships/faction/{faction_id}/reputation` - Update a character's reputation with a faction
+  - `GET /characters/{character_id}/relationships/quest` - Get all quest relationships for a character, optionally filtered by status
+  - `POST /characters/{character_id}/relationships/quest/{quest_id}/status` - Update a character's progress on a quest
+  - `POST /characters/{character_id}/relationships/spatial/{location_id}/proximity` - Update the proximity between a character and a location
+  - `GET /characters/{character_id}/relationships/spatial` - Get all locations for a character, optionally filtered by maximum distance
+  - `POST /characters/{user_id}/relationships/auth/{character_id}/link` - Create or update an auth relationship between a user and a character
+  - `GET /characters/{user_id}/relationships/auth/characters` - Get all characters for a user with their permissions and owner status
+  - `GET /characters/{character_id}/relationships/auth/users` - Get all users for a character with their permissions and owner status
+  - `GET /characters/{user_id}/relationships/auth/{character_id}/permission/{permission}` - Check if a user has a specific permission for a character
+  - `POST /parties/{player_id}` - Create a new party with a player and NPCs
+  - `POST /parties/{party_id}/members/{npc_id}` - Add an NPC to an existing party
+  - `DELETE /parties/{party_id}/members/{member_id}` - Remove a member from a party
+  - `GET /parties/{party_id}/level` - Get the total or average party level
+  - `POST /parties/{party_id}/xp/{amount}` - Award XP to all members of a party
+  - `POST /parties/abandon/{npc_id}` - Remove an NPC from any party they're in due to loyalty loss
+  - `POST /characters/` - Create a new character
+  - `GET /characters/{character_id}` - Get a character by ID
+  - `GET /characters/` - List all characters
+  - `DELETE /characters/{character_id}` - Delete a character by ID
+  - `PUT /characters/{character_id}` - Update a character by ID
+
+### Combat System
+- **Endpoints**: 5
+- **Description**: API endpoints for the combat system
+- **Endpoints**:
+  - `POST /combat/state` - Creates a new combat state
+  - `GET /combat/state/{combat_id}` - Retrieves the current state of a specific combat instance by its ID
+  - `PUT /combat/state/{combat_id}` - Updates an existing combat state by its ID
+  - `DELETE /combat/state/{combat_id}` - Deletes a combat instance by its ID (e
+  - `GET /combat/states` - Lists all active combat instances
+
+### Diplomacy System
+- **Endpoints**: 45
+- **Description**: API endpoints for the diplomacy system
+- **Endpoints**:
+  - `POST /treaties` - Create a new treaty between factions
+  - `GET /treaties/{treaty_id}` - Get a treaty by ID
+  - `GET /treaties` - List treaties, optionally filtered
+  - `PATCH /treaties/{treaty_id}` - Update a treaty
+  - `POST /treaties/{treaty_id}/expire` - Mark a treaty as expired
+  - `POST /negotiations` - Start a new negotiation
+  - `GET /negotiations/{negotiation_id}` - Get a negotiation by ID
+  - `GET /negotiations` - Get all negotiations
+  - `PATCH /negotiations/{negotiation_id}` - Update a negotiation
+  - `POST /negotiations/{negotiation_id}/offers` - Make an offer in a negotiation
+  - `POST /negotiations/{negotiation_id}/accept` - Accept the current offer in a negotiation
+  - `POST /negotiations/{negotiation_id}/reject` - Reject the current offer in a negotiation
+  - `POST /events` - Create a new diplomatic event
+  - `GET /events` - List diplomatic events, optionally filtered
+  - `GET /relationships/{faction_id}` - Get all relationships for a faction
+  - `GET /relationships/{faction_a_id}/{faction_b_id}` - Get the relationship between two factions
+  - `PATCH /relationships/{faction_a_id}/{faction_b_id}` - Update the relationship between two factions
+  - `GET /tension/{faction_a_id}/{faction_b_id}` - Get tension between two factions (backward compatibility)
+  - `POST /war/check/{faction_a_id}/{faction_b_id}` - Check if two factions are at war (backward compatibility)
+  - `POST /violations` - Report a treaty violation
+  - `GET /violations` - Get treaty violations, optionally filtered
+  - `POST /violations/{violation_id}/acknowledge` - Acknowledge a treaty violation as the violator
+  - `POST /violations/{violation_id}/resolve` - Mark a treaty violation as resolved
+  - `GET /compliance/{faction_id}` - Check if a faction is compliant with all its treaties
+  - `POST /enforce-treaties` - Automatically enforce treaties by detecting violations
+  - `POST /incidents` - Create a new diplomatic incident
+  - `GET /incidents/{incident_id}` - Get a diplomatic incident by ID
+  - `GET /incidents` - List diplomatic incidents with optional filtering
+  - `PATCH /incidents/{incident_id}` - Update a diplomatic incident
+  - `POST /incidents/{incident_id}/resolve` - Mark a diplomatic incident as resolved
+  - `POST /ultimatums` - Create a new ultimatum
+  - `GET /ultimatums/{ultimatum_id}` - Get an ultimatum by ID
+  - `GET /ultimatums` - List ultimatums with optional filtering
+  - `PATCH /ultimatums/{ultimatum_id}` - Update an ultimatum
+  - `POST /ultimatums/{ultimatum_id}/respond` - Respond to an ultimatum (accept or reject)
+  - `POST /ultimatums/check-expired` - Check for and process expired ultimatums
+  - `POST /sanctions` - Create a new diplomatic sanction against a faction
+  - `GET /sanctions/{sanction_id}` - Get a sanction by ID
+  - `GET /sanctions` - List sanctions, optionally filtered by various parameters
+  - `PATCH /sanctions/{sanction_id}` - Update an existing sanction
+  - `POST /sanctions/{sanction_id}/lift` - Lift a diplomatic sanction
+  - `POST /sanctions/{sanction_id}/violations` - Record a violation of a sanction
+  - `POST /sanctions/check-expired` - Check for and process expired sanctions
+  - `GET /factions/{faction_id}/treaties` - Get all treaties for a specific faction
+  - `GET /treaties/{treaty_id}/violations` - Get all violations for a specific treaty
+
+### Economy System
+- **Endpoints**: 10
+- **Description**: API endpoints for the economy system
+- **Endpoints**:
+  - `GET /inventory/{shop_id}` - Get a shop's inventory
+  - `POST /sell/{shop_id}` - Sell an item to a shop
+  - `POST /buy/{shop_id}` - Buy an item from a shop
+  - `POST /restock/{shop_id}` - Restock a shop with new items
+  - `POST /preview_price` - Preview the price of an item with all economic modifiers applied
+  - `GET /economy/resources/{resource_id}` - Get a resource by ID
+  - `GET /economy/regions/{region_id}/resources` - Get all resources in a region
+  - `GET /economy/metrics/{metric_type}` - Get metrics history
+  - `POST /economy/resources/{resource_id}/price/adjust` - Adjust the price of a resource based on supply and demand
+  - `POST /economy/trade` - Transfer resources between regions (trade)
+
+### Equipment System
+- **Endpoints**: 18
+- **Description**: API endpoints for the equipment system
+- **Endpoints**:
+  - `GET /equipment/sets` - Get all available equipment sets
+  - `GET /equipment/sets/{set_id}` - Get a specific equipment set by ID
+  - `POST /equipment/sets` - Create a new equipment set
+  - `PUT /equipment/sets/{set_id}` - Update an existing equipment set
+  - `DELETE /equipment/sets/{set_id}` - Delete an equipment set
+  - `POST /equipment/{character_id}/equip` - Equip an item from inventory to a character's equipment slot
+  - `POST /equipment/{character_id}/unequip` - Unequip an item from a character's equipment slot
+  - `GET /equipment/{character_id}` - Get a character's equipped items
+  - `POST /equipment/{character_id}/swap` - Swap an equipped item with a new item in one operation
+  - `POST /equipment/durability/{equipment_id}/damage/combat` - Apply combat damage to an equipment item
+  - `POST /equipment/durability/{equipment_id}/damage/wear` - Apply wear and tear damage to an equipment item
+  - `POST /equipment/durability/{equipment_id}/repair` - Repair an equipment item
+  - `GET /equipment/durability/{equipment_id}/status` - Get the durability status of an equipment item
+  - `GET /equipment/durability/{equipment_id}/repair-cost` - Calculate the cost to repair an equipment item
+  - `GET /equipment/durability/{equipment_id}/history` - Get durability change history for an equipment item
+  - `POST /equipment/{character_id}/identify` - Identify a single unknown effect on an item
+  - `POST /equipment/{character_id}/identify_full` - Fully identify all effects on an item at once (requires special NPC)
+  - `GET /equipment/{character_id}/set_bonuses` - Get all active set bonuses for a character
+
+### Inventory System
+- **Endpoints**: 28
+- **Description**: API endpoints for the inventory system
+- **Endpoints**:
+  - `GET /inventory/items` - Get a list of items with optional filtering
+  - `GET /inventory/items/{item_id}` - Get a specific item by ID
+  - `POST /inventory/items` - Create a new item
+  - `PUT /inventory/items/{item_id}` - Update an existing item
+  - `DELETE /inventory/items/{item_id}` - Delete an item
+  - `GET /inventory/inventories` - Get a list of inventories with optional filtering
+  - `GET /inventory/inventories/{inventory_id}` - Get a specific inventory by ID
+  - `POST /inventory/inventories` - Create a new inventory
+  - `PUT /inventory/inventories/{inventory_id}` - Update an existing inventory
+  - `DELETE /inventory/inventories/{inventory_id}` - Delete an inventory
+  - `GET /inventory/inventories/{inventory_id}/items` - Get all items in an inventory
+  - `POST /inventory/inventories/{inventory_id}/items` - Add an item to an inventory
+  - `DELETE /inventory/inventories/{inventory_id}/items/{inventory_item_id}` - Remove an item from an inventory
+  - `PUT /inventory/inventories/{inventory_id}/items/{inventory_item_id}` - Update an inventory item
+  - `POST /inventory/transfer` - Transfer items between inventories with authentication and permission checks
+  - `POST /inventory/inventory/{from_inventory_id}/transfer/{to_inventory_id}/{inventory_item_id}` - Transfer an item from one inventory to another
+  - `POST /inventory/inventory/{from_inventory_id}/bulk-transfer/{to_inventory_id}` - Transfer multiple items between inventories in a single operation
+  - `GET /inventory/inventories/{inventory_id}/stats` - Get statistics for an inventory
+  - `POST /inventory/inventories/{inventory_id}/backup` - Create a backup of an inventory
+  - `POST /inventory/inventories/restore` - Restore an inventory from backup data
+  - `POST /inventory/inventories/{inventory_id}/export` - Export an inventory to JSON format
+  - `POST /inventory/inventories/import` - Import an inventory from JSON format
+  - `POST /inventory/inventories/{inventory_id}/swap` - Swap the positions of two items in the same inventory
+  - `POST /inventory/inventories/{inventory_id}/split-stack/{stack_id}` - Split an item stack into two separate stacks
+  - `POST /inventory/inventories/{inventory_id}/combine-stacks` - Combine two item stacks in an inventory
+  - `POST /inventory/inventories/{inventory_id}/optimize-stacks` - Optimize inventory by combining stackable items of the same type
+  - `POST /inventory/inventories/{inventory_id}/filter` - Filter inventory items by various criteria
+  - `POST /inventory/admin/inventory/run-migrations` - Run inventory system migrations to update database schema
+
+### Magic System
+- **Endpoints**: 30
+- **Description**: API endpoints for the magic system
+- **Endpoints**:
+  - `POST /magic/abilities` - Create a new magic ability
+  - `GET /magic/abilities` - List magic abilities
+  - `GET /magic/abilities/{ability_id}` - Get a magic ability by ID
+  - `PUT /magic/abilities/{ability_id}` - Update a magic ability
+  - `DELETE /magic/abilities/{ability_id}` - Delete a magic ability
+  - `POST /magic/spells` - Create a new spell
+  - `GET /magic/spells` - List spells (for narrative/reference purposes only)
+  - `GET /magic/spells/search` - Search for spells by name and school
+  - `GET /magic/spells/{spell_id}` - Get spell information (for narrative/reference purposes only)
+  - `PUT /magic/spells/{spell_id}` - Update a spell
+  - `DELETE /magic/spells/{spell_id}` - Delete a spell
+  - `POST /magic/spells/cast` - Cast a spell on a target
+  - `POST /magic/spellbooks` - Create a new spellbook
+  - `GET /magic/spellbooks` - List spellbooks
+  - `GET /magic/spellbooks/{spellbook_id}` - Get a spellbook by ID
+  - `GET /magic/characters/{owner_id}/spellbook` - Get a character's spellbook
+  - `POST /magic/spellbooks/{spellbook_id}/spells/{spell_id}` - Add a spell to a spellbook
+  - `DELETE /magic/spellbooks/{spellbook_id}/spells/{spell_id}` - Remove a spell from a spellbook
+  - `GET /magic/effects` - List active magical effects (for narrative context only)
+  - `GET /magic/effects/{effect_id}` - Get details of a magical effect (for narrative context only)
+  - `DELETE /magic/effects/{effect_id}` - Delete a spell effect
+  - `POST /magic/effects/{effect_id}/dispel` - Attempt to dispel a spell effect
+  - `PUT /magic/effects/{effect_id}/modify-duration` - Modify the duration of a spell effect
+  - `GET /magic/influences` - List magical influences in the world (for narrative context only)
+  - `GET /magic/influences/{influence_id}` - Get details of a magical influence (for narrative context only)
+  - `GET /magic/spellbooks/{owner_type}/{owner_id}` - Get a spellbook by owner type and ID
+  - `GET /magic/effects/{target_type}/{target_id}` - Get active effects for a specific target
+  - `GET /magic/locations/{location_id}/analysis` - Analyze magical influences in a location
+  - `GET /magic/characters/{character_id}/magic-summary` - Get a summary of a character's magical abilities and current effects for narrative context
+  - `POST /magic/system/process-tick` - Process a magic system tick (background system function)
+
+### Motif System
+- **Endpoints**: 34
+- **Description**: API endpoints for the motif system
+- **Endpoints**:
+  - `GET /api/motif/` - Root endpoint for the Motif System API
+  - `POST /api/motif/motifs/` - Create a new motif
+  - `GET /api/motif/motifs/` - List motifs with optional filtering
+  - `GET /api/motif/motifs/{motif_id}` - Get a specific motif by ID
+  - `PATCH /api/motif/motifs/{motif_id}` - Update a motif
+  - `DELETE /api/motif/motifs/{motif_id}` - Delete a motif
+  - `GET /api/motif/global/` - Get all active global motifs
+  - `GET /api/motif/regional/{region_id}` - Get all active motifs for a specific region
+  - `GET /api/motif/position/` - Get all motifs that affect a specific position
+  - `GET /api/motif/context/` - Get a context dictionary describing the active motifs at a position or region
+  - `POST /api/motif/random` - Generate a random motif with specified scope
+  - `POST /api/motif/advance-lifecycles` - Advance the lifecycle of all motifs based on time
+  - `POST /api/motif/blend` - Blend multiple motifs to create a composite narrative effect
+  - `POST /api/motif/sequences/generate` - Generate a sequence of thematically related motifs for long-term narrative arcs
+  - `GET /api/motif/sequences/{sequence_id}` - Get all motifs that are part of a specific sequence
+  - `POST /api/motif/sequences/{sequence_id}/advance` - Advance a motif sequence to its next step
+  - `GET /api/motif/chaos/event` - Get a random chaos event from the predefined table
+  - `POST /api/motif/chaos/inject` - Inject a chaos event into the world
+  - `POST /api/motif/chaos/trigger/{entity_id}` - Check if chaos should be triggered based on entity's motif state and trigger if needed
+  - `POST /api/motif/chaos/force/{entity_id}` - Force a chaos event to occur for an entity, regardless of current motif state
+  - `GET /api/motif/chaos/log` - Get the most recent chaos events from the world log
+  - `GET /api/motif/narrative/context/` - Get enhanced narrative context suitable for GPT prompts
+  - `POST /api/motif/apply-effects/{motif_id}` - Manually apply a motif's effects to target systems
+  - `POST /api/motif/batch/apply-effects` - Apply effects for all active motifs, optionally filtered by scope and region
+  - `GET /api/motif/gpt-context` - Generate a comprehensive GPT context for narrative generation, incorporating motifs
+    with entity data, location, region, and world state
+  - `POST /api/motif/generate-event` - Generate a world event influenced by active motifs in the specified region or location
+  - `WEBSOCKET /api/motif/ws/notifications` - WebSocket endpoint for real-time motif change notifications
+  - `GET /api/motif/notifications/recent` - Retrieve recent motif system events for clients that can't use WebSockets
+  - `GET /api/motif/predict-trends` - Predict how the current set of motifs will evolve and interact over time
+  - `GET /api/motif/analyze-conflicts` - Analyze motifs for thematic conflicts and compatibility issues
+  - `GET /api/motif/compatible-motifs/{motif_id}` - Find motifs that would be most compatible with a given motif
+  - `GET /api/motif/narrative/influence/` - Get motif narrative influence
+  - `GET /api/motif/active/` - Get all active motifs
+  - `GET /api/motif/region/summary/{region_id}` - Get motif summary for a region
+
+### Npc System
+- **Endpoints**: 40
+- **Description**: API endpoints for the npc system
+- **Endpoints**:
+  - `POST /api/npcs/` - Create a new NPC
+  - `GET /api/npcs/{npc_id}` - Get an NPC by ID
+  - `GET /api/npcs/` - List NPCs, optionally filtered by location or faction
+  - `PATCH /api/npcs/{npc_id}` - Update an NPC
+  - `DELETE /api/npcs/{npc_id}` - Delete an NPC
+  - `GET /api/npcs/{npc_id}/location` - Get an NPC's current location
+  - `PATCH /api/npcs/{npc_id}/location` - Update an NPC's location
+  - `GET /api/npcs/{npc_id}/memories` - Get memories for a specific NPC
+  - `POST /api/npcs/{npc_id}/memories` - Add a memory to an NPC
+  - `GET /api/npcs/{npc_id}/factions` - Get faction status for a specific NPC
+  - `POST /api/npcs/{npc_id}/factions/adjust` - Adjust an NPC's allegiance to a faction
+  - `GET /api/npcs/{npc_id}/rumors` - Get rumors known by a specific NPC
+  - `POST /api/npcs/{npc_id}/rumors` - Add a rumor to an NPC
+  - `GET /api/npcs/{npc_id}/motifs` - Get motifs for a specific NPC
+  - `POST /api/npcs/{npc_id}/motifs` - Apply a specific motif to an NPC
+  - `GET /api/npcs/{npc_id}/loyalty/{character_id}` - Get an NPC's loyalty towards a character
+  - `POST /api/npcs/{npc_id}/loyalty` - Update an NPC's loyalty towards a character
+  - `POST /api/npcs/generate` - Generate NPCs for a POI or region
+  - `POST /api/npcs/{npc_id}/regenerate-goals` - Regenerate an NPC's goals
+  - `GET /api/npc/systems/memories/{npc_id}` - Get memories for a specific NPC
+  - `POST /api/npc/systems/memories/{npc_id}` - Create a new memory for an NPC
+  - `DELETE /api/npc/systems/memories/{npc_id}/{memory_id}` - Delete a specific memory from an NPC
+  - `GET /api/npc/systems/memories/{npc_id}/summary` - Get a summary of an NPC's memories
+  - `GET /api/npc/systems/factions/{npc_id}` - Get faction status for a specific NPC
+  - `POST /api/npc/systems/factions/{npc_id}/adjust` - Adjust an NPC's allegiance to a faction
+  - `GET /api/npc/systems/rumors/{npc_id}` - Get rumors known by a specific NPC
+  - `POST /api/npc/systems/rumors/seed` - Seed a rumor to random NPCs
+  - `GET /api/npc/systems/rumors/network/{rumor_id}` - Get the network of NPCs who know a specific rumor
+  - `POST /api/npc/systems/rumors/decay` - Run the rumor decay process
+  - `POST /api/npc/systems/population/update` - Run the monthly population update process
+  - `GET /api/npc/systems/population/metrics` - Get global population metrics
+  - `POST /api/npc/systems/population/multiplier/{multiplier}` - Set the global population multiplier
+  - `POST /api/npc/systems/population/poi/{poi_id}` - Adjust population for a specific POI
+  - `GET /api/npc/systems/motifs/{npc_id}` - Get motifs applied to a specific NPC
+  - `POST /api/npc/systems/motifs/apply/global` - Apply global motifs to all NPCs
+  - `POST /api/npc/systems/motifs/apply/regional/{region_id}` - Apply regional motifs to all NPCs in a region
+  - `POST /api/npc/systems/motifs/apply/npc/{npc_id}/{motif_id}` - Apply a specific motif to an NPC
+  - `POST /npcs/{npc_id}/update-location` - Update an NPC's location based on mobility settings
+  - `GET /npcs/{npc_id}/location` - Get an NPC's current location
+  - `POST /npcs/daily-movement-tick` - Trigger movement updates for all NPCs at once (daily tick)
+
+### Population System
+- **Endpoints**: 21
+- **Description**: API endpoints for the population system
+- **Endpoints**:
+  - `GET /api/population/` - Get all POI populations, optionally filtered by status
+  - `GET /api/population/config` - Get the current population configuration
+  - `POST /api/population/config/global-multiplier` - Set the global population growth multiplier
+  - `POST /api/population/config/base-rate/{poi_type}` - Set the base growth rate for a specific POI type
+  - `GET /api/population/events` - Get population change events
+  - `GET /api/population/by-state/{state}` - Get all populations filtered by state
+  - `GET /api/population/by-type/{poi_type}` - Get all populations filtered by type
+  - `POST /api/population/monthly-update` - Run the monthly population update for all POIs
+  - `POST /api/population/migration` - Handle population migration between two POIs
+  - `GET /api/population/{poi_id}` - Get population data for a specific POI
+  - `GET /api/population/status/{poi_id}` - Get detailed status information for a POI
+  - `POST /api/population/` - Create population data for a new POI
+  - `PUT /api/population/{poi_id}` - Update population data for a POI
+  - `DELETE /api/population/{poi_id}` - Delete a POI's population data
+  - `PATCH /api/population/{poi_id}/population` - Manually change a POI's population
+  - `POST /api/population/{poi_id}/convert-to-dungeon` - Convert a POI in Ruins state to a Dungeon
+  - `POST /api/population/{poi_id}/start-repopulation` - Start repopulating an abandoned or ruined POI
+  - `POST /api/population/{poi_id}/catastrophe` - Apply catastrophe effects to a POI's population
+  - `POST /api/population/{poi_id}/war-impact` - Apply war damage to a POI's population
+  - `POST /api/population/{poi_id}/resource-shortage` - Handle the impact of resource shortages on a POI's population
+  - `POST /api/population/{poi_id}/seasonal-effect` - Apply seasonal effects to a POI's population
+
+### Region System
+- **Endpoints**: 27
+- **Description**: API endpoints for the region system
+- **Endpoints**:
+  - `POST /regions/{region_id}` - Update a region
+  - `DELETE /regions/{region_id}` - Delete a region
+  - `GET /regions/{region_id}/details` - Get region details with weather
+  - `GET /regions/by_continent/{continent_id}` - Get all regions in a continent
+  - `GET /regions/` - List all regions
+  - `GET /regions/map/{region_id}` - Fetch the full tile map for a region
+  - `POST /regions/seed/{region_id}` - Seeds a basic 10x10 region with clustered terrain tags
+  - `POST /regions/generate` - Create a new region with starting coordinates
+  - `POST /regions/generate/new` - Shortcut to generate a new region at the origin (0,0)
+  - `POST /regions/log_event` - Log a world event and notify NPCs in the region
+  - `GET /regions/questlog/{character_id}` - Get a character's questlog
+  - `POST /regions/questlog/{character_id}` - Add a quest to a character's questlog
+  - `GET /regions/initialize` - Initialize the region system with optional seed
+  - `GET /regions/world/metadata` - Get metadata about the current world
+  - `GET /regions/world/map` - Get world map data for rendering
+  - `POST /regions/world/regenerate` - Regenerate the entire world with new parameters
+  - `GET /regions/continents` - Get all continents in the world
+  - `GET /regions/continents/{continent_id}` - Get detailed information about a specific continent
+  - `POST /regions/continents/generate` - Generate a new continent and add it to the world
+  - `GET /regions/regions` - Get all regions, optionally filtered by continent or biome type
+  - `GET /regions/regions/{region_id}` - Get detailed information about a specific region
+  - `GET /regions/regions/at_coordinates` - Get regions at the specified coordinates
+  - `GET /regions/regions/coordinates/{x}/{y}` - Get region at the specified coordinates
+  - `GET /regions/regions/{region_id}/adjacent` - Get regions adjacent to the specified region
+  - `POST /regions/regions/generate` - Generate a new individual region and add it to the world
+  - `GET /regions/biomes` - Get biome data for all biomes or a specific biome
+  - `GET /regions/biomes/adjacency` - Get biome adjacency rules
+
+### Rumor System
+- **Endpoints**: 9
+- **Description**: API endpoints for the rumor system
+- **Endpoints**:
+  - `POST /rumors/` - Create a new rumor
+  - `GET /rumors/{rumor_id}` - Get a specific rumor by ID
+  - `GET /rumors/` - List rumors with filters
+  - `POST /rumors/spread/{rumor_id}` - Spread a rumor from one entity to another
+  - `POST /rumors/mutate/{rumor_id}` - Create a mutated variant of a rumor
+  - `GET /rumors/entity/{entity_id}` - Get all rumors known to an entity
+  - `POST /rumors/context` - Get rumor context for narrative generation
+  - `POST /rumors/decay` - Apply decay to rumors that haven't been reinforced recently
+  - `DELETE /rumors/{rumor_id}` - Delete a rumor
+
+### Tension_War System
+- **Endpoints**: 7
+- **Description**: API endpoints for the tension_war system
+- **Endpoints**:
+  - `GET /{region_id}` - Get the current tension values for a region
+  - `POST /{region_id}` - Modify tension values for a region
+  - `POST /{region_id}/reset` - Reset tension values for a region
+  - `POST /{region_id}/decay` - Apply natural decay to tension values for a region
+  - `POST /event` - Calculate and apply tension changes from an event
+  - `GET /{region_id}/history` - Get tension history between two factions
+  - `GET /wars` - Get all regions with factions at war
+
+### Time System
+- **Endpoints**: 17
+- **Description**: API endpoints for the time system
+- **Endpoints**:
+  - `GET /time/current` - Get the current game time
+  - `POST /time/advance` - Advance the game time by the specified amount and unit
+  - `GET /time/events` - Get all scheduled time events or only upcoming ones
+  - `POST /time/events` - Schedule a new time event
+  - `DELETE /time/events/{event_id}` - Cancel a scheduled time event
+  - `GET /time/calendar` - Get the game calendar configuration
+  - `GET /time/season` - Get the current season in the game world
+  - `GET /time/weather` - Get the current weather conditions
+  - `POST /time/calendar/dates` - Add an important date to the calendar
+  - `DELETE /time/calendar/dates/{name}` - Remove an important date from the calendar
+  - `POST /time/progression/start` - Start automatic time progression
+  - `POST /time/progression/stop` - Stop automatic time progression
+  - `POST /time/progression/pause` - Pause time progression
+  - `POST /time/progression/resume` - Resume time progression
+  - `POST /time/scale` - Set the time scale for automatic progression
+  - `POST /time/reset` - Reset the game time to initial default state (admin use only)
+  - `POST /time/save` - Save the current time system state to persistent storage
+
+### World_Generation System
+- **Endpoints**: 5
+- **Description**: API endpoints for the world_generation system
+- **Endpoints**:
+  - `POST /world/continents` - Creates a new continent with procedurally generated regions
+  - `GET /world/continents/{continent_id}` - Retrieves details of a continent by ID
+  - `GET /world/continents` - Lists all continents with pagination support
+  - `PATCH /world/continents/{continent_id}/metadata` - Updates metadata for a continent
+  - `DELETE /world/continents/{continent_id}` - Deletes a continent
+
+### World_State System
+- **Endpoints**: 17
+- **Description**: API endpoints for the world_state system
+- **Endpoints**:
+  - `GET /worldgen/biomes` - Get information about all available biomes in the world generation system
+  - `POST /worldgen/region` - Generate a single region with the specified parameters
+  - `GET /worldgen/region/{x}/{y}` - Get a specific region by coordinates
+  - `GET /worldgen/continent/{continent_id}` - Get data for a specific continent
+  - `GET /worldgen/world/{world_seed}` - Get data for an entire world
+  - `GET /worldgen/test-region` - Generate a test region with default parameters
+  - `GET /api/world-state/` - Get the current world state
+  - `GET /api/world-state/history` - Get historical data for world state values
+  - `PATCH /api/world-state/` - Update a specific value in the world state
+  - `POST /api/world-state/events` - Create a new world event
+  - `GET /api/world-state/events` - Get world events with optional filtering
+  - `GET /api/world-state/events/{event_id}` - Get a specific world event by ID
+  - `GET /api/world-state/related-events/{event_id}` - Get events related to the specified event
+  - `POST /api/world-state/process-tick` - Manually trigger a world tick processing cycle
+  - `POST /api/world-state/chaos-event` - Inject a chaos event into the world
+  - `GET /api/world-state/regions` - Get a list of valid world regions
+  - `GET /api/world-state/categories` - Get a list of valid state categories
+

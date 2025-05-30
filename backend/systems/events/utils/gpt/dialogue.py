@@ -1,2 +1,0 @@
-class DialogueGPTClient:
-    pass 

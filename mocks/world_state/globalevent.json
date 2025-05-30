@@ -1,0 +1,17 @@
+{
+  "id": "344441d5-bf73-44f0-95ce-474edd4801b0",
+  "created_at": "2025-05-18T01:34:25.043565Z",
+  "updated_at": "2025-05-27T01:34:25.043568Z",
+  "name": "Improve",
+  "description": "Discover your cell either.",
+  "status": "INACTIVE",
+  "metadata": {
+    "tags": [
+      "three",
+      "store",
+      "line"
+    ],
+    "category": "price",
+    "priority": 4
+  }
+}

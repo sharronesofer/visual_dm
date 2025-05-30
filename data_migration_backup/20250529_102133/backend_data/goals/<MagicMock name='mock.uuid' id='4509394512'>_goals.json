@@ -1,0 +1,16 @@
+{
+  "b190788e-14c5-4c91-8093-757e6f495a29": {
+    "goal_id": "b190788e-14c5-4c91-8093-757e6f495a29",
+    "character_id": "<MagicMock name='mock.uuid' id='4509394512'>",
+    "description": "Survive and thrive in this world",
+    "goal_type": "personal",
+    "priority": "high",
+    "status": "active",
+    "progress": 0.0,
+    "parent_goal_id": null,
+    "metadata": {},
+    "created_at": "2025-05-25T03:48:40.298279",
+    "updated_at": "2025-05-25T03:48:40.298281",
+    "subgoals": []
+  }
+}

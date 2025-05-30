@@ -1,0 +1,697 @@
+# Visual DM Development Bible
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Core Design Philosophy](#core-design-philosophy)
+3. [World and Setting](#world-and-setting)
+4. [Character System](#character-system)
+5. [Combat System](#combat-system)
+6. [Magic System](#magic-system)
+7. [Item and Equipment System](#item-and-equipment-system)
+8. [World Generation](#world-generation)
+9. [Procedural Content Generation](#procedural-content-generation)
+10. [User Interface](#user-interface)
+11. [Data Architecture](#data-architecture)
+12. [AI Integration](#ai-integration)
+13. [Character Creation](#character-creation)
+14. [Adventure Generation](#adventure-generation)
+15. [NPC Generation](#npc-generation)
+16. [Economy](#economy)
+17. [Party Management](#party-management)
+18. [Modding Support](#modding-support)
+19. [Technical Architecture](#technical-architecture)
+20. [Systems Architecture](#systems-architecture)
+
+## Introduction
+
+Visual DM is a tabletop roleplaying game companion/simulation tool that brings to life the worlds, characters, and stories from tabletop RPGs. It emphasizes a robust, modular, and extensible design with a focus on procedural generation, rich NPCs, and immersive storytelling driven by advanced AI.
+
+The goal is to create a virtual world that facilitates an adaptive, living, and dynamic tabletop roleplaying experience. Visual DM allows for traditional GM-led play, solo/GM-less play, or a hybrid approach.
+
+## Core Design Philosophy
+
+1. **Accessibility with Depth:** Easy for beginners but with enough depth for experienced players.
+2. **Modular Design:** Components that can be used independently or together.
+3. **AI-Powered Storytelling:** AI that adapts to player choices and creates compelling narratives.
+4. **Procedural Generation:** Dynamic content that feels handcrafted.
+5. **Visual Storytelling:** Bringing game elements to life through maps, character portraits, and environments.
+6. **Table-First Approach:** Enhancing the tabletop experience, not replacing it.
+7. **System Flexibility:** Adaptable to different rulesets and playstyles.
+8. **Living Worlds:** Persistent worlds that evolve based on player actions.
+
+## World and Setting
+
+### Cosmology
+
+- **The Weave:** The fabric of reality that binds the physical and magical worlds.
+- **The Material Plane:** The primary world where adventures take place.
+- **The Feywild:** A realm of natural magic and extreme emotion.
+- **The Shadowfell:** A dark reflection of the Material Plane filled with undead and shadows.
+- **Elemental Planes:** Realms of pure elemental energy (Fire, Water, Earth, Air).
+- **The Astral Sea:** Connects all planes, filled with the remnants of dead gods.
+- **The Abyss:** Chaotic evil plane of demons.
+- **The Nine Hells:** Lawful evil plane of devils.
+- **Celestial Realms:** Home to benevolent deities and celestial beings.
+
+### Major Geographic Regions
+
+- **Northlands:** Frozen tundra and mountains, home to hardy tribes and ancient ruins.
+- **Eastern Kingdoms:** Feudal realms with strong magical traditions.
+- **Southern Islands:** Tropical archipelago with rich trade networks and diverse cultures.
+- **Western Wilds:** Frontier lands with unexplored forests and monster-filled badlands.
+- **Central Heartlands:** Center of civilization with major cities and political powers.
+- **Underdark:** Vast network of underground caverns and societies.
+- **Seas:** Various seas and oceans with their own dangers and opportunities.
+
+### History and Timeline
+
+- **Ancient Era:** Time of powerful magic and primordial beings.
+- **Old Kingdoms Era:** Rise and fall of the first great civilizations.
+- **Imperial Era:** Age of conquest and empire-building.
+- **Modern Era:** Current age of rediscovery and adventure.
+
+## Character System
+
+### Core Attributes
+
+- **Strength (STR):** Physical power and brute force.
+- **Dexterity (DEX):** Agility, reflexes, and finesse.
+- **Constitution (CON):** Endurance, stamina, and resilience.
+- **Intelligence (INT):** Knowledge, memory, and reasoning.
+- **Wisdom (WIS):** Perception, intuition, and willpower.
+- **Charisma (CHA):** Force of personality, persuasiveness, and leadership.
+
+### Skills
+
+Characters have skill proficiencies that reflect their training and natural aptitudes. Skill checks are made by rolling a d20 and adding the relevant skill modifier.
+
+Core skills include:
+- **Arcana:** Knowledge of magic and magical entities.
+- **Athletics:** Physical training and prowess.
+- **Deception:** Ability to lie convincingly.
+- **History:** Knowledge of past events and cultures.
+- **Insight:** Understanding others' intentions.
+- **Investigation:** Searching for and finding clues.
+- **Medicine:** Treating wounds and diagnosing illness.
+- **Nature:** Knowledge of the natural world.
+- **Perception:** Awareness of surroundings.
+- **Persuasion:** Influencing others positively.
+- **Religion:** Knowledge of deities and religious practices.
+- **Stealth:** Moving silently and remaining unseen.
+- **Survival:** Living in the wilderness.
+
+### Character Races
+
+Diverse species with unique traits, abilities, and cultural backgrounds.
+
+- **Human:** Versatile and adaptable with no specific strengths or weaknesses.
+- **Elf:** Long-lived, graceful beings with enhanced perception and magical affinity.
+- **Dwarf:** Sturdy mountain-dwellers with resistance to poison and magic.
+- **Halfling:** Small, nimble folk with extraordinary luck.
+- **Gnome:** Clever inventors with magical tricks and illusions.
+- **Half-Elf:** Blend of human adaptability and elven grace.
+- **Half-Orc:** Strong and resilient with savage combat prowess.
+- **Dragonborn:** Dragon-descended humanoids with breath weapons.
+- **Tiefling:** Humans with fiendish ancestry and resistances.
+
+### Character Advancement
+
+- **Experience Points (XP):** Earned through combat, exploration, and completing objectives.
+- **Levels:** Characters gain new abilities and powers as they advance in level.
+- **Feats:** Special abilities and talents that customize characters further.
+
+## Combat System
+
+The combat system is designed to be tactical, engaging, and balanced, allowing for a variety of strategies and playstyles.
+
+### Combat Flow
+
+1. **Initiative:** Determined by DEX + modifiers, establishing turn order.
+2. **Actions:** Each character gets one Action, one Bonus Action, and one Reaction per round.
+3. **Movement:** Characters can move up to their speed (typically 30 feet) during their turn.
+4. **Attack Resolution:** Based on ability scores, proficiencies, and situational modifiers.
+
+### Damage System and Health 
+
+- **Damage Reduction (DR):** Armor and protective effects reduce incoming damage by a flat amount based on armor quality and type.
+- **Health Points (HP):** Represent a character's vitality and ability to avoid serious injury.
+- **Temporary Health:** Extra buffer from spells, abilities, or items that absorbs damage first.
+- **Death and Dying:** Characters who reach 0 HP begin making death saving throws.
+
+### Combat Actions
+
+- **Attack:** Roll to hit against target's defenses.
+- **Cast Spell:** Using magical abilities, often requiring concentration.
+- **Dodge:** Impose disadvantage on attacks against you.
+- **Dash:** Double movement speed for the turn.
+- **Disengage:** Move without provoking opportunity attacks.
+- **Hide:** Attempt to become hidden from enemies.
+- **Help:** Give advantage to an ally's next check.
+- **Ready:** Prepare an action to trigger on a specific circumstance.
+
+### Combat Conditions
+
+- **Blinded:** Cannot see, disadvantage on attacks, advantage on attacks against them.
+- **Charmed:** Cannot attack charmer, charmer has advantage on social checks.
+- **Deafened:** Cannot hear.
+- **Frightened:** Disadvantage on checks while source of fear is visible, cannot move closer to fear source.
+- **Grappled:** Speed becomes 0, ends if grappler is incapacitated.
+- **Incapacitated:** Cannot take actions or reactions.
+- **Invisible:** Cannot be seen without special senses, advantage on attacks, disadvantage on attacks against them.
+- **Paralyzed:** Cannot move or speak, automatically fails STR and DEX saves, advantage on attacks against them, critical hit if attacker is within 5 feet.
+- **Petrified:** Transformed to stone, cannot move or speak, automatically fails STR and DEX saves, resistance to all damage.
+- **Poisoned:** Disadvantage on attack rolls and ability checks.
+- **Prone:** Can only crawl, disadvantage on attack rolls, melee attacks against them have advantage, ranged attacks against them have disadvantage.
+- **Restrained:** Speed becomes 0, disadvantage on DEX saves and attack rolls, advantage on attacks against them.
+- **Stunned:** Incapacitated, automatically fails STR and DEX saves, advantage on attacks against them.
+- **Unconscious:** Incapacitated, cannot move or speak, automatically fails STR and DEX saves, advantage on attacks against them, critical hit if attacker is within 5 feet.
+
+## Magic System
+
+The magic system is flexible and diverse, allowing for creative spellcasting and magical effects.
+
+### Magic Schools
+
+- **Abjuration:** Protective spells, wards, and barriers.
+- **Conjuration:** Summoning creatures or objects.
+- **Divination:** Gaining information and foreseeing the future.
+- **Enchantment:** Influencing minds and emotions.
+- **Evocation:** Elemental damage and energy manipulation.
+- **Illusion:** Creating sensory deceptions.
+- **Necromancy:** Manipulating life and death energies.
+- **Transmutation:** Changing physical properties of creatures or objects.
+
+### Magic Resource System
+
+- **Mana Points (MP):** Resource used to cast spells, regenerates with rest.
+- **Concentration:** Many powerful spells require concentration, limiting concurrent effects.
+- **Spell Preparation:** Some casters must prepare spells in advance.
+- **Ritual Casting:** Casting spells without expending resources by taking extra time.
+
+### Magic Domains
+
+Represents the source or tradition of magic, which affects spellcasting style and available spells:
+
+- **Arcane:** Traditional wizardry and academic magic study.
+- **Divine:** Magic granted by deities and higher powers.
+- **Nature:** Magic drawn from natural forces and the elements.
+- **Occult:** Forbidden knowledge and pacts with otherworldly entities.
+
+### Magical Effects and Interactions
+
+- **Magical Detection:** Spells and abilities to sense and identify magic.
+- **Counterspelling:** Ability to interrupt or dispel other spells.
+- **Magic Resistance:** Some creatures or items resist magical effects.
+- **Anti-Magic:** Areas where magic is suppressed or functions differently.
+
+## Item and Equipment System
+
+The system encompasses weapons, armor, magical items, consumables, and crafting materials. Every item in Visual DM is inherently magical and evolves with the player's character.
+
+### Equipment Types
+
+- **Weapons:** Melee and ranged options with unique properties and damage types.
+  - **Weapon Properties:** Include damage dice, critical hit ranges, range, and special tags (like "reach" or "thrown").
+  - **Weapon Types:** Simple, martial, and exotic, requiring different levels of proficiency.
+  - **Damage Types:** Piercing, slashing, bludgeoning, and magical variations.
+
+- **Armor:** Protective gear that provides Damage Reduction (DR).
+  - **Armor Types:** Light, medium, and heavy, with different encumbrance effects.
+  - **AC Bonus:** Flat bonus that reduces incoming damage.
+  - **Max Dex Bonus:** Limit to Dexterity bonus while wearing armor.
+  - **Armor Check Penalty:** Penalty to certain physical actions.
+  - **Arcane Spell Failure:** Chance for spells to fail when cast in armor.
+
+- **Accessories:** Rings, amulets, cloaks, and other items that provide special benefits.
+- **Consumables:** Potions, scrolls, and other one-use items.
+- **Tools and Kits:** Items needed for certain skills and activities.
+
+### Item Quality and Rarity
+
+| Rarity    | Drop Rate (from battles) | Effects | Naming       | Notes |
+|-----------|--------------------------|---------|--------------|-------|
+| Normal    | 50%                      | 3–5     | Generic      | Frequent, low impact |
+| Epic      | 0.25% of drops (1/400)   | 8–12    | Template/GPT | Story-worthy |
+| Legendary | 0.0025% of drops (1/40K) | 20      | GPT-named    | Ultra-rare, quest-tied |
+
+### Magical Item System
+
+Items possess magical properties that enhance their effectiveness or grant special abilities.
+
+- **Item Structure:** Each item contains:
+  - Base item type (e.g., Chainmail)
+  - Rarity (normal, epic, legendary)
+  - Display name
+  - Flavor text
+  - Effects (with level-based unlocking)
+  - Identified levels
+  - Maximum effects
+
+- **Item Effects:** Sourced from `item_effects.json`, including:
+  - Feats (excluding spellcasting feats)
+  - Skill bonuses
+  - Countable effects (DR, stat bonuses)
+  - Special monster-only feats (for legendary items)
+
+### Item Identification and Discovery
+
+The identification system provides a sense of discovery and progression:
+
+- **Identification Methods:**
+  - **Standard Vendors:** Reveal next effect for a fee
+  - **Legendary NPCs:** Reveal all effects for a significant price
+  - **Trial and Error:** Learning through use, which may be risky
+  - **Shopkeepers:** Identify and mark-up legendary items
+  
+- **Progressive Identification:** Items reveal more properties as they're used or identified professionally
+
+### Item Leveling and Evolution System
+
+Every item in Visual DM is magical and evolves with the player:
+
+- **Level-Gated Effects:** Effects unlock as character levels up with the item
+- **Hidden Potential:** Players won't know an item's full potential until it's fully identified
+- **Awakening:** Magical items "wake up" when certain conditions are met
+- **Bonding:** Items become more powerful as the character uses them extensively
+- **Evolution Paths:** Items can evolve along different paths based on use and character actions
+
+### Loot Generation System
+
+- **Drop System:** Carefully balanced to make loot drops regular and meaningful
+- **Context-Sensitive:** Takes player level and battle context into account when generating loot
+- **AI-Enhanced:** GPT used for epic/legendary naming and lore generation
+- **Rule-Compliant:** All generated items validated against game rules for balance
+
+### Crafting and Modification
+
+- **Crafting System:** Creating items from raw materials
+- **Modification:** Upgrading or changing existing items
+- **Enchanting:** Adding magical properties to mundane items
+- **Repair and Maintenance:** Keeping equipment in working order
+
+## World Generation
+
+### World Map Generation
+
+- **Continent Scale:** Large landmasses with diverse biomes.
+- **Region Scale:** Political and geographic divisions within continents.
+- **Local Scale:** Detailed terrain for adventuring.
+- **Underworld:** Cave systems, dungeons, and underground realms.
+
+### Geographic Features
+
+- **Mountains:** Difficult terrain with valuable resources.
+- **Forests:** Dense woodlands with hidden locations.
+- **Deserts:** Harsh environments with ancient ruins.
+- **Oceans and Seas:** Naval travel and underwater locations.
+- **Rivers and Lakes:** Travel routes and settlements.
+- **Swamps and Marshes:** Dangerous environments with unique resources.
+
+### Settlement Generation
+
+- **Cities:** Major population centers with diverse districts.
+- **Towns:** Smaller settlements with limited services.
+- **Villages:** Rural communities focused on local resources.
+- **Outposts:** Frontier establishments with specific purposes.
+- **Ruins:** Abandoned settlements reclaimed by nature or monsters.
+
+### Points of Interest (POI)
+
+POIs are dynamic entities that evolve over time through player interaction, NPC decisions, world simulation, and random events.
+
+#### POI Density and Types
+- **POI Density:** Each region contains ~20 major POIs (towns, dungeons, etc.), plus 200–400 minor/nature squares (groves, ruins, camps, etc.), with the remainder being wilderness or terrain hexes.
+- **Dungeons:** Underground complexes with monsters and treasure.
+- **Temples:** Religious sites dedicated to various deities.
+- **Towers:** Magical or defensive structures.
+- **Camps:** Temporary settlements for various factions.
+- **Natural Landmarks:** Unique geographic features with special properties.
+
+#### POI Evolution States
+- **Settlement Growth:** POIs can evolve from camps to villages to towns based on population and events.
+- **Control Status:** "Cleared," "Monster-controlled," "Disputed," etc.
+- **State Tags:** "Rumored," "Cleared," "Inhabited," "Abandoned," etc.
+
+#### POI Memory System
+POIs maintain a memory of events that have occurred there:
+- **Event Log:** Records player visits, combat, growth, and other significant events.
+- **Motif Pool:** Like NPCs, POIs have thematic motifs that influence their development.
+- **Next Event Check:** Timestamp for when the POI should next be evaluated for an event.
+
+#### Daily Tick System
+The world simulation regularly updates POIs:
+- **Event Checks:** Each POI is checked on a scheduled basis.
+- **Combat Simulation:** When appropriate, simulates combat between inhabitants and threats.
+- **Population Dynamics:** Growth, decline, or abandonment based on events and conditions.
+- **Settlement Growth:** POIs can evolve in tier based on successful development.
+
+#### POI State Transitions
+POIs can transition between states based on events:
+- **Cleared → Inhabited:** When players clear a location and NPCs move in.
+- **Inhabited → Abandoned:** When population drops or disasters occur.
+- **Abandoned → Monster-controlled:** When monsters reclaim abandoned settlements.
+- **Monster-controlled → Cleared:** When players defeat monsters.
+
+## Procedural Content Generation
+
+### Procedural Algorithms
+
+- **Terrain Generation:** Creating realistic landscapes.
+- **Settlement Planning:** Generating believable towns and cities.
+- **Dungeon Design:** Creating interesting and balanced dungeons.
+- **Quest Generation:** Creating meaningful and varied quests.
+
+### Environmental Storytelling
+
+- **Ruins and Remnants:** Telling stories through abandoned structures.
+- **Natural Formations:** Creating interesting and unique natural features.
+- **Cultural Markers:** Signs of civilization and cultural practices.
+- **Historical Events:** Environmental evidence of past events.
+
+### Dynamic World Changes
+
+- **Seasonal Changes:** Effects of different seasons on the environment.
+- **Weather Systems:** Dynamic weather patterns affecting gameplay.
+- **Natural Disasters:** Random events that change the landscape.
+- **Faction Influence:** How different groups affect the environment.
+
+## User Interface
+
+### Map Interface
+
+- **World Map:** Overview of the entire game world.
+- **Region Map:** Detailed view of specific regions.
+- **Local Map:** Immediate surroundings for tactical decisions.
+- **Dungeon Map:** Interior layouts of structures and dungeons.
+
+### Character Management
+
+- **Character Sheet:** Display of character statistics and equipment.
+- **Inventory System:** Management of items and equipment.
+- **Skill and Ability Interface:** Access to character abilities and skills.
+- **Party Management:** Interface for controlling multiple characters.
+
+### Game Master Tools
+
+- **NPC Creator:** Tool for creating and managing NPCs.
+- **Encounter Builder:** Tool for designing balanced combat encounters.
+- **Loot Generator:** System for creating appropriate treasure.
+- **Scene Setup:** Tools for creating and managing game scenes.
+
+### Player Tools
+
+- **Character Creator:** Interface for building new characters.
+- **Quest Journal:** Tracking active and completed quests.
+- **Relationship Tracker:** Managing relationships with NPCs and factions.
+- **Roleplaying Aids:** Tools to assist in roleplaying decisions.
+
+## Data Architecture
+
+### Data Models
+
+- **World Data:** Information about the game world and environment.
+- **Character Data:** Character statistics, abilities, and equipment.
+- **Quest Data:** Information about available and active quests.
+- **NPC Data:** Details about non-player characters.
+- **Item Data:** Information about items and equipment.
+- **POI State Data:** Evolution state, events, and memory of locations.
+
+### Data Storage
+
+- **Persistent Storage:** Long-term storage of game data.
+- **Runtime Data:** Temporary data used during gameplay.
+- **Cloud Storage:** Optional online storage for sharing and backup.
+- **Local Storage:** Data stored on the user's device.
+- **Database Options:** Various database solutions being explored for POI state storage and world persistence.
+
+### Data Access Patterns
+
+- **Real-time Access:** Immediate data retrieval for gameplay.
+- **Background Loading:** Loading data in the background to prevent interruptions.
+- **Data Streaming:** Continuous loading of data as needed.
+- **Data Caching:** Storing frequently used data for quick access.
+
+## AI Integration
+
+### NPC Intelligence
+
+- **Conversation System:** AI-driven dialogue with NPCs.
+- **Behavior Patterns:** Realistic NPC actions and reactions.
+- **Memory System:** NPCs remember interactions with players.
+- **Relationship Tracking:** How NPCs feel about players and each other.
+
+### Narrative Generation
+
+- **Story Arc Creation:** Generating compelling story arcs.
+- **Plot Adaptation:** Adjusting stories based on player choices.
+- **Theme Consistency:** Maintaining consistent narrative themes.
+- **Character Development:** Evolving characters throughout the story.
+
+### Encounter Design
+
+- **Dynamic Difficulty:** Adjusting encounter difficulty based on party strength.
+- **Tactical Intelligence:** Intelligent enemy tactics during combat.
+- **Environment Utilization:** Enemies use the environment strategically.
+- **Reinforcement Learning:** Enemies learn from previous encounters.
+
+### World Simulation
+
+- **Economic Simulation:** Realistic economy affected by player actions.
+- **Political Simulation:** Evolving political landscape.
+- **Ecological Simulation:** Natural world that responds to events.
+- **Social Simulation:** Communities that change and develop.
+- **POI Evolution:** Locations that change state and purpose over time.
+
+## Character Creation
+
+### Character Generation Process
+
+1. **Select Race:** Choose from available races with unique traits.
+2. **Determine Attributes:** Allocate points to core attributes.
+3. **Select Skills:** Choose skill proficiencies based on background.
+4. **Choose Background:** Select a background that provides additional skills and story elements.
+5. **Select Equipment:** Start with appropriate gear.
+6. **Define Personality:** Establish character traits, ideals, bonds, and flaws.
+
+### Background System
+
+- **Background Types:** Various backgrounds representing different life experiences.
+- **Background Benefits:** Skills, tools, and resources from backgrounds.
+- **Background Story Elements:** Plot hooks and connections from backgrounds.
+- **Custom Backgrounds:** Option to create unique backgrounds.
+
+### Alignment and Personality
+
+- **Alignment System:** Character moral and ethical stance.
+- **Personality Traits:** Defining characteristics that influence roleplaying.
+- **Ideals:** What the character believes in and strives for.
+- **Bonds:** Connections to people, places, or events.
+- **Flaws:** Character weaknesses and vulnerabilities.
+
+## Adventure Generation
+
+### Quest Types
+
+- **Main Quests:** Primary storyline missions.
+- **Side Quests:** Optional missions for additional rewards.
+- **Faction Quests:** Missions for specific factions.
+- **Character Quests:** Personal quests for character development.
+- **Random Encounters:** Spontaneous events during travel.
+
+### Quest Generation Parameters
+
+- **Difficulty Scaling:** Adjusting quest challenge based on party level.
+- **Reward Balancing:** Appropriate rewards for quest difficulty.
+- **Narrative Integration:** Connecting quests to the overall story.
+- **Player Interest Matching:** Generating quests that align with player preferences.
+
+### Adventure Structures
+
+- **Linear Adventures:** Straightforward progression through predetermined events.
+- **Branching Adventures:** Multiple paths leading to different outcomes.
+- **Sandbox Adventures:** Open-ended exploration with emergent storytelling.
+- **Hybrid Adventures:** Combining elements of different structures.
+
+### Campaign Management
+
+- **Campaign Arcs:** Long-term story development across sessions.
+- **Session Planning:** Tools for preparing individual game sessions.
+- **Plot Tracking:** Managing complex storylines and character involvement.
+- **World Consequences:** How player choices affect the world over time.
+
+## NPC Generation
+
+### NPC Types
+
+- **Villagers:** Ordinary people in settlements.
+- **Merchants:** Traders selling goods and services.
+- **Quest Givers:** NPCs who provide missions.
+- **Allies:** Characters who assist the players.
+- **Antagonists:** Opponents and villains.
+- **Neutrals:** Characters with their own agendas.
+
+### NPC Personality Generation
+
+- **Trait Selection:** Defining personality characteristics.
+- **Motivation Generation:** What drives the NPC's actions.
+- **Relationship Map:** How the NPC relates to others.
+- **Behavior Patterns:** How the NPC acts in different situations.
+
+### NPC Appearance
+
+- **Physical Traits:** Height, weight, and distinguishing features.
+- **Clothing and Style:** How the NPC dresses and presents themselves.
+- **Mannerisms:** Unique behaviors and habits.
+- **Voice and Speech Patterns:** How the NPC communicates.
+
+### NPC Development
+
+- **Character Growth:** How NPCs change over time.
+- **Relationship Evolution:** Changing relationships with players.
+- **Narrative Roles:** How NPCs fit into the larger story.
+- **Memory and Learning:** How NPCs remember and adapt to player actions.
+
+## Economy
+
+### Currency System
+
+- **Standard Coins:** Gold, silver, and copper pieces.
+- **Regional Currencies:** Local variants with different values.
+- **Trade Goods:** Non-monetary items used for barter.
+- **Precious Materials:** Gems and rare metals as alternative currencies.
+
+### Economic Simulation
+
+- **Supply and Demand:** Fluctuating prices based on availability.
+- **Regional Variations:** Different economies in different regions.
+- **Event Impacts:** How events affect local and global economies.
+- **Player Influence:** How player actions can change economic conditions.
+
+### Trade System
+
+- **Merchant Networks:** Connected traders across regions.
+- **Caravan Routes:** Established trade paths with specific goods.
+- **Black Markets:** Illegal goods and services.
+- **Guild Influence:** How trade guilds affect prices and availability.
+
+### Resource Management
+
+- **Raw Materials:** Gathering and processing resources.
+- **Crafting Materials:** Items used to create equipment.
+- **Consumable Resources:** Items that are used up during gameplay.
+- **Rare Resources:** Valuable materials with special properties.
+
+## Party Management
+
+### Party Composition
+
+- **Role Balance:** Ensuring the party has necessary capabilities.
+- **Group Dynamics:** How characters interact with each other.
+- **Shared Resources:** Managing party funds and equipment.
+- **Leadership:** Decision-making processes within the party.
+
+### Party Progression
+
+- **Group Experience:** Shared advancement opportunities.
+- **Teamwork Benefits:** Advantages from working together.
+- **Relationship Development:** Evolving relationships between party members.
+- **Shared Goals:** Common objectives for the group.
+
+### Companion System
+
+- **Companion Recruitment:** Finding and recruiting NPCs to join the party.
+- **Companion Loyalty:** Maintaining good relationships with companions.
+- **Companion Development:** How companions grow and change over time.
+- **Companion Specializations:** Unique abilities and roles for companions.
+
+## Modding Support
+
+### Mod Types
+
+- **Content Mods:** Adding new items, creatures, and locations.
+- **Rules Mods:** Changing game mechanics and systems.
+- **Visual Mods:** Altering the game's appearance.
+- **Story Mods:** Adding new quests and narrative content.
+
+### Modding Tools
+
+- **Asset Creator:** Tool for creating new game assets.
+- **Script Editor:** Interface for modifying game scripts.
+- **World Editor:** Tool for creating and modifying game worlds.
+- **Rules Editor:** Interface for changing game rules.
+
+### Mod Integration
+
+- **Compatibility Checking:** Ensuring mods work together.
+- **Load Order:** Managing the sequence in which mods are applied.
+- **Conflict Resolution:** Addressing issues between mods.
+- **Version Management:** Handling different versions of mods.
+
+### Community Support
+
+- **Mod Repository:** Central location for finding and sharing mods.
+- **Documentation:** Guides for creating and using mods.
+- **Community Forums:** Places for modders to share knowledge.
+- **Modding Tutorials:** Step-by-step guides for creating mods.
+
+## Technical Architecture
+
+### Frontend Architecture
+
+- **Rendering Engine:** System for displaying the game world.
+- **UI Framework:** Structure for user interface elements.
+- **Input Handling:** Processing player inputs.
+- **Animation System:** Managing character and environmental animations.
+
+### Backend Architecture
+
+- **Game State Management:** Tracking and updating the game state.
+- **Data Persistence:** Storing and retrieving game data.
+- **AI Processing:** Handling artificial intelligence calculations.
+- **Network Communication:** Managing online interactions.
+
+### Optimization
+
+- **Performance Tuning:** Ensuring smooth gameplay.
+- **Memory Management:** Efficient use of system resources.
+- **Asset Loading:** Optimized loading of game assets.
+- **Scalability:** Adapting to different hardware capabilities.
+
+### Security
+
+- **Data Protection:** Safeguarding user information.
+- **Anti-Cheat Measures:** Preventing unfair play.
+- **Secure Communication:** Protecting online interactions.
+- **Update Verification:** Ensuring authentic game updates.
+
+## Systems Architecture
+
+### Core Systems
+
+- **Game Loop:** Main execution cycle of the game.
+- **Event System:** Managing and responding to game events.
+- **Asset Management:** Handling game resources.
+- **Save/Load System:** Preserving and restoring game state.
+
+### Simulation Systems
+
+- **Physics Simulation:** Realistic physical interactions.
+- **Weather Simulation:** Dynamic weather patterns.
+- **Time System:** Day/night cycle and calendar.
+- **Ecosystem Simulation:** Flora and fauna interactions.
+- **Daily Tick System:** Regular world updates and event processing.
+
+### Interaction Systems
+
+- **Dialog System:** Managing conversations with NPCs.
+- **Quest System:** Tracking and updating quests.
+- **Combat System:** Handling combat interactions.
+- **Crafting System:** Creating and modifying items.
+- **Item Identification:** Discovering magical properties of items.
+
+### Feedback Systems
+
+- **Audio System:** Managing game sounds and music.
+- **Visual Effects:** Creating special visual elements.
+- **Haptic Feedback:** Physical feedback for supported devices.
+- **UI Notifications:** Alerting players to important information.

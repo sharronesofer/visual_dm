@@ -1,0 +1,82 @@
+{
+    "Burning Hands": {
+      "school": "Evocation [Fire]",
+      "casting_time": "1 standard action",
+      "range": "15 ft.",
+      "components": ["V", "S"],
+      "duration": "Instantaneous",
+      "saving_throw": "Reflex half",
+      "spell_resistance": "Yes",
+      "description": "Deals 1d4 fire damage/level (max 5d4) in a 15-ft. cone."
+    },
+    "Cure Light Wounds": {
+      "school": "Conjuration (Healing)",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S"],
+      "duration": "Instantaneous",
+      "saving_throw": "Will half (harmless)",
+      "spell_resistance": "Yes (harmless)",
+      "description": "Cures 1d8 +1/level damage (max +5)."
+    },
+    "Mage Armor": {
+      "school": "Conjuration (Creation) [Force]",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S", "F"],
+      "duration": "1 hour/level (D)",
+      "saving_throw": "Will negates (harmless)",
+      "spell_resistance": "No",
+      "description": "Gives subject +4 armor bonus to AC."
+    },
+    "Shield": {
+      "school": "Abjuration [Force]",
+      "casting_time": "1 standard action",
+      "range": "Personal",
+      "components": ["V", "S"],
+      "duration": "1 min/level (D)",
+      "saving_throw": "None",
+      "spell_resistance": "No",
+      "description": "Invisible disc gives +4 shield bonus to AC, blocks magic missiles."
+    },
+    "Magic Missile": {
+      "school": "Evocation [Force]",
+      "casting_time": "1 standard action",
+      "range": "Medium (100 ft. + 10 ft./level)",
+      "components": ["V", "S"],
+      "duration": "Instantaneous",
+      "saving_throw": "None",
+      "spell_resistance": "Yes",
+      "description": "1d4+1 damage; +1 missile per two caster levels (max 5)."
+    },
+    "Charm Person": {
+      "school": "Enchantment (Charm) [Mind-Affecting]",
+      "casting_time": "1 standard action",
+      "range": "Close (25 ft. + 5 ft./2 levels)",
+      "components": ["V", "S"],
+      "duration": "1 hour/level (D)",
+      "saving_throw": "Will negates",
+      "spell_resistance": "Yes",
+      "description": "Makes one humanoid creature your friend."
+    },
+    "Endure Elements": {
+      "school": "Abjuration",
+      "casting_time": "1 standard action",
+      "range": "Touch",
+      "components": ["V", "S"],
+      "duration": "24 hours",
+      "saving_throw": "Will negates (harmless)",
+      "spell_resistance": "Yes (harmless)",
+      "description": "Exist comfortably in hot or cold environments."
+    },
+    "Enlarge Person": {
+      "school": "Transmutation",
+      "casting_time": "1 round",
+      "range": "Close (25 ft. + 5 ft./2 levels)",
+      "components": ["V", "S", "M"],
+      "duration": "1 min/level (D)",
+      "saving_throw": "Fortitude negates",
+      "spell_resistance": "Yes",
+      "description": "Humanoid creature doubles in size, +2 Str, –2 Dex, –1 AC."
+    }
+  }

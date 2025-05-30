@@ -23,7 +23,7 @@ The Region system models the narrative and mechanical structure of a world regio
 - **tension_level**: Current tension (0-100) between factions in the region.
 
 ### Motif System
-- Each region has 3 unique active motifs, drawn from a canonical set. Motifs have entropy/decay and rotate out when their duration expires. Motif history is tracked for narrative purposes. See `motif_utils.py` and `motif_engine_class.py` for implementation details.
+- Each region has 3 unique active motifs, drawn from a canonical set. Motifs have entropy/decay and rotate out when their duration expires. Motif history is tracked for narrative purposes. See the consolidated motif system in `backend/systems/motif/` for implementation details (refactoring complete).
 
 ### Memory System
 - Region memory logs all major events (capitol changes, arc failures, etc.). Memories are summarized at daily, weekly, monthly, and annual intervals. Core memories are created for major events and are not summarized further. See `memory_utils.py` for summarization and core memory logic.
@@ -66,15 +66,15 @@ The Motif system provides narrative drivers for regions and NPCs, supporting dyn
 ### Motif Rotation
 - Expired motifs are added to motif history and replaced with new unique motifs.
 - Motif pools are always kept at 3 unique active motifs.
-- Motif rotation and tick logic are implemented in `motif_utils.py` and `motif_engine_class.py`.
+- Motif rotation and tick logic are implemented in the consolidated motif system.
 
 ### Integration
 - Motif pools and history are attached to region and NPC data models.
 - Motif changes are triggered by world ticks, chaos events, or narrative hooks.
 
 ### References
-- See `backend/motifs/motif_utils.py` for canonical motif pool and lifecycle logic.
-- See `backend/motifs/motif_engine_class.py` for motif engine and tick/rotation logic.
+- See `backend/systems/motif/` for canonical motif pool and lifecycle logic.
+- See `backend/systems/motif/` for the consolidated motif system implementation.
 - See `docs/stubs_needs_consolidation_qna.md` for Q&A clarifications and rationale.
 
 ## Memory System (Consolidated)

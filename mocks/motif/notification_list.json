@@ -1,0 +1,42 @@
+[
+  {
+    "id": "27423d2e-4898-43e1-b2a6-e87955f3f7f2",
+    "created_at": "2025-05-05T01:34:24.962843Z",
+    "updated_at": "2025-05-28T01:34:24.962845Z",
+    "name": "Education",
+    "description": "Hear magazine current.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "53170658-0ef7-4011-aa58-42bd42b7825c",
+    "created_at": "2025-05-21T01:34:24.962848Z",
+    "updated_at": "2025-05-24T01:34:24.962849Z",
+    "name": "Nothing",
+    "description": "Chance trip seat edge side.",
+    "status": "PENDING"
+  },
+  {
+    "id": "2b6ebc2e-bb55-44a8-b995-5f59057e70b7",
+    "created_at": "2025-04-29T01:34:24.962853Z",
+    "updated_at": "2025-05-27T01:34:24.962854Z",
+    "name": "Among",
+    "description": "Structure question hour thing person process bag production.",
+    "status": "PENDING"
+  },
+  {
+    "id": "3815a464-0e03-4824-b709-fdd5dc0f1327",
+    "created_at": "2025-05-07T01:34:24.962857Z",
+    "updated_at": "2025-05-27T01:34:24.962859Z",
+    "name": "Somebody",
+    "description": "Hotel heart itself.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "4b7043ee-bc12-4ffa-9fcf-15b71b447534",
+    "created_at": "2025-05-25T01:34:24.962862Z",
+    "updated_at": "2025-05-28T01:34:24.962863Z",
+    "name": "Ever",
+    "description": "Model movie because control customer move money.",
+    "status": "PENDING"
+  }
+]

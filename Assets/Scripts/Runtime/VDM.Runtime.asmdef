@@ -1,0 +1,18 @@
+{
+    "name": "VDM.Runtime",
+    "rootNamespace": "VDM",
+    "references": [
+        "VDM.Core",
+        "Unity.Nuget.Newtonsoft-Json",
+        "VisualDM.DTOs"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+} 

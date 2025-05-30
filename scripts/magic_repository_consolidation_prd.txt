@@ -1,0 +1,59 @@
+# Magic System Repository Consolidation PRD
+
+## Overview
+This PRD outlines the tasks required to consolidate the duplicate repository implementations in the Magic System. Currently, there's redundant code between the main `repositories.py` file and the individual repository files in the `repositories/` directory. This project aims to eliminate duplication, standardize interfaces, improve error handling, and enhance documentation.
+
+## Requirements
+
+### Repository Structure Consolidation
+- Move all repository implementations to the `repositories/` directory, with each repository in its own file.
+- Update the `repositories/__init__.py` to properly export all repository classes.
+- Update the main `__init__.py` to use the updated imports from the consolidated structure.
+- Remove the redundant `repositories.py` file once migration is complete.
+
+### Repository Implementation Standardization
+- Ensure all repository classes extend the `BaseRepository` class.
+- Standardize method signatures and return types across all repositories.
+- Apply consistent naming conventions for all methods and parameters.
+- Ensure proper type annotations for all methods and parameters.
+- Implement proper error handling and response patterns.
+- Add comprehensive docstrings to all methods and classes.
+
+### Transaction Management Improvement
+- Ensure all repositories use proper transaction management.
+- Implement proper usage of flush() and commit() operations.
+- Handle transaction errors consistently.
+
+### Documentation Updates
+- Update `CHANGES.md` with details about the repository consolidation.
+- Update `README.md` with the new directory structure and usage examples.
+- Add inline documentation for complex logic.
+
+## Acceptance Criteria
+- No duplicated repository code exists between `repositories.py` and the `repositories/` directory.
+- All repositories follow a consistent interface pattern.
+- All repositories have standardized method signatures and return types.
+- All repositories extend `BaseRepository`.
+- Documentation (both inline and in `README.md`/`CHANGES.md`) is updated to reflect changes.
+- All existing functionality is preserved with no regressions.
+- All repositories use proper transaction management with appropriate flush/commit calls.
+
+## Technical Constraints
+- Maintain backward compatibility with existing service layer code.
+- Ensure all changes follow the system's modular architecture as outlined in the Development Bible.
+- All new code must follow Python best practices, including PEP 8 style guidelines.
+- Include proper type annotations for all methods and parameters.
+
+## Tasks
+1. Analyze existing repository implementations and identify duplications.
+2. Define standardized method signatures and interfaces.
+3. Update `BaseRepository` class if needed.
+4. Consolidate and update each repository implementation.
+5. Update `repositories/__init__.py` exports.
+6. Update main `__init__.py` imports.
+7. Update documentation.
+8. Run tests to ensure no functionality is lost.
+9. Remove redundant `repositories.py` file.
+
+## Timeline
+This is a medium-size refactoring task that should take approximately 2-3 days to complete. 

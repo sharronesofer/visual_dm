@@ -1,0 +1,32 @@
+{
+    "xp_table": {
+      "1": 0,
+      "2": 1000,
+      "3": 3000,
+      "4": 6000,
+      "5": 10000,
+      "6": 15000,
+      "7": 21000,
+      "8": 28000,
+      "9": 36000,
+      "10": 45000,
+      "11": 55000,
+      "12": 66000,
+      "13": 78000,
+      "14": 91000,
+      "15": 105000,
+      "16": 120000,
+      "17": 136000,
+      "18": 153000,
+      "19": 171000,
+      "20": 190000
+    },
+    "ability_score_increase_levels": [4, 8, 12, 16, 20],
+    "feat_gain_levels": [1, 3, 6, 9, 12, 15, 18],
+    "multiclassing": {
+      "rules": "You can add levels of a new class if you meet its prerequisites. XP is divided evenly among classes.",
+      "favored_classes": "Each race has a favored class. Multiclassing penalties apply if levels are not balanced unless the class is favored.",
+      "prestige_class_rules": "Prestige classes require meeting prerequisites and must be selected instead of a level in a base class."
+    }
+  }
+  

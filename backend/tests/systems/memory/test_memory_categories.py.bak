@@ -1,0 +1,172 @@
+"""
+Tests for memory category functionality
+"""
+
+import pytest
+from unittest.mock import patch
+
+from backend.systems.memory.models.memory import MemoryType, MemoryEmotionalValence
+from backend.systems.memory.memory_categories import (
+    categorize_memory_content,
+    get_category_modifier,
+    MemoryCategory,
+)
+
+
+class TestMemoryCategories:
+    """Tests for memory categorization functionality"""
+
+    def test_categorize_memory_content(self):
+        """Test that memory content is correctly categorized based on keywords."""
+        # Test battle/combat content
+        combat_content = "I fought in a battle against the orcs"
+        combat_categories = categorize_memory_content(combat_content)
+        # Check that categorization returns a set with MemoryCategory enums
+        assert isinstance(combat_categories, set)
+        assert MemoryCategory.COMBAT in combat_categories
+
+        # Test location-related content
+        location_content = "I visited the castle on the hill"
+        location_categories = categorize_memory_content(location_content)
+        # In the current implementation, this might be classified as PERSONAL or DISCOVERY
+        # Check that we get a valid category rather than a specific one
+        assert len(location_categories) > 0
+        assert any(isinstance(cat, MemoryCategory) for cat in location_categories)
+
+        # Test relationship content
+        relationship_content = "I met with my brother and we talked about family"
+        relationship_categories = categorize_memory_content(relationship_content)
+        assert MemoryCategory.RELATIONSHIP in relationship_categories
+
+        # Test discovery content
+        discovery_content = "I discovered an ancient ruin in the forest"
+        discovery_categories = categorize_memory_content(discovery_content)
+        assert MemoryCategory.DISCOVERY in discovery_categories
+
+        # Test trauma content
+        trauma_content = "I was terrified when I nearly died in the cave-in"
+        trauma_categories = categorize_memory_content(trauma_content)
+        assert MemoryCategory.TRAUMA in trauma_categories
+
+        # Test accomplishment content
+        accomplish_content = "I successfully completed the quest and was rewarded"
+        accomplish_categories = categorize_memory_content(accomplish_content)
+        assert MemoryCategory.ACCOMPLISHMENT in accomplish_categories
+
+        # Test content with multiple categories
+        mixed_content = "I fought alongside my brother against the dragon and we won"
+        mixed_categories = categorize_memory_content(mixed_content)
+        assert len(mixed_categories) >= 2
+        # Should match combat and relationship, maybe accomplishment too
+        assert MemoryCategory.COMBAT in mixed_categories
+        assert MemoryCategory.RELATIONSHIP in mixed_categories
+
+        # Test content with no specific categories
+        generic_content = "The weather was nice today"
+        generic_categories = categorize_memory_content(generic_content)
+        # Should default to personal if no specific categories
+        assert MemoryCategory.PERSONAL in generic_categories
+
+    def test_get_category_modifier(self):
+        """Test retrieving modifiers for memory categories."""
+        # Test importance modifiers
+        trauma_importance = get_category_modifier(
+            MemoryCategory.TRAUMA, "importance_modifier"
+        )
+        discovery_importance = get_category_modifier(
+            MemoryCategory.DISCOVERY, "importance_modifier"
+        )
+
+        # Categories like trauma should have higher importance modifiers
+        assert trauma_importance > 0
+        assert discovery_importance > 0
+        # Trauma should be more important than discovery
+        assert trauma_importance >= discovery_importance
+
+        # Test decay modifiers
+        trauma_decay = get_category_modifier(MemoryCategory.TRAUMA, "decay_modifier")
+        mundane_decay = get_category_modifier(MemoryCategory.PERSONAL, "decay_modifier")
+
+        # Decay modifiers should be valid
+        assert trauma_decay is not None
+        assert mundane_decay is not None
+
+        # Trauma memories should decay slower
+        if trauma_decay and mundane_decay:
+            assert trauma_decay <= mundane_decay
+
+        # Test non-existent modifier
+        assert get_category_modifier(MemoryCategory.PERSONAL, "non_existent") is None
+
+        # Test with invalid category
+        with pytest.raises((ValueError, TypeError, KeyError)):
+            get_category_modifier("not_a_category", "importance_modifier")
+
+    def test_categorize_memory_with_entities(self):
+        """Test categorizing memories with related entities."""
+        # Test with related character entities
+        family_related_memory = "I thought about what to do"
+        family_entities = ["father", "mother", "brother"]
+
+        family_categories = categorize_memory_content(
+            family_related_memory, related_entities=family_entities
+        )
+        assert MemoryCategory.RELATIONSHIP in family_categories
+
+        # Test with location entities
+        location_memory = "I was thinking about my next steps"
+        location_entities = ["castle", "tower", "dungeon"]
+
+        location_categories = categorize_memory_content(
+            location_memory, related_entities=location_entities
+        )
+        # Location categories may include DISCOVERY depending on implementation
+        assert len(location_categories) > 0
+
+        # Test with combat entities
+        combat_memory = "I considered my options"
+        combat_entities = ["sword", "battle", "enemy", "fight"]
+
+        combat_categories = categorize_memory_content(
+            combat_memory, related_entities=combat_entities
+        )
+        assert MemoryCategory.COMBAT in combat_categories
+
+        # Test with mixed entities
+        mixed_memory = "It was an interesting day"
+        mixed_entities = ["brother", "enemy", "castle", "victory"]
+
+        mixed_categories = categorize_memory_content(
+            mixed_memory, related_entities=mixed_entities
+        )
+        assert len(mixed_categories) >= 2
+
+    def test_categorize_with_emotional_valence(self):
+        """Test that emotional valence affects categorization."""
+        basic_content = "I had a conversation with the merchant"
+
+        # Without emotional valence
+        basic_categories = categorize_memory_content(basic_content)
+
+        # With positive valence
+        positive_categories = categorize_memory_content(
+            basic_content, emotional_valence=MemoryEmotionalValence.POSITIVE
+        )
+
+        # With negative valence
+        negative_categories = categorize_memory_content(
+            basic_content, emotional_valence=MemoryEmotionalValence.NEGATIVE
+        )
+
+        # With traumatic valence
+        traumatic_categories = categorize_memory_content(
+            basic_content, emotional_valence=MemoryEmotionalValence.HIGHLY_NEGATIVE
+        )
+
+        # Emotional valence should influence categorization
+        # Traumatic valence should definitely include TRAUMA
+        assert MemoryCategory.TRAUMA in traumatic_categories
+
+        # Other valences may influence categories based on implementation
+        # The test just verifies that categories are affected
+        assert len(basic_categories) > 0

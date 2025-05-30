@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-05-28T21:12:33.328910",
+  "summary": {
+    "total_systems": 1,
+    "systems_by_layer": {
+      "Core Game": [
+        "character"
+      ]
+    },
+    "api_systems": [],
+    "service_only_systems": [
+      "character"
+    ],
+    "compliance_issues": [
+      "character: Missing __init__.py"
+    ],
+    "import_issues": [],
+    "missing_tests": [
+      "character"
+    ],
+    "systems_info": [
+      {
+        "name": "character",
+        "path": "systems/character",
+        "has_router": false,
+        "router_files": [],
+        "api_endpoints": [],
+        "models": [],
+        "services": [],
+        "repositories": [],
+        "test_coverage": null,
+        "status": "\u2705 Service Layer",
+        "description": "Character management and progression",
+        "unity_dependencies": "**CRITICAL** - Player character management",
+        "layer": "Core Game"
+      }
+    ]
+  },
+  "systems_detail": [
+    {
+      "name": "character",
+      "path": "systems/character",
+      "has_router": false,
+      "router_files": [],
+      "api_endpoints": [],
+      "models": [],
+      "services": [],
+      "repositories": [],
+      "test_coverage": null,
+      "status": "\u2705 Service Layer",
+      "description": "Character management and progression",
+      "unity_dependencies": "**CRITICAL** - Player character management",
+      "layer": "Core Game"
+    }
+  ]
+}

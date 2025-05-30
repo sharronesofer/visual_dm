@@ -1,0 +1,145 @@
+{
+  "healing_potion": {
+    "name": "Healing Potion",
+    "description": "A basic potion that restores health.",
+    "skill_required": "alchemy",
+    "min_skill_level": 1,
+    "station_required": "alchemy_lab",
+    "station_level": 1,
+    "ingredients": [
+      {
+        "item_id": "red_herb",
+        "quantity": 2,
+        "is_consumed": true,
+        "substitution_groups": {
+          "alternate": {
+            "healing_root": 1
+          }
+        }
+      },
+      {
+        "item_id": "water_flask",
+        "quantity": 1,
+        "is_consumed": true
+      }
+    ],
+    "results": [
+      {
+        "item_id": "healing_potion",
+        "quantity": 1,
+        "probability": 1.0
+      }
+    ],
+    "is_hidden": false,
+    "is_enabled": true,
+    "discovery_methods": ["alchemy_mentor", "observation"],
+    "metadata": {
+      "base_experience": 8,
+      "quality_modifiers": {
+        "potency": 2,
+        "duration": 1
+      }
+    }
+  },
+  
+  "invisibility_potion": {
+    "name": "Invisibility Potion",
+    "description": "A potion that renders the drinker partially invisible for a short time.",
+    "skill_required": "alchemy",
+    "min_skill_level": 6,
+    "station_required": "alchemy_lab",
+    "station_level": 2,
+    "ingredients": [
+      {
+        "item_id": "ghost_flower",
+        "quantity": 3,
+        "is_consumed": true
+      },
+      {
+        "item_id": "moonstone_dust",
+        "quantity": 2,
+        "is_consumed": true
+      },
+      {
+        "item_id": "crystal_vial",
+        "quantity": 1,
+        "is_consumed": true
+      }
+    ],
+    "results": [
+      {
+        "item_id": "invisibility_potion",
+        "quantity": 1,
+        "probability": 0.7
+      },
+      {
+        "item_id": "failed_potion",
+        "quantity": 1,
+        "probability": 0.3
+      }
+    ],
+    "is_hidden": true,
+    "is_enabled": true,
+    "discovery_methods": ["rare_book", "ancient_scroll"],
+    "metadata": {
+      "base_experience": 35,
+      "quality_modifiers": {
+        "potency": 3,
+        "duration": 4
+      },
+      "discovery_conditions": {
+        "rare_book": {
+          "book_id": "ancient_alchemical_secrets"
+        }
+      }
+    }
+  },
+  
+  "poison_antidote": {
+    "name": "Poison Antidote",
+    "description": "A remedy that neutralizes poison effects.",
+    "skill_required": "alchemy",
+    "min_skill_level": 3,
+    "station_required": "alchemy_lab",
+    "station_level": 1,
+    "ingredients": [
+      {
+        "item_id": "white_mushroom",
+        "quantity": 2,
+        "is_consumed": true
+      },
+      {
+        "item_id": "purified_water",
+        "quantity": 1,
+        "is_consumed": true
+      },
+      {
+        "item_id": "cleansing_herb",
+        "quantity": 1,
+        "is_consumed": true
+      }
+    ],
+    "results": [
+      {
+        "item_id": "poison_antidote",
+        "quantity": 1,
+        "probability": 0.9
+      },
+      {
+        "item_id": "herbal_residue",
+        "quantity": 1,
+        "probability": 0.4
+      }
+    ],
+    "is_hidden": false,
+    "is_enabled": true,
+    "discovery_methods": ["alchemy_mentor", "herbalist_quest"],
+    "metadata": {
+      "base_experience": 15,
+      "quality_modifiers": {
+        "potency": 2,
+        "expiration_time": 3
+      }
+    }
+  }
+} 

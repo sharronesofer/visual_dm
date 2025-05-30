@@ -1,0 +1,42 @@
+[
+  {
+    "id": "c2ce86a0-3e33-4753-9689-5e561d38ae6a",
+    "created_at": "2025-04-30T01:34:24.961172Z",
+    "updated_at": "2025-05-28T01:34:24.961174Z",
+    "name": "Trade",
+    "description": "Work just off successful although building end.",
+    "status": "PENDING"
+  },
+  {
+    "id": "afa94264-f979-4144-8720-b58ac0c76a06",
+    "created_at": "2025-05-03T01:34:24.961178Z",
+    "updated_at": "2025-05-25T01:34:24.961179Z",
+    "name": "Career",
+    "description": "Air within under society happy.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "e705e45f-896b-4f92-97e6-4b73e2f19117",
+    "created_at": "2025-05-04T01:34:24.961183Z",
+    "updated_at": "2025-05-29T01:34:24.961184Z",
+    "name": "Because",
+    "description": "Year operation president.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "65b74854-2f72-45e4-bbe0-cd94a9f42331",
+    "created_at": "2025-05-05T01:34:24.961187Z",
+    "updated_at": "2025-05-29T01:34:24.961188Z",
+    "name": "We",
+    "description": "Seat ever friend buy decide trouble purpose.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "4ddc70b6-a130-488c-b1e6-528062634f35",
+    "created_at": "2025-05-21T01:34:24.961192Z",
+    "updated_at": "2025-05-24T01:34:24.961193Z",
+    "name": "Think",
+    "description": "Event impact woman.",
+    "status": "INACTIVE"
+  }
+]

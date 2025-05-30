@@ -1,0 +1,241 @@
+"""
+Tests for the saliency scoring functionality in the memory system.
+"""
+
+import pytest
+from datetime import datetime, timedelta
+from backend.systems.memory.saliency_scoring import (
+    calculate_initial_importance,
+    calculate_memory_saliency,
+    calculate_memory_relevance,
+    DEFAULT_MAX_IMPORTANCE,
+)
+
+
+class TestSaliencyScoring:
+    """Tests for memory saliency scoring functions."""
+
+    def test_calculate_initial_importance(self):
+        """Test that initial importance calculation works correctly."""
+        # Test with basic content
+        basic_importance = calculate_initial_importance("A basic memory")
+        assert 0.0 <= basic_importance <= 1.0
+
+        # Test with emotional content
+        emotional_content = "I was terrified when the dragon attacked our village"
+        emotional_importance = calculate_initial_importance(emotional_content)
+        assert 0.0 <= emotional_importance <= 1.0
+
+        # Emotional content should have higher importance due to keywords
+        assert emotional_importance > basic_importance
+
+        # Test with life event content
+        life_event = "The death of the king changed everything"
+        life_importance = calculate_initial_importance(life_event)
+        assert 0.0 <= life_importance <= 1.0
+
+        # Test with different memory types
+        trauma_importance = calculate_initial_importance(
+            "A regular memory", memory_type="trauma"
+        )
+        regular_importance = calculate_initial_importance(
+            "A regular memory", memory_type="regular"
+        )
+
+        # Trauma memories should have higher base importance
+        assert trauma_importance > regular_importance
+
+        # Test with categories
+        categorized_importance = calculate_initial_importance(
+            "A basic memory", categories=["trauma", "accomplishment"]
+        )
+        uncategorized_importance = calculate_initial_importance("A basic memory")
+
+        # Categories should increase importance
+        assert categorized_importance > uncategorized_importance
+
+        # Test maximum importance cap
+        max_content = "I was absolutely devastated and heartbroken by the death of my entire family"
+        max_importance = calculate_initial_importance(
+            max_content,
+            memory_type="trauma",
+            categories=["trauma", "relationship", "identity"],
+        )
+
+        # Should not exceed the max importance cap
+        assert max_importance <= DEFAULT_MAX_IMPORTANCE
+
+    def test_calculate_initial_importance_categories(self):
+        """Test that memory categories affect initial importance."""
+        # Test with no categories
+        base_importance = calculate_initial_importance("A memory", categories=[])
+
+        # Test with high-importance categories
+        trauma_importance = calculate_initial_importance(
+            "A memory", categories=["trauma"]
+        )
+        accomplishment_importance = calculate_initial_importance(
+            "A memory", categories=["accomplishment"]
+        )
+        multiple_category_importance = calculate_initial_importance(
+            "A memory", categories=["trauma", "accomplishment", "identity"]
+        )
+
+        # Categories should boost importance
+        assert trauma_importance > base_importance
+        assert accomplishment_importance > base_importance
+        assert multiple_category_importance > trauma_importance
+
+        # Category boost should be capped
+        many_categories_importance = calculate_initial_importance(
+            "A memory",
+            categories=["trauma", "accomplishment", "identity", "relationship"] * 3,
+        )
+        assert many_categories_importance <= DEFAULT_MAX_IMPORTANCE
+
+        # Allow for small differences in floating point calculations
+        assert abs(many_categories_importance - multiple_category_importance) < 0.1
+
+    def test_calculate_memory_saliency(self):
+        """Test saliency calculation based on importance and time decay."""
+        # Create a memory dict for testing
+        base_memory = {
+            "importance": 0.8,
+            "created_at": datetime.now().isoformat(),
+            "memory_type": "regular",
+            "categories": [],
+        }
+
+        # Test no decay at creation time
+        current_saliency = calculate_memory_saliency(base_memory, datetime.now())
+        assert current_saliency == 0.8  # At creation time, saliency equals importance
+
+        # Test decay over time
+        future_memory = base_memory.copy()
+        past_date = (datetime.now() - timedelta(days=30)).isoformat()
+        future_memory["created_at"] = past_date
+
+        future_saliency = calculate_memory_saliency(future_memory, datetime.now())
+        assert future_saliency < 0.8  # Saliency should decrease over time
+
+        # Test different memory types decay at different rates
+        trauma_memory = {
+            "importance": 0.8,
+            "created_at": past_date,
+            "memory_type": "regular",
+            "categories": ["trauma"],
+        }
+
+        mundane_memory = {
+            "importance": 0.8,
+            "created_at": past_date,
+            "memory_type": "regular",
+            "categories": ["mundane"],
+        }
+
+        trauma_saliency = calculate_memory_saliency(trauma_memory, datetime.now())
+        mundane_saliency = calculate_memory_saliency(mundane_memory, datetime.now())
+
+        # Traumatic memories should decay slower than mundane ones
+        assert trauma_saliency > mundane_saliency
+
+        # Test access count boosts saliency
+        accessed_memory = base_memory.copy()
+        accessed_memory["created_at"] = past_date
+        accessed_memory["access_count"] = 10
+
+        unaccessed_memory = base_memory.copy()
+        unaccessed_memory["created_at"] = past_date
+        unaccessed_memory["access_count"] = 0
+
+        accessed_saliency = calculate_memory_saliency(accessed_memory, datetime.now())
+        unaccessed_saliency = calculate_memory_saliency(
+            unaccessed_memory, datetime.now()
+        )
+
+        # More frequently accessed memories should have higher saliency
+        assert accessed_saliency > unaccessed_saliency
+
+    def test_calculate_memory_relevance(self):
+        """Test relevance calculation based on content similarity."""
+        # Test basic relevance
+        query = "I need to find the magic sword"
+        memory_content = "I found a magic sword in the cave"
+
+        relevance = calculate_memory_relevance(query, memory_content)
+        assert 0.0 <= relevance <= 1.0
+
+        # Test unrelated content
+        unrelated_content = "The weather was nice yesterday"
+        unrelated_relevance = calculate_memory_relevance(query, unrelated_content)
+
+        # Relevance should be higher for related content
+        assert relevance > unrelated_relevance
+
+        # Test category-based relevance
+        category_content = "I went for a walk"
+        category_relevance = calculate_memory_relevance(
+            "Where did I put my sword?",
+            category_content,
+            memory_categories=["item", "weapon"],
+        )
+
+        no_category_relevance = calculate_memory_relevance(
+            "Where did I put my sword?", category_content
+        )
+
+        # Categories should enhance relevance for related queries
+        assert category_relevance > no_category_relevance
+
+    def test_category_influence_on_saliency(self):
+        """Test how different combinations of categories influence saliency."""
+        # Arrange
+        now = datetime.now()
+        base_memory = {
+            "content": "Base memory for category testing",
+            "created_at": (now - timedelta(days=30)).isoformat(),
+            "importance": 0.7,
+            "memory_type": "regular",
+            "categories": [],
+        }
+
+        # Create memories with different category combinations
+        trauma_memory = base_memory.copy()
+        trauma_memory["categories"] = ["trauma"]
+
+        war_memory = base_memory.copy()
+        war_memory["categories"] = ["war"]
+
+        combined_memory = base_memory.copy()
+        combined_memory["categories"] = ["trauma", "war"]
+
+        conflict_memory = base_memory.copy()
+        conflict_memory["categories"] = ["trauma", "war", "combat", "injury"]
+
+        irrelevant_memory = base_memory.copy()
+        irrelevant_memory["categories"] = ["mundane", "custom"]
+
+        # Act
+        trauma_saliency = calculate_memory_saliency(trauma_memory)
+        war_saliency = calculate_memory_saliency(war_memory)
+        combined_saliency = calculate_memory_saliency(combined_memory)
+        conflict_saliency = calculate_memory_saliency(conflict_memory)
+        irrelevant_saliency = calculate_memory_saliency(irrelevant_memory)
+        base_saliency = calculate_memory_saliency(base_memory)
+
+        # Assert
+        # Categories with stronger modifiers should have higher saliency
+        assert trauma_saliency > base_saliency
+        assert war_saliency > base_saliency
+
+        # Allow for small floating point differences in calculations
+        # combined categories should stack, but in some implementations they might
+        # have similar values due to capping
+        assert abs(combined_saliency - trauma_saliency) < 0.1
+
+        # More categories should generally lead to higher saliency
+        # but again allow for capping and implementation differences
+        assert (
+            conflict_saliency >= combined_saliency
+            or abs(conflict_saliency - combined_saliency) < 0.1
+        )

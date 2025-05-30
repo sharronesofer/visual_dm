@@ -1,0 +1,15 @@
+{
+  "id": "a3cbce62-4c4b-4b04-bcd9-88701a05e444",
+  "created_at": "2025-05-05T01:34:25.035235Z",
+  "updated_at": "2025-05-26T01:34:25.035238Z",
+  "name": "Course",
+  "description": "Force by course ready heavy his front. Start kid expert.",
+  "status": "INACTIVE",
+  "metadata": {
+    "tags": [
+      "term"
+    ],
+    "category": "contain",
+    "priority": 8
+  }
+}

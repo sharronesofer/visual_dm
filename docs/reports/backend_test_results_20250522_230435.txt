@@ -1,0 +1,915 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+23:04:36 [INFO] backend.systems.storage.json_storage: JSONStorageManager initialized with base path: /Users/Sharrone/Visual_DM/data
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+collected 27 items
+
+backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_memory_content FAILED [  3%]
+backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_get_category_modifier FAILED [  7%]
+backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_memory_with_entities FAILED [ 11%]
+backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_with_emotional_valence FAILED [ 14%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_initial_importance PASSED [ 18%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_initial_importance_categories PASSED [ 22%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_memory_saliency FAILED [ 25%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_memory_relevance FAILED [ 29%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_category_influence_on_saliency PASSED [ 33%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_initialization FAILED [ 37%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_id_generation FAILED [ 40%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_importance_influence_on_decay FAILED [ 44%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_access_updates_timestamp FAILED [ 48%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_categories FAILED [ 51%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_core_flag FAILED [ 55%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_with_related_entities FAILED [ 59%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_emotional_valence FAILED [ 62%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_serialization FAILED [ 66%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_create_memory 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+PASSED                                                                   [ 70%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+PASSED                                                                   [ 74%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_remember_contextual 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+FAILED                                                                   [ 77%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_update_memory_importance 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+PASSED                                                                   [ 81%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_forget_memory 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+PASSED                                                                   [ 85%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_run_memory_decay 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+FAILED                                                                   [ 88%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_event_handlers 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+FAILED                                                                   [ 92%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_load_character_memories 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+FAILED                                                                   [ 96%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_save_memory 
+-------------------------------- live log setup --------------------------------
+23:04:36 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+FAILED                                                                   [100%]
+
+=================================== FAILURES ===================================
+_____________ TestMemoryCategories.test_categorize_memory_content ______________
+
+self = <systems.memory.test_memory_categories.TestMemoryCategories object at 0x103630710>
+
+    def test_categorize_memory_content(self):
+        """Test that memory content is correctly categorized based on keywords."""
+        # Test battle/combat content
+        combat_content = "I fought in a battle against the orcs"
+        combat_categories = categorize_memory_content(combat_content)
+        # Check that categorization returns a set with MemoryCategory enums
+        assert isinstance(combat_categories, set)
+        assert MemoryCategory.COMBAT in combat_categories
+    
+        # Test location-related content
+        location_content = "I visited the castle on the hill"
+        location_categories = categorize_memory_content(location_content)
+        # In the current implementation, this might be classified as PERSONAL or DISCOVERY
+        # Check that we get a valid category rather than a specific one
+        assert len(location_categories) > 0
+        assert any(isinstance(cat, MemoryCategory) for cat in location_categories)
+    
+        # Test relationship content
+        relationship_content = "I met with my brother and we talked about family"
+        relationship_categories = categorize_memory_content(relationship_content)
+>       assert MemoryCategory.RELATIONSHIP in relationship_categories
+E       AssertionError: assert <MemoryCategory.RELATIONSHIP: 'relationship'> in {<MemoryCategory.PERSONAL: 'personal'>}
+E        +  where <MemoryCategory.RELATIONSHIP: 'relationship'> = MemoryCategory.RELATIONSHIP
+
+backend/tests/systems/memory/test_memory_categories.py:34: AssertionError
+_______________ TestMemoryCategories.test_get_category_modifier ________________
+
+self = <systems.memory.test_memory_categories.TestMemoryCategories object at 0x103977110>
+
+    def test_get_category_modifier(self):
+        """Test retrieving modifiers for memory categories."""
+        # Test importance modifiers
+        trauma_importance = get_category_modifier(MemoryCategory.TRAUMA, "importance_modifier")
+        discovery_importance = get_category_modifier(MemoryCategory.DISCOVERY, "importance_modifier")
+    
+        # Categories like trauma should have higher importance modifiers
+        assert trauma_importance > 0
+        assert discovery_importance > 0
+        # Trauma should be more important than discovery
+        assert trauma_importance >= discovery_importance
+    
+        # Test decay modifiers
+        trauma_decay = get_category_modifier(MemoryCategory.TRAUMA, "decay_modifier")
+        mundane_decay = get_category_modifier(MemoryCategory.PERSONAL, "decay_modifier")
+    
+        # Decay modifiers should be valid
+        assert trauma_decay is not None
+        assert mundane_decay is not None
+    
+        # Trauma memories should decay slower
+        if trauma_decay and mundane_decay:
+            assert trauma_decay <= mundane_decay
+    
+        # Test non-existent modifier
+        assert get_category_modifier(MemoryCategory.PERSONAL, "non_existent") is None
+    
+        # Test with invalid category
+>       with pytest.raises((ValueError, TypeError, KeyError)):
+E       Failed: DID NOT RAISE (<class 'ValueError'>, <class 'TypeError'>, <class 'KeyError'>)
+
+backend/tests/systems/memory/test_memory_categories.py:93: Failed
+__________ TestMemoryCategories.test_categorize_memory_with_entities ___________
+
+self = <systems.memory.test_memory_categories.TestMemoryCategories object at 0x103977a10>
+
+    def test_categorize_memory_with_entities(self):
+        """Test categorizing memories with related entities."""
+        # Test with related character entities
+        family_related_memory = "I thought about what to do"
+        family_entities = ["father", "mother", "brother"]
+    
+>       family_categories = categorize_memory_content(family_related_memory, related_entities=family_entities)
+E       TypeError: categorize_memory_content() got an unexpected keyword argument 'related_entities'
+
+backend/tests/systems/memory/test_memory_categories.py:102: TypeError
+_________ TestMemoryCategories.test_categorize_with_emotional_valence __________
+
+self = <systems.memory.test_memory_categories.TestMemoryCategories object at 0x10397d290>
+
+    def test_categorize_with_emotional_valence(self):
+        """Test that emotional valence affects categorization."""
+        basic_content = "I had a conversation with the merchant"
+    
+        # Without emotional valence
+        basic_categories = categorize_memory_content(basic_content)
+    
+        # With positive valence
+>       positive_categories = categorize_memory_content(
+            basic_content,
+            emotional_valence=MemoryEmotionalValence.POSITIVE
+        )
+E       TypeError: categorize_memory_content() got an unexpected keyword argument 'emotional_valence'
+
+backend/tests/systems/memory/test_memory_categories.py:135: TypeError
+______________ TestSaliencyScoring.test_calculate_memory_saliency ______________
+
+self = <systems.memory.test_saliency_scoring.TestSaliencyScoring object at 0x103a50d10>
+
+    def test_calculate_memory_saliency(self):
+        """Test saliency calculation based on importance and time decay."""
+        # Create a memory dict for testing
+        base_memory = {
+            "importance": 0.8,
+            "created_at": datetime.now().isoformat(),
+            "memory_type": "regular",
+            "categories": []
+        }
+    
+        # Test no decay at creation time
+        current_saliency = calculate_memory_saliency(base_memory, datetime.now())
+>       assert current_saliency == 0.8  # At creation time, saliency equals importance
+E       assert 0.7999999999998612 == 0.8
+
+backend/tests/systems/memory/test_saliency_scoring.py:113: AssertionError
+_____________ TestSaliencyScoring.test_calculate_memory_relevance ______________
+
+self = <systems.memory.test_saliency_scoring.TestSaliencyScoring object at 0x103a51110>
+
+    def test_calculate_memory_relevance(self):
+        """Test relevance calculation based on content similarity."""
+        # Test basic relevance
+        query = "I need to find the magic sword"
+        memory_content = "I found a magic sword in the cave"
+    
+        relevance = calculate_memory_relevance(query, memory_content)
+        assert 0.0 <= relevance <= 1.0
+    
+        # Test unrelated content
+        unrelated_content = "The weather was nice yesterday"
+        unrelated_relevance = calculate_memory_relevance(query, unrelated_content)
+    
+        # Relevance should be higher for related content
+        assert relevance > unrelated_relevance
+    
+        # Test category-based relevance
+        category_content = "I went for a walk"
+        category_relevance = calculate_memory_relevance(
+            "Where did I put my sword?",
+            category_content,
+            memory_categories=["item", "weapon"]
+        )
+    
+        no_category_relevance = calculate_memory_relevance(
+            "Where did I put my sword?",
+            category_content
+        )
+    
+        # Categories should enhance relevance for related queries
+>       assert category_relevance > no_category_relevance
+E       assert 0.11666666666666665 > 0.11666666666666665
+
+backend/tests/systems/memory/test_saliency_scoring.py:189: AssertionError
+____________________ TestMemory.test_memory_initialization _____________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x10397b5d0>
+
+    def test_memory_initialization(self):
+        """Test that a Memory object can be created with the expected attributes."""
+        # Arrange
+        owner_id = "char123"
+        content = "I met a traveler from an antique land"
+        memory_type = MemoryType.EXPERIENCE
+        importance = 0.75
+    
+        # Act
+        memory = Memory(
+            owner_id=owner_id,
+            content=content,
+            memory_type=memory_type,
+            importance=importance
+        )
+    
+        # Assert
+        assert memory.owner_id == owner_id
+        assert memory.content == content
+        assert memory.memory_type == memory_type
+        assert memory.importance == importance
+        assert isinstance(memory.id, str)
+>       assert isinstance(memory.created_at, datetime)
+E       AttributeError: 'Memory' object has no attribute 'created_at'
+
+backend/tests/systems/memory/test_memory.py:40: AttributeError
+_____________________ TestMemory.test_memory_id_generation _____________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x10397ab10>
+
+    def test_memory_id_generation(self):
+        """Test that each Memory gets a unique ID."""
+        # Arrange & Act
+>       memory1 = Memory(
+            owner_id="char1",
+            content="Memory 1",
+            memory_type=MemoryType.EXPERIENCE
+        )
+E       TypeError: Memory.__init__() missing 1 required positional argument: 'importance'
+
+backend/tests/systems/memory/test_memory.py:48: TypeError
+________________ TestMemory.test_importance_influence_on_decay _________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x10397b910>
+
+    def test_importance_influence_on_decay(self):
+        """Test that importance affects decay rate."""
+        # Arrange
+        high_importance_memory = Memory(
+            owner_id="char123",
+            content="A very important memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.9
+        )
+    
+        low_importance_memory = Memory(
+            owner_id="char123",
+            content="A less important memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.3
+        )
+    
+        # Act - use a larger time difference to make decay differences more apparent
+        current_time = datetime.now() + timedelta(days=30)
+    
+        # The saliency should be affected by both importance and decay over time
+>       high_importance_saliency = high_importance_memory.calculate_saliency(current_time)
+E       AttributeError: 'Memory' object has no attribute 'calculate_saliency'
+
+backend/tests/systems/memory/test_memory.py:84: AttributeError
+_______________ TestMemory.test_memory_access_updates_timestamp ________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x10397a050>
+
+    def test_memory_access_updates_timestamp(self):
+        """Test that accessing a memory updates its last_accessed timestamp."""
+        # Arrange
+        memory = Memory(
+            owner_id="char123",
+            content="Remember to update timestamps",
+>           memory_type=MemoryType.DIRECTIVE
+        )
+
+backend/tests/systems/memory/test_memory.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <enum 'MemoryType'>, name = 'DIRECTIVE'
+
+    def __getattr__(cls, name):
+        """
+        Return the enum member matching `name`
+    
+        We use __getattr__ instead of descriptors or inserting into the enum
+        class' __dict__ in order to support `name` and `value` being both
+        properties for enum members (which live in the class' __dict__) and
+        enum members themselves.
+        """
+        if _is_dunder(name):
+            raise AttributeError(name)
+        try:
+            return cls._member_map_[name]
+        except KeyError:
+>           raise AttributeError(name) from None
+E           AttributeError: DIRECTIVE
+
+../.pyenv/versions/3.11.5/lib/python3.11/enum.py:784: AttributeError
+______________________ TestMemory.test_memory_categories _______________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x103979bd0>
+
+    def test_memory_categories(self):
+        """Test adding and retrieving memory categories."""
+        # Arrange
+>       memory = Memory(
+            owner_id="char123",
+            content="This happened during the big battle",
+            memory_type=MemoryType.EXPERIENCE
+        )
+E       TypeError: Memory.__init__() missing 1 required positional argument: 'importance'
+
+backend/tests/systems/memory/test_memory.py:114: TypeError
+_______________________ TestMemory.test_memory_core_flag _______________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x103978450>
+
+    def test_memory_core_flag(self):
+        """Test that the is_core flag prevents memory decay."""
+        # Arrange
+        core_memory = Memory(
+            owner_id="char123",
+            content="I am the legendary hero",
+>           memory_type=MemoryType.IDENTITY,
+            is_core=True,
+            importance=0.7
+        )
+
+backend/tests/systems/memory/test_memory.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <enum 'MemoryType'>, name = 'IDENTITY'
+
+    def __getattr__(cls, name):
+        """
+        Return the enum member matching `name`
+    
+        We use __getattr__ instead of descriptors or inserting into the enum
+        class' __dict__ in order to support `name` and `value` being both
+        properties for enum members (which live in the class' __dict__) and
+        enum members themselves.
+        """
+        if _is_dunder(name):
+            raise AttributeError(name)
+        try:
+            return cls._member_map_[name]
+        except KeyError:
+>           raise AttributeError(name) from None
+E           AttributeError: IDENTITY
+
+../.pyenv/versions/3.11.5/lib/python3.11/enum.py:784: AttributeError
+_________________ TestMemory.test_memory_with_related_entities _________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x10397aa90>
+
+    def test_memory_with_related_entities(self):
+        """Test creating a memory with related entities."""
+        # Arrange
+        related_entities = ["entity1", "entity2", "entity3"]
+    
+        # Act
+        memory = Memory(
+            owner_id="char123",
+            content="Memory with related entities",
+>           memory_type=MemoryType.RELATIONSHIP,
+            related_entities=related_entities
+        )
+
+backend/tests/systems/memory/test_memory.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <enum 'MemoryType'>, name = 'RELATIONSHIP'
+
+    def __getattr__(cls, name):
+        """
+        Return the enum member matching `name`
+    
+        We use __getattr__ instead of descriptors or inserting into the enum
+        class' __dict__ in order to support `name` and `value` being both
+        properties for enum members (which live in the class' __dict__) and
+        enum members themselves.
+        """
+        if _is_dunder(name):
+            raise AttributeError(name)
+        try:
+            return cls._member_map_[name]
+        except KeyError:
+>           raise AttributeError(name) from None
+E           AttributeError: RELATIONSHIP
+
+../.pyenv/versions/3.11.5/lib/python3.11/enum.py:784: AttributeError
+___________________ TestMemory.test_memory_emotional_valence ___________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x103ab8750>
+
+    def test_memory_emotional_valence(self):
+        """Test that emotional valence is properly set."""
+        # Arrange & Act
+        positive_memory = Memory(
+            owner_id="char123",
+            content="I won the tournament",
+>           memory_type=MemoryType.ACCOMPLISHMENT,
+            emotional_valence=MemoryEmotionalValence.POSITIVE
+        )
+
+backend/tests/systems/memory/test_memory.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <enum 'MemoryType'>, name = 'ACCOMPLISHMENT'
+
+    def __getattr__(cls, name):
+        """
+        Return the enum member matching `name`
+    
+        We use __getattr__ instead of descriptors or inserting into the enum
+        class' __dict__ in order to support `name` and `value` being both
+        properties for enum members (which live in the class' __dict__) and
+        enum members themselves.
+        """
+        if _is_dunder(name):
+            raise AttributeError(name)
+        try:
+            return cls._member_map_[name]
+        except KeyError:
+>           raise AttributeError(name) from None
+E           AttributeError: ACCOMPLISHMENT
+
+../.pyenv/versions/3.11.5/lib/python3.11/enum.py:784: AttributeError
+_____________________ TestMemory.test_memory_serialization _____________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x103ab8150>
+
+    def test_memory_serialization(self):
+        """Test that a Memory can be serialized and deserialized correctly."""
+        # Arrange
+>       original_memory = Memory(
+            owner_id="char123",
+            content="This is a test memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.8,
+            emotional_valence=MemoryEmotionalValence.NEUTRAL,
+            related_entities=["entity1", "entity2"]
+        )
+E       TypeError: Memory.__init__() got an unexpected keyword argument 'related_entities'
+
+backend/tests/systems/memory/test_memory.py:214: TypeError
+__________________ TestMemoryManager.test_remember_contextual __________________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x103a52190>
+memory_manager = <backend.systems.memory.memory_manager.MemoryManager object at 0x1039da910>
+
+    @pytest.mark.asyncio
+    async def test_remember_contextual(self, memory_manager):
+        """Test the remember function for retrieving relevant memories."""
+        # Arrange
+        character_id = "char123"
+    
+        # Create memories with different relevance to a context
+        relevant_memory = Memory(
+            character_id=character_id,
+            world_id="world1",
+            content="I found a magic sword in the cave",
+            importance=0.7
+        )
+    
+        irrelevant_memory = Memory(
+            character_id=character_id,
+            world_id="world1",
+            content="The weather was nice yesterday",
+            importance=0.7
+        )
+    
+        # Add to cache
+        if character_id not in memory_manager._memory_cache:
+            memory_manager._memory_cache[character_id] = {}
+        memory_manager._memory_cache[character_id][relevant_memory.id] = relevant_memory
+        memory_manager._memory_cache[character_id][irrelevant_memory.id] = irrelevant_memory
+    
+        # Mock the relevance scoring to ensure our test works predictably
+>       with patch('backend.systems.memory.memory_manager.calculate_memory_relevance') as mock_calculate_relevance:
+
+backend/tests/systems/memory/test_memory_manager.py:175: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:1443: in __enter__
+    original, local = self.get_original()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <unittest.mock._patch object at 0x103986a90>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'backend.systems.memory.memory_manager' from '/Users/Sharrone/Visual_DM/backend/systems/memory/memory_manager.py'> does not have the attribute 'calculate_memory_relevance'
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:1416: AttributeError
+---------------------------- Captured stderr setup -----------------------------
+INFO:backend.systems.memory.memory_manager:MemoryManager initialized
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.memory.memory_manager:memory_manager.py:104 MemoryManager initialized
+___________________ TestMemoryManager.test_run_memory_decay ____________________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x103a51f90>
+memory_manager = <backend.systems.memory.memory_manager.MemoryManager object at 0x103a28a50>
+
+    @pytest.mark.asyncio
+    async def test_run_memory_decay(self, memory_manager):
+        """Test the memory decay process."""
+        # Arrange
+        character_id = "char123"
+    
+        # Create a memory that will decay
+        old_memory = Memory(
+            character_id=character_id,
+            world_id="world1",
+            content="Old memory that will decay",
+            importance=0.5,
+            created_at=datetime.now() - timedelta(days=60)  # Old memory
+        )
+    
+        # Create a core memory that won't decay
+        core_memory = Memory(
+            character_id=character_id,
+            world_id="world1",
+            content="Core memory that won't decay",
+            importance=0.5,
+            is_core=True,
+            created_at=datetime.now() - timedelta(days=60)  # Same age
+        )
+    
+        # Add to cache
+        if character_id not in memory_manager._memory_cache:
+            memory_manager._memory_cache[character_id] = {}
+        memory_manager._memory_cache[character_id][old_memory.id] = old_memory
+        memory_manager._memory_cache[character_id][core_memory.id] = core_memory
+    
+        # Record original strength
+        original_strength = memory_manager._memory_cache[character_id][old_memory.id].importance
+    
+        # Act
+        affected_count = await memory_manager.run_memory_decay(decay_factor=0.2)
+    
+        # Assert
+>       assert affected_count >= 1  # At least one memory should be affected
+E       assert 0 >= 1
+
+backend/tests/systems/memory/test_memory_manager.py:301: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+INFO:backend.systems.memory.memory_manager:MemoryManager initialized
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.memory.memory_manager:memory_manager.py:104 MemoryManager initialized
+____________________ TestMemoryManager.test_event_handlers _____________________
+
+self = <MagicMock name='EventDispatcher.get_instance().subscribe' id='4356315792'>
+args = ('character.deleted', <bound method MemoryManager._on_character_created of <backend.systems.memory.memory_manager.MemoryManager object at 0x103b7d150>>)
+kwargs = {}
+expected = call('character.deleted', <bound method MemoryManager._on_character_created of <backend.systems.memory.memory_manager.MemoryManager object at 0x103b7d150>>)
+cause = None
+actual = [call('character.created', <bound method MemoryManager._on_character_created of <backend.systems.memory.memory_manager...oryManager._on_character_deleted of <backend.systems.memory.memory_manager.MemoryManager object at 0x103b7d150>>), ...]
+expected_string = "subscribe('character.deleted', <bound method MemoryManager._on_character_created of <backend.systems.memory.memory_manager.MemoryManager object at 0x103b7d150>>)"
+
+    def assert_any_call(self, /, *args, **kwargs):
+        """assert the mock has been called with the specified arguments.
+    
+        The assert passes if the mock has *ever* been called, unlike
+        `assert_called_with` and `assert_called_once_with` that only pass if
+        the call is the most recent one."""
+        expected = self._call_matcher(_Call((args, kwargs), two=True))
+        cause = expected if isinstance(expected, Exception) else None
+        actual = [self._call_matcher(c) for c in self.call_args_list]
+        if cause or expected not in _AnyComparer(actual):
+            expected_string = self._format_mock_call_signature(args, kwargs)
+>           raise AssertionError(
+                '%s call not found' % expected_string
+            ) from cause
+E           AssertionError: subscribe('character.deleted', <bound method MemoryManager._on_character_created of <backend.systems.memory.memory_manager.MemoryManager object at 0x103b7d150>>) call not found
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:1010: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x103a072d0>
+memory_manager = <backend.systems.memory.memory_manager.MemoryManager object at 0x103b7d150>
+mock_event_dispatcher = <AsyncMock name='EventDispatcher.get_instance()' id='4356184144'>
+
+    @pytest.mark.asyncio
+    async def test_event_handlers(self, memory_manager, mock_event_dispatcher):
+        """Test that event handlers are registered correctly."""
+        # This mainly tests that the registration happens without errors
+        memory_manager._register_event_handlers()
+    
+        # Check that subscribe was called for expected events
+        expected_events = [
+            "character.created",
+            "character.deleted",
+            "narrative.generated",
+            "character.interaction"
+        ]
+    
+        for event in expected_events:
+>           mock_event_dispatcher.subscribe.assert_any_call(event, memory_manager._on_character_created)
+E           AssertionError: subscribe('character.deleted', <bound method MemoryManager._on_character_created of <backend.systems.memory.memory_manager.MemoryManager object at 0x103b7d150>>) call not found
+E           
+E           pytest introspection follows:
+E           
+E           Args:
+E           assert ('character.i...0x103b7d150>>) == ('character.d...0x103b7d150>>)
+E             
+E             At index 0 diff: 'character.interaction' != 'character.deleted'
+E             
+E             Full diff:
+E               (
+E             -     'character.deleted',
+E             +     'character.interaction',...
+E             
+E             ...Full output truncated (5 lines hidden), use '-vv' to show
+
+backend/tests/systems/memory/test_memory_manager.py:324: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+INFO:backend.systems.memory.memory_manager:MemoryManager initialized
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.memory.memory_manager:memory_manager.py:104 MemoryManager initialized
+________________ TestMemoryManager.test_load_character_memories ________________
+
+self = <AsyncMock name='StorageManager.get_instance().get' id='4355268176'>
+args = ('memories:char123',), kwargs = {}, expected = call('memories:char123')
+actual = call('memories/char123')
+_error_message = <function NonCallableMock.assert_called_with.<locals>._error_message at 0x1039f14e0>
+cause = None
+
+    def assert_called_with(self, /, *args, **kwargs):
+        """assert that the last call was made with the specified arguments.
+    
+        Raises an AssertionError if the args and keyword args passed in are
+        different to the last call to the mock."""
+        if self.call_args is None:
+            expected = self._format_mock_call_signature(args, kwargs)
+            actual = 'not called.'
+            error_message = ('expected call not found.\nExpected: %s\nActual: %s'
+                    % (expected, actual))
+            raise AssertionError(error_message)
+    
+        def _error_message():
+            msg = self._format_mock_failure_message(args, kwargs)
+            return msg
+        expected = self._call_matcher(_Call((args, kwargs), two=True))
+        actual = self._call_matcher(self.call_args)
+        if actual != expected:
+            cause = expected if isinstance(expected, Exception) else None
+>           raise AssertionError(_error_message()) from cause
+E           AssertionError: expected call not found.
+E           Expected: get('memories:char123')
+E           Actual: get('memories/char123')
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:939: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <AsyncMock name='StorageManager.get_instance().get' id='4355268176'>
+args = ('memories:char123',), kwargs = {}
+
+    def assert_called_once_with(self, /, *args, **kwargs):
+        """assert that the mock was called exactly once and that that call was
+        with the specified arguments."""
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to be called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+            raise AssertionError(msg)
+>       return self.assert_called_with(*args, **kwargs)
+E       AssertionError: expected call not found.
+E       Expected: get('memories:char123')
+E       Actual: get('memories/char123')
+E       
+E       pytest introspection follows:
+E       
+E       Args:
+E       assert ('memories/char123',) == ('memories:char123',)
+E         
+E         At index 0 diff: 'memories/char123' != 'memories:char123'
+E         
+E         Full diff:
+E           (
+E         -     'memories:char123',
+E         ?              ^...
+E         
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+../.pyenv/versions/3.11.5/lib/python3.11/unittest/mock.py:951: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x103a04990>
+memory_manager = <backend.systems.memory.memory_manager.MemoryManager object at 0x1039a85d0>
+mock_storage = <AsyncMock name='StorageManager.get_instance()' id='4355224016'>
+
+    @pytest.mark.asyncio
+    async def test_load_character_memories(self, memory_manager, mock_storage):
+        """Test loading memories from storage."""
+        # Arrange
+        character_id = "char123"
+        memory_data = {
+            "memory1": {
+                "id": "memory1",
+                "character_id": character_id,
+                "world_id": "world1",
+                "content": "Stored memory 1",
+                "importance": 0.7,
+                "created_at": datetime.now().isoformat()
+            },
+            "memory2": {
+                "id": "memory2",
+                "character_id": character_id,
+                "world_id": "world1",
+                "content": "Stored memory 2",
+                "importance": 0.5,
+                "created_at": datetime.now().isoformat()
+            }
+        }
+    
+        # Set up the mock to return our test data
+        mock_storage.get.return_value = memory_data
+    
+        # Act
+        await memory_manager._load_character_memories(character_id)
+    
+        # Assert
+        assert character_id in memory_manager._memory_cache
+        assert len(memory_manager._memory_cache[character_id]) == 2
+        assert "memory1" in memory_manager._memory_cache[character_id]
+        assert "memory2" in memory_manager._memory_cache[character_id]
+    
+        # Verify storage.get was called with the right key
+>       mock_storage.get.assert_called_once_with(f"memories:{character_id}")
+E       AssertionError: expected call not found.
+E       Expected: get('memories:char123')
+E       Actual: get('memories/char123')
+E       
+E       pytest introspection follows:
+E       
+E       Args:
+E       assert ('memories/char123',) == ('memories:char123',)
+E         
+E         At index 0 diff: 'memories/char123' != 'memories:char123'
+E         
+E         Full diff:
+E           (
+E         -     'memories:char123',
+E         ?              ^...
+E         
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+backend/tests/systems/memory/test_memory_manager.py:363: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+INFO:backend.systems.memory.memory_manager:MemoryManager initialized
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.memory.memory_manager:memory_manager.py:104 MemoryManager initialized
+______________________ TestMemoryManager.test_save_memory ______________________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x103a05c90>
+memory_manager = <backend.systems.memory.memory_manager.MemoryManager object at 0x103c99990>
+mock_storage = <AsyncMock name='StorageManager.get_instance()' id='4357482832'>
+
+    @pytest.mark.asyncio
+    async def test_save_memory(self, memory_manager, mock_storage):
+        """Test saving a memory to storage."""
+        # Arrange
+        character_id = "char123"
+        memory = Memory(
+            character_id=character_id,
+            world_id="world1",
+            content="Memory to save",
+            importance=0.6
+        )
+    
+        # Act
+        await memory_manager._save_memory(memory)
+    
+        # Assert - verify storage.set was called with the right data
+        mock_storage.set.assert_called_once()
+        args = mock_storage.set.call_args[0]
+    
+        # First arg should be the key
+>       assert args[0] == f"memories:{character_id}:{memory.id}"
+E       AssertionError: assert 'memories/char123' == 'memories:cha...-d4f42d3d15d1'
+E         
+E         - memories:char123:030065dd-a48f-4ea1-8126-d4f42d3d15d1
+E         + memories/char123
+
+backend/tests/systems/memory/test_memory_manager.py:385: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+INFO:backend.systems.memory.memory_manager:MemoryManager initialized
+------------------------------ Captured log setup ------------------------------
+INFO     backend.systems.memory.memory_manager:memory_manager.py:104 MemoryManager initialized
+=============================== warnings summary ===============================
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+backend/systems/storage/events.py:13
+  /Users/Sharrone/Visual_DM/backend/systems/storage/events.py:13: DeprecationWarning: Importing from backend.systems.events.event_dispatcher is deprecated. Use backend.app.core.events.event_dispatcher instead.
+    from backend.systems.events.event_dispatcher import EventDispatcher
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441: PytestConfigWarning: Unknown config option: verbose
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_create_memory
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_remember_contextual
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_update_memory_importance
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_forget_memory
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_run_memory_decay
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_event_handlers
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_load_character_memories
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_save_memory
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/pytest_asyncio/plugin.py:884: DeprecationWarning: The event_loop fixture provided by pytest-asyncio has been redefined in
+  /Users/Sharrone/Visual_DM/backend/tests/conftest.py:245
+  Replacing the event_loop fixture with a custom implementation is deprecated
+  and will lead to errors in the future.
+  If you want to request an asyncio event loop with a scope other than function
+  scope, use the "loop_scope" argument to the asyncio mark when marking the tests.
+  If you want to return different types of event loops, use the event_loop_policy
+  fixture.
+  
+    warnings.warn(
+
+backend/tests/systems/memory/test_memory_manager.py: 11 warnings
+  /Users/Sharrone/Visual_DM/backend/systems/memory/memory_manager.py:451: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    mem_dict = mem.dict()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_memory_content
+FAILED backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_get_category_modifier
+FAILED backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_memory_with_entities
+FAILED backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_with_emotional_valence
+FAILED backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_memory_saliency
+FAILED backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_memory_relevance
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_initialization
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_id_generation
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_importance_influence_on_decay
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_access_updates_timestamp
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_categories
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_core_flag
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_with_related_entities
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_emotional_valence
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_serialization
+FAILED backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_remember_contextual
+FAILED backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_run_memory_decay
+FAILED backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_event_handlers
+FAILED backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_load_character_memories
+FAILED backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_save_memory
+================== 20 failed, 7 passed, 24 warnings in 0.76s ===================
+
+
+Test Duration: 1.38 seconds
+Exit Code: 1

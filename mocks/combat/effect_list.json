@@ -1,0 +1,42 @@
+[
+  {
+    "id": "06865c0f-e542-48bb-ad25-b667c509f487",
+    "created_at": "2025-04-30T01:34:24.945890Z",
+    "updated_at": "2025-05-27T01:34:24.945896Z",
+    "name": "Car",
+    "description": "Offer follow popular about discuss high try.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "e606c258-2c45-41ef-aeef-544aa6da5e5e",
+    "created_at": "2025-05-09T01:34:24.945906Z",
+    "updated_at": "2025-05-28T01:34:24.945908Z",
+    "name": "Respond",
+    "description": "Call his food out improve he way.",
+    "status": "PENDING"
+  },
+  {
+    "id": "cc7cfe8a-de55-4162-aef7-e94db056301b",
+    "created_at": "2025-05-04T01:34:24.945913Z",
+    "updated_at": "2025-05-27T01:34:24.945915Z",
+    "name": "Memory",
+    "description": "Our up letter every girl keep.",
+    "status": "PENDING"
+  },
+  {
+    "id": "53d9c943-9fb2-4609-96c1-2e00ee828764",
+    "created_at": "2025-05-22T01:34:24.945919Z",
+    "updated_at": "2025-05-25T01:34:24.945921Z",
+    "name": "Daughter",
+    "description": "Station mean financial.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "f08bb226-4aaf-499f-8d9e-6f28bb0155a3",
+    "created_at": "2025-05-25T01:34:24.945926Z",
+    "updated_at": "2025-05-27T01:34:24.945927Z",
+    "name": "Now",
+    "description": "Measure including again our.",
+    "status": "INACTIVE"
+  }
+]

@@ -1,0 +1,714 @@
+"""
+Tests for dialogue quest integration module.
+"""
+
+import pytest
+from unittest.mock import Mock, MagicMock, patch
+from backend.systems.dialogue.quest_integration import DialogueQuestIntegration
+
+
+class TestDialogueQuestIntegration:
+    """Test suite for DialogueQuestIntegration class."""
+
+    @pytest.fixture
+    def mock_quest_manager(self):
+        """Create a mock quest manager."""
+        manager = Mock()
+        manager.get_quest.return_value = {
+            "id": "quest_1",
+            "title": "Test Quest",
+            "description": "A test quest description",
+            "state": "active",
+            "progress": 0.5,
+            "arc_id": "arc_1",
+            "priority": "normal",
+            "location": "test_location",
+            "giver": "npc_1",
+            "deadline": None,
+            "objectives": [
+                {"id": "obj_1", "description": "First objective", "completed": True},
+                {"id": "obj_2", "description": "Second objective", "completed": False}
+            ],
+            "giver_perspective": "I need help with this task.",
+            "receiver_perspective": "This quest seems important.",
+            "involved_perspective": "I know something about this quest.",
+            "antagonist_perspective": "I oppose this quest.",
+            "history": [
+                {"event": "Quest started"},
+                {"event": "First objective completed"}
+            ],
+            "offer_dialogue": "This is important work.",
+            "general_hint": "Look for clues in the old books."
+        }
+        manager.get_quests_by_conditions.return_value = [
+            {
+                "id": "quest_1",
+                "title": "Test Quest",
+                "description": "A test quest",
+                "state": "active",
+                "relevance_reason": "Character is the quest giver"
+            },
+            {
+                "id": "quest_2", 
+                "title": "Second Quest",
+                "description": "Another quest",
+                "state": "pending",
+                "relevance_reason": "Character is involved"
+            }
+        ]
+        return manager
+
+    @pytest.fixture
+    def mock_arc_manager(self):
+        """Create a mock arc manager."""
+        manager = Mock()
+        manager.get_arc.return_value = {
+            "id": "arc_1",
+            "name": "Test Arc",
+            "description": "A test narrative arc",
+            "progress": 0.6,
+            "state": "active",
+            "themes": ["adventure", "mystery"],
+            "current_act": "Act 2",
+            "main_characters": ["hero", "villain"],
+            "character_perspectives": {
+                "char_1": {"role": "protagonist", "knowledge": "full"}
+            },
+            "character_roles": {
+                "protagonist": ["char_1"],
+                "antagonist": ["char_2"]
+            },
+            "role_perspectives": {
+                "protagonist": {"role": "protagonist", "stance": "supportive"}
+            }
+        }
+        manager.get_arcs_by_conditions.return_value = [
+            {
+                "id": "arc_1",
+                "name": "Test Arc",
+                "description": "A test arc",
+                "progress": 0.6,
+                "current_act": "Act 2"
+            }
+        ]
+        return manager
+
+    @pytest.fixture
+    def integration(self, mock_quest_manager, mock_arc_manager):
+        """Create a DialogueQuestIntegration instance with mocked dependencies."""
+        return DialogueQuestIntegration(
+            quest_manager=mock_quest_manager,
+            arc_manager=mock_arc_manager
+        )
+
+    def test_init_with_managers(self, mock_quest_manager, mock_arc_manager):
+        """Test initialization with provided managers."""
+        integration = DialogueQuestIntegration(
+            quest_manager=mock_quest_manager,
+            arc_manager=mock_arc_manager
+        )
+        
+        assert integration.quest_manager == mock_quest_manager
+        assert integration.arc_manager == mock_arc_manager
+
+    @patch('backend.systems.dialogue.quest_integration.QuestManager')
+    @patch('backend.systems.dialogue.quest_integration.ArcManager')
+    def test_init_without_managers(self, mock_arc_cls, mock_quest_cls):
+        """Test initialization without provided managers."""
+        mock_quest_instance = Mock()
+        mock_arc_instance = Mock()
+        mock_quest_cls.get_instance.return_value = mock_quest_instance
+        mock_arc_cls.get_instance.return_value = mock_arc_instance
+        
+        integration = DialogueQuestIntegration()
+        
+        assert integration.quest_manager == mock_quest_instance
+        assert integration.arc_manager == mock_arc_instance
+        mock_quest_cls.get_instance.assert_called_once()
+        mock_arc_cls.get_instance.assert_called_once()
+
+    def test_add_quest_context_to_dialogue_with_quest_id(self, integration):
+        """Test adding quest context with specific quest ID."""
+        context = {"existing": "data"}
+        
+        result = integration.add_quest_context_to_dialogue(
+            context=context,
+            character_id="char_1",
+            quest_id="quest_1"
+        )
+        
+        assert "quests" in result
+        assert "current" in result["quests"]
+        assert result["quests"]["current"]["id"] == "quest_1"
+        assert result["quests"]["current"]["title"] == "Test Quest"
+        assert "relevant" in result["quests"]
+        assert "active_arcs" in result["quests"]
+        assert result["existing"] == "data"
+
+    def test_add_quest_context_to_dialogue_without_quest_id(self, integration):
+        """Test adding quest context without specific quest ID."""
+        context = {"existing": "data"}
+        
+        result = integration.add_quest_context_to_dialogue(
+            context=context,
+            character_id="char_1"
+        )
+        
+        assert "quests" in result
+        assert "relevant" in result["quests"]
+        assert "active_arcs" in result["quests"]
+        assert "current" not in result["quests"]
+        assert result["existing"] == "data"
+
+    def test_add_quest_context_to_dialogue_existing_quests_context(self, integration):
+        """Test adding quest context when quests already exist in context."""
+        context = {"quests": {"existing": "quest_data"}}
+        
+        result = integration.add_quest_context_to_dialogue(
+            context=context,
+            character_id="char_1",
+            quest_id="quest_1"
+        )
+        
+        assert result["quests"]["existing"] == "quest_data"
+        assert "current" in result["quests"]
+        assert "relevant" in result["quests"]
+
+    def test_add_quest_context_to_dialogue_with_location(self, integration):
+        """Test adding quest context with location filtering."""
+        result = integration.add_quest_context_to_dialogue(
+            context={},
+            character_id="char_1",
+            location_id="test_location",
+            include_completed=True,
+            max_quests=5
+        )
+        
+        integration.quest_manager.get_quests_by_conditions.assert_called_with({
+            "character_id": "char_1",
+            "include_completed": True,
+            "limit": 5,
+            "location_id": "test_location"
+        })
+        assert "quests" in result
+
+    def test_get_quest_dialogue_options_quest_offer_giver(self, integration):
+        """Test getting quest offer dialogue options for quest giver."""
+        integration.quest_manager.get_quest.return_value["giver"] = "char_1"
+        
+        result = integration.get_quest_dialogue_options(
+            character_id="char_1",
+            quest_id="quest_1",
+            dialogue_type="quest_offer"
+        )
+        
+        assert len(result) >= 2
+        assert any("task that needs attention" in opt["text"] for opt in result)
+        assert all(opt["quest_action"] == "offer" for opt in result[:2])
+        assert all(opt["quest_id"] == "quest_1" for opt in result)
+
+    def test_get_quest_dialogue_options_progress_giver(self, integration):
+        """Test getting quest progress dialogue options for quest giver."""
+        integration.quest_manager.get_quest.return_value["giver"] = "char_1"
+        
+        result = integration.get_quest_dialogue_options(
+            character_id="char_1",
+            quest_id="quest_1",
+            dialogue_type="progress"
+        )
+        
+        assert len(result) >= 2
+        assert any("work coming along" in opt["text"].lower() for opt in result)
+        assert any(opt["quest_action"] == "hint" for opt in result)
+
+    def test_get_quest_dialogue_options_completion_giver(self, integration):
+        """Test getting quest completion dialogue options for quest giver."""
+        integration.quest_manager.get_quest.return_value["giver"] = "char_1"
+        integration.quest_manager.get_quest.return_value["objectives"] = [
+            {"completed": True}, {"completed": True}
+        ]
+        
+        result = integration.get_quest_dialogue_options(
+            character_id="char_1",
+            quest_id="quest_1",
+            dialogue_type="completion"
+        )
+        
+        assert len(result) >= 2
+        assert any("excellent work" in opt["text"].lower() for opt in result)
+        assert any(opt["quest_action"] == "complete" for opt in result)
+
+    def test_get_quest_dialogue_options_hint(self, integration):
+        """Test getting quest hint dialogue options."""
+        result = integration.get_quest_dialogue_options(
+            character_id="char_1",
+            quest_id="quest_1",
+            dialogue_type="hint"
+        )
+        
+        assert len(result) >= 1
+        assert any("general_hint" in opt["quest_action"] for opt in result)
+
+    def test_get_quest_dialogue_options_quest_not_found(self, integration):
+        """Test getting quest dialogue options when quest not found."""
+        integration.quest_manager.get_quest.return_value = None
+        
+        result = integration.get_quest_dialogue_options(
+            character_id="char_1",
+            quest_id="nonexistent",
+            dialogue_type="quest_offer"
+        )
+        
+        assert result == []
+
+    def test_get_quest_dialogue_options_exception(self, integration):
+        """Test getting quest dialogue options with exception."""
+        integration.quest_manager.get_quest.side_effect = Exception("Test error")
+        
+        result = integration.get_quest_dialogue_options(
+            character_id="char_1",
+            quest_id="quest_1",
+            dialogue_type="quest_offer"
+        )
+        
+        assert result == []
+
+    def test_get_arc_dialogue_context_success(self, integration):
+        """Test getting arc dialogue context successfully."""
+        result = integration.get_arc_dialogue_context(
+            arc_id="arc_1",
+            character_id="char_1"
+        )
+        
+        assert result["id"] == "arc_1"
+        assert result["name"] == "Test Arc"
+        assert result["progress"] == 0.6
+        assert result["state"] == "active"
+        assert "character_perspective" in result
+        assert "active_quests" in result
+
+    def test_get_arc_dialogue_context_without_character(self, integration):
+        """Test getting arc dialogue context without character."""
+        result = integration.get_arc_dialogue_context(arc_id="arc_1")
+        
+        assert result["id"] == "arc_1"
+        assert result["name"] == "Test Arc"
+        assert "character_perspective" not in result
+
+    def test_get_arc_dialogue_context_arc_not_found(self, integration):
+        """Test getting arc dialogue context when arc not found."""
+        integration.arc_manager.get_arc.return_value = None
+        
+        result = integration.get_arc_dialogue_context(arc_id="nonexistent")
+        
+        assert result == {}
+
+    def test_get_arc_dialogue_context_exception(self, integration):
+        """Test getting arc dialogue context with exception."""
+        integration.arc_manager.get_arc.side_effect = Exception("Test error")
+        
+        result = integration.get_arc_dialogue_context(arc_id="arc_1")
+        
+        assert result == {}
+
+    def test_get_quest_narrative_description_success(self, integration):
+        """Test getting quest narrative description successfully."""
+        result = integration.get_quest_narrative_description(
+            quest_id="quest_1",
+            character_id="char_1",
+            include_history=True
+        )
+        
+        assert "Test Quest" in result
+        assert "test quest description" in result.lower()
+        assert "recently" in result.lower()
+
+    def test_get_quest_narrative_description_without_history(self, integration):
+        """Test getting quest narrative description without history."""
+        result = integration.get_quest_narrative_description(
+            quest_id="quest_1",
+            character_id="char_1",
+            include_history=False
+        )
+        
+        assert "Test Quest" in result
+        assert "recently" not in result.lower()
+
+    def test_get_quest_narrative_description_quest_not_found(self, integration):
+        """Test getting quest narrative description when quest not found."""
+        integration.quest_manager.get_quest.return_value = None
+        
+        result = integration.get_quest_narrative_description(quest_id="nonexistent")
+        
+        assert "unknown" in result.lower()
+
+    def test_get_quest_narrative_description_exception(self, integration):
+        """Test getting quest narrative description with exception."""
+        integration.quest_manager.get_quest.side_effect = Exception("Test error")
+        
+        result = integration.get_quest_narrative_description(quest_id="quest_1")
+        
+        assert "unavailable" in result.lower()
+
+    def test_get_quest_info_success(self, integration):
+        """Test getting quest info successfully."""
+        result = integration._get_quest_info(quest_id="quest_1", character_id="char_1")
+        
+        assert result["id"] == "quest_1"
+        assert result["title"] == "Test Quest"
+        assert result["state"] == "active"
+        assert "objectives" in result
+        assert len(result["objectives"]) == 2
+
+    def test_get_quest_info_without_character(self, integration):
+        """Test getting quest info without character."""
+        result = integration._get_quest_info(quest_id="quest_1")
+        
+        assert result["id"] == "quest_1"
+        assert "character_role" not in result
+        assert "perspective" not in result
+
+    def test_get_quest_info_quest_not_found(self, integration):
+        """Test getting quest info when quest not found."""
+        integration.quest_manager.get_quest.return_value = None
+        
+        result = integration._get_quest_info(quest_id="nonexistent")
+        
+        assert result == {}
+
+    def test_get_quest_info_exception(self, integration):
+        """Test getting quest info with exception."""
+        integration.quest_manager.get_quest.side_effect = Exception("Test error")
+        
+        result = integration._get_quest_info(quest_id="quest_1")
+        
+        assert result == {}
+
+    def test_get_character_relevant_quests_success(self, integration):
+        """Test getting character relevant quests successfully."""
+        result = integration._get_character_relevant_quests(
+            character_id="char_1",
+            location_id="test_location",
+            include_completed=True,
+            limit=5
+        )
+        
+        assert len(result) == 2
+        assert result[0]["id"] == "quest_1"
+        assert result[1]["id"] == "quest_2"
+        assert all("character_role" in quest for quest in result)
+
+    def test_get_character_relevant_quests_without_location(self, integration):
+        """Test getting character relevant quests without location."""
+        result = integration._get_character_relevant_quests(character_id="char_1")
+        
+        integration.quest_manager.get_quests_by_conditions.assert_called_with({
+            "character_id": "char_1",
+            "include_completed": False,
+            "limit": 3
+        })
+        assert len(result) == 2
+
+    def test_get_character_relevant_quests_exception(self, integration):
+        """Test getting character relevant quests with exception."""
+        integration.quest_manager.get_quests_by_conditions.side_effect = Exception("Test error")
+        
+        result = integration._get_character_relevant_quests(character_id="char_1")
+        
+        assert result == []
+
+    def test_get_active_arcs_success(self, integration):
+        """Test getting active arcs successfully."""
+        result = integration._get_active_arcs(character_id="char_1")
+        
+        assert len(result) == 1
+        assert result[0]["id"] == "arc_1"
+        assert result[0]["name"] == "Test Arc"
+        assert "character_perspective" in result[0]
+
+    def test_get_active_arcs_without_character(self, integration):
+        """Test getting active arcs without character."""
+        result = integration._get_active_arcs()
+        
+        integration.arc_manager.get_arcs_by_conditions.assert_called_with({
+            "state": "active"
+        })
+        assert len(result) == 1
+
+    def test_get_active_arcs_exception(self, integration):
+        """Test getting active arcs with exception."""
+        integration.arc_manager.get_arcs_by_conditions.side_effect = Exception("Test error")
+        
+        result = integration._get_active_arcs()
+        
+        assert result == []
+
+    def test_get_character_quest_role_giver(self, integration):
+        """Test getting character quest role as giver."""
+        integration.quest_manager.get_quest.return_value["giver"] = "char_1"
+        
+        result = integration._get_character_quest_role("char_1", "quest_1")
+        
+        assert result == "giver"
+
+    def test_get_character_quest_role_receiver(self, integration):
+        """Test getting character quest role as receiver."""
+        quest_data = integration.quest_manager.get_quest.return_value
+        quest_data["giver"] = "other_char"
+        quest_data["receiver"] = "char_1"
+        
+        result = integration._get_character_quest_role("char_1", "quest_1")
+        
+        assert result == "receiver"
+
+    def test_get_character_quest_role_involved(self, integration):
+        """Test getting character quest role as involved."""
+        quest_data = integration.quest_manager.get_quest.return_value
+        quest_data["giver"] = "other_char"
+        quest_data["receiver"] = "other_char_2"
+        quest_data["involved_characters"] = ["char_1", "char_2"]
+        
+        result = integration._get_character_quest_role("char_1", "quest_1")
+        
+        assert result == "involved"
+
+    def test_get_character_quest_role_antagonist(self, integration):
+        """Test getting character quest role as antagonist."""
+        quest_data = integration.quest_manager.get_quest.return_value
+        quest_data["giver"] = "other_char"
+        quest_data["receiver"] = "other_char_2"
+        quest_data["involved_characters"] = ["char_2"]
+        quest_data["antagonists"] = ["char_1"]
+        
+        result = integration._get_character_quest_role("char_1", "quest_1")
+        
+        assert result == "antagonist"
+
+    def test_get_character_quest_role_none(self, integration):
+        """Test getting character quest role when character has no role."""
+        quest_data = integration.quest_manager.get_quest.return_value
+        quest_data["giver"] = "other_char"
+        quest_data["receiver"] = "other_char_2"
+        quest_data["involved_characters"] = ["char_2"]
+        quest_data["antagonists"] = ["char_3"]
+        
+        result = integration._get_character_quest_role("char_1", "quest_1")
+        
+        assert result is None
+
+    def test_get_character_quest_role_quest_not_found(self, integration):
+        """Test getting character quest role when quest not found."""
+        integration.quest_manager.get_quest.return_value = None
+        
+        result = integration._get_character_quest_role("char_1", "nonexistent")
+        
+        assert result is None
+
+    def test_get_character_quest_role_exception(self, integration):
+        """Test getting character quest role with exception."""
+        integration.quest_manager.get_quest.side_effect = Exception("Test error")
+        
+        result = integration._get_character_quest_role("char_1", "quest_1")
+        
+        assert result is None
+
+    def test_get_character_arc_perspective_direct(self, integration):
+        """Test getting character arc perspective with direct perspective."""
+        result = integration._get_character_arc_perspective("char_1", "arc_1")
+        
+        assert result["role"] == "protagonist"
+        assert result["knowledge"] == "full"
+
+    def test_get_character_arc_perspective_role_based(self, integration):
+        """Test getting character arc perspective with role-based perspective."""
+        arc_data = integration.arc_manager.get_arc.return_value
+        arc_data["character_perspectives"] = {}  # No direct perspective
+        
+        result = integration._get_character_arc_perspective("char_1", "arc_1")
+        
+        assert result["role"] == "protagonist"
+        assert result["stance"] == "supportive"
+
+    def test_get_character_arc_perspective_none(self, integration):
+        """Test getting character arc perspective when none exists."""
+        arc_data = integration.arc_manager.get_arc.return_value
+        arc_data["character_perspectives"] = {}
+        arc_data["character_roles"] = {}
+        arc_data["role_perspectives"] = {}
+        
+        result = integration._get_character_arc_perspective("char_1", "arc_1")
+        
+        assert result is None
+
+    def test_get_character_arc_perspective_arc_not_found(self, integration):
+        """Test getting character arc perspective when arc not found."""
+        integration.arc_manager.get_arc.return_value = None
+        
+        result = integration._get_character_arc_perspective("char_1", "nonexistent")
+        
+        assert result is None
+
+    def test_get_character_arc_perspective_exception(self, integration):
+        """Test getting character arc perspective with exception."""
+        integration.arc_manager.get_arc.side_effect = Exception("Test error")
+        
+        result = integration._get_character_arc_perspective("char_1", "arc_1")
+        
+        assert result is None
+
+    def test_get_arc_active_quests_success(self, integration):
+        """Test getting arc active quests successfully."""
+        result = integration._get_arc_active_quests("arc_1")
+        
+        integration.quest_manager.get_quests_by_conditions.assert_called_with({
+            "arc_id": "arc_1",
+            "state": "active"
+        })
+        assert len(result) == 2
+        assert result[0]["id"] == "quest_1"
+
+    def test_get_arc_active_quests_exception(self, integration):
+        """Test getting arc active quests with exception."""
+        integration.quest_manager.get_quests_by_conditions.side_effect = Exception("Test error")
+        
+        result = integration._get_arc_active_quests("arc_1")
+        
+        assert result == []
+
+    def test_get_quest_state_description_all_states(self, integration):
+        """Test getting quest state descriptions for all states."""
+        test_cases = [
+            ("inactive", "not yet begun"),
+            ("active", "currently underway"),
+            ("complete", "completed successfully"),
+            ("failed", "has failed"),
+            ("expired", "no longer available"),
+            ("pending", "waiting to begin"),
+            ("unknown_state", "unclear")
+        ]
+        
+        for state, expected_phrase in test_cases:
+            result = integration._get_quest_state_description(state)
+            assert isinstance(result, str)
+            assert expected_phrase in result.lower()
+
+    def test_get_quest_offer_dialogue_basic(self, integration):
+        """Test getting quest offer dialogue options."""
+        quest = integration.quest_manager.get_quest.return_value
+        
+        result = integration._get_quest_offer_dialogue(quest, "char_1")
+        
+        assert len(result) >= 2
+        assert all(opt["quest_action"] == "offer" for opt in result)
+        assert all(opt["quest_id"] == "quest_1" for opt in result)
+
+    def test_get_quest_offer_dialogue_with_refusal_history(self, integration):
+        """Test getting quest offer dialogue with refusal history."""
+        quest = integration.quest_manager.get_quest.return_value
+        player_history = {"previously_refused": True}
+        
+        result = integration._get_quest_offer_dialogue(quest, "char_1", player_history)
+        
+        assert len(result) >= 3
+        assert any(opt["quest_action"] == "re_offer" for opt in result)
+
+    def test_get_quest_progress_dialogue_early_stage(self, integration):
+        """Test getting quest progress dialogue for early stage."""
+        quest = integration.quest_manager.get_quest.return_value
+        quest["progress"] = 0.1
+        
+        result = integration._get_quest_progress_dialogue(quest, "char_1")
+        
+        assert len(result) >= 2
+        assert any("progress" in opt["text"].lower() for opt in result)
+        assert any(opt["quest_action"] == "hint" for opt in result)
+
+    def test_get_quest_progress_dialogue_mid_stage(self, integration):
+        """Test getting quest progress dialogue for mid stage."""
+        quest = integration.quest_manager.get_quest.return_value
+        quest["progress"] = 0.5
+        
+        result = integration._get_quest_progress_dialogue(quest, "char_1")
+        
+        assert len(result) >= 2
+        assert any("completed 1 of 2" in opt["text"] for opt in result)
+
+    def test_get_quest_progress_dialogue_late_stage(self, integration):
+        """Test getting quest progress dialogue for late stage."""
+        quest = integration.quest_manager.get_quest.return_value
+        quest["progress"] = 0.8
+        
+        result = integration._get_quest_progress_dialogue(quest, "char_1")
+        
+        assert len(result) >= 2
+        assert any("good progress" in opt["text"].lower() for opt in result)
+
+    def test_get_quest_completion_dialogue_all_complete(self, integration):
+        """Test getting quest completion dialogue when all objectives complete."""
+        quest = integration.quest_manager.get_quest.return_value
+        quest["objectives"] = [{"completed": True}, {"completed": True}]
+        
+        result = integration._get_quest_completion_dialogue(quest, "char_1")
+        
+        assert len(result) >= 2
+        assert any("excellent work" in opt["text"].lower() for opt in result)
+        assert any(opt["quest_action"] == "complete" for opt in result)
+
+    def test_get_quest_completion_dialogue_incomplete(self, integration):
+        """Test getting quest completion dialogue when objectives incomplete."""
+        quest = integration.quest_manager.get_quest.return_value
+        quest["objectives"] = [{"completed": True}, {"completed": False}]
+        
+        result = integration._get_quest_completion_dialogue(quest, "char_1")
+        
+        assert len(result) >= 2
+        assert any("haven't quite finished" in opt["text"].lower() for opt in result)
+        assert any(opt["quest_action"] == "incomplete" for opt in result)
+
+    def test_get_quest_hint_dialogue_with_incomplete_objectives(self, integration):
+        """Test getting quest hint dialogue with incomplete objectives."""
+        quest = integration.quest_manager.get_quest.return_value
+        quest["objectives"] = [
+            {"id": "obj_1", "completed": True, "description": "First objective"},
+            {"id": "obj_2", "completed": False, "description": "Second objective", "hint": "Look carefully"},
+            {"id": "obj_3", "completed": False, "description": "Third objective", "hint": "Search thoroughly"}
+        ]
+        
+        result = integration._get_quest_hint_dialogue(quest, "char_1")
+        
+        assert len(result) >= 3  # General hint + 2 specific hints (limited to 2)
+        assert any(opt["quest_action"] == "general_hint" for opt in result)
+        assert any(opt["quest_action"] == "objective_hint" for opt in result)
+
+    def test_get_quest_hint_dialogue_no_specific_hints(self, integration):
+        """Test getting quest hint dialogue without specific hints."""
+        quest = integration.quest_manager.get_quest.return_value
+        quest["objectives"] = [
+            {"id": "obj_1", "completed": False, "description": "Objective without hint"}
+        ]
+        
+        result = integration._get_quest_hint_dialogue(quest, "char_1")
+        
+        assert len(result) >= 2  # General hint + default objective hint
+        assert any("look into it carefully" in opt["text"].lower() for opt in result)
+
+
+class TestStubArcManager:
+    """Test suite for the stub ArcManager class."""
+
+    def test_get_instance(self):
+        """Test getting instance of stub ArcManager."""
+        from backend.systems.dialogue.quest_integration import ArcManager
+        
+        instance = ArcManager.get_instance()
+        
+        assert isinstance(instance, ArcManager)
+
+    def test_get_arc_returns_none(self):
+        """Test that get_arc returns None for stub implementation."""
+        from backend.systems.dialogue.quest_integration import ArcManager
+        
+        manager = ArcManager()
+        result = manager.get_arc("any_arc_id")
+        
+        assert result is None 

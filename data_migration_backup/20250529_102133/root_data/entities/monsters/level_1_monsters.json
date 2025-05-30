@@ -1,0 +1,562 @@
+[
+  {
+    "name": "Goblin Scout",
+    "hp": 7,
+    "ac": 12,
+    "attack_bonus": 1,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 4,
+    "fort": 1,
+    "ref": 3,
+    "will": 2,
+    "cr": 0.25,
+    "type": "humanoid",
+    "abilities": {
+      "STR": 12,
+      "DEX": 15,
+      "CON": 16,
+      "INT": 10,
+      "WIS": 7,
+      "CHA": 11
+    },
+    "skills": {
+      "Listen": 1
+    },
+    "feats": "Weapon Finesse"
+  },
+  {
+    "name": "Kobold Slinger",
+    "hp": 4,
+    "ac": 15,
+    "attack_bonus": 1,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 4,
+    "fort": 0,
+    "ref": 0,
+    "will": -1,
+    "cr": 0.25,
+    "type": "vermin",
+    "abilities": {
+      "STR": 13,
+      "DEX": 8,
+      "CON": 11,
+      "INT": 5,
+      "WIS": 10,
+      "CHA": 11
+    },
+    "skills": {
+      "Jump": 4
+    },
+    "feats": "Alertness"
+  },
+  {
+    "name": "Cave Rat",
+    "hp": 5,
+    "ac": 12,
+    "attack_bonus": 2,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 1,
+    "fort": 1,
+    "ref": 2,
+    "will": 2,
+    "cr": 0.25,
+    "type": "monstrous humanoid",
+    "abilities": {
+      "STR": 14,
+      "DEX": 12,
+      "CON": 14,
+      "INT": 5,
+      "WIS": 6,
+      "CHA": 7
+    },
+    "skills": {
+      "Jump": 2
+    },
+    "feats": "Weapon Finesse"
+  },
+  {
+    "name": "Skeleton Minion",
+    "hp": 4,
+    "ac": 15,
+    "attack_bonus": 3,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 4,
+    "fort": 1,
+    "ref": 2,
+    "will": 0,
+    "cr": 0.25,
+    "type": "beast",
+    "abilities": {
+      "STR": 12,
+      "DEX": 9,
+      "CON": 11,
+      "INT": 4,
+      "WIS": 8,
+      "CHA": 11
+    },
+    "skills": {
+      "Move Silently": 2
+    },
+    "feats": "Improved Initiative"
+  },
+  {
+    "name": "Zombie Shambler",
+    "hp": 4,
+    "ac": 14,
+    "attack_bonus": 1,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 4,
+    "fort": 1,
+    "ref": 2,
+    "will": -1,
+    "cr": 0.25,
+    "type": "monstrous humanoid",
+    "abilities": {
+      "STR": 16,
+      "DEX": 15,
+      "CON": 14,
+      "INT": 5,
+      "WIS": 9,
+      "CHA": 10
+    },
+    "skills": {
+      "Climb": 3
+    },
+    "feats": "Toughness"
+  },
+  {
+    "name": "Gnoll Whelp",
+    "hp": 8,
+    "ac": 14,
+    "attack_bonus": 2,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 1,
+    "fort": 1,
+    "ref": 1,
+    "will": 1,
+    "cr": 0.25,
+    "type": "vermin",
+    "abilities": {
+      "STR": 9,
+      "DEX": 12,
+      "CON": 16,
+      "INT": 7,
+      "WIS": 11,
+      "CHA": 13
+    },
+    "skills": {
+      "Climb": 4
+    },
+    "feats": "Alertness"
+  },
+  {
+    "name": "Swamp Leech",
+    "hp": 9,
+    "ac": 15,
+    "attack_bonus": 2,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 0,
+    "fort": 3,
+    "ref": 1,
+    "will": 2,
+    "cr": 0.25,
+    "type": "vermin",
+    "abilities": {
+      "STR": 8,
+      "DEX": 11,
+      "CON": 10,
+      "INT": 9,
+      "WIS": 13,
+      "CHA": 6
+    },
+    "skills": {
+      "Listen": 3
+    },
+    "feats": "Alertness"
+  },
+  {
+    "name": "Bandit Lookout",
+    "hp": 10,
+    "ac": 12,
+    "attack_bonus": 2,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 0,
+    "fort": 0,
+    "ref": 3,
+    "will": 2,
+    "cr": 0.25,
+    "type": "undead",
+    "abilities": {
+      "STR": 8,
+      "DEX": 10,
+      "CON": 10,
+      "INT": 4,
+      "WIS": 12,
+      "CHA": 12
+    },
+    "skills": {
+      "Climb": 2
+    },
+    "feats": "Toughness"
+  },
+  {
+    "name": "Giant Centipede",
+    "hp": 10,
+    "ac": 15,
+    "attack_bonus": 1,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 3,
+    "fort": 2,
+    "ref": 1,
+    "will": -1,
+    "cr": 0.25,
+    "type": "beast",
+    "abilities": {
+      "STR": 10,
+      "DEX": 12,
+      "CON": 13,
+      "INT": 4,
+      "WIS": 9,
+      "CHA": 8
+    },
+    "skills": {
+      "Listen": 4
+    },
+    "feats": "Alertness"
+  },
+  {
+    "name": "Forest Gremlin",
+    "hp": 6,
+    "ac": 13,
+    "attack_bonus": 3,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 0,
+    "fort": 2,
+    "ref": 1,
+    "will": -1,
+    "cr": 0.25,
+    "type": "vermin",
+    "abilities": {
+      "STR": 14,
+      "DEX": 16,
+      "CON": 15,
+      "INT": 3,
+      "WIS": 6,
+      "CHA": 11
+    },
+    "skills": {
+      "Move Silently": 1
+    },
+    "feats": "Improved Initiative"
+  },
+  {
+    "name": "Goblin Scout #11",
+    "hp": 6,
+    "ac": 13,
+    "attack_bonus": 3,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 2,
+    "fort": 3,
+    "ref": 2,
+    "will": 0,
+    "cr": 0.25,
+    "type": "monstrous humanoid",
+    "abilities": {
+      "STR": 8,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 3,
+      "WIS": 10,
+      "CHA": 9
+    },
+    "skills": {
+      "Move Silently": 1
+    },
+    "feats": "Weapon Finesse"
+  },
+  {
+    "name": "Kobold Slinger #12",
+    "hp": 6,
+    "ac": 11,
+    "attack_bonus": 2,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 2,
+    "fort": 1,
+    "ref": 3,
+    "will": 1,
+    "cr": 0.25,
+    "type": "beast",
+    "abilities": {
+      "STR": 15,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 7,
+      "WIS": 14,
+      "CHA": 13
+    },
+    "skills": {
+      "Climb": 4
+    },
+    "feats": "Improved Initiative"
+  },
+  {
+    "name": "Cave Rat #13",
+    "hp": 6,
+    "ac": 14,
+    "attack_bonus": 1,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 3,
+    "fort": 3,
+    "ref": 0,
+    "will": 2,
+    "cr": 0.25,
+    "type": "vermin",
+    "abilities": {
+      "STR": 9,
+      "DEX": 14,
+      "CON": 15,
+      "INT": 6,
+      "WIS": 12,
+      "CHA": 10
+    },
+    "skills": {
+      "Climb": 3
+    },
+    "feats": "Alertness"
+  },
+  {
+    "name": "Skeleton Minion #14",
+    "hp": 10,
+    "ac": 11,
+    "attack_bonus": 2,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 1,
+    "fort": 0,
+    "ref": 2,
+    "will": 2,
+    "cr": 0.25,
+    "type": "humanoid",
+    "abilities": {
+      "STR": 16,
+      "DEX": 8,
+      "CON": 10,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 13
+    },
+    "skills": {
+      "Climb": 4
+    },
+    "feats": "Toughness"
+  },
+  {
+    "name": "Zombie Shambler #15",
+    "hp": 4,
+    "ac": 12,
+    "attack_bonus": 3,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 2,
+    "fort": 3,
+    "ref": 3,
+    "will": 2,
+    "cr": 0.25,
+    "type": "monstrous humanoid",
+    "abilities": {
+      "STR": 15,
+      "DEX": 9,
+      "CON": 13,
+      "INT": 11,
+      "WIS": 13,
+      "CHA": 12
+    },
+    "skills": {
+      "Climb": 3
+    },
+    "feats": "Alertness"
+  },
+  {
+    "name": "Gnoll Whelp #16",
+    "hp": 9,
+    "ac": 14,
+    "attack_bonus": 2,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 2,
+    "fort": 1,
+    "ref": 2,
+    "will": 2,
+    "cr": 0.25,
+    "type": "humanoid",
+    "abilities": {
+      "STR": 13,
+      "DEX": 10,
+      "CON": 14,
+      "INT": 3,
+      "WIS": 14,
+      "CHA": 13
+    },
+    "skills": {
+      "Spot": 4
+    },
+    "feats": "Improved Initiative"
+  },
+  {
+    "name": "Swamp Leech #17",
+    "hp": 8,
+    "ac": 13,
+    "attack_bonus": 1,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 3,
+    "fort": 2,
+    "ref": 2,
+    "will": 0,
+    "cr": 0.25,
+    "type": "beast",
+    "abilities": {
+      "STR": 10,
+      "DEX": 14,
+      "CON": 9,
+      "INT": 4,
+      "WIS": 7,
+      "CHA": 10
+    },
+    "skills": {
+      "Listen": 4
+    },
+    "feats": "Improved Initiative"
+  },
+  {
+    "name": "Bandit Lookout #18",
+    "hp": 9,
+    "ac": 12,
+    "attack_bonus": 3,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 0,
+    "fort": 0,
+    "ref": 0,
+    "will": 2,
+    "cr": 0.25,
+    "type": "beast",
+    "abilities": {
+      "STR": 11,
+      "DEX": 13,
+      "CON": 16,
+      "INT": 9,
+      "WIS": 11,
+      "CHA": 7
+    },
+    "skills": {
+      "Listen": 1
+    },
+    "feats": "Toughness"
+  },
+  {
+    "name": "Giant Centipede #19",
+    "hp": 7,
+    "ac": 14,
+    "attack_bonus": 3,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "claw",
+    "damage_2": "1d4",
+    "initiative": 3,
+    "fort": 1,
+    "ref": 0,
+    "will": -1,
+    "cr": 0.25,
+    "type": "beast",
+    "abilities": {
+      "STR": 11,
+      "DEX": 12,
+      "CON": 12,
+      "INT": 10,
+      "WIS": 10,
+      "CHA": 10
+    },
+    "skills": {
+      "Spot": 4
+    },
+    "feats": "Alertness"
+  },
+  {
+    "name": "Forest Gremlin #20",
+    "hp": 9,
+    "ac": 14,
+    "attack_bonus": 1,
+    "attack": "bite",
+    "damage": "1d6",
+    "attack_2": "slam",
+    "damage_2": "1d4",
+    "initiative": 4,
+    "fort": 0,
+    "ref": 0,
+    "will": 0,
+    "cr": 0.25,
+    "type": "humanoid",
+    "abilities": {
+      "STR": 10,
+      "DEX": 8,
+      "CON": 8,
+      "INT": 8,
+      "WIS": 13,
+      "CHA": 12
+    },
+    "skills": {
+      "Move Silently": 2
+    },
+    "feats": "Weapon Finesse"
+  }
+]

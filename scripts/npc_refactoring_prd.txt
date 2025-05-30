@@ -1,0 +1,120 @@
+# NPC System Refactoring Project Requirements Document
+
+## Project Overview
+Complete the refactoring of the `/backend/systems/npc` folder to create a consolidated, consistent, and organized NPC system architecture by eliminating duplicate modules, fixing imports, and removing deprecated files.
+
+## Current State Analysis
+The NPC system is partially refactored with:
+- A canonical `npc_service.py` containing consolidated functionality
+- Multiple duplicate integration files with overlapping functionality
+- Mixed Flask/FastAPI routing
+- Outdated import references
+- Event definition inconsistencies
+
+## Objectives
+
+### Primary Goals
+1. **Consolidate Functionality**: Ensure all NPC functionality is accessible through the canonical `NPCService` class
+2. **Eliminate Duplicates**: Remove duplicate integration files that replicate functionality already in `npc_service.py`
+3. **Fix Import Dependencies**: Update all import statements to reference the correct canonical modules
+4. **Standardize Architecture**: Use only FastAPI routing, remove Flask routes
+5. **Clean Event System**: Ensure event definitions are consistent and not duplicated
+
+### Secondary Goals
+1. **Maintain Test Coverage**: Ensure existing tests continue to work with refactored imports
+2. **Update Documentation**: Ensure all docstrings and comments reflect the new architecture
+3. **Preserve Functionality**: Maintain all existing NPC system capabilities
+
+## Technical Requirements
+
+### Architecture Decisions
+- **Canonical Service**: `backend/systems/npc/services/npc_service.py` is the single source of truth
+- **Event System**: Use `backend/systems/npc/models/npc_events.py` as the canonical event definitions
+- **Routing**: Use only FastAPI routers in `backend/systems/npc/routers/`
+- **Integration**: All system integrations should go through the main `NPCService`
+
+### Files to Remove (Deprecated)
+1. `npc_faction_integration.py` - Functionality moved to `npc_service.py`
+2. `npc_memory_integration.py` - Functionality moved to `npc_service.py`
+3. `npc_rumor_integration.py` - Functionality moved to `npc_service.py`
+4. `npc_motif_integration.py` - Functionality moved to `npc_service.py`
+5. `npc_routes.py` - Flask routing, replaced by FastAPI
+6. `npc_event_integration.py` - Events already defined in `models/npc_events.py`
+
+### Files to Update (Import Fixes)
+1. `npc_builder_class.py` - Update imports to use canonical service
+2. `npc_character_routes.py` - Update imports to use canonical modules
+3. `npc_travel_utils.py` - Update imports to use canonical modules
+4. `npc_scheduled_tasks.py` - Update imports to use canonical service
+5. `npc_population_service.py` - Update imports to use canonical modules
+
+### Files to Preserve (Canonical)
+1. `services/npc_service.py` - Main service implementation
+2. `models/npc_events.py` - Event definitions
+3. `routers/npc_router.py` - FastAPI routing
+4. `routers/npc_system_router.py` - System-level FastAPI routing
+5. `routers/npc_location_router.py` - Location-specific FastAPI routing
+6. All `__init__.py` files with updated exports
+
+## Implementation Steps
+
+### Phase 1: Analysis and Backup
+1. Document current functionality in each integration file
+2. Verify all functionality exists in `npc_service.py`
+3. Create backup of current state
+
+### Phase 2: Import Fixes
+1. Update `npc_builder_class.py` imports
+2. Update `npc_character_routes.py` imports
+3. Update `npc_travel_utils.py` imports
+4. Update `npc_scheduled_tasks.py` imports
+5. Update `npc_population_service.py` imports
+6. Update test imports
+
+### Phase 3: File Removal
+1. Remove deprecated integration files
+2. Remove Flask routing file
+3. Remove duplicate event definition file
+
+### Phase 4: Validation
+1. Run tests to ensure functionality is preserved
+2. Verify imports resolve correctly
+3. Check that all endpoints still work
+4. Validate event system integration
+
+## Success Criteria
+
+### Functional Requirements
+- All existing NPC functionality remains available
+- All API endpoints continue to work
+- Event system functions correctly
+- Tests pass
+
+### Architectural Requirements
+- Single canonical service for all NPC operations
+- No duplicate functionality across files
+- Clean import dependencies
+- Consistent FastAPI routing only
+- Standardized event definitions
+
+### Code Quality Requirements
+- No broken imports
+- Clear module organization
+- Updated documentation
+- Maintainable architecture
+
+## Testing Strategy
+1. **Unit Tests**: Verify individual service methods work
+2. **Integration Tests**: Verify system integration still functions
+3. **API Tests**: Verify all endpoints respond correctly
+4. **Import Tests**: Verify all imports resolve without errors
+
+## Migration Notes
+- Existing code using the integration services should be updated to use the canonical `NPCService`
+- Any external systems importing integration modules need to be updated
+- Test files importing integration modules need import updates
+
+## Future Considerations
+- This refactoring prepares the NPC system for future enhancements
+- The canonical service pattern can be extended for new functionality
+- The event system is ready for expanded inter-system communication 

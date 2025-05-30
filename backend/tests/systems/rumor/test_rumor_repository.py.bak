@@ -1,0 +1,267 @@
+"""
+Tests for the rumor repository.
+
+This module tests the RumorRepository class responsible for
+storage and retrieval of rumors.
+"""
+
+import unittest
+from unittest.mock import patch, mock_open, AsyncMock, MagicMock
+import json
+import os
+import shutil
+import tempfile
+import asyncio
+from datetime import datetime
+
+from backend.systems.rumor.models.rumor import (
+    Rumor,
+    RumorVariant,
+    RumorSpread,
+    RumorCategory,
+    RumorSeverity,
+)
+from backend.systems.rumor.repository import RumorRepository
+
+
+class TestRumorRepository(unittest.IsolatedAsyncioTestCase):
+    """Test case for the RumorRepository class."""
+
+    async def asyncSetUp(self):
+        """Set up the test case."""
+        # Create a temporary directory for testing
+        self.temp_dir = tempfile.mkdtemp()
+        self.repo = RumorRepository(storage_path=self.temp_dir)
+
+        # Create a test rumor
+        self.test_rumor = Rumor(
+            id="test_rumor_1",
+            originator_id="entity_1",
+            original_content="Test rumor content",
+            categories=[RumorCategory.SCANDAL],
+            severity=RumorSeverity.MINOR,
+            truth_value=0.6,
+            variants=[
+                RumorVariant(
+                    id="test_variant_1",
+                    content="Test variant content",
+                    entity_id="entity_1",
+                )
+            ],
+            spread={},
+        )
+
+        # Add a spread record
+        self.test_rumor.spread = {
+            "entity_2": {
+                "heard_from": ["entity_1"],
+                "current_variant_id": "test_variant_1",
+                "believability": 0.8,
+                "last_heard": datetime.utcnow().isoformat(),
+            }
+        }
+
+    async def asyncTearDown(self):
+        """Tear down the test case."""
+        # Remove the temporary directory
+        shutil.rmtree(self.temp_dir)
+
+    async def test_init(self):
+        """Test repository initialization."""
+        # Test with default path
+        repo = RumorRepository()
+        self.assertEqual(repo.storage_path, "data/rumors/")
+
+        # Test with custom path
+        custom_path = "custom/storage/path/"
+        repo = RumorRepository(storage_path=custom_path)
+        self.assertEqual(repo.storage_path, custom_path)
+
+        # Ensure directory is created
+        self.assertTrue(os.path.exists(self.temp_dir))
+
+    async def test_save_rumor(self):
+        """Test saving a rumor to storage."""
+        await self.repo.save_rumor(self.test_rumor)
+
+        # Check if rumor is in cache
+        self.assertIn(self.test_rumor.id, self.repo._rumor_cache)
+        self.assertEqual(self.repo._rumor_cache[self.test_rumor.id], self.test_rumor)
+
+        # Check if file exists
+        rumor_path = os.path.join(self.temp_dir, f"{self.test_rumor.id}.json")
+        self.assertTrue(os.path.exists(rumor_path))
+
+        # Verify file contents
+        with open(rumor_path, "r") as f:
+            saved_data = json.load(f)
+            self.assertEqual(saved_data["id"], self.test_rumor.id)
+            self.assertEqual(
+                saved_data["original_content"], self.test_rumor.original_content
+            )
+            self.assertEqual(saved_data["originator_id"], self.test_rumor.originator_id)
+            self.assertEqual(len(saved_data["variants"]), 1)
+            self.assertIn("entity_2", saved_data["spread"])
+
+    async def test_get_rumor_from_cache(self):
+        """Test retrieving a rumor from cache."""
+        # Put rumor in cache
+        self.repo._rumor_cache[self.test_rumor.id] = self.test_rumor
+
+        # Get the rumor
+        retrieved_rumor = await self.repo.get_rumor(self.test_rumor.id)
+
+        # Check if it's the correct rumor
+        self.assertEqual(retrieved_rumor, self.test_rumor)
+
+    async def test_get_rumor_from_file(self):
+        """Test retrieving a rumor from file."""
+        # Save rumor to file
+        await self.repo.save_rumor(self.test_rumor)
+
+        # Clear cache
+        self.repo._rumor_cache = {}
+
+        # Get the rumor
+        retrieved_rumor = await self.repo.get_rumor(self.test_rumor.id)
+
+        # Check if it's the correct rumor
+        self.assertEqual(retrieved_rumor.id, self.test_rumor.id)
+        self.assertEqual(
+            retrieved_rumor.original_content, self.test_rumor.original_content
+        )
+        self.assertEqual(retrieved_rumor.originator_id, self.test_rumor.originator_id)
+        self.assertEqual(len(retrieved_rumor.variants), 1)
+        self.assertIn("entity_2", retrieved_rumor.spread)
+
+        # Check if rumor was added to cache
+        self.assertIn(self.test_rumor.id, self.repo._rumor_cache)
+
+    async def test_get_nonexistent_rumor(self):
+        """Test retrieving a non-existent rumor."""
+        # Get a rumor that doesn't exist
+        retrieved_rumor = await self.repo.get_rumor("non_existent_rumor")
+
+        # Check if it's None
+        self.assertIsNone(retrieved_rumor)
+
+    async def test_get_all_rumors(self):
+        """Test retrieving all rumors."""
+        # Create and save multiple rumors
+        rumor1 = self.test_rumor
+        await self.repo.save_rumor(rumor1)
+
+        rumor2 = Rumor(
+            id="test_rumor_2",
+            originator_id="entity_3",
+            original_content="Another test rumor",
+            categories=[RumorCategory.DISASTER],
+            severity=RumorSeverity.MAJOR,
+            truth_value=0.7,
+            variants=[
+                RumorVariant(
+                    id="test_variant_2",
+                    content="Another test variant content",
+                    entity_id="entity_3",
+                )
+            ],
+            spread={},
+        )
+        await self.repo.save_rumor(rumor2)
+
+        # Clear cache to test file reading
+        self.repo._rumor_cache = {}
+
+        # Get all rumors
+        rumors = await self.repo.get_all_rumors()
+
+        # Check if both rumors are returned
+        self.assertEqual(len(rumors), 2)
+        rumor_ids = [r.id for r in rumors]
+        self.assertIn("test_rumor_1", rumor_ids)
+        self.assertIn("test_rumor_2", rumor_ids)
+
+    async def test_get_all_rumors_empty(self):
+        """Test retrieving all rumors when there are none."""
+        # Use a new empty directory
+        empty_dir = tempfile.mkdtemp()
+        repo = RumorRepository(storage_path=empty_dir)
+
+        # Get all rumors
+        rumors = await repo.get_all_rumors()
+
+        # Check if the list is empty
+        self.assertEqual(len(rumors), 0)
+
+        # Clean up
+        shutil.rmtree(empty_dir)
+
+    async def test_delete_rumor(self):
+        """Test deleting a rumor."""
+        # Save rumor
+        await self.repo.save_rumor(self.test_rumor)
+
+        # Verify it exists
+        rumor_path = os.path.join(self.temp_dir, f"{self.test_rumor.id}.json")
+        self.assertTrue(os.path.exists(rumor_path))
+        self.assertIn(self.test_rumor.id, self.repo._rumor_cache)
+
+        # Delete rumor
+        result = await self.repo.delete_rumor(self.test_rumor.id)
+
+        # Check result
+        self.assertTrue(result)
+
+        # Verify it's gone
+        self.assertFalse(os.path.exists(rumor_path))
+        self.assertNotIn(self.test_rumor.id, self.repo._rumor_cache)
+
+    async def test_delete_nonexistent_rumor(self):
+        """Test deleting a non-existent rumor."""
+        # Delete a rumor that doesn't exist
+        result = await self.repo.delete_rumor("non_existent_rumor")
+
+        # Check result
+        self.assertFalse(result)
+
+    async def test_save_rumor_error(self):
+        """Test handling errors when saving a rumor."""
+        # Use mocking to simulate an error when writing to file
+        with patch("builtins.open", mock_open()) as mock_file:
+            mock_file.side_effect = IOError("Test error")
+
+            with self.assertRaises(Exception):
+                await self.repo.save_rumor(self.test_rumor)
+
+    async def test_get_rumor_error(self):
+        """Test handling errors when retrieving a rumor."""
+        # Save rumor
+        await self.repo.save_rumor(self.test_rumor)
+
+        # Clear cache
+        self.repo._rumor_cache = {}
+
+        # Use mocking to simulate an error when reading file
+        with patch("builtins.open", mock_open()) as mock_file:
+            mock_file.side_effect = IOError("Test error")
+
+            # Get rumor should return None on error
+            retrieved_rumor = await self.repo.get_rumor(self.test_rumor.id)
+            self.assertIsNone(retrieved_rumor)
+
+    async def test_delete_rumor_error(self):
+        """Test handling errors when deleting a rumor."""
+        # Save rumor
+        await self.repo.save_rumor(self.test_rumor)
+
+        # Use mocking to simulate an error when deleting file
+        with patch("os.remove") as mock_remove:
+            mock_remove.side_effect = IOError("Test error")
+
+            # Delete rumor should return False on error
+            result = await self.repo.delete_rumor(self.test_rumor.id)
+            self.assertFalse(result)
+
+
+if __name__ == "__main__":
+    unittest.main()

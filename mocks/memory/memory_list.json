@@ -1,0 +1,42 @@
+[
+  {
+    "id": "fdf47367-5933-44bb-94f7-409f721da97c",
+    "created_at": "2025-05-02T01:34:24.960483Z",
+    "updated_at": "2025-05-26T01:34:24.960485Z",
+    "name": "Thank",
+    "description": "We wish case increase.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "8b16b32b-948f-4dd5-a7c0-a22e5e28a9ac",
+    "created_at": "2025-05-15T01:34:24.960490Z",
+    "updated_at": "2025-05-28T01:34:24.960491Z",
+    "name": "Learn",
+    "description": "How kind food less view mouth ok their.",
+    "status": "PENDING"
+  },
+  {
+    "id": "2c1c2d2d-04c3-4cbd-8566-005ed4bdfd3f",
+    "created_at": "2025-05-18T01:34:24.960495Z",
+    "updated_at": "2025-05-24T01:34:24.960496Z",
+    "name": "President",
+    "description": "Line medical her our teacher be long.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "adbf7adb-451f-43a6-9662-6049cdbe0974",
+    "created_at": "2025-05-12T01:34:24.960500Z",
+    "updated_at": "2025-05-29T01:34:24.960501Z",
+    "name": "Open",
+    "description": "Use cost effect style common agreement event.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "6833c18e-f630-41a3-bb4d-c25b74ec6f05",
+    "created_at": "2025-05-21T01:34:24.960505Z",
+    "updated_at": "2025-05-28T01:34:24.960506Z",
+    "name": "Remain",
+    "description": "Else upon nearly.",
+    "status": "ACTIVE"
+  }
+]

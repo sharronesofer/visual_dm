@@ -1,0 +1,131 @@
+from backend.systems.shared.database.base import Base
+from backend.systems.shared.database.base import Base
+"""
+Unit tests for the CloudStorageProvider class.
+
+These tests verify that: pass
+1. Base CloudStorageProvider interface is properly defined and enforced
+2. CloudStorageProvider stub implementation works correctly
+"""
+
+import pytest
+import asyncio
+from unittest.mock import patch, MagicMock, AsyncMock
+
+from backend.systems.storage.cloud_storage import CloudStorageProvider
+
+class TestCloudStorageProvider: pass
+    """Test suite for the CloudStorageProvider class."""
+    
+    @pytest.fixture
+    def cloud_provider(self): pass
+        """Create a CloudStorageProvider instance."""
+        provider = CloudStorageProvider(provider="test_provider")
+        
+        yield provider
+    
+    def test_required_methods(self): pass
+        """Test that the required methods are defined in the interface."""
+        required_methods = [
+            'get',
+            'set',
+            'delete',
+            'list',
+            'exists',
+            'get_version_history'
+        ]
+        
+        for method_name in required_methods: pass
+            assert hasattr(CloudStorageProvider, method_name)
+    
+    @pytest.mark.asyncio
+    async def test_connect_disconnect(self, cloud_provider): pass
+        """Test that connect/disconnect methods work correctly."""
+        # Initially disconnected
+        assert not cloud_provider.connected
+        
+        # Connect
+        await cloud_provider.connect()
+        assert cloud_provider.connected
+        
+        # Disconnect
+        await cloud_provider.disconnect()
+        assert not cloud_provider.connected
+    
+    @pytest.mark.asyncio
+    async def test_get(self, cloud_provider): pass
+        """Test that get() returns None (stub implementation)."""
+        result = await cloud_provider.get("test/path")
+        assert result is None
+    
+    @pytest.mark.asyncio
+    async def test_set(self, cloud_provider): pass
+        """Test that set() doesn't raise exception (stub implementation)."""
+        await cloud_provider.set("test/path", {"value": 123})
+        # No assertion needed, just testing it doesn't raise
+    
+    @pytest.mark.asyncio
+    async def test_delete(self, cloud_provider): pass
+        """Test that delete() doesn't raise exception (stub implementation)."""
+        await cloud_provider.delete("test/path")
+        # No assertion needed, just testing it doesn't raise
+    
+    @pytest.mark.asyncio
+    async def test_list(self, cloud_provider): pass
+        """Test that list() returns empty dict (stub implementation)."""
+        result = await cloud_provider.list("test/path")
+        assert result == {}
+    
+    @pytest.mark.asyncio
+    async def test_exists(self, cloud_provider): pass
+        """Test that exists() returns False (stub implementation)."""
+        result = await cloud_provider.exists("test/path")
+        assert result is False
+    
+    @pytest.mark.asyncio
+    async def test_get_version_history(self, cloud_provider): pass
+        """Test that get_version_history() returns empty list (stub implementation)."""
+        result = await cloud_provider.get_version_history("test/path")
+        assert result == []
+    
+    @pytest.mark.asyncio
+    async def test_sync(self, cloud_provider): pass
+        """Test that sync() doesn't raise exception (stub implementation)."""
+        await cloud_provider.sync()
+        await cloud_provider.sync(paths=["test/path1", "test/path2"])
+        # No assertion needed, just testing it doesn't raise
+    
+    @pytest.mark.asyncio
+    async def test_get_sync_status(self, cloud_provider): pass
+        """Test that get_sync_status() returns correct structure."""
+        result = await cloud_provider.get_sync_status()
+        
+        # Check structure
+        assert "provider" in result
+        assert "connected" in result
+        assert "last_sync" in result
+        assert "pending_uploads" in result
+        assert "pending_downloads" in result
+        assert "status" in result
+        
+        # Check values
+        assert result["provider"] == "test_provider"
+        assert result["connected"] is False
+        assert result["pending_uploads"] == 0
+        assert result["pending_downloads"] == 0
+        assert result["status"] == "disconnected"
+    
+    @pytest.mark.asyncio
+    async def test_provider_config(self): pass
+        """Test that provider and config parameters are stored correctly."""
+        # With custom config
+        custom_config = {"timeout": 30, "api_key": "test_key"}
+        provider = CloudStorageProvider(provider="gdrive", config=custom_config)
+        
+        assert provider.provider == "gdrive"
+        assert provider.config == custom_config
+        
+        # Default config
+        provider = CloudStorageProvider(provider="icloud")
+        assert provider.provider == "icloud"
+        assert provider.config == {} 

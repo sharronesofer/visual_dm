@@ -1,0 +1,102 @@
+# Visual DM Analytics System Fixes PRD
+
+<context>
+# Overview
+The Visual DM Analytics System is responsible for capturing, storing, and processing game events for analysis and training LLM models. The current implementation has several inconsistencies and test failures that need to be addressed to improve system reliability and align with the Development Bible specifications.
+
+# Core Features
+- Event tracking and collection for gameplay metrics
+- Structured storage of events for later analysis
+- Integration with the central event system via middleware
+- Dataset generation for analysis and LLM training
+- Asynchronous processing to minimize impact on gameplay performance
+
+# User Experience
+- The analytics system should operate invisibly to the end user
+- Performance impact should be minimal during gameplay
+- Data collection should follow privacy best practices
+- Analytics should provide useful insights for both developers and potentially players
+</context>
+
+<PRD>
+# Technical Architecture
+
+## Current Issues
+The analytics system currently suffers from several issues:
+1. Multiple test failures in test_analytics_service_core.py and test_analytics_service_async.py
+2. Missing method implementations in AnalyticsService class
+3. Inconsistent method signatures between implementation and tests
+4. Incomplete error handling for edge cases
+5. Test coverage is at 62% but targeting 90%
+
+## Implementation Requirements
+
+### Fix Method Implementations
+1. Implement missing methods in AnalyticsService:
+   - `_get_event_file_path`: Construct proper file path for storing events
+   - `get_event_directory`: Get directory path for a specific date
+   - `_worker_process`: Process events from the queue in the background
+   - `_start_worker`: Start the worker task that processes events
+   - `track_event` (alias for queue_track_event): Support legacy method calls
+
+2. Fix method signatures to match test expectations:
+   - Update `_store_event_sync` to handle both dictionary input and individual parameters
+   - Fix `_map_event_to_analytics_type` to properly return event type constants
+   - Update `get_analytics_middleware` to accept two parameters
+   - Fix special case handling for test mocks in event mapping
+
+3. Ensure proper error handling:
+   - Handle None values in filters for event matching
+   - Add proper exception handling in event processing
+   - Ensure async component initialization is robust
+
+4. Fix other implementation issues:
+   - Add logger as instance variable
+   - Fix event filtering to handle None filters
+   - Fix JSON serialization expectations in tests
+   - Implement proper worker task process
+
+### Align with Development Bible
+1. Ensure the system supports all 15 canonical event types defined in the Development Bible
+2. Maintain proper middleware integration with the central event dispatcher
+3. Follow the structured storage format with hierarchical directory structure
+4. Support dataset generation for analysis and LLM training
+
+## Development Roadmap
+
+### Phase 1: Core Fixes
+1. Fix missing method implementations
+2. Address method signature inconsistencies
+3. Fix error handling edge cases
+4. Align with test expectations
+
+### Phase 2: Test Coverage Improvement
+1. Fix failing tests in test_analytics_service_core.py
+2. Fix failing tests in test_analytics_service_async.py
+3. Identify and address coverage gaps
+
+### Phase 3: Development Bible Alignment
+1. Verify all canonical event types are supported
+2. Ensure proper middleware integration
+3. Validate structured storage format
+4. Test dataset generation capabilities
+
+## Logical Dependency Chain
+1. Fix core method implementations and signatures first
+2. Address error handling and edge cases
+3. Fix failing tests and improve test coverage
+4. Verify alignment with Development Bible specifications
+
+## Risks and Mitigations
+1. **Test Environment Differences**: Ensure tests work in different environments by using platform-independent path handling
+2. **Async Testing Complexity**: Use proper async test fixtures and mocking
+3. **Backward Compatibility**: Maintain compatibility with existing code by preserving method signatures
+4. **Performance Impact**: Ensure asynchronous processing minimizes gameplay impact
+
+## Acceptance Criteria
+1. All tests pass successfully
+2. Test coverage increases from 62% to at least 90%
+3. System handles all edge cases gracefully
+4. Implementation aligns with Development Bible specifications
+5. No regressions in existing functionality
+</PRD> 

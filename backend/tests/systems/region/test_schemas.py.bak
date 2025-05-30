@@ -1,0 +1,823 @@
+"""
+Tests for region system schemas.
+"""
+
+import pytest
+from pydantic import ValidationError
+
+from backend.systems.region.models import (
+    CoordinateSchema,
+    HexCoordinateSchema,
+    PoiSchema,
+    RegionSchema,
+    TileSchema,
+    RegionMapSchema,
+    RegionGenerationSchema,
+    EventSchema,
+    QuestSchema,
+    QuestlogEntrySchema,
+    RegionCreationSchema,
+    RegionUpdateSchema,
+)
+
+# Note: BiomeType, PointOfInterestSchema, ResourceLevelSchema, ContinentSchema
+# may not exist in models.py and might be test-specific or deprecated
+
+
+class TestCoordinateSchema:
+    """Tests for CoordinateSchema."""
+
+    def test_valid_coordinate(self, sample_coordinate):
+        """Test that a valid coordinate passes validation."""
+        coordinate = CoordinateSchema(**sample_coordinate)
+        assert coordinate.x == sample_coordinate["x"]
+        assert coordinate.y == sample_coordinate["y"]
+
+    def test_invalid_coordinate_missing_fields(self):
+        """Test that validation fails when required fields are missing."""
+        with pytest.raises(ValidationError):
+            CoordinateSchema(x=10.5)
+
+        with pytest.raises(ValidationError):
+            CoordinateSchema(y=20.75)
+
+    def test_invalid_coordinate_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        with pytest.raises(ValidationError):
+            CoordinateSchema(x="not_a_number", y=20.75)
+
+        with pytest.raises(ValidationError):
+            CoordinateSchema(x=10.5, y="not_a_number")
+
+
+class TestHexCoordinateSchema:
+    """Tests for HexCoordinateSchema."""
+
+    def test_valid_hex_coordinate(self, sample_hex_coordinate):
+        """Test that a valid hex coordinate passes validation."""
+        coordinate = HexCoordinateSchema(**sample_hex_coordinate)
+        assert coordinate.q == sample_hex_coordinate["q"]
+        assert coordinate.r == sample_hex_coordinate["r"]
+        assert coordinate.s == sample_hex_coordinate["s"]
+
+    def test_invalid_hex_coordinate_missing_fields(self):
+        """Test that validation fails when required fields are missing."""
+        with pytest.raises(ValidationError):
+            HexCoordinateSchema(q=2, r=-3)  # Missing s
+
+        with pytest.raises(ValidationError):
+            HexCoordinateSchema(q=2, s=1)  # Missing r
+
+        with pytest.raises(ValidationError):
+            HexCoordinateSchema(r=-3, s=1)  # Missing q
+
+    def test_invalid_hex_coordinate_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        with pytest.raises(ValidationError):
+            HexCoordinateSchema(q="not_a_number", r=-3, s=1)
+
+        with pytest.raises(ValidationError):
+            HexCoordinateSchema(q=2, r="not_a_number", s=1)
+
+        with pytest.raises(ValidationError):
+            HexCoordinateSchema(q=2, r=-3, s="not_a_number")
+
+
+class TestPoiSchema:
+    """Tests for PoiSchema."""
+
+    def test_valid_poi(self, sample_poi):
+        """Test that a valid POI passes validation."""
+        poi = PoiSchema(**sample_poi)
+        assert poi.type == sample_poi["type"]
+        assert poi.coordinates.x == sample_poi["coordinates"]["x"]
+        assert poi.coordinates.y == sample_poi["coordinates"]["y"]
+        assert poi.size == sample_poi["size"]
+        assert poi.name == sample_poi["name"]
+        assert poi.description == sample_poi["description"]
+        assert poi.faction_control == sample_poi["faction_control"]
+        assert poi.tension == sample_poi["tension"]
+
+    def test_valid_poi_minimal(self):
+        """Test that a POI with only required fields passes validation."""
+        minimal_poi = {
+            "type": "settlement",
+            "coordinates": {"x": 11.25, "y": 21.5},
+            "size": 3.5,
+        }
+        poi = PoiSchema(**minimal_poi)
+        assert poi.type == minimal_poi["type"]
+        assert poi.coordinates.x == minimal_poi["coordinates"]["x"]
+        assert poi.coordinates.y == minimal_poi["coordinates"]["y"]
+        assert poi.size == minimal_poi["size"]
+        assert poi.name is None
+        assert poi.description is None
+        assert poi.faction_control is None
+        assert poi.tension is None
+
+    def test_invalid_poi_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing type
+        with pytest.raises(ValidationError):
+            PoiSchema(coordinates={"x": 11.25, "y": 21.5}, size=3.5)
+
+        # Missing coordinates
+        with pytest.raises(ValidationError):
+            PoiSchema(type="settlement", size=3.5)
+
+        # Missing size
+        with pytest.raises(ValidationError):
+            PoiSchema(type="settlement", coordinates={"x": 11.25, "y": 21.5})
+
+    def test_invalid_poi_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for type field
+        with pytest.raises(ValidationError):
+            PoiSchema(type=123, coordinates={"x": 11.25, "y": 21.5}, size=3.5)
+
+        # Wrong type for coordinates
+        with pytest.raises(ValidationError):
+            PoiSchema(type="settlement", coordinates="not_coordinates", size=3.5)
+
+        # Wrong type for size
+        with pytest.raises(ValidationError):
+            PoiSchema(
+                type="settlement",
+                coordinates={"x": 11.25, "y": 21.5},
+                size="not_a_number",
+            )
+
+
+class TestRegionSchema:
+    """Tests for RegionSchema."""
+
+    def test_valid_region(self, sample_region):
+        """Test that a valid region passes validation."""
+        region = RegionSchema(**sample_region)
+        assert region.id == sample_region["id"]
+        assert region.coordinates.x == sample_region["coordinates"]["x"]
+        assert region.coordinates.y == sample_region["coordinates"]["y"]
+        assert region.size == sample_region["size"]
+        assert region.biome == sample_region["biome"]
+        assert region.elevation == sample_region["elevation"]
+        assert region.temperature == sample_region["temperature"]
+        assert region.humidity == sample_region["humidity"]
+        assert region.features == sample_region["features"]
+        assert region.resources == sample_region["resources"]
+        assert len(region.pois) == len(sample_region["pois"])
+        assert region.name == sample_region["name"]
+        assert region.description == sample_region["description"]
+        assert region.faction_control == sample_region["faction_control"]
+        assert region.tension == sample_region["tension"]
+        assert region.last_updated == sample_region["last_updated"]
+
+    def test_valid_region_minimal(self):
+        """Test that a region with only required fields passes validation."""
+        minimal_region = {
+            "coordinates": {"x": 10.5, "y": 20.75},
+            "size": 5.0,
+            "biome": "forest",
+            "elevation": 120.5,
+            "temperature": 22.5,
+            "humidity": 0.65,
+            "features": ["river", "hills"],
+            "resources": {"wood": 0.8, "stone": 0.4},
+            "pois": [],
+        }
+        region = RegionSchema(**minimal_region)
+        assert region.coordinates.x == minimal_region["coordinates"]["x"]
+        assert region.coordinates.y == minimal_region["coordinates"]["y"]
+        assert region.size == minimal_region["size"]
+        assert region.biome == minimal_region["biome"]
+        assert region.elevation == minimal_region["elevation"]
+        assert region.temperature == minimal_region["temperature"]
+        assert region.humidity == minimal_region["humidity"]
+        assert region.features == minimal_region["features"]
+        assert region.resources == minimal_region["resources"]
+        assert len(region.pois) == 0
+        assert region.id is None
+        assert region.name is None
+        assert region.description is None
+        assert region.faction_control is None
+        assert region.tension is None
+        assert region.last_updated is None
+
+    def test_invalid_region_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing coordinates
+        with pytest.raises(ValidationError):
+            RegionSchema(
+                size=5.0,
+                biome="forest",
+                elevation=120.5,
+                temperature=22.5,
+                humidity=0.65,
+                features=["river", "hills"],
+                resources={"wood": 0.8, "stone": 0.4},
+                pois=[],
+            )
+
+        # Missing biome
+        with pytest.raises(ValidationError):
+            RegionSchema(
+                coordinates={"x": 10.5, "y": 20.75},
+                size=5.0,
+                elevation=120.5,
+                temperature=22.5,
+                humidity=0.65,
+                features=["river", "hills"],
+                resources={"wood": 0.8, "stone": 0.4},
+                pois=[],
+            )
+
+    def test_invalid_region_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for biome
+        with pytest.raises(ValidationError):
+            RegionSchema(
+                coordinates={"x": 10.5, "y": 20.75},
+                size=5.0,
+                biome=123,  # Should be string
+                elevation=120.5,
+                temperature=22.5,
+                humidity=0.65,
+                features=["river", "hills"],
+                resources={"wood": 0.8, "stone": 0.4},
+                pois=[],
+            )
+
+        # Wrong type for features
+        with pytest.raises(ValidationError):
+            RegionSchema(
+                coordinates={"x": 10.5, "y": 20.75},
+                size=5.0,
+                biome="forest",
+                elevation=120.5,
+                temperature=22.5,
+                humidity=0.65,
+                features="not_a_list",  # Should be list
+                resources={"wood": 0.8, "stone": 0.4},
+                pois=[],
+            )
+
+
+class TestTileSchema:
+    """Tests for TileSchema."""
+
+    def test_valid_tile(self, sample_tile):
+        """Test that a valid tile passes validation."""
+        tile = TileSchema(**sample_tile)
+        assert tile.tags == sample_tile["tags"]
+        assert tile.poi == sample_tile["poi"]
+
+    def test_valid_tile_minimal(self):
+        """Test that a tile with only required fields passes validation."""
+        minimal_tile = {"tags": ["forest", "dense"]}
+        tile = TileSchema(**minimal_tile)
+        assert tile.tags == minimal_tile["tags"]
+        assert tile.poi is None
+
+    def test_invalid_tile_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing tags
+        with pytest.raises(ValidationError):
+            TileSchema(poi="settlement")
+
+    def test_invalid_tile_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for tags
+        with pytest.raises(ValidationError):
+            TileSchema(tags="not_a_list", poi="settlement")
+
+        # Wrong type for poi
+        with pytest.raises(ValidationError):
+            TileSchema(tags=["forest"], poi=123)  # poi should be string
+
+
+class TestRegionMapSchema:
+    """Tests for RegionMapSchema."""
+
+    def test_valid_region_map(self, sample_map):
+        """Test that a valid region map passes validation."""
+        region_map = RegionMapSchema(**sample_map)
+        assert len(region_map.tiles) == len(sample_map["tiles"])
+
+        # Check a specific tile
+        tile = region_map.tiles["0,0"]
+        assert tile.tags == sample_map["tiles"]["0,0"]["tags"]
+        assert tile.poi == sample_map["tiles"]["0,0"]["poi"]
+
+    def test_invalid_region_map_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing tiles
+        with pytest.raises(ValidationError):
+            RegionMapSchema()
+
+    def test_invalid_region_map_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for tiles
+        with pytest.raises(ValidationError):
+            RegionMapSchema(tiles="not_a_dict")
+
+        # Wrong type for tile value
+        with pytest.raises(ValidationError):
+            RegionMapSchema(tiles={"0,0": "not_a_tile"})
+
+
+class TestRegionGenerationSchema:
+    """Tests for RegionGenerationSchema."""
+
+    def test_valid_region_generation(self):
+        """Test that valid region generation parameters pass validation."""
+        params = RegionGenerationSchema(seed_x=10, seed_y=20)
+        assert params.seed_x == 10
+        assert params.seed_y == 20
+
+    def test_default_values(self):
+        """Test that default values are used when not provided."""
+        params = RegionGenerationSchema()
+        assert params.seed_x == 0
+        assert params.seed_y == 0
+
+    def test_invalid_region_generation_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for seed_x
+        with pytest.raises(ValidationError):
+            RegionGenerationSchema(seed_x="not_a_number", seed_y=20)
+
+        # Wrong type for seed_y
+        with pytest.raises(ValidationError):
+            RegionGenerationSchema(seed_x=10, seed_y="not_a_number")
+
+
+class TestEventSchema:
+    """Tests for EventSchema."""
+
+    def test_valid_event(self, sample_event):
+        """Test that a valid event passes validation."""
+        event = EventSchema(**sample_event)
+        assert event.type == sample_event["type"]
+        assert event.region == sample_event["region"]
+        assert event.poi_id == sample_event["poi_id"]
+        assert event.description == sample_event["description"]
+        assert event.character_id == sample_event["character_id"]
+        assert event.faction_id == sample_event["faction_id"]
+        assert event.timestamp == sample_event["timestamp"]
+        assert event.details == sample_event["details"]
+
+    def test_valid_event_minimal(self):
+        """Test that an event with only required fields passes validation."""
+        minimal_event = {"type": "conflict", "region": "r_test123"}
+        event = EventSchema(**minimal_event)
+        assert event.type == minimal_event["type"]
+        assert event.region == minimal_event["region"]
+        assert event.poi_id is None
+        assert event.description is None
+        assert event.character_id is None
+        assert event.faction_id is None
+        assert event.timestamp is None
+        assert event.details is None
+
+    def test_invalid_event_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing type
+        with pytest.raises(ValidationError):
+            EventSchema(region="r_test123")
+
+        # Missing region
+        with pytest.raises(ValidationError):
+            EventSchema(type="conflict")
+
+    def test_invalid_event_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for type field
+        with pytest.raises(ValidationError):
+            EventSchema(type=123, region="r_test123")
+
+        # Wrong type for region
+        with pytest.raises(ValidationError):
+            EventSchema(type="conflict", region=123)
+
+
+class TestQuestSchema:
+    """Tests for QuestSchema."""
+
+    def test_valid_quest(self, sample_quest):
+        """Test that a valid quest passes validation."""
+        quest = QuestSchema(**sample_quest)
+        assert quest.title == sample_quest["title"]
+        assert quest.description == sample_quest["description"]
+        assert quest.objectives == sample_quest["objectives"]
+        assert quest.rewards == sample_quest["rewards"]
+        assert quest.faction_id == sample_quest["faction_id"]
+        assert quest.giver_id == sample_quest["giver_id"]
+        assert quest.status == sample_quest["status"]
+
+    def test_valid_quest_minimal(self):
+        """Test that a quest with only required fields passes validation."""
+        minimal_quest = {
+            "title": "Test Quest",
+            "description": "A test quest",
+            "objectives": [{"type": "visit", "target": "r_test123"}],
+            "rewards": {"gold": 100},
+        }
+        quest = QuestSchema(**minimal_quest)
+        assert quest.title == minimal_quest["title"]
+        assert quest.description == minimal_quest["description"]
+        assert quest.objectives == minimal_quest["objectives"]
+        assert quest.rewards == minimal_quest["rewards"]
+        assert quest.faction_id is None
+        assert quest.giver_id is None
+        assert quest.status == "active"  # Default value
+
+    def test_invalid_quest_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing title
+        with pytest.raises(ValidationError):
+            QuestSchema(
+                description="A test quest",
+                objectives=[{"type": "visit", "target": "r_test123"}],
+                rewards={"gold": 100},
+            )
+
+        # Missing description
+        with pytest.raises(ValidationError):
+            QuestSchema(
+                title="Test Quest",
+                objectives=[{"type": "visit", "target": "r_test123"}],
+                rewards={"gold": 100},
+            )
+
+    def test_invalid_quest_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for title
+        with pytest.raises(ValidationError):
+            QuestSchema(
+                title=123,
+                description="A test quest",
+                objectives=[{"type": "visit", "target": "r_test123"}],
+                rewards={"gold": 100},
+            )
+
+        # Wrong type for objectives
+        with pytest.raises(ValidationError):
+            QuestSchema(
+                title="Test Quest",
+                description="A test quest",
+                objectives="not_a_list",
+                rewards={"gold": 100},
+            )
+
+
+class TestQuestlogEntrySchema:
+    """Tests for QuestlogEntrySchema."""
+
+    def test_valid_questlog_entry(self, sample_questlog_entry):
+        """Test that a valid questlog entry passes validation."""
+        entry = QuestlogEntrySchema(**sample_questlog_entry)
+        assert entry.quest.title == sample_questlog_entry["quest"]["title"]
+        assert entry.quest.description == sample_questlog_entry["quest"]["description"]
+        assert entry.quest.objectives == sample_questlog_entry["quest"]["objectives"]
+        assert entry.quest.rewards == sample_questlog_entry["quest"]["rewards"]
+        assert entry.timestamp == sample_questlog_entry["timestamp"]
+
+    def test_valid_questlog_entry_minimal(self):
+        """Test that a questlog entry with only required fields passes validation."""
+        minimal_entry = {
+            "quest": {
+                "title": "Test Quest",
+                "description": "A test quest",
+                "objectives": [{"type": "visit", "target": "r_test123"}],
+                "rewards": {"gold": 100},
+            }
+        }
+        entry = QuestlogEntrySchema(**minimal_entry)
+        assert entry.quest.title == minimal_entry["quest"]["title"]
+        assert entry.quest.description == minimal_entry["quest"]["description"]
+        assert entry.quest.objectives == minimal_entry["quest"]["objectives"]
+        assert entry.quest.rewards == minimal_entry["quest"]["rewards"]
+        assert entry.timestamp is None
+
+    def test_invalid_questlog_entry_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing quest
+        with pytest.raises(ValidationError):
+            QuestlogEntrySchema(timestamp="2023-05-15T10:15:30")
+
+    def test_invalid_questlog_entry_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for quest
+        with pytest.raises(ValidationError):
+            QuestlogEntrySchema(quest="not_a_quest", timestamp="2023-05-15T10:15:30")
+
+        # Wrong type for timestamp
+        with pytest.raises(ValidationError):
+            QuestlogEntrySchema(
+                quest={
+                    "title": "Test Quest",
+                    "description": "A test quest",
+                    "objectives": [{"type": "visit", "target": "r_test123"}],
+                    "rewards": {"gold": 100},
+                },
+                timestamp=123,
+            )
+
+
+class TestRegionCreationSchema:
+    """Tests for RegionCreationSchema."""
+
+    def test_valid_region_creation(self):
+        """Test that valid region creation parameters pass validation."""
+        params = RegionCreationSchema(
+            continent_id="c_test123",
+            coordinates={"x": 10.5, "y": 20.75},
+            biome="forest",
+        )
+        assert params.continent_id == "c_test123"
+        assert params.coordinates.x == 10.5
+        assert params.coordinates.y == 20.75
+        assert params.biome == "forest"
+
+    def test_valid_region_creation_minimal(self):
+        """Test that region creation with only required fields passes validation."""
+        params = RegionCreationSchema(coordinates={"x": 10.5, "y": 20.75})
+        assert params.coordinates.x == 10.5
+        assert params.coordinates.y == 20.75
+        assert params.continent_id is None
+        assert params.biome == "Plains"  # Default value
+
+    def test_invalid_region_creation_missing_required_fields(self):
+        """Test that validation fails when required fields are missing."""
+        # Missing coordinates
+        with pytest.raises(ValidationError):
+            RegionCreationSchema(continent_id="c_test123", biome="forest")
+
+    def test_invalid_region_creation_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for coordinates
+        with pytest.raises(ValidationError):
+            RegionCreationSchema(
+                continent_id="c_test123", coordinates="not_coordinates", biome="forest"
+            )
+
+        # Wrong type for biome
+        with pytest.raises(ValidationError):
+            RegionCreationSchema(
+                continent_id="c_test123", coordinates={"x": 10.5, "y": 20.75}, biome=123
+            )
+
+
+class TestRegionUpdateSchema:
+    """Tests for RegionUpdateSchema."""
+
+    def test_valid_region_update(self):
+        """Test that valid region update parameters pass validation."""
+        params = RegionUpdateSchema(
+            latitude=35.5,
+            longitude=-120.25,
+            biome="desert",
+            population=1500,
+            poi_ids=["p_test1", "p_test2"],
+        )
+        assert params.latitude == 35.5
+        assert params.longitude == -120.25
+        assert params.biome == "desert"
+        assert params.population == 1500
+        assert params.poi_ids == ["p_test1", "p_test2"]
+
+    def test_valid_region_update_minimal(self):
+        """Test that a region update with no fields passes validation (all optional)."""
+        params = RegionUpdateSchema()
+        assert params.latitude is None
+        assert params.longitude is None
+        assert params.biome is None
+        assert params.population is None
+        assert params.poi_ids is None
+
+    def test_valid_region_update_partial(self):
+        """Test that a region update with some fields passes validation."""
+        params = RegionUpdateSchema(biome="desert", population=1500)
+        assert params.latitude is None
+        assert params.longitude is None
+        assert params.biome == "desert"
+        assert params.population == 1500
+        assert params.poi_ids is None
+
+    def test_invalid_region_update_wrong_types(self):
+        """Test that validation fails when fields have wrong types."""
+        # Wrong type for latitude
+        with pytest.raises(ValidationError):
+            RegionUpdateSchema(latitude="not_a_number")
+
+        # Wrong type for longitude
+        with pytest.raises(ValidationError):
+            RegionUpdateSchema(longitude="not_a_number")
+
+        # Wrong type for biome
+        with pytest.raises(ValidationError):
+            RegionUpdateSchema(biome=123)
+
+        # Wrong type for population
+        with pytest.raises(ValidationError):
+            RegionUpdateSchema(population="not_a_number")
+
+        # Wrong type for poi_ids
+        with pytest.raises(ValidationError):
+            RegionUpdateSchema(poi_ids="not_a_list")
+
+        # Wrong type within poi_ids list
+        with pytest.raises(ValidationError):
+            RegionUpdateSchema(poi_ids=["p_test1", 123])  # Should all be strings
+
+
+class TestPointOfInterestSchema:
+    """Tests for the PointOfInterestSchema class."""
+
+    def test_valid_poi(self):
+        """Test that a valid POI is accepted."""
+        poi_data = {
+            "poi_id": "poi_test123",
+            "name": "Test Village",
+            "poi_type": "settlement",
+            "coordinates": {"x": 10.2, "y": 20.3},
+            "description": "A small village in the forest",
+        }
+
+        # This should not raise an exception
+        poi = PointOfInterestSchema(**poi_data)
+
+        # Verify values
+        assert poi.poi_id == "poi_test123"
+        assert poi.name == "Test Village"
+        assert poi.poi_type == "settlement"
+        assert poi.coordinates.x == 10.2
+        assert poi.coordinates.y == 20.3
+        assert poi.description == "A small village in the forest"
+
+    def test_poi_id_validation(self):
+        """Test that poi_id is validated correctly."""
+        # Test with invalid id (not starting with poi_)
+        invalid_data = {
+            "poi_id": "test123",
+            "name": "Test Village",
+            "poi_type": "settlement",
+            "coordinates": {"x": 10.2, "y": 20.3},
+        }
+
+        with pytest.raises(ValidationError) as exc_info:
+            PointOfInterestSchema(**invalid_data)
+
+        # Check error message
+        error_msg = str(exc_info.value)
+        assert "poi_id" in error_msg
+        assert "must start with 'poi_'" in error_msg
+
+    def test_minimum_required_fields(self):
+        """Test that a POI with only required fields is valid."""
+        min_data = {
+            "poi_id": "poi_test123",
+            "name": "Test Village",
+            "poi_type": "settlement",
+            "coordinates": {"x": 10.2, "y": 20.3},
+        }
+
+        # This should not raise an exception
+        poi = PointOfInterestSchema(**min_data)
+
+        # Verify default values
+        assert poi.description == ""
+
+
+class TestResourceLevelSchema:
+    """Tests for the ResourceLevelSchema class."""
+
+    def test_valid_resource_levels(self):
+        """Test that valid resource levels are accepted."""
+        resource_data = {
+            "wood": 0.8,
+            "stone": 0.4,
+            "herbs": 0.6,
+            "water": 0.9,
+            "metals": 0.2,
+        }
+
+        # This should not raise an exception
+        resources = ResourceLevelSchema(**resource_data)
+
+        # Verify values
+        assert resources["wood"] == 0.8
+        assert resources["stone"] == 0.4
+        assert resources["herbs"] == 0.6
+        assert resources["water"] == 0.9
+        assert resources["metals"] == 0.2
+
+    def test_resource_level_range(self):
+        """Test that resource levels are limited to 0-1 range."""
+        # Test with values outside range
+        invalid_data = {"wood": 1.2, "stone": -0.1}
+
+        with pytest.raises(ValidationError) as exc_info:
+            ResourceLevelSchema(**invalid_data)
+
+        # Check error message
+        error_msg = str(exc_info.value)
+        assert "wood" in error_msg or "stone" in error_msg
+        assert (
+            "less than or equal to 1" in error_msg
+            or "greater than or equal to 0" in error_msg
+        )
+
+    def test_empty_resources(self):
+        """Test that empty resources object is valid."""
+        # Empty resources
+        resource_data = {}
+
+        # This should not raise an exception
+        resources = ResourceLevelSchema(**resource_data)
+
+        # Verify it's empty
+        assert len(resources) == 0
+
+
+class TestContinentSchema:
+    """Tests for the ContinentSchema class."""
+
+    def test_valid_continent(self):
+        """Test that a valid continent schema is accepted."""
+        continent_data = {
+            "continent_id": "c_test123",
+            "name": "Test Continent",
+            "coordinates": {"x": 0, "y": 0},
+            "size": 100.0,
+            "regions": ["r_test1", "r_test2", "r_test3"],
+            "biome_distribution": {
+                "forest": 0.4,
+                "plains": 0.3,
+                "mountain": 0.2,
+                "desert": 0.1,
+            },
+            "created_at": "2023-01-01T12:00:00",
+            "updated_at": "2023-01-02T12:00:00",
+        }
+
+        # This should not raise an exception
+        continent = ContinentSchema(**continent_data)
+
+        # Verify values
+        assert continent.continent_id == "c_test123"
+        assert continent.name == "Test Continent"
+        assert continent.coordinates.x == 0
+        assert continent.coordinates.y == 0
+        assert continent.size == 100.0
+        assert len(continent.regions) == 3
+        assert continent.biome_distribution["forest"] == 0.4
+
+    def test_continent_id_validation(self):
+        """Test that continent_id is validated correctly."""
+        # Test with invalid id (not starting with c_)
+        invalid_data = {
+            "continent_id": "test123",
+            "name": "Test Continent",
+            "coordinates": {"x": 0, "y": 0},
+        }
+
+        with pytest.raises(ValidationError) as exc_info:
+            ContinentSchema(**invalid_data)
+
+        # Check error message
+        error_msg = str(exc_info.value)
+        assert "continent_id" in error_msg
+        assert "must start with 'c_'" in error_msg
+
+    def test_biome_distribution_validation(self):
+        """Test that biome distribution values are validated correctly."""
+        # Test with distribution values outside 0-1 range
+        invalid_data = {
+            "continent_id": "c_test123",
+            "name": "Test Continent",
+            "coordinates": {"x": 0, "y": 0},
+            "biome_distribution": {"forest": 1.2, "desert": -0.1},
+        }
+
+        with pytest.raises(ValidationError) as exc_info:
+            ContinentSchema(**invalid_data)
+
+        # Check error message
+        error_msg = str(exc_info.value)
+        assert "biome_distribution" in error_msg
+
+    def test_minimum_required_fields(self):
+        """Test that a continent with only required fields is valid."""
+        min_data = {
+            "continent_id": "c_test123",
+            "name": "Test Continent",
+            "coordinates": {"x": 0, "y": 0},
+        }
+
+        # This should not raise an exception
+        continent = ContinentSchema(**min_data)
+
+        # Verify default values
+        assert continent.size is not None
+        assert continent.regions == []
+        assert continent.biome_distribution == {}

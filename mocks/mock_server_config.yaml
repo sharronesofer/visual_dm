@@ -1,0 +1,114 @@
+# Visual DM Mock Server Configuration
+# ===================================
+
+# Server settings
+server:
+  host: "localhost"
+  port: 3001
+  debug: false
+  cors_origins: ["http://localhost:3000", "http://localhost:8080", "https://unity-app.local"]
+
+# Authentication simulation
+auth:
+  enabled: true
+  tokens:
+    dev_token_123:
+      user_id: "test-user-1"
+      username: "developer"
+      permissions: ["read", "write", "admin"]
+    player_token_456:
+      user_id: "test-user-2"
+      username: "player"
+      permissions: ["read", "write"]
+    readonly_token_789:
+      user_id: "test-user-3"
+      username: "readonly"
+      permissions: ["read"]
+
+# Response simulation
+responses:
+  # Add realistic delay to responses (in seconds)
+  delay:
+    min: 0.1
+    max: 0.5
+  
+  # Response headers
+  headers:
+    api_version: "1.0.0"
+    rate_limit: 1000
+    rate_limit_window: 3600  # seconds
+  
+  # Error rates for testing (percentage)
+  error_rates:
+    server_error: 0.01  # 1% chance of 500 error
+    not_found: 0.02     # 2% chance of 404 error
+    validation: 0.05    # 5% chance of 422 error
+
+# System-specific configurations
+systems:
+  character:
+    max_list_size: 50
+    generate_relations: true
+  
+  npc:
+    max_list_size: 100
+    generate_on_demand: true
+    max_generation_count: 20
+  
+  quest:
+    max_list_size: 30
+    auto_expire: true
+    expire_after_days: 30
+  
+  equipment:
+    max_list_size: 200
+    include_variations: true
+  
+  magic:
+    max_spells: 500
+    include_custom_spells: true
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "mock_server.log"
+  max_size: "10MB"
+  backup_count: 5
+
+# Data generation settings
+data_generation:
+  seed: 42  # For reproducible fake data
+  locales: ["en_US"]
+  
+  # Character generation settings
+  character:
+    races: ["HUMAN", "ELF", "DWARF", "HALFLING", "ORC"]
+    classes: ["FIGHTER", "WIZARD", "ROGUE", "CLERIC", "RANGER"]
+    level_range: [1, 20]
+    stat_range: [8, 18]
+  
+  # Equipment generation settings
+  equipment:
+    rarity_weights:
+      COMMON: 0.6
+      UNCOMMON: 0.25
+      RARE: 0.1
+      EPIC: 0.04
+      LEGENDARY: 0.01
+    
+    durability_range: [0, 100]
+    enchantment_chance: 0.3
+
+# Cache settings
+cache:
+  enabled: true
+  ttl: 3600  # Cache TTL in seconds
+  max_size: 1000  # Maximum cached items
+
+# Development settings
+development:
+  auto_reload: true
+  verbose_logging: true
+  include_debug_headers: true
+  enable_fixture_hot_reload: false 

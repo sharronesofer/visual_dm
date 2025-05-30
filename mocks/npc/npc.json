@@ -1,0 +1,39 @@
+{
+  "id": "3d265d59-fcaf-4055-a003-02086a972e2f",
+  "created_at": "2025-05-10T01:34:24.963293Z",
+  "updated_at": "2025-05-27T01:34:24.963296Z",
+  "name": "Michael Davis",
+  "npc_type": "ANTAGONIST",
+  "personality_trait": "FRIENDLY",
+  "description": "Wait among have along.",
+  "location": {
+    "region_id": "5ac11389-c260-42a2-baa5-08389f4f2b4f",
+    "poi_id": "8d95984e-9798-42b0-81f1-530fc58d4ec1",
+    "coordinates": {
+      "q": 5,
+      "r": 2,
+      "s": -4
+    }
+  },
+  "stats": {
+    "level": 8,
+    "hit_points": 34,
+    "armor_class": 10
+  },
+  "faction_affiliations": [
+    {
+      "faction_id": "a28720c1-02b9-4792-8a07-6a81908ffb98",
+      "role": "LEADER",
+      "reputation": -79
+    }
+  ],
+  "schedule": {
+    "current_activity": "WORKING",
+    "next_activity_time": "2025-05-30T01:34:24.963449Z"
+  },
+  "loyalty": {
+    "player_character_id": "11495bc0-970f-4ad8-8e1e-4dbe89c1ff57",
+    "loyalty_score": 65,
+    "goodwill": 13
+  }
+}

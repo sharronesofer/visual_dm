@@ -4,7 +4,9 @@ Visual DM is designed with modding in mind, allowing players and developers to e
 
 ## Overview
 
-The modding system in Visual DM is based on JSON files that follow defined schemas. These files define various game elements such as:
+The modding system in Visual DM is based on JSON files that follow defined schemas. These files define various game elements that serve as world generation seeds - they establish the initial state of a new world rather than modifying the game during runtime. Once a world is generated, these elements evolve according to the game's simulation rules.
+
+These JSON files define various game elements such as:
 
 - Weapons
 - Armor
@@ -18,6 +20,20 @@ The modding system in Visual DM is based on JSON files that follow defined schem
 - Quests
 - Resources
 - Effects
+
+## World Seeds vs. Runtime Modifications
+
+Visual DM's modding approach is different from many other games. Instead of altering the game while it's running, mods in Visual DM function as world seeds:
+
+- **World Generation Seeds**: Mods define the initial state and building blocks of a new world at creation time. They determine what exists in the world when a new game starts.
+
+- **Not Runtime Modifications**: Once a world is created and gameplay begins, these elements evolve organically according to the game's simulation rules, not by modifying JSON files.
+
+- **Simulation-Driven Evolution**: After world generation, changes to the game world happen through the internal simulation systems rather than by loading new mod content.
+
+- **Persistent World States**: Each world maintains its own persistent state that evolves from the initial seed data provided by mods.
+
+This approach allows for deeply customized worlds while maintaining the integrity of the simulation once the game is in progress.
 
 ## Modding Directory Structure
 

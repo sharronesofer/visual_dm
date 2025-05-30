@@ -1,0 +1,555 @@
+"""
+Tests for the event system middleware components.
+
+This module contains tests for the middleware components of the event system,
+including validation, logging, filtering, persistence, and error handling.
+"""
+
+import pytest
+import asyncio
+import logging
+import json
+import os
+import tempfile
+from datetime import datetime
+from typing import Dict, Any, List, Optional, Set
+
+from backend.systems.events.event_base import EventBase
+from backend.systems.events.event_dispatcher import (
+    EventDispatcher as EnhancedEventDispatcher,
+)
+
+
+# Test event classes
+class TestEvent(EventBase):
+    """Simple test event for middleware tests."""
+
+    event_type: str
+    data: str
+    metadata: Dict[str, Any] = {}
+
+
+class FilterableEvent(EventBase):
+    """Event with filterable attributes for filter tests."""
+
+    event_type: str
+    category: str
+    priority: int
+    data: str
+    metadata: Dict[str, Any] = {}
+
+
+# Define test fixtures
+@pytest.fixture
+def dispatcher():
+    """Create a fresh EnhancedEventDispatcher for each test."""
+    # Reset the singleton instance
+    EnhancedEventDispatcher._instance = None
+    return EnhancedEventDispatcher.get_instance()
+
+
+@pytest.fixture
+def events():
+    """Create a set of test events for the middleware tests."""
+    return {
+        "basic": TestEvent(event_type="test:middleware", data="basic_data"),
+        "high_priority": FilterableEvent(
+            event_type="test:filter",
+            category="important",
+            priority=1,
+            data="high_priority",
+        ),
+        "low_priority": FilterableEvent(
+            event_type="test:filter",
+            category="routine",
+            priority=5,
+            data="low_priority",
+        ),
+        "error_event": TestEvent(event_type="test:error", data="error_data"),
+    }
+
+
+@pytest.fixture
+def temp_directory():
+    """Create a temporary directory for persistence tests."""
+    temp_dir = tempfile.mkdtemp()
+    yield temp_dir
+    # Clean up temp directory after tests
+    for filename in os.listdir(temp_dir):
+        os.remove(os.path.join(temp_dir, filename))
+    os.rmdir(temp_dir)
+
+
+# Test ValidationMiddleware
+def test_validation_middleware(dispatcher, events):
+    """Test that ValidationMiddleware validates events against schemas."""
+    # Create schema for TestEvent
+    test_event_schema = {
+        "type": "object",
+        "properties": {
+            "event_type": {"type": "string"},
+            "data": {"type": "string"},
+            "timestamp": {"type": "number"},
+        },
+        "required": ["event_type", "data"],
+    }
+
+    # Track validation results
+    valid_events = []
+    invalid_events = []
+
+    # Create validation middleware with schema
+    validation_middleware = ValidationMiddleware()
+    validation_middleware.add_schema("TestEvent", test_event_schema)
+
+    # Add middleware to dispatcher
+    dispatcher.add_middleware(validation_middleware)
+
+    # Define handler
+    def handler(event):
+        valid_events.append(event)
+        return "handled"
+
+    # Configure middleware to reject invalid events
+    validation_middleware.on_invalid = "reject"
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Create a valid event
+    valid_event = TestEvent(event_type="test:valid", data="valid_data")
+
+    # Create an invalid event (missing required field)
+    invalid_event = TestEvent(event_type="test:invalid", data="")
+    invalid_event.data = None  # Make invalid by removing required field
+
+    # Process both events
+    dispatcher.publish_sync(valid_event)
+    dispatcher.publish_sync(invalid_event)
+
+    # Valid event should be processed, invalid should be rejected
+    assert len(valid_events) == 1
+    assert valid_event in valid_events
+
+    # Test "warn" mode instead of reject
+    validation_middleware.on_invalid = "warn"
+    valid_events.clear()
+
+    # Now invalid event should pass through with warning
+    dispatcher.publish_sync(invalid_event)
+    assert len(valid_events) == 1
+    assert invalid_event in valid_events
+
+
+# Test LoggingMiddleware
+def test_logging_middleware(dispatcher, events, caplog):
+    """Test that LoggingMiddleware logs events correctly."""
+    # Setup caplog
+    caplog.set_level(logging.DEBUG)
+
+    # Create logging middleware
+    logging_middleware = LoggingMiddleware(
+        log_level=logging.DEBUG, include_payload=True
+    )
+
+    # Add middleware to dispatcher
+    dispatcher.add_middleware(logging_middleware)
+
+    # Define handler
+    def handler(event):
+        return "handled"
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Publish event
+    dispatcher.publish_sync(events["basic"])
+
+    # Verify that event was logged
+    assert "test:middleware" in caplog.text
+    assert "basic_data" in caplog.text
+
+
+# Test FilteringMiddleware
+@pytest.mark.asyncio
+async def test_filtering_middleware(dispatcher, events):
+    """Test that FilteringMiddleware correctly filters events."""
+    # Track received events
+    received_events = []
+
+    # Define filtering rules
+    filtering_rules = [
+        # Only allow high priority events
+        lambda event: (isinstance(event, FilterableEvent) and event.priority <= 3)
+    ]
+
+    # Create filtering middleware
+    filtering_middleware = FilteringMiddleware(rules=filtering_rules)
+
+    # Add middleware to dispatcher
+    dispatcher.add_middleware(filtering_middleware)
+
+    # Define handler
+    def handler(event):
+        received_events.append(event)
+        return "handled"
+
+    # Subscribe handler
+    dispatcher.subscribe(FilterableEvent, handler)
+
+    # Publish events - high priority should pass, low priority should be filtered
+    await dispatcher.publish(events["high_priority"])
+    await dispatcher.publish(events["low_priority"])
+
+    # Only high priority event should be received
+    assert len(received_events) == 1
+    assert events["high_priority"] in received_events
+    assert events["low_priority"] not in received_events
+
+    # Test category-based filter
+    received_events.clear()
+
+    # Replace filter rule
+    filtering_middleware.rules = [
+        # Only allow "important" category
+        lambda event: (
+            isinstance(event, FilterableEvent) and event.category == "important"
+        )
+    ]
+
+    # Publish events again
+    await dispatcher.publish(events["high_priority"])
+    await dispatcher.publish(events["low_priority"])
+
+    # Only important category event should be received
+    assert len(received_events) == 1
+    assert events["high_priority"] in received_events
+    assert events["low_priority"] not in received_events
+
+
+# Test PersistenceMiddleware
+def test_persistence_middleware(dispatcher, events, temp_directory):
+    """Test that PersistenceMiddleware persists events to storage."""
+    # Create persistence middleware
+    persistence_middleware = PersistenceMiddleware(
+        storage_dir=temp_directory, event_types_to_persist=["test:middleware"]
+    )
+
+    # Add middleware to dispatcher
+    dispatcher.add_middleware(persistence_middleware)
+
+    # Define handler
+    def handler(event):
+        return "handled"
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Publish event
+    dispatcher.publish_sync(events["basic"])
+
+    # Verify that event was persisted
+    persisted_files = os.listdir(temp_directory)
+    assert len(persisted_files) == 1
+
+    # Check file content
+    persisted_file_path = os.path.join(temp_directory, persisted_files[0])
+    with open(persisted_file_path, "r") as f:
+        persisted_data = json.load(f)
+
+    # Verify persisted data content
+    assert persisted_data["event_type"] == "test:middleware"
+    assert persisted_data["data"] == "basic_data"
+
+    # Test event replay
+    replayed_events = persistence_middleware.replay_events()
+    assert len(replayed_events) == 1
+    assert replayed_events[0].event_type == "test:middleware"
+    assert replayed_events[0].data == "basic_data"
+
+
+# Test AnalyticsMiddleware
+def test_analytics_middleware(dispatcher, events):
+    """Test that AnalyticsMiddleware captures analytics data."""
+    # Create analytics middleware
+    analytics_middleware = AnalyticsMiddleware()
+
+    # Add middleware to dispatcher
+    dispatcher.add_middleware(analytics_middleware)
+
+    # Define handler
+    def handler(event):
+        return "handled"
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Publish event
+    dispatcher.publish_sync(events["basic"])
+
+    # Get analytics data
+    metrics = analytics_middleware.get_metrics()
+
+    # Verify metrics were captured
+    assert metrics["event_count"] == 1
+    assert "TestEvent" in metrics["event_types"]
+    assert metrics["event_types"]["TestEvent"] == 1
+
+    # Publish another event
+    dispatcher.publish_sync(events["basic"])
+
+    # Check updated metrics
+    metrics = analytics_middleware.get_metrics()
+    assert metrics["event_count"] == 2
+    assert metrics["event_types"]["TestEvent"] == 2
+
+
+# Test ErrorMiddleware
+def test_error_middleware(dispatcher, events, caplog):
+    """Test that ErrorMiddleware handles errors in event processing."""
+    # Setup caplog
+    caplog.set_level(logging.ERROR)
+
+    # Create error middleware
+    error_middleware = ErrorMiddleware()
+
+    # Add middleware to dispatcher
+    dispatcher.add_middleware(error_middleware)
+
+    # Define handler that raises an error
+    def error_handler(event):
+        if event.event_type == "test:error":
+            raise ValueError("Test error")
+        return "handled"
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, error_handler)
+
+    # Publish error event - should not crash
+    dispatcher.publish_sync(events["error_event"])
+
+    # Error should be logged
+    assert "Test error" in caplog.text
+
+    # Non-error event should still be processed
+    result = dispatcher.publish_sync(events["basic"])
+    assert result == ["handled"]
+
+
+# Test middleware chain ordering
+@pytest.mark.asyncio
+async def test_middleware_chain_ordering(dispatcher, events):
+    """Test that middleware executes in the correct order."""
+    # Track execution order
+    execution_order = []
+
+    # Define middleware that record execution
+    async def middleware1(event, next_middleware):
+        execution_order.append("middleware1_before")
+        result = await next_middleware(event)
+        execution_order.append("middleware1_after")
+        return result
+
+    async def middleware2(event, next_middleware):
+        execution_order.append("middleware2_before")
+        result = await next_middleware(event)
+        execution_order.append("middleware2_after")
+        return result
+
+    async def middleware3(event, next_middleware):
+        execution_order.append("middleware3_before")
+        result = await next_middleware(event)
+        execution_order.append("middleware3_after")
+        return result
+
+    # Define handler
+    async def handler(event):
+        execution_order.append("handler")
+        return "handled"
+
+    # Add middleware in order
+    dispatcher.add_middleware(middleware1)
+    dispatcher.add_middleware(middleware2)
+    dispatcher.add_middleware(middleware3)
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Publish event
+    await dispatcher.publish(events["basic"])
+
+    # Verify execution order - middleware should wrap in order of addition
+    assert execution_order == [
+        "middleware1_before",
+        "middleware2_before",
+        "middleware3_before",
+        "handler",
+        "middleware3_after",
+        "middleware2_after",
+        "middleware1_after",
+    ]
+
+
+# Test event cancellation by middleware
+@pytest.mark.asyncio
+async def test_middleware_event_cancellation(dispatcher, events):
+    """Test that middleware can cancel events."""
+    # Track received events
+    received_events = []
+
+    # Define cancelling middleware
+    async def cancelling_middleware(event, next_middleware):
+        # Cancel test:middleware events
+        if event.event_type == "test:middleware":
+            return None
+        return await next_middleware(event)
+
+    # Define handler
+    def handler(event):
+        received_events.append(event)
+        return "handled"
+
+    # Add middleware and subscribe
+    dispatcher.add_middleware(cancelling_middleware)
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Publish events - one should be cancelled
+    await dispatcher.publish(events["basic"])  # Should be cancelled
+    await dispatcher.publish(events["error_event"])  # Should pass through
+
+    # Only error event should be received
+    assert len(received_events) == 1
+    assert events["error_event"] in received_events
+    assert events["basic"] not in received_events
+
+
+# Test MiddlewareBridge
+def test_middleware_bridge(dispatcher, events):
+    """Test the MiddlewareBridge for adapting old-style middleware."""
+    # Track middleware calls
+    middleware_calls = []
+
+    # Create old-style middleware function
+    def old_style_middleware(event):
+        middleware_calls.append(event)
+        # Modify event
+        if isinstance(event, TestEvent):
+            event.data = f"modified_{event.data}"
+        return event
+
+    # Create middleware bridge
+    bridge = MiddlewareBridge(old_style_middleware)
+
+    # Add bridged middleware to dispatcher
+    dispatcher.add_middleware(bridge)
+
+    # Track handler calls
+    handler_calls = []
+
+    # Define handler
+    def handler(event):
+        handler_calls.append(event)
+        return "handled"
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Publish event
+    dispatcher.publish_sync(events["basic"])
+
+    # Middleware should be called
+    assert len(middleware_calls) == 1
+    assert middleware_calls[0] == events["basic"]
+
+    # Handler should receive modified event
+    assert len(handler_calls) == 1
+    assert handler_calls[0].data == f"modified_{events['basic'].data}"
+
+
+# Test event transformation by middleware
+@pytest.mark.asyncio
+async def test_middleware_event_transformation(dispatcher, events):
+    """Test that middleware can transform events."""
+    # Track received events
+    received_events = []
+
+    # Define transforming middleware
+    async def transforming_middleware(event, next_middleware):
+        # Transform TestEvent to FilterableEvent
+        if isinstance(event, TestEvent) and event.event_type == "test:middleware":
+            transformed_event = FilterableEvent(
+                event_type="test:transformed",
+                category="transformed",
+                priority=1,
+                data=f"transformed_{event.data}",
+            )
+            return await next_middleware(transformed_event)
+        return await next_middleware(event)
+
+    # Define handlers
+    def test_handler(event):
+        received_events.append(("test", event))
+        return "test_handled"
+
+    def filterable_handler(event):
+        received_events.append(("filterable", event))
+        return "filterable_handled"
+
+    # Add middleware and subscribe handlers
+    dispatcher.add_middleware(transforming_middleware)
+    dispatcher.subscribe(TestEvent, test_handler)
+    dispatcher.subscribe(FilterableEvent, filterable_handler)
+
+    # Publish event - should be transformed
+    await dispatcher.publish(events["basic"])
+
+    # TestEvent handler should not be called, FilterableEvent handler should
+    assert len(received_events) == 1
+    assert received_events[0][0] == "filterable"
+    assert received_events[0][1].event_type == "test:transformed"
+    assert received_events[0][1].data == f"transformed_{events['basic'].data}"
+
+
+# Test middleware performance
+def test_middleware_performance(dispatcher):
+    """Test middleware performance with a chain of middleware."""
+    # Create a chain of middleware
+    middleware_count = 5
+    for i in range(middleware_count):
+        # Simple pass-through middleware
+        def create_middleware(index):
+            def simple_middleware(event, next_middleware):
+                return next_middleware(event)
+
+            return simple_middleware
+
+        dispatcher.add_middleware(create_middleware(i))
+
+    # Track handler calls
+    handler_calls = 0
+
+    # Define handler
+    def handler(event):
+        nonlocal handler_calls
+        handler_calls += 1
+        return "handled"
+
+    # Subscribe handler
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Create and publish a large number of events
+    event_count = 100
+    start_time = datetime.now()
+
+    for i in range(event_count):
+        event = TestEvent(event_type="test:perf", data=f"perf_event_{i}")
+        dispatcher.publish_sync(event)
+
+    end_time = datetime.now()
+    processing_time = (end_time - start_time).total_seconds()
+
+    # All events should be processed
+    assert handler_calls == event_count
+
+    # Processing should be efficient (less than 1 second for 100 events)
+    assert processing_time < 1.0

@@ -1,0 +1,80 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+testpaths: backend/tests
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+23:52:19 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
+23:52:19 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
+23:52:20 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
+23:52:20 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+23:52:20 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
+23:52:20 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
+23:52:20 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
+23:52:20 [INFO] backend.systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+23:52:20 [WARNING] backend.systems.data.loaders.game_data_registry: Biome file not found: backend/data/biomes/land_types.json
+23:52:20 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load biome data
+23:52:20 [WARNING] backend.systems.data.loaders.game_data_registry: Adjacency file not found: backend/data/biomes/adjacency.json
+23:52:20 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load adjacency rules
+23:52:20 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: backend/data/entities
+23:52:20 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: backend/data/items
+23:52:20 [INFO] backend.systems.rumor.repository: RumorRepository initialized with storage at data/rumors/
+23:52:20 [INFO] backend.systems.rumor.repository: RumorRepository sync singleton created with storage at data/rumors/
+23:52:20 [INFO] backend.systems.rumor.service: RumorService instance configured.
+23:52:20 [INFO] backend.systems.rumor.service: RumorService sync singleton instance created.
+23:52:20 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
+23:52:21 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+23:52:21 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+23:52:21 [INFO] root: World Generator initialized.
+23:52:22 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
+23:52:22 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
+23:52:22 [INFO] systems.combat.effect_visualizer: EffectVisualizer initialized
+23:52:22 [INFO] systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+23:52:22 [INFO] systems.llm.core.dm_core: DungeonMaster initialized
+23:52:22 [WARNING] systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+23:52:22 [WARNING] systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+23:52:22 [ERROR] backend.systems.loot.data_access: Error loading JSON file data/monsters/feats.json: [Errno 2] No such file or directory: 'data/monsters/feats.json'
+23:52:22 [WARNING] backend.systems.loot.data_access: Monster feats data not found at canonical path data/monsters/feats.json, falling back to legacy path.
+23:52:22 [ERROR] backend.systems.loot.data_access: Error loading JSON file rules_json/monster_only_feats.json: [Errno 2] No such file or directory: 'rules_json/monster_only_feats.json'
+23:52:23 [WARNING] backend.systems.religion.services: Faction system not available, faction integration will be disabled
+23:52:23 [WARNING] backend.systems.religion.services: Quest system not available, quest integration will be disabled
+23:52:23 [WARNING] systems.shared.rules: Unknown balance constant: version
+23:52:23 [WARNING] systems.shared.rules: Unknown balance constant: constants
+23:52:23 [INFO] root: World Generator initialized.
+collected 2613 items / 2 errors / 24 skipped
+
+==================================== ERRORS ====================================
+____________ ERROR collecting backend/tests/test_legacy_adapter.py _____________
+backend/tests/test_legacy_adapter.py:12: in <module>
+    import systems.combat.legacy_adapter
+backend/systems/combat/legacy_adapter.py:160: in <module>
+    @deprecated(replacement_func=process_status_effects)
+E   NameError: name 'process_status_effects' is not defined
+______________ ERROR collecting backend/tests/test_loot_routes.py ______________
+backend/systems/loot/data_access.py:107: in load_monster_feats_data
+    return load_json_file(CANONICAL_MONSTER_FEATS_PATH)
+backend/systems/loot/data_access.py:55: in load_json_file
+    with open(path, "r", encoding="utf-8") as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: 'data/monsters/feats.json'
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_loot_routes.py:12: in <module>
+    import systems.loot.loot_routes
+backend/systems/loot/loot_routes.py:24: in <module>
+    monster_feats = load_monster_feats_data()
+backend/systems/loot/data_access.py:113: in load_monster_feats_data
+    return load_json_file(LEGACY_MONSTER_FEATS_PATH)
+backend/systems/loot/data_access.py:55: in load_json_file
+    with open(path, "r", encoding="utf-8") as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: 'rules_json/monster_only_feats.json'
+=========================== short test summary info ============================
+ERROR backend/tests/test_legacy_adapter.py - NameError: name 'process_status_...
+ERROR backend/tests/test_loot_routes.py - FileNotFoundError: [Errno 2] No suc...
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+================== 24 skipped, 60 warnings, 2 errors in 4.67s ==================

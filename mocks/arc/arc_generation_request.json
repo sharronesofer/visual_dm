@@ -1,0 +1,14 @@
+{
+  "arc_type": "SECONDARY",
+  "themes": [
+    "Republican",
+    "floor",
+    "a"
+  ],
+  "target_characters": [
+    "d80fc55e-6ac6-437b-87a6-2792aa8173da",
+    "71826d18-1d01-44e6-886a-f3bef90747da"
+  ],
+  "complexity": "MODERATE",
+  "estimated_steps": 8
+}

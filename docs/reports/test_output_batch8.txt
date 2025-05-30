@@ -1,0 +1,57 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+testpaths: backend/tests
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+00:07:00 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
+00:07:00 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
+00:07:00 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
+00:07:00 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+00:07:00 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
+00:07:00 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
+00:07:00 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
+00:07:00 [INFO] backend.systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+00:07:00 [INFO] backend.systems.data.loaders.game_data_registry: Loaded 13 biomes
+00:07:00 [INFO] backend.systems.data.loaders.game_data_registry: Loaded 44 adjacency rules
+00:07:00 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: backend/data/entities
+00:07:00 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: backend/data/items
+00:07:00 [INFO] backend.systems.rumor.repository: RumorRepository initialized with storage at data/rumors/
+00:07:00 [INFO] backend.systems.rumor.repository: RumorRepository sync singleton created with storage at data/rumors/
+00:07:00 [INFO] backend.systems.rumor.service: RumorService instance configured.
+00:07:00 [INFO] backend.systems.rumor.service: RumorService sync singleton instance created.
+00:07:00 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
+00:07:01 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+00:07:01 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+00:07:01 [INFO] root: World Generator initialized.
+00:07:02 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
+00:07:02 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
+00:07:02 [INFO] systems.combat.effect_visualizer: EffectVisualizer initialized
+00:07:02 [INFO] systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
+00:07:02 [INFO] systems.llm.core.dm_core: DungeonMaster initialized
+00:07:02 [WARNING] systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
+00:07:02 [WARNING] systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
+00:07:03 [WARNING] backend.systems.religion.services: Faction system not available, faction integration will be disabled
+00:07:03 [WARNING] backend.systems.religion.services: Quest system not available, quest integration will be disabled
+00:07:03 [WARNING] systems.shared.rules: Unknown balance constant: version
+00:07:03 [WARNING] systems.shared.rules: Unknown balance constant: constants
+00:07:03 [INFO] root: World Generator initialized.
+collected 2615 items / 1 error / 24 skipped
+
+==================================== ERRORS ====================================
+____________ ERROR collecting backend/tests/test_legacy_adapter.py _____________
+backend/tests/test_legacy_adapter.py:12: in <module>
+    import systems.combat.legacy_adapter
+backend/systems/combat/legacy_adapter.py:123: in <module>
+    @deprecated(replacement_func=apply_full_damage_calculation)
+E   NameError: name 'apply_full_damage_calculation' is not defined
+=========================== short test summary info ============================
+ERROR backend/tests/test_legacy_adapter.py - NameError: name 'apply_full_dama...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+================== 24 skipped, 60 warnings, 1 error in 4.28s ===================

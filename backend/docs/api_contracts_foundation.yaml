@@ -1,0 +1,3198 @@
+openapi: 3.0.0
+info:
+  title: Visual DM Backend API
+  version: 1.0.0
+  description: Comprehensive API contracts for Visual DM backend systems
+paths:
+  /inventory/{shop_id}:
+    get:
+      summary: GET /inventory/{shop_id}
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /sell/{shop_id}:
+    post:
+      summary: POST /sell/{shop_id}
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /buy/{shop_id}:
+    post:
+      summary: POST /buy/{shop_id}
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /restock/{shop_id}:
+    post:
+      summary: POST /restock/{shop_id}
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /preview_price:
+    post:
+      summary: POST /preview_price
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /resources/{resource_id}:
+    get:
+      summary: GET /resources/{resource_id}
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /regions/{region_id}/resources:
+    get:
+      summary: GET /regions/{region_id}/resources
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /metrics/{metric_type}:
+    get:
+      summary: GET /metrics/{metric_type}
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /resources/{resource_id}/price/adjust:
+    post:
+      summary: POST /resources/{resource_id}/price/adjust
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /trade:
+    post:
+      summary: POST /trade
+      tags:
+      - economy
+      responses:
+        '200':
+          description: Successful response
+  /:
+    get:
+      summary: GET /
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /motifs/:
+    post:
+      summary: POST /motifs/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /motifs/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /motifs/{motif_id}:
+    get:
+      summary: GET /motifs/{motif_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /motifs/{motif_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /motifs/{motif_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /global/:
+    get:
+      summary: GET /global/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /regional/{region_id}:
+    get:
+      summary: GET /regional/{region_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /position/:
+    get:
+      summary: GET /position/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /context/:
+    get:
+      summary: GET /context/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /random:
+    post:
+      summary: POST /random
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /advance-lifecycles:
+    post:
+      summary: POST /advance-lifecycles
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /blend:
+    post:
+      summary: POST /blend
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /sequences/generate:
+    post:
+      summary: POST /sequences/generate
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /sequences/{sequence_id}:
+    get:
+      summary: GET /sequences/{sequence_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /sequences/{sequence_id}/advance:
+    post:
+      summary: POST /sequences/{sequence_id}/advance
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /chaos/event:
+    get:
+      summary: GET /chaos/event
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /chaos/inject:
+    post:
+      summary: POST /chaos/inject
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /chaos/trigger/{entity_id}:
+    post:
+      summary: POST /chaos/trigger/{entity_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /chaos/force/{entity_id}:
+    post:
+      summary: POST /chaos/force/{entity_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /chaos/log:
+    get:
+      summary: GET /chaos/log
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /narrative/context/:
+    get:
+      summary: GET /narrative/context/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /apply-effects/{motif_id}:
+    post:
+      summary: POST /apply-effects/{motif_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /batch/apply-effects:
+    post:
+      summary: POST /batch/apply-effects
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /gpt-context:
+    get:
+      summary: GET /gpt-context
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /generate-event:
+    post:
+      summary: POST /generate-event
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /notifications/recent:
+    get:
+      summary: GET /notifications/recent
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /predict-trends:
+    get:
+      summary: GET /predict-trends
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /analyze-conflicts:
+    get:
+      summary: GET /analyze-conflicts
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /compatible-motifs/{motif_id}:
+    get:
+      summary: GET /compatible-motifs/{motif_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /narrative/influence/:
+    get:
+      summary: GET /narrative/influence/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /active/:
+    get:
+      summary: GET /active/
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /region/summary/{region_id}:
+    get:
+      summary: GET /region/summary/{region_id}
+      tags:
+      - motif
+      responses:
+        '200':
+          description: Successful response
+  /{region_id}:
+    get:
+      summary: GET /{region_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /{region_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /{region_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /{region_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /{region_id}/reset:
+    post:
+      summary: POST /{region_id}/reset
+      tags:
+      - tension_war
+      responses:
+        '200':
+          description: Successful response
+  /{region_id}/decay:
+    post:
+      summary: POST /{region_id}/decay
+      tags:
+      - tension_war
+      responses:
+        '200':
+          description: Successful response
+  /event:
+    post:
+      summary: POST /event
+      tags:
+      - tension_war
+      responses:
+        '200':
+          description: Successful response
+  /{region_id}/history:
+    get:
+      summary: GET /{region_id}/history
+      tags:
+      - tension_war
+      responses:
+        '200':
+          description: Successful response
+  /wars:
+    get:
+      summary: GET /wars
+      tags:
+      - tension_war
+      responses:
+        '200':
+          description: Successful response
+  /continents:
+    post:
+      summary: POST /continents
+      tags:
+      - world_generation
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /continents
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /continents/{continent_id}:
+    get:
+      summary: GET /continents/{continent_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /continents/{continent_id}
+      tags:
+      - world_generation
+      responses:
+        '200':
+          description: Successful response
+  /continents/{continent_id}/metadata:
+    patch:
+      summary: PATCH /continents/{continent_id}/metadata
+      tags:
+      - world_generation
+      responses:
+        '200':
+          description: Successful response
+  /treaties:
+    post:
+      summary: POST /treaties
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /treaties
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /treaties/{treaty_id}:
+    get:
+      summary: GET /treaties/{treaty_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /treaties/{treaty_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /treaties/{treaty_id}/expire:
+    post:
+      summary: POST /treaties/{treaty_id}/expire
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /negotiations:
+    post:
+      summary: POST /negotiations
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /negotiations
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /negotiations/{negotiation_id}:
+    get:
+      summary: GET /negotiations/{negotiation_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /negotiations/{negotiation_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /negotiations/{negotiation_id}/offers:
+    post:
+      summary: POST /negotiations/{negotiation_id}/offers
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /negotiations/{negotiation_id}/accept:
+    post:
+      summary: POST /negotiations/{negotiation_id}/accept
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /negotiations/{negotiation_id}/reject:
+    post:
+      summary: POST /negotiations/{negotiation_id}/reject
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /events:
+    post:
+      summary: POST /events
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /events
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /relationships/{faction_id}:
+    get:
+      summary: GET /relationships/{faction_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /relationships/{faction_a_id}/{faction_b_id}:
+    get:
+      summary: GET /relationships/{faction_a_id}/{faction_b_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /relationships/{faction_a_id}/{faction_b_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /tension/{faction_a_id}/{faction_b_id}:
+    get:
+      summary: GET /tension/{faction_a_id}/{faction_b_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /war/check/{faction_a_id}/{faction_b_id}:
+    post:
+      summary: POST /war/check/{faction_a_id}/{faction_b_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /violations:
+    post:
+      summary: POST /violations
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /violations
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /violations/{violation_id}/acknowledge:
+    post:
+      summary: POST /violations/{violation_id}/acknowledge
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /violations/{violation_id}/resolve:
+    post:
+      summary: POST /violations/{violation_id}/resolve
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /compliance/{faction_id}:
+    get:
+      summary: GET /compliance/{faction_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /enforce-treaties:
+    post:
+      summary: POST /enforce-treaties
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /incidents:
+    post:
+      summary: POST /incidents
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /incidents
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /incidents/{incident_id}:
+    get:
+      summary: GET /incidents/{incident_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /incidents/{incident_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /incidents/{incident_id}/resolve:
+    post:
+      summary: POST /incidents/{incident_id}/resolve
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /ultimatums:
+    post:
+      summary: POST /ultimatums
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /ultimatums
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /ultimatums/{ultimatum_id}:
+    get:
+      summary: GET /ultimatums/{ultimatum_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /ultimatums/{ultimatum_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /ultimatums/{ultimatum_id}/respond:
+    post:
+      summary: POST /ultimatums/{ultimatum_id}/respond
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /ultimatums/check-expired:
+    post:
+      summary: POST /ultimatums/check-expired
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /sanctions:
+    post:
+      summary: POST /sanctions
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /sanctions
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /sanctions/{sanction_id}:
+    get:
+      summary: GET /sanctions/{sanction_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /sanctions/{sanction_id}
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /sanctions/{sanction_id}/lift:
+    post:
+      summary: POST /sanctions/{sanction_id}/lift
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /sanctions/{sanction_id}/violations:
+    post:
+      summary: POST /sanctions/{sanction_id}/violations
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /sanctions/check-expired:
+    post:
+      summary: POST /sanctions/check-expired
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /factions/{faction_id}/treaties:
+    get:
+      summary: GET /factions/{faction_id}/treaties
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /treaties/{treaty_id}/violations:
+    get:
+      summary: GET /treaties/{treaty_id}/violations
+      tags:
+      - diplomacy
+      responses:
+        '200':
+          description: Successful response
+  /create:
+    post:
+      summary: POST /create
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /start/{combat_id}:
+    post:
+      summary: POST /start/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /state/{combat_id}:
+    get:
+      summary: GET /state/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /state/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /state/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /next_turn/{combat_id}:
+    post:
+      summary: POST /next_turn/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /take_action/{combat_id}:
+    post:
+      summary: POST /take_action/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /apply_effect/{combat_id}:
+    post:
+      summary: POST /apply_effect/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /apply_damage/{combat_id}:
+    post:
+      summary: POST /apply_damage/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /apply_healing/{combat_id}:
+    post:
+      summary: POST /apply_healing/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /available_actions/{combat_id}/{character_id}:
+    get:
+      summary: GET /available_actions/{combat_id}/{character_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /end/{combat_id}:
+    post:
+      summary: POST /end/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /{combat_id}:
+    delete:
+      summary: DELETE /{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /list:
+    get:
+      summary: GET /list
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /move/{combat_id}:
+    post:
+      summary: POST /move/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /visible_entities/{combat_id}/{observer_id}:
+    get:
+      summary: GET /visible_entities/{combat_id}/{observer_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /perception_check/{combat_id}:
+    post:
+      summary: POST /perception_check/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /pause/{combat_id}:
+    post:
+      summary: POST /pause/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /resume/{combat_id}:
+    post:
+      summary: POST /resume/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /add_character/{combat_id}:
+    post:
+      summary: POST /add_character/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /remove_character/{combat_id}/{character_id}:
+    delete:
+      summary: DELETE /remove_character/{combat_id}/{character_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /move_character/{combat_id}:
+    post:
+      summary: POST /move_character/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /remove_effect/{combat_id}/{character_id}/{effect_id}:
+    delete:
+      summary: DELETE /remove_effect/{combat_id}/{character_id}/{effect_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /get_character_effects/{combat_id}/{character_id}:
+    get:
+      summary: GET /get_character_effects/{combat_id}/{character_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /get_available_actions/{combat_id}/{character_id}:
+    get:
+      summary: GET /get_available_actions/{combat_id}/{character_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /ready_action/{combat_id}:
+    post:
+      summary: POST /ready_action/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /get_state/{combat_id}:
+    get:
+      summary: GET /get_state/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /save_state/{combat_id}:
+    post:
+      summary: POST /save_state/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /load_state/{combat_id}:
+    post:
+      summary: POST /load_state/{combat_id}
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /state:
+    post:
+      summary: POST /state
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /states:
+    get:
+      summary: GET /states
+      tags:
+      - combat
+      responses:
+        '200':
+          description: Successful response
+  /abilities:
+    post:
+      summary: POST /abilities
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /abilities
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /abilities/{ability_id}:
+    get:
+      summary: GET /abilities/{ability_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /abilities/{ability_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /abilities/{ability_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spells:
+    post:
+      summary: POST /spells
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /spells
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spells/search:
+    get:
+      summary: GET /spells/search
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spells/{spell_id}:
+    get:
+      summary: GET /spells/{spell_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /spells/{spell_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /spells/{spell_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spells/cast:
+    post:
+      summary: POST /spells/cast
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spellbooks:
+    post:
+      summary: POST /spellbooks
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /spellbooks
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spellbooks/{spellbook_id}:
+    get:
+      summary: GET /spellbooks/{spellbook_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /characters/{owner_id}/spellbook:
+    get:
+      summary: GET /characters/{owner_id}/spellbook
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spellbooks/{spellbook_id}/spells/{spell_id}:
+    post:
+      summary: POST /spellbooks/{spellbook_id}/spells/{spell_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /spellbooks/{spellbook_id}/spells/{spell_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /effects:
+    get:
+      summary: GET /effects
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /effects/{effect_id}:
+    get:
+      summary: GET /effects/{effect_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /effects/{effect_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /effects/{effect_id}/dispel:
+    post:
+      summary: POST /effects/{effect_id}/dispel
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /effects/{effect_id}/modify-duration:
+    put:
+      summary: PUT /effects/{effect_id}/modify-duration
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /influences:
+    get:
+      summary: GET /influences
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /influences/{influence_id}:
+    get:
+      summary: GET /influences/{influence_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /spellbooks/{owner_type}/{owner_id}:
+    get:
+      summary: GET /spellbooks/{owner_type}/{owner_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /effects/{target_type}/{target_id}:
+    get:
+      summary: GET /effects/{target_type}/{target_id}
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /locations/{location_id}/analysis:
+    get:
+      summary: GET /locations/{location_id}/analysis
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /characters/{character_id}/magic-summary:
+    get:
+      summary: GET /characters/{character_id}/magic-summary
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /system/process-tick:
+    post:
+      summary: POST /system/process-tick
+      tags:
+      - magic
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships:
+    get:
+      summary: GET /{character_id}/relationships
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /{character_id}/relationships
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/{target_id}/{relationship_type}:
+    delete:
+      summary: DELETE /{character_id}/relationships/{target_id}/{relationship_type}
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/faction:
+    get:
+      summary: GET /{character_id}/relationships/faction
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/faction/{faction_id}/reputation:
+    post:
+      summary: POST /{character_id}/relationships/faction/{faction_id}/reputation
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/quest:
+    get:
+      summary: GET /{character_id}/relationships/quest
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/quest/{quest_id}/status:
+    post:
+      summary: POST /{character_id}/relationships/quest/{quest_id}/status
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/spatial/{location_id}/proximity:
+    post:
+      summary: POST /{character_id}/relationships/spatial/{location_id}/proximity
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/spatial:
+    get:
+      summary: GET /{character_id}/relationships/spatial
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{user_id}/relationships/auth/{character_id}/link:
+    post:
+      summary: POST /{user_id}/relationships/auth/{character_id}/link
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{user_id}/relationships/auth/characters:
+    get:
+      summary: GET /{user_id}/relationships/auth/characters
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/relationships/auth/users:
+    get:
+      summary: GET /{character_id}/relationships/auth/users
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{user_id}/relationships/auth/{character_id}/permission/{permission}:
+    get:
+      summary: GET /{user_id}/relationships/auth/{character_id}/permission/{permission}
+      tags:
+      - character
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}:
+    get:
+      summary: GET /{character_id}
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /{character_id}
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /{character_id}
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /check/{character_id}/{permission}:
+    get:
+      summary: GET /check/{character_id}/{permission}
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/permissions:
+    post:
+      summary: POST /{character_id}/permissions
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/permissions/{permission}:
+    delete:
+      summary: DELETE /{character_id}/permissions/{permission}
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/ownership:
+    put:
+      summary: PUT /{character_id}/ownership
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/transfer-ownership:
+    post:
+      summary: POST /{character_id}/transfer-ownership
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /user/characters:
+    get:
+      summary: GET /user/characters
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /character/{character_id}/users:
+    get:
+      summary: GET /character/{character_id}/users
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /check-multi:
+    post:
+      summary: POST /check-multi
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /token:
+    post:
+      summary: POST /token
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /me:
+    get:
+      summary: GET /me
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /check-permission/{permission_name}:
+    get:
+      summary: GET /check-permission/{permission_name}
+      tags:
+      - auth_user
+      responses:
+        '200':
+          description: Successful response
+  /{faction_id}:
+    get:
+      summary: GET /{faction_id}
+      tags:
+      - faction
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /{faction_id}
+      tags:
+      - faction
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /{faction_id}
+      tags:
+      - faction
+      responses:
+        '200':
+          description: Successful response
+  /generate:
+    post:
+      summary: POST /generate
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /identify:
+    post:
+      summary: POST /identify
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /enhance/requirements:
+    post:
+      summary: POST /enhance/requirements
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /enhance:
+    post:
+      summary: POST /enhance
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /enchant:
+    post:
+      summary: POST /enchant
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /generate/contextual:
+    post:
+      summary: POST /generate/contextual
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /apply/faction-motifs:
+    post:
+      summary: POST /apply/faction-motifs
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /apply/regional-motifs:
+    post:
+      summary: POST /apply/regional-motifs
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /shop/generate-inventory:
+    post:
+      summary: POST /shop/generate-inventory
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /shop/restock:
+    post:
+      summary: POST /shop/restock
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /shop/transaction:
+    post:
+      summary: POST /shop/transaction
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /economy/factors:
+    get:
+      summary: GET /economy/factors
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /item/description:
+    get:
+      summary: GET /item/description
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /update-prices:
+    post:
+      summary: POST /update-prices
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /price:
+    get:
+      summary: GET /price
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /loot/equipment:
+    get:
+      summary: GET /loot/equipment
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /loot/item-effects:
+    get:
+      summary: GET /loot/item-effects
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /loot/monster-abilities:
+    get:
+      summary: GET /loot/monster-abilities
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /loot/shops:
+    get:
+      summary: GET /loot/shops
+      tags:
+      - loot
+      responses:
+        '200':
+          description: Successful response
+  /current:
+    get:
+      summary: GET /current
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /advance:
+    post:
+      summary: POST /advance
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /events/{event_id}:
+    delete:
+      summary: DELETE /events/{event_id}
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+    get:
+      summary: GET /events/{event_id}
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /calendar:
+    get:
+      summary: GET /calendar
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /season:
+    get:
+      summary: GET /season
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /weather:
+    get:
+      summary: GET /weather
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /calendar/dates:
+    post:
+      summary: POST /calendar/dates
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /calendar/dates/{name}:
+    delete:
+      summary: DELETE /calendar/dates/{name}
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /progression/start:
+    post:
+      summary: POST /progression/start
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /progression/stop:
+    post:
+      summary: POST /progression/stop
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /progression/pause:
+    post:
+      summary: POST /progression/pause
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /progression/resume:
+    post:
+      summary: POST /progression/resume
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /scale:
+    post:
+      summary: POST /scale
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /reset:
+    post:
+      summary: POST /reset
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /save:
+    post:
+      summary: POST /save
+      tags:
+      - time
+      responses:
+        '200':
+          description: Successful response
+  /config:
+    get:
+      summary: GET /config
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /config/global-multiplier:
+    post:
+      summary: POST /config/global-multiplier
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /config/base-rate/{poi_type}:
+    post:
+      summary: POST /config/base-rate/{poi_type}
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /by-state/{state}:
+    get:
+      summary: GET /by-state/{state}
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /by-type/{poi_type}:
+    get:
+      summary: GET /by-type/{poi_type}
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /monthly-update:
+    post:
+      summary: POST /monthly-update
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /migration:
+    post:
+      summary: POST /migration
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}:
+    get:
+      summary: GET /{poi_id}
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /{poi_id}
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /{poi_id}
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /status/{poi_id}:
+    get:
+      summary: GET /status/{poi_id}
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}/population:
+    patch:
+      summary: PATCH /{poi_id}/population
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}/convert-to-dungeon:
+    post:
+      summary: POST /{poi_id}/convert-to-dungeon
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}/start-repopulation:
+    post:
+      summary: POST /{poi_id}/start-repopulation
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}/catastrophe:
+    post:
+      summary: POST /{poi_id}/catastrophe
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}/war-impact:
+    post:
+      summary: POST /{poi_id}/war-impact
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}/resource-shortage:
+    post:
+      summary: POST /{poi_id}/resource-shortage
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{poi_id}/seasonal-effect:
+    post:
+      summary: POST /{poi_id}/seasonal-effect
+      tags:
+      - population
+      responses:
+        '200':
+          description: Successful response
+  /{region_id}/details:
+    get:
+      summary: GET /{region_id}/details
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /by_continent/{continent_id}:
+    get:
+      summary: GET /by_continent/{continent_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /map/{region_id}:
+    get:
+      summary: GET /map/{region_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /seed/{region_id}:
+    post:
+      summary: POST /seed/{region_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /generate/new:
+    post:
+      summary: POST /generate/new
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /log_event:
+    post:
+      summary: POST /log_event
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /questlog/{character_id}:
+    get:
+      summary: GET /questlog/{character_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /questlog/{character_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /initialize:
+    get:
+      summary: GET /initialize
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /world/metadata:
+    get:
+      summary: GET /world/metadata
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /world/map:
+    get:
+      summary: GET /world/map
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /world/regenerate:
+    post:
+      summary: POST /world/regenerate
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /continents/generate:
+    post:
+      summary: POST /continents/generate
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /regions:
+    get:
+      summary: GET /regions
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /regions/{region_id}:
+    get:
+      summary: GET /regions/{region_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /regions/at_coordinates:
+    get:
+      summary: GET /regions/at_coordinates
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /regions/coordinates/{x}/{y}:
+    get:
+      summary: GET /regions/coordinates/{x}/{y}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /regions/{region_id}/adjacent:
+    get:
+      summary: GET /regions/{region_id}/adjacent
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /regions/generate:
+    post:
+      summary: POST /regions/generate
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /biomes:
+    get:
+      summary: GET /biomes
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /biomes/adjacency:
+    get:
+      summary: GET /biomes/adjacency
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /{region_id}/neighbors:
+    get:
+      summary: GET /{region_id}/neighbors
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /{region_id}/pois:
+    get:
+      summary: GET /{region_id}/pois
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /continent/{continent_id}:
+    get:
+      summary: GET /continent/{continent_id}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /biome/{biome_type}:
+    get:
+      summary: GET /biome/{biome_type}
+      tags:
+      - region
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}:
+    get:
+      summary: GET /{player_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /{player_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{quest_id}:
+    get:
+      summary: GET /{player_id}/{quest_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /{player_id}/{quest_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /{player_id}/{quest_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{quest_id}/accept:
+    post:
+      summary: POST /{player_id}/{quest_id}/accept
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{quest_id}/complete:
+    post:
+      summary: POST /{player_id}/{quest_id}/complete
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{quest_id}/abandon:
+    post:
+      summary: POST /{player_id}/{quest_id}/abandon
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{quest_id}/steps/{step_id}:
+    post:
+      summary: POST /{player_id}/{quest_id}/steps/{step_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /npc/{npc_id}:
+    get:
+      summary: GET /npc/{npc_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /location/{location_id}:
+    get:
+      summary: GET /location/{location_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /board/accept:
+    post:
+      summary: POST /board/accept
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/quest/{quest_id}:
+    get:
+      summary: GET /{player_id}/quest/{quest_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/arc/{arc_id}:
+    get:
+      summary: GET /{player_id}/arc/{arc_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /rumors/{region_id}:
+    get:
+      summary: GET /rumors/{region_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /notes/{player_id}:
+    get:
+      summary: GET /notes/{player_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /notes/{player_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{arc_id}:
+    get:
+      summary: GET /{player_id}/{arc_id}
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{arc_id}/progress:
+    post:
+      summary: POST /{player_id}/{arc_id}/progress
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/{arc_id}/chapters/{chapter_index}/unlock:
+    post:
+      summary: POST /{player_id}/{arc_id}/chapters/{chapter_index}/unlock
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/regional:
+    post:
+      summary: POST /{player_id}/regional
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /{player_id}/global:
+    post:
+      summary: POST /{player_id}/global
+      tags:
+      - quest
+      responses:
+        '200':
+          description: Successful response
+  /items:
+    get:
+      summary: GET /items
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /items
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /items/{item_id}:
+    get:
+      summary: GET /items/{item_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /items/{item_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /items/{item_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories:
+    get:
+      summary: GET /inventories
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /inventories
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}:
+    get:
+      summary: GET /inventories/{inventory_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /inventories/{inventory_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /inventories/{inventory_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/items:
+    get:
+      summary: GET /inventories/{inventory_id}/items
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /inventories/{inventory_id}/items
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/items/{inventory_item_id}:
+    delete:
+      summary: DELETE /inventories/{inventory_id}/items/{inventory_item_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /inventories/{inventory_id}/items/{inventory_item_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /transfer:
+    post:
+      summary: POST /transfer
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventory/{from_inventory_id}/transfer/{to_inventory_id}/{inventory_item_id}:
+    post:
+      summary: POST /inventory/{from_inventory_id}/transfer/{to_inventory_id}/{inventory_item_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventory/{from_inventory_id}/bulk-transfer/{to_inventory_id}:
+    post:
+      summary: POST /inventory/{from_inventory_id}/bulk-transfer/{to_inventory_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/stats:
+    get:
+      summary: GET /inventories/{inventory_id}/stats
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/backup:
+    post:
+      summary: POST /inventories/{inventory_id}/backup
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/restore:
+    post:
+      summary: POST /inventories/restore
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/export:
+    post:
+      summary: POST /inventories/{inventory_id}/export
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/import:
+    post:
+      summary: POST /inventories/import
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/swap:
+    post:
+      summary: POST /inventories/{inventory_id}/swap
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/split-stack/{stack_id}:
+    post:
+      summary: POST /inventories/{inventory_id}/split-stack/{stack_id}
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/combine-stacks:
+    post:
+      summary: POST /inventories/{inventory_id}/combine-stacks
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/optimize-stacks:
+    post:
+      summary: POST /inventories/{inventory_id}/optimize-stacks
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /inventories/{inventory_id}/filter:
+    post:
+      summary: POST /inventories/{inventory_id}/filter
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /admin/inventory/run-migrations:
+    post:
+      summary: POST /admin/inventory/run-migrations
+      tags:
+      - inventory
+      responses:
+        '200':
+          description: Successful response
+  /history:
+    get:
+      summary: GET /history
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /related-events/{event_id}:
+    get:
+      summary: GET /related-events/{event_id}
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /process-tick:
+    post:
+      summary: POST /process-tick
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /chaos-event:
+    post:
+      summary: POST /chaos-event
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /categories:
+    get:
+      summary: GET /categories
+      tags:
+      - world_state
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}:
+    get:
+      summary: GET /{arc_id}
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /{arc_id}
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /{arc_id}
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/activate:
+    post:
+      summary: POST /{arc_id}/activate
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/advance:
+    post:
+      summary: POST /{arc_id}/advance
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/fail-step:
+    post:
+      summary: POST /{arc_id}/fail-step
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/steps:
+    get:
+      summary: GET /{arc_id}/steps
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/generate-steps:
+    post:
+      summary: POST /{arc_id}/generate-steps
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/quest-opportunities:
+    get:
+      summary: GET /{arc_id}/quest-opportunities
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/generate-quest:
+    post:
+      summary: POST /{arc_id}/generate-quest
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /{arc_id}/progression:
+    get:
+      summary: GET /{arc_id}/progression
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /system/statistics:
+    get:
+      summary: GET /system/statistics
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /system/check-stalled:
+    post:
+      summary: POST /system/check-stalled
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /overview:
+    get:
+      summary: GET /overview
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /performance-metrics:
+    get:
+      summary: GET /performance-metrics
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /effectiveness/{arc_id}:
+    get:
+      summary: GET /effectiveness/{arc_id}
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /completion-trends:
+    get:
+      summary: GET /completion-trends
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /failure-analysis:
+    get:
+      summary: GET /failure-analysis
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /system-health:
+    get:
+      summary: GET /system-health
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /engagement-metrics:
+    get:
+      summary: GET /engagement-metrics
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /bottlenecks:
+    get:
+      summary: GET /bottlenecks
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /success-patterns:
+    get:
+      summary: GET /success-patterns
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /impact-assessment:
+    get:
+      summary: GET /impact-assessment
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /prediction-accuracy:
+    get:
+      summary: GET /prediction-accuracy
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /cohort-analysis:
+    get:
+      summary: GET /cohort-analysis
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /custom-report:
+    post:
+      summary: POST /custom-report
+      tags:
+      - arc
+      responses:
+        '200':
+          description: Successful response
+  /sets:
+    get:
+      summary: GET /sets
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /sets
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /sets/{set_id}:
+    get:
+      summary: GET /sets/{set_id}
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: PUT /sets/{set_id}
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /sets/{set_id}
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/equip:
+    post:
+      summary: POST /{character_id}/equip
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/unequip:
+    post:
+      summary: POST /{character_id}/unequip
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/swap:
+    post:
+      summary: POST /{character_id}/swap
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /durability/{equipment_id}/damage/combat:
+    post:
+      summary: POST /durability/{equipment_id}/damage/combat
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /durability/{equipment_id}/damage/wear:
+    post:
+      summary: POST /durability/{equipment_id}/damage/wear
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /durability/{equipment_id}/repair:
+    post:
+      summary: POST /durability/{equipment_id}/repair
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /durability/{equipment_id}/status:
+    get:
+      summary: GET /durability/{equipment_id}/status
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /durability/{equipment_id}/repair-cost:
+    get:
+      summary: GET /durability/{equipment_id}/repair-cost
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /durability/{equipment_id}/history:
+    get:
+      summary: GET /durability/{equipment_id}/history
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/identify:
+    post:
+      summary: POST /{character_id}/identify
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/identify_full:
+    post:
+      summary: POST /{character_id}/identify_full
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /{character_id}/set_bonuses:
+    get:
+      summary: GET /{character_id}/set_bonuses
+      tags:
+      - equipment
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}:
+    get:
+      summary: GET /{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: DELETE /{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/location:
+    get:
+      summary: GET /{npc_id}/location
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    patch:
+      summary: PATCH /{npc_id}/location
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/memories:
+    get:
+      summary: GET /{npc_id}/memories
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /{npc_id}/memories
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/factions:
+    get:
+      summary: GET /{npc_id}/factions
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/factions/adjust:
+    post:
+      summary: POST /{npc_id}/factions/adjust
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/rumors:
+    get:
+      summary: GET /{npc_id}/rumors
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /{npc_id}/rumors
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/motifs:
+    get:
+      summary: GET /{npc_id}/motifs
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /{npc_id}/motifs
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/loyalty/{character_id}:
+    get:
+      summary: GET /{npc_id}/loyalty/{character_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/loyalty:
+    post:
+      summary: POST /{npc_id}/loyalty
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/regenerate-goals:
+    post:
+      summary: POST /{npc_id}/regenerate-goals
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /memories/{npc_id}:
+    get:
+      summary: GET /memories/{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: POST /memories/{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /memories/{npc_id}/{memory_id}:
+    delete:
+      summary: DELETE /memories/{npc_id}/{memory_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /memories/{npc_id}/summary:
+    get:
+      summary: GET /memories/{npc_id}/summary
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /factions/{npc_id}:
+    get:
+      summary: GET /factions/{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /factions/{npc_id}/adjust:
+    post:
+      summary: POST /factions/{npc_id}/adjust
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /rumors/{npc_id}:
+    get:
+      summary: GET /rumors/{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /rumors/seed:
+    post:
+      summary: POST /rumors/seed
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /rumors/network/{rumor_id}:
+    get:
+      summary: GET /rumors/network/{rumor_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /rumors/decay:
+    post:
+      summary: POST /rumors/decay
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /population/update:
+    post:
+      summary: POST /population/update
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /population/metrics:
+    get:
+      summary: GET /population/metrics
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /population/multiplier/{multiplier}:
+    post:
+      summary: POST /population/multiplier/{multiplier}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /population/poi/{poi_id}:
+    post:
+      summary: POST /population/poi/{poi_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /motifs/{npc_id}:
+    get:
+      summary: GET /motifs/{npc_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /motifs/apply/global:
+    post:
+      summary: POST /motifs/apply/global
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /motifs/apply/regional/{region_id}:
+    post:
+      summary: POST /motifs/apply/regional/{region_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /motifs/apply/npc/{npc_id}/{motif_id}:
+    post:
+      summary: POST /motifs/apply/npc/{npc_id}/{motif_id}
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /{npc_id}/update-location:
+    post:
+      summary: POST /{npc_id}/update-location
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+  /daily-movement-tick:
+    post:
+      summary: POST /daily-movement-tick
+      tags:
+      - npc
+      responses:
+        '200':
+          description: Successful response
+components:
+  schemas: {}
+  securitySchemes: {}

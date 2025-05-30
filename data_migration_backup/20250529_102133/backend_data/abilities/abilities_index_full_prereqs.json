@@ -1,0 +1,722 @@
+{
+  "Radiance of the Dawn": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Sacred Weapon": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Turn Fey": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Turn Undead": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Divine Intervention": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Empty Body": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Tranquility": {
+    "prerequisites": [
+      NaN,
+      "WIS 3"
+    ]
+  },
+  "Cloak of Shadows": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Maddening Hex": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Rage": {
+    "prerequisites": [
+      NaN,
+      "Athletics rank 1"
+    ]
+  },
+  "Hurl Through Hell": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Eldritch Sight": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Beast Speech": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Sneak Attack": {
+    "prerequisites": [
+      NaN,
+      "Stealth rank 1"
+    ]
+  },
+  "Fist of Unbroken Air": {
+    "prerequisites": [
+      "Unarmed Strike",
+      NaN
+    ]
+  },
+  "Quivering Palm": {
+    "prerequisites": [
+      "Unarmed Strike",
+      "WIS 2"
+    ]
+  },
+  "Whirlwind Attack": {
+    "prerequisites": [
+      "Two Weapon Fighting",
+      NaN
+    ]
+  },
+  "Flurry of Blows": {
+    "prerequisites": [
+      "Unarmed Strike",
+      NaN
+    ]
+  },
+  "Elk Attunement": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "War Priest": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Thirsting Blade (Blade)": {
+    "prerequisites": [
+      "Pact of the Blade",
+      NaN
+    ]
+  },
+  "Menacing Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Stunning Strike": {
+    "prerequisites": [
+      "Unarmed Strike",
+      NaN
+    ]
+  },
+  "Divine Smite": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Polearm Master": {
+    "prerequisites": [
+      "Heavy Weapon Proficiency",
+      "Athletics rank 1"
+    ]
+  },
+  "Two Weapon Fighting": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Melee Weapon Attack": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Unarmed Attack": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Improvised Attack": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Volley": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Throw an Item": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Ranged Attack": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Throw a weapon": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Fangs of the Fire Snake": {
+    "prerequisites": [
+      "Unarmed Strike",
+      NaN
+    ]
+  },
+  "Reach Attack": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Wild Shape": {
+    "prerequisites": [
+      "Spellcasting (Nature)",
+      NaN
+    ]
+  },
+  "Commander's Strike": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Vow of Enmity": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Guided Strike": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "War God's Blessing": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Versatile Trickster": {
+    "prerequisites": [
+      "Mage Hand, Sneak Attack",
+      NaN
+    ]
+  },
+  "Lunging Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Precision Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Destructive Wrath": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Divine Sense": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      "Divine rank 1"
+    ]
+  },
+  "Lay on Hands": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      "Divine rank 1"
+    ]
+  },
+  "Preserve Life": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Healer": {
+    "prerequisites": [
+      NaN,
+      "Survival rank 1"
+    ]
+  },
+  "Wholeness of Body": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Cleansing Touch": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Rally": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Master Transmuter": {
+    "prerequisites": [
+      "Transmuter's Stone",
+      NaN
+    ]
+  },
+  "Elder Champion": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Fiendish Vigor": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Help": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Drink a potion": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "The Third Eye": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Countercharm": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Stillness of Mind": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Blessing of the Trickster": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Bardic Inspiration": {
+    "prerequisites": [
+      NaN,
+      "Perform rank 1"
+    ]
+  },
+  "Feinting Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Parry": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Maneuvering Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Armor of Shadows": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Eldritch Smite (Blade)": {
+    "prerequisites": [
+      "Pact of the Blade",
+      NaN
+    ]
+  },
+  "Dodge": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Hypnotic Gaze": {
+    "prerequisites": [
+      "Spellcasting (Arcane)",
+      "Arcane rank 1"
+    ]
+  },
+  "Abjure Enemy": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Command Undead": {
+    "prerequisites": [
+      "Spellcasting (Arcane)",
+      NaN
+    ]
+  },
+  "Create Thrall": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Draconic Presence": {
+    "prerequisites": [
+      "Draconic Ancestor",
+      NaN
+    ]
+  },
+  "CHArm Animals and Plants": {
+    "prerequisites": [
+      "Spellcasting (Nature)",
+      NaN
+    ]
+  },
+  "Intimidating Presence": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Fey Presence": {
+    "prerequisites": [
+      NaN,
+      "Occult rank 1"
+    ]
+  },
+  "Master of Nature": {
+    "prerequisites": [
+      NaN,
+      "Nature rank 1"
+    ]
+  },
+  "Read Thoughts": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Dark Delirium": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Nature\u2019s Wrath": {
+    "prerequisites": [
+      "Spellcasting (Nature)",
+      NaN
+    ]
+  },
+  "Invoke Duplicity": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Bend Luck": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Entropic Ward": {
+    "prerequisites": [
+      "Spellcasting (Occult)",
+      NaN
+    ]
+  },
+  "Distracting Strike": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Goading Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Improved Duplicity": {
+    "prerequisites": [
+      "Spellcasting (Divine), Sneak Attack",
+      NaN
+    ]
+  },
+  "Benign Transposition": {
+    "prerequisites": [
+      "Spellcasting (Arcane)",
+      NaN
+    ]
+  },
+  "Step of the Wind": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Shadow Step": {
+    "prerequisites": [
+      "Sneak Attack",
+      NaN
+    ]
+  },
+  "Evasive Footwork": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Cunning Action": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Pushing Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Avenging Angel": {
+    "prerequisites": [
+      "Spellcasting (Divine)",
+      NaN
+    ]
+  },
+  "Shield Master": {
+    "prerequisites": [
+      "Moderately Armored",
+      "Athletics rank 1"
+    ]
+  },
+  "Dash": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Disengage": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Stand/Lay down": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Jump": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Grappler": {
+    "prerequisites": [
+      NaN,
+      "3 STR"
+    ]
+  },
+  "Charger": {
+    "prerequisites": [
+      NaN,
+      "1 DEX"
+    ]
+  },
+  "Patient Defense": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Riposte": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Vanish": {
+    "prerequisites": [
+      "Sneak Attack",
+      NaN
+    ]
+  },
+  "Disarming Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Sweeping Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Trip Attack": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Hide": {
+    "prerequisites": [
+      NaN,
+      NaN
+    ]
+  },
+  "Draw or sheathe a weapon": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Open or close a door": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Speak a short sentence": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Pick up a dropped item": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Drop an item": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Grapple": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Shove": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Shield Bash": {
+    "prerequisites": [
+      "Sheild Master",
+      NaN
+    ]
+  },
+  "Shove to Prone": {
+    "prerequisites": [
+      "Intrinsic",
+      NaN
+    ]
+  },
+  "Spellcasting (Arcane)": {
+    "prerequisites": [
+      NaN,
+      "Arcane rank 1"
+    ]
+  },
+  "Spellcasting (Divine)": {
+    "prerequisites": [
+      NaN,
+      "Divine rank 1"
+    ]
+  },
+  "Spellcasting (Nature)": {
+    "prerequisites": [
+      NaN,
+      "Nature rank 1"
+    ]
+  },
+  "Spellcasting (Occult)": {
+    "prerequisites": [
+      NaN,
+      "Occult rank 1"
+    ]
+  }
+}

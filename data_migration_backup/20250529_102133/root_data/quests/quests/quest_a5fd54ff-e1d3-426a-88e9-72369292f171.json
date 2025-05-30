@@ -1,0 +1,40 @@
+{
+  "title": "Mediate between Local Guild",
+  "description": "A quest in Starting Area",
+  "player_id": "player_123",
+  "location_id": "default_location",
+  "theme": "social",
+  "difficulty": "easy",
+  "level": 1,
+  "type": "SideQuest",
+  "status": "available",
+  "steps": [
+    {
+      "id": 1,
+      "description": "Speak with the local official",
+      "type": "talk",
+      "completed": false,
+      "required_items": [],
+      "required_skills": [],
+      "target_npc_id": null,
+      "target_location_id": null,
+      "target_item_id": null,
+      "target_enemy_id": null,
+      "target_enemy_type": null,
+      "quantity": 1,
+      "required_count": 1,
+      "current_count": 0,
+      "time_requirement": null,
+      "dialogue_id": null
+    }
+  ],
+  "rewards": {
+    "gold": 29,
+    "experience": 54,
+    "reputation": 3
+  },
+  "created_at": "2025-05-28T20:56:14.246328",
+  "updated_at": "2025-05-28T20:56:14.246333",
+  "data_version": 1,
+  "last_modified": "2025-05-28T16:56:14.246486"
+}

@@ -1,0 +1,325 @@
+"""
+Tests for the region.repository module.
+
+This module contains tests for data access and persistence operations
+in the region repository.
+"""
+
+import pytest
+from unittest.mock import patch, MagicMock, mock_open
+import json
+import os
+
+from backend.systems.region.repository import RegionRepository
+from backend.systems.shared.utils.common.error import RegionError
+
+
+class TestRegionRepository:
+    """Tests for the RegionRepository class."""
+
+    @pytest.fixture
+    def region_repo(self, temp_data_dir):
+        """Create a RegionRepository instance for testing."""
+        return RegionRepository(data_dir=temp_data_dir)
+
+    def test_initialization(self, temp_data_dir):
+        """Test that the repository initializes correctly."""
+        repo = RegionRepository(data_dir=temp_data_dir)
+
+        # Check that paths were set correctly
+        assert repo.data_dir == temp_data_dir
+        assert repo.regions_dir == os.path.join(temp_data_dir, "regions")
+        assert repo.continents_dir == os.path.join(temp_data_dir, "continents")
+        assert repo.world_file == os.path.join(
+            temp_data_dir, "world", "world_data.json"
+        )
+
+    def test_get_region_exists(
+        self, region_repo, sample_region_data, create_test_region_file
+    ):
+        """Test getting a region that exists."""
+        # Create a test region file
+        region_id = "r_test123"
+        create_test_region_file(region_id, sample_region_data)
+
+        # Get the region
+        region = region_repo.get_region(region_id)
+
+        # Check that the correct region was returned
+        assert region is not None
+        assert region["region_id"] == region_id
+        assert region["name"] == sample_region_data["name"]
+        assert region["biome_type"] == sample_region_data["biome_type"]
+
+    def test_get_region_not_exists(self, region_repo):
+        """Test getting a region that doesn't exist."""
+        # Try to get a non-existent region
+        region = region_repo.get_region("nonexistent")
+
+        # Should return None
+        assert region is None
+
+    def test_get_region_invalid_id(self, region_repo):
+        """Test getting a region with an invalid ID."""
+        # Try to get a region with an invalid ID
+        with pytest.raises(RegionError):
+            region_repo.get_region(None)
+
+    def test_save_region_new(self, region_repo, sample_region_data, temp_data_dir):
+        """Test saving a new region."""
+        # Save a new region
+        region_id = "r_new_test"
+        sample_region_data["region_id"] = region_id
+
+        result = region_repo.save_region(sample_region_data)
+
+        # Check result
+        assert result is True
+
+        # Check that file was created
+        file_path = os.path.join(temp_data_dir, "regions", f"{region_id}.json")
+        assert os.path.exists(file_path)
+
+        # Check file contents
+        with open(file_path, "r") as f:
+            saved_data = json.load(f)
+
+        assert saved_data["region_id"] == region_id
+        assert saved_data["name"] == sample_region_data["name"]
+
+    def test_save_region_update(
+        self, region_repo, sample_region_data, create_test_region_file, temp_data_dir
+    ):
+        """Test updating an existing region."""
+        # Create an existing region
+        region_id = "r_test123"
+        create_test_region_file(region_id, sample_region_data)
+
+        # Update the region
+        updated_data = sample_region_data.copy()
+        updated_data["name"] = "Updated Region Name"
+
+        result = region_repo.save_region(updated_data)
+
+        # Check result
+        assert result is True
+
+        # Check file contents
+        file_path = os.path.join(temp_data_dir, "regions", f"{region_id}.json")
+        with open(file_path, "r") as f:
+            saved_data = json.load(f)
+
+        assert saved_data["name"] == "Updated Region Name"
+
+    def test_save_region_invalid_data(self, region_repo):
+        """Test saving invalid region data."""
+        # Try to save None
+        with pytest.raises(RegionError):
+            region_repo.save_region(None)
+
+        # Try to save without region_id
+        with pytest.raises(RegionError):
+            region_repo.save_region({"name": "Invalid Region"})
+
+    def test_delete_region(
+        self, region_repo, sample_region_data, create_test_region_file, temp_data_dir
+    ):
+        """Test deleting a region."""
+        # Create a test region file
+        region_id = "r_test123"
+        file_path = create_test_region_file(region_id, sample_region_data)
+
+        # Ensure file exists before deletion
+        assert os.path.exists(file_path)
+
+        # Delete the region
+        result = region_repo.delete_region(region_id)
+
+        # Check result
+        assert result is True
+
+        # Check that file was deleted
+        assert not os.path.exists(file_path)
+
+    def test_delete_region_not_exists(self, region_repo):
+        """Test deleting a region that doesn't exist."""
+        # Try to delete a non-existent region
+        result = region_repo.delete_region("nonexistent")
+
+        # Should return False
+        assert result is False
+
+    def test_get_all_regions(
+        self, region_repo, sample_region_data, create_test_region_file
+    ):
+        """Test getting all regions."""
+        # Create test region files
+        region1_id = "r_test1"
+        region2_id = "r_test2"
+
+        region1_data = sample_region_data.copy()
+        region1_data["region_id"] = region1_id
+        region1_data["name"] = "Test Region 1"
+
+        region2_data = sample_region_data.copy()
+        region2_data["region_id"] = region2_id
+        region2_data["name"] = "Test Region 2"
+
+        create_test_region_file(region1_id, region1_data)
+        create_test_region_file(region2_id, region2_data)
+
+        # Get all regions
+        regions = region_repo.get_all_regions()
+
+        # Check result
+        assert len(regions) == 2
+        assert any(r["region_id"] == region1_id for r in regions)
+        assert any(r["region_id"] == region2_id for r in regions)
+
+    def test_get_regions_by_continent(
+        self, region_repo, sample_region_data, create_test_region_file
+    ):
+        """Test getting regions by continent."""
+        # Create test region files
+        continent1_id = "c_test1"
+        continent2_id = "c_test2"
+
+        region1_data = sample_region_data.copy()
+        region1_data["region_id"] = "r_c1_test1"
+        region1_data["continent_id"] = continent1_id
+
+        region2_data = sample_region_data.copy()
+        region2_data["region_id"] = "r_c1_test2"
+        region2_data["continent_id"] = continent1_id
+
+        region3_data = sample_region_data.copy()
+        region3_data["region_id"] = "r_c2_test1"
+        region3_data["continent_id"] = continent2_id
+
+        create_test_region_file("r_c1_test1", region1_data)
+        create_test_region_file("r_c1_test2", region2_data)
+        create_test_region_file("r_c2_test1", region3_data)
+
+        # Get regions by continent
+        regions = region_repo.get_regions_by_continent(continent1_id)
+
+        # Check result
+        assert len(regions) == 2
+        assert all(r["continent_id"] == continent1_id for r in regions)
+
+    def test_get_region_at_coordinates(
+        self, region_repo, sample_region_data, create_test_region_file
+    ):
+        """Test getting a region at specific coordinates."""
+        # Create test region files with different coordinates
+        region1_data = sample_region_data.copy()
+        region1_data["region_id"] = "r_coord_test1"
+        region1_data["coordinates"] = {"x": 10, "y": 20}
+
+        region2_data = sample_region_data.copy()
+        region2_data["region_id"] = "r_coord_test2"
+        region2_data["coordinates"] = {"x": 30, "y": 40}
+
+        create_test_region_file("r_coord_test1", region1_data)
+        create_test_region_file("r_coord_test2", region2_data)
+
+        # Get region at coordinates (10, 20)
+        region = region_repo.get_region_at_coordinates({"x": 10, "y": 20})
+
+        # Check result
+        assert region is not None
+        assert region["region_id"] == "r_coord_test1"
+
+        # Get region at non-existent coordinates
+        region = region_repo.get_region_at_coordinates({"x": 999, "y": 999})
+
+        # Should return None
+        assert region is None
+
+    def test_save_and_get_region_map_tiles(self, region_repo, temp_data_dir):
+        """Test saving and retrieving region map tiles."""
+        region_id = "r_map_test"
+        test_tiles = [
+            {"x": 0, "y": 0, "terrain": "forest", "features": ["trees"]},
+            {"x": 0, "y": 1, "terrain": "plains", "features": ["grass"]},
+            {"x": 1, "y": 0, "terrain": "mountain", "features": ["rocks"]},
+        ]
+
+        # Save map tiles
+        result = region_repo.save_region_map_tiles(region_id, test_tiles)
+
+        # Check result
+        assert result is True
+
+        # Check that file was created
+        file_path = os.path.join(temp_data_dir, "regions", f"{region_id}_map.json")
+        assert os.path.exists(file_path)
+
+        # Get map tiles
+        tiles = region_repo.get_region_map_tiles(region_id)
+
+        # Check result
+        assert len(tiles) == 3
+        assert tiles[0]["terrain"] == "forest"
+        assert tiles[1]["terrain"] == "plains"
+        assert tiles[2]["terrain"] == "mountain"
+
+    def test_save_and_load_world_data(self, region_repo, temp_data_dir):
+        """Test saving and loading world data."""
+        test_world_data = {
+            "world_id": "test_world",
+            "name": "Test World",
+            "seed": 12345,
+            "continents": {
+                "c1": {
+                    "continent_id": "c1",
+                    "name": "Test Continent",
+                    "regions": ["r1", "r2"],
+                }
+            },
+        }
+
+        # Save world data
+        result = region_repo.save_world_data(test_world_data)
+
+        # Check result
+        assert result is True
+
+        # Check that file was created
+        file_path = os.path.join(temp_data_dir, "world", "world_data.json")
+        assert os.path.exists(file_path)
+
+        # Load world data
+        world_data = region_repo.load_world_data()
+
+        # Check result
+        assert world_data is not None
+        assert world_data["world_id"] == "test_world"
+        assert world_data["name"] == "Test World"
+        assert world_data["seed"] == 12345
+
+    def test_load_world_data_not_exists(self, region_repo):
+        """Test loading world data when the file doesn't exist."""
+        # Try to load non-existent world data
+        with pytest.raises(FileNotFoundError):
+            region_repo.load_world_data()
+
+    @patch("os.makedirs")
+    def test_ensure_directories_exist(self, mock_makedirs, region_repo):
+        """Test that directories are created if they don't exist."""
+        # Call ensure_directories_exist
+        region_repo._ensure_directories_exist()
+
+        # Check that os.makedirs was called for each directory
+        mock_makedirs.assert_any_call(region_repo.regions_dir, exist_ok=True)
+        mock_makedirs.assert_any_call(region_repo.continents_dir, exist_ok=True)
+        mock_makedirs.assert_any_call(
+            os.path.dirname(region_repo.world_file), exist_ok=True
+        )
+
+    @patch("builtins.open", new_callable=mock_open, read_data='{"invalid": true')
+    def test_json_error_handling(self, mock_file, region_repo):
+        """Test handling of JSON errors."""
+        # Try to get a region with invalid JSON
+        with pytest.raises(RegionError):
+            region_repo.get_region("invalid_json")

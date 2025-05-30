@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Example Schema",
+  "description": "An example schema template for Visual DM data files",
+  "type": "object",
+  "required": ["version", "description", "data_items"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Version of the data format, using semantic versioning",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+      "examples": ["1.0", "2.1.3"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the data file's purpose"
+    },
+    "data_items": {
+      "type": "array",
+      "description": "Collection of data items",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the item",
+            "pattern": "^[a-z0-9_]+$",
+            "examples": ["iron_sword", "healing_potion"]
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description"
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Various attributes as key-value pairs",
+            "additionalProperties": {
+              "type": ["string", "number", "boolean"]
+            }
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags for categorization",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relationships": {
+            "type": "array",
+            "description": "Relationships to other entities",
+            "items": {
+              "type": "object",
+              "required": ["target_id", "relationship_type"],
+              "properties": {
+                "target_id": {
+                  "type": "string",
+                  "description": "ID of the related entity"
+                },
+                "relationship_type": {
+                  "type": "string",
+                  "description": "Type of relationship",
+                  "enum": ["parent", "child", "requires", "excludes", "enhances"]
+                },
+                "strength": {
+                  "type": "number",
+                  "description": "Strength of the relationship (0.0 to 1.0)",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+} 

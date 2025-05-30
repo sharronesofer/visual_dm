@@ -1,0 +1,2958 @@
+# Visual DM API Contracts
+# Generated automatically from FastAPI router files
+
+openapi: 3.0.3
+info:
+  title: Visual DM API
+  description: API contracts for Visual DM backend systems
+  version: 1.0.0
+
+paths:
+
+  # ARC System
+  /{arc_id}:
+    delete:
+      tags: [arc]
+      summary: Arc DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /bottlenecks:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /cohort-analysis:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /completion-trends:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /effectiveness/{arc_id}:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /engagement-metrics:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /failure-analysis:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /impact-assessment:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /overview:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /performance-metrics:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /prediction-accuracy:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /success-patterns:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /system-health:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /system/statistics:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/progression:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/quest-opportunities:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/steps:
+    get:
+      tags: [arc]
+      summary: Arc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /custom-report:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /generate:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /system/check-stalled:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/activate:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/advance:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/fail-step:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/generate-quest:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}/generate-steps:
+    post:
+      tags: [arc]
+      summary: Arc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{arc_id}:
+    put:
+      tags: [arc]
+      summary: Arc PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # AUTH_USER System
+  /{character_id}:
+    delete:
+      tags: [auth_user]
+      summary: Auth_User DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/permissions/{permission}:
+    delete:
+      tags: [auth_user]
+      summary: Auth_User DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /character/{character_id}/users:
+    get:
+      tags: [auth_user]
+      summary: Auth_User GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /check-permission/{permission_name}:
+    get:
+      tags: [auth_user]
+      summary: Auth_User GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /check/{character_id}/{permission}:
+    get:
+      tags: [auth_user]
+      summary: Auth_User GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /me:
+    get:
+      tags: [auth_user]
+      summary: Auth_User GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /user/characters:
+    get:
+      tags: [auth_user]
+      summary: Auth_User GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}:
+    get:
+      tags: [auth_user]
+      summary: Auth_User GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /check-multi:
+    post:
+      tags: [auth_user]
+      summary: Auth_User POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /token:
+    post:
+      tags: [auth_user]
+      summary: Auth_User POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/permissions:
+    post:
+      tags: [auth_user]
+      summary: Auth_User POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/transfer-ownership:
+    post:
+      tags: [auth_user]
+      summary: Auth_User POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}:
+    put:
+      tags: [auth_user]
+      summary: Auth_User PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/ownership:
+    put:
+      tags: [auth_user]
+      summary: Auth_User PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # CHARACTER System
+  /{character_id}/relationships/{target_id}/{relationship_type}:
+    delete:
+      tags: [character]
+      summary: Character DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships:
+    get:
+      tags: [character]
+      summary: Character GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships/auth/users:
+    get:
+      tags: [character]
+      summary: Character GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships/faction:
+    get:
+      tags: [character]
+      summary: Character GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships/quest:
+    get:
+      tags: [character]
+      summary: Character GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships/spatial:
+    get:
+      tags: [character]
+      summary: Character GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{user_id}/relationships/auth/characters:
+    get:
+      tags: [character]
+      summary: Character GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{user_id}/relationships/auth/{character_id}/permission/{permission}:
+    get:
+      tags: [character]
+      summary: Character GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships:
+    post:
+      tags: [character]
+      summary: Character POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships/faction/{faction_id}/reputation:
+    post:
+      tags: [character]
+      summary: Character POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships/quest/{quest_id}/status:
+    post:
+      tags: [character]
+      summary: Character POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/relationships/spatial/{location_id}/proximity:
+    post:
+      tags: [character]
+      summary: Character POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{user_id}/relationships/auth/{character_id}/link:
+    post:
+      tags: [character]
+      summary: Character POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # COMBAT System
+  /state/{combat_id}:
+    delete:
+      tags: [combat]
+      summary: Combat DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /state/{combat_id}:
+    get:
+      tags: [combat]
+      summary: Combat GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /states:
+    get:
+      tags: [combat]
+      summary: Combat GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /state:
+    post:
+      tags: [combat]
+      summary: Combat POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /state/{combat_id}:
+    put:
+      tags: [combat]
+      summary: Combat PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # DIALOGUE System
+  /conversations/{conversation_id}:
+    delete:
+      tags: [dialogue]
+      summary: Dialogue DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /conversations:
+    get:
+      tags: [dialogue]
+      summary: Dialogue GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /conversations/{conversation_id}:
+    get:
+      tags: [dialogue]
+      summary: Dialogue GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /conversations/{conversation_id}/context:
+    get:
+      tags: [dialogue]
+      summary: Dialogue GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /conversations/{conversation_id}/messages:
+    get:
+      tags: [dialogue]
+      summary: Dialogue GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /health:
+    get:
+      tags: [dialogue]
+      summary: Dialogue GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /npcs/{npc_id}/dialogue-options:
+    get:
+      tags: [dialogue]
+      summary: Dialogue GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /test/mock-conversation:
+    get:
+      tags: [dialogue]
+      summary: Dialogue GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /conversations:
+    post:
+      tags: [dialogue]
+      summary: Dialogue POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /conversations/{conversation_id}/generate-response:
+    post:
+      tags: [dialogue]
+      summary: Dialogue POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /conversations/{conversation_id}/messages:
+    post:
+      tags: [dialogue]
+      summary: Dialogue POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # DIPLOMACY System
+  /compliance/{faction_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /factions/{faction_id}/treaties:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /incidents:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /incidents/{incident_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /negotiations:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /negotiations/{negotiation_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /relationships/{faction_a_id}/{faction_b_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /relationships/{faction_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sanctions:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sanctions/{sanction_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /tension/{faction_a_id}/{faction_b_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /treaties:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /treaties/{treaty_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /treaties/{treaty_id}/violations:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /ultimatums:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /ultimatums/{ultimatum_id}:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /violations:
+    get:
+      tags: [diplomacy]
+      summary: Diplomacy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /incidents/{incident_id}:
+    patch:
+      tags: [diplomacy]
+      summary: Diplomacy PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /negotiations/{negotiation_id}:
+    patch:
+      tags: [diplomacy]
+      summary: Diplomacy PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /relationships/{faction_a_id}/{faction_b_id}:
+    patch:
+      tags: [diplomacy]
+      summary: Diplomacy PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sanctions/{sanction_id}:
+    patch:
+      tags: [diplomacy]
+      summary: Diplomacy PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /treaties/{treaty_id}:
+    patch:
+      tags: [diplomacy]
+      summary: Diplomacy PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /ultimatums/{ultimatum_id}:
+    patch:
+      tags: [diplomacy]
+      summary: Diplomacy PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /enforce-treaties:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /incidents:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /incidents/{incident_id}/resolve:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /negotiations:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /negotiations/{negotiation_id}/accept:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /negotiations/{negotiation_id}/offers:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /negotiations/{negotiation_id}/reject:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sanctions:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sanctions/check-expired:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sanctions/{sanction_id}/lift:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sanctions/{sanction_id}/violations:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /treaties:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /treaties/{treaty_id}/expire:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /ultimatums:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /ultimatums/check-expired:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /ultimatums/{ultimatum_id}/respond:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /violations:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /violations/{violation_id}/acknowledge:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /violations/{violation_id}/resolve:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /war/check/{faction_a_id}/{faction_b_id}:
+    post:
+      tags: [diplomacy]
+      summary: Diplomacy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # ECONOMY System
+  /inventory/{shop_id}:
+    get:
+      tags: [economy]
+      summary: Economy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /metrics/{metric_type}:
+    get:
+      tags: [economy]
+      summary: Economy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions/{region_id}/resources:
+    get:
+      tags: [economy]
+      summary: Economy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /resources/{resource_id}:
+    get:
+      tags: [economy]
+      summary: Economy GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /buy/{shop_id}:
+    post:
+      tags: [economy]
+      summary: Economy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /preview_price:
+    post:
+      tags: [economy]
+      summary: Economy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /resources/{resource_id}/price/adjust:
+    post:
+      tags: [economy]
+      summary: Economy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /restock/{shop_id}:
+    post:
+      tags: [economy]
+      summary: Economy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sell/{shop_id}:
+    post:
+      tags: [economy]
+      summary: Economy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /trade:
+    post:
+      tags: [economy]
+      summary: Economy POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # EQUIPMENT System
+  /sets/{set_id}:
+    delete:
+      tags: [equipment]
+      summary: Equipment DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /durability/{equipment_id}/history:
+    get:
+      tags: [equipment]
+      summary: Equipment GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /durability/{equipment_id}/repair-cost:
+    get:
+      tags: [equipment]
+      summary: Equipment GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /durability/{equipment_id}/status:
+    get:
+      tags: [equipment]
+      summary: Equipment GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sets:
+    get:
+      tags: [equipment]
+      summary: Equipment GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sets/{set_id}:
+    get:
+      tags: [equipment]
+      summary: Equipment GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}:
+    get:
+      tags: [equipment]
+      summary: Equipment GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/set_bonuses:
+    get:
+      tags: [equipment]
+      summary: Equipment GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /durability/{equipment_id}/damage/combat:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /durability/{equipment_id}/damage/wear:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /durability/{equipment_id}/repair:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sets:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/equip:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/identify:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/identify_full:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/swap:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{character_id}/unequip:
+    post:
+      tags: [equipment]
+      summary: Equipment POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sets/{set_id}:
+    put:
+      tags: [equipment]
+      summary: Equipment PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # INVENTORY System
+  /inventories/{inventory_id}:
+    delete:
+      tags: [inventory]
+      summary: Inventory DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/items/{inventory_item_id}:
+    delete:
+      tags: [inventory]
+      summary: Inventory DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /items/{item_id}:
+    delete:
+      tags: [inventory]
+      summary: Inventory DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories:
+    get:
+      tags: [inventory]
+      summary: Inventory GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}:
+    get:
+      tags: [inventory]
+      summary: Inventory GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/items:
+    get:
+      tags: [inventory]
+      summary: Inventory GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/stats:
+    get:
+      tags: [inventory]
+      summary: Inventory GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /items:
+    get:
+      tags: [inventory]
+      summary: Inventory GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /items/{item_id}:
+    get:
+      tags: [inventory]
+      summary: Inventory GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /admin/inventory/run-migrations:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/import:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/restore:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/backup:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/combine-stacks:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/export:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/filter:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/items:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/optimize-stacks:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/split-stack/{stack_id}:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/swap:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventory/{from_inventory_id}/bulk-transfer/{to_inventory_id}:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventory/{from_inventory_id}/transfer/{to_inventory_id}/{inventory_item_id}:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /items:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /transfer:
+    post:
+      tags: [inventory]
+      summary: Inventory POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}:
+    put:
+      tags: [inventory]
+      summary: Inventory PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /inventories/{inventory_id}/items/{inventory_item_id}:
+    put:
+      tags: [inventory]
+      summary: Inventory PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /items/{item_id}:
+    put:
+      tags: [inventory]
+      summary: Inventory PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # MAGIC System
+  /abilities/{ability_id}:
+    delete:
+      tags: [magic]
+      summary: Magic DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /effects/{effect_id}:
+    delete:
+      tags: [magic]
+      summary: Magic DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spellbooks/{spellbook_id}/spells/{spell_id}:
+    delete:
+      tags: [magic]
+      summary: Magic DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spells/{spell_id}:
+    delete:
+      tags: [magic]
+      summary: Magic DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /abilities:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /abilities/{ability_id}:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /characters/{character_id}/magic-summary:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /characters/{owner_id}/spellbook:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /effects:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /effects/{effect_id}:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /effects/{target_type}/{target_id}:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /influences:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /influences/{influence_id}:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /locations/{location_id}/analysis:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spellbooks:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spellbooks/{owner_type}/{owner_id}:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spellbooks/{spellbook_id}:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spells:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spells/search:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spells/{spell_id}:
+    get:
+      tags: [magic]
+      summary: Magic GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /abilities:
+    post:
+      tags: [magic]
+      summary: Magic POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /effects/{effect_id}/dispel:
+    post:
+      tags: [magic]
+      summary: Magic POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spellbooks:
+    post:
+      tags: [magic]
+      summary: Magic POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spellbooks/{spellbook_id}/spells/{spell_id}:
+    post:
+      tags: [magic]
+      summary: Magic POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spells:
+    post:
+      tags: [magic]
+      summary: Magic POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spells/cast:
+    post:
+      tags: [magic]
+      summary: Magic POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /system/process-tick:
+    post:
+      tags: [magic]
+      summary: Magic POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /abilities/{ability_id}:
+    put:
+      tags: [magic]
+      summary: Magic PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /effects/{effect_id}/modify-duration:
+    put:
+      tags: [magic]
+      summary: Magic PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /spells/{spell_id}:
+    put:
+      tags: [magic]
+      summary: Magic PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # MOTIF System
+  /motifs/{motif_id}:
+    delete:
+      tags: [motif]
+      summary: Motif DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /active/:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /analyze-conflicts:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /chaos/event:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /chaos/log:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /compatible-motifs/{motif_id}:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /context/:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /global/:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /gpt-context:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/{motif_id}:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /narrative/context/:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /narrative/influence/:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /notifications/recent:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /position/:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /predict-trends:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /region/summary/{region_id}:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regional/{region_id}:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sequences/{sequence_id}:
+    get:
+      tags: [motif]
+      summary: Motif GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/{motif_id}:
+    patch:
+      tags: [motif]
+      summary: Motif PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /advance-lifecycles:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /apply-effects/{motif_id}:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /batch/apply-effects:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /blend:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /chaos/force/{entity_id}:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /chaos/inject:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /chaos/trigger/{entity_id}:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /generate-event:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /random:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sequences/generate:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /sequences/{sequence_id}/advance:
+    post:
+      tags: [motif]
+      summary: Motif POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # NPC System
+  /memories/{npc_id}/{memory_id}:
+    delete:
+      tags: [npc]
+      summary: Npc DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}:
+    delete:
+      tags: [npc]
+      summary: Npc DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /factions/{npc_id}:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /memories/{npc_id}:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /memories/{npc_id}/summary:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/{npc_id}:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /population/metrics:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /rumors/network/{rumor_id}:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /rumors/{npc_id}:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/factions:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/location:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/location:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/loyalty/{character_id}:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/memories:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/motifs:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/rumors:
+    get:
+      tags: [npc]
+      summary: Npc GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}:
+    patch:
+      tags: [npc]
+      summary: Npc PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/location:
+    patch:
+      tags: [npc]
+      summary: Npc PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /daily-movement-tick:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /factions/{npc_id}/adjust:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /generate:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /memories/{npc_id}:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/apply/global:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/apply/npc/{npc_id}/{motif_id}:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /motifs/apply/regional/{region_id}:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /population/multiplier/{multiplier}:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /population/poi/{poi_id}:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /population/update:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /rumors/decay:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /rumors/seed:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/factions/adjust:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/loyalty:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/memories:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/motifs:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/regenerate-goals:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/rumors:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{npc_id}/update-location:
+    post:
+      tags: [npc]
+      summary: Npc POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # POPULATION System
+  /{poi_id}:
+    delete:
+      tags: [population]
+      summary: Population DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    get:
+      tags: [population]
+      summary: Population GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /by-state/{state}:
+    get:
+      tags: [population]
+      summary: Population GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /by-type/{poi_type}:
+    get:
+      tags: [population]
+      summary: Population GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /config:
+    get:
+      tags: [population]
+      summary: Population GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events:
+    get:
+      tags: [population]
+      summary: Population GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /status/{poi_id}:
+    get:
+      tags: [population]
+      summary: Population GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}:
+    get:
+      tags: [population]
+      summary: Population GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}/population:
+    patch:
+      tags: [population]
+      summary: Population PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /config/base-rate/{poi_type}:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /config/global-multiplier:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /migration:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /monthly-update:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}/catastrophe:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}/convert-to-dungeon:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}/resource-shortage:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}/seasonal-effect:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}/start-repopulation:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}/war-impact:
+    post:
+      tags: [population]
+      summary: Population POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{poi_id}:
+    put:
+      tags: [population]
+      summary: Population PUT endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # REGION System
+  /{region_id}:
+    delete:
+      tags: [region]
+      summary: Region DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /biomes:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /biomes/adjacency:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /by_continent/{continent_id}:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /continents:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /continents/{continent_id}:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /initialize:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /map/{region_id}:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /questlog/{character_id}:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions/at_coordinates:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions/coordinates/{x}/{y}:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions/{region_id}:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions/{region_id}/adjacent:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /world/map:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /world/metadata:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{region_id}/details:
+    get:
+      tags: [region]
+      summary: Region GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /continents/generate:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /generate:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /generate/new:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /log_event:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /questlog/{character_id}:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions/generate:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /seed/{region_id}:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /world/regenerate:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{region_id}:
+    post:
+      tags: [region]
+      summary: Region POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # TENSION_WAR System
+  /wars:
+    get:
+      tags: [tension_war]
+      summary: Tension_War GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{region_id}:
+    get:
+      tags: [tension_war]
+      summary: Tension_War GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{region_id}/history:
+    get:
+      tags: [tension_war]
+      summary: Tension_War GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /event:
+    post:
+      tags: [tension_war]
+      summary: Tension_War POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{region_id}:
+    post:
+      tags: [tension_war]
+      summary: Tension_War POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{region_id}/decay:
+    post:
+      tags: [tension_war]
+      summary: Tension_War POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /{region_id}/reset:
+    post:
+      tags: [tension_war]
+      summary: Tension_War POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # TIME System
+  /calendar/dates/{name}:
+    delete:
+      tags: [time]
+      summary: Time DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events/{event_id}:
+    delete:
+      tags: [time]
+      summary: Time DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /calendar:
+    get:
+      tags: [time]
+      summary: Time GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /current:
+    get:
+      tags: [time]
+      summary: Time GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events:
+    get:
+      tags: [time]
+      summary: Time GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /season:
+    get:
+      tags: [time]
+      summary: Time GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /weather:
+    get:
+      tags: [time]
+      summary: Time GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /advance:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /calendar/dates:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /progression/pause:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /progression/resume:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /progression/start:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /progression/stop:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /reset:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /save:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /scale:
+    post:
+      tags: [time]
+      summary: Time POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # WORLD_GENERATION System
+  /continents/{continent_id}:
+    delete:
+      tags: [world_generation]
+      summary: World_Generation DELETE endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /continents:
+    get:
+      tags: [world_generation]
+      summary: World_Generation GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /continents/{continent_id}:
+    get:
+      tags: [world_generation]
+      summary: World_Generation GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /continents/{continent_id}/metadata:
+    patch:
+      tags: [world_generation]
+      summary: World_Generation PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /continents:
+    post:
+      tags: [world_generation]
+      summary: World_Generation POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+
+  # WORLD_STATE System
+  /:
+    get:
+      tags: [world_state]
+      summary: World_State GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /categories:
+    get:
+      tags: [world_state]
+      summary: World_State GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events:
+    get:
+      tags: [world_state]
+      summary: World_State GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events/{event_id}:
+    get:
+      tags: [world_state]
+      summary: World_State GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /history:
+    get:
+      tags: [world_state]
+      summary: World_State GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /regions:
+    get:
+      tags: [world_state]
+      summary: World_State GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /related-events/{event_id}:
+    get:
+      tags: [world_state]
+      summary: World_State GET endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /:
+    patch:
+      tags: [world_state]
+      summary: World_State PATCH endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /chaos-event:
+    post:
+      tags: [world_state]
+      summary: World_State POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /events:
+    post:
+      tags: [world_state]
+      summary: World_State POST endpoint
+      responses:
+        '200':
+          description: Successful response
+
+  /process-tick:
+    post:
+      tags: [world_state]
+      summary: World_State POST endpoint
+      responses:
+        '200':
+          description: Successful response
+

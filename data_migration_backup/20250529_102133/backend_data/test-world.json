@@ -1,0 +1,17 @@
+{
+  "id": "test-world",
+  "name": "Test World",
+  "version": "1.0",
+  "continents": {
+    "continent1": {
+      "id": "continent1",
+      "name": "Test Continent",
+      "regions": {
+        "region1": {
+          "id": "region1",
+          "name": "Test Region"
+        }
+      }
+    }
+  }
+}

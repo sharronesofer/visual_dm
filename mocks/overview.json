@@ -1,0 +1,46 @@
+{
+  "generated_at": "2025-05-29T01:34:25.044946Z",
+  "systems_count": 25,
+  "systems": [
+    "analytics",
+    "arc",
+    "auth_user",
+    "character",
+    "combat",
+    "crafting",
+    "diplomacy",
+    "economy",
+    "equipment",
+    "faction",
+    "inventory",
+    "magic",
+    "memory",
+    "motif",
+    "npc",
+    "poi",
+    "population",
+    "quest",
+    "region",
+    "religion",
+    "rumor",
+    "tension_war",
+    "time",
+    "world_generation",
+    "world_state"
+  ],
+  "fixture_types": [
+    "Single object responses",
+    "List responses",
+    "Create/update requests",
+    "Error responses",
+    "Success responses",
+    "Edge case data"
+  ],
+  "usage_notes": [
+    "All fixtures use realistic fake data generated with Faker library",
+    "IDs are properly formatted (UUID or integer) based on system requirements",
+    "Timestamps are in ISO 8601 format with timezone",
+    "Enum values match backend system specifications",
+    "Error responses follow API contract specifications"
+  ]
+}

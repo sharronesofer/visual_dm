@@ -1,0 +1,26 @@
+{
+    "name": "VDM.Tests",
+    "rootNamespace": "VDM.Tests",
+    "references": [
+        "VDM.UI",
+        "VDM.Runtime",
+        "VDM.Modules",
+        "VDM.Systems",
+        "VDM.Services",
+        "VDM.Core",
+        "VDM.DTOs",
+        "VDM.Common",
+        "Unity.Nuget.Newtonsoft-Json",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+    "versionDefines": [],
+    "noEngineReferences": false
+} 

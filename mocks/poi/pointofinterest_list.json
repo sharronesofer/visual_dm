@@ -1,0 +1,42 @@
+[
+  {
+    "id": "aa39d565-a9e1-47c1-8f2a-6b509e56c9b3",
+    "created_at": "2025-04-30T01:34:24.965588Z",
+    "updated_at": "2025-05-27T01:34:24.965591Z",
+    "name": "Budget",
+    "description": "Value structure live situation.",
+    "status": "PENDING"
+  },
+  {
+    "id": "e1006653-d07d-41b6-a555-8f329c75264a",
+    "created_at": "2025-05-06T01:34:24.965595Z",
+    "updated_at": "2025-05-29T01:34:24.965596Z",
+    "name": "Machine",
+    "description": "Family according evening represent less hear husband single.",
+    "status": "PENDING"
+  },
+  {
+    "id": "e0a49770-8d85-4354-8c9c-7abe0c720c78",
+    "created_at": "2025-05-19T01:34:24.965600Z",
+    "updated_at": "2025-05-25T01:34:24.965601Z",
+    "name": "Mr",
+    "description": "Affect serious sit part oil.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "cdd817b4-2363-4c8d-9b43-8a4780c3bf3c",
+    "created_at": "2025-04-29T01:34:24.965605Z",
+    "updated_at": "2025-05-28T01:34:24.965606Z",
+    "name": "Draw",
+    "description": "Act hand owner without art.",
+    "status": "PENDING"
+  },
+  {
+    "id": "1861175c-c1d3-41b1-b001-8831747060b7",
+    "created_at": "2025-05-24T01:34:24.965610Z",
+    "updated_at": "2025-05-25T01:34:24.965611Z",
+    "name": "Front",
+    "description": "Store guy Mrs support turn.",
+    "status": "PENDING"
+  }
+]

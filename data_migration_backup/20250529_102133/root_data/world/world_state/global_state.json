@@ -1,0 +1,12 @@
+{
+  "global_entropy": 12,
+  "active_factions": ["Faction A", "Faction B"],
+  "global_rumors": [
+    "A mysterious figure is seen in the sky",
+    "A new power rises in the east"
+  ],
+  "global_events": [
+    {"event": "Solar Eclipse", "timestamp": "2025-04-03T12:00:00Z"}
+  ],
+  "last_updated": "2025-04-03T16:00:00Z"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "ab7f7e2c-3660-4f40-990f-dfed7309a7ad",
+  "created_at": "2025-05-09T01:34:24.968494Z",
+  "updated_at": "2025-05-27T01:34:24.968496Z",
+  "title": "Managed dedicated concept",
+  "description": "Degree minute strategy space role fear how director. Operation school argue around with others white. Up live minute center southern maintain. I property difficult account control.",
+  "quest_type": "SIDE",
+  "quest_status": "ACTIVE",
+  "giver_id": "f6856d94-b11e-4a94-91e3-d13090ebccd0",
+  "target_character_id": "19fa86e0-8fc3-4f44-81f9-6e5bb0eac29a",
+  "requirements": {
+    "minimum_level": 2,
+    "required_items": [
+      "6a4cda9e-8e27-4e17-9d4c-332dbd859f71"
+    ],
+    "prerequisite_quests": [
+      "7d1dc1b0-433a-4f6a-9a04-8abc8187db26",
+      "73b3835e-c1d1-4185-b3fd-66894aa3854b"
+    ]
+  },
+  "rewards": {
+    "experience_points": 1635,
+    "gold": 913,
+    "items": [
+      {
+        "item_id": "780565ad-6f74-461d-826c-bce94b2e400c",
+        "quantity": 1
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "step_type": "KILL",
+      "description": "Safe rest glass seat after common whom.",
+      "completed": false,
+      "target_id": "17d27b83-d909-4ec4-bdf1-708f550c7c8a"
+    },
+    {
+      "step_number": 2,
+      "step_type": "DELIVER",
+      "description": "Subject morning trial a life although administration.",
+      "completed": true,
+      "target_id": "572b5c0a-099a-454c-a902-433bebb5aeec"
+    },
+    {
+      "step_number": 3,
+      "step_type": "DELIVER",
+      "description": "Can voice where two simply.",
+      "completed": true,
+      "target_id": "3074b561-88e9-4ad7-a70d-a977b24054f3"
+    }
+  ]
+}

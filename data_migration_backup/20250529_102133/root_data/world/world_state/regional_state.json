@@ -1,0 +1,11 @@
+{
+  "region_name": "Mystic Highlands",
+  "regional_entropy": 5,
+  "faction_control": "The Arcane Order",
+  "local_rumors": ["A hidden treasure lies beneath the old ruins"],
+  "environment": {
+    "weather": "foggy",
+    "terrain": "mountainous"
+  },
+  "last_updated": "2025-04-03T15:30:00Z"
+}

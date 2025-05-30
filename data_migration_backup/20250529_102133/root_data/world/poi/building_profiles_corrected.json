@@ -1,0 +1,128 @@
+{
+  "general_store": {
+    "type": "commercial",
+    "inventory_tags": [
+      "gear",
+      "basic_armor",
+      "basic_weapon"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "hamlet",
+    "weight": 5,
+    "tile_size": 1
+  },
+  "pawn_shop": {
+    "type": "commercial",
+    "inventory_tags": [
+      "gear",
+      "random"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 3,
+    "tile_size": 1
+  },
+  "weaponsmith": {
+    "type": "commercial",
+    "inventory_tags": [
+      "weapon"
+    ],
+    "services": [
+      "buy",
+      "sell",
+      "repair"
+    ],
+    "min_city_size": "village",
+    "weight": 3,
+    "tile_size": 1
+  },
+  "armorsmith": {
+    "type": "commercial",
+    "inventory_tags": [
+      "armor"
+    ],
+    "services": [
+      "buy",
+      "sell",
+      "repair",
+      "identification"
+    ],
+    "min_city_size": "village",
+    "weight": 3,
+    "tile_size": 1
+  },
+  "clothier": {
+    "type": "commercial",
+    "inventory_tags": [
+      "clothing",
+      "jewelry",
+      "hats"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2,
+    "tile_size": 1
+  },
+  "knick_knack_shop": {
+    "type": "commercial",
+    "inventory_tags": [
+      "quest_hook",
+      "curios"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2,
+    "tile_size": 1
+  },
+  "apothecary": {
+    "type": "commercial",
+    "inventory_tags": [
+      "herbs",
+      "potions"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "village",
+    "weight": 2,
+    "tile_size": 1
+  },
+  "alchemist": {
+    "type": "commercial",
+    "inventory_tags": [
+      "alchemy",
+      "scrolls"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2,
+    "tile_size": 1
+  },
+  "castle": {
+    "type": "ruling",
+    "services": [
+      "rule",
+      "court",
+      "military"
+    ],
+    "min_city_size": "city",
+    "weight": 1,
+    "tile_size": 4
+  }
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cec34fff-5d3c-4101-97bb-9aa04b26ea57",
+    "created_at": "2025-05-07T01:34:24.945118Z",
+    "updated_at": "2025-05-26T01:34:24.945119Z",
+    "name": "Cold",
+    "description": "Part lose very to cultural forward.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "97e29db0-4eb0-46ec-a8c4-3dd2751561dc",
+    "created_at": "2025-05-06T01:34:24.945124Z",
+    "updated_at": "2025-05-26T01:34:24.945125Z",
+    "name": "Base",
+    "description": "Whose land development grow enough.",
+    "status": "PENDING"
+  },
+  {
+    "id": "9fcf8249-48a2-4b7a-82f2-26f84d0cf20a",
+    "created_at": "2025-05-10T01:34:24.945129Z",
+    "updated_at": "2025-05-29T01:34:24.945130Z",
+    "name": "Compare",
+    "description": "Spring hundred participant treatment others money.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "db26fa64-c3ca-40f4-84c4-08dc20a4cd95",
+    "created_at": "2025-05-25T01:34:24.945134Z",
+    "updated_at": "2025-05-28T01:34:24.945135Z",
+    "name": "Wall",
+    "description": "Network our agency me guess tell begin.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "07995a21-477d-4424-b881-f79cacf45220",
+    "created_at": "2025-05-05T01:34:24.945138Z",
+    "updated_at": "2025-05-26T01:34:24.945140Z",
+    "name": "Plan",
+    "description": "Coach movie final trade possible.",
+    "status": "ACTIVE"
+  }
+]

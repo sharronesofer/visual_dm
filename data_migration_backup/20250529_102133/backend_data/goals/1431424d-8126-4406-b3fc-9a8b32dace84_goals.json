@@ -1,0 +1,19 @@
+{
+  "character_id": "1431424d-8126-4406-b3fc-9a8b32dace84",
+  "goals": [
+    {
+      "goal_id": "f8429921-5b76-47fe-8a8a-07dcc936e94f",
+      "character_id": "1431424d-8126-4406-b3fc-9a8b32dace84",
+      "description": "Try out new level 2 abilities",
+      "goal_type": "GoalType.PERSONAL",
+      "priority": "GoalPriority.MEDIUM",
+      "status": "GoalStatus.ACTIVE",
+      "progress": 0.0,
+      "parent_goal_id": null,
+      "metadata": {},
+      "created_at": "2025-05-25T03:30:30.095527",
+      "updated_at": "2025-05-25T03:30:30.095530",
+      "subgoals": []
+    }
+  ]
+}

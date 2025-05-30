@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bfa5d536-3e64-41d0-8712-9050789119a9",
+    "created_at": "2025-05-03T01:34:24.947073Z",
+    "updated_at": "2025-05-29T01:34:24.947075Z",
+    "name": "Debate",
+    "description": "First treat rise cover tax one build treat.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "405b1ed1-d201-492d-985d-cd70a65d4afa",
+    "created_at": "2025-05-01T01:34:24.947079Z",
+    "updated_at": "2025-05-24T01:34:24.947080Z",
+    "name": "Civil",
+    "description": "Property get knowledge or four.",
+    "status": "PENDING"
+  },
+  {
+    "id": "d7f3129f-5a24-4184-a80e-0e22e7d0a2a7",
+    "created_at": "2025-05-16T01:34:24.947084Z",
+    "updated_at": "2025-05-27T01:34:24.947085Z",
+    "name": "Leader",
+    "description": "Entire item team fine.",
+    "status": "PENDING"
+  },
+  {
+    "id": "7e0a56b0-e5c4-4936-8182-1fcd6fe622d3",
+    "created_at": "2025-05-21T01:34:24.947088Z",
+    "updated_at": "2025-05-24T01:34:24.947090Z",
+    "name": "Argue",
+    "description": "Course might child job.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "e39ca4b7-e14d-4120-8499-a07c1980dba7",
+    "created_at": "2025-05-24T01:34:24.947093Z",
+    "updated_at": "2025-05-27T01:34:24.947095Z",
+    "name": "Open",
+    "description": "Than today crime you.",
+    "status": "INACTIVE"
+  }
+]

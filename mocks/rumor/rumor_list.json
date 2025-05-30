@@ -1,0 +1,42 @@
+[
+  {
+    "id": "4bba9597-1ddf-45ec-a172-8aae064e8bd2",
+    "created_at": "2025-05-09T01:34:25.031243Z",
+    "updated_at": "2025-05-26T01:34:25.031248Z",
+    "name": "Structure",
+    "description": "Rule child usually certain one.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "3e9bf1f8-e79d-4c9a-853b-3713dd270f09",
+    "created_at": "2025-05-25T01:34:25.031254Z",
+    "updated_at": "2025-05-26T01:34:25.031256Z",
+    "name": "Different",
+    "description": "Space security maintain color program poor from.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "e510c8b5-94c8-4854-9505-5abd2bdf8a2d",
+    "created_at": "2025-05-16T01:34:25.031260Z",
+    "updated_at": "2025-05-27T01:34:25.031262Z",
+    "name": "Stay",
+    "description": "Ask shoulder factor after method.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "eb8eb9e4-6c10-4069-acbc-db28633570b2",
+    "created_at": "2025-05-10T01:34:25.031267Z",
+    "updated_at": "2025-05-29T01:34:25.031268Z",
+    "name": "Maybe",
+    "description": "Beyond cut wait grow issue hour eye.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "b05f3571-1d61-468c-ae15-d6acb43751b9",
+    "created_at": "2025-05-21T01:34:25.031273Z",
+    "updated_at": "2025-05-27T01:34:25.031275Z",
+    "name": "Contain",
+    "description": "Sit figure fine teach person.",
+    "status": "PENDING"
+  }
+]

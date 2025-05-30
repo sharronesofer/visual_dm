@@ -1,0 +1,42 @@
+[
+  {
+    "id": "6eabd9ab-b6cf-4eea-875a-f34e0a07d2bc",
+    "created_at": "2025-04-29T01:34:24.990834Z",
+    "updated_at": "2025-05-29T01:34:24.990837Z",
+    "name": "Artist",
+    "description": "Road rock fight.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "f4da05e7-a456-4fee-bd21-256196368ab0",
+    "created_at": "2025-05-26T01:34:24.990842Z",
+    "updated_at": "2025-05-25T01:34:24.990844Z",
+    "name": "Teacher",
+    "description": "Window bring responsibility race person treat.",
+    "status": "PENDING"
+  },
+  {
+    "id": "97142607-317f-4393-9f64-593a0a056997",
+    "created_at": "2025-05-21T01:34:24.990848Z",
+    "updated_at": "2025-05-27T01:34:24.990850Z",
+    "name": "Question",
+    "description": "Member allow opportunity item beat paper.",
+    "status": "PENDING"
+  },
+  {
+    "id": "4501ab72-9271-4261-8449-2cece528faae",
+    "created_at": "2025-05-08T01:34:24.990854Z",
+    "updated_at": "2025-05-24T01:34:24.990856Z",
+    "name": "Difference",
+    "description": "Big or goal authority particularly else.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "1693aef5-6bcc-4181-8987-364edc4c846c",
+    "created_at": "2025-05-16T01:34:24.990860Z",
+    "updated_at": "2025-05-29T01:34:24.990861Z",
+    "name": "Current",
+    "description": "Rest hear better present country bit huge design.",
+    "status": "PENDING"
+  }
+]

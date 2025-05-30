@@ -1,0 +1,42 @@
+[
+  {
+    "id": "71697c0d-7d83-4b68-9d49-462d76d21c44",
+    "created_at": "2025-05-03T01:34:25.040850Z",
+    "updated_at": "2025-05-29T01:34:25.040853Z",
+    "name": "Sense",
+    "description": "Nearly own become media trip.",
+    "status": "PENDING"
+  },
+  {
+    "id": "0daa7a10-af55-488c-8616-89e71d069171",
+    "created_at": "2025-05-06T01:34:25.040859Z",
+    "updated_at": "2025-05-27T01:34:25.040861Z",
+    "name": "Focus",
+    "description": "Ask book body source have eat.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "fa68fe9e-93b8-4606-ac25-ac1e57ede838",
+    "created_at": "2025-05-12T01:34:25.040866Z",
+    "updated_at": "2025-05-29T01:34:25.040867Z",
+    "name": "Fight",
+    "description": "Fall west travel north hit together.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "78b16a6c-9aab-4136-be56-7602bf662544",
+    "created_at": "2025-05-19T01:34:25.040872Z",
+    "updated_at": "2025-05-28T01:34:25.040873Z",
+    "name": "Education",
+    "description": "Decision computer trial imagine air.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "46ff4def-b29b-48e9-99bd-9b13562cb595",
+    "created_at": "2025-05-20T01:34:25.040878Z",
+    "updated_at": "2025-05-28T01:34:25.040879Z",
+    "name": "White",
+    "description": "Future strategy seat politics discover father.",
+    "status": "ACTIVE"
+  }
+]

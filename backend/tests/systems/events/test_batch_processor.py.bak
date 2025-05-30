@@ -1,0 +1,455 @@
+"""
+Tests for the BatchEventProcessor and EventBatch classes.
+
+This module contains tests for batch event processing functionality, including
+queuing, prioritization, dependency handling, and both synchronous and asynchronous processing.
+"""
+
+import pytest
+import asyncio
+import time
+from typing import List, Dict, Any
+
+from backend.systems.events.event_base import EventBase
+from backend.systems.events.event_dispatcher import EventDispatcher
+
+
+# Test event classes
+class TestEvent(EventBase):
+    """Simple test event for batch processing tests."""
+
+    event_type: str
+    data: str
+    metadata: Dict[str, Any] = {}
+
+
+class PriorityEvent(EventBase):
+    """Event with explicit priority for batch priority tests."""
+
+    event_type: str
+    priority: int
+    data: str
+    metadata: Dict[str, Any] = {}
+
+
+# Test fixtures
+@pytest.fixture
+def dispatcher():
+    """Create a fresh EventDispatcher for each test."""
+    # Reset the singleton instance
+    EventDispatcher._instance = None
+    return EventDispatcher.get_instance()
+
+
+@pytest.fixture
+def processor(dispatcher):
+    """Create a BatchEventProcessor with the test dispatcher."""
+    return BatchEventProcessor(dispatcher=dispatcher, auto_process=False)
+
+
+@pytest.fixture
+def events():
+    """Create a set of test events for the batch tests."""
+    return {
+        "event1": TestEvent(event_type="test:batch", data="event1"),
+        "event2": TestEvent(event_type="test:batch", data="event2"),
+        "event3": TestEvent(event_type="test:batch", data="event3"),
+        "high": PriorityEvent(
+            event_type="test:priority", priority=EventPriority.HIGH, data="high"
+        ),
+        "medium": PriorityEvent(
+            event_type="test:priority", priority=EventPriority.NORMAL, data="medium"
+        ),
+        "low": PriorityEvent(
+            event_type="test:priority", priority=EventPriority.LOW, data="low"
+        ),
+    }
+
+
+# Test basic queuing and processing
+def test_queue_and_process(processor, events, dispatcher):
+    """Test basic event queuing and synchronous processing."""
+    # Track received events
+    received_events = []
+
+    # Define handler
+    def handler(event):
+        received_events.append(event)
+        return "handled"
+
+    # Subscribe to test events
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Queue events
+    processor.queue_event(events["event1"])
+    processor.queue_event(events["event2"])
+
+    # Verify queue size
+    assert len(processor.queue) == 2
+
+    # Process queue
+    processed_count = processor.process_queue()
+
+    # Verify processing results
+    assert processed_count == 2
+    assert len(received_events) == 2
+    assert events["event1"] in received_events
+    assert events["event2"] in received_events
+    assert len(processor.queue) == 0  # Queue should be empty now
+
+
+# Test queue_events method
+def test_queue_events(processor, events, dispatcher):
+    """Test queuing multiple events at once."""
+    # Track received events
+    received_events = []
+
+    # Define handler
+    def handler(event):
+        received_events.append(event)
+        return "handled"
+
+    # Subscribe to test events
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Queue multiple events at once
+    event_list = [events["event1"], events["event2"], events["event3"]]
+    processor.queue_events(event_list)
+
+    # Verify queue size
+    assert len(processor.queue) == 3
+
+    # Process queue
+    processed_count = processor.process_queue()
+
+    # Verify processing results
+    assert processed_count == 3
+    assert len(received_events) == 3
+    assert events["event1"] in received_events
+    assert events["event2"] in received_events
+    assert events["event3"] in received_events
+
+
+# Test async processing
+@pytest.mark.asyncio
+async def test_async_processing(processor, events, dispatcher):
+    """Test asynchronous event batch processing."""
+    # Track received events
+    received_events = []
+
+    # Define async handler
+    async def async_handler(event):
+        received_events.append(event)
+        await asyncio.sleep(0.01)  # Simulate async work
+        return f"async_handled_{event.data}"
+
+    # Subscribe to test events
+    dispatcher.subscribe(TestEvent, async_handler)
+
+    # Queue events
+    processor.queue_event(events["event1"])
+    processor.queue_event(events["event2"])
+
+    # Process queue asynchronously
+    processed_count = await processor.process_queue_async()
+
+    # Verify processing results
+    assert processed_count == 2
+    assert len(received_events) == 2
+    assert events["event1"] in received_events
+    assert events["event2"] in received_events
+
+
+# Test auto-processing threshold
+def test_auto_processing(dispatcher, events):
+    """Test that events are automatically processed when threshold is reached."""
+    # Create processor with auto processing
+    auto_processor = BatchEventProcessor(
+        dispatcher=dispatcher, auto_process=True, batch_size=3
+    )
+
+    # Track received events
+    received_events = []
+
+    # Define handler
+    def handler(event):
+        received_events.append(event)
+        return "handled"
+
+    # Subscribe to test events
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Queue events (not enough to trigger auto-processing)
+    auto_processor.queue_event(events["event1"])
+    auto_processor.queue_event(events["event2"])
+
+    # Should not auto-process yet
+    assert len(received_events) == 0
+    assert len(auto_processor.queue) == 2
+
+    # Add one more event to reach threshold
+    auto_processor.queue_event(events["event3"])
+
+    # Should have auto-processed
+    assert len(received_events) == 3
+    assert len(auto_processor.queue) == 0
+
+
+# Test clear_queue operation
+def test_clear_queue(processor, events):
+    """Test clearing the event queue without processing."""
+    # Queue events
+    processor.queue_event(events["event1"])
+    processor.queue_event(events["event2"])
+
+    # Verify queue size
+    assert len(processor.queue) == 2
+
+    # Clear queue
+    processor.clear_queue()
+
+    # Queue should be empty
+    assert len(processor.queue) == 0
+
+
+# Test statistics
+def test_processor_stats(processor, events, dispatcher):
+    """Test the statistics tracking of the batch processor."""
+    # Queue and process some events
+    processor.queue_event(events["event1"])
+    processor.queue_event(events["event2"])
+
+    # Process once
+    processor.process_queue()
+
+    # Get stats
+    stats = processor.get_stats()
+
+    # Verify stats
+    assert stats["queue_size"] == 0
+    assert stats["processed_batch_count"] == 1
+    assert stats["last_process_time"] is not None
+    assert stats["auto_process"] is False
+    assert stats["batch_size"] == 100
+
+
+# Test EventBatch class
+def test_event_batch(events):
+    """Test creating and using an EventBatch for structured processing."""
+    # Create a batch with high priority
+    batch = EventBatch(priority=EventPriority.HIGH, name="TestBatch")
+
+    # Add events to the batch
+    batch.add(events["event1"])
+    batch.add(
+        events["event2"], depends_on=[events["event1"]]
+    )  # event2 depends on event1
+
+    # Verify batch properties
+    assert batch.name == "TestBatch"
+    assert batch.priority == EventPriority.HIGH
+    assert batch.get_event_count() == 2
+
+    # Check dependency tracking
+    assert len(batch.dependencies[events["event2"]]) == 1
+    assert events["event1"] in batch.dependencies[events["event2"]]
+
+    # Get ordered events (should respect dependencies)
+    ordered_events = batch.get_events_in_order()
+
+    # event1 should come before event2 due to dependency
+    assert ordered_events.index(events["event1"]) < ordered_events.index(
+        events["event2"]
+    )
+
+
+# Test add_all method of EventBatch
+def test_batch_add_all(events):
+    """Test adding multiple events to a batch at once."""
+    # Create batch
+    batch = EventBatch()
+
+    # Add multiple events
+    event_list = [events["event1"], events["event2"], events["event3"]]
+    batch.add_all(event_list)
+
+    # Verify all events were added
+    assert batch.get_event_count() == 3
+    for event in event_list:
+        assert event in batch.events
+
+
+# Test dependency ordering with multi-level dependencies
+def test_complex_dependency_ordering(events):
+    """Test ordering with complex dependencies between events."""
+    # Create batch
+    batch = EventBatch()
+
+    # Add events with multi-level dependencies:
+    # event3 <- event2 <- event1 (event3 depends on event2, which depends on event1)
+    batch.add(events["event1"])
+    batch.add(events["event2"], depends_on=[events["event1"]])
+    batch.add(events["event3"], depends_on=[events["event2"]])
+
+    # Get ordered events
+    ordered_events = batch.get_events_in_order()
+
+    # Verify correct order: event1, event2, event3
+    assert ordered_events.index(events["event1"]) < ordered_events.index(
+        events["event2"]
+    )
+    assert ordered_events.index(events["event2"]) < ordered_events.index(
+        events["event3"]
+    )
+
+
+# Test processing multiple batches
+@pytest.mark.asyncio
+async def test_process_batches(events, dispatcher):
+    """Test processing multiple EventBatch objects with dependencies."""
+    from ..batch_processor import process_batches, process_batches_async
+
+    # Track received events and their order
+    received_events = []
+
+    # Define handler
+    def handler(event):
+        received_events.append(event)
+        return "handled"
+
+    # Subscribe to all event types
+    dispatcher.subscribe(TestEvent, handler)
+    dispatcher.subscribe(PriorityEvent, handler)
+
+    # Create batches with different priorities
+    high_batch = EventBatch(priority=EventPriority.HIGH, name="HighBatch")
+    high_batch.add(events["high"])
+
+    normal_batch = EventBatch(priority=EventPriority.NORMAL, name="NormalBatch")
+    normal_batch.add(events["medium"])
+
+    low_batch = EventBatch(priority=EventPriority.LOW, name="LowBatch")
+    low_batch.add(events["low"])
+
+    # Process batches (in reverse priority order to test prioritization)
+    batches = [low_batch, normal_batch, high_batch]
+
+    # Synchronous processing
+    count = process_batches(batches, dispatcher)
+
+    # Verify results
+    assert count == 3
+    assert len(received_events) == 3
+
+    # Clear for async test
+    received_events.clear()
+
+    # Asynchronous processing
+    count = await process_batches_async(batches, dispatcher)
+
+    # Verify results
+    assert count == 3
+    assert len(received_events) == 3
+
+
+# Test cyclic dependency detection
+def test_cyclic_dependencies(events):
+    """Test that cyclic dependencies are detected and resolved."""
+    # Create batch
+    batch = EventBatch()
+
+    # Create a cyclic dependency (A -> B -> C -> A)
+    batch.add(events["event1"])
+    batch.add(events["event2"], depends_on=[events["event1"]])
+    batch.add(events["event3"], depends_on=[events["event2"]])
+
+    # Complete the cycle - this should be detected
+    batch.add(events["event1"], depends_on=[events["event3"]])
+
+    # Try to get ordered events - should not result in infinite loop
+    ordered_events = batch.get_events_in_order()
+
+    # All events should be in the result, despite the cycle
+    assert len(ordered_events) == 3
+    assert events["event1"] in ordered_events
+    assert events["event2"] in ordered_events
+    assert events["event3"] in ordered_events
+
+
+# Test batch with duplicate events
+def test_duplicate_events_in_batch(events):
+    """Test that adding the same event multiple times doesn't duplicate it in the batch."""
+    # Create batch
+    batch = EventBatch()
+
+    # Add the same event multiple times
+    batch.add(events["event1"])
+    batch.add(events["event1"])  # Should not create a duplicate
+    batch.add(events["event1"])  # Should not create a duplicate
+
+    # Should only have one event
+    assert batch.get_event_count() == 1
+    assert events["event1"] in batch.events
+
+
+# Test batch with conflicting dependencies
+def test_conflicting_dependencies(events):
+    """Test handling of conflicting dependencies between events."""
+    # Create batch
+    batch = EventBatch()
+
+    # Add events with dependencies
+    batch.add(events["event1"], depends_on=[events["event3"]])  # 1 depends on 3
+    batch.add(events["event2"], depends_on=[events["event1"]])  # 2 depends on 1
+    batch.add(
+        events["event3"], depends_on=[events["event2"]]
+    )  # 3 depends on 2 (creates cycle)
+
+    # Get ordered events - should resolve the cycle somehow
+    ordered_events = batch.get_events_in_order()
+
+    # All events should be in the result despite the cycle
+    assert len(ordered_events) == 3
+    assert events["event1"] in ordered_events
+    assert events["event2"] in ordered_events
+    assert events["event3"] in ordered_events
+
+
+# Test performance of batch processing
+def test_batch_performance(dispatcher):
+    """Test the performance of batch processing with a large number of events."""
+    # Create processor
+    processor = BatchEventProcessor(dispatcher=dispatcher)
+
+    # Create a large number of events
+    large_batch = []
+    event_count = 100
+
+    for i in range(event_count):
+        large_batch.append(TestEvent(event_type="test:perf", data=f"perf_event_{i}"))
+
+    # Track events received
+    received_events = []
+
+    # Define handler
+    def handler(event):
+        received_events.append(event)
+        return "handled"
+
+    # Subscribe
+    dispatcher.subscribe(TestEvent, handler)
+
+    # Queue events
+    processor.queue_events(large_batch)
+
+    # Measure processing time
+    start_time = time.time()
+    processor.process_queue()
+    end_time = time.time()
+
+    # Processing should be efficient (less than 1 second for 100 events)
+    processing_time = end_time - start_time
+    assert processing_time < 1.0
+
+    # All events should be processed
+    assert len(received_events) == event_count

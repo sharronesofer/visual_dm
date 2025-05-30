@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bbac8a0c-a6a2-4d9b-b645-43de071a28b0",
+    "created_at": "2025-05-23T01:34:24.967155Z",
+    "updated_at": "2025-05-28T01:34:24.967157Z",
+    "name": "Suffer",
+    "description": "Card tax notice voice at.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "262dcb04-ce46-4372-8a11-c65dba49b0a8",
+    "created_at": "2025-05-03T01:34:24.967160Z",
+    "updated_at": "2025-05-25T01:34:24.967162Z",
+    "name": "Concern",
+    "description": "Put young arrive whose great occur.",
+    "status": "PENDING"
+  },
+  {
+    "id": "fbcd5619-126b-41fe-b1a5-943b0790aa01",
+    "created_at": "2025-05-26T01:34:24.967165Z",
+    "updated_at": "2025-05-24T01:34:24.967167Z",
+    "name": "From",
+    "description": "Knowledge particular production professor of set newspaper everybody.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "1ff690e4-8210-46b6-8530-c7ee224dde70",
+    "created_at": "2025-05-27T01:34:24.967170Z",
+    "updated_at": "2025-05-24T01:34:24.967171Z",
+    "name": "Share",
+    "description": "Every court professor other level almost pay.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "6f91874e-d7d0-41c2-8a30-a266fed388fe",
+    "created_at": "2025-05-19T01:34:24.967175Z",
+    "updated_at": "2025-05-28T01:34:24.967176Z",
+    "name": "Tend",
+    "description": "Commercial fact hear.",
+    "status": "INACTIVE"
+  }
+]

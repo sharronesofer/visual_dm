@@ -1,0 +1,199 @@
+{
+  "general_store": {
+    "type": "commercial",
+    "inventory_tags": [
+      "gear",
+      "basic_armor",
+      "basic_weapon"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "hamlet",
+    "weight": 5
+  },
+  "pawn_shop": {
+    "type": "commercial",
+    "inventory_tags": [
+      "gear",
+      "random"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 3
+  },
+  "weaponsmith": {
+    "type": "commercial",
+    "inventory_tags": [
+      "weapon"
+    ],
+    "services": [
+      "buy",
+      "sell",
+      "repair"
+    ],
+    "min_city_size": "village",
+    "weight": 3
+  },
+  "armorsmith": {
+    "type": "commercial",
+    "inventory_tags": [
+      "armor"
+    ],
+    "services": [
+      "buy",
+      "sell",
+      "repair",
+      "identification"
+    ],
+    "min_city_size": "village",
+    "weight": 3
+  },
+  "clothier": {
+    "type": "commercial",
+    "inventory_tags": [
+      "clothing",
+      "jewelry",
+      "hats"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2
+  },
+  "knick_knack_shop": {
+    "type": "commercial",
+    "inventory_tags": [
+      "quest_hook",
+      "curios"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2
+  },
+  "apothecary": {
+    "type": "commercial",
+    "inventory_tags": [
+      "herbs",
+      "potions"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "village",
+    "weight": 2
+  },
+  "alchemist": {
+    "type": "commercial",
+    "inventory_tags": [
+      "alchemy",
+      "scrolls"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2
+  },
+  "book_dealer": {
+    "type": "commercial",
+    "inventory_tags": [
+      "books",
+      "maps",
+      "scrolls"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2
+  },
+  "pet_stall": {
+    "type": "commercial",
+    "inventory_tags": [
+      "pets",
+      "beasts",
+      "creatures"
+    ],
+    "services": [
+      "buy"
+    ],
+    "min_city_size": "village",
+    "weight": 1
+  },
+  "cartwright": {
+    "type": "commercial",
+    "inventory_tags": [
+      "wagons",
+      "mounts",
+      "travel_gear"
+    ],
+    "services": [
+      "buy",
+      "repair"
+    ],
+    "min_city_size": "village",
+    "weight": 2
+  },
+  "fishmonger": {
+    "type": "commercial",
+    "inventory_tags": [
+      "food"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "village",
+    "weight": 1
+  },
+  "vinter": {
+    "type": "commercial",
+    "inventory_tags": [
+      "wine",
+      "rumors"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "town",
+    "weight": 2
+  },
+  "curiosity_shop": {
+    "type": "commercial",
+    "inventory_tags": [
+      "artifacts",
+      "curios"
+    ],
+    "services": [
+      "buy",
+      "sell"
+    ],
+    "min_city_size": "city",
+    "weight": 1
+  },
+  "honey_cart": {
+    "type": "commercial",
+    "inventory_tags": [
+      "sweets"
+    ],
+    "services": [
+      "buy"
+    ],
+    "min_city_size": "hamlet",
+    "weight": 1
+  }
+}

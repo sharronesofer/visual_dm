@@ -1,0 +1,314 @@
+[
+  {
+    "id": "f696245a-c455-4d6b-9f97-2e1f579a76d7",
+    "created_at": "2025-05-03T01:34:24.963581Z",
+    "updated_at": "2025-05-27T01:34:24.963584Z",
+    "name": "Amy Kelly",
+    "npc_type": "VILLAGER",
+    "personality_trait": "NEUTRAL",
+    "description": "Voice tend check receive wife draw week nation. Former expert as each mouth to. Simply mission national.",
+    "location": {
+      "region_id": "7605436e-da67-459a-adab-8568974f78f3",
+      "poi_id": "ed6f8028-b51f-4068-8552-37d2b54fabf3",
+      "coordinates": {
+        "q": -2,
+        "r": -10,
+        "s": -8
+      }
+    },
+    "stats": {
+      "level": 2,
+      "hit_points": 63,
+      "armor_class": 14
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "87edf55d-34db-4f8d-8255-6865e0654da1",
+        "role": "LEADER",
+        "reputation": -18
+      }
+    ],
+    "schedule": {
+      "current_activity": "SOCIALIZING",
+      "next_activity_time": "2025-05-30T01:34:24.963710Z"
+    },
+    "loyalty": {
+      "player_character_id": "d0771f2e-7c32-4afb-8802-897f3950b90a",
+      "loyalty_score": 64,
+      "goodwill": -29
+    }
+  },
+  {
+    "id": "389e258e-533d-46e2-8dd3-2d8a164a1327",
+    "created_at": "2025-05-28T01:34:24.963719Z",
+    "updated_at": "2025-05-29T01:34:24.963721Z",
+    "name": "Mario Nicholson",
+    "npc_type": "VILLAGER",
+    "personality_trait": "MYSTERIOUS",
+    "description": "Sing turn follow age agree financial only poor. Office up call majority bed. Draw act exist several color call offer.",
+    "location": {
+      "region_id": "f6c09742-690e-4a79-9a69-c0518cfdc583",
+      "poi_id": "c7be3e1b-e989-4f6a-bc14-e2bd85c4db7f",
+      "coordinates": {
+        "q": 4,
+        "r": -10,
+        "s": 1
+      }
+    },
+    "stats": {
+      "level": 6,
+      "hit_points": 70,
+      "armor_class": 11
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "94b9893d-7ff8-4f5e-beac-7e1c4e1d32f4",
+        "role": "LEADER",
+        "reputation": 33
+      }
+    ],
+    "schedule": {
+      "current_activity": "WORKING",
+      "next_activity_time": "2025-05-30T01:34:24.963828Z"
+    },
+    "loyalty": {
+      "player_character_id": "df18af0a-c66a-4ab9-8d2b-8a85b3043a1f",
+      "loyalty_score": 83,
+      "goodwill": 48
+    }
+  },
+  {
+    "id": "df3de52b-93a3-4fc3-addc-ea5bb692563a",
+    "created_at": "2025-05-01T01:34:24.963835Z",
+    "updated_at": "2025-05-26T01:34:24.963837Z",
+    "name": "Emily Garcia",
+    "npc_type": "MERCHANT",
+    "personality_trait": "FRIENDLY",
+    "description": "Continue development best start lawyer process professional. Power thus knowledge field decision plant.",
+    "location": {
+      "region_id": "0cbfd752-d14c-4fe4-8034-910f5e39eb9b",
+      "poi_id": "9ccbd2f0-bb35-42f1-a0b8-2367174804e5",
+      "coordinates": {
+        "q": -7,
+        "r": -10,
+        "s": -5
+      }
+    },
+    "stats": {
+      "level": 1,
+      "hit_points": 15,
+      "armor_class": 17
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "ad4e481e-f2bd-40da-98ce-993db866b5a7",
+        "role": "ALLY",
+        "reputation": -55
+      }
+    ],
+    "schedule": {
+      "current_activity": "WORKING",
+      "next_activity_time": "2025-05-30T01:34:24.963934Z"
+    },
+    "loyalty": {
+      "player_character_id": "3e04412f-b5d2-48a7-a585-428e8a05dccb",
+      "loyalty_score": 67,
+      "goodwill": 34
+    }
+  },
+  {
+    "id": "40a84cab-38c9-4504-bcd6-fe142e486fa9",
+    "created_at": "2025-05-07T01:34:24.963941Z",
+    "updated_at": "2025-05-25T01:34:24.963943Z",
+    "name": "Lori Bailey",
+    "npc_type": "ALLY",
+    "personality_trait": "HOSTILE",
+    "description": "Direction foot pay wide then. Director thus fall above nothing carry maybe. Only national today about.",
+    "location": {
+      "region_id": "fb58b0b7-3372-4e91-a4c6-908f9e0ca95c",
+      "poi_id": "db167b13-8612-493a-8f30-09cf23afec0d",
+      "coordinates": {
+        "q": -8,
+        "r": 4,
+        "s": 5
+      }
+    },
+    "stats": {
+      "level": 1,
+      "hit_points": 63,
+      "armor_class": 16
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "94b88db7-09d9-44fc-9600-7301a5137e5d",
+        "role": "LEADER",
+        "reputation": -38
+      }
+    ],
+    "schedule": {
+      "current_activity": "WORKING",
+      "next_activity_time": "2025-05-30T01:34:24.964045Z"
+    },
+    "loyalty": {
+      "player_character_id": "b4430868-145c-423a-8928-cebb1980de32",
+      "loyalty_score": 12,
+      "goodwill": 34
+    }
+  },
+  {
+    "id": "03a2ffa8-2ac8-4b2c-a685-bf77927c2357",
+    "created_at": "2025-05-14T01:34:24.964053Z",
+    "updated_at": "2025-05-24T01:34:24.964054Z",
+    "name": "Dylan Lopez",
+    "npc_type": "GUARD",
+    "personality_trait": "MYSTERIOUS",
+    "description": "Take fast heart success. Our pick list center six.",
+    "location": {
+      "region_id": "6ed24f13-86ba-4652-8830-e54d1cf4fe35",
+      "poi_id": "05f6535d-bf59-4210-976b-bb92f84a7215",
+      "coordinates": {
+        "q": -2,
+        "r": 3,
+        "s": -3
+      }
+    },
+    "stats": {
+      "level": 9,
+      "hit_points": 28,
+      "armor_class": 12
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "51067125-7820-4228-a346-ff277ae382a6",
+        "role": "LEADER",
+        "reputation": 64
+      }
+    ],
+    "schedule": {
+      "current_activity": "RESTING",
+      "next_activity_time": "2025-05-30T01:34:24.964149Z"
+    },
+    "loyalty": {
+      "player_character_id": "dd95051a-7f8a-43a6-9dd9-e0e2eeaf8950",
+      "loyalty_score": 96,
+      "goodwill": -36
+    }
+  },
+  {
+    "id": "73f95fd7-aa84-40a1-83e2-a01eccbf7079",
+    "created_at": "2025-05-03T01:34:24.964156Z",
+    "updated_at": "2025-05-29T01:34:24.964157Z",
+    "name": "Heidi Sherman",
+    "npc_type": "ANTAGONIST",
+    "personality_trait": "MYSTERIOUS",
+    "description": "Suddenly soldier feel true leave get. State eat dinner mother meeting defense. Teacher leg you.",
+    "location": {
+      "region_id": "f085384a-8229-4a64-a7a2-120f1e1279c6",
+      "poi_id": "0422b06e-7dfb-4459-b249-2da4fc26f067",
+      "coordinates": {
+        "q": -6,
+        "r": 2,
+        "s": -3
+      }
+    },
+    "stats": {
+      "level": 11,
+      "hit_points": 41,
+      "armor_class": 17
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "d06c2c03-3ec6-4a29-8a6d-bda67019850a",
+        "role": "ALLY",
+        "reputation": 87
+      }
+    ],
+    "schedule": {
+      "current_activity": "WORKING",
+      "next_activity_time": "2025-05-30T01:34:24.964257Z"
+    },
+    "loyalty": {
+      "player_character_id": "83d6948b-cc2e-490a-a055-58193d344a31",
+      "loyalty_score": 50,
+      "goodwill": 20
+    }
+  },
+  {
+    "id": "7e08f07a-b561-4c61-83ed-4ab8e7ada968",
+    "created_at": "2025-05-18T01:34:24.964265Z",
+    "updated_at": "2025-05-27T01:34:24.964267Z",
+    "name": "Jacqueline Hernandez",
+    "npc_type": "ALLY",
+    "personality_trait": "HOSTILE",
+    "description": "Leader wonder form produce individual training. Region accept plant remain travel student. Toward listen most quickly western.",
+    "location": {
+      "region_id": "25530c89-0667-4e72-bf5b-71663d052b5a",
+      "poi_id": "5b5c99f6-b4b5-47ff-ae61-e38422445a90",
+      "coordinates": {
+        "q": -10,
+        "r": 10,
+        "s": -2
+      }
+    },
+    "stats": {
+      "level": 14,
+      "hit_points": 16,
+      "armor_class": 15
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "e14a64ab-0ff4-47e5-8ab8-00a127198be5",
+        "role": "ENEMY",
+        "reputation": -83
+      }
+    ],
+    "schedule": {
+      "current_activity": "WORKING",
+      "next_activity_time": "2025-05-30T01:34:24.964433Z"
+    },
+    "loyalty": {
+      "player_character_id": "f4646404-89d7-41c3-8575-a3193b5311c6",
+      "loyalty_score": 44,
+      "goodwill": 45
+    }
+  },
+  {
+    "id": "b92cff53-bd6d-480a-814f-76a3e85f508e",
+    "created_at": "2025-05-17T01:34:24.964441Z",
+    "updated_at": "2025-05-27T01:34:24.964443Z",
+    "name": "Jaime Hoffman",
+    "npc_type": "ANTAGONIST",
+    "personality_trait": "FRIENDLY",
+    "description": "Ability fast second real his from use summer. Real far set trip chair. Play stock almost trip professor college wind. Structure catch tax movie almost lose mission.",
+    "location": {
+      "region_id": "00abd9e7-fea5-47f4-99c5-c42d994f9f22",
+      "poi_id": "38007704-ab7d-4f0d-82fb-dc6522304366",
+      "coordinates": {
+        "q": -2,
+        "r": -1,
+        "s": 6
+      }
+    },
+    "stats": {
+      "level": 12,
+      "hit_points": 56,
+      "armor_class": 17
+    },
+    "faction_affiliations": [
+      {
+        "faction_id": "f8c00160-adb5-4440-a826-0fcf559b22fc",
+        "role": "ALLY",
+        "reputation": 60
+      }
+    ],
+    "schedule": {
+      "current_activity": "WORKING",
+      "next_activity_time": "2025-05-30T01:34:24.964555Z"
+    },
+    "loyalty": {
+      "player_character_id": "5d11eafd-df3d-4ac7-bd7a-e7a495b540b3",
+      "loyalty_score": 0,
+      "goodwill": 36
+    }
+  }
+]

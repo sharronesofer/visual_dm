@@ -1,0 +1,42 @@
+[
+  {
+    "id": "d4a8a18b-e23b-47d3-82cb-92b9039216dd",
+    "created_at": "2025-05-08T01:34:25.044717Z",
+    "updated_at": "2025-05-25T01:34:25.044719Z",
+    "name": "Approach",
+    "description": "Theory mention practice off.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "3c4a2037-76cd-47fd-8832-756ed1fc92f1",
+    "created_at": "2025-05-10T01:34:25.044724Z",
+    "updated_at": "2025-05-25T01:34:25.044725Z",
+    "name": "Area",
+    "description": "Write quality although size five.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "33291997-abbd-4f94-b19c-f45b072e71e0",
+    "created_at": "2025-05-02T01:34:25.044729Z",
+    "updated_at": "2025-05-27T01:34:25.044731Z",
+    "name": "Too",
+    "description": "Citizen question house make.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "3590ff30-4740-4c0c-9f85-078784bb0f6c",
+    "created_at": "2025-05-28T01:34:25.044735Z",
+    "updated_at": "2025-05-27T01:34:25.044737Z",
+    "name": "How",
+    "description": "Crime degree interest couple maintain important tax.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "ec3e616e-2f80-4e91-a03c-cd3b9d0dc797",
+    "created_at": "2025-05-14T01:34:25.044740Z",
+    "updated_at": "2025-05-24T01:34:25.044742Z",
+    "name": "Expect",
+    "description": "Religious your lead left show else thus.",
+    "status": "ACTIVE"
+  }
+]

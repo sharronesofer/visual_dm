@@ -1,0 +1,42 @@
+[
+  {
+    "id": "e435a5da-ac90-49dc-a7c3-ff61925cbe2e",
+    "created_at": "2025-05-22T01:34:24.962507Z",
+    "updated_at": "2025-05-24T01:34:24.962509Z",
+    "name": "Career",
+    "description": "State politics writer agency stage.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "42e94a1a-1a32-499a-a3b4-86be5c0c5523",
+    "created_at": "2025-05-14T01:34:24.962512Z",
+    "updated_at": "2025-05-24T01:34:24.962514Z",
+    "name": "Image",
+    "description": "Sit everything action collection.",
+    "status": "PENDING"
+  },
+  {
+    "id": "f852f168-c13d-48b8-82ce-f7e45eb32f55",
+    "created_at": "2025-05-17T01:34:24.962517Z",
+    "updated_at": "2025-05-24T01:34:24.962519Z",
+    "name": "Grow",
+    "description": "Today window law work near pick situation.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "cebabbaf-deb7-4f6c-97a2-99fd478fe282",
+    "created_at": "2025-05-16T01:34:24.962522Z",
+    "updated_at": "2025-05-26T01:34:24.962523Z",
+    "name": "Daughter",
+    "description": "News both safe president treatment.",
+    "status": "PENDING"
+  },
+  {
+    "id": "999c3aaa-96e8-45d4-9e18-17a68e62fbb6",
+    "created_at": "2025-05-08T01:34:24.962527Z",
+    "updated_at": "2025-05-28T01:34:24.962528Z",
+    "name": "Television",
+    "description": "By writer reflect what huge young her language.",
+    "status": "PENDING"
+  }
+]

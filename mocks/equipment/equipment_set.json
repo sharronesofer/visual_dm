@@ -1,0 +1,196 @@
+{
+  "id": "289d0064-8b06-4b92-888e-9b224fbdcd81",
+  "name": "Decentralized local adapter Set",
+  "description": "Impact need actually. Traditional their agency course before thought feeling.",
+  "pieces": [
+    {
+      "id": "dd2705df-ca61-4e8e-8380-75e486bbdf2f",
+      "created_at": "2025-05-09T01:34:24.954098Z",
+      "updated_at": "2025-05-27T01:34:24.954100Z",
+      "name": "Begin Sword",
+      "description": "Leg break plant. Gun lose difference.",
+      "equipment_type": "ARMOR",
+      "slot": "NECKLACE",
+      "rarity": "LEGENDARY",
+      "stats": {
+        "attack_bonus": 4,
+        "damage": null,
+        "armor_class": null,
+        "stat_bonuses": {
+          "strength": -2,
+          "dexterity": 0,
+          "constitution": 0
+        }
+      },
+      "durability": {
+        "current": 95,
+        "maximum": 100,
+        "wear_rate": 1.83
+      },
+      "enchantments": [
+        {
+          "enchantment_id": "ae883549-2ae5-4735-92d3-03e70a3b78cb",
+          "name": "Bag Enhancement",
+          "effect": "Must account program though offer audience start.",
+          "magnitude": 1
+        },
+        {
+          "enchantment_id": "88a83cc3-0fb7-4326-9601-16fb410bd083",
+          "name": "Fine Enhancement",
+          "effect": "Former road third road air staff exactly believe.",
+          "magnitude": 5
+        },
+        {
+          "enchantment_id": "6242af14-945c-4fb1-afa3-63b958b4bf86",
+          "name": "Information Enhancement",
+          "effect": "Foreign old investment drop green perform door cost.",
+          "magnitude": 1
+        }
+      ],
+      "identified": true,
+      "value": 4464
+    },
+    {
+      "id": "6413925f-78a9-4f11-85b7-2f6134935bc5",
+      "created_at": "2025-05-27T01:34:24.954189Z",
+      "updated_at": "2025-05-26T01:34:24.954190Z",
+      "name": "Require Staff",
+      "description": "Discuss pick read again. Attention role night every yet remain. Fall create series class activity.",
+      "equipment_type": "ACCESSORY",
+      "slot": "HANDS",
+      "rarity": "LEGENDARY",
+      "stats": {
+        "attack_bonus": null,
+        "damage": "1d10",
+        "armor_class": 14,
+        "stat_bonuses": {
+          "strength": 3,
+          "dexterity": -1,
+          "constitution": -1
+        }
+      },
+      "durability": {
+        "current": 100,
+        "maximum": 100,
+        "wear_rate": 0.58
+      },
+      "enchantments": [
+        {
+          "enchantment_id": "6cc93e91-b966-4caa-8c79-0136028981c7",
+          "name": "Interest Enhancement",
+          "effect": "Size safe affect civil.",
+          "magnitude": 5
+        },
+        {
+          "enchantment_id": "9757dd48-a1e0-4f1e-b6de-4b41b7c92262",
+          "name": "Court Enhancement",
+          "effect": "Court general rich wide everyone peace hour.",
+          "magnitude": 5
+        }
+      ],
+      "identified": false,
+      "value": 3965
+    },
+    {
+      "id": "38ce4a9b-0169-4e0b-889a-c4a4f236d906",
+      "created_at": "2025-05-04T01:34:24.954266Z",
+      "updated_at": "2025-05-24T01:34:24.954268Z",
+      "name": "Them Staff",
+      "description": "Thus music range section. Itself success check it very main ask page.",
+      "equipment_type": "TOOL",
+      "slot": "MAIN_HAND",
+      "rarity": "EPIC",
+      "stats": {
+        "attack_bonus": null,
+        "damage": null,
+        "armor_class": null,
+        "stat_bonuses": {
+          "strength": -1,
+          "dexterity": 2,
+          "constitution": 0
+        }
+      },
+      "durability": {
+        "current": 82,
+        "maximum": 100,
+        "wear_rate": 1.6
+      },
+      "enchantments": [
+        {
+          "enchantment_id": "3e3e38ec-624f-4eab-b2bf-b4be879ad0d4",
+          "name": "Citizen Enhancement",
+          "effect": "Allow rest before religious should.",
+          "magnitude": 1
+        },
+        {
+          "enchantment_id": "cc2e3d8a-7067-4551-80d6-093a5e05ce75",
+          "name": "Nation Enhancement",
+          "effect": "Civil guess small probably.",
+          "magnitude": 3
+        },
+        {
+          "enchantment_id": "3034862f-b649-446e-8717-d50d23616239",
+          "name": "Leg Enhancement",
+          "effect": "No everyone art likely board start.",
+          "magnitude": 5
+        }
+      ],
+      "identified": false,
+      "value": 4676
+    },
+    {
+      "id": "6ea945ad-eb56-4f83-9884-df5838b01055",
+      "created_at": "2025-05-09T01:34:24.954352Z",
+      "updated_at": "2025-05-28T01:34:24.954353Z",
+      "name": "Cover Bow",
+      "description": "Move if how structure threat price simply claim. Move short above however specific room enter difference. Visit national wish stay civil.",
+      "equipment_type": "TOOL",
+      "slot": "MAIN_HAND",
+      "rarity": "EPIC",
+      "stats": {
+        "attack_bonus": 4,
+        "damage": null,
+        "armor_class": 16,
+        "stat_bonuses": {
+          "strength": 2,
+          "dexterity": 3,
+          "constitution": 0
+        }
+      },
+      "durability": {
+        "current": 81,
+        "maximum": 100,
+        "wear_rate": 1.31
+      },
+      "enchantments": [
+        {
+          "enchantment_id": "701b7c82-ba57-466c-81ae-4481e89c97a6",
+          "name": "Night Enhancement",
+          "effect": "End give role participant man.",
+          "magnitude": 4
+        },
+        {
+          "enchantment_id": "d3675008-8d92-4aa5-8139-bab187641c9e",
+          "name": "Argue Enhancement",
+          "effect": "Citizen assume assume garden.",
+          "magnitude": 2
+        }
+      ],
+      "identified": false,
+      "value": 6143
+    }
+  ],
+  "set_bonuses": [
+    {
+      "pieces_required": 4,
+      "bonus_name": "Pretty Bonus",
+      "bonus_description": "Catch green by.",
+      "stat_bonuses": {
+        "strength": 3,
+        "armor_class": 1
+      }
+    }
+  ],
+  "created_at": "2025-05-09T01:34:24.954443Z",
+  "updated_at": "2025-05-28T01:34:24.954444Z"
+}

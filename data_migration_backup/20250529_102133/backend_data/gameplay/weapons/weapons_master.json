@@ -1,0 +1,581 @@
+[
+  {
+    "name": "Dagger",
+    "type": "light",
+    "damage": "1d4",
+    "damage_type": [
+      "piercing",
+      "slashing"
+    ],
+    "tags": [
+      "thrown"
+    ],
+    "range_ft": 10,
+    "gold_value": 2,
+    "weight_lbs": 1,
+    "description": "A short blade favored by rogues and commoners alike."
+  },
+  {
+    "name": "Punch Dagger",
+    "type": "light",
+    "damage": "1d4",
+    "damage_type": [
+      "piercing"
+    ],
+    "tags": [],
+    "gold_value": 3,
+    "weight_lbs": 1,
+    "description": "A fist-mounted blade used for close-quarters assassinations."
+  },
+  {
+    "name": "Sickle",
+    "type": "light",
+    "damage": "1d6",
+    "damage_type": [
+      "slashing"
+    ],
+    "tags": [],
+    "gold_value": 4,
+    "weight_lbs": 2,
+    "description": "A farming tool turned weapon, favored by druids and revolutionaries."
+  },
+  {
+    "name": "Hand Axe",
+    "type": "light",
+    "damage": "1d6",
+    "damage_type": [
+      "slashing"
+    ],
+    "tags": [
+      "thrown"
+    ],
+    "range_ft": 10,
+    "gold_value": 5,
+    "weight_lbs": 2,
+    "description": "A versatile tool and weapon, can be thrown in combat."
+  },
+  {
+    "name": "Spiked Knuckles",
+    "type": "light",
+    "damage": "1d4",
+    "damage_type": [
+      "bludgeoning",
+      "piercing"
+    ],
+    "tags": [],
+    "gold_value": 3,
+    "weight_lbs": 1,
+    "description": "Reinforced fist wraps that add deadly force to punches."
+  },
+  {
+    "name": "Shortsword",
+    "type": "medium",
+    "damage": "1d6",
+    "damage_type": [
+      "piercing"
+    ],
+    "tags": [],
+    "gold_value": 10,
+    "weight_lbs": 2,
+    "description": "A straight, agile blade ideal for quick stabs and duels."
+  },
+  {
+    "name": "Mace",
+    "type": "medium",
+    "damage": "1d6",
+    "damage_type": [
+      "bludgeoning"
+    ],
+    "tags": [],
+    "gold_value": 8,
+    "weight_lbs": 5,
+    "description": "A solid metal club designed to crush armor and bones alike."
+  },
+  {
+    "name": "Battle Pick",
+    "type": "medium",
+    "damage": "1d8",
+    "damage_type": [
+      "piercing"
+    ],
+    "tags": [],
+    "gold_value": 12,
+    "weight_lbs": 6,
+    "description": "A heavy miner's pick adapted for combat, punches through armor."
+  },
+  {
+    "name": "Warhammer",
+    "type": "medium",
+    "damage": "1d8",
+    "damage_type": [
+      "bludgeoning"
+    ],
+    "tags": [],
+    "gold_value": 14,
+    "weight_lbs": 7,
+    "description": "Used with one or two hands, devastating against armored foes."
+  },
+  {
+    "name": "Falchion",
+    "type": "medium",
+    "damage": "1d10",
+    "damage_type": [
+      "slashing"
+    ],
+    "tags": [],
+    "gold_value": 18,
+    "weight_lbs": 6,
+    "description": "A heavy curved blade that cleaves through multiple targets."
+  },
+  {
+    "name": "Spear",
+    "type": "medium",
+    "damage": "1d8",
+    "damage_type": [
+      "piercing"
+    ],
+    "tags": [
+      "reach",
+      "thrown"
+    ],
+    "range_ft": 10,
+    "gold_value": 5,
+    "weight_lbs": 4,
+    "description": "A versatile weapon used for throwing or thrusting from a distance."
+  },
+  {
+    "name": "Greatclub",
+    "type": "heavy",
+    "damage": "1d10",
+    "damage_type": [
+      "bludgeoning"
+    ],
+    "tags": [],
+    "gold_value": 3,
+    "weight_lbs": 8,
+    "description": "A massive two-handed club made of dense wood or stone."
+  },
+  {
+    "name": "Greataxe",
+    "type": "heavy",
+    "damage": "1d12",
+    "damage_type": [
+      "slashing"
+    ],
+    "tags": [],
+    "gold_value": 20,
+    "weight_lbs": 12,
+    "description": "A brutal axe for devastating overhead chops."
+  },
+  {
+    "name": "Glaive",
+    "type": "heavy",
+    "damage": "1d10",
+    "damage_type": [
+      "slashing"
+    ],
+    "tags": [
+      "reach"
+    ],
+    "gold_value": 18,
+    "weight_lbs": 10,
+    "description": "A long polearm with a curved blade, allows sweeping reach attacks."
+  },
+  {
+    "name": "Halberd",
+    "type": "heavy",
+    "damage": "1d10",
+    "damage_type": [
+      "slashing",
+      "piercing"
+    ],
+    "tags": [
+      "reach"
+    ],
+    "gold_value": 20,
+    "weight_lbs": 12,
+    "description": "Combines axe, spear, and hook into one fearsome weapon."
+  },
+  {
+    "name": "Maul",
+    "type": "heavy",
+    "damage": "2d6",
+    "damage_type": [
+      "bludgeoning"
+    ],
+    "tags": [],
+    "gold_value": 25,
+    "weight_lbs": 16,
+    "description": "A massive hammer capable of shattering bones and barriers."
+  },
+  {
+    "name": "Fangblade",
+    "type": "medium",
+    "damage": "1d8",
+    "damage_type": [
+      "slashing",
+      "piercing"
+    ],
+    "tags": [],
+    "gold_value": 35,
+    "weight_lbs": 5,
+    "description": "A ritual blade with twin jagged edges, favored by cultists."
+  },
+  {
+    "name": "Throwing Hammer",
+    "type": "light",
+    "damage": "1d6",
+    "damage_type": [
+      "bludgeoning"
+    ],
+    "tags": [
+      "thrown"
+    ],
+    "range_ft": 10,
+    "gold_value": 7,
+    "weight_lbs": 3,
+    "description": "Balanced for throwing, yet solid enough for melee."
+  },
+  {
+    "name": "Chain Whip",
+    "type": "medium",
+    "damage": "1d6",
+    "damage_type": [
+      "slashing"
+    ],
+    "tags": [
+      "reach"
+    ],
+    "gold_value": 15,
+    "weight_lbs": 4,
+    "description": "A flexible chain tipped with blades, used to entangle and cut."
+  },
+  {
+    "name": "Obsidian Saber",
+    "type": "medium",
+    "damage": "1d8",
+    "damage_type": [
+      "slashing"
+    ],
+    "tags": [],
+    "gold_value": 40,
+    "weight_lbs": 5,
+    "description": "Shatters easily but cuts with terrifying precision."
+  },
+  {
+    "name": "Shortbow",
+    "type": "light",
+    "damage": "1d6",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 60,
+    "tags": [
+      "range"
+    ],
+    "gold_value": 25,
+    "weight_lbs": 2,
+    "description": "A compact, easily carried bow ideal for scouts and skirmishers."
+  },
+  {
+    "name": "Longbow",
+    "type": "heavy",
+    "damage": "1d8",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 120,
+    "tags": [
+      "range"
+    ],
+    "gold_value": 50,
+    "weight_lbs": 3,
+    "description": "Tall and powerful, favored by elven archers and hunters."
+  },
+  {
+    "name": "Throwing Dagger",
+    "type": "light",
+    "damage": "1d4",
+    "damage_type": [
+      "piercing",
+      "slashing"
+    ],
+    "range_ft": 30,
+    "tags": [
+      "thrown"
+    ],
+    "gold_value": 2,
+    "weight_lbs": 1,
+    "description": "A perfectly balanced dagger made for distance precision."
+  },
+  {
+    "name": "Hand Crossbow",
+    "type": "light",
+    "damage": "1d6",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 40,
+    "tags": [
+      "range"
+    ],
+    "gold_value": 75,
+    "weight_lbs": 2,
+    "description": "Small and concealable, popular among rogues and spies."
+  },
+  {
+    "name": "Light Crossbow",
+    "type": "medium",
+    "damage": "1d8",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 80,
+    "tags": [
+      "range"
+    ],
+    "gold_value": 35,
+    "weight_lbs": 4,
+    "description": "Reliable and powerful with slow reload speed."
+  },
+  {
+    "name": "Heavy Crossbow",
+    "type": "heavy",
+    "damage": "1d10",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 120,
+    "tags": [
+      "range",
+      "slow_reload"
+    ],
+    "gold_value": 50,
+    "weight_lbs": 8,
+    "description": "Punches through armor at long range. Takes time to reload."
+  },
+  {
+    "name": "Sling",
+    "type": "light",
+    "damage": "1d4",
+    "damage_type": [
+      "bludgeoning"
+    ],
+    "range_ft": 50,
+    "tags": [
+      "range"
+    ],
+    "gold_value": 1,
+    "weight_lbs": 0.5,
+    "description": "Simple but effective. Favored by halflings and peasants."
+  },
+  {
+    "name": "Chakrams",
+    "type": "medium",
+    "damage": "1d6",
+    "damage_type": [
+      "slashing"
+    ],
+    "range_ft": 40,
+    "tags": [
+      "thrown",
+      "returning"
+    ],
+    "gold_value": 10,
+    "weight_lbs": 1,
+    "description": "Circular throwing blades that slice through targets and spin back."
+  },
+  {
+    "name": "Boomerang",
+    "type": "medium",
+    "damage": "1d4",
+    "damage_type": [
+      "bludgeoning"
+    ],
+    "range_ft": 30,
+    "tags": [
+      "thrown",
+      "returning"
+    ],
+    "gold_value": 3,
+    "weight_lbs": 1,
+    "description": "Curved wood used for sport or stunning foes."
+  },
+  {
+    "name": "Throwing Axe",
+    "type": "medium",
+    "damage": "1d6",
+    "damage_type": [
+      "slashing"
+    ],
+    "range_ft": 20,
+    "tags": [
+      "thrown"
+    ],
+    "gold_value": 8,
+    "weight_lbs": 2,
+    "description": "A sharpened axe balanced for one-handed throwing."
+  },
+  {
+    "name": "Javelin",
+    "type": "medium",
+    "damage": "1d6",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 60,
+    "tags": [
+      "thrown"
+    ],
+    "gold_value": 5,
+    "weight_lbs": 2,
+    "description": "Spear-like projectile for hurling over distance."
+  },
+  {
+    "name": "Needle Rifle",
+    "type": "heavy",
+    "damage": "1d10",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 150,
+    "tags": [
+      "range",
+      "reload"
+    ],
+    "gold_value": 90,
+    "weight_lbs": 10,
+    "description": "Precision launcher that fires bone-thin darts with explosive pressure."
+  },
+  {
+    "name": "Alchemical Launcher",
+    "type": "heavy",
+    "damage": "1d8",
+    "damage_type": [
+      "bludgeoning",
+      "fire"
+    ],
+    "range_ft": 30,
+    "tags": [
+      "thrown",
+      "special"
+    ],
+    "gold_value": 100,
+    "weight_lbs": 8,
+    "description": "Lobs volatile concoctions. Explodes on impact."
+  },
+  {
+    "name": "Throwing Spear",
+    "type": "medium",
+    "damage": "1d8",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 50,
+    "tags": [
+      "thrown"
+    ],
+    "gold_value": 6,
+    "weight_lbs": 3,
+    "description": "Heavier than a javelin but capable of greater force."
+  },
+  {
+    "name": "Throwing Star",
+    "type": "light",
+    "damage": "1d4",
+    "damage_type": [
+      "slashing"
+    ],
+    "range_ft": 20,
+    "tags": [
+      "thrown",
+      "stealth"
+    ],
+    "gold_value": 2,
+    "weight_lbs": 0.5,
+    "description": "Silent, sharp, and difficult to see in flight."
+  },
+  {
+    "name": "Wristbow",
+    "type": "light",
+    "damage": "1d4",
+    "damage_type": [
+      "piercing"
+    ],
+    "range_ft": 30,
+    "tags": [
+      "range",
+      "concealed"
+    ],
+    "gold_value": 60,
+    "weight_lbs": 1,
+    "description": "Strapped to the wrist and fired with a flick. Concealable but weak."
+  },
+  {
+    "name": "Spitfire Tube",
+    "type": "light",
+    "damage": "1d6",
+    "damage_type": [
+      "fire"
+    ],
+    "range_ft": 25,
+    "tags": [
+      "alchemical",
+      "reload"
+    ],
+    "gold_value": 35,
+    "weight_lbs": 3,
+    "description": "Fires a short burst of fire or acid. Requires recharging."
+  },
+  {
+    "name": "Skyhook Lance",
+    "type": "heavy",
+    "damage": "1d10",
+    "damage_type": [
+      "piercing",
+      "bludgeoning"
+    ],
+    "range_ft": 40,
+    "tags": [
+      "thrown",
+      "special",
+      "returning"
+    ],
+    "gold_value": 120,
+    "weight_lbs": 12,
+    "description": "Chain-attached spear that can yank enemies back."
+  },
+  {
+    "name": "Glider Disk",
+    "type": "medium",
+    "damage": "1d6",
+    "damage_type": [
+      "slashing"
+    ],
+    "range_ft": 50,
+    "tags": [
+      "thrown",
+      "returning"
+    ],
+    "gold_value": 15,
+    "weight_lbs": 2,
+    "description": "Wide-edged metal disc designed for gliding arcs."
+  },
+  {
+    "name": "Storm Sling",
+    "type": "light",
+    "damage": "1d6",
+    "damage_type": [
+      "bludgeoning",
+      "lightning"
+    ],
+    "range_ft": 60,
+    "tags": [
+      "range",
+      "elemental"
+    ],
+    "gold_value": 45,
+    "weight_lbs": 1,
+    "description": "Blessed sling that crackles with energy on release."
+  }
+]

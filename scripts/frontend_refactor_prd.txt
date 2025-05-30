@@ -1,0 +1,215 @@
+# Frontend-Backend Architecture Alignment PRD
+
+## Project Overview
+
+### Problem Statement
+The Unity frontend currently has an inconsistent directory structure that doesn't mirror the backend systems architecture. This creates:
+- Developer confusion when navigating between frontend and backend code
+- Unclear separation of concerns between business logic (backend) and presentation logic (frontend)
+- Difficulty in maintaining and extending systems
+- Inconsistent API consumption patterns
+- Missing UI components for core game functionality
+
+### Solution Vision
+Refactor the Unity frontend structure to:
+1. Mirror the backend systems directory structure exactly
+2. Implement clear separation where backend is source of truth for all business logic
+3. Create frontend components that purely handle presentation, input, and API consumption
+4. Implement missing UI components for core game functionality
+5. Establish consistent patterns for frontend-backend integration
+
+## Core Requirements
+
+### 1. Structure Analysis & Planning (Priority: Critical)
+- Analyze development_bible.md to understand all required systems
+- Map current backend/systems/ directory structure to understand target architecture
+- Audit current Unity Assets/Scripts/Runtime/ structure to identify what needs migration
+- Create detailed migration plan with dependency mapping
+- Identify obvious UI components needed (menus, HUD, maps, character sheets, etc.)
+
+### 2. Directory Structure Migration (Priority: Critical)
+- Create new directory structure mirroring backend/systems/ exactly
+- Migrate existing code from current structure to new structure
+- Update namespace declarations to match new structure
+- Fix all import/using statements to reference new locations
+- Remove duplicate/conflicting directories (Faction vs Factions, Quest vs Quests, etc.)
+
+### 3. Frontend System Implementation (Priority: High)
+- Implement client-side components for each backend system following patterns:
+  - Models/DTOs for API communication
+  - Services for HTTP/WebSocket communication with backend
+  - UI components for user interaction
+  - Integration layers for Unity-specific concerns
+- Create standardized API consumption patterns
+- Implement real-time synchronization via WebSocket where needed
+
+### 4. Essential UI Components (Priority: High)
+- Main Menu system with game creation, loading, settings
+- HUD overlay with health, resources, time display
+- World/Region map interface with zoom controls
+- Character management interface (creation, progression, relationships)
+- Inventory and equipment management UI
+- Quest log and tracking interface
+- Dialogue system UI with conversation trees
+- Faction relationship and diplomacy interface
+- Settings and configuration panels
+
+### 5. Integration & Testing (Priority: Medium)
+- Create comprehensive tests for all migrated components
+- Implement integration tests between frontend and backend
+- Performance testing for API communication
+- User experience testing for UI components
+- Documentation updates for new architecture
+
+## Technical Requirements
+
+### Backend Systems to Mirror
+Based on backend/systems/ directory:
+- analytics/ - Performance and usage tracking UI
+- arc/ - Narrative arc progression UI
+- auth_user/ - Authentication and user management
+- character/ - Character creation and management
+- combat/ - Combat interface and animations
+- crafting/ - Crafting interface and recipes
+- data/ - Data management and import/export tools
+- dialogue/ - Conversation UI and voice systems
+- diplomacy/ - Faction relationship management
+- economy/ - Trade, markets, and economic interfaces
+- equipment/ - Gear management and customization
+- events/ - Event notification and handling
+- faction/ - Faction management and politics
+- inventory/ - Item storage and organization
+- llm/ - AI integration interfaces
+- loot/ - Loot generation and rewards display
+- magic/ - Spell casting and magic systems
+- memory/ - Character memory and history
+- motif/ - Narrative theme management
+- npc/ - NPC interaction and management
+- poi/ - Point of interest exploration
+- population/ - Settlement and population display
+- quest/ - Quest tracking and management
+- region/ - Regional map and exploration
+- religion/ - Religious system management
+- rumor/ - Information and rumor spreading
+- storage/ - Persistent storage management
+- time/ - Time progression and calendar
+- world_generation/ - World creation tools
+- world_state/ - Global state management
+
+### Unity-Specific Components
+- Bootstrap/ - Game initialization and startup
+- Core/ - Unity-specific core systems
+- UI/ - User interface framework and components
+- Integration/ - System integration and communication layers
+- Services/ - Unity service layer for backend communication
+
+### Performance Requirements
+- API calls should complete within 200ms for responsive UI
+- WebSocket reconnection within 5 seconds of disconnect
+- UI should remain responsive during backend operations
+- Memory usage should not exceed 2GB for client
+- Frame rate should maintain 60fps during normal gameplay
+
+### Technical Constraints
+- Must maintain compatibility with Unity 2022.3 LTS
+- All API communication must be asynchronous
+- UI must be scalable across different screen resolutions
+- Code must follow established C# and Unity best practices
+- Must support both single-player and multiplayer modes
+
+## Success Criteria
+
+### Completion Metrics
+- 100% of backend systems have corresponding frontend structure
+- All existing functionality preserved after migration
+- Zero compilation errors after refactoring
+- All tests passing after migration
+- All essential UI components implemented and functional
+
+### Quality Metrics
+- Developer can navigate from backend system to frontend counterpart in <10 seconds
+- New developer onboarding time reduced by 50%
+- Code review time reduced due to consistent patterns
+- Bug reports related to frontend-backend misalignment reduced to zero
+
+### User Experience Metrics
+- All core game functionality accessible through intuitive UI
+- Response time for user actions under 100ms
+- No visual glitches or UI inconsistencies
+- Smooth transitions between different game states
+
+## Risk Mitigation
+
+### High Risk Items
+- Breaking existing functionality during migration
+- Performance degradation from new architecture
+- Extended development timeline due to scope
+
+### Mitigation Strategies
+- Incremental migration with frequent testing
+- Backup of existing structure before changes
+- Performance benchmarking throughout process
+- Regular stakeholder check-ins to manage scope
+
+## Timeline Estimates
+
+### Phase 1: Analysis & Planning (1 week)
+- Development bible analysis
+- Backend structure mapping
+- Migration planning
+- UI component identification
+
+### Phase 2: Core Migration (2 weeks)
+- Directory structure creation
+- Code migration and namespace updates
+- Basic API service implementation
+- Integration testing
+
+### Phase 3: UI Implementation (2 weeks)
+- Essential UI component creation
+- User experience testing
+- Performance optimization
+- Documentation updates
+
+### Phase 4: Testing & Polish (1 week)
+- Comprehensive testing
+- Bug fixes and optimization
+- Final documentation
+- Stakeholder review
+
+Total estimated timeline: 6 weeks
+
+## Dependencies
+
+### External Dependencies
+- Unity 2022.3 LTS must remain stable
+- Backend API contracts must be finalized
+- Network infrastructure must support WebSocket connections
+
+### Internal Dependencies
+- Backend systems must be functional for integration testing
+- Development environment must be properly configured
+- Team must be aligned on new architectural patterns
+
+## Acceptance Criteria
+
+### Must Have
+- Complete directory structure alignment with backend
+- All existing functionality preserved
+- Essential UI components implemented
+- Zero compilation errors
+- Performance within acceptable ranges
+
+### Should Have
+- Improved developer experience metrics
+- Comprehensive documentation
+- Automated testing coverage
+- User experience improvements
+
+### Could Have
+- Advanced UI animations and effects
+- Performance monitoring dashboards
+- Developer tools and debugging aids
+- Additional quality of life improvements
+
+This refactoring represents a critical architectural improvement that will establish Visual DM as a maintainable, scalable, and developer-friendly codebase that clearly separates concerns between business logic (backend) and presentation logic (frontend). 

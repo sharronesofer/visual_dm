@@ -1,0 +1,599 @@
+# Visual DM: API Integration and Code Refactoring PRD
+
+## Executive Summary
+
+This PRD outlines a comprehensive plan to stabilize the Visual DM backend API contracts, implement Unity frontend integration through mocks, complete narrative-arc implementation, and refactor the codebase for maintainability. The project ensures seamless backend-frontend integration while maintaining code quality and test coverage ≥90%.
+
+## Technical Requirements
+
+### Technology Stack
+- **Backend**: Python FastAPI, existing systems architecture
+- **Frontend**: Unity 2022.3+ with C# scripting
+- **API Contracts**: OpenAPI 3.0 specification
+- **Mock Server**: Flask or JSON Server for development
+- **Testing**: pytest for backend, Unity Test Framework for frontend
+- **Asset Storage**: Unity Resources system with organized folder structure
+
+### Development Constraints
+- Maintain ≥90% test coverage throughout refactoring
+- Preserve existing system architecture and boundaries
+- Ensure backward compatibility during API stabilization
+- Follow established coding standards and import patterns
+
+## Phase 1: Backend API Contract Stabilization
+
+### 1.1 System Inventory and Analysis
+**Objective**: Create comprehensive catalog of all backend systems and their API surfaces
+
+**Requirements**:
+- Traverse `/backend/systems/` directory systematically
+- Document each system's current implementation status
+- Identify all FastAPI routers and endpoint definitions
+- Catalog request/response schemas, error codes, and HTTP methods
+- Note version tags and authentication requirements
+- Create system dependency map for API interactions
+
+**Deliverables**:
+- `backend_systems_inventory.md` with complete system catalog
+- API surface area analysis per system
+- Implementation status matrix (complete/incomplete/missing)
+
+### 1.2 API Contract Extraction and Documentation
+**Objective**: Generate unified OpenAPI specification for all backend services
+
+**Requirements**:
+- Extract API contracts from all identified systems
+- Standardize request/response schemas across systems
+- Define consistent error response formats
+- Establish authentication and authorization patterns
+- Create comprehensive OpenAPI 3.0 specification
+- Validate contracts against existing implementations
+
+**Deliverables**:
+- `api_contracts.yaml` in repository root
+- Contract validation report
+- API versioning strategy documentation
+
+### 1.3 Gap Analysis and Prioritization
+**Objective**: Identify incomplete implementations requiring mock/stub treatment
+
+**Requirements**:
+- Compare API contracts against actual implementations
+- Identify unimplemented endpoints (especially narrative-arc functions)
+- Classify gaps by criticality for frontend development
+- Prioritize implementation based on Unity development needs
+- Document placeholder/stub requirements
+
+**Deliverables**:
+- Gap analysis report with implementation priorities
+- Mock requirements specification
+- Frontend development dependency analysis
+
+## Phase 2: Mock Infrastructure Development
+
+### 2.1 Mock Data Generation
+**Objective**: Create realistic test data matching API contracts
+
+**Requirements**:
+- Generate JSON fixtures for all API endpoints
+- Ensure fixtures match OpenAPI schemas exactly
+- Include edge cases, error scenarios, and empty states
+- Create data relationships reflecting system interactions
+- Organize fixtures by system and endpoint
+- Support dynamic data generation for testing
+
+**Deliverables**:
+- `/mocks/` directory with organized fixture files
+- Fixture generation scripts for maintenance
+- Data relationship documentation
+
+### 2.2 Mock Server Implementation
+**Objective**: Build development server serving mock data with realistic behavior
+
+**Requirements**:
+- Implement Flask/JSON Server matching API contracts
+- Support all HTTP methods and status codes
+- Include proper CORS configuration
+- Simulate authentication and authorization
+- Add request validation and error responses
+- Provide startup scripts and configuration
+- Support hot-reloading for fixture updates
+
+**Deliverables**:
+- Mock server implementation with startup scripts
+- Configuration documentation
+- Development environment setup guide
+
+## Phase 3: Unity Frontend Integration
+
+### 3.1 C# DTO Generation (Unity Implementation Required)
+**Objective**: Create Unity data transfer objects matching backend schemas
+
+**Implementation Type**: Unity Development with Cursor Guidance
+**Cursor Role**: Provide detailed implementation instructions and code templates
+
+**Requirements**:
+- Generate C# classes from OpenAPI schemas
+- Include proper JSON serialization attributes
+- Implement data validation and type safety
+- Organize DTOs by system/domain boundaries
+- Support nested objects and collections
+- Include error response DTOs
+
+**Cursor Instructions for User**:
+```csharp
+// Example DTO structure Cursor will provide:
+[System.Serializable]
+public class CharacterDTO
+{
+    [JsonProperty("id")]
+    public string Id { get; set; }
+    
+    [JsonProperty("name")]
+    public string Name { get; set; }
+    
+    // Additional properties based on API schema
+}
+```
+
+**Deliverables**:
+- Complete C# DTO library in Unity project
+- Serialization test validation
+- DTO usage documentation
+
+### 3.2 Unity API Client Implementation (Unity Implementation Required)
+**Objective**: Create Unity HTTP client for backend communication
+
+**Implementation Type**: Unity Development with Cursor Guidance
+**Cursor Role**: Provide complete implementation code and integration patterns
+
+**Requirements**:
+- Implement async HTTP client using UnityWebRequest
+- Support all CRUD operations and authentication
+- Include proper error handling and retry logic
+- Provide configuration for mock vs real endpoints
+- Add logging and debugging capabilities
+- Support request/response serialization
+
+**Cursor Instructions for User**:
+```csharp
+// Complete APIClient implementation Cursor will provide
+public class APIClient : MonoBehaviour
+{
+    private string baseUrl;
+    private bool useMockServer;
+    
+    public async Task<T> GetAsync<T>(string endpoint)
+    {
+        // Complete implementation provided by Cursor
+    }
+}
+```
+
+**Deliverables**:
+- Unity APIClient with mock/real server switching
+- Authentication handling implementation
+- Error handling and logging framework
+
+### 3.3 Unity Test Scenes Development (Unity Implementation Required)
+**Objective**: Create demonstration scenes for core game features
+
+**Implementation Type**: Unity Development with Cursor Guidance
+**Cursor Role**: Provide scene setup instructions and UI code templates
+
+**Requirements**:
+- Character loading and display scene
+- Quest system interface demonstration
+- Narrative arc progression visualization
+- Dialogue window implementation
+- Integration testing framework
+- Data flow validation
+
+**Scene Requirements**:
+1. **Character Scene**: Load character data, display attributes, show equipment
+2. **Quest Scene**: Quest list, quest details, progression tracking
+3. **Arc Scene**: Narrative arc visualization, progression indicators
+4. **Dialogue Scene**: Conversation trees, NPC interaction, choice handling
+
+**Cursor Instructions for User**:
+- Detailed GameObject hierarchy setup
+- UI component configuration
+- Script attachment and parameter setup
+- Event system integration
+- Data binding patterns
+
+**Deliverables**:
+- Four functional test scenes in Unity
+- Scene documentation and usage guide
+- Integration test results
+
+## Phase 4: Narrative-Arc Implementation
+
+### 4.1 Core Arc Engine Development
+**Objective**: Implement primary narrative arc functions in backend
+
+**Implementation Type**: Backend Development (Cursor Implementation)
+**Cursor Role**: Direct implementation of Python code
+
+**Requirements**:
+- Implement `generate_primary_arc()` function
+- Implement `advance_secondary_tertiary_arcs()` function  
+- Implement `hook_detection()` function
+- Integrate with existing arc system architecture
+- Maintain GPT-powered generation compatibility
+- Ensure cross-system event integration
+
+**Technical Specifications**:
+- Location: `/backend/systems/arc/`
+- Integration: Existing ArcManager and services
+- Dependencies: Quest, NPC, World systems
+- Performance: <100ms response time for arc operations
+
+**Deliverables**:
+- Complete arc engine implementation
+- Integration with existing systems
+- Performance benchmarking results
+
+### 4.2 Arc Logic Testing
+**Objective**: Comprehensive test coverage for arc functionality
+
+**Implementation Type**: Backend Development (Cursor Implementation)
+**Cursor Role**: Direct implementation of test suites
+
+**Requirements**:
+- Unit tests for all arc engine functions
+- Integration tests across systems
+- Branching logic validation
+- Edge case and error condition testing
+- Narrative consistency validation
+- Performance testing under load
+
+**Coverage Requirements**:
+- ≥90% code coverage for arc engine
+- Integration test coverage for all cross-system interactions
+- Stress testing for concurrent arc operations
+
+**Deliverables**:
+- Comprehensive test suite
+- Coverage reports and analysis
+- Performance test results
+
+## Phase 5: Integration and Mock Removal
+
+### 5.1 Unity Real Backend Integration (Unity Implementation Required)
+**Objective**: Replace mock endpoints with real backend integration
+
+**Implementation Type**: Unity Development with Cursor Guidance
+**Cursor Role**: Provide configuration changes and troubleshooting guidance
+
+**Requirements**:
+- Update APIClient configuration for real endpoints
+- Implement proper authentication flow
+- Add real-time data validation
+- Ensure error handling for production scenarios
+- Performance optimization for network requests
+- Fallback mechanisms for connectivity issues
+
+**Cursor Instructions for User**:
+- Configuration file updates
+- Authentication token handling
+- Error response processing
+- Network optimization settings
+- Testing and validation procedures
+
+**Deliverables**:
+- Production-ready Unity API integration
+- Authentication and error handling
+- Performance validation results
+
+### 5.2 End-to-End Integration Testing
+**Objective**: Validate complete system integration
+
+**Implementation Type**: Mixed (Backend testing by Cursor, Unity testing with guidance)
+**Cursor Role**: Implement backend tests, guide Unity test procedures
+
+**Requirements**:
+- Full workflow testing from Unity to backend
+- Data consistency validation
+- Error scenario testing
+- Performance benchmarking
+- Cross-system integration validation
+- User experience validation
+
+**Test Scenarios**:
+- Character creation and loading
+- Quest progression and completion
+- Narrative arc advancement
+- Cross-system data synchronization
+- Error recovery and resilience
+
+**Deliverables**:
+- Complete integration test suite
+- Performance benchmarks
+- User acceptance test results
+
+## Phase 6: Code Refactoring and Modularization
+
+### 6.1 Monolithic Module Analysis
+**Objective**: Identify refactoring targets in backend codebase
+
+**Implementation Type**: Backend Development (Cursor Implementation)
+**Cursor Role**: Direct analysis and planning implementation
+
+**Requirements**:
+- Analyze monolithic files (basic.py, character_utils.py, etc.)
+- Identify single-responsibility boundaries
+- Map dependencies and coupling
+- Plan modular architecture
+- Assess refactoring impact and risks
+
+**Target Files for Analysis**:
+- Files >500 lines requiring decomposition
+- Files with multiple responsibility areas
+- High-coupling modules needing isolation
+- Utility modules requiring organization
+
+**Deliverables**:
+- Refactoring analysis report
+- Modular architecture plan
+- Risk assessment and mitigation
+
+### 6.2 Domain Module Extraction
+**Objective**: Split monolithic files into focused domain modules
+
+**Implementation Type**: Backend Development (Cursor Implementation)
+**Cursor Role**: Direct refactoring implementation
+
+**Requirements**:
+- Extract domain-specific functionality into `/backend/systems/<domain>/`
+- Maintain backward compatibility during transition
+- Update import paths to absolute references
+- Preserve existing API contracts
+- Ensure test coverage throughout refactoring
+
+**Refactoring Process**:
+1. Create new modular structure
+2. Extract functionality with tests
+3. Update import references
+4. Validate system integration
+5. Remove deprecated code
+
+**Deliverables**:
+- Modularized codebase with improved organization
+- Updated import structure
+- Maintained test coverage ≥90%
+
+### 6.3 Shared Utilities Organization
+**Objective**: Consolidate and organize shared utility functions
+
+**Implementation Type**: Backend Development (Cursor Implementation)
+**Cursor Role**: Direct implementation of utility organization
+
+**Requirements**:
+- Extract shared utilities to `/backend/systems/utils/`
+- Eliminate duplicate functions across systems
+- Create consistent utility interfaces
+- Update all import references
+- Add comprehensive utility testing
+
+**Utility Categories**:
+- Mathematical operations
+- String processing
+- Data structure manipulation
+- Common game mechanics
+- Validation functions
+
+**Deliverables**:
+- Organized utility library
+- Eliminated code duplication
+- Comprehensive utility documentation
+
+### 6.4 Legacy Code Cleanup
+**Objective**: Remove deprecated code and technical debt
+
+**Implementation Type**: Backend Development (Cursor Implementation)
+**Cursor Role**: Direct cleanup implementation
+
+**Requirements**:
+- Remove all # TODO comments with implementation or deletion
+- Eliminate deprecated function calls
+- Clean up unused imports and variables
+- Consolidate duplicate implementations
+- Update documentation for remaining code
+
+**Cleanup Targets**:
+- TODO comments requiring resolution
+- Deprecated function implementations
+- Unused import statements
+- Dead code elimination
+- Documentation updates
+
+**Deliverables**:
+- Clean codebase without technical debt
+- Updated documentation
+- Improved code maintainability
+
+## Phase 7: Sprite Placeholder Planning and Implementation
+
+### 7.1 Minimum Viable Asset Analysis
+**Objective**: Define essential placeholder sprites for Unity development
+
+**Implementation Type**: Analysis and Documentation (Cursor Implementation)
+**Cursor Role**: Create comprehensive asset specification
+
+**Requirements**:
+- Identify minimum sprite requirements for core gameplay
+- Define sprite specifications (dimensions, format, style)
+- Plan asset organization structure
+- Create naming conventions
+- Establish placeholder quality standards
+
+**Essential Sprite Categories**:
+1. **Terrain**: Grassland hex tile, mountain hex, water hex, forest hex
+2. **Characters**: Player character sprite, NPC placeholder, enemy placeholder
+3. **Buildings**: Small settlement building, tower, castle, temple
+4. **UI Elements**: Panel background, button template, dialogue frame, health bar
+5. **Items**: Generic weapon, armor piece, potion, treasure chest
+6. **World Objects**: Tree, rock, road marker, point of interest icon
+
+**Sprite Specifications**:
+- **Hex Tiles**: 128x128 pixels, PNG format, transparent background
+- **Characters**: 64x64 pixels, PNG format, centered positioning
+- **Buildings**: 96x96 pixels, PNG format, isometric perspective
+- **UI Elements**: Variable sizes, 9-slice capable, consistent style
+- **Items**: 32x32 pixels, PNG format, icon style
+
+**Deliverables**:
+- Complete sprite specification document
+- Asset naming convention guide
+- Quality and style guidelines
+
+### 7.2 Unity Asset Structure Planning (Unity Implementation Required)
+**Objective**: Plan Unity asset organization and loading system
+
+**Implementation Type**: Unity Development with Cursor Guidance
+**Cursor Role**: Provide complete folder structure and loading code
+
+**Requirements**:
+- Design `/Assets/Placeholders/` folder structure
+- Create asset loading and caching system
+- Implement sprite management utilities
+- Plan runtime asset switching capabilities
+- Design asset validation system
+
+**Folder Structure**:
+```
+/Assets/Placeholders/
+├── Terrain/
+│   ├── hex_grassland.png
+│   ├── hex_mountain.png
+│   └── hex_water.png
+├── Characters/
+│   ├── player_placeholder.png
+│   └── npc_placeholder.png
+├── Buildings/
+│   ├── settlement_small.png
+│   └── tower_basic.png
+├── UI/
+│   ├── panel_background.png
+│   └── dialogue_frame.png
+└── Items/
+    ├── weapon_generic.png
+    └── armor_generic.png
+```
+
+**Cursor Instructions for User**:
+```csharp
+// Complete asset loading system Cursor will provide
+public class PlaceholderAssetManager : MonoBehaviour
+{
+    private Dictionary<string, Sprite> loadedSprites;
+    
+    public Sprite GetSprite(string spriteName)
+    {
+        // Complete implementation provided by Cursor
+    }
+}
+```
+
+**Deliverables**:
+- Unity asset folder structure
+- Asset loading and management system
+- Runtime sprite switching capabilities
+
+### 7.3 Placeholder Asset Integration (Unity Implementation Required)
+**Objective**: Integrate placeholder sprites into Unity test scenes
+
+**Implementation Type**: Unity Development with Cursor Guidance
+**Cursor Role**: Provide integration code and scene setup instructions
+
+**Requirements**:
+- Load placeholder sprites in all test scenes
+- Implement sprite display and management
+- Create asset switching for development testing
+- Validate asset loading performance
+- Document asset usage patterns
+
+**Integration Points**:
+- Character scene sprite display
+- Quest scene UI elements
+- Arc scene visual indicators
+- Dialogue scene backgrounds and frames
+- World visualization placeholders
+
+**Cursor Instructions for User**:
+- GameObject setup for sprite display
+- UI component configuration
+- Asset reference management
+- Performance optimization settings
+- Scene validation procedures
+
+**Deliverables**:
+- Fully integrated placeholder assets
+- Asset switching system
+- Performance validation results
+
+## Success Criteria
+
+### Technical Metrics
+- Backend API contracts 100% documented and validated
+- Unity frontend successfully integrated with backend
+- Test coverage maintained ≥90% throughout refactoring
+- Narrative arc system fully functional and tested
+- Code duplication reduced by ≥50%
+- Monolithic files split into <300 line modules
+
+### Functional Metrics
+- All Unity test scenes operational with real backend data
+- Complete character loading and display functionality
+- Quest system interface working end-to-end
+- Narrative arc progression visible and functional
+- Dialogue system integrated and responsive
+- Placeholder assets successfully supporting development
+
+### Quality Metrics
+- Zero critical bugs in integration testing
+- API response times <200ms for standard operations
+- Unity scene loading times <3 seconds
+- No deprecated code or unresolved TODO comments
+- All import paths using absolute references
+- Documentation 100% current and accurate
+
+## Risk Mitigation
+
+### Technical Risks
+- **Unity-Cursor Integration**: Provide detailed step-by-step instructions for all Unity tasks
+- **API Contract Changes**: Implement comprehensive validation and testing
+- **Refactoring Regression**: Maintain test coverage throughout process
+- **Performance Degradation**: Continuous benchmarking and optimization
+
+### Process Risks
+- **Task Complexity**: Break down complex tasks into manageable subtasks
+- **Documentation Gaps**: Require comprehensive documentation for all deliverables
+- **Integration Issues**: Implement thorough testing at each integration point
+- **Timeline Pressure**: Prioritize critical path items and provide alternatives
+
+## Implementation Notes
+
+### For Cursor Implementation
+- All backend Python code development
+- Test suite implementation and maintenance
+- API contract extraction and documentation
+- Code refactoring and modularization
+- Analysis and planning tasks
+
+### For Unity Implementation with Cursor Guidance
+- C# DTO and API client development
+- Unity scene creation and configuration
+- Asset integration and management
+- Frontend testing and validation
+- UI component development
+
+### Collaboration Pattern
+1. Cursor provides detailed implementation instructions
+2. User implements Unity-specific tasks following instructions
+3. User returns to Cursor for validation and next steps
+4. Cursor provides troubleshooting and optimization guidance
+5. Iterative refinement until objectives achieved
+
+This PRD ensures comprehensive coverage of all development phases while clearly delineating implementation responsibilities between Cursor and Unity development tasks. 

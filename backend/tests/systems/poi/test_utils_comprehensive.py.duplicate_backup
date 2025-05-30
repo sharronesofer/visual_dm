@@ -1,0 +1,461 @@
+"""
+Comprehensive tests for backend.systems.poi.utils
+
+This module contains comprehensive tests for POI utility functions,
+focusing on edge cases and missing coverage areas.
+"""
+
+import pytest
+from unittest.mock import Mock
+import math
+
+from backend.systems.poi.utils import (
+    calculate_distance,
+    calculate_poi_distance,
+    is_poi_accessible,
+    generate_poi_name,
+    normalize_poi_type,
+    calculate_resource_production,
+    get_closest_pois,
+    find_poi_neighbors,
+    calculate_poi_influence_range,
+    is_poi_in_region,
+    determine_interaction_type_from_state,
+)
+from backend.systems.poi.models import POIState, POIInteractionType, POIType
+
+
+class TestUtilsComprehensive:
+    """Comprehensive tests for POI utility functions."""
+
+    # Test calculate_poi_distance edge cases
+    def test_calculate_poi_distance_string_coordinates(self):
+        """Test POI distance calculation with string coordinates."""
+        distance = calculate_poi_distance("0_0", "3_4")
+        assert distance == 5.0
+
+    def test_calculate_poi_distance_invalid_string_coordinates(self):
+        """Test POI distance calculation with invalid string coordinates."""
+        distance = calculate_poi_distance("invalid", "also_invalid")
+        assert distance == 9999.0
+
+    def test_calculate_poi_distance_mixed_types(self):
+        """Test POI distance calculation with mixed types."""
+        poi = Mock()
+        poi.position = {"x": 3, "y": 4}
+        
+        distance = calculate_poi_distance("0_0", poi)
+        assert distance == 5.0
+
+    def test_calculate_poi_distance_different_regions_with_coordinates(self):
+        """Test POI distance calculation in different regions with global coordinates."""
+        poi1 = Mock()
+        poi1.region_id = "region_1"
+        poi1.coordinates = (0, 0)
+        
+        poi2 = Mock()
+        poi2.region_id = "region_2"
+        poi2.coordinates = (3, 4)
+        
+        distance = calculate_poi_distance(poi1, poi2)
+        assert distance == 5.0
+
+    def test_calculate_poi_distance_different_regions_no_coordinates(self):
+        """Test POI distance calculation in different regions without global coordinates."""
+        poi1 = Mock(spec=['region_id'])
+        poi1.region_id = "region_1"
+        
+        poi2 = Mock(spec=['region_id'])
+        poi2.region_id = "region_2"
+        
+        distance = calculate_poi_distance(poi1, poi2)
+        assert distance == 9999.0
+
+    def test_calculate_poi_distance_mixed_types_invalid(self):
+        """Test POI distance calculation with mixed types that fail."""
+        poi = Mock(spec=['invalid_attr'])
+        
+        distance = calculate_poi_distance("invalid_string", poi)
+        assert distance == 9999.0
+
+    # Test is_poi_accessible edge cases
+    def test_is_poi_accessible_high_level_poi(self):
+        """Test POI accessibility with high level POI."""
+        poi = Mock()
+        poi.level = 10
+        poi.current_state = POIState.NORMAL
+        
+        result = is_poi_accessible(poi, character_level=5)
+        assert result is False
+
+    def test_is_poi_accessible_abandoned_high_level_character(self):
+        """Test POI accessibility for abandoned POI with high level character."""
+        poi = Mock()
+        poi.level = 1
+        poi.current_state = POIState.ABANDONED
+        
+        result = is_poi_accessible(poi, character_level=5)
+        assert result is True
+
+    def test_is_poi_accessible_ruins_low_level_character(self):
+        """Test POI accessibility for ruins with low level character."""
+        poi = Mock()
+        poi.level = 1
+        poi.current_state = POIState.RUINS
+        
+        result = is_poi_accessible(poi, character_level=2)
+        assert result is False
+
+    def test_is_poi_accessible_dungeon_adequate_level(self):
+        """Test POI accessibility for dungeon with adequate level."""
+        poi = Mock()
+        poi.level = 3
+        poi.current_state = POIState.DUNGEON
+        
+        result = is_poi_accessible(poi, character_level=6)
+        assert result is True
+
+    def test_is_poi_accessible_declining_state(self):
+        """Test POI accessibility for declining state."""
+        poi = Mock()
+        poi.level = 1
+        poi.current_state = POIState.DECLINING
+        
+        result = is_poi_accessible(poi, character_level=2)
+        assert result is True
+
+    # Test generate_poi_name edge cases
+    def test_generate_poi_name_with_region(self):
+        """Test POI name generation with region name."""
+        name = generate_poi_name("city", region_name="Northern Kingdoms")
+        assert "Northern" in name
+        assert isinstance(name, str)
+        assert len(name) > 0
+
+    def test_generate_poi_name_with_tags(self):
+        """Test POI name generation with tags."""
+        name = generate_poi_name("village", tags=["peaceful", "farming"])
+        assert isinstance(name, str)
+        assert len(name) > 0
+
+    def test_generate_poi_name_unknown_type(self):
+        """Test POI name generation with unknown type."""
+        name = generate_poi_name("unknown_type")
+        assert "Mysterious" in name
+        assert "Unknown" in name
+
+    def test_generate_poi_name_all_types(self):
+        """Test POI name generation for all supported types."""
+        types = ["city", "town", "village", "dungeon", "ruins", "temple", "fortress"]
+        for poi_type in types:
+            name = generate_poi_name(poi_type)
+            assert isinstance(name, str)
+            assert len(name) > 0
+
+    # Test normalize_poi_type edge cases
+    def test_normalize_poi_type_all_mappings(self):
+        """Test POI type normalization for all mappings."""
+        mappings = {
+            "metropolis": "city",
+            "capitol": "city",
+            "capital": "city",
+            "urban": "city",
+            "settlement": "town",
+            "borough": "town",
+            "hamlet": "village",
+            "homestead": "village",
+            "crypt": "dungeon",
+            "tomb": "dungeon",
+            "cavern": "dungeon",
+            "wreckage": "ruins",
+            "abandoned": "ruins",
+            "rubble": "ruins",
+            "shrine": "temple",
+            "sanctuary": "temple",
+            "cathedral": "temple",
+            "castle": "fortress",
+            "citadel": "fortress",
+            "stronghold": "fortress",
+        }
+        
+        for input_type, expected in mappings.items():
+            result = normalize_poi_type(input_type)
+            assert result == expected
+
+    def test_normalize_poi_type_case_insensitive(self):
+        """Test POI type normalization is case insensitive."""
+        result = normalize_poi_type("METROPOLIS")
+        assert result == "city"
+
+    def test_normalize_poi_type_unknown(self):
+        """Test POI type normalization for unknown type."""
+        result = normalize_poi_type("unknown_type")
+        assert result == "unknown_type"
+
+    # Test calculate_resource_production edge cases
+    def test_calculate_resource_production_town(self):
+        """Test resource production calculation for town."""
+        poi = Mock()
+        poi.poi_type = "town"
+        poi.population = 500
+        poi.current_state = POIState.NORMAL
+        poi.tags = []
+        
+        production = calculate_resource_production(poi)
+        assert "food" in production
+        assert "gold" in production
+        assert "goods" in production
+        assert production["food"] == 7.5  # 500/100 * 1.5
+
+    def test_calculate_resource_production_village(self):
+        """Test resource production calculation for village."""
+        poi = Mock()
+        poi.poi_type = "village"
+        poi.population = 200
+        poi.current_state = POIState.NORMAL
+        poi.tags = []
+        
+        production = calculate_resource_production(poi)
+        assert "food" in production
+        assert "gold" in production
+        assert production["food"] == 6.0  # 200/100 * 3.0
+        assert production["gold"] == 1.0  # 200/100 * 0.5
+
+    def test_calculate_resource_production_with_mining_tag(self):
+        """Test resource production calculation with mining tag."""
+        poi = Mock()
+        poi.poi_type = "city"
+        poi.population = 1000
+        poi.current_state = POIState.NORMAL
+        poi.tags = ["mining"]
+        
+        production = calculate_resource_production(poi)
+        assert production["gold"] == 45.0  # (1000/100 * 3.0) * 1.5
+
+    def test_calculate_resource_production_with_prosperous_tag(self):
+        """Test resource production calculation with prosperous tag."""
+        poi = Mock()
+        poi.poi_type = "city"
+        poi.population = 1000
+        poi.current_state = POIState.NORMAL
+        poi.tags = ["prosperous"]
+        
+        production = calculate_resource_production(poi)
+        assert production["food"] == 25.0  # (1000/100 * 2.0) * 1.25
+        assert production["gold"] == 37.5  # (1000/100 * 3.0) * 1.25
+
+    def test_calculate_resource_production_with_fertile_tag(self):
+        """Test resource production calculation with fertile tag."""
+        poi = Mock()
+        poi.poi_type = "village"
+        poi.population = 200
+        poi.current_state = POIState.NORMAL
+        poi.tags = ["fertile"]
+        
+        production = calculate_resource_production(poi)
+        assert production["food"] == 9.0  # (200/100 * 3.0) * 1.5
+
+    def test_calculate_resource_production_declining_state(self):
+        """Test resource production calculation for declining state."""
+        poi = Mock()
+        poi.poi_type = "city"
+        poi.population = 1000
+        poi.current_state = POIState.DECLINING
+        poi.tags = []
+        
+        production = calculate_resource_production(poi)
+        assert production["food"] == 14.0  # (1000/100 * 2.0) * 0.7
+
+    def test_calculate_resource_production_abandoned_state(self):
+        """Test resource production calculation for abandoned state."""
+        poi = Mock()
+        poi.poi_type = "city"
+        poi.population = 1000
+        poi.current_state = POIState.ABANDONED
+        poi.tags = []
+        
+        production = calculate_resource_production(poi)
+        assert production == {}
+
+    def test_calculate_resource_production_ruins_state(self):
+        """Test resource production calculation for ruins state."""
+        poi = Mock()
+        poi.poi_type = "city"
+        poi.population = 1000
+        poi.current_state = POIState.RUINS
+        poi.tags = []
+        
+        production = calculate_resource_production(poi)
+        assert production == {}
+
+    def test_calculate_resource_production_no_tags_attribute(self):
+        """Test resource production calculation without tags attribute."""
+        poi = Mock(spec=['poi_type', 'population', 'current_state'])
+        poi.poi_type = "city"
+        poi.population = 1000
+        poi.current_state = POIState.NORMAL
+        
+        production = calculate_resource_production(poi)
+        assert "food" in production
+        assert "gold" in production
+
+    # Test get_closest_pois edge cases
+    def test_get_closest_pois_with_poi_type_filter(self):
+        """Test getting closest POIs with type filter."""
+        poi1 = Mock()
+        poi1.coordinates = (1, 1)
+        poi1.poi_type = POIType.CITY
+        
+        poi2 = Mock()
+        poi2.coordinates = (2, 2)
+        poi2.poi_type = POIType.VILLAGE
+        
+        pois = [poi1, poi2]
+        result = get_closest_pois(0, 0, pois, poi_type=POIType.CITY)
+        assert len(result) == 1
+        assert result[0] == poi1
+
+    def test_get_closest_pois_using_position_dict(self):
+        """Test getting closest POIs using position dictionary."""
+        poi1 = Mock(spec=['position'])
+        poi1.position = {'x': 1, 'y': 1}
+        
+        poi2 = Mock(spec=['position'])
+        poi2.position = {'x': 2, 'y': 2}
+        
+        pois = [poi1, poi2]
+        result = get_closest_pois(0, 0, pois, max_distance=5)
+        assert len(result) == 2
+
+    def test_get_closest_pois_beyond_max_distance(self):
+        """Test getting closest POIs beyond max distance."""
+        poi1 = Mock()
+        poi1.coordinates = (100, 100)
+        
+        pois = [poi1]
+        result = get_closest_pois(0, 0, pois, max_distance=10)
+        assert len(result) == 0
+
+    def test_get_closest_pois_limit_exceeded(self):
+        """Test getting closest POIs with limit exceeded."""
+        pois = []
+        for i in range(10):
+            poi = Mock()
+            poi.coordinates = (i, i)
+            pois.append(poi)
+        
+        result = get_closest_pois(0, 0, pois, limit=3)
+        assert len(result) == 3
+
+    # Test find_poi_neighbors edge cases
+    def test_find_poi_neighbors_poi_not_found(self):
+        """Test finding POI neighbors when center POI not found."""
+        poi1 = Mock()
+        poi1.id = "poi_1"
+        
+        result = find_poi_neighbors("nonexistent", [poi1])
+        assert result == []
+
+    # Test calculate_poi_influence_range edge cases
+    def test_calculate_poi_influence_range_all_types(self):
+        """Test POI influence range calculation for all types."""
+        types_ranges = {
+            "city": 10.0,
+            "town": 5.0,
+            "village": 2.0,
+            "fortress": 8.0,
+            "temple": 6.0,
+            "dungeon": 3.0,
+            "ruins": 1.0,
+        }
+        
+        for poi_type, expected_base in types_ranges.items():
+            poi = Mock()
+            poi.poi_type = poi_type
+            poi.population = 100
+            
+            range_val = calculate_poi_influence_range(poi)
+            assert range_val == expected_base  # 100/100 = 1.0 multiplier
+
+    def test_calculate_poi_influence_range_unknown_type(self):
+        """Test POI influence range calculation for unknown type."""
+        poi = Mock()
+        poi.poi_type = "unknown"
+        poi.population = 100
+        
+        range_val = calculate_poi_influence_range(poi)
+        assert range_val == 3.0  # Default base range
+
+    def test_calculate_poi_influence_range_low_population(self):
+        """Test POI influence range calculation with low population."""
+        poi = Mock()
+        poi.poi_type = "city"
+        poi.population = 10
+        
+        range_val = calculate_poi_influence_range(poi)
+        assert range_val == 5.0  # 10.0 * max(0.5, 10/100) = 10.0 * 0.5
+
+    def test_calculate_poi_influence_range_high_population(self):
+        """Test POI influence range calculation with high population."""
+        poi = Mock()
+        poi.poi_type = "city"
+        poi.population = 2000
+        
+        range_val = calculate_poi_influence_range(poi)
+        assert range_val == 200.0  # 10.0 * (2000/100)
+
+    # Test determine_interaction_type_from_state edge cases
+    def test_determine_interaction_type_enum_state(self):
+        """Test interaction type determination with enum state."""
+        result = determine_interaction_type_from_state(POIState.NORMAL, "city")
+        assert result == POIInteractionType.SOCIAL
+
+    def test_determine_interaction_type_unknown_state(self):
+        """Test interaction type determination with unknown state."""
+        result = determine_interaction_type_from_state("unknown_state", "city")
+        assert result == POIInteractionType.SOCIAL
+
+    def test_determine_interaction_type_unknown_state_unknown_type(self):
+        """Test interaction type determination with unknown state and type."""
+        result = determine_interaction_type_from_state("unknown_state", "unknown_type")
+        assert result == POIInteractionType.NEUTRAL
+
+    def test_determine_interaction_type_special_state(self):
+        """Test interaction type determination with special state."""
+        result = determine_interaction_type_from_state("special", "temple")
+        assert result == POIInteractionType.SOCIAL
+
+    def test_determine_interaction_type_string_states(self):
+        """Test interaction type determination with various string states."""
+        # Test normal-like states
+        normal_states = ["active", "flourishing", "stable"]
+        for state in normal_states:
+            result = determine_interaction_type_from_state(state, "city")
+            assert result == POIInteractionType.SOCIAL
+
+        # Test abandoned-like states
+        abandoned_states = ["ruined", "destroyed"]
+        for state in abandoned_states:
+            result = determine_interaction_type_from_state(state, "city")
+            assert result == POIInteractionType.NEUTRAL
+
+        # Test combat-like states
+        combat_states = ["hostile", "siege", "combat"]
+        for state in combat_states:
+            result = determine_interaction_type_from_state(state, "city")
+            assert result == POIInteractionType.COMBAT
+
+    def test_determine_interaction_type_dungeon_normal_state(self):
+        """Test interaction type determination for dungeon in normal state."""
+        result = determine_interaction_type_from_state("normal", "dungeon")
+        assert result == POIInteractionType.COMBAT
+
+    def test_determine_interaction_type_invalid_poi_type(self):
+        """Test interaction type determination with invalid POI type."""
+        result = determine_interaction_type_from_state("normal", "invalid_type")
+        assert result == POIInteractionType.NEUTRAL
+
+    def test_determine_interaction_type_no_poi_type(self):
+        """Test interaction type determination without POI type."""
+        result = determine_interaction_type_from_state("normal", None)
+        assert result == POIInteractionType.SOCIAL  # Default for normal states with None type 

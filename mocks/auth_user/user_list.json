@@ -1,0 +1,42 @@
+[
+  {
+    "id": "f66dd9e2-dc54-4fc8-a0b2-009f420dafaa",
+    "created_at": "2025-05-12T01:34:24.941777Z",
+    "updated_at": "2025-05-26T01:34:24.941780Z",
+    "name": "Power",
+    "description": "Shake soldier take my bed once.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "1c938fb0-6903-4185-83eb-03d806fda2fa",
+    "created_at": "2025-05-04T01:34:24.941785Z",
+    "updated_at": "2025-05-27T01:34:24.941786Z",
+    "name": "Claim",
+    "description": "Life form pretty wear site face boy.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "12162f32-08c7-4934-9be4-60638b44cff9",
+    "created_at": "2025-05-01T01:34:24.941790Z",
+    "updated_at": "2025-05-26T01:34:24.941791Z",
+    "name": "Ago",
+    "description": "Down where particularly spend owner hundred day customer.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "85adf9bf-f07f-4b33-8c2b-db4635480fad",
+    "created_at": "2025-05-10T01:34:24.941795Z",
+    "updated_at": "2025-05-26T01:34:24.941796Z",
+    "name": "By",
+    "description": "Dog husband thousand high none.",
+    "status": "PENDING"
+  },
+  {
+    "id": "7f91dc05-cddd-4a03-8db0-8e577f9ed8ee",
+    "created_at": "2025-05-09T01:34:24.941800Z",
+    "updated_at": "2025-05-25T01:34:24.941801Z",
+    "name": "Prevent",
+    "description": "Radio we bit like risk poor product.",
+    "status": "ACTIVE"
+  }
+]

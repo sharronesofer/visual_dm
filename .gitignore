@@ -99,9 +99,9 @@ node_modules/
 *.sln
 *.sw?
 
-# Task files
+# Task Master files - Keep tasks directory
 tasks.json
-tasks/
+# tasks/ - Commenting this out so we keep our task files
 
 # Dependencies
 .pnp
@@ -154,3 +154,7 @@ scripts/load-tests/results/load_metrics.json
 !.editorconfig
 !Visual_DM/Assembly-CSharp.ruleset
 !docs/coding-standards.md
+
+# Added by Claude Task Master
+# Task files
+tasks/ 

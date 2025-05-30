@@ -1,0 +1,42 @@
+[
+  {
+    "id": "832ec3ab-643e-401f-9987-6a05b2825e46",
+    "created_at": "2025-05-05T01:34:24.967489Z",
+    "updated_at": "2025-05-28T01:34:24.967490Z",
+    "name": "Magazine",
+    "description": "Mean next near reduce degree glass contain.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "025d0340-5fce-4e07-8bdb-e5122382f321",
+    "created_at": "2025-05-11T01:34:24.967494Z",
+    "updated_at": "2025-05-24T01:34:24.967496Z",
+    "name": "Check",
+    "description": "Four director mention store civil wide hope.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "06246b05-d6c3-40b8-b1b8-3503199c0a93",
+    "created_at": "2025-05-23T01:34:24.967500Z",
+    "updated_at": "2025-05-29T01:34:24.967501Z",
+    "name": "Smile",
+    "description": "Health idea bag physical.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "6c722c04-b133-4a7d-a5c1-bddb59acf04d",
+    "created_at": "2025-05-15T01:34:24.967505Z",
+    "updated_at": "2025-05-26T01:34:24.967506Z",
+    "name": "Young",
+    "description": "Meeting cold drug network successful night.",
+    "status": "PENDING"
+  },
+  {
+    "id": "a52cc2d0-720a-49fa-8814-e6b4c2912a2b",
+    "created_at": "2025-05-14T01:34:24.967509Z",
+    "updated_at": "2025-05-26T01:34:24.967510Z",
+    "name": "Institution",
+    "description": "Remain food create.",
+    "status": "INACTIVE"
+  }
+]

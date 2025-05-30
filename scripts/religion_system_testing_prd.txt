@@ -1,0 +1,143 @@
+# Religion System Testing PRD
+
+## Overview
+This document outlines the testing requirements for the `/backend/systems/religion` directory in the Visual DM project. The religion system handles the creation, management, and relationships of religions, religious memberships, and religious events within the game world. Comprehensive testing is required to ensure this complex system integrates properly with other game systems including factions, characters, cultures, and narrative engines.
+
+## Testing Requirements
+
+### Unit Tests
+
+1. **Religion Model Testing**
+   - Test Religion model creation, validation, and properties
+   - Test uniqueness constraints for key identifiers
+   - Test religious attributes calculation and manipulation
+   - Test relationships with other models (memberships, events, etc.)
+   - Test inheritance from CoreBaseModel
+
+2. **ReligionMembership Model Testing**
+   - Test membership creation, modification, and termination
+   - Test status transitions and validation
+   - Test relationships with Religion and Character models
+   - Test influence calculations and devotion metrics
+
+3. **ReligiousCalendarEvent Testing**
+   - Test event creation and scheduling
+   - Test recurring event patterns
+   - Test event importance calculations
+   - Test integration with the calendar and time systems
+
+4. **ReligiousInfluenceRecord Testing**
+   - Test influence record creation and updating
+   - Test influence calculations across different entity types
+   - Test influence decay over time
+   - Test aggregate influence metrics
+
+5. **Schema Validation Testing**
+   - Test API request/response schemas
+   - Test validation rules for all schema fields
+   - Test error responses for invalid inputs
+   - Test schema compatibility with frontend requirements
+
+### Integration Tests
+
+1. **Religion Repository Tests**
+   - Test CRUD operations for religions and related entities
+   - Test query filters and ordering
+   - Test persistence to storage
+   - Test error handling and edge cases
+
+2. **Religion Service Tests**
+   - Test business logic in service layer
+   - Test integration with other services (narrative, culture, etc.)
+   - Test complex workflows spanning multiple operations
+
+3. **Membership Service Tests**
+   - Test joining/leaving religious organizations
+   - Test status changes and propagation
+   - Test filtering and selection logic
+   - Test integration with character and faction systems
+
+4. **Event Handling Tests**
+   - Test event dispatching through the central event hub
+   - Test event reception and handling
+   - Test subscription and unsubscription logic
+   - Test event-triggered state changes
+
+### End-to-End Tests
+
+1. **Religion System API Tests**
+   - Test all REST API endpoints for the religion system
+   - Test authentication and authorization for religious operations
+   - Test complex API workflows
+   - Test error handling and response codes
+
+2. **Cross-System Integration Tests**
+   - Test religion interactions with faction systems
+   - Test religion interactions with cultural systems
+   - Test religion interactions with narrative systems
+   - Test religion interactions with character development
+
+## Testing Strategy
+
+### Test Data Requirements
+- Create comprehensive fixture data for different religion types
+- Include diverse membership patterns
+- Include historical events and influence records
+- Create realistic faction and character relationships
+
+### Mocking Strategy
+- Mock external services and database where appropriate
+- Mock complex calculations for focused testing
+- Mock time-dependent functions for deterministic testing
+- Mock event dispatch system for isolation
+
+### Coverage Requirements
+- Achieve minimum 85% code coverage for core models
+- Achieve minimum 80% code coverage for services
+- Focus on critical paths and failure scenarios
+- Ensure all public API endpoints are covered
+
+## Technical Specifications
+
+### Unit Test Frameworks and Tools
+- Use pytest as the primary testing framework
+- Use pytest-mock for mocking dependencies
+- Use pytest-cov to track coverage metrics
+- Leverage fixtures for test data setup
+
+### Integration Test Approach
+- Use TestClient from FastAPI for API testing
+- Use transaction rollbacks to reset database state
+- Use real database instances for repository tests
+- Seed test data through fixtures or setup methods
+
+### Continuous Integration
+- Tests must pass on CI before merging PRs
+- Coverage reports should be generated automatically
+- Integration with GitHub Actions workflow
+- Support for parallel test execution where possible
+
+## Deliverables
+
+1. **Complete Test Suite**
+   - Unit tests for all models, schemas, and repositories
+   - Integration tests for services and API endpoints
+   - End-to-end tests for cross-system workflows
+
+2. **Testing Documentation**
+   - Test strategy document
+   - Coverage reports
+   - Setup instructions for test environment
+
+3. **Test Data and Fixtures**
+   - Reusable test data fixtures
+   - Mock implementations for dependencies
+   - Example scenarios for manual testing
+
+## Additional Considerations
+
+- **Test Isolation**: Ensure tests can run independently or as a suite
+- **Test Performance**: Keep tests efficient for fast feedback cycles
+- **Maintainability**: Structure tests to be maintainable as the system evolves
+- **Readability**: Make tests readable and clear in their purpose
+- **Extensibility**: Design tests to accommodate future features 

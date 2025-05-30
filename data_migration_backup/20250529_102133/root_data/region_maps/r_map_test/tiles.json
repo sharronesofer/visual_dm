@@ -1,0 +1,26 @@
+[
+  {
+    "x": 0,
+    "y": 0,
+    "terrain": "forest",
+    "features": [
+      "trees"
+    ]
+  },
+  {
+    "x": 0,
+    "y": 1,
+    "terrain": "plains",
+    "features": [
+      "grass"
+    ]
+  },
+  {
+    "x": 1,
+    "y": 0,
+    "terrain": "mountain",
+    "features": [
+      "rocks"
+    ]
+  }
+]

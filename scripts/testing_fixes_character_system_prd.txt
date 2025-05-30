@@ -1,0 +1,98 @@
+# Visual_DM Character System Test Fixes PRD
+
+## Overview
+
+The Visual_DM application has several failing tests in the character system component, particularly in the RelationshipService and RelationshipAPI modules. This PRD outlines the issues and required fixes to make these tests pass, ensuring the character system functions correctly.
+
+## Objectives
+
+1. Fix failing relationship service tests related to error handling and edge cases
+2. Address issues in the relationship API endpoints where UUID conversion is causing problems
+3. Fix character system integration tests that involve relationships and character creation
+4. Ensure proper error handling across the character system
+5. Document patterns to avoid similar issues in the future
+
+## Requirements
+
+### RelationshipService Fixes
+
+1. Fix the `update_auth_permissions` method in `RelationshipService`:
+   - Properly handle database errors in the create_auth_relationship call
+   - Ensure consistent return values for error cases
+   - Add proper try/except blocks around database operations
+
+2. Fix the `update_auth_permissions_not_found` test:
+   - Update mock setup to correctly simulate relationship not found cases
+   - Ensure the test correctly verifies the expected behavior
+
+### RelationshipAPI Fixes
+
+1. Fix API endpoint parameter types:
+   - Update all router endpoints to accept string IDs instead of UUID objects
+   - Ensure proper type conversion in the route handlers
+   - Fix response status codes to match expected values in tests
+
+2. Fix response models to properly handle relationship objects:
+   - Ensure RelationshipResponse model correctly validates relationship data
+   - Fix any type mismatches between service returns and API responses
+
+### Character Integration Test Fixes
+
+1. Fix the character creation with stats:
+   - Update the test to use the correct character model structure
+   - Ensure stats dictionary properly includes character class information
+   - Fix mock setup for character creation and retrieval
+
+2. Fix relationship and mood integration:
+   - Properly mock relationships between characters
+   - Ensure mood service integration works with character service
+
+### General Error Handling Improvements
+
+1. Implement consistent error handling patterns:
+   - Add proper database error handling in all service methods
+   - Return appropriate values for not found cases
+   - Ensure HTTP exceptions use correct status codes
+
+## Success Criteria
+
+1. All RelationshipService tests pass successfully
+2. All RelationshipAPI tests pass successfully 
+3. All character system integration tests pass successfully
+4. Error handling is consistent across the character system
+5. Documentation is updated with proper patterns for:
+   - UUID/string conversion in API endpoints
+   - Database error handling in services
+   - Integration test mocking
+
+## Technical Specifications
+
+### RelationshipService Improvements
+
+- Update `update_auth_permissions` to properly handle database errors with try/except blocks
+- Fix `create_auth_relationship` to handle errors properly
+- Ensure consistent error propagation when nested method calls fail
+
+### RelationshipAPI Improvements
+
+- Change parameter types from UUID to str in all router methods
+- Update parameter validation to handle string IDs properly
+- Fix response models to correctly handle relationship data structures
+
+### Character Integration Test Improvements
+
+- Update sample_character fixture to include proper stats structure
+- Fix CharacterService mocks to properly return Character objects
+- Ensure proper error handling in integration tests
+
+## Deliverables
+
+1. Fixed RelationshipService implementation
+2. Fixed RelationshipAPI router implementation
+3. Updated character system integration tests
+4. Documentation of patterns for proper API parameter handling
+5. Documentation of patterns for service error handling
+
+## Timeline
+
+This project should be completed in one week, focusing first on the service layer, then the API layer, and finally the integration tests. 

@@ -1,0 +1,132 @@
+{
+  "task": "Task 60: Backend Development Protocol",
+  "timestamp": "2025-05-28T21:56:00.386391",
+  "summary": {
+    "analysis_timestamp": "2025-05-28T21:55:08.810124",
+    "errors_resolved": 1,
+    "import_issues_fixed": 0,
+    "tests_relocated": 0,
+    "duplicates_removed": 5,
+    "structure_violations_fixed": 0,
+    "coverage_improvements": 0
+  },
+  "details": {
+    "errors_found": [
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "line": 82,
+        "type": "coroutine_not_awaited",
+        "content": "analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "line": 106,
+        "type": "coroutine_not_awaited",
+        "content": "analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "line": 140,
+        "type": "coroutine_not_awaited",
+        "content": "analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "line": 216,
+        "type": "coroutine_not_awaited",
+        "content": "analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "line": 337,
+        "type": "coroutine_not_awaited",
+        "content": "analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "line": 469,
+        "type": "coroutine_not_awaited",
+        "content": "analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/character/services/analytics_middleware.py",
+        "line": 72,
+        "type": "coroutine_not_awaited",
+        "content": "analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "line": 84,
+        "type": "coroutine_not_awaited",
+        "content": "self.analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "line": 237,
+        "type": "coroutine_not_awaited",
+        "content": "self.analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "line": 300,
+        "type": "coroutine_not_awaited",
+        "content": "self.analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "line": 421,
+        "type": "coroutine_not_awaited",
+        "content": "self.analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      },
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/events/middleware.py",
+        "line": 122,
+        "type": "coroutine_not_awaited",
+        "content": "self.analytics_service.log_event(",
+        "fix_needed": "Ensure log_event is called properly in sync context"
+      }
+    ],
+    "fixes_applied": [
+      {
+        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "type": "analytics_coroutine_fix",
+        "changes": 6
+      }
+    ],
+    "import_issues": [],
+    "test_relocations": [],
+    "duplicates_found": [
+      {
+        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_generation/test_optimized_worldgen.py",
+        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_state/test_optimized_worldgen.py"
+      },
+      {
+        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_generation/test_world_utils.py",
+        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_state/test_world_utils.py"
+      },
+      {
+        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/region/test_utils_comprehensive.py",
+        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/inventory/test_utils_comprehensive.py"
+      },
+      {
+        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/quest/test_quest_integration.py",
+        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/arc/test_quest_integration.py"
+      },
+      {
+        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/inventory/test_utils.py",
+        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/analytics/test_utils.py"
+      }
+    ]
+  }
+}

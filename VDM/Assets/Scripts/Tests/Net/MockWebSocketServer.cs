@@ -1,12 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
 using Newtonsoft.Json;
-using VisualDM.Net;
+using System.Collections.Generic;
+using System.Collections;
+using System.Text;
+using System;
+using UnityEngine;
+using VDM.Runtime.Services;
 
-namespace VDM.Tests.Net
+
+namespace VDM.Tests.Services
 {
     /// <summary>
     /// A mock WebSocket server for testing WebSocket communication without actual network connections.

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "a2de8c65-26eb-4145-949d-b1271ff153f0",
+    "created_at": "2025-05-09T01:34:24.944752Z",
+    "updated_at": "2025-05-28T01:34:24.944754Z",
+    "name": "Feel",
+    "description": "Fear their for despite job.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "296f3813-220b-420c-a57a-b468564c4283",
+    "created_at": "2025-05-19T01:34:24.944758Z",
+    "updated_at": "2025-05-27T01:34:24.944760Z",
+    "name": "This",
+    "description": "Three want reason.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "e6d307c7-273d-4bdb-ab54-1c8897ae4ce7",
+    "created_at": "2025-04-29T01:34:24.944764Z",
+    "updated_at": "2025-05-28T01:34:24.944765Z",
+    "name": "Pressure",
+    "description": "Although local young together move then character.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "76ce5c27-3f0e-4f56-a39a-1ea834fb009f",
+    "created_at": "2025-05-25T01:34:24.944769Z",
+    "updated_at": "2025-05-26T01:34:24.944770Z",
+    "name": "Compare",
+    "description": "Want assume positive majority behind audience all west.",
+    "status": "PENDING"
+  },
+  {
+    "id": "8dabb32b-8b14-40c8-9348-2bf30f796c39",
+    "created_at": "2025-05-18T01:34:24.944774Z",
+    "updated_at": "2025-05-28T01:34:24.944775Z",
+    "name": "Benefit",
+    "description": "Society usually tell control lose former true.",
+    "status": "PENDING"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "05b4cda3-403a-4b14-9d74-c9bc9b3253a7",
+    "created_at": "2025-05-20T01:34:24.949630Z",
+    "updated_at": "2025-05-28T01:34:24.949632Z",
+    "name": "Six",
+    "description": "Smile could throw six better daughter.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "23cee3b7-4559-4cb4-9583-f93fbf02624d",
+    "created_at": "2025-05-13T01:34:24.949635Z",
+    "updated_at": "2025-05-27T01:34:24.949637Z",
+    "name": "System",
+    "description": "Former operation attack certain inside determine drug.",
+    "status": "PENDING"
+  },
+  {
+    "id": "1365e4b0-59be-4382-8f2d-6edbaf591ab8",
+    "created_at": "2025-05-21T01:34:24.949640Z",
+    "updated_at": "2025-05-29T01:34:24.949641Z",
+    "name": "This",
+    "description": "Be manage national whose explain.",
+    "status": "PENDING"
+  },
+  {
+    "id": "ba143d68-9835-4ca9-bf98-7f47729d93bf",
+    "created_at": "2025-05-25T01:34:24.949645Z",
+    "updated_at": "2025-05-25T01:34:24.949646Z",
+    "name": "Property",
+    "description": "Tonight address series tend enjoy common response.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "0ad15882-ebf7-43a4-bbca-356625707caa",
+    "created_at": "2025-05-09T01:34:24.949649Z",
+    "updated_at": "2025-05-27T01:34:24.949651Z",
+    "name": "Company",
+    "description": "Only apply on give protect country course to.",
+    "status": "INACTIVE"
+  }
+]

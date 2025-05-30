@@ -1,0 +1,42 @@
+[
+  {
+    "id": "d74e4784-ff29-44d4-a94a-4c00e8c85e50",
+    "created_at": "2025-05-03T01:34:24.947448Z",
+    "updated_at": "2025-05-26T01:34:24.947450Z",
+    "name": "Shoulder",
+    "description": "Trade whole health together.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "0d82ed10-7a9d-4fa6-b879-fe56c196d38b",
+    "created_at": "2025-05-24T01:34:24.947454Z",
+    "updated_at": "2025-05-24T01:34:24.947456Z",
+    "name": "Say",
+    "description": "Southern resource remain full least single its.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "99f9f245-d9cc-4237-947c-3be2d107a1fc",
+    "created_at": "2025-05-02T01:34:24.947459Z",
+    "updated_at": "2025-05-29T01:34:24.947461Z",
+    "name": "Modern",
+    "description": "Third newspaper college.",
+    "status": "PENDING"
+  },
+  {
+    "id": "0a43b84a-b64a-4fc3-b2cb-f9cfd23dba61",
+    "created_at": "2025-05-03T01:34:24.947464Z",
+    "updated_at": "2025-05-26T01:34:24.947466Z",
+    "name": "The",
+    "description": "Agreement interesting around several history.",
+    "status": "PENDING"
+  },
+  {
+    "id": "8b3f9713-7823-4693-9ba0-0c40a32524ef",
+    "created_at": "2025-05-06T01:34:24.947469Z",
+    "updated_at": "2025-05-29T01:34:24.947471Z",
+    "name": "Drop",
+    "description": "Fine collection alone.",
+    "status": "ACTIVE"
+  }
+]

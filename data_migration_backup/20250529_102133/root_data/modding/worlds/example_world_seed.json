@@ -1,0 +1,341 @@
+{
+    "version": "1.0.0",
+    "name": "Eldoria",
+    "metadata": {
+        "author": "Visual DM",
+        "description": "A high fantasy world with diverse biomes, ancient magic, and competing factions",
+        "tags": ["fantasy", "magic", "medieval", "adventure"],
+        "created_at": "2023-08-15T12:00:00Z",
+        "updated_at": "2023-08-15T12:00:00Z",
+        "settings": {
+            "magic_level": "high",
+            "technology_level": "medieval",
+            "realism": "moderate"
+        }
+    },
+    "world_settings": {
+        "seed": "eldoria-12345",
+        "continents": 3,
+        "region_density": 1.2,
+        "biome_distribution": {
+            "forest": 2.5,
+            "mountain": 1.8,
+            "desert": 1.2,
+            "plains": 2.0,
+            "swamp": 0.8,
+            "tundra": 0.6,
+            "jungle": 1.0
+        },
+        "river_settings": {
+            "river_density": 1.2,
+            "min_length": 8,
+            "max_length": 40
+        },
+        "coastline_settings": {
+            "smoothing_iterations": 3,
+            "beach_width": 2
+        }
+    },
+    "modular_data_references": {
+        "biomes": "data/modding/biomes/standard.json",
+        "adjacency": "data/adjacency.json",
+        "creatures": "data/modding/creatures/standard.json",
+        "buildings": "data/modding/buildings/medieval.json",
+        "poi_types": "data/modding/pois/standard.json",
+        "resources": "data/modding/resources/standard.json",
+        "magic": "data/modding/magic/high_fantasy.json",
+        "quests": "data/modding/quests/standard.json",
+        "motifs": "data/modding/motifs/fantasy.json",
+        "custom": {
+            "weather": "data/modding/weather/seasonal.json",
+            "cultures": "data/modding/cultures/standard.json"
+        }
+    },
+    "factions": [
+        {
+            "id": "royal_dominion",
+            "name": "Royal Dominion",
+            "type": "political",
+            "description": "The ruling monarchy that controls the central kingdoms",
+            "influence": 75,
+            "relationships": {
+                "arcane_collegium": 40,
+                "shadow_syndicate": -70,
+                "merchant_league": 30
+            },
+            "territory": ["central_plains", "northern_hills", "western_forest"],
+            "custom_data": {
+                "banner_colors": ["blue", "gold"],
+                "ruled_by": "Queen Eliana II",
+                "succession": "hereditary"
+            }
+        },
+        {
+            "id": "arcane_collegium",
+            "name": "Arcane Collegium",
+            "type": "arcane",
+            "description": "A powerful organization of mages and scholars studying the arcane arts",
+            "influence": 60,
+            "relationships": {
+                "royal_dominion": 40,
+                "shadow_syndicate": -10,
+                "merchant_league": 20
+            },
+            "territory": ["crystal_mountains", "mage_isles"],
+            "custom_data": {
+                "specialties": ["divination", "evocation", "abjuration"],
+                "leadership": "council",
+                "membership_requirement": "magical aptitude"
+            }
+        },
+        {
+            "id": "shadow_syndicate",
+            "name": "Shadow Syndicate",
+            "type": "criminal",
+            "description": "A network of thieves, assassins, and smugglers operating in the shadows",
+            "influence": 45,
+            "relationships": {
+                "royal_dominion": -70,
+                "arcane_collegium": -10,
+                "merchant_league": 20
+            },
+            "territory": ["harbor_district", "slums", "undercity"],
+            "custom_data": {
+                "specialties": ["theft", "assassination", "smuggling"],
+                "leadership": "hidden",
+                "initiation_ritual": "blood oath"
+            }
+        },
+        {
+            "id": "merchant_league",
+            "name": "Merchant League",
+            "type": "guild",
+            "description": "A powerful coalition of merchants, artisans, and bankers",
+            "influence": 65,
+            "relationships": {
+                "royal_dominion": 30,
+                "arcane_collegium": 20,
+                "shadow_syndicate": 20
+            },
+            "territory": ["trade_quarter", "harbor_district", "artisan_district"],
+            "custom_data": {
+                "specialties": ["banking", "shipping", "luxury goods"],
+                "leadership": "elected council",
+                "membership_requirement": "business ownership"
+            }
+        }
+    ],
+    "religions": [
+        {
+            "id": "lightbringers",
+            "name": "Order of the Divine Light",
+            "type": "monotheistic",
+            "description": "Worshippers of the Radiant One, deity of light, truth, and healing",
+            "deities": [
+                {
+                    "name": "The Radiant One",
+                    "domain": "light, truth, healing",
+                    "description": "An ever-present divine force embodied by the sun and stars"
+                }
+            ],
+            "influence": 70,
+            "custom_data": {
+                "holy_symbol": "sunburst",
+                "holy_day": "summer solstice",
+                "temples": ["Cathedral of Dawn", "Temples of Truth"]
+            }
+        },
+        {
+            "id": "natural_harmony",
+            "name": "Circle of Natural Harmony",
+            "type": "animistic",
+            "description": "Druids and nature worshippers who revere the spirits of the natural world",
+            "deities": [
+                {
+                    "name": "Mother Earth",
+                    "domain": "fertility, growth",
+                    "description": "The nurturing spirit of the land"
+                },
+                {
+                    "name": "Storm Lord",
+                    "domain": "weather, seasons",
+                    "description": "The volatile spirit of the sky and storms"
+                },
+                {
+                    "name": "Ancient Oak",
+                    "domain": "wisdom, endurance",
+                    "description": "The eldest spirit of the forest"
+                }
+            ],
+            "influence": 40,
+            "custom_data": {
+                "holy_symbol": "oakleaf",
+                "holy_sites": ["ancient groves", "natural springs", "stone circles"],
+                "rituals": ["seasonal celebrations", "communion with spirits"]
+            }
+        }
+    ],
+    "regions": [
+        {
+            "id": "central_plains",
+            "name": "The Golden Fields",
+            "biome": "plains",
+            "coordinates": {
+                "x": 0,
+                "y": 0
+            },
+            "description": "Vast fields of golden grain surrounding the royal capital",
+            "pois": [
+                {
+                    "id": "royal_capital",
+                    "name": "Crownhaven",
+                    "type": "city",
+                    "description": "The magnificent capital city of the Royal Dominion",
+                    "coordinates": {
+                        "x": 5,
+                        "y": 5
+                    },
+                    "population": 50000,
+                    "faction_id": "royal_dominion",
+                    "custom_data": {
+                        "defenses": "high walls, royal guard",
+                        "notable_buildings": ["Royal Palace", "Grand Cathedral", "Central Market"]
+                    }
+                },
+                {
+                    "id": "farming_village",
+                    "name": "Wheathollow",
+                    "type": "village",
+                    "description": "A peaceful farming community known for its fine grains",
+                    "coordinates": {
+                        "x": 10,
+                        "y": 8
+                    },
+                    "population": 500,
+                    "faction_id": "royal_dominion",
+                    "custom_data": {
+                        "exports": ["wheat", "barley", "oats"],
+                        "festivals": ["harvest festival", "spring planting"]
+                    }
+                }
+            ],
+            "motifs": ["abundance", "order", "tradition"],
+            "custom_data": {
+                "resources": ["grain", "livestock", "textiles"],
+                "climate": "temperate",
+                "dangers": ["bandits", "drought"]
+            }
+        },
+        {
+            "id": "crystal_mountains",
+            "name": "The Crystal Peaks",
+            "biome": "mountain",
+            "coordinates": {
+                "x": 15,
+                "y": -10
+            },
+            "description": "Towering mountains with veins of magical crystals that glow at night",
+            "pois": [
+                {
+                    "id": "arcane_tower",
+                    "name": "Spire of Enlightenment",
+                    "type": "custom",
+                    "description": "The central tower of the Arcane Collegium, where the most powerful mages study and experiment",
+                    "coordinates": {
+                        "x": 18,
+                        "y": -12
+                    },
+                    "population": 200,
+                    "faction_id": "arcane_collegium",
+                    "custom_data": {
+                        "defenses": "magical wards, arcane guardians",
+                        "notable_features": ["Grand Library", "Observatory", "Experimental Chambers"]
+                    }
+                },
+                {
+                    "id": "crystal_mine",
+                    "name": "Luminal Mines",
+                    "type": "custom",
+                    "description": "Mines where magical crystals are carefully extracted",
+                    "coordinates": {
+                        "x": 20,
+                        "y": -8
+                    },
+                    "population": 150,
+                    "faction_id": "arcane_collegium",
+                    "custom_data": {
+                        "exports": ["arcane crystals", "gemstones", "minerals"],
+                        "dangers": ["cave-ins", "crystal storms", "magical anomalies"]
+                    }
+                }
+            ],
+            "motifs": ["knowledge", "power", "isolation"],
+            "custom_data": {
+                "resources": ["arcane crystals", "rare metals", "magical herbs"],
+                "climate": "cold, windy",
+                "phenomena": ["crystal storms", "floating rocks", "aurora lights"]
+            }
+        }
+    ],
+    "canon_lists": {
+        "biomes": [
+            "plains", "forest", "mountain", "desert", "swamp", 
+            "tundra", "jungle", "coast", "beach", "hills"
+        ],
+        "poi_types": [
+            "city", "town", "village", "dungeon", "ruins", 
+            "temple", "outpost", "port", "mine", "fortress"
+        ],
+        "faction_types": [
+            "political", "religious", "guild", "criminal", 
+            "military", "academic", "arcane"
+        ],
+        "motifs": [
+            "betrayal", "redemption", "corruption", "sacrifice", 
+            "renewal", "balance", "chaos", "order", "mystery"
+        ]
+    },
+    "narrative_hooks": [
+        {
+            "id": "ancient_prophecy",
+            "type": "prophecy",
+            "description": "An ancient prophecy foretells the return of a long-forgotten power when the twin moons align",
+            "tags": ["mystery", "magic", "apocalyptic"],
+            "faction_id": "arcane_collegium",
+            "custom_data": {
+                "discovery_location": "forbidden archives",
+                "interpreted_by": "Archmage Thorne",
+                "timeline": "within one year",
+                "accuracy": "disputed"
+            }
+        },
+        {
+            "id": "royal_assassination",
+            "type": "event",
+            "description": "A plot to assassinate a member of the royal family has been uncovered",
+            "tags": ["intrigue", "politics", "violence"],
+            "faction_id": "shadow_syndicate",
+            "region_id": "central_plains",
+            "custom_data": {
+                "target": "Prince Aldric",
+                "mastermind": "unknown",
+                "timeline": "imminent",
+                "method": "poison"
+            }
+        },
+        {
+            "id": "magical_anomaly",
+            "type": "event",
+            "description": "Strange magical disturbances are occurring near the Crystal Peaks",
+            "tags": ["magic", "mystery", "danger"],
+            "region_id": "crystal_mountains",
+            "faction_id": "arcane_collegium",
+            "custom_data": {
+                "effects": ["random teleportation", "transmutation", "summoning"],
+                "cause": "unknown",
+                "timeline": "worsening",
+                "investigation": "ongoing"
+            }
+        }
+    ]
+} 

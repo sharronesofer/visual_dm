@@ -1,0 +1,28 @@
+{
+  "id": "3e61ca52-c1a4-488e-8e8b-399ac98308cf",
+  "created_at": "2025-05-04T01:34:24.952075Z",
+  "updated_at": "2025-05-27T01:34:24.952078Z",
+  "name": "Key Sword",
+  "description": "Listen black security vote these consumer address lead. Throw summer interview.",
+  "equipment_type": "WEAPON",
+  "slot": "RING",
+  "rarity": "RARE",
+  "stats": {
+    "attack_bonus": 3,
+    "damage": null,
+    "armor_class": null,
+    "stat_bonuses": {
+      "strength": 0,
+      "dexterity": 0,
+      "constitution": 0
+    }
+  },
+  "durability": {
+    "current": 55,
+    "maximum": 100,
+    "wear_rate": 1.6
+  },
+  "enchantments": [],
+  "identified": false,
+  "value": 8729
+}

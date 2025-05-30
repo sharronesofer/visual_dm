@@ -1,0 +1,25 @@
+{
+    "name": "VDM.Runtime",
+    "rootNamespace": "VDM.Runtime",
+    "references": [
+        "VDM.Systems",
+        "VDM.Character",
+        "VDM.Modules",
+        "VisualDM.DTOs",
+        "VDM.Common",
+        "VDM.Core",
+        "Unity.Nuget.Newtonsoft-Json",
+        "Unity.InputSystem",
+        "Unity.TextMeshPro",
+        "Unity.Netcode.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1f0305dd-5262-40c0-874d-92d25d23bd8a",
+    "created_at": "2025-05-20T01:34:24.968092Z",
+    "updated_at": "2025-05-27T01:34:24.968094Z",
+    "name": "Number",
+    "description": "Fast firm west minute high.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "c20f8946-c14c-4659-aab1-a5c8ec1c647d",
+    "created_at": "2025-05-06T01:34:24.968098Z",
+    "updated_at": "2025-05-26T01:34:24.968099Z",
+    "name": "Will",
+    "description": "Anything respond space surface large bad.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "5530fba7-a0d5-4b32-8481-a8e51b71e314",
+    "created_at": "2025-05-07T01:34:24.968102Z",
+    "updated_at": "2025-05-25T01:34:24.968104Z",
+    "name": "Laugh",
+    "description": "Medical first reality beyond.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "f2e0cdf0-3548-409e-a71f-8140f61b8f05",
+    "created_at": "2025-05-21T01:34:24.968107Z",
+    "updated_at": "2025-05-27T01:34:24.968109Z",
+    "name": "Feel",
+    "description": "Base relate example analysis.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "eeae3b31-0991-4ba0-9728-8d1b9c0e0235",
+    "created_at": "2025-05-15T01:34:24.968112Z",
+    "updated_at": "2025-05-25T01:34:24.968113Z",
+    "name": "Everything",
+    "description": "Now each answer.",
+    "status": "PENDING"
+  }
+]

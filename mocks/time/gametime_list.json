@@ -1,0 +1,42 @@
+[
+  {
+    "id": "0c295a86-6115-4e99-a12c-f3a9c3dafd10",
+    "created_at": "2025-05-07T01:34:25.037743Z",
+    "updated_at": "2025-05-26T01:34:25.037746Z",
+    "name": "Change",
+    "description": "Those likely fear million water fish fall.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "ceb1371d-fb6c-49d0-b716-0cc57c73c89e",
+    "created_at": "2025-05-09T01:34:25.037751Z",
+    "updated_at": "2025-05-29T01:34:25.037752Z",
+    "name": "State",
+    "description": "Something PM term war.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "aa563cde-bd95-44a3-af32-b716a213a50c",
+    "created_at": "2025-05-11T01:34:25.037757Z",
+    "updated_at": "2025-05-27T01:34:25.037759Z",
+    "name": "Add",
+    "description": "Leave cut third rest.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "f3a996e7-6aaf-4b20-b338-3a5ac00ce0ce",
+    "created_at": "2025-05-12T01:34:25.037763Z",
+    "updated_at": "2025-05-27T01:34:25.037765Z",
+    "name": "Identify",
+    "description": "Modern prove computer candidate exactly debate company.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "850e7897-1840-4e17-b8d0-1c240b259eb5",
+    "created_at": "2025-04-29T01:34:25.037769Z",
+    "updated_at": "2025-05-26T01:34:25.037771Z",
+    "name": "Eat",
+    "description": "Sometimes social station let.",
+    "status": "INACTIVE"
+  }
+]

@@ -1,0 +1,227 @@
+"""
+Tests for the Memory class in the memory system.
+"""
+
+import uuid
+import pytest
+import time
+from datetime import datetime, timedelta
+from unittest.mock import MagicMock, patch
+
+from backend.systems.memory.models.memory import (
+    Memory,
+    MemoryType,
+    MemoryEmotionalValence,
+)
+
+
+class TestMemory:
+    """Tests for the Memory class."""
+
+    def test_memory_initialization(self):
+        """Test that a Memory object can be created with the expected attributes."""
+        # Arrange
+        owner_id = "char123"
+        content = "I met a traveler from an antique land"
+        memory_type = MemoryType.EXPERIENCE
+        importance = 0.75
+
+        # Act
+        memory = Memory(
+            owner_id=owner_id,
+            content=content,
+            memory_type=memory_type,
+            importance=importance,
+        )
+
+        # Assert
+        assert memory.owner_id == owner_id
+        assert memory.content == content
+        assert memory.memory_type == memory_type
+        assert memory.importance == importance
+        assert isinstance(memory.id, str)
+        assert isinstance(memory.timestamp, float)
+        assert memory.tags == []
+        assert memory.entities_involved == []
+        assert memory.emotional_valence == MemoryEmotionalValence.NEUTRAL
+
+    def test_memory_id_generation(self):
+        """Test that each Memory gets a unique ID."""
+        # Arrange & Act
+        memory1 = Memory(
+            owner_id="char1",
+            content="Memory 1",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.5,
+        )
+
+        memory2 = Memory(
+            owner_id="char1",
+            content="Memory 2",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.5,
+        )
+
+        # Assert
+        assert memory1.id != memory2.id
+
+    def test_importance_influence_on_decay(self):
+        """Test that importance affects decay rate."""
+        # Arrange
+        high_importance_memory = Memory(
+            owner_id="char123",
+            content="A very important memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.9,
+        )
+
+        low_importance_memory = Memory(
+            owner_id="char123",
+            content="A less important memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.3,
+        )
+
+        # Act - use a future time to simulate decay
+        current_time = time.time() + 60 * 60 * 24 * 30  # 30 days later
+
+        # The current_strength should be affected by both importance and decay over time
+        high_importance_memory.update_strength(current_time)
+        low_importance_memory.update_strength(current_time)
+
+        # Assert
+        assert (
+            high_importance_memory.current_strength
+            > low_importance_memory.current_strength
+        )
+
+    def test_recall_tracking(self):
+        """Test that recalling a memory updates tracking properties."""
+        # Arrange
+        memory = Memory(
+            owner_id="char123",
+            content="Remember to update timestamps",
+            memory_type=MemoryType.DECISION,
+            importance=0.6,
+        )
+
+        # Get the initial timestamp and recall count
+        initial_timestamp = memory.last_recalled
+        initial_recall_count = memory.recall_count
+
+        # Ensure some time passes
+        recall_time = time.time() + 3600  # 1 hour later
+
+        # Act
+        memory.recall(recall_time)
+
+        # Assert
+        assert memory.last_recalled == recall_time
+        assert memory.recall_count == initial_recall_count + 1
+
+    def test_add_remove_tags(self):
+        """Test adding and removing tags."""
+        # Arrange
+        memory = Memory(
+            owner_id="char123",
+            content="This happened during the big battle",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.7,
+        )
+
+        # Act
+        memory.add_tag("combat")
+        memory.add_tag("traumatic")
+
+        # Assert
+        assert "combat" in memory.tags
+        assert "traumatic" in memory.tags
+        assert len(memory.tags) == 2
+
+        # Test remove tag
+        memory.remove_tag("traumatic")
+        assert "traumatic" not in memory.tags
+        assert len(memory.tags) == 1
+
+    def test_memory_with_related_entities(self):
+        """Test creating a memory with related entities."""
+        # Arrange
+        entities_involved = ["entity1", "entity2", "entity3"]
+
+        # Act
+        memory = Memory(
+            owner_id="char123",
+            content="Memory with related entities",
+            memory_type=MemoryType.INTERACTION,
+            importance=0.6,
+            entities_involved=entities_involved,
+        )
+
+        # Assert
+        assert memory.entities_involved == entities_involved
+
+        # Test adding another entity
+        memory.add_entity("entity4")
+        assert "entity4" in memory.entities_involved
+        assert len(memory.entities_involved) == 4
+
+        # Test removing an entity
+        memory.remove_entity("entity2")
+        assert "entity2" not in memory.entities_involved
+        assert len(memory.entities_involved) == 3
+
+    def test_memory_emotional_valence(self):
+        """Test that emotional valence is properly set."""
+        # Arrange & Act
+        positive_memory = Memory(
+            owner_id="char123",
+            content="I won the tournament",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.7,
+            emotional_valence=MemoryEmotionalValence.POSITIVE,
+        )
+
+        negative_memory = Memory(
+            owner_id="char123",
+            content="I lost the tournament",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.7,
+            emotional_valence=MemoryEmotionalValence.NEGATIVE,
+        )
+
+        # Assert
+        assert positive_memory.emotional_valence == MemoryEmotionalValence.POSITIVE
+        assert negative_memory.emotional_valence == MemoryEmotionalValence.NEGATIVE
+
+    def test_memory_serialization(self):
+        """Test that a Memory can be serialized and deserialized correctly."""
+        # Arrange
+        original_memory = Memory(
+            owner_id="char123",
+            content="This is a test memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.8,
+            emotional_valence=MemoryEmotionalValence.NEUTRAL,
+            entities_involved=["entity1", "entity2"],
+            tags=["test", "important"],
+        )
+
+        # Act - Convert to dict
+        memory_dict = original_memory.to_dict()
+
+        # Create new memory from dict
+        deserialized_memory = Memory.from_dict(memory_dict)
+
+        # Assert
+        assert deserialized_memory.id == original_memory.id
+        assert deserialized_memory.owner_id == original_memory.owner_id
+        assert deserialized_memory.content == original_memory.content
+        assert deserialized_memory.memory_type == original_memory.memory_type
+        assert deserialized_memory.importance == original_memory.importance
+        assert (
+            deserialized_memory.emotional_valence == original_memory.emotional_valence
+        )
+        assert set(deserialized_memory.entities_involved) == set(
+            original_memory.entities_involved
+        )
+        assert set(deserialized_memory.tags) == set(original_memory.tags)

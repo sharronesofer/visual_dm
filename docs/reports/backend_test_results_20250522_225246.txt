@@ -1,0 +1,487 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /Users/Sharrone/Visual_DM
+configfile: pytest.ini
+plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... 
+----------------------------- live log collection ------------------------------
+22:52:48 [INFO] backend.systems.storage.json_storage: JSONStorageManager initialized with base path: /Users/Sharrone/Visual_DM/data
+22:52:48 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
+collected 29 items
+
+backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_memory_content FAILED [  3%]
+backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_get_category_modifier FAILED [  6%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_initial_importance FAILED [ 10%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_initial_importance_categories PASSED [ 13%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_memory_saliency PASSED [ 17%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_memory_relevance PASSED [ 20%]
+backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_category_influence_on_saliency PASSED [ 24%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_initialization PASSED [ 27%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_custom_memory_id SKIPPED [ 31%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_with_tags PASSED [ 34%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_to_dict_and_from_dict PASSED [ 37%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_recall_tracking PASSED [ 41%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_add_remove_tags PASSED [ 44%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_strength_update PASSED [ 48%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_importance_influence_on_decay FAILED [ 51%]
+backend/tests/systems/memory/test_memory.py::TestMemory::test_memory_relevance_calculation PASSED [ 55%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_create_memory ERROR [ 58%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories_with_cache ERROR [ 62%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories_loading_from_storage ERROR [ 65%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories_with_filters ERROR [ 68%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_remember ERROR [ 72%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_update_memory_importance ERROR [ 75%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_forget_memory ERROR [ 79%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_run_memory_decay ERROR [ 82%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_load_character_memories ERROR [ 86%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_save_memory ERROR [ 89%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_event_handlers ERROR [ 93%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_concurrent_memory_operations ERROR [ 96%]
+backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_error_handling ERROR [100%]
+
+==================================== ERRORS ====================================
+____________ ERROR at setup of TestMemoryManager.test_create_memory ____________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a795550>
+mock_storage = <AsyncMock id='4470414992'>
+mock_event_dispatcher = <AsyncMock id='4470469584'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a719f50>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+_______ ERROR at setup of TestMemoryManager.test_get_memories_with_cache _______
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a796510>
+mock_storage = <AsyncMock id='4468765840'>
+mock_event_dispatcher = <AsyncMock id='4469689424'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a6a2a50>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+__ ERROR at setup of TestMemoryManager.test_get_memories_loading_from_storage __
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a795fd0>
+mock_storage = <AsyncMock id='4469990096'>
+mock_event_dispatcher = <AsyncMock id='4469246736'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a6ae2d0>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+______ ERROR at setup of TestMemoryManager.test_get_memories_with_filters ______
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a7970d0>
+mock_storage = <AsyncMock id='4468697040'>
+mock_event_dispatcher = <AsyncMock id='4468720848'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a61e790>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+______________ ERROR at setup of TestMemoryManager.test_remember _______________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a797e50>
+mock_storage = <AsyncMock id='4469814608'>
+mock_event_dispatcher = <AsyncMock id='4468713744'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a610a10>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+______ ERROR at setup of TestMemoryManager.test_update_memory_importance _______
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a780050>
+mock_storage = <AsyncMock id='4470585872'>
+mock_event_dispatcher = <AsyncMock id='4468936528'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a6c8810>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+____________ ERROR at setup of TestMemoryManager.test_forget_memory ____________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a780fd0>
+mock_storage = <AsyncMock id='4437487056'>
+mock_event_dispatcher = <AsyncMock id='4470851024'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a5fe810>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+__________ ERROR at setup of TestMemoryManager.test_run_memory_decay ___________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a781750>
+mock_storage = <AsyncMock id='4469142224'>
+mock_event_dispatcher = <AsyncMock id='4469649040'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a5f6690>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+_______ ERROR at setup of TestMemoryManager.test_load_character_memories _______
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a781f10>
+mock_storage = <AsyncMock id='4469489360'>
+mock_event_dispatcher = <AsyncMock id='4468941456'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a5a2850>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+_____________ ERROR at setup of TestMemoryManager.test_save_memory _____________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a782a90>
+mock_storage = <AsyncMock id='4470855312'>
+mock_event_dispatcher = <AsyncMock id='4469372944'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a650e50>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+___________ ERROR at setup of TestMemoryManager.test_event_handlers ____________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a783b50>
+mock_storage = <AsyncMock id='4469215184'>
+mock_event_dispatcher = <AsyncMock id='4469158096'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a647510>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+____ ERROR at setup of TestMemoryManager.test_concurrent_memory_operations _____
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a783e90>
+mock_storage = <AsyncMock id='4469482128'>
+mock_event_dispatcher = <AsyncMock id='4469367184'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a6dbf90>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+___________ ERROR at setup of TestMemoryManager.test_error_handling ____________
+
+self = <systems.memory.test_memory_manager.TestMemoryManager object at 0x10a779510>
+mock_storage = <AsyncMock id='4470034704'>
+mock_event_dispatcher = <AsyncMock id='4469151376'>
+
+    @pytest.fixture
+    async def memory_manager(self, mock_storage, mock_event_dispatcher):
+        """Create a memory manager for testing."""
+>       manager = MemoryManager()
+
+backend/tests/systems/memory/test_memory_manager.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <backend.systems.memory.memory_manager.MemoryManager object at 0x10a650910>
+
+    def __init__(self):
+        """Initialize the MemoryManager. Use get_instance() instead of direct instantiation."""
+        if MemoryManager._instance is not None:
+>           raise RuntimeError("MemoryManager is a singleton. Use get_instance() instead.")
+E           RuntimeError: MemoryManager is a singleton. Use get_instance() instead.
+
+backend/systems/memory/memory_manager.py:90: RuntimeError
+=================================== FAILURES ===================================
+_____________ TestMemoryCategories.test_categorize_memory_content ______________
+
+self = <systems.memory.test_memory_categories.TestMemoryCategories object at 0x10a5a8d10>
+
+    def test_categorize_memory_content(self):
+        """Test that memory content is correctly categorized based on keywords."""
+        # Test battle/combat content
+        combat_content = "I fought in a battle against the orcs"
+        combat_categories = categorize_memory_content(combat_content)
+        assert "combat" in combat_categories
+    
+        # Test location-related content
+        location_content = "I visited the castle on the hill"
+        location_categories = categorize_memory_content(location_content)
+>       assert "location" in location_categories
+E       AssertionError: assert 'location' in {<MemoryCategory.PERSONAL: 'personal'>}
+
+backend/tests/systems/memory/test_memory_categories.py:24: AssertionError
+_______________ TestMemoryCategories.test_get_category_modifier ________________
+
+self = <systems.memory.test_memory_categories.TestMemoryCategories object at 0x10a5ab190>
+
+    def test_get_category_modifier(self):
+        """Test retrieving modifiers for memory categories."""
+        # Test importance modifiers
+        trauma_importance = get_category_modifier("trauma", "importance")
+        discovery_importance = get_category_modifier("discovery", "importance")
+    
+        # Categories like trauma should have higher importance modifiers
+>       assert trauma_importance > 1.0
+E       TypeError: '>' not supported between instances of 'NoneType' and 'float'
+
+backend/tests/systems/memory/test_memory_categories.py:54: TypeError
+____________ TestSaliencyScoring.test_calculate_initial_importance _____________
+
+self = <systems.memory.test_saliency_scoring.TestSaliencyScoring object at 0x10a660ad0>
+
+    def test_calculate_initial_importance(self):
+        """Test that initial importance calculation works correctly."""
+        # Test with basic content
+        basic_importance = calculate_initial_importance("A basic memory")
+        assert 0.0 <= basic_importance <= 1.0
+    
+        # Test with emotional content
+        emotional_content = "I was terrified when the dragon attacked our village"
+        emotional_importance = calculate_initial_importance(emotional_content)
+        assert emotional_importance > basic_importance
+    
+        # Test with longer content
+        long_content = "This is a very long memory with many details. " * 10
+        long_importance = calculate_initial_importance(long_content)
+>       assert long_importance > basic_importance
+E       assert 0.6 > 0.6
+
+backend/tests/systems/memory/test_saliency_scoring.py:32: AssertionError
+________________ TestMemory.test_importance_influence_on_decay _________________
+
+self = <systems.memory.test_memory.TestMemory object at 0x10a6cb3d0>
+
+    def test_importance_influence_on_decay(self):
+        """Test that importance affects decay rate."""
+        # Arrange
+        high_importance_memory = Memory(
+            owner_id="char123",
+            content="A very important memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.9
+        )
+    
+        low_importance_memory = Memory(
+            owner_id="char123",
+            content="A less important memory",
+            memory_type=MemoryType.EXPERIENCE,
+            importance=0.3
+        )
+    
+        # Act
+        current_time = time.time() + 10000  # 10000 seconds later
+        original_high = high_importance_memory.current_strength
+        original_low = low_importance_memory.current_strength
+    
+        high_importance_memory.update_strength(current_time)
+        low_importance_memory.update_strength(current_time)
+    
+        # Assert - The high importance memory should decay less
+        high_decay = original_high - high_importance_memory.current_strength
+        low_decay = original_low - low_importance_memory.current_strength
+    
+>       assert high_decay < low_decay
+E       assert 0.005770324396071169 < 0.0057703243931903625
+
+backend/tests/systems/memory/test_memory.py:204: AssertionError
+=============================== warnings summary ===============================
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+backend/systems/storage/events.py:13
+  /Users/Sharrone/Visual_DM/backend/systems/storage/events.py:13: DeprecationWarning: Importing from backend.systems.events.event_dispatcher is deprecated. Use backend.app.core.events.event_dispatcher instead.
+    from backend.systems.events.event_dispatcher import EventDispatcher
+
+../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441: PytestConfigWarning: Unknown config option: verbose
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+backend/tests/systems/memory/test_memory_manager.py: 13 warnings
+  /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/pytest_asyncio/plugin.py:884: DeprecationWarning: The event_loop fixture provided by pytest-asyncio has been redefined in
+  /Users/Sharrone/Visual_DM/backend/tests/conftest.py:245
+  Replacing the event_loop fixture with a custom implementation is deprecated
+  and will lead to errors in the future.
+  If you want to request an asyncio event loop with a scope other than function
+  scope, use the "loop_scope" argument to the asyncio mark when marking the tests.
+  If you want to return different types of event loops, use the event_loop_policy
+  fixture.
+  
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_categorize_memory_content
+FAILED backend/tests/systems/memory/test_memory_categories.py::TestMemoryCategories::test_get_category_modifier
+FAILED backend/tests/systems/memory/test_saliency_scoring.py::TestSaliencyScoring::test_calculate_initial_importance
+FAILED backend/tests/systems/memory/test_memory.py::TestMemory::test_importance_influence_on_decay
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_create_memory
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories_with_cache
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories_loading_from_storage
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_get_memories_with_filters
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_remember
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_update_memory_importance
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_forget_memory
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_run_memory_decay
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_load_character_memories
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_save_memory
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_event_handlers
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_concurrent_memory_operations
+ERROR backend/tests/systems/memory/test_memory_manager.py::TestMemoryManager::test_error_handling
+======= 4 failed, 11 passed, 1 skipped, 17 warnings, 13 errors in 1.12s ========
+
+
+Test Duration: 1.90 seconds
+Exit Code: 1

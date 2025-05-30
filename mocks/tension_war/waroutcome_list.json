@@ -1,0 +1,42 @@
+[
+  {
+    "id": "471575db-6185-413f-88b6-69bd47d7d550",
+    "created_at": "2025-05-04T01:34:25.034999Z",
+    "updated_at": "2025-05-25T01:34:25.035002Z",
+    "name": "Watch",
+    "description": "Responsibility attack us forward.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "e56c95cc-5dc4-4381-bc88-a7d0d30e4331",
+    "created_at": "2025-05-07T01:34:25.035006Z",
+    "updated_at": "2025-05-28T01:34:25.035008Z",
+    "name": "Staff",
+    "description": "Particularly morning all evening.",
+    "status": "INACTIVE"
+  },
+  {
+    "id": "625a3ace-5cb4-4f0a-8f0d-8ed564b39442",
+    "created_at": "2025-05-04T01:34:25.035012Z",
+    "updated_at": "2025-05-24T01:34:25.035014Z",
+    "name": "Level",
+    "description": "Lead hour someone establish political.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "ab7b7560-e604-4644-bdec-ae24f55df5c6",
+    "created_at": "2025-05-16T01:34:25.035018Z",
+    "updated_at": "2025-05-24T01:34:25.035020Z",
+    "name": "Two",
+    "description": "Little development from close.",
+    "status": "ACTIVE"
+  },
+  {
+    "id": "c75b86df-b839-4bb4-b98e-7b86562f380e",
+    "created_at": "2025-05-05T01:34:25.035024Z",
+    "updated_at": "2025-05-26T01:34:25.035026Z",
+    "name": "Month",
+    "description": "Radio air remain something fund.",
+    "status": "ACTIVE"
+  }
+]

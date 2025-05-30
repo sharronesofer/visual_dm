@@ -1,0 +1,147 @@
+{
+  "iron_sword": {
+    "name": "Iron Sword",
+    "description": "A basic iron sword, effective in combat.",
+    "skill_required": "smithing",
+    "min_skill_level": 2,
+    "station_required": "smithy",
+    "station_level": 1,
+    "ingredients": [
+      {
+        "item_id": "iron_ingot",
+        "quantity": 3,
+        "is_consumed": true,
+        "substitution_groups": {
+          "low_quality": {
+            "scrap_metal": 5
+          }
+        }
+      },
+      {
+        "item_id": "leather_strip",
+        "quantity": 2,
+        "is_consumed": true
+      },
+      {
+        "item_id": "wood_handle",
+        "quantity": 1,
+        "is_consumed": true
+      }
+    ],
+    "results": [
+      {
+        "item_id": "iron_sword",
+        "quantity": 1,
+        "probability": 1.0
+      }
+    ],
+    "is_hidden": false,
+    "is_enabled": true,
+    "discovery_methods": ["smith_mentor"],
+    "metadata": {
+      "base_experience": 15,
+      "quality_modifiers": {
+        "damage": 2,
+        "durability": 5
+      }
+    }
+  },
+  
+  "steel_dagger": {
+    "name": "Steel Dagger",
+    "description": "A sharp steel dagger with swift striking capabilities.",
+    "skill_required": "smithing",
+    "min_skill_level": 4,
+    "station_required": "smithy",
+    "station_level": 2,
+    "ingredients": [
+      {
+        "item_id": "steel_ingot",
+        "quantity": 1,
+        "is_consumed": true
+      },
+      {
+        "item_id": "leather_strip",
+        "quantity": 1,
+        "is_consumed": true
+      },
+      {
+        "item_id": "fine_wood_handle",
+        "quantity": 1,
+        "is_consumed": true
+      }
+    ],
+    "results": [
+      {
+        "item_id": "steel_dagger",
+        "quantity": 1,
+        "probability": 1.0
+      }
+    ],
+    "is_hidden": false,
+    "is_enabled": true,
+    "discovery_methods": ["smith_mentor", "book_learning"],
+    "metadata": {
+      "base_experience": 20,
+      "quality_modifiers": {
+        "damage": 1,
+        "speed": 3,
+        "durability": 2
+      }
+    }
+  },
+  
+  "enchanted_blade": {
+    "name": "Enchanted Blade",
+    "description": "A weapon infused with magical properties.",
+    "skill_required": "arcane_smithing",
+    "min_skill_level": 5,
+    "station_required": "arcane_forge",
+    "station_level": 1,
+    "ingredients": [
+      {
+        "item_id": "steel_ingot",
+        "quantity": 2,
+        "is_consumed": true
+      },
+      {
+        "item_id": "magical_essence",
+        "quantity": 3,
+        "is_consumed": true
+      },
+      {
+        "item_id": "rare_gem",
+        "quantity": 1,
+        "is_consumed": true
+      }
+    ],
+    "results": [
+      {
+        "item_id": "enchanted_blade",
+        "quantity": 1,
+        "probability": 0.8
+      },
+      {
+        "item_id": "magical_residue",
+        "quantity": 2,
+        "probability": 0.5
+      }
+    ],
+    "is_hidden": true,
+    "is_enabled": true,
+    "discovery_methods": ["arcane_quest", "ancient_text"],
+    "metadata": {
+      "base_experience": 40,
+      "quality_modifiers": {
+        "damage": 3,
+        "magical_power": 5,
+        "durability": 4
+      },
+      "is_milestone": true,
+      "milestone_rewards": {
+        "title": "Arcane Smith",
+        "experience": 300
+      }
+    }
+  }
+} 

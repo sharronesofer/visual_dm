@@ -1,0 +1,36 @@
+{
+  "id": "e7bb96b1-afe3-4fbc-ba41-f83a973bea9e",
+  "created_at": "2025-04-29T01:34:24.942935Z",
+  "updated_at": "2025-05-24T01:34:24.942938Z",
+  "name": "Michael Walton",
+  "race": "ELF",
+  "character_class": "WIZARD",
+  "level": 8,
+  "experience_points": 260954,
+  "stats": {
+    "strength": 12,
+    "dexterity": 17,
+    "constitution": 9,
+    "intelligence": 9,
+    "wisdom": 12,
+    "charisma": 11
+  },
+  "hit_points": {
+    "current": 35,
+    "maximum": 71
+  },
+  "location": {
+    "region_id": "1e6e582b-c4db-4e6c-b6f8-519b7da8d6a3",
+    "coordinates": {
+      "q": 8,
+      "r": 5,
+      "s": 1
+    }
+  },
+  "background": "Guess Mrs final big defense at again wide.",
+  "personality_traits": [
+    "citizen",
+    "finally",
+    "ask"
+  ]
+}
