@@ -7,6 +7,7 @@ using VDM.Infrastructure.Services;
 using VDM.Systems;
 using VDM.Systems.Arc.Services;
 using VDM.Systems.Arc.Integration;
+using System.Threading.Tasks;
 
 
 namespace VDM.Infrastructure.Integration
@@ -426,51 +427,55 @@ namespace VDM.Infrastructure.Integration
 
         private IEnumerator TestArcSystemIntegration(IntegrationTestResult result)
         {
-            // TODO: Implement these missing client classes
-            // if (arcSystemClient == null)
-            // {
-            //     result.passed = false;
-            //     result.errorMessage = "Arc system client not available";
-            //     yield break;
-            // }
+            if (arcService == null)
+            {
+                result.passed = false;
+                result.errorMessage = "Arc service not available";
+                yield break;
+            }
 
             bool testCompleted = false;
             bool testPassed = false;
             string testError = "";
 
-            // Test getting arcs
-            // arcSystemClient.GetArcs(callback: arcs =>
-            // {
-            //     testCompleted = true;
-            //     if (arcs != null)
-            //     {
-            //         testPassed = true;
-            //         result.details = $"Successfully retrieved {arcs.Count} arcs";
-            //     }
-            //     else
-            //     {
-            //         testError = "Failed to retrieve arcs";
-            //     }
-            // });
-
-            // Wait for test completion
-            float timeout = connectionTimeout;
-            while (!testCompleted && timeout > 0)
+            // Test getting arcs using the real async API
+            var getArcsTask = arcService.GetArcsAsync();
+            
+            // Wait for the async task to complete
+            while (!getArcsTask.IsCompleted)
             {
-                timeout -= Time.deltaTime;
                 yield return null;
             }
 
-            if (!testCompleted)
+            if (getArcsTask.IsFaulted)
             {
-                result.passed = false;
-                result.errorMessage = "Arc system test timed out";
+                testCompleted = true;
+                testPassed = false;
+                testError = $"Arc service error: {getArcsTask.Exception?.GetBaseException().Message}";
+            }
+            else if (getArcsTask.IsCompletedSuccessfully)
+            {
+                testCompleted = true;
+                var arcs = getArcsTask.Result;
+                if (arcs != null)
+                {
+                    testPassed = true;
+                    result.details = $"Successfully retrieved {arcs.Count} arcs";
+                }
+                else
+                {
+                    testError = "Arc service returned null";
+                }
             }
             else
             {
-                result.passed = testPassed;
-                result.errorMessage = testError;
+                testCompleted = true;
+                testPassed = false;
+                testError = "Arc service task was cancelled";
             }
+
+            result.passed = testPassed;
+            result.errorMessage = testError;
         }
 
         private IEnumerator TestNarrativeProgressionIntegration(IntegrationTestResult result)
