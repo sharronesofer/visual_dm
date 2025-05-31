@@ -5,6 +5,8 @@ using System.Linq;
 using System;
 using UnityEngine;
 using VDM.Infrastructure.Services;
+using VDM.Infrastructure.Services.Services.Websocket;
+using VDM.Infrastructure.Services.Services.Http;
 
 
 namespace VDM.Infrastructure.Services
@@ -37,7 +39,7 @@ namespace VDM.Infrastructure.Services
 
         // System references
         private PerformanceManager performanceManager;
-        private OptimizedHTTPClient httpClient;
+        private OptimizedHttpClient httpClient;
         private OptimizedWebSocketClient webSocketClient;
 
         // Network performance tracking
@@ -86,7 +88,7 @@ namespace VDM.Infrastructure.Services
             performanceManager = PerformanceManager.Instance;
 
             // Find network clients
-            httpClient = FindObjectOfType<OptimizedHTTPClient>();
+            httpClient = FindObjectOfType<OptimizedHttpClient>();
             webSocketClient = OptimizedWebSocketClient.Instance;
 
             // Set up default presets if not configured

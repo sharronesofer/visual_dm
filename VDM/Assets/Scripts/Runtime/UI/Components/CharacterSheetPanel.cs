@@ -99,9 +99,8 @@ namespace VDM.UI.Systems.Character
                 equipmentButton.onClick.AddListener(OpenEquipmentManager);
         }
         
-        protected override void OnEnable()
+        private void OnEnable()
         {
-            base.OnEnable();
             if (characterService != null)
             {
                 characterService.OnCharacterChanged += OnCharacterChanged;
@@ -110,9 +109,8 @@ namespace VDM.UI.Systems.Character
             }
         }
         
-        protected override void OnDisable()
+        private void OnDisable()
         {
-            base.OnDisable();
             if (characterService != null)
             {
                 characterService.OnCharacterChanged -= OnCharacterChanged;

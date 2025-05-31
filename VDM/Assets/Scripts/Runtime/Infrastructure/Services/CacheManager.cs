@@ -35,7 +35,7 @@ namespace VDM.Infrastructure.Core
         private Dictionary<string, Dictionary<string, CacheEntry>> categories = new Dictionary<string, Dictionary<string, CacheEntry>>();
         
         [Serializable]
-        private class CacheEntry
+        public class CacheEntry
         {
             public object data;
             public DateTime createdAt;

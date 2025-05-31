@@ -10,6 +10,7 @@ using VDM.Systems.Arc.Services;
 using VDM.Systems.Arc.Models;
 using VDM.Systems.Events;
 using VDM.Infrastructure.Core.Core.Patterns;
+using VDM.Systems.Arc.Ui;
 
 namespace VDM.Systems.Arc.Integration
 {

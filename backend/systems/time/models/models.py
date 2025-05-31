@@ -8,7 +8,7 @@ the Development Bible standards.
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from uuid import UUID, uuid4
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base

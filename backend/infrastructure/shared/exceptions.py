@@ -299,8 +299,14 @@ class EquipmentNotFoundError(NotFoundError):
     """Exception raised when equipment is not found"""
     pass
 
+
 class EquipmentValidationError(ValidationError):
     """Exception raised when equipment validation fails"""
+    pass
+
+
+class EquipmentConflictError(ConflictError):
+    """Exception raised when equipment conflicts occur"""
     pass
 
 
@@ -363,4 +369,5 @@ __all__ = [
     "EventsConflictError",
     "EquipmentNotFoundError",
     "EquipmentValidationError",
+    "EquipmentConflictError",
 ] 

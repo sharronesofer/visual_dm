@@ -7,6 +7,9 @@ using UnityEngine;
 using VDM.DTOs.Core;
 using VDM.Systems.Character;
 using VDM.Infrastructure.Services;
+using VDM.DTOs.Character;
+using VDM.Infrastructure.Services.Services.Websocket;
+using VDM.Infrastructure.Services.Services.Http;
 
 
 namespace VDM.Infrastructure.Services
@@ -29,7 +32,7 @@ namespace VDM.Infrastructure.Services
         [SerializeField] private bool enableCompression = true;
 
         // Network clients
-        private OptimizedHTTPClient optimizedHttpClient;
+        private OptimizedHttpClient optimizedHttpClient;
         private OptimizedWebSocketClient optimizedWebSocketClient;
         
         // Character events
@@ -80,11 +83,11 @@ namespace VDM.Infrastructure.Services
         private void InitializeService()
         {
             // Get or create OptimizedHTTPClient
-            optimizedHttpClient = FindObjectOfType<OptimizedHTTPClient>();
+            optimizedHttpClient = FindObjectOfType<OptimizedHttpClient>();
             if (optimizedHttpClient == null)
             {
                 var httpClientGO = new GameObject("OptimizedHTTPClient");
-                optimizedHttpClient = httpClientGO.AddComponent<OptimizedHTTPClient>();
+                optimizedHttpClient = httpClientGO.AddComponent<OptimizedHttpClient>();
             }
 
             // Get OptimizedWebSocketClient instance

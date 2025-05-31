@@ -9,3 +9,5 @@ from . import schemas
 from . import services
 from . import utils
 
+# Import specific modules that tests expect
+from .services import time_integration 

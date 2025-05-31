@@ -11,8 +11,15 @@ import logging
 from datetime import datetime, timedelta
 
 # Import time system components
-from backend.systems.calendar.calendar_manager import CalendarManager
-from backend.systems.calendar.time_manager import TimeManager
+# from backend.systems.calendar.calendar_manager import CalendarManager
+from backend.systems.time.services.time_manager import TimeManager
+
+# Temporary stub for CalendarManager
+class CalendarManager:
+    @classmethod
+    def get_instance(cls):
+        return cls()
+
 
 # Configure logger
 logger = logging.getLogger(__name__)

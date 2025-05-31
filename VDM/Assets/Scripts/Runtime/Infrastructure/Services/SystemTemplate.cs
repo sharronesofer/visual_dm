@@ -183,7 +183,7 @@ namespace VDM.Infrastructure.Core.Core.Templates
         /// UI Controller for system interface
         /// Should be placed in: SystemName/UI/SystemNameController.cs
         /// </summary>
-        public class TemplateUIController : UIController
+        public class TemplateUIController : VDM.Infrastructure.Core.Core.Patterns.UIController
         {
             [Header("Template UI Components")]
             [SerializeField] private Transform _templateContainer;

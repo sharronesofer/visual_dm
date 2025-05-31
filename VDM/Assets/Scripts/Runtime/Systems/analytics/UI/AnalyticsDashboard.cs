@@ -77,15 +77,14 @@ namespace VDM.Systems.Analytics.Ui
         private Color criticalColor = Color.red;
         private Color offlineColor = Color.gray;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             InitializeControls();
         }
 
         private void Start()
         {
-            Initialize();
+            // BaseUIComponent will call Initialize() automatically if autoInitialize is true
         }
 
         private void Update()
@@ -101,12 +100,10 @@ namespace VDM.Systems.Analytics.Ui
         }
 
         /// <summary>
-        /// Initialize the analytics dashboard
+        /// Required implementation of BaseUIComponent abstract method
         /// </summary>
-        public override void Initialize()
+        protected override void OnInitialize()
         {
-            if (isInitialized) return;
-
             analyticsService = AnalyticsService.Instance;
             if (analyticsService == null)
             {
@@ -127,8 +124,16 @@ namespace VDM.Systems.Analytics.Ui
             // Load initial data
             RefreshDashboard();
 
-            isInitialized = true;
             Debug.Log("AnalyticsDashboard initialized successfully");
+        }
+
+        /// <summary>
+        /// Public Initialize method for manual initialization (calls base)
+        /// </summary>
+        public override void Initialize()
+        {
+            if (isInitialized) return;
+            base.Initialize();
         }
 
         private void InitializeControls()
@@ -475,10 +480,8 @@ namespace VDM.Systems.Analytics.Ui
             totalEventsText.text = "Total Events: 0";
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
-            base.OnDestroy();
-            
             // Unsubscribe from events
             if (analyticsService != null)
             {

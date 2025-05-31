@@ -45,9 +45,9 @@ namespace VDM.Infrastructure.Ui.Ui.Framework
         
         #region Unity Lifecycle
         
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
+            base.OnInitialize(); // Call base initialization instead
             
             // Validate screen ID
             if (string.IsNullOrEmpty(screenId))
@@ -63,15 +63,15 @@ namespace VDM.Infrastructure.Ui.Ui.Framework
             }
             
             // Preload if needed
-            if (preloadOnAwake && !IsInitialized)
+            if (preloadOnAwake && !isInitialized)
             {
                 Initialize();
             }
         }
         
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
+            // BaseUIComponent will handle initialization automatically
             
             // Auto-register with screen manager
             if (ScreenManager)
@@ -88,15 +88,13 @@ namespace VDM.Infrastructure.Ui.Ui.Framework
             }
         }
         
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             // Unregister from screen manager
             if (ScreenManager)
             {
                 ScreenManager.UnregisterScreen(ScreenId);
             }
-            
-            base.OnDestroy();
         }
         
         #endregion
@@ -272,7 +270,7 @@ namespace VDM.Infrastructure.Ui.Ui.Framework
         /// <summary>
         /// Show component with custom screen transition
         /// </summary>
-        protected override void ShowAnimated()
+        protected virtual void ShowAnimated()
         {
             OnScreenWillShow();
             
@@ -307,7 +305,7 @@ namespace VDM.Infrastructure.Ui.Ui.Framework
         /// <summary>
         /// Hide component with custom screen transition
         /// </summary>
-        protected override void HideAnimated()
+        protected virtual void HideAnimated()
         {
             OnScreenWillHide();
             
@@ -340,22 +338,22 @@ namespace VDM.Infrastructure.Ui.Ui.Framework
         }
         
         /// <summary>
-        /// Override show instant to include screen lifecycle
+        /// Show instant with screen lifecycle
         /// </summary>
-        protected override void ShowInstant()
+        protected virtual void ShowInstant()
         {
             OnScreenWillShow();
-            base.ShowInstant();
+            Show(); // Call base Show method
             OnScreenDidShow();
         }
         
         /// <summary>
-        /// Override hide instant to include screen lifecycle
+        /// Hide instant with screen lifecycle
         /// </summary>
-        protected override void HideInstant()
+        protected virtual void HideInstant()
         {
             OnScreenWillHide();
-            base.HideInstant();
+            Hide(); // Call base Hide method
             OnScreenDidHide();
         }
         
@@ -583,6 +581,18 @@ namespace VDM.Infrastructure.Ui.Ui.Framework
         public virtual string GetScreenInfo()
         {
             return $"Screen: {ScreenId}, Layer: {layer}, Order: {sortOrder}, Active: {IsScreenActive}, Visible: {IsVisible}";
+        }
+        
+        #endregion
+        
+        #region BaseUIComponent Implementation
+        
+        /// <summary>
+        /// Required implementation of BaseUIComponent abstract method
+        /// </summary>
+        protected override void OnInitialize()
+        {
+            // Screen-specific initialization can be overridden in derived classes
         }
         
         #endregion
