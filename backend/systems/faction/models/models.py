@@ -113,3 +113,6 @@ class FactionListResponse(BaseModel):
     size: int
     has_next: bool
     has_prev: bool
+
+# Aliases for backward compatibility
+Faction = FactionModel

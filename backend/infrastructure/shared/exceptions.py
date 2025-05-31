@@ -299,6 +299,10 @@ class EquipmentNotFoundError(NotFoundError):
     """Exception raised when equipment is not found"""
     pass
 
+class EquipmentValidationError(ValidationError):
+    """Exception raised when equipment validation fails"""
+    pass
+
 
 # Add more system-specific exceptions as needed
 __all__ = [
@@ -358,4 +362,5 @@ __all__ = [
     "EventsValidationError",
     "EventsConflictError",
     "EquipmentNotFoundError",
+    "EquipmentValidationError",
 ] 

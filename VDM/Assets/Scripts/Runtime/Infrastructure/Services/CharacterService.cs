@@ -9,7 +9,6 @@ using VDM.Systems.Character.Models;
 using VDM.Infrastructure.Services;
 using VDM.Infrastructure.Core;
 using VDM.DTOs.Core;
-using VDM.DTOs.Character;
 using VDM.Systems.Character;
 
 
@@ -36,7 +35,7 @@ namespace VDM.Infrastructure.Services
 
         // Local character cache
         private Dictionary<string, CharacterResponseDTO> _characterCache = new Dictionary<string, CharacterResponseDTO>();
-        private Dictionary<string, CharacterModel> _characterModels = new Dictionary<string, CharacterModel>();
+        private Dictionary<string, VDM.DTOs.Character.CharacterModel> _characterModels = new Dictionary<string, VDM.DTOs.Character.CharacterModel>();
         
         // WebSocket integration
         private WebSocketManager _webSocketManager;
@@ -510,11 +509,11 @@ namespace VDM.Infrastructure.Services
         /// <summary>
         /// Convert CharacterResponseDTO to CharacterModel for use with existing Unity systems
         /// </summary>
-        public CharacterModel ConvertToCharacterModel(CharacterResponseDTO dto)
+        public VDM.DTOs.Character.CharacterModel ConvertToCharacterModel(CharacterResponseDTO dto)
         {
             if (dto == null) return null;
 
-            var model = new CharacterModel(dto.CharacterName, dto.Race);
+            var model = new VDM.DTOs.Character.CharacterModel(dto.CharacterName, dto.Race);
             
             // Core properties
             model.Level = dto.Level;
@@ -584,9 +583,9 @@ namespace VDM.Infrastructure.Services
         /// <summary>
         /// Get a cached CharacterModel
         /// </summary>
-        public CharacterModel GetCharacterModel(string characterId)
+        public VDM.DTOs.Character.CharacterModel GetCharacterModel(string characterId)
         {
-            if (_characterModels.TryGetValue(characterId, out CharacterModel model))
+            if (_characterModels.TryGetValue(characterId, out VDM.DTOs.Character.CharacterModel model))
             {
                 return model;
             }

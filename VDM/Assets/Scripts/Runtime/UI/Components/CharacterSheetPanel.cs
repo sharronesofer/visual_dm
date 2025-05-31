@@ -4,6 +4,7 @@ using TMPro;
 using VDM.UI.Core;
 using VDM.Systems.Character.Models;
 using VDM.Systems.Character.Services;
+using VDM.DTOs.Character;
 using System.Collections.Generic;
 using System.Linq;
 
