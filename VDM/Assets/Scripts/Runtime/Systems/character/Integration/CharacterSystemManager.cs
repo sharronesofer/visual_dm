@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using VDM.Infrastructure.Core.Core.Patterns;
 using VDM.Systems.Character.Models;
 using VDM.Systems.Character.Services;
-using VDM.Systems.Character.Models;
+using VDM.Systems.Character.Ui;
 
 
 namespace VDM.Systems.Character.Integration
@@ -42,9 +43,9 @@ namespace VDM.Systems.Character.Integration
         public event Action<CharacterResponseDTO> OnCharacterUpdated;
         public event Action<string> OnCharacterDeleted;
 
-        public override void InitializeSystem()
+        protected override async Task InitializeSystem()
         {
-            base.InitializeSystem();
+            await base.InitializeSystem();
 
             // Initialize character service
             _characterService = GetOrCreateService<CharacterService>();
@@ -73,9 +74,9 @@ namespace VDM.Systems.Character.Integration
             _lastAutoSave = UnityEngine.Time.time;
         }
 
-        protected override void OnDestroy()
+        protected override async Task ShutdownSystem()
         {
-            // Cleanup service events
+            // Cleanup service events in ShutdownSystem (called before OnDestroy)
             if (_characterService != null)
             {
                 _characterService.OnCharacterCreated -= HandleCharacterCreated;
@@ -87,6 +88,11 @@ namespace VDM.Systems.Character.Integration
                 _characterService.OnCharacterAbilityGained -= HandleCharacterAbilityGained;
             }
 
+            await base.ShutdownSystem();
+        }
+
+        protected override void OnDestroy()
+        {
             base.OnDestroy();
         }
 

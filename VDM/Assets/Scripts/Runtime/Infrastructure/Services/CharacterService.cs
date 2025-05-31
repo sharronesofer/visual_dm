@@ -7,7 +7,9 @@ using UnityEngine.Networking;
 using UnityEngine;
 using VDM.Systems.Character.Models;
 using VDM.Infrastructure.Services;
+using VDM.Infrastructure.Core;
 using VDM.DTOs.Core;
+using VDM.DTOs.Character;
 using VDM.Systems.Character;
 
 

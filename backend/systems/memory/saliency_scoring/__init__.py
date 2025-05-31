@@ -1,6 +1,7 @@
 """Saliency_Scoring for memory system"""
 
 from typing import Any, Dict, Optional
+from backend.systems.memory.utils.saliency_scoring import calculate_memory_saliency
 
 def calculate_initial_importance(memory_data: Dict[str, Any], context: Optional[Dict[str, Any]] = None) -> float:
     """
@@ -29,5 +30,5 @@ def calculate_initial_importance(memory_data: Dict[str, Any], context: Optional[
     # Ensure score is within bounds
     return max(0.0, min(1.0, base_score))
 
-__all__ = ['calculate_initial_importance']
+__all__ = ['calculate_initial_importance', 'calculate_memory_saliency']
 

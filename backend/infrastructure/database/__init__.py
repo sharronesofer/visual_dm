@@ -4,7 +4,7 @@ Database utilities and session management.
 
 # Import the essential database components that exist
 try:
-    from backend.infrastructure.shared.database.base import Base, BaseModel, UUIDMixin, TimestampMixin
+    from backend.infrastructure.shared.database.base import Base, BaseModel, UUIDMixin, TimestampMixin, GUID
 except ImportError:
     # Fallback - define Base here if shared doesn't exist
     from sqlalchemy.ext.declarative import declarative_base
@@ -26,6 +26,7 @@ except ImportError:
     # Provide aliases for compatibility
     UUIDMixin = BaseModel
     TimestampMixin = BaseModel
+    GUID = UUID
 
 try:
     from backend.infrastructure.shared.database.session import get_db

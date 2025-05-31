@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine;
 using VDM.DTOs.Common;
+using VDM.Infrastructure.Data.Models;
 
 
 namespace VDM.Infrastructure.Data.Services

@@ -44,6 +44,41 @@ class SimpleCache:
         """Clear all cache entries."""
         self._cache.clear()
 
+class RedisCache:
+    """Redis-compatible cache implementation (fallback to in-memory for now)."""
+    
+    def __init__(self, default_ttl: int = 300, redis_config: Optional[Dict[str, Any]] = None):
+        # For now, use in-memory cache as fallback
+        # TODO: Implement actual Redis connection when redis-py is available
+        self._cache = SimpleCache(default_ttl)
+        self._default_ttl = default_ttl
+        self._redis_config = redis_config or {}
+    
+    def get(self, key: str) -> Optional[Any]:
+        """Get value from Redis cache."""
+        return self._cache.get(key)
+    
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
+        """Set value in Redis cache."""
+        self._cache.set(key, value, ttl)
+    
+    def delete(self, key: str) -> bool:
+        """Delete value from Redis cache."""
+        return self._cache.delete(key)
+    
+    def clear(self) -> None:
+        """Clear all Redis cache entries."""
+        self._cache.clear()
+    
+    def exists(self, key: str) -> bool:
+        """Check if key exists in cache."""
+        return self._cache.get(key) is not None
+    
+    def keys(self, pattern: str = "*") -> list:
+        """Get all keys matching pattern (simplified implementation)."""
+        # Simplified - just return all keys for now
+        return list(self._cache._cache.keys())
+
 # Global cache instance
 cache = SimpleCache()
 
@@ -67,4 +102,4 @@ def cached(ttl: int = 300):
         return wrapper
     return decorator
 
-__all__ = ['SimpleCache', 'cache', 'cached'] 
+__all__ = ['SimpleCache', 'RedisCache', 'cache', 'cached'] 

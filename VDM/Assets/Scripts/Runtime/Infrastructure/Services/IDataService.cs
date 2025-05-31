@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using VDM.DTOs.Common;
+using VDM.Infrastructure.Data.Models;
 
 
 namespace VDM.Infrastructure.Data.Services
