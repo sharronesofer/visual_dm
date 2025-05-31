@@ -11,6 +11,9 @@ firebase-credentials.json
 logs/
 *.log
 
+# Archives - Large backup files
+archives/
+
 # Uploads
 uploads/
 media/

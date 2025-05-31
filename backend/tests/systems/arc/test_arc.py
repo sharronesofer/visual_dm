@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.arc.core.arc import arc
+    from backend.systems.arc.core.arc import arc
 except ImportError:
     pytest.skip(f"Module backend.systems.arc.arc not found", allow_module_level=True)
 

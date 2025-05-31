@@ -294,6 +294,12 @@ class EventsConflictError(ConflictError):
     pass
 
 
+# Equipment System Exceptions
+class EquipmentNotFoundError(NotFoundError):
+    """Exception raised when equipment is not found"""
+    pass
+
+
 # Add more system-specific exceptions as needed
 __all__ = [
     "BaseSystemError",
@@ -351,4 +357,5 @@ __all__ = [
     "EventsNotFoundError",
     "EventsValidationError",
     "EventsConflictError",
+    "EquipmentNotFoundError",
 ] 
