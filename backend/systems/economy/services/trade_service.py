@@ -1,6 +1,7 @@
 """
-Trade service for economy system.
-Handles trade routes, transactions, and resource flow between regions.
+Trade Service
+
+This module provides service layer functionality for trade routes and trade transactions.
 """
 
 import os
@@ -11,9 +12,11 @@ from datetime import datetime
 import random
 from sqlalchemy.orm import Session
 
-from backend.systems.economy.models import TradeRoute, TradeRouteData, Resource
+from backend.systems.economy.models import TradeRoute, TradeRouteData
+from backend.systems.economy.services.resource import Resource
 from backend.systems.economy.services.resource_service import ResourceService
-from app.core.logging import logger
+import logging
+logger = logging.getLogger(__name__)
 
 class TradeService:
     """Service for managing trade routes and transactions in the economy system."""

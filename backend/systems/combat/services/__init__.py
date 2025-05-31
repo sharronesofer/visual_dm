@@ -1,6 +1,5 @@
-from .combat_service import CombatService, combat_service
+"""Services for combat system"""
 
-__all__ = [
-    "CombatService",
-    "combat_service",
-]
+# Auto-generated imports
+from .combat_service import *
+from .services import *

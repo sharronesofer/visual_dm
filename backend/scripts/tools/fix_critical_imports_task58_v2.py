@@ -22,15 +22,15 @@ class CriticalImportFixer:
         # Critical import fixes - redirect to modules that actually exist
         self.critical_fixes = {
             # Database imports - redirect to correct locations
-            "from backend.systems.shared.database import Base": "from backend.systems.shared.database.base import Base",
-            "from backend.systems.shared.database import db": "from backend.systems.shared.database.database import db",
-            "from backend.systems.shared.database import get_db_session": "from backend.systems.shared.database.session import get_db_session",
-            "from backend.systems.shared.database import get_test_db_session": "from backend.systems.shared.database.session import get_test_db_session",
+            "from backend.infrastructure.shared.database import Base": "from backend.infrastructure.shared.database.base import Base",
+            "from backend.infrastructure.shared.database import db": "from backend.infrastructure.shared.database.database import db",
+            "from backend.infrastructure.shared.database import get_db_session": "from backend.infrastructure.shared.database.session import get_db_session",
+            "from backend.infrastructure.shared.database import get_test_db_session": "from backend.infrastructure.shared.database.session import get_test_db_session",
             
             # Data database imports - these need to be redirected 
-            "from backend.systems.data.database import Base": "from backend.systems.shared.database.base import Base",
-            "from backend.systems.data.database import db": "from backend.systems.shared.database.database import db",
-            "from backend.systems.data.database import get_db_session": "from backend.systems.shared.database.session import get_db_session",
+            "from backend.infrastructure.data.database import Base": "from backend.infrastructure.shared.database.base import Base",
+            "from backend.infrastructure.data.database import db": "from backend.infrastructure.shared.database.database import db",
+            "from backend.infrastructure.data.database import get_db_session": "from backend.infrastructure.shared.database.session import get_db_session",
             
             # Economy manager - check if it exists, otherwise redirect
             "from backend.systems.economy.services.economy_manager import EconomyManager": "from backend.systems.economy.economy_manager import EconomyManager",
@@ -44,15 +44,15 @@ class CriticalImportFixer:
             "from backend.systems.npc_router.routers import": "from backend.systems.npc.routers.npc_router import",
             
             # Shared models imports
-            "from backend.systems.shared.models import": "from backend.systems.shared.models.base import",
-            "from backend.systems.shared.enums import": "from backend.systems.shared.models.enums import",
-            "from backend.systems.shared.config import": "from backend.systems.shared.utils.config import",
+            "from backend.infrastructure.shared.models import": "from backend.infrastructure.shared.models.base import",
+            "from backend.infrastructure.shared.enums import": "from backend.infrastructure.shared.models.enums import",
+            "from backend.infrastructure.shared.config import": "from backend.infrastructure.shared.utils.config import",
             
             # Event imports that need to be fixed
-            "from backend.systems.events import *": "from backend.systems.events import EventDispatcher, EventBase",
+            "from backend.infrastructure.events import *": "from backend.infrastructure.events import EventDispatcher, EventBase",
             
             # Analytics imports
-            "from backend.systems.analytics.services.analytics_service import": "from backend.systems.analytics.services.core.analytics_service import",
+            "from backend.infrastructure.analytics.services.analytics_service import": "from backend.infrastructure.analytics.services.core.analytics_service import",
             
             # Tension war specific imports
             "from backend.systems.tension_war.services.tension_manager import": "from backend.systems.tension_war.managers.tension_manager import",
@@ -168,7 +168,6 @@ class CriticalImportFixer:
             "error_files": error_files,
         }
 
-
 def main():
     """Main execution function."""
     
@@ -184,7 +183,6 @@ def main():
     print(f"Modified {results['files_modified']} files")
     
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main()) 

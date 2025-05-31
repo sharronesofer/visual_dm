@@ -1,0 +1,31 @@
+# API Contracts for Visual DM Backend
+
+## Magic System API
+
+### Endpoints
+
+#### GET /magic/spells
+- **Description**: Get all spells with optional filtering
+- **Parameters**: 
+  - school (optional): Filter by magic school
+  - level (optional): Filter by spell level
+- **Response**: Array of SpellResponse objects
+
+#### POST /magic/spells/cast
+- **Description**: Cast a spell
+- **Body**: CastSpellRequest
+- **Response**: Cast result with effect ID
+
+#### GET /magic/spellbook/{character_id}
+- **Description**: Get character's spellbook
+- **Response**: SpellbookResponse with known and prepared spells
+
+### WebSocket Events
+
+#### spell_cast
+- **Trigger**: When a spell is cast
+- **Data**: Spell information and effect details
+
+#### effect_update
+- **Trigger**: When spell effects change
+- **Data**: Updated effect information

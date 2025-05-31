@@ -1,8 +1,8 @@
 import json
 from datetime import datetime
 from typing import List, Dict, Any, Optional, Callable, Union
-from dialogue.scoring import relevance_score
-from dialogue.extractors import extract_key_info
+from backend.systems.dialogue.scoring import relevance_score
+from backend.systems.dialogue.extractors import extract_key_info
 
 # Utility for token counting (stub, replace with actual tokenizer as needed)
 def count_tokens(text: str) -> int:

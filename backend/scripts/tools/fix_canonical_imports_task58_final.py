@@ -39,27 +39,27 @@ def get_backend_root() -> Path:
 # Import pattern fixes - most specific first to avoid conflicts
 IMPORT_FIXES = [
     # Fix specific problematic imports first
-    (r'from app\.npc\.npc_rumor_utils import', 'from backend.systems.rumor.utils import'),
-    (r'from dialogue\.extractors import', 'from backend.systems.dialogue.extractors import'),
+    (r'from backend.systems.rumor.utils import'),
+    (r'from backend.systems.dialogue.extractors import'),
     
     # Fix non-canonical NPC imports
-    (r'from backend\.systems\.npc_service\.services import', 'from backend.systems.npc.services.npc_service import'),
-    (r'from backend\.systems\.npc_router\.routers import', 'from backend.systems.npc.routers.npc_router import'),
-    (r'from backend\.systems\.npc_location_service import', 'from backend.systems.npc.services.npc_location_service import'),
-    (r'from backend\.systems\.npc_events\.models import', 'from backend.systems.npc.models.npc_events import'),
-    (r'from backend\.systems\.character\.npc\.npc_rumor_utils import', 'from backend.systems.rumor.utils import'),
-    (r'from backend\.npcs\.npc_leveling_utils import', 'from backend.systems.npc.utils.npc_leveling_utils import'),
-    (r'from backend\.systems\.services\.core\.npc_service import', 'from backend.systems.npc.services.npc_service import'),
-    (r'from backend\.systems\.core\.npc_service import', 'from backend.systems.npc.services.npc_service import'),
-    (r'from backend\.systems\.npc_quests import', 'from backend.systems.quest.npc_quests import'),
-    (r'from backend\.systems\.repositories\.npc_repository import', 'from backend.systems.npc.repositories.npc_repository import'),
+    (r'from backend.systems.npc.services.npc_service import'),
+    (r'from backend.systems.npc.routers.npc_router import'),
+    (r'from backend.systems.npc.services.npc_location_service import'),
+    (r'from backend.systems.npc.models.npc_events import'),
+    (r'from backend.systems.rumor.utils import'),
+    (r'from backend.systems.npc.utils.npc_leveling_utils import'),
+    (r'from backend.systems.npc.services.npc_service import'),
+    (r'from backend.systems.npc.services.npc_service import'),
+    (r'from backend.systems.quest.npc_quests import'),
+    (r'from backend.systems.npc.repositories.npc_repository import'),
     
     # Fix relative imports with system context detection
     # These will be handled by detect_system_context function
     
     # Fix generic patterns (commented out imports are fine to leave)
     (r'^(\s*)# from app\.', r'\1# from backend.systems.'),
-    (r'^(\s*)# from dialogue\.', r'\1# from backend.systems.dialogue.'),
+    (r'^(\s*)# from backend.systems.dialogue.'),
 ]
 
 def detect_system_context(file_path: Path) -> str:
@@ -105,9 +105,9 @@ def fix_relative_imports(content: str, file_path: Path) -> str:
             fixed_lines.append(line)
             continue
         
-        # Fix relative imports from current directory (from .module import)
+        # Fix relative imports from backend.systems.module import)
         if re.match(r'^\s*from\s+\.\s*import', stripped):
-            # from . import something -> from backend.systems.SYSTEM import something
+            # from backend.systems.SYSTEM import something
             new_line = re.sub(r'from\s+\.\s+import', f'from backend.systems.{system} import', line)
             if new_line != line:
                 logger.info(f"Fixed relative import in {file_path}: {stripped}")
@@ -115,7 +115,7 @@ def fix_relative_imports(content: str, file_path: Path) -> str:
             continue
             
         if re.match(r'^\s*from\s+\.[\w.]+\s+import', stripped):
-            # from .module import something -> from backend.systems.SYSTEM.module import something
+            # from backend.systems.module import backend.systems.SYSTEM.module import something
             match = re.search(r'from\s+\.([\w.]+)\s+import', stripped)
             if match:
                 module_path = match.group(1)
@@ -129,9 +129,9 @@ def fix_relative_imports(content: str, file_path: Path) -> str:
                 fixed_lines.append(new_line)
                 continue
         
-        # Fix relative imports from parent directory (from ..module import)
+        # Fix relative imports from backend.systems.module import)
         if re.match(r'^\s*from\s+\.\.[\w.]*\s+import', stripped):
-            # from ..module import something -> from backend.systems.module import something
+            # from backend.systems.module import backend.systems.module import something
             match = re.search(r'from\s+\.\.([\w.]*)\s+import', stripped)
             if match:
                 module_path = match.group(1).strip('.')
@@ -142,7 +142,7 @@ def fix_relative_imports(content: str, file_path: Path) -> str:
                         line
                     )
                 else:
-                    # from .. import -> from backend.systems import
+                    # from backend.systems import -> from backend.systems import
                     new_line = re.sub(
                         r'from\s+\.\.\s+import',
                         'from backend.systems import',
@@ -221,8 +221,8 @@ def validate_imports(root_path: Path) -> List[Tuple[Path, str]]:
         r'import\s+dialogue\.(?!.*backend\.systems\.dialogue)',
         r'from\s+systems\.(?!.*backend\.systems)',
         r'import\s+systems\.(?!.*backend\.systems)',
-        r'from\s+\.\s+import',  # from . import
-        r'from\s+\.\.+',        # from .. import or from ... import
+        r'from\s+\.\s+import',  # from backend.systems import
+        r'from\s+\.\.+',        # from backend.systems import or from backend.systems import
     ]
     
     for file_path in python_files:

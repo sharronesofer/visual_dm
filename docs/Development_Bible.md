@@ -8,6 +8,7 @@
    - [Analytics System](#analytics-system)
    - [Auth/User System](#authuser-system)
    - [Character System](#character-system)
+   - [Chaos System](#chaos-system)
    - [Combat System](#combat-system)
    - [Crafting System](#crafting-system)
    - [Data System](#data-system)
@@ -15,8 +16,10 @@
    - [Diplomacy System](#diplomacy-system)
    - [Economy System](#economy-system)
    - [Equipment System](#equipment-system)
+   - [Event Base System](#event-base-system)
    - [Events System](#events-system)
    - [Faction System](#faction-system)
+   - [Integration System](#integration-system)
    - [Inventory System](#inventory-system)
    - [LLM System](#llm-system)
    - [Loot System](#loot-system)
@@ -78,16 +81,256 @@ The goal is to create a virtual world that facilitates an adaptive, living, and 
 
 **Improvement Notes:** Need more detail on how systems communicate with each other.
 
-The Visual DM architecture is built on a modular system design where each gameplay domain is encapsulated in its own system folder. These systems communicate primarily through:
+The Visual DM architecture is built on a clean separation between business logic and infrastructure concerns, following a modular system design where each gameplay domain is encapsulated in its own system folder.
 
-- Direct imports for tightly coupled systems
-- Event-based communication for loose coupling
-- Shared data models for consistent state representation
+#### Backend Directory Structure
+
+The backend follows a clean architectural pattern with clear separation of concerns:
+
+```
+/backend/
+├── systems/           # ✅ BUSINESS LOGIC (35+ systems)
+│   ├── analytics/     # Analytics and metrics collection
+│   ├── arc/          # Narrative arc management
+│   ├── auth_user/    # Authentication and user management
+│   ├── character/    # Character creation and management
+│   ├── chaos/        # Chaos simulation and events
+│   ├── combat/       # Combat mechanics and calculations
+│   ├── crafting/     # Item crafting and recipes
+│   ├── data/         # Data validation and persistence
+│   ├── dialogue/     # Conversation and dialogue systems
+│   ├── diplomacy/    # Diplomatic relations and interactions
+│   ├── economy/      # Economic simulation and trading
+│   ├── equipment/    # Equipment and gear management
+│   ├── event_base/   # Core event infrastructure
+│   ├── events/       # Game event management
+│   ├── faction/      # Faction relationships and politics
+│   ├── integration/  # Cross-system integration utilities
+│   ├── inventory/    # Item storage and management
+│   ├── llm/          # AI language model integration
+│   ├── loot/         # Loot generation and distribution
+│   ├── magic/        # Magic system and spells
+│   ├── memory/       # Game memory and state management
+│   ├── motif/        # Narrative motif tracking
+│   ├── npc/          # Non-player character management
+│   ├── poi/          # Points of interest
+│   ├── population/   # Population simulation
+│   ├── quest/        # Quest generation and tracking
+│   ├── region/       # Regional management and properties
+│   ├── religion/     # Religious systems and beliefs
+│   ├── rumor/        # Rumor propagation and tracking
+│   ├── shared/       # Shared utilities and common components
+│   ├── storage/      # Data storage abstraction layer
+│   ├── tension_war/  # Conflict and tension mechanics
+│   ├── time/         # Time management and scheduling
+│   ├── world_generation/  # Procedural world creation
+│   └── world_state/  # Global world state management
+├── infrastructure/   # ✅ NON-BUSINESS INFRASTRUCTURE
+│   ├── config/       # Configuration management
+│   ├── utils/        # Core utilities (JSON, error handling)
+│   ├── database/     # Database session management
+│   └── validation/   # Rules and validation logic
+├── tests/            # ✅ ALL TESTS (organized by system)
+│   └── systems/      # Test structure mirrors systems/ exactly
+├── docs/             # ✅ DOCUMENTATION & INVENTORIES
+└── scripts/          # ✅ DEVELOPMENT & MAINTENANCE TOOLS
+```
+
+#### Frontend Directory Structure (Unity)
+
+The Unity frontend follows a clean architectural pattern that mirrors the backend structure and emphasizes separation of concerns:
+
+```
+/VDM/Assets/Scripts/
+├── Core/              # ✅ FOUNDATION CLASSES & UTILITIES
+│   ├── Managers/      # Core game managers and singletons
+│   ├── Events/        # Event system and pub/sub patterns
+│   ├── Utils/         # Core utility classes and helpers
+│   └── Base/          # Base classes for common patterns
+├── Infrastructure/    # ✅ CROSS-CUTTING INFRASTRUCTURE
+│   ├── Services/      # HTTP clients, WebSocket handlers
+│   ├── Database/      # Local data persistence and caching
+│   ├── Config/        # Configuration management
+│   └── Performance/   # Performance monitoring and optimization
+├── DTOs/              # ✅ DATA TRANSFER OBJECTS
+│   ├── Character/     # Character data models
+│   ├── Combat/        # Combat-related DTOs
+│   ├── Region/        # Region and world data
+│   ├── Inventory/     # Inventory and item DTOs
+│   ├── Quest/         # Quest and narrative DTOs
+│   ├── Economy/       # Economic data models
+│   ├── Faction/       # Faction and diplomacy DTOs
+│   └── Common/        # Shared/base DTO classes
+├── Systems/           # ✅ GAME DOMAIN LOGIC (mirrors backend)
+│   ├── analytics/     # Analytics and metrics collection
+│   ├── arc/          # Narrative arc management
+│   ├── authuser/     # Authentication and user management
+│   ├── character/    # Character creation and management
+│   ├── combat/       # Combat mechanics and UI
+│   ├── crafting/     # Item crafting and recipes
+│   ├── dialogue/     # Conversation and dialogue UI
+│   ├── diplomacy/    # Diplomatic relations interface
+│   ├── economy/      # Economic simulation UI
+│   ├── equipment/    # Equipment and gear management
+│   ├── events/       # Game event handling
+│   ├── faction/      # Faction relationships UI
+│   ├── inventory/    # Item storage and management
+│   ├── magic/        # Magic system interface
+│   ├── memory/       # Game memory and state
+│   ├── motif/        # Narrative motif tracking
+│   ├── npc/          # Non-player character interaction
+│   ├── poi/          # Points of interest UI
+│   ├── population/   # Population simulation display
+│   ├── quest/        # Quest generation and tracking
+│   ├── region/       # Regional management and maps
+│   ├── religion/     # Religious systems interface
+│   ├── rumor/        # Rumor propagation display
+│   ├── time/         # Time management UI
+│   ├── war/          # Conflict and tension interface
+│   ├── weather/      # Weather system display
+│   └── worldgen/     # World generation controls
+├── UI/                # ✅ USER INTERFACE FRAMEWORK
+│   ├── Core/          # Base UI classes and managers
+│   ├── Components/    # Reusable UI components
+│   ├── Systems/       # System-specific UI implementations
+│   ├── Prefabs/       # UI prefab definitions
+│   └── Themes/        # Visual themes and styling
+├── Services/          # ✅ GLOBAL APPLICATION SERVICES
+│   ├── API/           # Backend API communication
+│   ├── WebSocket/     # Real-time communication
+│   ├── Cache/         # Local data caching
+│   └── State/         # Global state management
+├── Integration/       # ✅ UNITY-SPECIFIC INTEGRATIONS
+│   ├── Unity/         # Unity engine integrations
+│   ├── Performance/   # Performance profiling
+│   └── Platform/      # Platform-specific implementations
+├── Runtime/           # ✅ RUNTIME GAME LOGIC
+│   ├── Gameplay/      # Core gameplay mechanics
+│   ├── Simulation/    # Game world simulation
+│   └── AI/            # AI behavior and logic
+├── Tests/             # ✅ ALL FRONTEND TESTS
+│   ├── Unit/          # Unit tests for components
+│   ├── Integration/   # Integration tests
+│   └── UI/            # UI and interaction tests
+└── Examples/          # ✅ SAMPLE IMPLEMENTATIONS
+    ├── Scenes/        # Example scenes and setups
+    └── Scripts/       # Example usage patterns
+```
+
+#### Frontend System Internal Structure
+
+Each system in the frontend follows a consistent four-layer pattern that mirrors backend organization:
+
+```
+/VDM/Assets/Scripts/Systems/[system_name]/
+├── Models/            # Data models and DTOs for API communication
+├── Services/          # HTTP/WebSocket communication services  
+├── UI/                # User interface components and panels
+├── Integration/       # Unity-specific integration logic
+└── README.md          # System documentation and dependencies
+```
+
+**Layer Responsibilities:**
+
+- **Models/**: Mirror backend DTOs exactly for API communication consistency
+- **Services/**: Handle API communication, WebSocket updates, and business logic
+- **UI/**: Provide user interaction through Unity UI components
+- **Integration/**: Bridge Unity-specific requirements and game engine features
+
+#### Frontend Communication Patterns
+
+Frontend systems communicate through several patterns that ensure loose coupling:
+
+1. **API Communication**: Direct communication with backend systems
+   ```csharp
+   // Service layer communicates with backend APIs
+   var characters = await characterService.GetCharactersAsync();
+   ```
+
+2. **Event-Driven Updates**: Real-time updates via WebSocket
+   ```csharp
+   // WebSocket handlers update UI components
+   regionWebSocket.OnRegionUpdated += UpdateRegionDisplay;
+   ```
+
+3. **Unity Event System**: UI and gameplay event communication
+   ```csharp
+   // Unity events for UI state changes
+   UnityEvent<CharacterData> OnCharacterSelected;
+   ```
+
+4. **State Management**: Global state accessible across systems
+   ```csharp
+   // Centralized state management
+   GameStateManager.Instance.SetCurrentCharacter(character);
+   ```
+
+#### Frontend Design Principles
+
+- **Backend Alignment**: Frontend system structure mirrors backend systems exactly
+- **Separation of Concerns**: Clear separation between data, logic, UI, and Unity integration
+- **Consistent Patterns**: All systems follow the same four-layer structure
+- **Unity Integration**: Unity-specific code isolated in Integration layer
+- **Real-time Updates**: WebSocket integration for responsive gameplay
+- **Modular UI**: Reusable UI components with consistent theming
+- **Performance First**: Efficient rendering and data management for smooth gameplay
+
+#### System Communication Patterns
+
+Systems communicate through several well-defined patterns:
+
+1. **Direct Imports**: For tightly coupled systems within the same domain
+   ```python
+   from backend.systems.character.models import Character
+   from backend.systems.faction.services import FactionService
+   ```
+
+2. **Infrastructure Utilities**: Shared infrastructure accessible to all systems
+   ```python
+   from backend.infrastructure.config import config
+   from backend.infrastructure.utils import load_json, save_json
+   from backend.infrastructure.database import get_db_session
+   ```
+
+3. **Event-Based Communication**: For loose coupling between systems
+   ```python
+   # Systems publish events without knowing their consumers
+   await event_dispatcher.publish('faction.conflict_started', event_data)
+   ```
+
+4. **Shared Data Models**: Consistent state representation across systems
+   ```python
+   from backend.systems.shared.models import BaseEntity, TimeStamp
+   ```
+
+#### Design Principles
+
+- **Clean Separation**: Business logic (`/systems/`) is completely separate from infrastructure concerns (`/infrastructure/`)
+- **Canonical Organization**: All business logic resides within `/backend/systems/` with consistent internal structure
+- **Infrastructure Abstraction**: Common utilities, configuration, and database access centralized in `/backend/infrastructure/`
+- **Test Consistency**: Test structure in `/backend/tests/systems/` mirrors business logic structure exactly
+- **Import Clarity**: Clear import patterns distinguish between business logic, infrastructure, and external dependencies
+
+#### Infrastructure Components
+
+The `/backend/infrastructure/` directory contains non-business-logic components:
+
+- **Configuration Management**: Centralized application configuration and environment handling
+- **Core Utilities**: JSON processing, error handling, logging, and common helper functions  
+- **Database Infrastructure**: Session management, connection pooling, and database utilities
+- **Validation Framework**: Rules engine and validation logic used across systems
+
+This separation ensures that:
+- Business logic systems focus purely on domain concerns
+- Infrastructure changes don't impact business logic
+- Systems can be easily tested in isolation
+- New systems can be added without infrastructure dependencies
 
 The architecture follows a layered approach:
-- Core infrastructure (database, events, shared utilities)
-- Domain-specific systems (character, combat, crafting, etc.)
-- Cross-cutting concerns (UI, AI integration, etc.)
+- **Infrastructure Layer**: Database, configuration, shared utilities, validation
+- **Business Logic Layer**: Domain-specific systems (character, combat, crafting, etc.)
+- **Integration Layer**: Cross-system communication, event handling, API routing
+- **Presentation Layer**: UI, external APIs, client interfaces
 
 ### Core Systems
 
@@ -119,14 +362,145 @@ The development workflow for Visual DM emphasizes:
 
 Developers should follow these steps for new features:
 1. Document design in appropriate section of Development Bible
-2. Create tests for the new functionality
-3. Implement the feature following established patterns
-4. Update documentation with implementation details
-5. Submit for review
+2. Create tests for the new functionality in `/backend/tests/systems/`
+3. Implement business logic in the appropriate `/backend/systems/` subdirectory
+4. Use infrastructure components from `/backend/infrastructure/` as needed
+5. Follow canonical import patterns for system communication
+6. Update documentation with implementation details
+7. Submit for review
+
+#### Import Guidelines
+
+**Business Logic Imports** (within systems):
+```python
+# Local system imports (preferred for internal modules)
+from .models import MyModel
+from .services import MyService
+
+# Cross-system imports (for related business logic)
+from backend.systems.character.models import Character
+from backend.systems.faction.services import FactionService
+```
+
+**Infrastructure Imports** (from any system):
+```python
+# Infrastructure utilities
+from backend.infrastructure.config import config
+from backend.infrastructure.utils import load_json, save_json
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.validation.rules import validate_entity
+```
+
+**Shared Business Logic** (when needed):
+```python
+# Shared business components
+from backend.systems.shared.models import BaseEntity
+from backend.systems.shared.database import DatabaseMixin
+```
 
 ## Systems
 
 This section describes each of the core systems in Visual DM, aligned with the actual directory structure in the codebase.
+
+### Canonical Directory Structure
+
+**Reference:** The canonical system directory structure is defined in `/backend/tests/systems/` and must be mirrored in `/backend/systems/`.
+
+The `/backend/tests/systems/` directory serves as the authoritative reference for system organization, containing 35+ defined system directories. Each system in `/backend/systems/` must correspond to a directory in the test structure to ensure consistent testing coverage and architectural alignment.
+
+#### Business Logic Systems (`/backend/systems/`)
+
+All game domain logic is organized under `/backend/systems/` with the following directories:
+
+- `analytics/` - Analytics and metrics collection
+- `arc/` - Narrative arc management  
+- `auth_user/` - Authentication and user management
+- `character/` - Character creation and management (includes relationship functionality)
+- `chaos/` - Chaos simulation and dynamic event systems
+- `combat/` - Combat mechanics and calculations
+- `crafting/` - Item crafting and recipes
+- `data/` - Data validation and persistence
+- `dialogue/` - Conversation and dialogue systems
+- `diplomacy/` - Diplomatic relations and interactions
+- `economy/` - Economic simulation and trading
+- `equipment/` - Equipment and gear management
+- `event_base/` - Core event infrastructure
+- `events/` - Game event management
+- `faction/` - Faction relationships and politics
+- `integration/` - Cross-system integration utilities
+- `inventory/` - Item storage and management
+- `llm/` - AI language model integration
+- `loot/` - Loot generation and distribution
+- `magic/` - Magic system and spells
+- `memory/` - Game memory and state management
+- `motif/` - Narrative motif tracking
+- `npc/` - Non-player character management
+- `poi/` - Points of interest
+- `population/` - Population simulation
+- `quest/` - Quest generation and tracking
+- `region/` - Regional management and properties
+- `religion/` - Religious systems and beliefs
+- `rumor/` - Rumor propagation and tracking
+- `shared/` - Shared utilities and common components
+- `storage/` - Data storage abstraction layer
+- `tension_war/` - Conflict and tension mechanics
+- `time/` - Time management and scheduling
+- `world_generation/` - Procedural world creation
+- `world_state/` - Global world state management
+
+#### Infrastructure Components (`/backend/infrastructure/`)
+
+Non-business logic infrastructure is centralized under `/backend/infrastructure/`:
+
+- `config/` - Configuration management and environment settings
+- `utils/` - Core utilities (JSON processing, error handling, logging)
+- `database/` - Database session management and connection utilities
+- `validation/` - Rules engine and validation logic used across systems
+
+#### Supporting Directories
+
+- `/backend/tests/` - All test files organized by system, mirroring `/backend/systems/` structure
+- `/backend/docs/` - Documentation, inventories, and architectural references
+- `/backend/scripts/` - Development tools, maintenance scripts, and automation
+
+#### System Internal Structure
+
+Each system directory follows a consistent internal structure:
+
+```
+/backend/systems/[system_name]/
+├── models/           # Data models and entities
+├── services/         # Business logic services
+├── repositories/     # Data access layer
+├── routers/          # API endpoints and routing
+├── events/           # System-specific events
+├── utils/            # System-specific utilities
+├── tests/            # Unit tests (integration tests in /backend/tests/)
+└── __init__.py       # Module initialization
+```
+
+#### Import Patterns
+
+**Within Systems** (local imports):
+```python
+from .models import MyModel
+from .services import MyService
+```
+
+**Cross-System Business Logic**:
+```python
+from backend.systems.character.models import Character
+from backend.systems.faction.services import FactionService
+```
+
+**Infrastructure Components**:
+```python
+from backend.infrastructure.config import config
+from backend.infrastructure.utils import load_json
+from backend.infrastructure.database import get_db_session
+```
+
+**Note:** Relationship functionality is handled by the character system rather than a separate relationship system. All entity-to-entity relationships (character-to-faction, character-to-quest, character-to-character, etc.) are managed through the character system's relationship models and services.
 
 ### Analytics System
 
@@ -240,6 +614,19 @@ Key components include:
 
 **Improvement Notes:** Add UML diagrams of character class relationships.
 
+**Status: ✅ FULLY IMPLEMENTED WITH RELATIONSHIP MANAGEMENT**
+
+**Location**: `/backend/systems/character/` - Complete Character System implementation including models, services, repositories, and relationship management.
+
+**Relationship Management**: As of the most recent refactoring, the Character System now includes comprehensive relationship management functionality:
+
+- **Relationship Models** (`/backend/systems/character/models/relationship.py`): Canonical implementation of all inter-entity relationships
+- **Relationship Services** (`/backend/systems/character/services/relationship_service.py`): Full CRUD operations for relationships
+- **Supported Relationship Types**: Faction relationships, quest progress tracking, character-to-character relationships, spatial relationships, authentication relationships, and custom relationship types
+- **Integration**: Fully integrated with the event system for relationship change notifications
+
+All relationship functionality that was previously in a separate relationship system has been consolidated into the character system to align with the canonical directory structure.
+
 #### Core Attributes
 
 - **Strength (STR):** Physical power and brute force.
@@ -311,6 +698,218 @@ Diverse species with unique traits, abilities, and cultural backgrounds.
 - **Experience Points (XP):** Earned through combat, exploration, and completing objectives.
 - **Levels:** Characters gain new abilities and powers as they advance in level.
 - **Abilities:** Special talents that customize characters further. Note that in Visual DM, what D&D calls "feats" are called "abilities".
+
+### Chaos System
+
+**Summary:** A hidden narrative engine that injects sudden destabilizing events into the game world, creating emergent storytelling through systematic chaos that emerges from system interactions.
+
+**Status: ⚠️ PARTIALLY IMPLEMENTED - NEEDS CONSOLIDATION**
+
+**Location**: Scattered across `/backend/systems/motif/utils/chaos_utils.py`, Unity `/archives/VDM_backup/Assets/Scripts/Runtime/Systems/Integration/ChaosEngine.cs`, and world state integration.
+
+**Implementation Notes:** Currently exists as fragmented components that need consolidation into a proper system following the canonical directory structure.
+
+#### Core Philosophy
+
+The Chaos System operates as a **pressure-based escalation system** that creates unpredictable narrative events when various game systems reach critical thresholds. It serves as both a narrative catalyst and a systemic pressure release valve, ensuring the game world remains dynamic and reactive.
+
+**Key Principles:**
+- **Hidden Operation:** Completely invisible to players - operates as backend narrative driver
+- **MMO-Scale Effects:** Affects regions, factions, and world state rather than individual players
+- **Sudden Destabilization:** Creates discrete incident events, not ongoing processes
+- **Cascading Externalities:** Events trigger secondary and tertiary effects across systems
+- **Emergent Storytelling:** Complex narratives emerge from simple system interactions
+
+**Implementation Pattern:**
+```python
+def evaluate_chaos_trigger(self, region_id):
+    pressure = self.pressure_calculator.calculate_composite_pressure(region_id)
+    if pressure.exceeds_threshold():
+        return self.select_and_execute_chaos_event(region_id, pressure)
+```
+
+#### Chaos Triggers - Multi-Dimensional Pressure System
+
+**Current Implementation:** Only motif pressure thresholds
+**Enhancement:** Comprehensive pressure matrix:
+
+1. **Economic Pressure:** Market crashes, resource depletion, trade route disruptions
+2. **Social Pressure:** Population unrest, faction tension peaks, mass migrations  
+3. **Environmental Pressure:** Natural disasters, seasonal extremes, magical anomalies
+4. **Political Pressure:** Leadership failures, succession crises, diplomatic breakdowns
+5. **Temporal Pressure:** Anniversary events, prophecy deadlines, cyclical patterns
+6. **Motif Pressure:** Existing motif weight thresholds (≥5 individual, ≥4 dual pressure)
+
+**Implementation:**
+```python
+class ChaosManager:
+    """Central coordinator for chaos event generation and execution"""
+    
+class ChaosPressureCalculator:
+    """Aggregates pressure from all game systems to determine chaos probability"""
+    
+class ChaosDistributionTracker:
+    """Ensures chaos events are spread across regions and time"""
+    
+class NarrativeChaosModerator:
+    """Applies narrative context weighting to chaos selection"""
+```
+
+#### Chaos Event Framework
+
+**Canonical Chaos Event Table (20 Events):**
+- "NPC betrays a faction or personal goal"
+- "Player receives a divine omen"
+- "NPC vanishes mysteriously"
+- "Corrupted prophecy appears in a temple or vision"
+- "Artifact or item changes hands unexpectedly"
+- "NPC's child arrives with a claim"
+- "Villain resurfaces (real or false)"
+- "Time skip or memory blackout (~5 minutes)"
+- "PC is blamed for a crime in a new city"
+- "Ally requests an impossible favor"
+- "Magical item begins to misbehave"
+- "Enemy faction completes objective offscreen"
+- "False flag sent from another region"
+- "NPC becomes hostile based on misinformation"
+- "Rumor spreads about a player betrayal"
+- "PC has a surreal dream altering perception"
+- "Secret faction is revealed through slip-up"
+- "NPC becomes obsessed with the PC"
+- "Town leader is assassinated"
+- "Prophecy misidentifies the chosen one"
+
+**Regional Chaos Ecology:**
+Events filtered and customized based on regional characteristics:
+- **Biome-specific chaos:** Desert drought/sandstorms, coastal tsunamis/pirates
+- **Cultural chaos:** Events leveraging local customs, religions, historical grievances
+- **Economic chaos:** Target regional primary industries (mining collapse in mining regions)
+- **Political chaos:** Exploit existing faction tensions and power structures
+
+#### Cascading Effects System
+
+**Enhancement over current single-event model:**
+
+**Chain Reaction Framework:**
+```python
+CHAOS_CASCADE_TABLE = {
+    "Town leader assassinated": [
+        ("Power vacuum erupts", 0.7, "1-3 days"),
+        ("Faction war breaks out", 0.4, "1 week"), 
+        ("Trade routes disrupted", 0.8, "immediate")
+    ]
+}
+```
+
+**Implementation:**
+- **Immediate cascades:** Direct consequences within hours
+- **Delayed consequences:** Secondary effects triggered days/weeks later
+- **Cross-regional spread:** Chaos in connected regions based on trade/political ties
+- **System integration:** Each cascade affects specific game systems (economy, diplomacy, etc.)
+
+#### Severity Scaling with Warning System
+
+**Three-Tier Escalation:**
+
+1. **Rumor Phase:** NPCs spread concerning rumors, environmental omens appear
+2. **Omen Phase:** More obvious signs of impending instability 
+3. **Crisis Phase:** The actual destabilizing event hits suddenly
+
+**Implementation:**
+```python
+class ChaosSeverityManager:
+    def initiate_chaos_sequence(self, base_event, region_id):
+        self.start_rumor_phase(base_event, region_id)  # 1-3 days
+        self.schedule_omen_phase(base_event, region_id)  # 1-2 days  
+        self.schedule_crisis_event(base_event, region_id)  # Sudden trigger
+```
+
+#### Cross-System Integration Points
+
+**Economy System Integration:**
+- Chaos creates trade route disruptions, market volatility, resource shortages
+- Economic pressure contributes to chaos trigger calculations
+
+**Faction System Integration:**  
+- Chaos creates diplomatic incidents, succession crises, betrayals
+- Faction tension levels contribute to chaos pressure
+
+**World State Integration:**
+- All chaos events logged to global world log
+- World state changes can trigger environmental chaos
+
+**Motif System Integration (Current):**
+- Motif pressure triggers chaos events
+- Chaos events inject "chaos-source" motifs
+
+**NPC System Integration:**
+- Chaos affects NPC behavior and relationships
+- NPC aggression thresholds trigger chaos
+
+**Region System Integration:**
+- Regional characteristics determine chaos event types
+- Regional connections determine cascade propagation
+
+#### Narrative Intelligence and Weighting
+
+**Meta-Narrative Moderation:**
+- **Dramatic timing:** Chaos probability increases during crucial story moments
+- **Genre awareness:** Chaos tone matches current narrative atmosphere
+- **Pacing control:** Chaos frequency adjusts based on recent event density
+- **Thematic resonance:** Events echo current narrative themes
+
+**Implementation as Weighting System:**
+```python
+class NarrativeChaosModerator:
+    def apply_narrative_weights(self, base_weights, narrative_state):
+        # Influences probability and selection, doesn't control outcome
+        # Chaos can still override narrative preferences for true unpredictability
+```
+
+#### Distribution and Fatigue Management
+
+**Adaptive Distribution:**
+- Track recent chaos events by region and type
+- Reduce probability for recently affected areas
+- Increase probability for "quiet" regions
+- Prevent chaos clustering in time or space
+
+**Statistical Balance:**
+```python
+class ChaosDistributionTracker:
+    def adjust_chaos_probability(self, region_id, base_probability):
+        recent_chaos = self.get_recent_chaos_events(region_id, days=30)
+        return base_probability * self.calculate_fatigue_modifier(recent_chaos)
+```
+
+#### Implementation Status and Next Steps
+
+**Currently Implemented:**
+- ✅ Basic chaos event table and selection
+- ✅ Motif pressure trigger system  
+- ✅ Unity frontend chaos state tracking
+- ✅ World log integration for chaos events
+- ✅ Basic regional event synchronization
+
+**Needs Implementation:**
+- ❌ Consolidated ChaosManager system
+- ❌ Multi-dimensional pressure calculation
+- ❌ Cascading effects framework
+- ❌ Severity scaling and warning phases
+- ❌ Regional ecology and distribution management
+- ❌ Cross-system integration matrix
+- ❌ Narrative intelligence weighting
+- ❌ Proper database persistence layer
+
+**Recommended Implementation Priority:**
+1. **ChaosManager** - Central system coordinator
+2. **Multi-dimensional triggers** - Pressure calculation from all systems
+3. **Severity scaling** - Warning phases and escalation
+4. **Regional ecology** - Biome and culture-specific events
+5. **Cascading effects** - Secondary event chains
+6. **Cross-system integration** - Deep hooks into all major systems
+
+The Chaos System represents one of Visual DM's most sophisticated emergent narrative engines, transforming simple system interactions into complex, unpredictable storytelling opportunities that keep the world dynamic and engaging.
 
 ### Combat System
 
@@ -403,7 +1002,7 @@ Key components include:
 
 #### Canonical Data Directory Structure
 
-**IMPORTANT:** As of the latest reorganization, all static game data files (.json) are located in the root `/data/` directory, not `/backend/data/`. This change was made to improve organization and provide cross-system access to shared data files.
+**IMPORTANT:** As of the latest reorganization, all static game data files (.json) are located in the root `/data/` directory, not `/data/system/runtime/`. This change was made to improve organization and provide cross-system access to shared data files.
 
 **Canonical Location:** `/data/` (root directory)
 
@@ -465,7 +1064,7 @@ with open(data_path, "r") as f:
 4. **Simplified Deployment:** Easy to backup/deploy data separately from code
 
 **Migration Notes:** 
-- All references to `backend/data/` have been updated to use `data/`
+- All references to `data/system/runtime/` have been updated to use `data/`
 - Conflicting files were resolved by choosing canonical versions and archiving alternatives in `/archives/`
 - The backend data migration was completed to consolidate all static data files
 

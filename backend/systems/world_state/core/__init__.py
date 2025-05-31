@@ -5,10 +5,10 @@ This module contains the fundamental components that power the world state
 management, including the manager, loader, and type definitions.
 """
 
-from .manager import WorldStateManager
-from .loader import WorldStateLoader
-from .events import WorldStateEvent
-from .types import (
+from backend.systems.world_state.manager import WorldStateManager
+from backend.systems.world_state.loader import WorldStateLoader
+from backend.systems.world_state.events import WorldStateEvent
+from backend.systems.world_state.types import (
     StateChangeType,
     WorldRegion,
     StateCategory,

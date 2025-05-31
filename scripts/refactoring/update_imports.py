@@ -18,12 +18,12 @@ def update_imports_in_file(filepath):
         # Update event system imports
         content = re.sub(
             r'from backend\.app\.core\.events',
-            'from backend.systems.events',
+            'from backend.infrastructure.events',
             content
         )
         content = re.sub(
             r'from backend\.core\.events',
-            'from backend.systems.events',
+            'from backend.infrastructure.events',
             content
         )
         
@@ -37,43 +37,43 @@ def update_imports_in_file(filepath):
         # Update core model imports
         content = re.sub(
             r'from backend\.core\.models',
-            'from backend.systems.shared.models',
+            'from backend.infrastructure.shared.models',
             content
         )
         
         # Update core AI imports
         content = re.sub(
             r'from backend\.core\.ai',
-            'from backend.systems.llm.services',
+            'from backend.infrastructure.llm.services',
             content
         )
         
         # Update database imports
         content = re.sub(
             r'from backend\.core\.database',
-            'from backend.systems.shared.database',
+            'from backend.infrastructure.shared.database',
             content
         )
         content = re.sub(
             r'from backend\.app\.core\.database',
-            'from backend.systems.shared.database',
+            'from backend.infrastructure.shared.database',
             content
         )
         
         # Update config imports
         content = re.sub(
             r'from backend\.app\.core\.config',
-            'from backend.systems.shared.config',
+            'from backend.infrastructure.shared.config',
             content
         )
         content = re.sub(
             r'from backend\.app\.config',
-            'from backend.systems.shared.config',
+            'from backend.infrastructure.shared.config',
             content
         )
         content = re.sub(
             r'from backend\.core\.config',
-            'from backend.systems.shared.config',
+            'from backend.infrastructure.shared.config',
             content
         )
         
@@ -108,63 +108,63 @@ def update_imports_in_file(filepath):
         # Update schema imports
         content = re.sub(
             r'from backend\.app\.schemas',
-            'from backend.systems.shared.schemas',
+            'from backend.infrastructure.shared.schemas',
             content
         )
         
         # Update utils imports
         content = re.sub(
             r'from backend\.core\.utils',
-            'from backend.systems.shared.utils',
+            'from backend.infrastructure.shared.utils',
             content
         )
         
         # Update auth imports
         content = re.sub(
             r'from backend\.core\.auth',
-            'from backend.systems.auth_user.services',
+            'from backend.infrastructure.auth_user.services',
             content
         )
         
         # Update permissions imports
         content = re.sub(
             r'from backend\.core\.permissions',
-            'from backend.systems.shared.utils.security',
+            'from backend.infrastructure.shared.utils.security',
             content
         )
         
         # Update logging imports
         content = re.sub(
             r'from backend\.core\.logging',
-            'from backend.systems.shared.utils.logging',
+            'from backend.infrastructure.shared.utils.logging',
             content
         )
         
         # Update exceptions imports
         content = re.sub(
             r'from backend\.core\.exceptions',
-            'from backend.systems.shared.utils.exceptions',
+            'from backend.infrastructure.shared.utils.exceptions',
             content
         )
         
         # Update rules imports
         content = re.sub(
             r'from backend\.core\.rules',
-            'from backend.systems.shared.rules',
+            'from backend.infrastructure.shared.rules',
             content
         )
         
         # Update event_bus imports (deprecated, should use event_dispatcher)
         content = re.sub(
             r'from backend\.core\.event_bus',
-            'from backend.systems.events.event_dispatcher',
+            'from backend.infrastructure.events.event_dispatcher',
             content
         )
         
         # Update db imports
         content = re.sub(
             r'from backend\.core\.db',
-            'from backend.systems.shared.database',
+            'from backend.infrastructure.shared.database',
             content
         )
         
@@ -178,7 +178,7 @@ def update_imports_in_file(filepath):
         # Update import statements (not from statements)
         content = re.sub(
             r'import backend\.app\.core\.events',
-            'import backend.systems.events',
+            'import backend.infrastructure.events',
             content
         )
         content = re.sub(
@@ -188,17 +188,17 @@ def update_imports_in_file(filepath):
         )
         content = re.sub(
             r'import backend\.core\.models',
-            'import backend.systems.shared.models',
+            'import backend.infrastructure.shared.models',
             content
         )
         content = re.sub(
             r'import backend\.core\.ai',
-            'import backend.systems.llm.services',
+            'import backend.infrastructure.llm.services',
             content
         )
         content = re.sub(
             r'import backend\.core\.events',
-            'import backend.systems.events',
+            'import backend.infrastructure.events',
             content
         )
         

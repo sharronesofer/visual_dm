@@ -1,0 +1,84 @@
+
+
+🌱 Future Expansions (All Compiled)
+
+⚔ Combat
+Add DR-over-time or conditional DR from feats or effects
+
+Support ranged/magic/finesse tags in resolve_combat_action()
+
+Extend calculate_attack_roll() to optionally return roll outcome
+
+🌀 Chaos System
+Weight chaos events based on region tension and motif pressure
+
+Track chaos saturation to reduce event repetition
+
+Trigger NPC rumor or dialogue hooks when chaos escalates
+
+🎭 Motif Engine
+Tag motifs by emotional/moral/strategic theme
+
+Add motif pressure logs per NPC
+
+Inject motifs during worldgen (region-level narrative pressure)
+
+Trigger arcs or events on motif overflow
+
+🎮 UI & Tools
+Add /validate_loadout route for rule validation
+
+Expand combat_narration with stylistic output (crit/fumble)
+
+Expose memory_summary or motif_flags in character sheet
+
+📜 Quests & Arcs
+Link completed quests to motif reinforcement
+
+Add tag-based filtering and sorting in arcs (e.g. faction, region, theme)
+
+Log follow-up quests in arc journal for recurrence
+
+📦 Firebase & Infra
+Add firebase_exists(path) helper
+
+Add structured append_log() for world events or motif entropy logs
+
+🗺 World Map & POIs
+Support seasonal/weather overlays in sprite API
+
+Return motif pressure and faction control in /tile_data
+
+Add /tiles_in_range for tactical UI
+
+Add append_tile_history() for POI memory
+
+🛒 Shops
+Add restock cadence or price modulation by tension
+
+Use shopkeeper NPC loyalty to modify pricing
+
+Rumor triggers when rare items vanish or rotate out
+
+🧠 GPT Behavior
+Add resolve_intent() registry for GPT output interpretation
+
+Use motif/emotion context in score_interaction()
+
+Bias gpt_router() based on memory pressure or flags
+
+🧠 Memory & Beliefs
+Add memory summarization to daily tick
+
+Trigger motif shift from memory summary sentiment
+
+Belief decay/evolution logic
+
+GPT-driven rumor distortion by speaker trust
+
+🧩 Factions
+Flip POIs or regions on heavy faction control
+
+Log alignment shifts to memory or rumors
+
+Tag arcs with faction involvement metadata

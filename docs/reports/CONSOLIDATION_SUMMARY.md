@@ -5,8 +5,8 @@ Successfully consolidated all JSON data files from various directories into the 
 
 ## Files Consolidated
 
-### From backend/data/
-- `adjacency.json` → `data/adjacency.json`
+### From data/system/runtime/
+- `adjacency.json` → `data/builders/world_parameters/biomes/adjacency.json`
 - `biomes/adjacency.json` → `data/biomes/adjacency.json` (updated with most recent version)
 - `biomes/land_types.json` → `data/biomes/land_types.json` (updated with most recent version)
 - `modding/worlds/example_world_seed.json` → `data/modding/worlds/example_world_seed.json`
@@ -32,10 +32,10 @@ Successfully consolidated all JSON data files from various directories into the 
 ## Duplicate Handling
 - Identified and resolved duplicates between `/data/modding/worlds/` and `/data/world/generation/`
 - Kept the most recent versions of files when duplicates existed
-- Merged data from `backend/data/rules_json/` into the appropriate locations
+- Merged data from `data/system/runtime/rules_json/` into the appropriate locations
 
 ## Directory Structure Cleanup
-- Removed empty directories from `backend/data/` after consolidation
+- Removed empty directories from `data/system/runtime/` after consolidation
 - Preserved non-JSON files (Python modules, documentation) in their original locations
 - Created backup in `archives/data_backup/` before deletion
 

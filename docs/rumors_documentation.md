@@ -38,8 +38,8 @@ Entities have varying levels of belief in rumors they've heard:
 ### Categories and Severity
 
 Rumors are classified by both category and severity:
-- **Categories** describe the subject matter (see `/backend/data/modding/rumors/rumor_categories.json`)
-- **Severity** indicates the impact or importance (see `/backend/data/modding/rumors/rumor_severity.json`)
+- **Categories** describe the subject matter (see `/data/builders/rumors/rumor_categories.json`)
+- **Severity** indicates the impact or importance (see `/data/builders/rumors/rumor_severity.json`)
 - These classifications affect how rumors spread and how entities respond to them
 
 ## API Endpoints
@@ -152,7 +152,7 @@ The Rumor System integrates with the global event system:
 ### Mutation Mechanism
 
 Rumor mutation can occur in several ways:
-1. **Template-based**: Using patterns from `/backend/data/modding/rumors/rumor_mutation_templates.json`
+1. **Template-based**: Using patterns from `/data/builders/rumors/rumor_mutation_templates.json`
 2. **Random word substitution**: Replacing key words while preserving meaning
 3. **AI-powered** (if configured): Using a language model to create realistic mutations
 
@@ -181,7 +181,7 @@ rumor_system = RumorSystem(
 ### Adding New Categories
 
 To add new rumor categories:
-1. Edit `/backend/data/modding/rumors/rumor_categories.json`
+1. Edit `/data/builders/rumors/rumor_categories.json`
 2. Add a new category entry with id, name, description, examples, and spread factors
 3. Restart the application for changes to take effect
 

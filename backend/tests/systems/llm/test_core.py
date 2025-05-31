@@ -1,91 +1,45 @@
-"""Test llm core functionality."""
-
+"""Test core LLM functionality"""
 import pytest
+import asyncio
+from backend.infrastructure.llm.core.llm_core import LLMCore
+from backend.infrastructure.llm.core.gpt_client import GPTClient
 
+class TestLLMCore:
+    """Test LLM core functionality"""
+    
+    @pytest.fixture
+    async def llm_core(self):
+        core = LLMCore()
+        await core.initialize()
+        return core
+    
+    @pytest.mark.asyncio
+    async def test_initialization(self, llm_core):
+        """Test LLM core initialization"""
+        assert llm_core.initialized is True
+    
+    @pytest.mark.asyncio
+    async def test_process_request(self, llm_core):
+        """Test request processing"""
+        request = {"prompt": "test prompt"}
+        response = await llm_core.process_request(request)
+        
+        assert "id" in response
+        assert "response" in response
+        assert "timestamp" in response
 
-class TestLlmCore:
-    """Test class for llm core."""
+class TestGPTClient:
+    """Test GPT client functionality"""
     
-    def test_llm_basic_01(self):
-        """Test llm basic functionality."""
-        assert True
+    def test_client_initialization(self):
+        """Test GPT client initialization"""
+        client = GPTClient()
+        assert client is not None
     
-    def test_llm_basic_02(self):
-        """Test llm data handling."""
-        assert True
-    
-    def test_llm_basic_03(self):
-        """Test llm error handling."""
-        assert True
-    
-    def test_llm_basic_04(self):
-        """Test llm validation."""
-        assert True
-    
-    def test_llm_basic_05(self):
-        """Test llm configuration."""
-        assert True
-    
-    def test_llm_advanced_01(self):
-        """Test llm advanced functionality."""
-        assert True
-    
-    def test_llm_advanced_02(self):
-        """Test llm performance."""
-        assert True
-    
-    def test_llm_advanced_03(self):
-        """Test llm security."""
-        assert True
-    
-    def test_llm_advanced_04(self):
-        """Test llm monitoring."""
-        assert True
-    
-    def test_llm_advanced_05(self):
-        """Test llm cleanup."""
-        assert True
-
-
-class TestLlmCoreExtended:
-    """Extended test class for llm core."""
-    
-    def test_llm_extended_scenario_01(self):
-        """Test llm extended scenario 1."""
-        assert True
-    
-    def test_llm_extended_scenario_02(self):
-        """Test llm extended scenario 2."""
-        assert True
-    
-    def test_llm_extended_scenario_03(self):
-        """Test llm extended scenario 3."""
-        assert True
-    
-    def test_llm_extended_scenario_04(self):
-        """Test llm extended scenario 4."""
-        assert True
-    
-    def test_llm_extended_scenario_05(self):
-        """Test llm extended scenario 5."""
-        assert True
-    
-    def test_llm_extended_edge_case_01(self):
-        """Test llm edge case 1."""
-        assert True
-    
-    def test_llm_extended_edge_case_02(self):
-        """Test llm edge case 2."""
-        assert True
-    
-    def test_llm_extended_edge_case_03(self):
-        """Test llm edge case 3."""
-        assert True
-    
-    def test_llm_extended_edge_case_04(self):
-        """Test llm edge case 4."""
-        assert True
-    
-    def test_llm_extended_edge_case_05(self):
-        """Test llm edge case 5."""
-        assert True
+    @pytest.mark.asyncio
+    async def test_generate_response_without_api_key(self):
+        """Test response generation without API key"""
+        client = GPTClient()
+        response = await client.generate_response("test prompt")
+        # Should handle gracefully without API key
+        assert isinstance(response, str)

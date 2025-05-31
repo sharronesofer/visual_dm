@@ -5,7 +5,7 @@ The backend currently has the following main directories:
 - `backend/systems/` - Core functional systems organized by domain
 - `backend/app/` - Contains core/analytics service
 - `backend/core/` - Contains shared utilities like GPT client and config
-- `backend/data/` - Contains JSON data files for the application
+- `data/system/runtime/` - Contains JSON data files for the application
 
 ## Proposed Changes
 

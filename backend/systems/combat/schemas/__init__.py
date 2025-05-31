@@ -1,15 +1,4 @@
-"""
-Schemas for the combat system API.
-"""
+"""Schemas for combat system"""
 
-from backend.systems.combat.schemas.combat import (
-    CombatStateSchema, 
-    CombatantSchema,
-    CombatEffectSchema
-)
-
-__all__ = [
-    'CombatStateSchema',
-    'CombatantSchema',
-    'CombatEffectSchema',
-]
+# Auto-generated imports
+from .combat import *

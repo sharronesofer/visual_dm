@@ -7,6 +7,7 @@ This module provides API routes for faction system access.
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from backend.infrastructure.database import get_db
 
 from backend.systems.faction.faction_manager import FactionManager
 from backend.systems.faction.models.faction import Faction
@@ -21,20 +22,11 @@ faction_router = APIRouter(
 )
 
 # Dependency to get database session
-def get_db():
-    # This would be implemented to get actual DB session
-    # For example integration with SQLAlchemy
-    db = None
-    try:
-        yield db
-    finally:
-        if db:
-            db.close()
+
 
 # Dependency to get faction manager
 def get_faction_manager(db: Session = Depends(get_db)):
     return FactionManager(db)
-
 
 @faction_router.get("/", response_model=List[FactionSchema])
 async def get_factions(
@@ -54,7 +46,6 @@ async def get_factions(
     
     return manager.get_factions(**filters)
 
-
 @faction_router.get("/{faction_id}", response_model=FactionSchema)
 async def get_faction(
     faction_id: int,
@@ -68,7 +59,6 @@ async def get_faction(
             detail=f"Faction with ID {faction_id} not found"
         )
     return faction
-
 
 @faction_router.post("/", response_model=FactionSchema, status_code=status.HTTP_201_CREATED)
 async def create_faction(
@@ -96,7 +86,6 @@ async def create_faction(
             detail=str(e)
         )
 
-
 @faction_router.put("/{faction_id}", response_model=FactionSchema)
 async def update_faction(
     faction_id: int,
@@ -119,7 +108,6 @@ async def update_faction(
             detail=str(e)
         )
 
-
 @faction_router.delete("/{faction_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_faction(
     faction_id: int,
@@ -134,3 +122,13 @@ async def delete_faction(
             detail=str(e)
         )
     return None 
+
+@router.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy", "service": "active"}
+
+@router.get("/")
+async def list_entities():
+    """List all entities."""
+    return {"entities": [], "total": 0}

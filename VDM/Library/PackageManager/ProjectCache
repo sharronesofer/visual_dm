@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638841605520000000
-    m_Hash: 57962134
+      ticks: 638843106610000000
+    m_Hash: 1618094579
   m_LockFileStatus:
     m_FilePath: /Users/Sharrone/Visual_DM/VDM/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638841606990000000
-    m_Hash: 220046612
+      ticks: 638843105830000000
+    m_Hash: 2846866679
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -839,7 +839,7 @@ m_ResolvedPackages:
   fingerprint: 
 - packageId: com.unity.modules.uielements@1.0.0
   testable: 0
-  isDirectDependency: 0
+  isDirectDependency: 1
   version: 1.0.0
   source: 2
   resolvedPath: /Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.modules.uielements@1.0.0
@@ -907,7 +907,7 @@ m_ResolvedPackages:
   fingerprint: 
 - packageId: com.unity.modules.ui@1.0.0
   testable: 0
-  isDirectDependency: 0
+  isDirectDependency: 1
   version: 1.0.0
   source: 2
   resolvedPath: /Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.modules.ui@1.0.0
@@ -963,7 +963,7 @@ m_ResolvedPackages:
   fingerprint: 
 - packageId: com.unity.modules.imgui@1.0.0
   testable: 0
-  isDirectDependency: 0
+  isDirectDependency: 1
   version: 1.0.0
   source: 2
   resolvedPath: /Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.modules.imgui@1.0.0
@@ -1019,7 +1019,7 @@ m_ResolvedPackages:
   fingerprint: 
 - packageId: com.unity.modules.jsonserialize@1.0.0
   testable: 0
-  isDirectDependency: 0
+  isDirectDependency: 1
   version: 1.0.0
   source: 2
   resolvedPath: /Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.unity.modules.jsonserialize@1.0.0
@@ -1066,6 +1066,64 @@ m_ResolvedPackages:
     path: 
   unityLifecycle:
     version: 1.0.0
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+  fingerprint: 
+- packageId: com.endel.nativewebsocket@https://github.com/endel/NativeWebSocket.git#upm
+  testable: 0
+  isDirectDependency: 1
+  version: 1.1.5
+  source: 5
+  resolvedPath: /Users/Sharrone/Visual_DM/VDM/Library/PackageCache/com.endel.nativewebsocket@1d8b49b3fe
+  assetPath: Packages/com.endel.nativewebsocket
+  name: com.endel.nativewebsocket
+  displayName: Native WebSockets
+  author:
+    name: Endel Dreyer
+    email: endel.dreyer@gmail.com
+    url: https://github.com/endel/NativeWebSocket
+  category: 
+  type: 
+  description: WebSocket client for Unity - with no external dependencies (WebGL,
+    Native, Android, iOS, UWP).
+  status: 0
+  errors: []
+  versions:
+    all: []
+    compatible: []
+    recommended: 
+    deprecated: []
+  dependencies: []
+  resolvedDependencies: []
+  keywords:
+  - websocket
+  - websockets
+  - native websocket
+  - native websockets
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 0
+  documentationUrl: 
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.com/endel/NativeWebSocket.git
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0

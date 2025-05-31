@@ -40,7 +40,7 @@ The system supports:
 
 ### Entity Types
 
-The system supports various entity types, defined in `backend/data/modding/entity_types.json`. Default types include:
+The system supports various entity types, defined in `data/builders/entity_types.json`. Default types include:
 
 - **Characters**: NPCs, players, creatures
 - **Locations**: Cities, dungeons, shops
@@ -51,7 +51,7 @@ The system supports various entity types, defined in `backend/data/modding/entit
 
 ### Relationships
 
-Entities can form relationships with each other as defined in `backend/data/modding/relationship_types.json`. Examples include:
+Entities can form relationships with each other as defined in `data/builders/relationship_types.json`. Examples include:
 
 - **Knows**: Character knows another character or location
 - **Located At**: Entity is located at a location
@@ -281,8 +281,8 @@ class EntityRelationship(BaseModel):
 
 Entity and relationship types are defined in JSON configuration files:
 
-- `backend/data/modding/entity_types.json`: Defines the types of entities
-- `backend/data/modding/relationship_types.json`: Defines the types of relationships
+- `data/builders/entity_types.json`: Defines the types of entities
+- `data/builders/relationship_types.json`: Defines the types of relationships
 
 ## WebSocket Protocol
 

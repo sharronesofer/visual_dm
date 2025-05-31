@@ -1,8 +1,9 @@
 """
-Crafting Service
+Crafting Service Module
 
-Main service for crafting operations in the game.
+Provides crafting system functionality for the game.
 """
+
 from typing import Dict, List, Optional, Any, Tuple, Union
 import random
 import logging
@@ -11,20 +12,30 @@ import os
 import json
 from pathlib import Path
 import time
-
-# Uncomment these imports
 from backend.systems.crafting.models.recipe import CraftingRecipe
 from backend.systems.crafting.models.ingredient import CraftingIngredient
 from backend.systems.crafting.models.result import CraftingResult
 from backend.systems.crafting.models.station import CraftingStation
-# Add inventory system imports
-from backend.systems.inventory.models import Inventory, InventoryItem
-from backend.systems.inventory.repository import InventoryItemRepository
-from backend.core.database import db
 
-# Will uncomment when events are implemented
-from backend.systems.events.event_dispatcher import EventDispatcher
+# Optional imports to avoid circular dependencies
+try:
+    from backend.systems.inventory.models import Inventory, InventoryItem
+from backend.systems.inventory.repositories import InventoryItemRepository
+    INVENTORY_AVAILABLE = True
+except ImportError:
+    INVENTORY_AVAILABLE = False
 
+try:
+    from backend.infrastructure.database import db
+    DATABASE_AVAILABLE = True
+except ImportError:
+    DATABASE_AVAILABLE = False
+
+try:
+    from backend.infrastructure.events.event_dispatcher import EventDispatcher
+    EVENTS_AVAILABLE = True
+except ImportError:
+    EVENTS_AVAILABLE = False
 
 class CraftingService:
     """
@@ -39,7 +50,16 @@ class CraftingService:
         # These will be set up when the corresponding systems are available
         self._recipes = {}  # Dictionary of recipe_id -> CraftingRecipe
         self._stations = {}  # Dictionary of station_id -> CraftingStation
-        self._event_dispatcher = EventDispatcher.get_instance()
+        
+        # Optional event dispatcher
+        if EVENTS_AVAILABLE:
+            try:
+                self._event_dispatcher = EventDispatcher.get_instance()
+            except Exception:
+                self._event_dispatcher = None
+        else:
+            self._event_dispatcher = None
+            
         self._logger = logging.getLogger(__name__)
         
         # Character knowledge tracking
@@ -371,18 +391,18 @@ class CraftingService:
             
         return list(self._known_recipes[character_id])
         
-    def save_recipe_knowledge(self, file_path: str = None) -> bool:
+    def save_recipe_knowledge(self, file_path: Path = None) -> bool:
         """
         Save character recipe knowledge to a file.
         
         Args:
-            file_path: Path to save file (default: data/character_recipes.json)
+            file_path: Path to save file (default: data/system/runtime/character_recipes.json)
             
         Returns:
             bool: True if successful, False otherwise
         """
         if not file_path:
-            file_path = "data/character_recipes.json"
+            file_path = Path("data/system/runtime/character_recipes.json")
             
         try:
             # Convert sets to lists for JSON serialization
@@ -392,7 +412,7 @@ class CraftingService:
             }
             
             # Create parent directory if it doesn't exist
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            os.makedirs(file_path.parent, exist_ok=True)
             
             with open(file_path, "w") as f:
                 json.dump(save_data, f, indent=2)
@@ -404,20 +424,20 @@ class CraftingService:
             self._logger.error(f"Error saving character recipe knowledge: {str(e)}")
             return False
             
-    def load_recipe_knowledge(self, file_path: str = None) -> bool:
+    def load_recipe_knowledge(self, file_path: Path = None) -> bool:
         """
         Load character recipe knowledge from a file.
         
         Args:
-            file_path: Path to load file (default: data/character_recipes.json)
+            file_path: Path to load file (default: data/system/runtime/character_recipes.json)
             
         Returns:
             bool: True if successful, False otherwise
         """
         if not file_path:
-            file_path = "data/character_recipes.json"
+            file_path = Path("data/system/runtime/character_recipes.json")
             
-        if not os.path.exists(file_path):
+        if not file_path.exists():
             self._logger.warning(f"Character recipe knowledge file not found: {file_path}")
             return False
             
@@ -1470,3 +1490,16 @@ class CraftingService:
             
         # Replace the craft method
         self.craft = enhanced_craft.__get__(self, type(self)) 
+
+# Module-level code
+"""
+Crafting Service
+
+Main service for crafting operations in the game.
+"""
+
+# Uncomment these imports
+# Add inventory system imports
+
+# Will uncomment when events are implemented
+

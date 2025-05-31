@@ -1,0 +1,23 @@
+{
+    "name": "VDM.Character",
+    "rootNamespace": "VDM.Character",
+    "references": [
+        "VDM.DTOs",
+        "VDM.Common",
+        "VDM.Core",
+        "Unity.Nuget.Newtonsoft-Json",
+        "Unity.InputSystem",
+        "Unity.TextMeshPro",
+        "Unity.Netcode.Runtime",
+        "com.endel.nativewebsocket"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+} 

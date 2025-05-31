@@ -1,12 +1,7 @@
-"""
-Crafting System Services
+"""Services for crafting system"""
 
-This module contains the service layer for the crafting system.
-"""
-
-# Import services once implemented
-# from .crafting_service import CraftingService
-# from .recipe_service import RecipeService
-# from .station_service import StationService
-
-__all__ = []  # Add service classes when implemented
+# Auto-generated imports
+from .crafting_experience_service import *
+from .crafting_service import *
+from .services import *
+from .station_service import *

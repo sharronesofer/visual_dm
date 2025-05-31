@@ -1,3 +1,1 @@
-"""
-Tests for backend.systems.region package.
-"""
+# Test package for the region system

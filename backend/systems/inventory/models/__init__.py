@@ -1,10 +1,4 @@
-"""
-Re-export models from parent module.
+"""Models for inventory system"""
 
-This module re-exports the models from the parent module to maintain
-backwards compatibility with any code that imports from here.
-"""
-
-from backend.systems.inventory.models import Item, Inventory, InventoryItem, ItemCategory
-
-__all__ = ['Item', 'Inventory', 'InventoryItem', 'ItemCategory']
+# Auto-generated imports
+from .models import *

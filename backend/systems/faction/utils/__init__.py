@@ -1,17 +1,6 @@
-"""
-Faction system utility functions.
+"""Utils for faction system"""
 
-This module provides utility functions for the faction system.
-"""
-
-from backend.systems.faction.utils.validators import (
-    validate_faction_name,
-    validate_faction_influence,
-    validate_diplomatic_stance
-)
-
-__all__ = [
-    'validate_faction_name',
-    'validate_faction_influence',
-    'validate_diplomatic_stance'
-]
+# Auto-generated imports
+from .faction_tick_utils import *
+from .faction_utils import *
+from .validators import *

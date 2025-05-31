@@ -3,15 +3,13 @@ CraftingIngredient Model
 
 Defines the structure and behavior of ingredients used in crafting recipes.
 """
-from typing import Optional
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from typing import Optional, Dict, Any
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, JSON
 from sqlalchemy.orm import relationship
 
-# Import the base model/db setup when available
-# from backend.database import Base
+from backend.infrastructure.database import BaseModel, GUID
 
-
-class CraftingIngredient:
+class CraftingIngredient(BaseModel):
     """
     Represents an ingredient required for a crafting recipe.
     
@@ -19,31 +17,26 @@ class CraftingIngredient:
     and whether they are consumed in the crafting process.
     """
     
-    # These fields will be properly implemented when the database models are set up
-    # id = Column(Integer, primary_key=True)
-    # recipe_id = Column(Integer, ForeignKey("crafting_recipe.id"))
-    # recipe = relationship("CraftingRecipe", back_populates="ingredients")
-    # item_id = Column(String, nullable=False)
-    # quantity = Column(Integer, nullable=False, default=1)
-    # is_consumed = Column(Boolean, default=True)
-    # is_tool = Column(Boolean, default=False)
-
-    def __init__(
-        self, 
-        item_id: str, 
-        quantity: int = 1,
-        is_consumed: bool = True,
-        is_tool: bool = False,
-        recipe_id: Optional[int] = None
-    ):
-        """Initialize a crafting ingredient."""
-        self.item_id = item_id
-        self.quantity = quantity
-        self.is_consumed = is_consumed
-        self.is_tool = is_tool
-        self.recipe_id = recipe_id
-
-    def check_availability(self, inventory: any) -> bool:
+    __tablename__ = "crafting_ingredients"
+    
+    # Primary key
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Foreign key to recipe
+    recipe_id = Column(GUID(), ForeignKey("crafting_recipes.id"), nullable=False, index=True)
+    recipe = relationship("CraftingRecipe", back_populates="ingredients")
+    
+    # Ingredient details
+    item_id = Column(String, nullable=False, index=True)
+    quantity = Column(Integer, nullable=False, default=1)
+    is_consumed = Column(Boolean, default=True)
+    is_tool = Column(Boolean, default=False)  # Tools are not consumed
+    
+    # Advanced ingredient features
+    substitution_groups = Column(JSON, default=dict)  # Alternative ingredients
+    quality_requirement = Column(String, nullable=True)  # Minimum quality needed
+    
+    def check_availability(self, inventory: Any) -> bool:
         """
         Check if the required quantity of this ingredient is available in the inventory.
         
@@ -53,5 +46,38 @@ class CraftingIngredient:
         Returns:
             bool: True if the required quantity is available, False otherwise
         """
-        # Will be implemented when the inventory system is available
+        # TODO: Implement when inventory system is available
+        # This would check if inventory has sufficient quantity of item_id
+        # and handle substitution groups if the primary ingredient is not available
+        return True  # Placeholder
+        
+    def get_substitution_options(self) -> Dict[str, Any]:
+        """
+        Get available substitution options for this ingredient.
+        
+        Returns:
+            Dictionary of substitution groups and their requirements
+        """
+        return self.substitution_groups or {}
+        
+    def can_substitute(self, available_item_id: str, available_quantity: int) -> bool:
+        """
+        Check if an available item can substitute for this ingredient.
+        
+        Args:
+            available_item_id: ID of the available item
+            available_quantity: Quantity of the available item
+            
+        Returns:
+            bool: True if substitution is possible, False otherwise
+        """
+        if available_item_id == self.item_id:
+            return available_quantity >= self.quantity
+            
+        # Check substitution groups
+        for group_name, substitutions in self.substitution_groups.items():
+            if available_item_id in substitutions:
+                required_quantity = substitutions[available_item_id]
+                return available_quantity >= required_quantity
+                
         return False 

@@ -1,18 +1,10 @@
-"""
-Character Services
-----------------
-Service layer for character-related operations, encapsulating business logic
-and database interactions.
-"""
+"""Services for character system"""
 
-from backend.systems.character.services.character_service import CharacterService
-from backend.systems.character.services.relationship_service import RelationshipService
-from backend.systems.character.services.mood_service import MoodService
-from backend.systems.character.services.goal_service import GoalService
-
-__all__ = [
-    'CharacterService',
-    'RelationshipService',
-    'MoodService',
-    'GoalService'
-]
+# Auto-generated imports
+from .character_service import *
+from .goal_service import *
+from .mood_service import *
+from .party_service import *
+from .prompt_manager import *
+from .relationship_service import *
+from .services import *

@@ -21,33 +21,33 @@ def fix_imports_in_file(file_path):
         replacements = [
             # Direct submodule imports to main module
             (r'from backend\.systems\.events\.event_dispatcher import EventDispatcher, EventBase', 
-             'from backend.systems.events import EventDispatcher, EventBase'),
+             'from backend.infrastructure.events import EventDispatcher, EventBase'),
             (r'from backend\.systems\.events\.event_dispatcher import EventDispatcher', 
-             'from backend.systems.events import EventDispatcher'),
+             'from backend.infrastructure.events import EventDispatcher'),
             (r'from backend\.systems\.events\.event_base import EventBase', 
-             'from backend.systems.events import EventBase'),
+             'from backend.infrastructure.events import EventBase'),
             (r'from backend\.systems\.events\.event_types import ([^,\n]+)', 
-             r'from backend.systems.events import \1'),
+             r'from backend.infrastructure.events import \1'),
             (r'from backend\.systems\.events\.middleware import ([^,\n]+)', 
-             r'from backend.systems.events import \1'),
+             r'from backend.infrastructure.events import \1'),
             
             # Fix EventBus references to EventDispatcher
             (r'from backend\.systems\.events\.event_bus import EventBus', 
-             'from backend.systems.events import get_event_dispatcher'),
+             'from backend.infrastructure.events import get_event_dispatcher'),
             (r'from backend\.systems\.events\.event_dispatcher import EventBus', 
-             'from backend.systems.events import get_event_dispatcher'),
+             'from backend.infrastructure.events import get_event_dispatcher'),
             
             # Fix models.event_dispatcher references
             (r'from backend\.systems\.events\.models\.event_dispatcher import ([^,\n]+)', 
-             r'from backend.systems.events import \1'),
+             r'from backend.infrastructure.events import \1'),
             
             # Fix services.event_dispatcher references  
             (r'from backend\.systems\.events\.services\.event_dispatcher import ([^,\n]+)', 
-             r'from backend.systems.events import \1'),
+             r'from backend.infrastructure.events import \1'),
             
             # Fix canonical_events references
             (r'from backend\.systems\.events\.canonical_events import ([^,\n]+)', 
-             r'from backend.systems.events import \1'),
+             r'from backend.infrastructure.events import \1'),
         ]
         
         # Apply replacements

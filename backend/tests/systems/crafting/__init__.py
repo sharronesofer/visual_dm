@@ -1,1 +1,1 @@
-# Crafting system tests package
+# Test package for the crafting system

@@ -216,6 +216,6 @@ This document defines the canonical JSON schemas for all modular game data categ
 
 ## Notes
 - All schemas are versioned and extensible.
-- Use these as the basis for all modular data in backend/data/modding/.
+- Use these as the basis for all modular data in data/builders/.
 - Validate all JSON files against these schemas before loading.
 - Update this document as new categories are modularized. 

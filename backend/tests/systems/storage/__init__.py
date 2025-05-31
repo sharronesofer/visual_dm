@@ -1,1 +1,1 @@
-# Automatically created during test structure preparation
+# Test package for the storage system

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fix import issues that arose from moving /backend/data/ to root /data/ directory.
+Fix import issues that arose from moving /data/system/runtime/ to root /data/ directory.
 
 This script identifies and fixes path references that point to the old backend/data location.
 """
@@ -60,10 +60,10 @@ class DataImportFixer:
             # Pattern replacements for fixing paths
             replacements = [
                 # Path string replacements
-                (r'backend/data/', 'data/'),
+                (r'data/system/runtime/', 'data/'),
                 (r'backend\\data\\', 'data/'),
-                (r'"backend/data/', '"data/'),
-                (r"'backend/data/", "'data/"),
+                (r'"data/system/runtime/', '"data/'),
+                (r"'data/system/runtime/", "'data/"),
                 (r'"backend/data"', '"data"'),
                 (r"'backend/data'", "'data'"),
                 

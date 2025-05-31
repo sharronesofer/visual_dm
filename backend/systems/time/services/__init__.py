@@ -1,5 +1,5 @@
-"""
-Time system services.
-"""
+"""Services for time system"""
 
-from backend.systems.time.services.time_manager import TimeManager 
+# Auto-generated imports
+from .services import *
+from .time_manager import *

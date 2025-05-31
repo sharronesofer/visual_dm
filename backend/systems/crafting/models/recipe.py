@@ -4,14 +4,12 @@ CraftingRecipe Model
 Defines the structure and behavior of crafting recipes.
 """
 from typing import List, Dict, Any, Optional
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, JSON
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, JSON, Float
 from sqlalchemy.orm import relationship
 
-# Import the base model/db setup when available
-# from backend.database import Base
+from backend.infrastructure.database import BaseModel
 
-
-class CraftingRecipe:
+class CraftingRecipe(BaseModel):
     """
     Represents a crafting recipe in the game.
     
@@ -19,54 +17,61 @@ class CraftingRecipe:
     an item, as well as the resulting item(s) and any specific requirements.
     """
     
-    # These fields will be properly implemented when the database models are set up
-    # id = Column(Integer, primary_key=True)
-    # name = Column(String, nullable=False)
-    # description = Column(String)
-    # skill_required = Column(String)
-    # min_skill_level = Column(Integer, default=1)
-    # crafting_time = Column(Integer)  # in seconds
-    # station_required = Column(String)
-    # ingredients = relationship("CraftingIngredient", back_populates="recipe")
-    # results = relationship("CraftingResult", back_populates="recipe")
-    # is_hidden = Column(Boolean, default=False)
-    # is_enabled = Column(Boolean, default=True)
-    # metadata = Column(JSON, default=dict)
+    __tablename__ = "crafting_recipes"
+    
+    # Primary key
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Recipe identification and basic info
+    name = Column(String, nullable=False, index=True)
+    description = Column(String, default="")
+    
+    # Skill requirements
+    skill_required = Column(String, nullable=True, index=True)
+    min_skill_level = Column(Integer, default=1)
+    
+    # Crafting mechanics
+    crafting_time = Column(Integer, default=0)  # in seconds
+    base_experience = Column(Integer, default=10)  # experience gained
+    
+    # Station requirements
+    station_required = Column(String, nullable=True, index=True)
+    station_level = Column(Integer, default=0)
+    
+    # Recipe state
+    is_hidden = Column(Boolean, default=False, index=True)
+    is_enabled = Column(Boolean, default=True, index=True)
+    
+    # Additional data
+    recipe_metadata = Column(JSON, default=dict)
+    discovery_methods = Column(JSON, default=list)
+    
+    # Relationships
+    ingredients = relationship("CraftingIngredient", back_populates="recipe", cascade="all, delete-orphan")
+    results = relationship("CraftingResult", back_populates="recipe", cascade="all, delete-orphan")
 
-    def __init__(
-        self,
-        name: str,
-        description: str = "",
-        skill_required: Optional[str] = None,
-        min_skill_level: int = 1,
-        crafting_time: int = 0,
-        station_required: Optional[str] = None,
-        is_hidden: bool = False,
-        is_enabled: bool = True,
-        metadata: Optional[Dict[str, Any]] = None
-    ):
-        """Initialize a crafting recipe."""
-        self.name = name
-        self.description = description
-        self.skill_required = skill_required
-        self.min_skill_level = min_skill_level
-        self.crafting_time = crafting_time
-        self.station_required = station_required
-        self.is_hidden = is_hidden
-        self.is_enabled = is_enabled
-        self.metadata = metadata or {}
-        self.ingredients = []
-        self.results = []
-
-    def add_ingredient(self, item_id: str, quantity: int, is_consumed: bool = True) -> None:
+    def add_ingredient(self, item_id: str, quantity: int, is_consumed: bool = True, substitution_groups: Optional[Dict] = None) -> None:
         """Add an ingredient to the recipe."""
-        # Implementation will be added when CraftingIngredient is created
-        pass
+        from backend.systems.crafting.models.ingredient import CraftingIngredient
+        ingredient = CraftingIngredient(
+            item_id=item_id,
+            quantity=quantity,
+            is_consumed=is_consumed,
+            substitution_groups=substitution_groups or {},
+            recipe=self
+        )
+        self.ingredients.append(ingredient)
 
     def add_result(self, item_id: str, quantity: int, probability: float = 1.0) -> None:
         """Add a result item to the recipe."""
-        # Implementation will be added when CraftingResult is created
-        pass
+        from backend.systems.crafting.models.result import CraftingResult
+        result = CraftingResult(
+            item_id=item_id,
+            quantity=quantity,
+            probability=probability,
+            recipe=self
+        )
+        self.results.append(result)
 
     def can_craft(self, inventory: Any, character_skills: Dict[str, int]) -> bool:
         """
@@ -79,5 +84,40 @@ class CraftingRecipe:
         Returns:
             bool: True if the recipe can be crafted, False otherwise
         """
-        # Will be implemented when the inventory system is available
-        return False 
+        # Check skill requirements
+        if self.skill_required:
+            if self.skill_required not in character_skills:
+                return False
+            if character_skills[self.skill_required] < self.min_skill_level:
+                return False
+        
+        # Check if recipe is enabled
+        if not self.is_enabled:
+            return False
+            
+        # TODO: Check ingredient availability when inventory system is integrated
+        # For now, return True if skill requirements are met
+        return True
+        
+    def get_required_ingredients(self) -> List[Dict[str, Any]]:
+        """Get a list of required ingredients with details."""
+        return [
+            {
+                "item_id": ingredient.item_id,
+                "quantity": ingredient.quantity,
+                "is_consumed": ingredient.is_consumed,
+                "substitution_groups": ingredient.substitution_groups
+            }
+            for ingredient in self.ingredients
+        ]
+        
+    def get_possible_results(self) -> List[Dict[str, Any]]:
+        """Get a list of possible crafting results."""
+        return [
+            {
+                "item_id": result.item_id,
+                "quantity": result.quantity,
+                "probability": result.probability
+            }
+            for result in self.results
+        ] 

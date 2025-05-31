@@ -1,1 +1,1 @@
-"""Tests for the dialogue system."""
+# Test package for the dialogue system

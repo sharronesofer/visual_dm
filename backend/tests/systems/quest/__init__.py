@@ -1,1 +1,1 @@
-"""Tests for the quest system."""
+# Test package for the quest system

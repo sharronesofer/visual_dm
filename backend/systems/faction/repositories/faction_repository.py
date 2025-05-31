@@ -12,7 +12,6 @@ from datetime import datetime
 from backend.systems.faction.models.faction import Faction, FactionRelationship, FactionMembership
 from backend.systems.faction.schemas.faction_types import FactionType, FactionAlignment, DiplomaticStance
 
-
 class FactionRepository:
     """Repository for faction data persistence."""
     
@@ -201,7 +200,6 @@ class FactionRepository:
             i += 1
             
         return f"fac_{i}"
-
 
 class FactionRelationshipRepository:
     """Repository for faction relationship data persistence."""

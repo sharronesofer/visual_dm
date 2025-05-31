@@ -46,8 +46,8 @@ class BatchTestFixer:
                 content
             )
             # Add the correct import
-            if "from backend.systems.data.schemas.biome_schema import BiomeSchema" not in content:
-                content = "from backend.systems.data.schemas.biome_schema import BiomeSchema\n" + content
+            if "from backend.infrastructure.data.schemas.biome_schema import BiomeSchema" not in content:
+                content = "from backend.infrastructure.data.schemas.biome_schema import BiomeSchema\n" + content
             
         return content != original_content
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fix NPC test import paths to use canonical backend.systems.npc imports.
+Fix NPC test import backend.systems.npc imports.
 
 This script fixes imports in NPC test files to follow the canonical structure
 as required by Development_Bible.md.
@@ -21,12 +21,12 @@ def fix_imports_in_file(file_path: Path) -> bool:
         # Fix import patterns
         patterns = [
             # systems.npc.* -> backend.systems.npc.*
-            (r'import systems\.npc\.', 'import backend.systems.npc.'),
-            (r'from systems\.npc\.', 'from backend.systems.npc.'),
+            (r'import backend.systems.npc.'),
+            (r'from backend.systems.npc.'),
             
             # Handle specific test file patterns that might exist
-            (r'import systems\.npc$', 'import backend.systems.npc'),
-            (r'from systems\.npc import', 'from backend.systems.npc import'),
+            (r'import backend.systems.npc'),
+            (r'from backend.systems.npc import'),
         ]
         
         for old_pattern, new_pattern in patterns:

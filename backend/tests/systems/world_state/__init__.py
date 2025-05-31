@@ -1,1 +1,1 @@
-"""Tests for the world_state system."""
+# Test package for the world_state system

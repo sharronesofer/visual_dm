@@ -1,0 +1,3293 @@
+{
+  "timestamp": "2025-05-30 19:33:40",
+  "assessment_type": "Task 45 - Comprehensive Backend Systems Assessment",
+  "structural_issues": [],
+  "import_violations": [
+    {
+      "file": "backend/systems/llm/utils/memory_system.py",
+      "import": "typing",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/memory_system.py",
+      "import": "datetime",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/memory_system.py",
+      "import": "uuid",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/memory_system.py",
+      "import": "pydantic",
+      "line": 15,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/memory_system.py",
+      "import": "backend.systems.dm.event_integration",
+      "line": 17,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/faction_system.py",
+      "import": "typing",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/faction_system.py",
+      "import": "datetime",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/faction_system.py",
+      "import": "uuid",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/faction_system.py",
+      "import": "pydantic",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/faction_system.py",
+      "import": "backend.systems.dm.event_integration",
+      "line": 18,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/motif_system.py",
+      "import": "typing",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/motif_system.py",
+      "import": "datetime",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/motif_system.py",
+      "import": "uuid",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/motif_system.py",
+      "import": "pydantic",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/motif_system.py",
+      "import": "backend.systems.dm.event_integration",
+      "line": 18,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/rumor_system.py",
+      "import": "typing",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/rumor_system.py",
+      "import": "datetime",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/rumor_system.py",
+      "import": "uuid",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/rumor_system.py",
+      "import": "pydantic",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/llm/utils/rumor_system.py",
+      "import": "backend.systems.dm.event_integration",
+      "line": 18,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/character_utils.py",
+      "import": "typing",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/character_utils.py",
+      "import": "datetime",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/character_utils.py",
+      "import": "backend.systems.shared.utils.error_utils",
+      "line": 18,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/context_manager.py",
+      "import": "datetime",
+      "line": 2,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/context_manager.py",
+      "import": "typing",
+      "line": 3,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/context_manager.py",
+      "import": "backend.systems.dialogue.scoring",
+      "line": 4,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/context_manager.py",
+      "import": "backend.systems.dialogue.extractors",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/extractors.py",
+      "import": "typing",
+      "line": 2,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/party_utils.py",
+      "import": "uuid",
+      "line": 3,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/party_utils.py",
+      "import": "datetime",
+      "line": 4,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/party_utils.py",
+      "import": "typing",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/party_utils.py",
+      "import": "backend.systems.memory.memory_utils",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/party_utils.py",
+      "import": "backend.systems.core.repositories.party_repository",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/validation.py",
+      "import": "typing",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/character/utils/validation.py",
+      "import": "pydantic",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/auth_user/utils/auth_utils.py",
+      "import": "typing",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/auth_user/utils/auth_utils.py",
+      "import": "uuid",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/auth_user/utils/validation_utils.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/faction/utils/validators.py",
+      "import": "typing",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/faction/utils/validators.py",
+      "import": "backend.systems.faction.schemas.faction_types",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/shared/utils/floating_origin.py",
+      "import": "pathlib",
+      "line": 24,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/shared/utils/time.py",
+      "import": "datetime",
+      "line": 3,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/shared/utils/data_loader.py",
+      "import": "pathlib",
+      "line": 24,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/shared/utils/security.py",
+      "import": "pathlib",
+      "line": 24,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/shared/utils/coordinates.py",
+      "import": "pathlib",
+      "line": 24,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/newspaper_system.py",
+      "import": "datetime",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "datetime",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "typing",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.world",
+      "line": 15,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.npc",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.world_event",
+      "line": 17,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.core.enums",
+      "line": 18,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.shared.logging",
+      "line": 19,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.shared.database.base",
+      "line": 20,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.shared.utils.error_utils",
+      "line": 21,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "backend.systems.validation.world_event_validation",
+      "line": 22,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/tick_utils.py",
+      "import": "datetime",
+      "line": 509,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/terrain_generator.py",
+      "import": "typing",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/world_state/utils/terrain_generator.py",
+      "import": "dataclasses",
+      "line": 20,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/tile_loader.py",
+      "import": "pathlib",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/tile_loader.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/floating_origin.py",
+      "import": "typing",
+      "line": 19,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/floating_origin.py",
+      "import": "dataclasses",
+      "line": 24,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/floating_origin.py",
+      "import": "backend.systems.events.utils.coordinates",
+      "line": 25,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/plugins.py",
+      "import": "pathlib",
+      "line": 17,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/plugins.py",
+      "import": "typing",
+      "line": 18,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/plugins.py",
+      "import": "backend.systems.events.core.event_base",
+      "line": 20,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/plugins.py",
+      "import": "backend.systems.dispatcher",
+      "line": 21,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/plugins.py",
+      "import": "backend.systems.event_types",
+      "line": 496,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/export_utils.py",
+      "import": "typing",
+      "line": 3,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/export_utils.py",
+      "import": "reportlab.lib.pagesizes",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/export_utils.py",
+      "import": "reportlab.pdfgen",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/batching.py",
+      "import": "typing",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/batching.py",
+      "import": "backend.systems.events.core.event_base",
+      "line": 15,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/batching.py",
+      "import": "backend.systems.dispatcher",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/event_utils.py",
+      "import": "typing",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/event_utils.py",
+      "import": "backend.systems.events.core.event_base",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/event_utils.py",
+      "import": "backend.systems.events.core.event_dispatcher",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/screen_utils.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/screen_utils.py",
+      "import": "backend.systems.events.utils.error_utils",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "datetime",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.world",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.quest",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.shared.utils.event_utils",
+      "line": 11,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.shared.utils.base_manager",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.npc",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.world",
+      "line": 20,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.world",
+      "line": 15,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/world_tick_utils.py",
+      "import": "backend.systems.world",
+      "line": 419,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/error_utils.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/coordinate_validation.py",
+      "import": "typing",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/coordinate_validation.py",
+      "import": "backend.systems.events.utils.coordinates",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/coordinate_validation.py",
+      "import": "backend.systems.events.utils.floating_origin",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/coordinate_validation.py",
+      "import": "backend.systems.events.utils",
+      "line": 15,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/game_utils.py",
+      "import": "typing",
+      "line": 3,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/game_utils.py",
+      "import": "backend.systems.shared.utils.config_utils",
+      "line": 4,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/game_utils.py",
+      "import": "backend.systems.shared.utils.constants",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/floating_origin_ecs.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/floating_origin_ecs.py",
+      "import": "dataclasses",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/floating_origin_ecs.py",
+      "import": "backend.systems.shared.utils.coordinates",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/floating_origin_ecs.py",
+      "import": "backend.systems.shared.utils.floating_origin",
+      "line": 11,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "sqlalchemy",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "sqlalchemy.orm",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "sqlalchemy.exc",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "contextlib",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "datetime",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "functools",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "backend.systems.shared.database.base",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "backend.systems.shared.utils.cache",
+      "line": 15,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "backend.systems.shared.utils.monitoring",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "backend.systems.shared.utils.db_pool",
+      "line": 17,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/database_utils.py",
+      "import": "collections",
+      "line": 20,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/base_manager.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/data_loaders.py",
+      "import": "typing",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/seed.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/seed.py",
+      "import": "backend.systems.shared.database.base",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/seed.py",
+      "import": "backend.systems.user",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/seed.py",
+      "import": "backend.systems.role",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/seed.py",
+      "import": "backend.systems.permission",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/input_utils.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/input_utils.py",
+      "import": "backend.systems.events.error_utils",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/npc_utils.py",
+      "import": "typing",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/npc_utils.py",
+      "import": "datetime",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/npc_utils.py",
+      "import": "backend.systems.shared.utils.time_utils",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/npc_utils.py",
+      "import": "backend.systems.shared.utils.location_utils",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/npc_utils.py",
+      "import": "backend.systems.npc",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/file_utils.py",
+      "import": "typing",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/file_utils.py",
+      "import": "pathlib",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/file_utils.py",
+      "import": "backend.systems.shared.utils.security",
+      "line": 11,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/file_utils.py",
+      "import": "backend.systems.events.base_manager",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/file_utils.py",
+      "import": "backend.systems.config",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/file_utils.py",
+      "import": "datetime",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/shared_utils.py",
+      "import": "datetime",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/accessibility.py",
+      "import": "typing",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/accessibility.py",
+      "import": "backend.systems.events.error_handler",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "typing",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "datetime",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "dataclasses",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "functools",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "backend.systems.quest",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "backend.systems.character",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "backend.systems.npc",
+      "line": 15,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/quest_utils.py",
+      "import": "backend.systems.shared.utils.error_utils",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/asset_utils.py",
+      "import": "typing",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/asset_utils.py",
+      "import": "pathlib",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/asset_utils.py",
+      "import": "backend.systems.events.error_utils",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/coordinates.py",
+      "import": "typing",
+      "line": 19,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/rules_loader.py",
+      "import": "pathlib",
+      "line": 3,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/gpt/flavor.py",
+      "import": "typing",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/gpt/flavor.py",
+      "import": "backend.systems.shared.utils.gpt.client",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/game/json_io.py",
+      "import": "typing",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/game/world_tick.py",
+      "import": "datetime",
+      "line": 5,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/events/utils/game/world_tick.py",
+      "import": "typing",
+      "line": 6,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_validators.py",
+      "import": "typing",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_validators.py",
+      "import": "datetime",
+      "line": 9,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_validators.py",
+      "import": "backend.systems.arc.models.arc",
+      "line": 11,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_validators.py",
+      "import": "backend.systems.arc.models.arc_step",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_validators.py",
+      "import": "backend.systems.arc.models.arc_progression",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_validators.py",
+      "import": "backend.systems.arc.models.arc_completion_record",
+      "line": 14,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_formatters.py",
+      "import": "typing",
+      "line": 7,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_formatters.py",
+      "import": "datetime",
+      "line": 8,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_formatters.py",
+      "import": "backend.systems.arc.models.arc",
+      "line": 10,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_formatters.py",
+      "import": "backend.systems.arc.models.arc_step",
+      "line": 11,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_formatters.py",
+      "import": "backend.systems.arc.models.arc_progression",
+      "line": 12,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/arc/utils/arc_formatters.py",
+      "import": "backend.systems.arc.models.arc_completion_record",
+      "line": 13,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/data/utils/data_file_loader.py",
+      "import": "pathlib",
+      "line": 16,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/data/utils/data_file_loader.py",
+      "import": "typing",
+      "line": 17,
+      "type": "external_utility_import"
+    },
+    {
+      "file": "backend/systems/data/utils/data_file_loader.py",
+      "import": "dataclasses",
+      "line": 18,
+      "type": "external_utility_import"
+    }
+  ],
+  "missing_functionality": [
+    {
+      "system": "population",
+      "analysis": {
+        "expected_functions": [
+          "calculate_war_impact",
+          "handle_war_impact",
+          "calculate_catastrophe_impact",
+          "handle_catastrophe",
+          "calculate_resource_consumption",
+          "handle_resource_shortage",
+          "calculate_resource_shortage_impact",
+          "calculate_migration_impact",
+          "calculate_seasonal_growth_modifier",
+          "calculate_seasonal_death_rate_modifier",
+          "is_valid_transition",
+          "is_valid_state_progression",
+          "estimate_time_to_state",
+          "get_poi_status_description"
+        ],
+        "implemented_functions": [],
+        "missing_functions": [
+          "calculate_war_impact",
+          "handle_war_impact",
+          "calculate_catastrophe_impact",
+          "handle_catastrophe",
+          "calculate_resource_consumption",
+          "handle_resource_shortage",
+          "calculate_resource_shortage_impact",
+          "calculate_migration_impact",
+          "calculate_seasonal_growth_modifier",
+          "calculate_seasonal_death_rate_modifier",
+          "is_valid_transition",
+          "is_valid_state_progression",
+          "estimate_time_to_state",
+          "get_poi_status_description"
+        ],
+        "implementation_percentage": 0.0,
+        "critical_missing": [
+          "calculate_war_impact",
+          "handle_war_impact",
+          "calculate_catastrophe_impact",
+          "handle_catastrophe",
+          "calculate_resource_consumption"
+        ]
+      },
+      "severity": "critical"
+    }
+  ],
+  "test_organization_issues": [],
+  "duplicate_tests": [],
+  "orphan_dependencies": [],
+  "canonical_violations": [],
+  "coverage_analysis": {},
+  "system_health": {
+    "poi": {
+      "system": "poi",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "tilemap_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py",
+        "test_tilemap_service.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.poi",
+        "backend.systems.poi",
+        "backend.systems.poi"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "tilemap_service.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "npc": {
+      "system": "npc",
+      "implementation_files": [
+        "npc_loyalty_class.py",
+        "services.py",
+        "npc_builder_class.py",
+        "models.py",
+        "npc_location_service.py",
+        "npc_routes.py",
+        "npc_travel_utils.py",
+        "npc_character_routes.py",
+        "routers/npc_location_router.py",
+        "services/npc_service.py"
+      ],
+      "test_files": [
+        "test_npc_travel_utils.py",
+        "test_npc_character_routes.py",
+        "test_services.py",
+        "test_npc_loyalty_class.py",
+        "test_npc_routes.py",
+        "test_npc_builder_class.py",
+        "test_models.py",
+        "test_npc_location_service.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.npc",
+        "backend.systems.npc",
+        "backend.systems.npc",
+        "backend.systems.npc",
+        "backend.systems.npc",
+        "backend.systems.npc",
+        "backend.systems.npc",
+        "backend.systems.npc"
+      ],
+      "implementation_coverage": 25.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "other": [
+          "npc_loyalty_class.py",
+          "npc_builder_class.py",
+          "npc_location_service.py",
+          "npc_routes.py",
+          "npc_character_routes.py"
+        ],
+        "services": [
+          "services.py",
+          "services/npc_service.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "utils": [
+          "npc_travel_utils.py"
+        ],
+        "routers": [
+          "routers/npc_location_router.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "faction": {
+      "system": "faction",
+      "implementation_files": [
+        "services.py",
+        "faction_manager.py",
+        "models.py",
+        "faction_tick_utils.py",
+        "faction_routes.py",
+        "faction_utils.py",
+        "routers/faction_router.py",
+        "utils/validators.py",
+        "repositories/faction_repository.py",
+        "models/faction.py",
+        "models/faction_goal.py",
+        "schemas/faction_types.py",
+        "services/reputation_service.py",
+        "services/relationship_service_core.py",
+        "services/influence_service.py",
+        "services/faction_service.py",
+        "services/membership_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_faction_manager.py",
+        "test_models.py",
+        "test_faction_tick_utils.py",
+        "test_faction_routes.py",
+        "test_faction_utils.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.faction",
+        "backend.systems.faction",
+        "backend.systems.faction",
+        "backend.systems.faction",
+        "backend.systems.faction",
+        "backend.systems.faction"
+      ],
+      "implementation_coverage": 56.666666666666664,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/reputation_service.py",
+          "services/relationship_service_core.py",
+          "services/influence_service.py",
+          "services/faction_service.py",
+          "services/membership_service.py"
+        ],
+        "other": [
+          "faction_manager.py",
+          "faction_routes.py"
+        ],
+        "models": [
+          "models.py",
+          "models/faction.py",
+          "models/faction_goal.py"
+        ],
+        "utils": [
+          "faction_tick_utils.py",
+          "faction_utils.py",
+          "utils/validators.py"
+        ],
+        "routers": [
+          "routers/faction_router.py"
+        ],
+        "repositories": [
+          "repositories/faction_repository.py"
+        ],
+        "schemas": [
+          "schemas/faction_types.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "data": {
+      "system": "data",
+      "implementation_files": [
+        "services.py",
+        "schema_validator.py",
+        "models.py",
+        "routers/data_router.py",
+        "utils/data_file_loader.py",
+        "repositories/data_repository.py",
+        "models/config_models.py",
+        "models/biome_models.py",
+        "events/event_handlers.py",
+        "events/event_publisher.py",
+        "events/data_events.py",
+        "loaders/game_data_registry.py",
+        "services/data_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py",
+        "test_schema_validator.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.data",
+        "backend.systems.data",
+        "backend.systems.data"
+      ],
+      "implementation_coverage": 86.66666666666667,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/data_service.py"
+        ],
+        "other": [
+          "schema_validator.py",
+          "events/event_handlers.py",
+          "events/event_publisher.py",
+          "events/data_events.py",
+          "loaders/game_data_registry.py"
+        ],
+        "models": [
+          "models.py",
+          "models/config_models.py",
+          "models/biome_models.py"
+        ],
+        "routers": [
+          "routers/data_router.py"
+        ],
+        "utils": [
+          "utils/data_file_loader.py"
+        ],
+        "repositories": [
+          "repositories/data_repository.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "event_base": {
+      "system": "event_base",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "router.py",
+        "repositories/event_base_repository.py",
+        "models/event_handler_model.py",
+        "models/event_base_model.py",
+        "schemas/event_base_schema.py",
+        "services/event_base_service.py"
+      ],
+      "test_files": [
+        "conftest.py",
+        "test_router.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.event_base"
+      ],
+      "implementation_coverage": 53.333333333333336,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/event_base_service.py"
+        ],
+        "models": [
+          "models.py",
+          "models/event_handler_model.py",
+          "models/event_base_model.py"
+        ],
+        "other": [
+          "router.py"
+        ],
+        "repositories": [
+          "repositories/event_base_repository.py"
+        ],
+        "schemas": [
+          "schemas/event_base_schema.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "shared": {
+      "system": "shared",
+      "implementation_files": [
+        "services.py",
+        "config.py",
+        "models.py",
+        "database.py",
+        "exceptions.py",
+        "database/session.py",
+        "database/base.py",
+        "utils/floating_origin.py",
+        "utils/time.py",
+        "utils/logging.py",
+        "utils/error.py",
+        "utils/data_loader.py",
+        "utils/security.py",
+        "utils/file.py",
+        "utils/firebase.py",
+        "utils/coordinates.py",
+        "models/base.py",
+        "events/dispatcher.py",
+        "events/bus.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_config.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.shared",
+        "backend.systems.shared",
+        "backend.systems.shared"
+      ],
+      "implementation_coverage": 100,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "other": [
+          "config.py",
+          "database.py",
+          "exceptions.py",
+          "database/session.py",
+          "database/base.py",
+          "events/dispatcher.py",
+          "events/bus.py"
+        ],
+        "models": [
+          "models.py",
+          "models/base.py"
+        ],
+        "utils": [
+          "utils/floating_origin.py",
+          "utils/time.py",
+          "utils/logging.py",
+          "utils/error.py",
+          "utils/data_loader.py",
+          "utils/security.py",
+          "utils/file.py",
+          "utils/firebase.py",
+          "utils/coordinates.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "world_generation": {
+      "system": "world_generation",
+      "implementation_files": [
+        "services.py",
+        "continent_repository.py",
+        "models.py",
+        "continent_service.py",
+        "worldgen_routes.py",
+        "world_generation_utils.py"
+      ],
+      "test_files": [
+        "test_world_generation_utils.py",
+        "test_services.py",
+        "test_continent_repository.py",
+        "test_models.py",
+        "test_worldgen_routes.py",
+        "test_continent_service.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.world_generation",
+        "backend.systems.world_generation",
+        "backend.systems.world_generation",
+        "backend.systems.world_generation",
+        "backend.systems.world_generation",
+        "backend.systems.world_generation"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "other": [
+          "continent_repository.py",
+          "continent_service.py",
+          "worldgen_routes.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "utils": [
+          "world_generation_utils.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "auth_user": {
+      "system": "auth_user",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "base.py",
+        "routers/auth_relationship_router.py",
+        "routers/auth_router.py",
+        "utils/auth_utils.py",
+        "utils/validation_utils.py",
+        "models/user_models.py",
+        "models/auth_relationship_models.py",
+        "services/auth_service.py",
+        "services/password_service.py",
+        "services/security_service.py",
+        "services/token_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py",
+        "test_base.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.auth_user",
+        "backend.systems.auth_user",
+        "backend.systems.auth_user"
+      ],
+      "implementation_coverage": 86.66666666666667,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/auth_service.py",
+          "services/password_service.py",
+          "services/security_service.py",
+          "services/token_service.py"
+        ],
+        "models": [
+          "models.py",
+          "models/user_models.py",
+          "models/auth_relationship_models.py"
+        ],
+        "other": [
+          "base.py"
+        ],
+        "routers": [
+          "routers/auth_relationship_router.py",
+          "routers/auth_router.py"
+        ],
+        "utils": [
+          "utils/auth_utils.py",
+          "utils/validation_utils.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "character": {
+      "system": "character",
+      "implementation_files": [
+        "services.py",
+        "character_schemas.py",
+        "models.py",
+        "prompt_manager.py",
+        "gpt_client.py",
+        "player_routes.py",
+        "history.py",
+        "routers/character_router.py",
+        "routers/relationship_router.py",
+        "database/setup.py",
+        "core/character_model.py",
+        "core/character_builder_class.py",
+        "utils/character_utils.py",
+        "utils/context_manager.py",
+        "utils/extractors.py",
+        "utils/cache.py",
+        "utils/party_utils.py",
+        "utils/validation.py",
+        "repositories/character_repository.py",
+        "models/character_builder.py",
+        "models/relationship.py",
+        "models/mood.py",
+        "models/character.py",
+        "models/goal.py",
+        "models/visual_model.py",
+        "api/party_api.py",
+        "api/character_api.py",
+        "api/api.py",
+        "services/mood_service.py",
+        "services/relationship_service.py",
+        "services/character_service.py",
+        "services/party_service.py",
+        "services/goal_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_player_routes.py",
+        "test_prompt_manager.py",
+        "test_character_schemas.py",
+        "test_gpt_client.py",
+        "test_models.py",
+        "test_history.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.character",
+        "backend.systems.character",
+        "backend.systems.character",
+        "backend.systems.character",
+        "backend.systems.character",
+        "backend.systems.character",
+        "backend.systems.character"
+      ],
+      "implementation_coverage": 94.28571428571428,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/mood_service.py",
+          "services/relationship_service.py",
+          "services/character_service.py",
+          "services/party_service.py",
+          "services/goal_service.py"
+        ],
+        "schemas": [
+          "character_schemas.py"
+        ],
+        "models": [
+          "models.py",
+          "models/character_builder.py",
+          "models/relationship.py",
+          "models/mood.py",
+          "models/character.py",
+          "models/goal.py",
+          "models/visual_model.py"
+        ],
+        "other": [
+          "prompt_manager.py",
+          "gpt_client.py",
+          "player_routes.py",
+          "history.py",
+          "database/setup.py",
+          "core/character_model.py",
+          "core/character_builder_class.py",
+          "api/party_api.py",
+          "api/character_api.py",
+          "api/api.py"
+        ],
+        "routers": [
+          "routers/character_router.py",
+          "routers/relationship_router.py"
+        ],
+        "utils": [
+          "utils/character_utils.py",
+          "utils/context_manager.py",
+          "utils/extractors.py",
+          "utils/cache.py",
+          "utils/party_utils.py",
+          "utils/validation.py"
+        ],
+        "repositories": [
+          "repositories/character_repository.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "storage": {
+      "system": "storage",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "models/storage_config.py",
+        "models/storage_bucket.py",
+        "models/file_record.py",
+        "models/cache_entry.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.storage",
+        "backend.systems.storage"
+      ],
+      "implementation_coverage": 60.0,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py",
+          "models/storage_config.py",
+          "models/storage_bucket.py",
+          "models/file_record.py",
+          "models/cache_entry.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "tension_war": {
+      "system": "tension_war",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "tension_routes.py",
+        "schemas.py",
+        "examples.py",
+        "war_routes.py"
+      ],
+      "test_files": [
+        "test_war_routes.py",
+        "test_services.py",
+        "test_tension_routes.py",
+        "test_models.py",
+        "test_schemas.py",
+        "test_examples.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.tension_war",
+        "backend.systems.tension_war",
+        "backend.systems.tension_war",
+        "backend.systems.tension_war",
+        "backend.systems.tension_war",
+        "backend.systems.tension_war"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "tension_routes.py",
+          "examples.py",
+          "war_routes.py"
+        ],
+        "schemas": [
+          "schemas.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "dialogue": {
+      "system": "dialogue",
+      "implementation_files": [
+        "analytics_integration.py",
+        "quest_integration.py",
+        "dialogue_system_new.py",
+        "services.py",
+        "population_integration.py",
+        "time_integration.py",
+        "war_integration.py",
+        "models.py",
+        "dialogue_system.py",
+        "conversation.py",
+        "region_integration.py",
+        "poi_integration.py",
+        "faction_integration.py",
+        "memory_integration.py",
+        "world_state_integration.py",
+        "rumor_integration.py",
+        "relationship_integration.py",
+        "dialogue_manager.py",
+        "motif_integration.py"
+      ],
+      "test_files": [
+        "test_dialogue_manager.py",
+        "test_rumor_integration.py",
+        "test_faction_integration.py",
+        "test_dialogue_system_new.py",
+        "test_relationship_integration.py",
+        "test_services.py",
+        "test_memory_integration.py",
+        "test_motif_integration.py",
+        "test_war_integration.py",
+        "test_population_integration.py",
+        "test_region_integration.py",
+        "test_conversation.py",
+        "test_quest_integration.py",
+        "test_models.py",
+        "test_analytics_integration.py",
+        "test_time_integration.py",
+        "test_dialogue_system.py",
+        "test_poi_integration.py",
+        "test_world_state_integration.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue",
+        "backend.systems.dialogue"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "other": [
+          "analytics_integration.py",
+          "quest_integration.py",
+          "dialogue_system_new.py",
+          "population_integration.py",
+          "time_integration.py",
+          "war_integration.py",
+          "dialogue_system.py",
+          "conversation.py",
+          "region_integration.py",
+          "poi_integration.py",
+          "faction_integration.py",
+          "memory_integration.py",
+          "world_state_integration.py",
+          "rumor_integration.py",
+          "relationship_integration.py",
+          "dialogue_manager.py",
+          "motif_integration.py"
+        ],
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "economy": {
+      "system": "economy",
+      "implementation_files": [
+        "shop_routes.py",
+        "services.py",
+        "websocket_events.py",
+        "models.py",
+        "deployment.py",
+        "events.py",
+        "resource.py",
+        "api_routes.py",
+        "integration.py",
+        "economy_manager.py",
+        "websocket_routes.py",
+        "shop_utils.py",
+        "resource_service.py",
+        "database_service.py",
+        "routes.py",
+        "migrations/001_create_economy_tables.py",
+        "models/market.py",
+        "models/commodity_future.py",
+        "models/trade_route.py",
+        "services/trade_service.py",
+        "services/market_service.py",
+        "services/futures_service.py"
+      ],
+      "test_files": [
+        "test_economy_manager.py",
+        "test_resource.py",
+        "test_shop_utils.py",
+        "test_shop_routes.py",
+        "test_market_service.py",
+        "test_basic_functionality.py",
+        "test_resource_service.py",
+        "test_services.py",
+        "test_websocket_routes.py",
+        "test_database_service.py",
+        "test_routes.py",
+        "test_api_routes.py",
+        "test_models.py",
+        "test_integration.py",
+        "test_events.py",
+        "test_deployment.py",
+        "test_websocket_events.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.economy.models.market",
+        "backend.systems.economy.services.market_service",
+        "backend.systems.economy.services.trade_service",
+        "backend.systems.economy.services.futures_service",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy.services.market_service",
+        "backend.systems.economy.models.market",
+        "backend.systems.economy.services.market_service",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy.market_service",
+        "backend.systems.economy",
+        "backend.systems.economy",
+        "backend.systems.economy"
+      ],
+      "implementation_coverage": 25.882352941176475,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "other": [
+          "shop_routes.py",
+          "websocket_events.py",
+          "deployment.py",
+          "events.py",
+          "resource.py",
+          "api_routes.py",
+          "integration.py",
+          "economy_manager.py",
+          "websocket_routes.py",
+          "resource_service.py",
+          "database_service.py",
+          "routes.py",
+          "migrations/001_create_economy_tables.py"
+        ],
+        "services": [
+          "services.py",
+          "services/trade_service.py",
+          "services/market_service.py",
+          "services/futures_service.py"
+        ],
+        "models": [
+          "models.py",
+          "models/market.py",
+          "models/commodity_future.py",
+          "models/trade_route.py"
+        ],
+        "utils": [
+          "shop_utils.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "magic": {
+      "system": "magic",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "router.py",
+        "websocket.py"
+      ],
+      "test_files": [
+        "test_router.py",
+        "test_services.py",
+        "test_repositories.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.magic",
+        "backend.systems.magic"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "router.py",
+          "websocket.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "events": {
+      "system": "events",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "event_dispatcher.py",
+        "canonical_events.py",
+        "event_types.py",
+        "routers/events_router.py",
+        "middleware/logging_middleware.py",
+        "middleware/debugging_middleware.py",
+        "middleware/debugging.py",
+        "middleware/error_middleware.py",
+        "middleware/error_handler.py",
+        "middleware/analytics.py",
+        "middleware/analytics_middleware.py",
+        "core/event_base.py",
+        "utils/tile_loader.py",
+        "utils/floating_origin.py",
+        "utils/plugins.py",
+        "utils/item_utils.py",
+        "utils/export_utils.py",
+        "utils/batching.py",
+        "utils/event_utils.py",
+        "utils/start_game_routes.py",
+        "utils/screen_utils.py",
+        "utils/world_tick_utils.py",
+        "utils/error_utils.py",
+        "utils/layout.py",
+        "utils/coordinate_validation.py",
+        "utils/coordinate_utils.py",
+        "utils/constants.py",
+        "utils/game_utils.py",
+        "utils/floating_origin_ecs.py",
+        "utils/database_utils.py",
+        "utils/base_manager.py",
+        "utils/data_loaders.py",
+        "utils/terrain_manager.py",
+        "utils/seed.py",
+        "utils/input_utils.py",
+        "utils/firebase_utils.py",
+        "utils/npc_utils.py",
+        "utils/render_utils.py",
+        "utils/file_utils.py",
+        "utils/shared_utils.py",
+        "utils/accessibility.py",
+        "utils/password.py",
+        "utils/json_utils.py",
+        "utils/quest_utils.py",
+        "utils/asset_utils.py",
+        "utils/coordinates.py",
+        "utils/rules_loader.py",
+        "utils/gpt.py",
+        "utils/gpt/intents.py",
+        "utils/gpt/client.py",
+        "utils/gpt/dialogue.py",
+        "utils/gpt/flavor.py",
+        "utils/game/json_io.py",
+        "utils/game/world_tick.py",
+        "repositories/events_repository.py",
+        "api/plugin_api.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_event_dispatcher.py",
+        "test_canonical_events.py",
+        "test_event_types.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.events",
+        "backend.systems.events",
+        "backend.systems.events",
+        "backend.systems.events",
+        "backend.systems.events"
+      ],
+      "implementation_coverage": 100,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "event_dispatcher.py",
+          "canonical_events.py",
+          "event_types.py",
+          "middleware/logging_middleware.py",
+          "middleware/debugging_middleware.py",
+          "middleware/debugging.py",
+          "middleware/error_middleware.py",
+          "middleware/error_handler.py",
+          "middleware/analytics.py",
+          "middleware/analytics_middleware.py",
+          "core/event_base.py",
+          "api/plugin_api.py"
+        ],
+        "routers": [
+          "routers/events_router.py"
+        ],
+        "utils": [
+          "utils/tile_loader.py",
+          "utils/floating_origin.py",
+          "utils/plugins.py",
+          "utils/item_utils.py",
+          "utils/export_utils.py",
+          "utils/batching.py",
+          "utils/event_utils.py",
+          "utils/start_game_routes.py",
+          "utils/screen_utils.py",
+          "utils/world_tick_utils.py",
+          "utils/error_utils.py",
+          "utils/layout.py",
+          "utils/coordinate_validation.py",
+          "utils/coordinate_utils.py",
+          "utils/constants.py",
+          "utils/game_utils.py",
+          "utils/floating_origin_ecs.py",
+          "utils/database_utils.py",
+          "utils/base_manager.py",
+          "utils/data_loaders.py",
+          "utils/terrain_manager.py",
+          "utils/seed.py",
+          "utils/input_utils.py",
+          "utils/firebase_utils.py",
+          "utils/npc_utils.py",
+          "utils/render_utils.py",
+          "utils/file_utils.py",
+          "utils/shared_utils.py",
+          "utils/accessibility.py",
+          "utils/password.py",
+          "utils/json_utils.py",
+          "utils/quest_utils.py",
+          "utils/asset_utils.py",
+          "utils/coordinates.py",
+          "utils/rules_loader.py",
+          "utils/gpt.py",
+          "utils/gpt/intents.py",
+          "utils/gpt/client.py",
+          "utils/gpt/dialogue.py",
+          "utils/gpt/flavor.py",
+          "utils/game/json_io.py",
+          "utils/game/world_tick.py"
+        ],
+        "repositories": [
+          "repositories/events_repository.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "region": {
+      "system": "region",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "worldgen.py",
+        "mapping.py",
+        "tension.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py",
+        "test_worldgen.py",
+        "test_tension.py",
+        "test_mapping.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.region",
+        "backend.systems.region",
+        "backend.systems.region",
+        "backend.systems.region",
+        "backend.systems.region"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "worldgen.py",
+          "mapping.py",
+          "tension.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "diplomacy": {
+      "system": "diplomacy",
+      "implementation_files": [
+        "services.py",
+        "integration_services.py",
+        "models.py",
+        "core_services.py",
+        "core_models.py",
+        "schemas.py",
+        "db_models.py",
+        "router.py",
+        "repository.py",
+        "db_repository.py",
+        "models/diplomacy_model.py",
+        "services/diplomacy_service.py"
+      ],
+      "test_files": [
+        "test_repository.py",
+        "test_db_models.py",
+        "test_core_models.py",
+        "test_diplomacy_models.py",
+        "test_router.py",
+        "test_services.py",
+        "test_core_services.py",
+        "test_integration_services.py",
+        "test_models.py",
+        "test_schemas.py",
+        "test_db_repository.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy",
+        "backend.systems.diplomacy"
+      ],
+      "implementation_coverage": 21.818181818181817,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "integration_services.py",
+          "core_services.py",
+          "services/diplomacy_service.py"
+        ],
+        "models": [
+          "models.py",
+          "core_models.py",
+          "db_models.py",
+          "models/diplomacy_model.py"
+        ],
+        "schemas": [
+          "schemas.py"
+        ],
+        "other": [
+          "router.py",
+          "repository.py",
+          "db_repository.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "arc": {
+      "system": "arc",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "arc.py",
+        "routers/arc_router.py",
+        "utils/arc_validators.py",
+        "utils/arc_helpers.py",
+        "utils/arc_formatters.py",
+        "repositories/arc_completion_record_repository.py",
+        "repositories/arc_repository.py",
+        "repositories/arc_step_repository.py",
+        "repositories/arc_progression_repository.py",
+        "models/arc_completion_record.py",
+        "models/arc_step.py",
+        "models/arc_progression.py",
+        "schemas/arc_schemas.py",
+        "services/arc_generator.py",
+        "services/progression_tracker.py",
+        "services/quest_integration_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_arc.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.arc",
+        "backend.systems.arc",
+        "backend.systems.arc"
+      ],
+      "implementation_coverage": 100,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/arc_generator.py",
+          "services/progression_tracker.py",
+          "services/quest_integration_service.py"
+        ],
+        "models": [
+          "models.py",
+          "models/arc_completion_record.py",
+          "models/arc_step.py",
+          "models/arc_progression.py"
+        ],
+        "other": [
+          "arc.py"
+        ],
+        "routers": [
+          "routers/arc_router.py"
+        ],
+        "utils": [
+          "utils/arc_validators.py",
+          "utils/arc_helpers.py",
+          "utils/arc_formatters.py"
+        ],
+        "repositories": [
+          "repositories/arc_completion_record_repository.py",
+          "repositories/arc_repository.py",
+          "repositories/arc_step_repository.py",
+          "repositories/arc_progression_repository.py"
+        ],
+        "schemas": [
+          "schemas/arc_schemas.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "loot": {
+      "system": "loot",
+      "implementation_files": [
+        "loot_utils_core.py",
+        "services.py",
+        "generation.py",
+        "models.py",
+        "loot_routes.py",
+        "events.py",
+        "database.py",
+        "core.py",
+        "loot_core.py",
+        "initialization.py",
+        "loot_manager.py",
+        "loot_shop.py",
+        "loot_events.py",
+        "models_old/location.py",
+        "models_old/shop.py",
+        "models_old/item.py"
+      ],
+      "test_files": [
+        "test_loot_routes.py",
+        "test_database.py",
+        "test_loot_manager.py",
+        "test_loot_shop.py",
+        "test_services.py",
+        "test_core.py",
+        "test_initialization.py",
+        "test_loot_utils_core.py",
+        "test_models.py",
+        "test_loot_core.py",
+        "test_events.py",
+        "test_generation.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot",
+        "backend.systems.loot"
+      ],
+      "implementation_coverage": 26.666666666666668,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "utils": [
+          "loot_utils_core.py"
+        ],
+        "services": [
+          "services.py"
+        ],
+        "other": [
+          "generation.py",
+          "loot_routes.py",
+          "events.py",
+          "database.py",
+          "core.py",
+          "loot_core.py",
+          "initialization.py",
+          "loot_manager.py",
+          "loot_shop.py",
+          "loot_events.py",
+          "models_old/location.py",
+          "models_old/shop.py",
+          "models_old/item.py"
+        ],
+        "models": [
+          "models.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "religion": {
+      "system": "religion",
+      "implementation_files": [
+        "services.py",
+        "narrative_service.py",
+        "models.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_narrative_service.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.religion",
+        "backend.systems.religion",
+        "backend.systems.religion"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "other": [
+          "narrative_service.py"
+        ],
+        "models": [
+          "models.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "world_state": {
+      "system": "world_state",
+      "implementation_files": [
+        "world_routes.py",
+        "services.py",
+        "models.py",
+        "cleanup.py",
+        "optimized_worldgen.py",
+        "world_models.py",
+        "world_utils.py",
+        "worldgen_api.py",
+        "core/loader.py",
+        "utils/newspaper_system.py",
+        "utils/world_event_utils.py",
+        "utils/tick_utils.py",
+        "utils/terrain_generator.py",
+        "mods/mod_synchronizer.py",
+        "events/handlers.py"
+      ],
+      "test_files": [
+        "test_world_models.py",
+        "test_worldgen_api.py",
+        "test_optimized_worldgen.py",
+        "test_services.py",
+        "test_cleanup.py",
+        "test_world_utils.py",
+        "test_models.py",
+        "test_world_routes.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.world_state",
+        "backend.systems.world_state",
+        "backend.systems.world_state",
+        "backend.systems.world_state",
+        "backend.systems.world_state",
+        "backend.systems.world_state",
+        "backend.systems.world_state",
+        "backend.systems.world_state"
+      ],
+      "implementation_coverage": 37.5,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "other": [
+          "world_routes.py",
+          "cleanup.py",
+          "optimized_worldgen.py",
+          "worldgen_api.py",
+          "core/loader.py",
+          "mods/mod_synchronizer.py",
+          "events/handlers.py"
+        ],
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py",
+          "world_models.py"
+        ],
+        "utils": [
+          "world_utils.py",
+          "utils/newspaper_system.py",
+          "utils/world_event_utils.py",
+          "utils/tick_utils.py",
+          "utils/terrain_generator.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "population": {
+      "system": "population",
+      "implementation_files": [
+        "services.py",
+        "models.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.population",
+        "backend.systems.population"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "quest": {
+      "system": "quest",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "arc_manager.py",
+        "journal_routes.py",
+        "integration.py",
+        "generator.py",
+        "quest_routes.py",
+        "manager.py",
+        "npc_quests.py"
+      ],
+      "test_files": [
+        "test_arc_manager.py",
+        "test_quest_routes.py",
+        "test_generator.py",
+        "test_npc_quests.py",
+        "test_services.py",
+        "test_journal_routes.py",
+        "test_models.py",
+        "test_integration.py",
+        "test_manager.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.quest",
+        "backend.systems.quest",
+        "backend.systems.quest",
+        "backend.systems.quest",
+        "backend.systems.quest",
+        "backend.systems.quest",
+        "backend.systems.quest",
+        "backend.systems.quest",
+        "backend.systems.quest"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "arc_manager.py",
+          "journal_routes.py",
+          "integration.py",
+          "generator.py",
+          "quest_routes.py",
+          "manager.py",
+          "npc_quests.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "integration": {
+      "system": "integration",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "monitoring.py",
+        "event_bus.py",
+        "state_sync.py",
+        "validation.py"
+      ],
+      "test_files": [
+        "test_validation.py",
+        "test_event_bus.py",
+        "test_state_sync.py",
+        "test_services.py",
+        "test_monitoring.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.integration",
+        "backend.systems.integration",
+        "backend.systems.integration",
+        "backend.systems.integration",
+        "backend.systems.integration",
+        "backend.systems.integration"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "monitoring.py",
+          "event_bus.py",
+          "state_sync.py",
+          "validation.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "memory": {
+      "system": "memory",
+      "implementation_files": [
+        "services.py",
+        "cognitive_frames.py",
+        "models.py",
+        "memory.py",
+        "saliency_scoring.py",
+        "memory_associations.py",
+        "memory_routes.py",
+        "summarization_styles.py",
+        "memory_manager_core.py",
+        "memory_categories.py",
+        "memory_utils.py"
+      ],
+      "test_files": [
+        "test_memory_utils.py",
+        "test_memory_basic.py",
+        "test_services.py",
+        "test_memory_integration.py",
+        "test_memory_categories.py",
+        "test_summarization_styles.py",
+        "test_saliency_scoring.py",
+        "test_memory_manager_core.py",
+        "test_models.py",
+        "test_memory.py",
+        "test_memory_associations.py",
+        "test_cognitive_frames.py",
+        "test_memory_routes.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.shared.database",
+        "backend.systems.shared.database",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory",
+        "backend.systems.memory"
+      ],
+      "implementation_coverage": 16.923076923076923,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py"
+        ],
+        "other": [
+          "cognitive_frames.py",
+          "memory.py",
+          "saliency_scoring.py",
+          "memory_associations.py",
+          "memory_routes.py",
+          "summarization_styles.py",
+          "memory_manager_core.py",
+          "memory_categories.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "utils": [
+          "memory_utils.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "llm": {
+      "system": "llm",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "middleware/event_integration.py",
+        "middleware/event_middleware.py",
+        "core/gpt_client.py",
+        "core/llm_core.py",
+        "core/dm_core.py",
+        "utils/memory_system.py",
+        "utils/faction_system.py",
+        "utils/motif_system.py",
+        "utils/rumor_system.py",
+        "repositories/conversation_repository.py",
+        "repositories/integration_repository.py",
+        "repositories/gpt_repository.py",
+        "repositories/prompt_repository.py",
+        "repositories/event_repository.py",
+        "repositories/response_repository.py",
+        "repositories/context_repository.py",
+        "api/llm_router.py",
+        "api/dm_routes.py",
+        "services/conversation_service.py",
+        "services/gpt_client_service.py",
+        "services/llm_service.py",
+        "services/prompt_service.py",
+        "services/integration_service.py",
+        "services/event_processing_service.py"
+      ],
+      "test_files": [
+        "test_middleware.py",
+        "test_services.py",
+        "test_core.py",
+        "test_repositories.py",
+        "test_models.py",
+        "test_api.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.llm.middleware.event_middleware",
+        "backend.systems.llm.services.llm_service",
+        "backend.systems.llm.services.conversation_service",
+        "backend.systems.llm.core.llm_core",
+        "backend.systems.llm.core.gpt_client",
+        "backend.systems.llm.repositories.gpt_repository",
+        "backend.systems.llm.repositories.conversation_repository",
+        "backend.systems.llm",
+        "backend.systems.llm.api.llm_router"
+      ],
+      "implementation_coverage": 86.66666666666667,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/conversation_service.py",
+          "services/gpt_client_service.py",
+          "services/llm_service.py",
+          "services/prompt_service.py",
+          "services/integration_service.py",
+          "services/event_processing_service.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "other": [
+          "middleware/event_integration.py",
+          "middleware/event_middleware.py",
+          "core/gpt_client.py",
+          "core/llm_core.py",
+          "core/dm_core.py",
+          "api/llm_router.py",
+          "api/dm_routes.py"
+        ],
+        "utils": [
+          "utils/memory_system.py",
+          "utils/faction_system.py",
+          "utils/motif_system.py",
+          "utils/rumor_system.py"
+        ],
+        "repositories": [
+          "repositories/conversation_repository.py",
+          "repositories/integration_repository.py",
+          "repositories/gpt_repository.py",
+          "repositories/prompt_repository.py",
+          "repositories/event_repository.py",
+          "repositories/response_repository.py",
+          "repositories/context_repository.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "equipment": {
+      "system": "equipment",
+      "implementation_files": [
+        "set_bonus_utils.py",
+        "identify_item_utils.py",
+        "services.py",
+        "durability_utils.py",
+        "models.py",
+        "inventory_utils.py"
+      ],
+      "test_files": [
+        "test_inventory_utils.py",
+        "test_services.py",
+        "test_identify_item_utils.py",
+        "test_set_bonus_utils.py",
+        "test_models.py",
+        "test_durability_utils.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.equipment",
+        "backend.systems.equipment",
+        "backend.systems.equipment",
+        "backend.systems.equipment",
+        "backend.systems.equipment",
+        "backend.systems.equipment"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "utils": [
+          "set_bonus_utils.py",
+          "identify_item_utils.py",
+          "durability_utils.py",
+          "inventory_utils.py"
+        ],
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "combat": {
+      "system": "combat",
+      "implementation_files": [
+        "combat_ram.py",
+        "fog_of_war.py",
+        "services.py",
+        "effect_pipeline.py",
+        "models.py",
+        "combat_area.py",
+        "combat_debug_interface.py",
+        "effect_visualizer.py",
+        "object_pool.py",
+        "status_effects_utils.py",
+        "combat_handler_class.py",
+        "combat_class.py",
+        "combat_narrative_utils.py",
+        "action_system.py",
+        "combat_animation_system.py",
+        "combat_state_class.py",
+        "turn_queue.py",
+        "combat_state_firebase_utils.py",
+        "routers/combat_router.py",
+        "repositories/combat_repository.py",
+        "models/stats.py",
+        "schemas/combat.py",
+        "services/combat_service.py"
+      ],
+      "test_files": [
+        "test_turn_queue.py",
+        "test_combat_state_class.py",
+        "test_object_pool.py",
+        "test_combat_handler_class.py",
+        "test_combat_narrative_utils.py",
+        "test_services.py",
+        "test_combat_class.py",
+        "test_combat_area.py",
+        "test_action_system.py",
+        "test_combat_state_firebase_utils.py",
+        "test_models.py",
+        "test_effect_pipeline.py",
+        "test_fog_of_war.py",
+        "test_combat_ram.py",
+        "test_combat_animation_system.py",
+        "test_effect_visualizer.py",
+        "test_status_effects_utils.py",
+        "test_combat_debug_interface.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat",
+        "backend.systems.combat"
+      ],
+      "implementation_coverage": 25.555555555555554,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "other": [
+          "combat_ram.py",
+          "fog_of_war.py",
+          "effect_pipeline.py",
+          "combat_area.py",
+          "combat_debug_interface.py",
+          "effect_visualizer.py",
+          "object_pool.py",
+          "combat_handler_class.py",
+          "combat_class.py",
+          "action_system.py",
+          "combat_animation_system.py",
+          "combat_state_class.py",
+          "turn_queue.py"
+        ],
+        "services": [
+          "services.py",
+          "services/combat_service.py"
+        ],
+        "models": [
+          "models.py",
+          "models/stats.py"
+        ],
+        "utils": [
+          "status_effects_utils.py",
+          "combat_narrative_utils.py",
+          "combat_state_firebase_utils.py"
+        ],
+        "routers": [
+          "routers/combat_router.py"
+        ],
+        "repositories": [
+          "repositories/combat_repository.py"
+        ],
+        "schemas": [
+          "schemas/combat.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "rumor": {
+      "system": "rumor",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "transformer.py",
+        "decay_and_propagation.py",
+        "truth_tracker.py",
+        "npc_rumor_routes.py",
+        "npc_rumor_utils.py",
+        "repositories/rumor_repository.py",
+        "models/rumor.py",
+        "schemas/rumor_types.py",
+        "services/rumor_service.py"
+      ],
+      "test_files": [
+        "test_decay_and_propagation.py",
+        "test_npc_rumor_routes.py",
+        "test_services.py",
+        "test_npc_rumor_utils.py",
+        "test_models.py",
+        "test_transformer.py",
+        "test_truth_tracker.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.rumor",
+        "backend.systems.rumor",
+        "backend.systems.rumor",
+        "backend.systems.rumor",
+        "backend.systems.rumor",
+        "backend.systems.rumor",
+        "backend.systems.rumor"
+      ],
+      "implementation_coverage": 31.428571428571427,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/rumor_service.py"
+        ],
+        "models": [
+          "models.py",
+          "models/rumor.py"
+        ],
+        "other": [
+          "transformer.py",
+          "decay_and_propagation.py",
+          "truth_tracker.py",
+          "npc_rumor_routes.py"
+        ],
+        "utils": [
+          "npc_rumor_utils.py"
+        ],
+        "repositories": [
+          "repositories/rumor_repository.py"
+        ],
+        "schemas": [
+          "schemas/rumor_types.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "analytics": {
+      "system": "analytics",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "routers/analytics_router.py",
+        "repositories/analytics_repository.py",
+        "services/analytics_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.analytics",
+        "backend.systems.analytics"
+      ],
+      "implementation_coverage": 50.0,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/analytics_service.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "routers": [
+          "routers/analytics_router.py"
+        ],
+        "repositories": [
+          "repositories/analytics_repository.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "inventory": {
+      "system": "inventory",
+      "implementation_files": [
+        "validator.py",
+        "services.py",
+        "models.py",
+        "notification.py",
+        "export.py",
+        "factory.py",
+        "operations.py",
+        "migrations.py"
+      ],
+      "test_files": [
+        "test_operations.py",
+        "test_services.py",
+        "test_factory.py",
+        "test_migrations.py",
+        "test_notification.py",
+        "test_validator.py",
+        "test_models.py",
+        "test_export.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.inventory",
+        "backend.systems.inventory",
+        "backend.systems.inventory",
+        "backend.systems.inventory",
+        "backend.systems.inventory",
+        "backend.systems.inventory",
+        "backend.systems.inventory",
+        "backend.systems.inventory"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "other": [
+          "validator.py",
+          "notification.py",
+          "export.py",
+          "factory.py",
+          "operations.py",
+          "migrations.py"
+        ],
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "motif": {
+      "system": "motif",
+      "implementation_files": [
+        "manager_core.py",
+        "service.py",
+        "services.py",
+        "models.py",
+        "chaos_utils.py",
+        "motif_routes.py",
+        "utils.py",
+        "motif_utils.py",
+        "router.py",
+        "motif_engine_class.py",
+        "repository.py"
+      ],
+      "test_files": [
+        "test_motif_engine_class.py",
+        "test_repository.py",
+        "test_utils.py",
+        "test_service.py",
+        "test_router.py",
+        "test_services.py",
+        "test_chaos_utils.py",
+        "test_motif_routes.py",
+        "test_models.py",
+        "test_manager_core.py",
+        "test_motif_utils.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif",
+        "backend.systems.motif"
+      ],
+      "implementation_coverage": 20.0,
+      "critical_gaps": [
+        "Low implementation coverage"
+      ],
+      "file_structure": {
+        "other": [
+          "manager_core.py",
+          "service.py",
+          "motif_routes.py",
+          "router.py",
+          "motif_engine_class.py",
+          "repository.py"
+        ],
+        "services": [
+          "services.py"
+        ],
+        "models": [
+          "models.py"
+        ],
+        "utils": [
+          "chaos_utils.py",
+          "utils.py",
+          "motif_utils.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "time": {
+      "system": "time",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "routers/time_router.py",
+        "utils/time_utils.py",
+        "repositories/time_repository.py",
+        "models/time_model.py",
+        "services/time_manager.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.time",
+        "backend.systems.time"
+      ],
+      "implementation_coverage": 70.0,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/time_manager.py"
+        ],
+        "models": [
+          "models.py",
+          "models/time_model.py"
+        ],
+        "routers": [
+          "routers/time_router.py"
+        ],
+        "utils": [
+          "utils/time_utils.py"
+        ],
+        "repositories": [
+          "repositories/time_repository.py"
+        ]
+      },
+      "import_issues": []
+    },
+    "crafting": {
+      "system": "crafting",
+      "implementation_files": [
+        "services.py",
+        "models.py",
+        "routers/station_router.py",
+        "routers/recipe_router.py",
+        "routers/crafting_router.py",
+        "migrations/001_create_crafting_tables.py",
+        "repositories/crafting_repository.py",
+        "repositories/base_repository.py",
+        "repositories/recipe_repository.py",
+        "repositories/station_repository.py",
+        "models/ingredient.py",
+        "models/result.py",
+        "models/station.py",
+        "models/recipe.py",
+        "schemas/recipe_schemas.py",
+        "schemas/station_schemas.py",
+        "schemas/crafting_schemas.py",
+        "data/progression_manager.py",
+        "data/recipe_loader.py",
+        "data/station_loader.py",
+        "data/config_manager.py",
+        "data/cache_manager.py",
+        "services/crafting_service.py",
+        "services/station_service.py",
+        "services/crafting_experience_service.py"
+      ],
+      "test_files": [
+        "test_services.py",
+        "test_models.py"
+      ],
+      "missing_implementations": [
+        "backend.systems.crafting",
+        "backend.systems.crafting"
+      ],
+      "implementation_coverage": 100,
+      "critical_gaps": [],
+      "file_structure": {
+        "services": [
+          "services.py",
+          "services/crafting_service.py",
+          "services/station_service.py",
+          "services/crafting_experience_service.py"
+        ],
+        "models": [
+          "models.py",
+          "models/ingredient.py",
+          "models/result.py",
+          "models/station.py",
+          "models/recipe.py"
+        ],
+        "routers": [
+          "routers/station_router.py",
+          "routers/recipe_router.py",
+          "routers/crafting_router.py"
+        ],
+        "other": [
+          "migrations/001_create_crafting_tables.py",
+          "data/progression_manager.py",
+          "data/recipe_loader.py",
+          "data/station_loader.py",
+          "data/config_manager.py",
+          "data/cache_manager.py"
+        ],
+        "repositories": [
+          "repositories/crafting_repository.py",
+          "repositories/base_repository.py",
+          "repositories/recipe_repository.py",
+          "repositories/station_repository.py"
+        ],
+        "schemas": [
+          "schemas/recipe_schemas.py",
+          "schemas/station_schemas.py",
+          "schemas/crafting_schemas.py"
+        ]
+      },
+      "import_issues": []
+    }
+  },
+  "critical_errors": [],
+  "recommendations": [
+    {
+      "category": "Imports",
+      "priority": "high",
+      "action": "Fix non-canonical imports",
+      "details": "Convert all imports to backend.systems.* format"
+    },
+    {
+      "category": "Population System",
+      "priority": "critical",
+      "action": "Implement missing Population System functionality",
+      "details": "Implement 14 missing functions"
+    },
+    {
+      "category": "Coverage",
+      "priority": "medium",
+      "action": "Improve implementation coverage",
+      "details": "Focus on systems: poi, npc, world_generation, tension_war, dialogue, economy, magic, region, diplomacy, loot, religion, world_state, population, quest, integration, memory, equipment, combat, rumor, inventory, motif"
+    }
+  ],
+  "syntax_errors": [],
+  "import_errors": []
+}

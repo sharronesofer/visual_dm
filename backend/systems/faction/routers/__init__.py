@@ -1,9 +1,5 @@
-"""
-Faction system router module.
+"""Routers for faction system"""
 
-This module provides API routers for the faction system.
-"""
-
-from backend.systems.faction.routers.faction_router import faction_router
-
-__all__ = ['faction_router']
+# Auto-generated imports
+from .faction_router import *
+from .faction_routes import *

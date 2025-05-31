@@ -215,7 +215,7 @@ class DataDirectoryMigrator:
         # Run a quick test to see if imports work
         try:
             result = subprocess.run(
-                ["python", "-c", "import sys; sys.path.append('.'); from backend.systems.shared.config import Settings; print('✅ Config import works')"],
+                ["python", "-c", "import sys; sys.path.append('.'); from backend.infrastructure.shared.config import Settings; print('✅ Config import works')"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,

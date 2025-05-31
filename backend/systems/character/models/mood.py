@@ -1,404 +1,178 @@
 """
-Mood Model
-----------
-Implements the character mood system as described in the Development Bible.
-Tracks emotional states and moods with modifiers and decay mechanics.
+Character system - Mood models.
+
+This module provides mood and emotional state models for characters,
+supporting dynamic mood tracking and emotional responses.
 """
 
-from enum import Enum
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Enum as SQLEnum
+from sqlalchemy.orm import relationship
+from backend.infrastructure.database import Base
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Union
+from enum import Enum
+from typing import Dict, Any, Optional, List
 from uuid import UUID
-import logging
-from dataclasses import dataclass
 
-from backend.systems.events.event_dispatcher import EventDispatcher
-from backend.systems.events.canonical_events import EventBase
 
-logger = logging.getLogger(__name__)
-
-class EmotionalState(str, Enum):
-    """Primary emotional states a character can experience."""
+class EmotionalState(Enum):
+    """Enumeration of emotional states."""
     HAPPY = "happy"
     SAD = "sad"
     ANGRY = "angry"
     FEARFUL = "fearful"
-    DISGUSTED = "disgusted"
     SURPRISED = "surprised"
-    NEUTRAL = "neutral"
+    DISGUSTED = "disgusted"
+    EXCITED = "excited"
+    CALM = "calm"
+    ANXIOUS = "anxious"
+    CONFIDENT = "confident"
+    CONFUSED = "confused"
+    CONTENT = "content"
 
-class MoodIntensity(str, Enum):
-    """Intensity levels for moods."""
-    MILD = "mild"
+
+class MoodIntensity(Enum):
+    """Enumeration of mood intensity levels."""
+    VERY_LOW = "very_low"
+    LOW = "low"
     MODERATE = "moderate"
-    STRONG = "strong"
-    EXTREME = "extreme"
+    HIGH = "high"
+    VERY_HIGH = "very_high"
 
-@dataclass
-class MoodModifier:
+
+class CharacterMood(Base):
     """
-    Represents a temporary modifier to a character's mood.
+    Character mood model representing current emotional state.
     
-    Attributes:
-        emotional_state: The emotion being affected
-        intensity: How strongly the modifier affects the mood
-        reason: Description of what caused this modifier
-        expiry: When this modifier should expire (None for permanent)
-        created_at: When this modifier was created
+    Tracks the overall emotional state of a character including
+    base mood, current modifiers, and mood history.
     """
-    emotional_state: EmotionalState
-    intensity: MoodIntensity
-    reason: str
-    expiry: Optional[datetime] = None
-    created_at: datetime = datetime.utcnow()
     
-    @property
-    def is_expired(self) -> bool:
-        """Check if this modifier has expired."""
-        if self.expiry is None:
-            return False
-        return datetime.utcnow() > self.expiry
+    __tablename__ = 'character_moods'
     
-    @property
-    def value(self) -> int:
-        """Get the numeric value of this modifier based on intensity."""
-        intensity_values = {
-            MoodIntensity.MILD: 1,
-            MoodIntensity.MODERATE: 2,
-            MoodIntensity.STRONG: 3,
-            MoodIntensity.EXTREME: 5
-        }
-        return intensity_values.get(self.intensity, 1)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    character_id = Column(String(255), nullable=False, index=True)
+    base_emotional_state = Column(SQLEnum(EmotionalState), nullable=False, default=EmotionalState.CONTENT)
+    base_intensity = Column(SQLEnum(MoodIntensity), nullable=False, default=MoodIntensity.MODERATE)
+    current_emotional_state = Column(SQLEnum(EmotionalState), nullable=False, default=EmotionalState.CONTENT)
+    current_intensity = Column(SQLEnum(MoodIntensity), nullable=False, default=MoodIntensity.MODERATE)
+    stability = Column(Float, default=0.5)  # 0.0 = very unstable, 1.0 = very stable
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    
+    # Relationship to mood modifiers
+    modifiers = relationship("MoodModifier", back_populates="mood", cascade="all, delete-orphan")
+    
+    def __repr__(self):
+        return f"<CharacterMood {self.character_id}: {self.current_emotional_state.value} ({self.current_intensity.value})>"
     
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for serialization."""
+        """Convert mood to dictionary representation."""
         return {
-            "emotional_state": self.emotional_state,
-            "intensity": self.intensity,
-            "reason": self.reason,
-            "expiry": self.expiry.isoformat() if self.expiry else None,
-            "created_at": self.created_at.isoformat()
-        }
-    
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'MoodModifier':
-        """Create from dictionary."""
-        expiry = None
-        if data.get("expiry"):
-            expiry = datetime.fromisoformat(data["expiry"])
-        
-        created_at = datetime.utcnow()
-        if data.get("created_at"):
-            created_at = datetime.fromisoformat(data["created_at"])
-            
-        return cls(
-            emotional_state=EmotionalState(data["emotional_state"]),
-            intensity=MoodIntensity(data["intensity"]),
-            reason=data["reason"],
-            expiry=expiry,
-            created_at=created_at
-        )
-
-class MoodChanged(EventBase):
-    """Event emitted when a character's mood changes significantly."""
-    character_id: str
-    old_primary_mood: Optional[str]
-    new_primary_mood: str
-    old_intensity: Optional[str]
-    new_intensity: str
-    cause: Optional[str] = None
-    
-    def __init__(self, **data):
-        data["event_type"] = "character.mood_changed"
-        super().__init__(**data)
-
-class CharacterMood:
-    """
-    Manages a character's mood and emotional state.
-    
-    Features:
-    - Tracks multiple emotional states with intensity values
-    - Supports temporary mood modifiers with decay
-    - Emits events on significant mood changes
-    - Provides dominant mood calculation
-    """
-    
-    def __init__(self, character_id: Union[str, UUID]):
-        """Initialize mood tracker for a character."""
-        self.character_id = str(character_id)
-        self.mood_modifiers: List[MoodModifier] = []
-        self.base_mood: Dict[EmotionalState, int] = {
-            state: 0 for state in EmotionalState
-        }
-        # Default to neutral
-        self.base_mood[EmotionalState.NEUTRAL] = 3
-        
-        self.event_dispatcher = EventDispatcher.get_instance()
-        self.last_update = datetime.utcnow()
-    
-    def add_modifier(self, 
-                    emotional_state: Union[str, EmotionalState], 
-                    intensity: Union[str, MoodIntensity], 
-                    reason: str, 
-                    duration_hours: Optional[float] = None) -> MoodModifier:
-        """
-        Add a new mood modifier.
-        
-        Args:
-            emotional_state: The emotion to modify
-            intensity: How strong the modifier is
-            reason: Why this modifier is being applied
-            duration_hours: How long the modifier lasts (None = permanent)
-            
-        Returns:
-            The created mood modifier
-        """
-        # Convert string types to enums if needed
-        if isinstance(emotional_state, str):
-            emotional_state = EmotionalState(emotional_state)
-        if isinstance(intensity, str):
-            intensity = MoodIntensity(intensity)
-            
-        # Calculate expiry time
-        expiry = None
-        if duration_hours is not None:
-            expiry = datetime.utcnow() + timedelta(hours=duration_hours)
-            
-        # Create the modifier
-        modifier = MoodModifier(
-            emotional_state=emotional_state,
-            intensity=intensity,
-            reason=reason,
-            expiry=expiry
-        )
-        
-        # Store old mood for event emission
-        old_mood, old_intensity = self.get_dominant_mood()
-        
-        # Add to list
-        self.mood_modifiers.append(modifier)
-        
-        # Calculate new mood
-        new_mood, new_intensity = self.get_dominant_mood()
-        
-        # If dominant mood changed, emit event
-        if old_mood != new_mood or old_intensity != new_intensity:
-            self.event_dispatcher.emit(MoodChanged(
-                character_id=self.character_id,
-                old_primary_mood=old_mood,
-                new_primary_mood=new_mood,
-                old_intensity=old_intensity,
-                new_intensity=new_intensity,
-                cause=reason
-            ))
-            
-        logger.info(f"Added {intensity} {emotional_state} mood modifier to character {self.character_id}: {reason}")
-        return modifier
-    
-    def remove_expired_modifiers(self) -> int:
-        """
-        Remove all expired mood modifiers.
-        
-        Returns:
-            Number of modifiers removed
-        """
-        # Store old mood for event emission
-        old_mood, old_intensity = self.get_dominant_mood()
-        
-        # Filter out expired modifiers
-        original_count = len(self.mood_modifiers)
-        self.mood_modifiers = [mod for mod in self.mood_modifiers if not mod.is_expired]
-        removed_count = original_count - len(self.mood_modifiers)
-        
-        # If modifiers were removed, check if dominant mood changed
-        if removed_count > 0:
-            new_mood, new_intensity = self.get_dominant_mood()
-            
-            # If dominant mood changed, emit event
-            if old_mood != new_mood or old_intensity != new_intensity:
-                self.event_dispatcher.emit(MoodChanged(
-                    character_id=self.character_id,
-                    old_primary_mood=old_mood,
-                    new_primary_mood=new_mood,
-                    old_intensity=old_intensity,
-                    new_intensity=new_intensity,
-                    cause="Mood modifiers expired"
-                ))
-                
-            logger.info(f"Removed {removed_count} expired mood modifiers from character {self.character_id}")
-            
-        return removed_count
-    
-    def clear_modifiers(self) -> int:
-        """
-        Remove all mood modifiers.
-        
-        Returns:
-            Number of modifiers removed
-        """
-        # Store old mood for event emission
-        old_mood, old_intensity = self.get_dominant_mood()
-        
-        # Clear modifiers
-        removed_count = len(self.mood_modifiers)
-        self.mood_modifiers = []
-        
-        # Reset to neutral base mood
-        for state in EmotionalState:
-            self.base_mood[state] = 0
-        self.base_mood[EmotionalState.NEUTRAL] = 3
-        
-        # Calculate new mood
-        new_mood, new_intensity = self.get_dominant_mood()
-        
-        # If dominant mood changed, emit event
-        if old_mood != new_mood or old_intensity != new_intensity:
-            self.event_dispatcher.emit(MoodChanged(
-                character_id=self.character_id,
-                old_primary_mood=old_mood,
-                new_primary_mood=new_mood,
-                old_intensity=old_intensity,
-                new_intensity=new_intensity,
-                cause="All mood modifiers cleared"
-            ))
-            
-        logger.info(f"Cleared all mood modifiers from character {self.character_id}")
-        return removed_count
-    
-    def update(self, time_elapsed: Optional[timedelta] = None) -> None:
-        """
-        Update mood state, removing expired modifiers.
-        
-        Args:
-            time_elapsed: Time since last update (calculated if None)
-        """
-        if time_elapsed is None:
-            time_elapsed = datetime.utcnow() - self.last_update
-            
-        # Remove expired modifiers
-        self.remove_expired_modifiers()
-        
-        # Update last update time
-        self.last_update = datetime.utcnow()
-    
-    def calculate_mood_values(self) -> Dict[EmotionalState, int]:
-        """
-        Calculate current values for all emotional states.
-        
-        Returns:
-            Dictionary of emotional states to their current values
-        """
-        # Start with base values
-        result = self.base_mood.copy()
-        
-        # Add modifiers
-        for modifier in self.mood_modifiers:
-            if not modifier.is_expired:
-                result[modifier.emotional_state] = result.get(modifier.emotional_state, 0) + modifier.value
-                
-        return result
-    
-    def get_dominant_mood(self) -> tuple[str, str]:
-        """
-        Get the character's dominant mood and its intensity.
-        
-        Returns:
-            Tuple of (dominant_mood, intensity)
-        """
-        # Calculate all mood values
-        mood_values = self.calculate_mood_values()
-        
-        # Find the dominant mood
-        dominant_mood = EmotionalState.NEUTRAL
-        highest_value = -1
-        
-        for mood, value in mood_values.items():
-            if value > highest_value:
-                highest_value = value
-                dominant_mood = mood
-                
-        # Determine intensity based on value
-        intensity = MoodIntensity.MILD
-        if highest_value >= 8:
-            intensity = MoodIntensity.EXTREME
-        elif highest_value >= 5:
-            intensity = MoodIntensity.STRONG
-        elif highest_value >= 3:
-            intensity = MoodIntensity.MODERATE
-            
-        return dominant_mood, intensity
-    
-    def get_mood_description(self) -> str:
-        """
-        Get a text description of the character's current mood.
-        
-        Returns:
-            String description like "extremely angry" or "mildly happy"
-        """
-        mood, intensity = self.get_dominant_mood()
-        return f"{intensity} {mood}"
-    
-    def set_base_mood(self, 
-                     emotional_state: Union[str, EmotionalState], 
-                     value: int) -> None:
-        """
-        Set the base value for an emotional state.
-        
-        Args:
-            emotional_state: The emotion to modify
-            value: New base value
-        """
-        # Convert string type to enum if needed
-        if isinstance(emotional_state, str):
-            emotional_state = EmotionalState(emotional_state)
-            
-        # Store old mood for event emission
-        old_mood, old_intensity = self.get_dominant_mood()
-        
-        # Update base mood
-        self.base_mood[emotional_state] = value
-        
-        # Calculate new mood
-        new_mood, new_intensity = self.get_dominant_mood()
-        
-        # If dominant mood changed, emit event
-        if old_mood != new_mood or old_intensity != new_intensity:
-            self.event_dispatcher.emit(MoodChanged(
-                character_id=self.character_id,
-                old_primary_mood=old_mood,
-                new_primary_mood=new_mood,
-                old_intensity=old_intensity,
-                new_intensity=new_intensity,
-                cause=f"Base mood changed for {emotional_state}"
-            ))
-            
-        logger.info(f"Set base mood {emotional_state} to {value} for character {self.character_id}")
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for serialization."""
-        return {
+            "id": self.id,
             "character_id": self.character_id,
-            "base_mood": {str(k): v for k, v in self.base_mood.items()},
-            "mood_modifiers": [mod.to_dict() for mod in self.mood_modifiers],
-            "last_update": self.last_update.isoformat()
+            "base_emotional_state": self.base_emotional_state.value if self.base_emotional_state else None,
+            "base_intensity": self.base_intensity.value if self.base_intensity else None,
+            "current_emotional_state": self.current_emotional_state.value if self.current_emotional_state else None,
+            "current_intensity": self.current_intensity.value if self.current_intensity else None,
+            "stability": self.stability,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "modifiers": [modifier.to_dict() for modifier in self.modifiers] if self.modifiers else []
         }
     
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'CharacterMood':
-        """Create from dictionary."""
-        mood = cls(data["character_id"])
+    def apply_modifier(self, modifier: "MoodModifier") -> None:
+        """Apply a mood modifier to update current emotional state."""
+        # Simple mood modification logic - can be enhanced
+        intensity_values = {
+            MoodIntensity.VERY_LOW: 1,
+            MoodIntensity.LOW: 2,
+            MoodIntensity.MODERATE: 3,
+            MoodIntensity.HIGH: 4,
+            MoodIntensity.VERY_HIGH: 5
+        }
         
-        # Restore base mood
-        for state_str, value in data.get("base_mood", {}).items():
-            state = EmotionalState(state_str)
-            mood.base_mood[state] = value
+        current_intensity_value = intensity_values.get(self.current_intensity, 3)
+        modifier_intensity_value = intensity_values.get(modifier.intensity, 3)
+        
+        # Adjust intensity based on modifier
+        if modifier.emotional_state != self.current_emotional_state:
+            # Different emotion - blend or override based on intensity
+            if modifier_intensity_value > current_intensity_value:
+                self.current_emotional_state = modifier.emotional_state
+                self.current_intensity = modifier.intensity
+        else:
+            # Same emotion - increase intensity
+            new_intensity_value = min(5, current_intensity_value + 1)
+            for intensity, value in intensity_values.items():
+                if value == new_intensity_value:
+                    self.current_intensity = intensity
+                    break
+        
+        self.updated_at = datetime.utcnow()
+    
+    def decay_mood(self, hours_passed: float = 1.0) -> None:
+        """Apply natural mood decay over time."""
+        # Simple decay logic - mood gradually returns to base state
+        if self.current_emotional_state != self.base_emotional_state:
+            decay_rate = (1.0 - self.stability) * hours_passed * 0.1
             
-        # Restore modifiers
-        for mod_data in data.get("mood_modifiers", []):
-            mood.mood_modifiers.append(MoodModifier.from_dict(mod_data))
-            
-        # Restore last update time
-        if data.get("last_update"):
-            mood.last_update = datetime.fromisoformat(data["last_update"])
-            
-        return mood 
+            if decay_rate > 0.5:  # Significant decay
+                self.current_emotional_state = self.base_emotional_state
+                self.current_intensity = self.base_intensity
+                self.updated_at = datetime.utcnow()
+
+
+class MoodModifier(Base):
+    """
+    Mood modifier representing temporary emotional influences.
+    
+    Represents events, conditions, or circumstances that temporarily
+    affect a character's emotional state.
+    """
+    
+    __tablename__ = 'mood_modifiers'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    mood_id = Column(Integer, ForeignKey('character_moods.id'), nullable=False)
+    emotional_state = Column(SQLEnum(EmotionalState), nullable=False)
+    intensity = Column(SQLEnum(MoodIntensity), nullable=False, default=MoodIntensity.MODERATE)
+    reason = Column(String(500), nullable=False)
+    duration_hours = Column(Float, nullable=True)  # None = permanent until removed
+    applied_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    expires_at = Column(DateTime, nullable=True)
+    is_active = Column(String(10), default="true")  # Using string for compatibility
+    
+    # Relationship back to mood
+    mood = relationship("CharacterMood", back_populates="modifiers")
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if self.duration_hours and not self.expires_at:
+            self.expires_at = self.applied_at + timedelta(hours=self.duration_hours)
+    
+    def __repr__(self):
+        return f"<MoodModifier {self.emotional_state.value} ({self.intensity.value}): {self.reason}>"
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert modifier to dictionary representation."""
+        return {
+            "id": self.id,
+            "mood_id": self.mood_id,
+            "emotional_state": self.emotional_state.value if self.emotional_state else None,
+            "intensity": self.intensity.value if self.intensity else None,
+            "reason": self.reason,
+            "duration_hours": self.duration_hours,
+            "applied_at": self.applied_at.isoformat() if self.applied_at else None,
+            "expires_at": self.expires_at.isoformat() if self.expires_at else None,
+            "is_active": self.is_active
+        }
+    
+    def is_expired(self) -> bool:
+        """Check if the modifier has expired."""
+        if not self.expires_at:
+            return False
+        return datetime.utcnow() > self.expires_at
+    
+    def deactivate(self) -> None:
+        """Deactivate the modifier."""
+        self.is_active = "false"

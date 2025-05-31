@@ -13,7 +13,6 @@ import subprocess
 from pathlib import Path
 from typing import List, Dict, Set, Tuple
 
-
 class ComprehensiveImportFixer:
     def __init__(self, backend_root: str = "systems"):
         self.backend_root = Path(backend_root)
@@ -22,7 +21,7 @@ class ComprehensiveImportFixer:
         
         # Known import fixes
         self.known_fixes = {
-            "backend.systems.shared.base": "backend.systems.shared.models.base",
+            "backend.infrastructure.shared.base": "backend.infrastructure.shared.models.base",
             "backend.systems.poi.poi_service": "backend.systems.poi.services.poi_service",
             "backend.systems.loot.base": "backend.systems.loot.models.base",
         }
@@ -131,7 +130,7 @@ class ComprehensiveImportFixer:
             old_content = content
             content = re.sub(
                 r'from backend\.systems\.poi\.poi_service import',
-                'from .poi_service import',
+                'from backend.systems.poi_service import',
                 content
             )
             if content != old_content:
@@ -142,7 +141,7 @@ class ComprehensiveImportFixer:
             old_content = content
             content = re.sub(
                 r'from backend\.systems\.loot\.base import',
-                'from .base import',
+                'from backend.systems.base import',
                 content
             )
             if content != old_content:
@@ -214,7 +213,6 @@ class ComprehensiveImportFixer:
             "fixes_applied": self.fixes_applied
         }
 
-
 def main():
     """Main execution function"""
     fixer = ComprehensiveImportFixer()
@@ -249,7 +247,6 @@ def main():
         print("Test collection timed out")
     except Exception as e:
         print(f"Error running test collection: {e}")
-
 
 if __name__ == "__main__":
     main() 

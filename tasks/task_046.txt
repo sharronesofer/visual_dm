@@ -1,0 +1,682 @@
+# Task ID: 46
+# Title: Complete Religion System Implementation and Fix Critical Infrastructure Failures
+# Status: done
+# Dependencies: None
+# Priority: critical
+# Description: Religion System is 40-50% complete but completely non-functional due to critical infrastructure failures blocking all functionality including import chain failures, broken cross-system integration, missing database modules, and broken test infrastructure.
+# Details:
+**COMPLETION ASSESSMENT: 40-50% Complete but Non-Functional**
+
+Based on comprehensive analysis of backend/tests/systems/religion (11+ test files, 14,000+ lines) versus backend/systems/religion implementation (9 core files, ~4,500 lines), the religion system shows substantial domain logic implementation but critical infrastructure failures preventing any functionality from working.
+
+**CRITICAL INFRASTRUCTURE FAILURES BLOCKING ALL FUNCTIONALITY:**
+
+**1. Import Chain Failures (BLOCKING ALL TESTING)**
+- ModuleNotFoundError: No module named 'backend.systems.shared.database'
+- All religion tests fail with import errors before any validation can occur
+- Religion system depends on faction system which has broken SQLAlchemy models
+- Faction models have 'metadata' attribute conflicts with SQLAlchemy Declarative API
+- Cross-system imports cascade through multiple failing dependencies
+
+**2. Cross-System Integration Crisis**
+- Religion system imports faction service which fails due to model conflicts
+- Character system integration broken (no character religious roles)
+- Quest system integration missing (no religious quest triggers)
+- Event system integration incomplete (no event dispatcher access)
+- World state integration non-functional
+
+**3. Database Integration Breakdown**
+- Repository uses file-based storage instead of proper database persistence
+- No SQLAlchemy ORM models for religious entities
+- Missing database session management and dependency injection
+- Data persistence layer completely separated from database infrastructure
+
+**4. Test Infrastructure Crisis**
+- All 11+ test files fail with import errors before any validation
+- test_religion.py (259 lines), test_religion_models.py (161 lines), test_membership_service.py (514 lines) all broken
+- No functional test validation despite comprehensive test expectations
+- Test infrastructure depends on missing shared database module
+
+**WHAT'S ACTUALLY IMPLEMENTED (40-50%)**
+
+**✅ COMPREHENSIVE DOMAIN MODELS (models.py, 108 lines):**
+- Religion, ReligionMembership, ReligionType with proper Pydantic structure
+- Religious type enumeration (POLYTHEISTIC, MONOTHEISTIC, ANIMISTIC, ANCESTOR, CULT, SYNCRETIC)
+- Membership tracking with devotion levels, roles, and status
+- All expected religious entities with proper relationships
+
+**✅ SUBSTANTIAL SERVICE LAYER (services.py, 378 lines):**
+- ReligionService: Religion CRUD operations, membership management
+- Complex business logic for religious operations
+- Integration points for faction and narrative services (non-functional due to imports)
+
+**✅ SPECIALIZED SERVICES:**
+- membership_service.py (269 lines): Devotion tracking, role management
+- narrative_service.py (186 lines): Story integration and narrative hooks
+- faction_service.py (120 lines): Cross-faction religious coordination
+
+**✅ FILE-BASED REPOSITORY (repository.py, 168 lines):**
+- Data persistence using JSON file storage
+- CRUD operations for religions and memberships
+- Query capabilities and data management
+
+**✅ API VALIDATION (schemas.py, 91 lines):**
+- Pydantic schemas for religious operations
+- Request/response validation and data transfer objects
+
+**✅ UTILITY FUNCTIONS (utils.py, 200 lines):**
+- Devotion change calculations with factor modifiers
+- Religion compatibility algorithms
+- Schism probability calculations
+- Narrative generation helpers
+
+**DEVELOPMENT BIBLE COMPLIANCE**
+
+The Development Bible defines religion requirements that are architecturally supported but non-functional:
+- Deity definition and domains ⚠️ (Models exist but limited deity support)
+- Religious practices and rituals ⚠️ (Basic structure, needs expansion)
+- Clerical magic and divine intervention ❌ (Not implemented)
+- Religious organizations and hierarchies ⚠️ (Basic membership, needs roles)
+- Faith and devotion mechanics ✅ (Implemented in services and utils)
+- Cross-faction membership ✅ (Supported in models)
+- Narrative hooks ✅ (Narrative service implemented but non-functional)
+
+**FRONTEND STATUS**
+
+Unity frontend structure exists at VDM/Assets/Scripts/Runtime/Religion/ with:
+- Comprehensive Models (ReligionModels.cs, 428 lines) with deity, practice, event DTOs
+- Standard Services/, UI/, Integration/ directories
+- Basic README indicating alignment with backend
+- Frontend expects comprehensive religion API that doesn't exist due to backend failures
+
+**IMPACT ON PROJECT**
+
+**IMMEDIATE IMPACT:**
+- Religion functionality completely non-testable
+- Frontend integration impossible without working backend
+- No religious gameplay features functional
+- Cross-system integration broken
+
+**BROADER IMPACT:**
+- Same infrastructure issues affect multiple systems (auth_user, character, crafting, analytics, data)
+- Shared database module missing affects entire project
+- Event system integration problems are project-wide
+- Import dependency failures cascade across multiple systems
+
+**RESOLUTION PRIORITY**
+
+This represents a system with solid domain logic that's blocked by foundational infrastructure issues. Fixing these issues will:
+1. Unblock religion system testing and validation
+2. Enable frontend integration for religious features
+3. Resolve similar issues affecting other systems
+4. Establish proper patterns for cross-system integration
+5. Enable full religious gameplay functionality
+
+# Test Strategy:
+1. All 11+ religion test files pass without import errors\n2. Database integration enables proper data persistence\n3. Event system integration provides real-time religious updates\n4. Cross-system integration works with faction, character, and quest systems\n5. Frontend can successfully integrate with religion API\n6. Full religious workflow from belief tracking to narrative integration works end-to-end\n7. SQLAlchemy models support proper database operations\n8. WebSocket integration provides real-time religious event notifications
+
+# Subtasks:
+## 1. Create Missing Shared Database Module [done]
+### Dependencies: None
+### Description: Create the backend.systems.shared.database.base module that's blocking all religion system imports
+### Details:
+**CRITICAL INFRASTRUCTURE ISSUE: Missing Shared Database Module**
+
+All religion test files and cross-system imports fail with:
+`ModuleNotFoundError: No module named 'backend.systems.shared.database'`
+
+This same issue affects multiple systems: auth_user, character, crafting, analytics, data, diplomacy.
+
+**Required Implementation:**
+
+1. **Create Directory Structure:**
+   - backend/systems/shared/
+   - backend/systems/shared/database/
+   - backend/systems/shared/database/__init__.py
+   - backend/systems/shared/database/base.py
+
+2. **Base Module Requirements (base.py):**
+   - Database session management with SQLAlchemy
+   - Async session support for FastAPI
+   - Connection pooling and configuration
+   - Transaction management utilities
+   - Database migration support
+   - Testing utilities and mock support
+   - Error handling and logging
+
+3. **Integration Points:**
+   - Compatible with existing character system patterns
+   - Support for auth_user system requirements
+   - Works with FastAPI dependency injection
+   - Provides clean async/await interface
+   - Supports multiple database backends
+
+4. **Test Infrastructure:**
+   - Test database setup and teardown
+   - Fixture management for isolated testing
+   - Mock database for unit testing
+   - Integration test support
+
+**Dependencies:**
+This is a foundational module that other systems depend on. Must be implemented first.
+
+**Impact:**
+Resolving this will unblock testing for religion, diplomacy, auth_user, character, crafting, analytics, and data systems.
+
+## 2. Fix SQLAlchemy Model Conflicts in Faction System [done]
+### Dependencies: 46.1
+### Description: Resolve the SQLAlchemy 'metadata' attribute conflict in faction models that's preventing religion system imports
+### Details:
+**SQLALCHEMY MODEL CONFLICT RESOLUTION**
+
+Religion system imports fail due to SQLAlchemy model conflicts in the faction system:
+
+**Error:** `sqlalchemy.exc.InvalidRequestError: Attribute name 'metadata' is reserved when using the Declarative API.`
+
+**Root Cause:**
+- backend/systems/faction/models/faction.py line 151: class FactionRelationship(Base)
+- Faction models use 'metadata' as an attribute name which conflicts with SQLAlchemy's reserved 'metadata' attribute
+- This prevents the entire import chain from working
+
+**Required Resolution:**
+
+1. **Identify Conflicting Models:**
+   - Review all faction models for 'metadata' attribute usage
+   - Find all instances where 'metadata' conflicts with SQLAlchemy Declarative API
+   - Map dependencies between faction and religion systems
+
+2. **Rename Conflicting Attributes:**
+   - Change 'metadata' to 'meta_data' or 'custom_metadata'
+   - Update all references to the renamed attribute
+   - Ensure backward compatibility where possible
+
+3. **Update Database Schema:**
+   - Create migration scripts for attribute name changes
+   - Handle existing data during schema updates
+   - Test migration rollback procedures
+
+4. **Fix Cross-System References:**
+   - Update religion system faction service imports
+   - Fix any other systems that depend on faction models
+   - Ensure all import chains work correctly
+
+5. **Validation:**
+   - Test that faction models can be imported without errors
+   - Verify religion system can import faction dependencies
+   - Confirm no other SQLAlchemy conflicts exist
+
+**Impact:**
+This fix will enable religion system imports and unblock cross-system integration between religion and faction systems.
+
+## 3. Convert File Storage to SQLAlchemy Database Integration [done]
+### Dependencies: 46.1, 46.2
+### Description: Replace the current file-based repository with proper SQLAlchemy database models and operations
+### Details:
+**DATABASE INTEGRATION OVERHAUL**
+
+Current religion repository uses file storage instead of proper database persistence:
+
+**Current State:**
+- repository.py implements file-based JSON storage (168 lines)
+- Religion and membership data stored in JSON files
+- No SQLAlchemy ORM models for database integration
+- No database session management
+- No referential integrity or constraints
+
+**Required Database Integration:**
+
+1. **Create SQLAlchemy ORM Models:**
+   - Convert Religion Pydantic model to SQLAlchemy ORM
+   - Convert ReligionMembership Pydantic model to SQLAlchemy ORM
+   - Add proper foreign key relationships
+   - Implement database constraints and indexes
+   - Add timestamps and audit fields
+
+2. **Database Tables Needed:**
+   - religions (religion entities with type, description, metadata)
+   - religion_memberships (entity-religion associations with devotion)
+   - religion_types (enumeration table for religion types)
+   - religion_tenets (many-to-many for religion beliefs)
+   - religion_holy_places (many-to-many for sacred locations)
+
+3. **Repository Layer Overhaul:**
+   - Replace file operations with SQLAlchemy queries
+   - Implement async database operations for FastAPI
+   - Add transaction management for complex operations
+   - Implement proper error handling and rollback
+   - Add query optimization and indexing
+
+4. **Data Migration Strategy:**
+   - Create database migration scripts
+   - Migrate existing JSON data to database tables
+   - Preserve existing religion and membership data
+   - Rollback procedures for safety
+
+5. **Integration with Shared Database:**
+   - Use shared database module from subtask 46.1
+   - Implement proper session management
+   - Add database dependency injection
+   - Support for async operations
+
+**Integration Requirements:**
+- Compatible with FastAPI dependency injection
+- Support for async operations throughout
+- Integration with existing services layer
+- Maintain API compatibility during transition
+
+**Testing Requirements:**
+- Database operation testing
+- Migration testing with real data
+- Performance testing for religious queries
+- Data integrity validation
+
+## 4. Implement FastAPI Religion Endpoints [done]
+### Dependencies: 46.3
+### Description: Create comprehensive FastAPI router and endpoints for religion system frontend integration
+### Details:
+**COMPLETE RELIGION API IMPLEMENTATION**
+
+Currently no FastAPI endpoints exist for religion system frontend integration. Need comprehensive API layer:
+
+**Required Religion API Endpoints:**
+
+**1. religion_router.py - Core Religion Operations:**
+- GET /religions - List all religions with filtering
+- GET /religions/{id} - Get specific religion details
+- POST /religions - Create new religion
+- PUT /religions/{id} - Update existing religion
+- DELETE /religions/{id} - Delete religion
+- GET /religions/search - Search religions by criteria
+- GET /religions/types - Get available religion types
+
+**2. Religion Membership Endpoints:**
+- GET /religions/{id}/members - Get religion members
+- POST /religions/{id}/members - Add member to religion
+- PUT /religions/{id}/members/{member_id} - Update membership
+- DELETE /religions/{id}/members/{member_id} - Remove member
+- GET /members/{entity_id}/religions - Get entity's religions
+- PUT /members/{entity_id}/religions/{religion_id}/devotion - Update devotion
+
+**3. Religion Analytics Endpoints:**
+- GET /religions/{id}/statistics - Get religion statistics
+- GET /religions/{id}/compatibility/{other_id} - Check compatibility
+- GET /religions/{id}/schism-probability - Calculate schism risk
+- GET /religions/regional-influence/{region_id} - Regional influence
+
+**4. Religion Narrative Endpoints:**
+- GET /religions/{id}/events - Get religion events
+- POST /religions/{id}/events - Create religion event
+- GET /religions/{id}/narrative - Get narrative context
+- POST /religions/{id}/convert - Handle conversion events
+
+**API Features Required:**
+- Complete FastAPI router implementation
+- Pydantic request/response models matching existing schemas
+- Authentication and authorization middleware
+- Rate limiting and request validation
+- Comprehensive error handling with proper HTTP codes
+- API documentation with Swagger/OpenAPI
+- Filtering, pagination, and sorting support
+- Integration with ReligionService and related services
+
+**Frontend Integration Requirements:**
+Unity frontend expects comprehensive religion API:
+- ReligionModels.cs (428 lines) defines expected DTOs
+- Service structure ready for HTTP communication
+- UI components expecting religion data endpoints
+- Integration layer ready for API consumption
+
+**Integration Points:**
+- ReligionService for business logic coordination
+- Database for data persistence via new SQLAlchemy models
+- Event system for real-time updates
+- Cross-system integration with faction, character, quest systems
+
+**Testing Requirements:**
+- API endpoint testing with various request types
+- Authentication and authorization testing
+- Request/response format validation
+- Error handling and edge case testing
+- Performance testing under load
+
+## 5. Integrate Religion System with Event Dispatcher [done]
+### Dependencies: 46.2, 46.3
+### Description: Connect religion system with the events system for real-time updates and cross-system communication
+### Details:
+**EVENT SYSTEM INTEGRATION FOR CROSS-SYSTEM COMMUNICATION**
+
+Religion system needs comprehensive event integration for cross-system effects and real-time updates:
+
+**Current Event Integration Issues:**
+- **Missing Event Integration**: No event publishing or subscription in religion services
+- **Cross-System Effects**: Other systems can't react to religious changes
+- **Real-Time Updates**: No event-driven updates for frontend
+- **Religious Events**: No narrative event system for religious activities
+
+**Required Event Integration:**
+
+**1. Religious Event Types:**
+- **ReligionCreatedEvent**: New religion establishment
+- **ReligionUpdatedEvent**: Religion doctrine or structure changes
+- **MembershipCreatedEvent**: Entity joins religion
+- **MembershipUpdatedEvent**: Membership role or devotion changes
+- **DevotionChangedEvent**: Devotion level increases/decreases
+- **ConversionEvent**: Entity converts between religions
+- **ReligiousRitualEvent**: Religious ceremonies and practices
+- **SchismEvent**: Religion splits or conflicts
+
+**2. Event Publishing Integration:**
+- Update ReligionService to publish religious events
+- Update MembershipService to publish membership events
+- Update NarrativeService to publish story events
+- Implement event batching for performance
+- Add event metadata and context information
+
+**3. Event Subscription Handling:**
+- Subscribe to character events affecting religious devotion
+- Subscribe to quest events with religious implications
+- Subscribe to faction events affecting religious relationships
+- Subscribe to world events affecting religious practices
+- Subscribe to time events for religious calendar processing
+
+**4. Cross-System Integration Events:**
+- **Character System**: Religious actions affecting character stats/reputation
+- **Quest System**: Religious quests and objectives
+- **Faction System**: Religious influence on faction relationships
+- **World System**: Religious sites and regional influence
+- **Narrative System**: Religious story arcs and events
+
+**5. Real-Time Event Processing:**
+- Religious calendar events triggered by time progression
+- Devotion changes triggered by character actions
+- Religious conflict events triggered by cross-faction tensions
+- Conversion events triggered by narrative choices
+
+**6. Event-Driven Religious Simulation:**
+- Religious influence spreads based on regional events
+- Religious conflicts emerge from faction relationships
+- Religious practices adapt to world changes
+- Religious leaders respond to political events
+
+**WebSocket Event Integration:**
+- Transform internal religious events to WebSocket messages
+- Route events to appropriate channels (religion, narrative, character)
+- Filter events based on client subscriptions
+- Implement event aggregation for performance
+
+**Integration Testing:**
+- Cross-system event flow validation
+- Real-time update testing
+- Event performance testing
+- Error handling and recovery testing
+- WebSocket integration verification
+
+**Impact:**
+This enables proper cross-system religious integration and real-time updates for frontend.
+
+## 6. Fix and Implement Religion Test Suite [done]
+### Dependencies: 46.1, 46.2, 46.3, 46.5
+### Description: Replace placeholder tests with comprehensive validation logic for all religion test files
+### Details:
+**COMPREHENSIVE RELIGION TEST IMPLEMENTATION**
+
+All religion test files need real implementation to replace placeholders and validate functionality:
+
+**Test Files Requiring Implementation:**
+
+**1. Core Test Files:**
+- **test_religion.py (259 lines)**: Core religion functionality testing
+- **test_religion_models.py (161 lines)**: Model validation and behavior
+- **test_religion_service_extended.py (835 lines)**: Extended service functionality
+- **test_membership_service.py (514 lines)**: Membership management testing
+- **test_religion_repository.py (387 lines)**: Repository operations validation
+- **test_religion_schemas.py (215 lines)**: Schema validation testing
+
+**2. Integration Test Files:**
+- **test_integration.py**: Cross-system integration testing
+- **test_services.py**: Service layer integration
+- **test_performance.py**: Performance and scalability testing
+- **test_security.py**: Security and authorization testing
+
+**Test Implementation Requirements:**
+
+**1. Unit Testing:**
+- Test all service methods with various inputs
+- Validate model behavior and constraints
+- Test repository database operations
+- Mock external dependencies properly
+- Test error conditions and edge cases
+- Verify devotion calculation algorithms
+- Test religion compatibility calculations
+
+**2. Integration Testing:**
+- Test API endpoints with real requests
+- Validate database operations with SQLAlchemy models
+- Test event system integration with real events
+- Cross-system integration validation
+- Service-to-service communication testing
+
+**3. Religious Domain Testing:**
+- Religion creation and management workflows
+- Membership lifecycle testing (join, update, leave)
+- Devotion level tracking and modification
+- Religion compatibility and conflict resolution
+- Conversion and schism scenarios
+- Religious narrative integration
+
+**4. Database Testing:**
+- SQLAlchemy model relationship testing
+- Database migration testing
+- Transaction rollback testing
+- Query performance validation
+- Data integrity constraints
+- Concurrent access testing
+
+**5. Event System Testing:**
+- Religious event publishing verification
+- Event subscription and handling
+- Cross-system event propagation
+- Real-time update validation
+- WebSocket message testing
+
+**Test Infrastructure Requirements:**
+- Database test fixtures with proper setup/cleanup
+- Mock services for external dependencies
+- Religious scenario data generators
+- Performance measurement tools
+- Integration with pytest framework
+- CI/CD pipeline compatibility
+
+**Success Criteria:**
+- 90%+ code coverage across all religious components
+- All religious workflows validated end-to-end
+- Performance benchmarks met
+- Integration scenarios pass consistently
+- All import errors resolved
+- Real religious functionality demonstrated
+
+## 7. Implement WebSocket Religion Updates [done]
+### Dependencies: 46.4, 46.5
+### Description: Create WebSocket integration for real-time religion system updates matching frontend expectations
+### Details:
+**WEBSOCKET INTEGRATION FOR REAL-TIME RELIGION UPDATES**
+
+Unity frontend expects real-time religion updates via WebSocket but backend provides none:
+
+**Frontend WebSocket Expectations:**
+- Unity frontend service structure expects WebSocket communication
+- Real-time updates for religious events and changes
+- Live membership and devotion tracking
+- Narrative event streaming for religious activities
+
+**Required WebSocket Channels:**
+
+**1. Religion Channel (`religion`):**
+- Religion creation events (`religion_created`)
+- Religion updates (`religion_updated`) 
+- Religion deletion events (`religion_deleted`)
+- Religion configuration changes
+- Regional influence updates
+
+**2. Membership Channel (`membership`):**
+- Membership creation (`member_joined`)
+- Membership updates (`member_updated`)
+- Membership deletion (`member_left`)
+- Devotion level changes (`devotion_changed`)
+- Role assignment changes (`role_changed`)
+
+**3. Religious Events Channel (`religious_events`):**
+- Religious ritual events (`ritual_performed`)
+- Conversion events (`conversion_occurred`)
+- Religious conflict events (`religious_conflict`)
+- Schism events (`schism_occurred`)
+- Religious calendar events (`holy_day`)
+
+**4. Narrative Channel (`religious_narrative`):**
+- Religious story events (`story_event`)
+- Religious quest triggers (`quest_triggered`)
+- Religious character development (`character_development`)
+- Religious world events (`world_event`)
+
+**WebSocket Message Format:**
+```json
+{
+  \"type\": \"member_joined\",
+  \"channel\": \"membership\",
+  \"timestamp\": \"2024-01-01T12:00:00Z\",
+  \"data\": {
+    \"entity_id\": \"character123\",
+    \"religion_id\": \"religion456\",
+    \"membership\": { /* MembershipData object */ },
+    \"details\": \"Character joined through conversion ritual\"
+  }
+}
+```
+
+**Implementation Requirements:**
+- WebSocket server integration with FastAPI
+- Channel subscription management for religious topics
+- Message broadcasting to subscribed clients
+- Event filtering and routing by religion/region
+- Connection management and cleanup
+- Error handling and reconnection support
+- Performance optimization for high-frequency religious events
+- Authentication and authorization for WebSocket connections
+
+**Integration with Event System:**
+- Subscribe to religious events from event dispatcher
+- Transform religious events into WebSocket messages
+- Route events to appropriate channels based on type
+- Handle event batching for performance optimization
+- Implement event queuing for disconnected clients
+
+**Performance Considerations:**
+- Efficient message serialization for religious data
+- Connection pooling and management
+- Rate limiting for high-frequency religious updates
+- Message compression for large religious datasets
+- Graceful degradation under load
+- Regional filtering to reduce unnecessary traffic
+
+**Testing Requirements:**
+- WebSocket connection testing
+- Message format validation
+- Real-time update testing
+- Performance testing under religious event load
+- Error handling and recovery testing
+- Frontend integration testing
+
+## 8. Enable Frontend Integration and End-to-End Testing [done]
+### Dependencies: 46.4, 46.6, 46.7
+### Description: Ensure Unity frontend can successfully integrate with the fixed religion backend and validate complete workflows
+### Details:
+**FRONTEND INTEGRATION ENABLEMENT AND VALIDATION**
+
+Once backend infrastructure is fixed, enable smooth frontend integration and validate complete religion workflows:
+
+**Current Frontend State:**
+- Unity frontend structure exists at VDM/Assets/Scripts/Runtime/Religion/
+- Models/, Services/, UI/, Integration/ directories present
+- ReligionModels.cs (428 lines) with comprehensive DTOs ready
+- Service structure expecting HTTP/WebSocket communication
+- Frontend completely blocked without working backend API
+
+**Integration Requirements:**
+
+**1. API Compatibility Verification:**
+- Verify all expected religion endpoints are functional
+- Test request/response format compatibility with Unity DTOs
+- Validate WebSocket integration with real-time updates
+- Ensure proper error handling and status codes
+- Test authentication and authorization workflows
+
+**2. Real-Time Religious Features:**
+- WebSocket connection for live religious updates
+- Event streaming for membership changes
+- Real-time devotion level tracking
+- Live religious event notifications
+- Narrative event streaming for religious activities
+
+**3. Data Model Alignment:**
+- Ensure Unity DTOs match backend religion models
+- Validate serialization compatibility between C# and Python
+- Test data type conversions and nullable fields
+- Verify relationship mapping between entities
+- Handle religious enum conversions properly
+
+**4. Religious Workflow Testing:**
+- End-to-end religion creation and management
+- Complete membership lifecycle (join, update, leave)
+- Devotion tracking and modification workflows
+- Religious conversion and narrative integration
+- Cross-system religious interactions
+
+**5. Performance Validation:**
+- Frontend-backend communication performance
+- Real-time update responsiveness
+- Large dataset handling (many religions/members)
+- Concurrent user religious activities
+- Memory usage optimization for Unity
+
+**Unity-Specific Integration:**
+- C# data model compatibility with backend schemas
+- Unity coroutine integration for async operations
+- UI event handling for religious interactions
+- Performance optimization for Unity game engine
+- Cross-platform compatibility testing
+
+**End-to-End Test Scenarios:**
+
+**1. Basic Religious Operations:**
+- Create new religion with proper validation
+- Update religion details and verify changes
+- Delete religion and handle membership cleanup
+- Search and filter religions by various criteria
+
+**2. Membership Management:**
+- Add character to religion and track membership
+- Update devotion levels and see real-time changes
+- Modify roles and verify permission changes
+- Handle membership conflicts and resolutions
+
+**3. Cross-System Integration:**
+- Religious actions affecting character stats
+- Quest integration with religious objectives
+- Faction relationships influenced by religion
+- Narrative events triggered by religious activities
+
+**4. Real-Time Features:**
+- WebSocket connection stability
+- Real-time religious event notifications
+- Live membership and devotion updates
+- Religious calendar and ritual notifications
+
+**Success Criteria:**
+- Frontend can display religions and memberships correctly
+- Users can create and manage religious entities
+- Real-time religious events work properly
+- Religious narrative integration functional
+- Cross-system religious effects operational
+- Performance meets gameplay requirements
+- All religious workflows validated end-to-end
+

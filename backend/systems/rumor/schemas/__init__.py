@@ -1,13 +1,4 @@
-from .rumor_types import (
-    RumorEvent,
-    Rumor,
-    RumorTransformationRequest,
-    RumorTransformationResponse
-)
+"""Schemas for rumor system"""
 
-__all__ = [
-    "RumorEvent",
-    "Rumor",
-    "RumorTransformationRequest",
-    "RumorTransformationResponse"
-]
+# Auto-generated imports
+from .rumor_types import *

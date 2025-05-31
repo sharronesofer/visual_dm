@@ -1,1 +1,1 @@
-"""Tests for the poi system."""
+# Test package for the poi system

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
-from .schemas import RumorTransformationRequest, RumorTransformationResponse
-from .gpt_client import GPTClient
-from .rumor_transformer import RumorTransformer
-from .truth_tracker import TruthTracker
-from utils.cache import async_cached
+from backend.systems.character.schemas import RumorTransformationRequest, RumorTransformationResponse
+from backend.systems.character.services.gpt_client import GPTClient
+from backend.systems.character.rumor_transformer import RumorTransformer
+from backend.systems.character.truth_tracker import TruthTracker
+from backend.infrastructure.shared.cache import async_cached
 
 router = APIRouter()
 gpt_client = GPTClient()

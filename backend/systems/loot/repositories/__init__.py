@@ -1,0 +1,2 @@
+"""Repositories for loot system"""
+

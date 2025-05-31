@@ -32,7 +32,7 @@ The World State System (WSS) is a comprehensive solution for tracking, synchroni
    - Initializes default world state values
    - Populates regions with appropriate variables
 
-5. **JSON Schema** (`backend/data/modding/world_state_variables.json`)
+5. **JSON Schema** (`data/builders/world_state_variables.json`)
    - Defines predefined world state variables
    - Specifies default values, allowed values, and effects
    - Organized by category and region

@@ -1,0 +1,519 @@
+# Task ID: 34
+# Title: Complete Economy System Implementation - Bridge Critical API Integration Gap
+# Status: done
+# Dependencies: 26, 27, 28
+# Priority: critical
+# Description: Address critical gaps between comprehensive test expectations and current economy system implementation (currently 35-40% complete)
+# Details:
+Based on comprehensive analysis of backend/tests/systems/economy (25+ test files expecting EconomyManager with 25+ methods) versus backend/systems/economy implementation, the economy system is approximately 35-40% complete with critical gaps blocking frontend integration.
+
+**COMPLETION ASSESSMENT: 35-40% Complete**
+
+**✅ IMPLEMENTED (35-40% Complete):**
+- **Comprehensive Services Layer (80% complete)**: 
+  - resource_service.py (744 lines) - Full resource CRUD operations
+  - market_service.py (640 lines) - Market operations and pricing
+  - trade_service.py (323 lines) - Trade route management
+  - futures_service.py (582 lines) - Commodity futures operations
+- **Complete Models (90% complete)**: resource.py, market.py, trade_route.py, commodity_future.py
+- **Shop Implementation (85% complete)**: shop_routes.py (516 lines), shop_utils.py (355 lines)
+- **Documentation (95% complete)**: README.md (190 lines) describing comprehensive functionality
+
+**❌ MISSING CRITICAL COMPONENTS (60-65% Missing):**
+
+**1. EconomyManager Main API Layer (0% Complete - CRITICAL BLOCKER)**:
+- backend/systems/economy/__init__.py tries to import EconomyManager from .economy_manager but file doesn't exist
+- Found comprehensive implementation in archives/zombie_monoliths/economy_manager.py (1000+ lines)
+- This is the main coordination layer that provides the API surface for frontend integration
+- All 25+ test files expect EconomyManager class with methods like get_resource, create_market, process_tick, etc.
+
+**2. Test Infrastructure (0% Complete - NO VALIDATION)**:
+- All 25 test files contain only 'assert True' placeholders instead of real validation logic
+- test_economy_manager.py (531 lines) expects comprehensive EconomyManager testing
+- test_economy_service.py shows expected integration with EventDispatcher, Resource models
+- Cannot validate any functionality without proper tests
+
+**3. API Endpoints Layer (5% Complete - FRONTEND BLOCKER)**:
+- No FastAPI routers for frontend integration
+- Unity frontend EconomyWebSocketHandler.cs expects 7+ WebSocket channels
+- Frontend expects comprehensive REST API that doesn't exist
+- Shop routes exist but no core economy API endpoints
+
+**4. Event System Integration (10% Complete - NO REAL-TIME)**:
+- No WebSocket integration for real-time price updates
+- No event publishing for market changes
+- Frontend expects real-time economy events but backend doesn't provide them
+- Economic forecasting and analytics missing
+
+**5. Database Session Management (Incomplete)**:
+- Services exist but database operations need validation
+- Missing shared database module (same issue affecting other systems)
+- No proper dependency injection for database sessions
+
+**DEVELOPMENT BIBLE COMPLIANCE:**
+The Development Bible defines comprehensive economy requirements:
+- Resource management system ✅ (Implemented in services)
+- Market operations and pricing ✅ (Implemented in services)
+- Trade route management ✅ (Implemented in services)
+- Economic forecasting ❌ (Missing in main API layer)
+- Real-time price updates ❌ (Missing event integration)
+- Integration with other systems ❌ (Missing coordination layer)
+
+**FRONTEND INTEGRATION CRISIS:**
+Unity frontend expects comprehensive economy API but backend lacks the main coordination layer:
+- EconomyWebSocketHandler.cs expects 7 WebSocket channels: economy, market, prices, transactions, trade_routes, currencies, metrics
+- Frontend DialogueService shows economy integration expectations
+- VDM/Assets/Scripts/Runtime/Economy/ contains full UI system expecting backend API
+- Frontend completely blocked without EconomyManager coordination layer
+
+**IMPACT ON PROJECT:**
+- Economy functionality completely non-functional for gameplay
+- Frontend cannot integrate without main API coordination layer
+- Economic gameplay features impossible (trading, markets, pricing)
+- Other systems cannot interact with economy features
+- Critical gameplay system missing despite significant service layer implementation
+
+This represents a system with solid foundations (services and models) but missing the critical integration layer that coordinates everything and provides the API surface that frontend expects. The refactor session mentioned by user likely removed the main EconomyManager coordination layer without proper replacement.
+
+# Test Strategy:
+1. All 25 economy test files pass with real validation logic instead of placeholders
+2. EconomyManager successfully coordinates all economic operations
+3. Complete API layer with FastAPI endpoints responds correctly
+4. WebSocket integration provides real-time economic updates matching frontend expectations
+5. Event system integration publishes economic events for other systems
+6. Frontend EconomyWebSocketHandler.cs successfully communicates with backend
+7. Full economic workflow from resource creation to market trading works end-to-end
+8. Database operations complete successfully with proper session management
+
+# Subtasks:
+## 1. Restore Missing EconomyManager Coordination Layer [done]
+### Dependencies: None
+### Description: Implement the missing economy_manager.py that backend/__init__.py imports and all tests expect
+### Details:
+**CRITICAL INFRASTRUCTURE MISSING: EconomyManager Coordination Layer**
+
+All 25+ economy test files expect backend.systems.economy.economy_manager with comprehensive EconomyManager class:
+
+**Found Complete Implementation:**
+archives/zombie_monoliths/economy_manager.py (1000+ lines) contains the missing implementation
+
+**Required EconomyManager Methods (from test analysis):**
+- **Resource Management**: get_resource, create_resource, update_resource, delete_resource, get_resources_by_region
+- **Market Operations**: get_market, create_market, calculate_price, update_market_prices, get_market_trends
+- **Trade Routes**: get_trade_route, create_trade_route, process_trade_routes, calculate_trade_profits
+- **Futures Contracts**: get_future, create_future, settle_future, calculate_future_price
+- **Economic Processing**: process_tick, calculate_price_index, generate_economic_forecast, update_economic_metrics
+- **Analytics**: get_economic_analytics, generate_economic_report, track_economic_trends
+- **Integration**: initialize_economy, shutdown_economy, get_economy_status
+
+**Implementation Strategy:**
+1. **Restore from Archives**: Copy and adapt economy_manager.py from archives/zombie_monoliths/
+2. **Update Dependencies**: Ensure compatibility with current service layer architecture
+3. **Service Integration**: Integrate with existing ResourceService, MarketService, TradeService, FuturesService
+4. **Database Session**: Add proper database session management
+5. **Event Integration**: Add event publishing for economic state changes
+6. **API Surface**: Provide clean interface for FastAPI router integration
+
+**Critical Features:**
+- Singleton pattern for economy management
+- Service coordination and orchestration
+- Economic simulation and processing
+- Real-time economic calculations
+- Cross-system integration points
+- Performance optimization for economic operations
+
+This is the MOST CRITICAL missing piece - without EconomyManager, no tests can run and frontend cannot integrate.
+
+## 2. Replace All Test Placeholders with Real Implementation [done]
+### Dependencies: None
+### Description: Fix all 25 economy test files by replacing 'assert True' placeholders with comprehensive validation logic
+### Details:
+**COMPREHENSIVE TEST IMPLEMENTATION REQUIRED**
+
+All 25 economy test files contain placeholder logic that needs real implementation:
+
+**Primary Test Files:**
+- **test_economy_manager.py (531 lines)**: Expects comprehensive EconomyManager functionality testing
+- **test_economy_service.py**: Integration testing with EventDispatcher and Resource models
+- **test_resource_service.py**: Resource CRUD operations validation
+- **test_market_service.py**: Market operations and pricing validation
+- **test_trade_service.py**: Trade route management testing
+- **test_futures_service.py**: Commodity futures operations testing
+
+**Test Categories to Implement:**
+
+**1. Unit Testing (8+ files):**
+- Core economic logic validation
+- Service method functionality
+- Model relationship integrity
+- Economic calculation accuracy
+- Price calculation algorithms
+- Resource availability checking
+
+**2. Integration Testing (6+ files):**
+- Service-to-service communication
+- Database operation validation
+- Event system integration
+- Cross-system economic effects
+- API endpoint functionality
+
+**3. Economic Simulation Testing (4+ files):**
+- Economic tick processing
+- Market price fluctuations
+- Trade route profitability
+- Economic forecasting accuracy
+- Supply and demand calculations
+
+**4. Performance Testing (3+ files):**
+- Large-scale economic calculations
+- Concurrent market operations
+- Real-time price update performance
+- Database query optimization
+- Memory usage under economic load
+
+**5. API Testing (4+ files):**
+- REST endpoint validation
+- WebSocket message handling
+- Request/response format verification
+- Error handling and edge cases
+- Authentication and authorization
+
+**Test Infrastructure Requirements:**
+- Mock database setup and cleanup
+- Economic simulation test fixtures
+- Market data generators
+- Performance measurement tools
+- Integration with pytest framework
+- CI/CD pipeline compatibility
+
+**Success Criteria:**
+- 90%+ code coverage across all economic components
+- All economic workflows validated
+- Performance benchmarks met
+- Integration scenarios pass
+- Real economic simulation works correctly
+
+## 3. Create Complete Economy API Layer [done]
+### Dependencies: None
+### Description: Implement FastAPI routers and endpoints for full economy system integration
+### Details:
+**COMPLETE API IMPLEMENTATION FOR FRONTEND INTEGRATION**
+
+Currently no economy API endpoints exist for frontend integration. Need comprehensive FastAPI implementation:
+
+**Required Economy Routers:**
+
+**1. economy_router.py - Core Economic Operations:**
+- GET /economy/status - Get overall economic status
+- POST /economy/process-tick - Process economic simulation tick
+- GET /economy/metrics - Get economic metrics and analytics
+- GET /economy/forecast - Get economic forecasting data
+- POST /economy/initialize - Initialize economic system
+- PUT /economy/configuration - Update economic configuration
+
+**2. resource_router.py - Resource Management:**
+- GET /resources - List all resources
+- GET /resources/{id} - Get specific resource
+- POST /resources - Create new resource
+- PUT /resources/{id} - Update resource
+- DELETE /resources/{id} - Delete resource
+- GET /resources/region/{region_id} - Get resources by region
+- PUT /resources/{id}/adjust - Adjust resource amounts
+
+**3. market_router.py - Market Operations:**
+- GET /markets - List all markets
+- GET /markets/{id} - Get specific market
+- POST /markets - Create new market
+- PUT /markets/{id} - Update market
+- DELETE /markets/{id} - Delete market
+- GET /markets/region/{region_id} - Get markets by region
+- GET /markets/{id}/prices - Get market prices
+- PUT /markets/{id}/prices - Update market prices
+- GET /markets/{id}/trends - Get market trends
+
+**4. trade_router.py - Trade Route Management:**
+- GET /trade-routes - List all trade routes
+- GET /trade-routes/{id} - Get specific trade route
+- POST /trade-routes - Create new trade route
+- PUT /trade-routes/{id} - Update trade route
+- DELETE /trade-routes/{id} - Delete trade route
+- POST /trade-routes/process - Process all trade routes
+- GET /trade-routes/{id}/profits - Calculate trade profits
+
+**5. futures_router.py - Commodity Futures:**
+- GET /futures - List all commodity futures
+- GET /futures/{id} - Get specific future contract
+- POST /futures - Create new future contract
+- PUT /futures/{id} - Update future contract
+- POST /futures/{id}/settle - Settle future contract
+- GET /futures/prices - Get futures prices
+
+**WebSocket Integration Requirements:**
+Match Unity frontend EconomyWebSocketHandler.cs expectations:
+- **economy** channel: Overall economic events
+- **market** channel: Market creation/updates
+- **prices** channel: Real-time price updates
+- **transactions** channel: Transaction completions
+- **trade_routes** channel: Trade route updates
+- **currencies** channel: Currency updates
+- **metrics** channel: Economic metric updates
+
+**API Features:**
+- Complete FastAPI router implementation
+- Pydantic request/response models
+- Authentication and authorization
+- Rate limiting and request validation
+- Comprehensive error handling
+- API documentation with Swagger
+- WebSocket support for real-time features
+- Integration with EconomyManager coordination layer
+
+**Integration Points:**
+- EconomyManager for business logic coordination
+- Event system for real-time updates
+- Database for data persistence
+- Other game systems for cross-system effects
+
+## 4. Implement WebSocket Real-Time Economic Updates [done]
+### Dependencies: None
+### Description: Create WebSocket integration for real-time economic events matching frontend expectations
+### Details:
+**WEBSOCKET INTEGRATION FOR REAL-TIME ECONOMY**
+
+Unity frontend EconomyWebSocketHandler.cs expects 7 WebSocket channels but backend provides none:
+
+**Required WebSocket Channels:**
+
+**1. Economy Channel (`economy`):**
+- Economic system status changes
+- Overall economic events
+- System initialization/shutdown events
+- Configuration changes
+- Economic simulation events
+
+**2. Market Channel (`market`):**
+- Market creation events (`market_created`)
+- Market updates (`market_updated`)
+- Market events (`market_event`)
+- Market closure/opening events
+- Market configuration changes
+
+**3. Prices Channel (`prices`):**
+- Real-time price updates (`price_updated`)
+- Bulk price updates (`price_bulk_update`)
+- Price trend notifications
+- Price alerts and thresholds
+- Currency exchange rate changes
+
+**4. Transactions Channel (`transactions`):**
+- Transaction completion events (`transaction_completed`)
+- Transaction failures and errors
+- Large transaction notifications
+- Transaction volume updates
+
+**5. Trade Routes Channel (`trade_routes`):**
+- Trade route creation (`trade_route_created`)
+- Trade route updates (`trade_route_updated`)
+- Trade route completion events
+- Route profitability changes
+- Trade route optimization events
+
+**6. Currencies Channel (`currencies`):**
+- Currency value updates (`currency_updated`)
+- Exchange rate changes (`exchange_rate_updated`)
+- New currency introductions
+- Currency stability events
+
+**7. Metrics Channel (`metrics`):**
+- Economic metric updates (`metric_updated`)
+- Performance statistics
+- Economic health indicators
+- Forecasting updates
+- Analytics data streams
+
+**WebSocket Message Format:**
+```json
+{
+  "type": "market_updated",
+  "channel": "market",
+  "timestamp": "2024-01-01T12:00:00Z",
+  "data": {
+    "market_id": "123",
+    "market": { /* MarketData object */ },
+    "changes": ["prices", "volume"]
+  }
+}
+```
+
+**Implementation Requirements:**
+- WebSocket server integration with FastAPI
+- Channel subscription management
+- Message broadcasting to subscribed clients
+- Event filtering and routing
+- Connection management and cleanup
+- Error handling and reconnection support
+- Performance optimization for high-frequency updates
+- Authentication and authorization for WebSocket connections
+
+**Integration with Event System:**
+- Subscribe to economic events from EconomyManager
+- Transform economic events into WebSocket messages
+- Route events to appropriate channels
+- Handle event batching for performance
+- Implement event queuing for disconnected clients
+
+**Performance Considerations:**
+- Efficient message serialization
+- Connection pooling and management
+- Rate limiting for high-frequency updates
+- Message compression for large datasets
+- Graceful degradation under load
+
+## 5. Fix Database Session Management [done]
+### Dependencies: None
+### Description: Resolve database integration issues and implement proper session management
+### Details:
+**DATABASE INTEGRATION COMPLETION**
+
+Economic services exist but database operations need validation and proper session management:
+
+**Current Database Issues:**
+- **Missing Shared Database Module**: Same issue affecting multiple systems (auth_user, character, crafting, etc.)
+- **No Dependency Injection**: Services don't have proper database session injection
+- **Session Management**: No proper session lifecycle management
+- **Transaction Handling**: Missing transaction management for economic operations
+
+**Required Database Integration:**
+
+**1. Shared Database Module Integration:**
+- Use backend.systems.shared.database.base module (to be created by other tasks)
+- Implement proper async session management
+- Add database connection pooling
+- Configure transaction management
+
+**2. Service Layer Database Integration:**
+- Update ResourceService for proper database operations
+- Update MarketService for transactional market operations
+- Update TradeService for trade route persistence
+- Update FuturesService for contract management
+- Add proper error handling and rollback logic
+
+**3. EconomyManager Database Coordination:**
+- Coordinate database operations across services
+- Implement transaction management for complex economic operations
+- Add database health checking
+- Implement connection recovery and retry logic
+
+**4. Economic Data Persistence:**
+- Historical price data storage
+- Economic metrics persistence
+- Trade history tracking
+- Market trend analysis data
+- Performance metrics storage
+
+**5. Database Performance Optimization:**
+- Indexing for economic queries
+- Query optimization for large datasets
+- Caching strategy for frequently accessed data
+- Batch operations for bulk updates
+- Connection pooling configuration
+
+**6. Database Migration Support:**
+- Schema migration scripts for economic tables
+- Data migration for existing economic data
+- Version control for database schema
+- Rollback procedures for failed migrations
+
+**Integration Requirements:**
+- FastAPI dependency injection for database sessions
+- Async database operations for performance
+- Proper error handling and logging
+- Transaction management for complex operations
+- Database health monitoring
+- Connection recovery and retry logic
+
+**Testing Requirements:**
+- Database operation testing
+- Transaction rollback testing
+- Performance testing under load
+- Data integrity validation
+- Migration testing
+
+## 6. Integrate with Event System [done]
+### Dependencies: None
+### Description: Connect economy system with events system for cross-system integration and real-time updates
+### Details:
+**EVENT SYSTEM INTEGRATION FOR CROSS-SYSTEM COMMUNICATION**
+
+Economy system needs comprehensive event integration for cross-system effects and real-time updates:
+
+**Current Event Integration Issues:**
+- **Missing Event Integration**: No event publishing or subscription
+- **Cross-System Effects**: Other systems can't react to economic changes
+- **Real-Time Updates**: No event-driven updates for UI
+- **Economic Simulation**: No event-driven economic processing
+
+**Required Event Integration:**
+
+**1. Economic Event Types:**
+- **ResourceEvent**: Resource creation, update, depletion events
+- **MarketEvent**: Market opening, closing, price change events
+- **TradeEvent**: Trade route creation, completion, profit events
+- **FutureEvent**: Future contract creation, settlement events
+- **EconomicTickEvent**: Economic simulation processing events
+- **PriceChangeEvent**: Real-time price update events
+- **TransactionEvent**: Economic transaction events
+
+**2. Event Publishing:**
+- Update EconomyManager to publish economic events
+- Update services to publish specific event types
+- Implement event batching for performance
+- Add event metadata and context
+- Implement event versioning
+
+**3. Event Subscription:**
+- Subscribe to character events affecting economy
+- Subscribe to quest events with economic rewards
+- Subscribe to faction events affecting trade
+- Subscribe to world events affecting resources
+- Subscribe to time events for economic processing
+
+**4. Cross-System Integration Events:**
+- **Character System**: Economic actions affecting character wealth
+- **Quest System**: Quest rewards and costs affecting economy
+- **Faction System**: Faction relationships affecting trade
+- **World System**: Resource availability based on world state
+- **Combat System**: War effects on trade routes and markets
+
+**5. Real-Time Event Processing:**
+- Economic tick processing triggered by time events
+- Market price updates triggered by supply/demand changes
+- Trade route optimization triggered by world events
+- Economic forecasting triggered by data changes
+
+**6. Event-Driven Economic Simulation:**
+- Economic system responds to world events
+- Market dynamics affected by player actions
+- Resource scarcity based on consumption events
+- Price fluctuations based on supply/demand events
+
+**WebSocket Event Bridge:**
+- Transform internal events to WebSocket messages
+- Route events to appropriate WebSocket channels
+- Filter events based on client subscriptions
+- Implement event aggregation for performance
+
+**Performance Considerations:**
+- Efficient event processing
+- Event queuing for high-frequency events
+- Event filtering and routing optimization
+- Memory management for event history
+- Error handling and recovery
+
+**Integration Testing:**
+- Cross-system event flow validation
+- Real-time update testing
+- Event performance testing
+- Error handling and recovery testing
+- WebSocket integration testing
+

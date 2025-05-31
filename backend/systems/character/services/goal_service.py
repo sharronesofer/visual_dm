@@ -12,7 +12,7 @@ from uuid import UUID
 import json
 import os
 
-from backend.systems.events.event_dispatcher import EventDispatcher
+from backend.infrastructure.events.event_dispatcher import EventDispatcher
 from backend.systems.character.models.goal import (
     Goal, GoalType, GoalPriority, GoalStatus,
     GoalCreated, GoalCompleted, GoalFailed, GoalAbandoned, GoalProgressUpdated

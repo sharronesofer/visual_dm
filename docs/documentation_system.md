@@ -164,7 +164,7 @@ Tutorials are multi-step guides that can highlight UI elements and guide users t
 
 ## Documentation Schema Structure
 
-The documentation system uses a defined schema in `documentation_schema.json` that specifies the structure of all documentation types. See `backend/data/modding/documentation_schema.json` for the full schema definition.
+The documentation system uses a defined schema in `documentation_schema.json` that specifies the structure of all documentation types. See `data/builders/documentation_schema.json` for the full schema definition.
 
 ## WebSocket Communication
 

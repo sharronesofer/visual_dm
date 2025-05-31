@@ -1,1 +1,1 @@
-"""Tests for the loot system."""
+# Test package for the loot system

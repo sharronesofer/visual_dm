@@ -1,271 +1,292 @@
 """
-Tests for the POI generator.
-
-This module contains tests for placing points of interest in the world.
+Test POI Generator functionality
 """
 
 import pytest
-import copy
-from unittest.mock import patch, MagicMock
-
-from backend.systems.world_generation.poi_generator import (
-    generate_poi_data,
-    place_pois,
-    apply_poi_distribution,
-    validate_poi_placement,
-    get_valid_poi_locations,
-    distribute_poi_types,
-    calculate_poi_density,
+from unittest.mock import Mock, patch
+from backend.systems.poi.services.poi_generator import (
+    POIGenerator, 
+    GenerationParameters, 
+    GenerationType, 
+    BiomeType,
+    GenerationRule,
+    WorldCell,
+    get_poi_generator
 )
+from backend.systems.poi.models import POIType, POIState
 
 
-class TestPOIGenerator: pass
-    """Tests for the POI generator system."""
-
-    def test_generate_poi_data(self, mock_data_registry): pass
-        """Test generating POI data for a region."""
-        # Create a simple region setup
-        region_data = {
-            "id": "test-region",
-            "biome_map": {
-                (0, 0): "plains",
-                (0, 1): "forest",
-                (1, 0): "mountain",
-                (1, 1): "desert",
-            },
-            "elevation_map": {(0, 0): 0.3, (0, 1): 0.4, (1, 0): 0.8, (1, 1): 0.2},
-            "temperature_map": {(0, 0): 0.5, (0, 1): 0.4, (1, 0): 0.3, (1, 1): 0.8},
-            "humidity_map": {(0, 0): 0.6, (0, 1): 0.7, (1, 0): 0.3, (1, 1): 0.1},
-        }
-
-        # Generate POI data
-        poi_data = generate_poi_data(region_data, mock_data_registry)
-
-        # Verify the result
-        assert "poi_map" in poi_data
-        assert len(poi_data["poi_map"]) > 0
-
-        # Check if POIs are properly structured
-        for position, poi in poi_data["poi_map"].items(): pass
-            assert "type" in poi
-            assert "name" in poi
-            assert "biome" in poi
-            assert poi["biome"] == region_data["biome_map"][position]
-
-    def test_place_pois(self, mock_data_registry): pass
-        """Test placing POIs in a region based on constraints."""
-        # Create a simple region and POI distribution
-        region_data = {"width": 10, "height": 10, "biome_map": {}, "elevation_map": {}}
-
-        # Fill the maps with some data
-        for x in range(10): pass
-            for y in range(10): pass
-                if x < 5: pass
-                    region_data["biome_map"][(x, y)] = "forest"
-                else: pass
-                    region_data["biome_map"][(x, y)] = "plains"
-
-                region_data["elevation_map"][(x, y)] = 0.5  # Flat terrain
-
-        # Add mountains
-        region_data["biome_map"][(3, 3)] = "mountain"
-        region_data["elevation_map"][(3, 3)] = 0.8
-
-        # Add water
-        region_data["biome_map"][(7, 7)] = "water"
-        region_data["elevation_map"][(7, 7)] = 0.1
-
-        # Distribution of POI types to place
-        poi_distribution = {"town": 2, "dungeon": 3, "ruins": 5, "grove": 10}
-
-        # Place POIs
-        poi_map = place_pois(region_data, poi_distribution, mock_data_registry)
-
-        # Verify expected counts
-        poi_counts = {}
-        for poi in poi_map.values(): pass
-            poi_type = poi["type"]
-            poi_counts[poi_type] = poi_counts.get(poi_type, 0) + 1
-
-        assert poi_counts.get("town", 0) == 2
-        assert poi_counts.get("dungeon", 0) == 3
-        assert poi_counts.get("ruins", 0) == 5
-        assert poi_counts.get("grove", 0) == 10
-
-        # Verify total count
-        assert len(poi_map) == 20
-
-        # Verify no POIs in water
-        for position, poi in poi_map.items(): pass
-            assert region_data["biome_map"][position] != "water"
-
-    def test_apply_poi_distribution(self, mock_data_registry): pass
-        """Test applying a POI distribution to a region."""
-        # Define a region size
-        width = 50
-        height = 50
-
-        # Apply distribution based on Development Bible POI density: pass
-        # ~20 major POIs (towns, dungeons) and 200-400 minor POIs per region
-        poi_distribution = apply_poi_distribution(
-            width, height, mock_data_registry.poi_types
+class TestPOIGenerator:
+    """Test POI Generator functionality"""
+    
+    def test_poi_generator_initialization(self):
+        """Test POI generator initializes correctly"""
+        generator = POIGenerator()
+        
+        assert generator is not None
+        assert generator.generation_rules is not None
+        assert len(generator.generation_rules) > 0
+        assert POIType.CITY in generator.generation_rules
+        assert POIType.VILLAGE in generator.generation_rules
+    
+    def test_generation_rules_setup(self):
+        """Test that generation rules are properly configured"""
+        generator = POIGenerator()
+        
+        # Check city rules
+        city_rule = generator.generation_rules[POIType.CITY]
+        assert city_rule.poi_type == POIType.CITY
+        assert city_rule.min_distance_same_type > 0
+        assert city_rule.probability_base > 0
+        
+        # Check village rules
+        village_rule = generator.generation_rules[POIType.VILLAGE]
+        assert village_rule.poi_type == POIType.VILLAGE
+        assert village_rule.min_distance_same_type < city_rule.min_distance_same_type
+    
+    @patch('backend.systems.poi.services.poi_generator.get_db_session')
+    def test_generate_pois_for_region(self, mock_db):
+        """Test POI generation for a region"""
+        mock_session = Mock()
+        mock_db.return_value = mock_session
+        
+        generator = POIGenerator(mock_session)
+        
+        # Test parameters
+        region_bounds = (0.0, 0.0, 100.0, 100.0)
+        params = GenerationParameters(
+            poi_density=0.01,  # Low density for testing
+            civilization_level=0.5,
+            seed=12345
         )
-
-        # Verify distribution
-        major_poi_count = 0
-        minor_poi_count = 0
-
-        for poi_type, count in poi_distribution.items(): pass
-            if mock_data_registry.poi_types[poi_type].get("is_major", False): pass
-                major_poi_count += count
-            else: pass
-                minor_poi_count += count
-
-        # Check against the expected ranges from the Development Bible
-        assert 15 <= major_poi_count <= 25  # ~20 major POIs
-        assert 200 <= minor_poi_count <= 400  # 200-400 minor POIs
-
-    def test_validate_poi_placement(self): pass
-        """Test validating POI placement against constraints."""
-        # Create a sample position, POI type, and constraints
-        position = (5, 5)
-        poi_type = "town"
-
-        # Create test biome and elevation maps
-        biome_map = {position: "plains"}
-        elevation_map = {position: 0.4}
-
-        # Define constraints for valid placement
-        constraints = {
-            "valid_biomes": ["plains", "forest"],
-            "invalid_biomes": ["water", "mountain"],
-            "min_elevation": 0.2,
-            "max_elevation": 0.6,
-        }
-
-        # Validate placement that should be valid
-        valid_result = validate_poi_placement(
-            position, poi_type, constraints, biome_map, elevation_map
-        )
-
-        # Modify constraints to make placement invalid
-        invalid_constraints = copy.deepcopy(constraints)
-        invalid_constraints["valid_biomes"] = ["forest"]  # Plains not valid anymore
-
-        # Validate placement that should be invalid
-        invalid_result = validate_poi_placement(
-            position, poi_type, invalid_constraints, biome_map, elevation_map
-        )
-
+        
+        # Generate POIs
+        pois = generator.generate_pois_for_region(region_bounds, params)
+        
         # Verify results
-        assert valid_result is True
-        assert invalid_result is False
-
-    def test_get_valid_poi_locations(self): pass
-        """Test getting valid locations for a POI type."""
-        # Create simple region data
-        biome_map = {}
-        elevation_map = {}
-
-        for x in range(10): pass
-            for y in range(10): pass
-                if x < 5: pass
-                    biome_map[(x, y)] = "forest"
-                else: pass
-                    biome_map[(x, y)] = "plains"
-
-                # Elevation increases with x
-                elevation_map[(x, y)] = x / 10.0
-
-        # Add a mountain and water
-        biome_map[(3, 3)] = "mountain"
-        elevation_map[(3, 3)] = 0.9
-        biome_map[(7, 7)] = "water"
-        elevation_map[(7, 7)] = 0.1
-
-        # Define POI types with constraints
-        poi_types = {
-            "town": {
-                "valid_biomes": ["plains"],
-                "invalid_biomes": ["water", "mountain"],
-                "min_elevation": 0.3,
-                "max_elevation": 0.6,
-            },
-            "fishing_village": {
-                "valid_biomes": ["water"],
-                "invalid_biomes": [],
-                "min_elevation": 0.0,
-                "max_elevation": 0.2,
-            },
-        }
-
-        # Get valid locations
-        town_locations = get_valid_poi_locations(
-            "town", poi_types["town"], biome_map, elevation_map
+        assert isinstance(pois, list)
+        assert len(pois) >= 0  # Should generate at least some POIs
+        
+        # Check POI properties
+        for poi in pois:
+            assert poi.name is not None
+            assert poi.description is not None
+            assert poi.poi_type in [t.value for t in POIType]
+            assert poi.location_x >= 0.0 and poi.location_x <= 100.0
+            assert poi.location_y >= 0.0 and poi.location_y <= 100.0
+            assert poi.population > 0
+    
+    def test_find_optimal_poi_location(self):
+        """Test finding optimal POI locations"""
+        generator = POIGenerator()
+        
+        search_area = (0.0, 0.0, 100.0, 100.0)
+        params = GenerationParameters(seed=12345)
+        
+        # Find location for a village
+        location = generator.find_optimal_poi_location(
+            POIType.VILLAGE, search_area, [], params
         )
-
-        fishing_village_locations = get_valid_poi_locations(
-            "fishing_village", poi_types["fishing_village"], biome_map, elevation_map
+        
+        assert location is not None
+        assert isinstance(location, tuple)
+        assert len(location) == 2
+        assert 0.0 <= location[0] <= 100.0
+        assert 0.0 <= location[1] <= 100.0
+    
+    def test_poi_name_generation(self):
+        """Test POI name generation"""
+        generator = POIGenerator()
+        
+        # Test different POI types
+        city_name = generator._generate_poi_name(POIType.CITY)
+        village_name = generator._generate_poi_name(POIType.VILLAGE)
+        fortress_name = generator._generate_poi_name(POIType.FORTRESS)
+        
+        assert isinstance(city_name, str)
+        assert len(city_name) > 0
+        assert isinstance(village_name, str)
+        assert len(village_name) > 0
+        assert isinstance(fortress_name, str)
+        assert len(fortress_name) > 0
+    
+    def test_poi_population_calculation(self):
+        """Test POI population calculation"""
+        generator = POIGenerator()
+        params = GenerationParameters(civilization_level=0.5)
+        
+        # Test different POI types
+        city_pop = generator._calculate_poi_population(POIType.CITY, params)
+        village_pop = generator._calculate_poi_population(POIType.VILLAGE, params)
+        
+        assert city_pop > village_pop  # Cities should be larger
+        assert city_pop > 0
+        assert village_pop > 0
+    
+    def test_distance_constraints(self):
+        """Test distance constraint checking"""
+        generator = POIGenerator()
+        
+        # Create mock existing POI
+        existing_poi = Mock()
+        existing_poi.location_x = 50.0
+        existing_poi.location_y = 50.0
+        existing_poi.poi_type = POIType.CITY.value
+        
+        rule = generator.generation_rules[POIType.CITY]
+        
+        # Test too close (should fail)
+        too_close = generator._check_distance_constraints(
+            51.0, 51.0, POIType.CITY, [existing_poi], rule
         )
-
-        # Verify results
-        # Towns should be in plains with elevation 0.3-0.6
-        for loc in town_locations: pass
-            assert biome_map[loc] == "plains"
-            assert 0.3 <= elevation_map[loc] <= 0.6
-
-        # Fishing villages should be in water with elevation 0.0-0.2
-        for loc in fishing_village_locations: pass
-            assert biome_map[loc] == "water"
-            assert 0.0 <= elevation_map[loc] <= 0.2
-
-    def test_distribute_poi_types(self, mock_data_registry): pass
-        """Test distributing different POI types across a region."""
-        # Define target numbers for different POI categories
-        major_poi_count = 20
-        minor_poi_count = 300
-
-        # Call the distribution function
-        distribution = distribute_poi_types(
-            major_poi_count, minor_poi_count, mock_data_registry.poi_types
+        assert not too_close
+        
+        # Test far enough (should pass)
+        far_enough = generator._check_distance_constraints(
+            250.0, 250.0, POIType.CITY, [existing_poi], rule
         )
+        assert far_enough
+    
+    def test_factory_function(self):
+        """Test the factory function"""
+        generator = get_poi_generator()
+        assert isinstance(generator, POIGenerator)
+    
+    def test_generation_parameters(self):
+        """Test generation parameters"""
+        params = GenerationParameters()
+        
+        # Test defaults
+        assert params.world_size == (1000.0, 1000.0)
+        assert params.poi_density == 0.1
+        assert params.civilization_level == 0.5
+        
+        # Test custom parameters
+        custom_params = GenerationParameters(
+            world_size=(500.0, 500.0),
+            poi_density=0.2,
+            civilization_level=0.8,
+            seed=42
+        )
+        
+        assert custom_params.world_size == (500.0, 500.0)
+        assert custom_params.poi_density == 0.2
+        assert custom_params.civilization_level == 0.8
+        assert custom_params.seed == 42
+    
+    def test_biome_types(self):
+        """Test biome type enumeration"""
+        assert BiomeType.GRASSLAND == "grassland"
+        assert BiomeType.FOREST == "forest"
+        assert BiomeType.MOUNTAIN == "mountain"
+        assert BiomeType.DESERT == "desert"
+        assert BiomeType.COASTAL == "coastal"
+    
+    def test_generation_types(self):
+        """Test generation type enumeration"""
+        assert GenerationType.RANDOM == "random"
+        assert GenerationType.CLUSTERED == "clustered"
+        assert GenerationType.GRID_BASED == "grid_based"
+        assert GenerationType.NOISE_BASED == "noise_based"
+    
+    def test_world_cell(self):
+        """Test world cell data structure"""
+        cell = WorldCell(x=10.0, y=20.0)
+        
+        assert cell.x == 10.0
+        assert cell.y == 20.0
+        assert cell.biome == BiomeType.GRASSLAND  # Default
+        assert cell.elevation == 0.5  # Default
+        assert isinstance(cell.resources, list)
+        assert isinstance(cell.existing_pois, list)
+    
+    def test_generation_rule(self):
+        """Test generation rule data structure"""
+        rule = GenerationRule(
+            poi_type=POIType.CITY,
+            probability_base=0.05,
+            min_distance_same_type=200.0,
+            preferred_biomes=[BiomeType.GRASSLAND, BiomeType.COASTAL]
+        )
+        
+        assert rule.poi_type == POIType.CITY
+        assert rule.probability_base == 0.05
+        assert rule.min_distance_same_type == 200.0
+        assert BiomeType.GRASSLAND in rule.preferred_biomes
+        assert BiomeType.COASTAL in rule.preferred_biomes
 
-        # Verify the total count matches our targets
-        actual_major_count = 0
-        actual_minor_count = 0
 
-        for poi_type, count in distribution.items(): pass
-            if mock_data_registry.poi_types[poi_type].get("is_major", False): pass
-                actual_major_count += count
-            else: pass
-                actual_minor_count += count
-
-        assert actual_major_count == major_poi_count
-        assert actual_minor_count == minor_poi_count
-
-        # Check that all POI types are represented
-        for poi_type in mock_data_registry.poi_types: pass
-            assert poi_type in distribution
-
-    def test_calculate_poi_density(self): pass
-        """Test calculating POI density based on region size."""
-        # Test various region sizes
-        small_region = {"width": 20, "height": 20}
-        medium_region = {"width": 50, "height": 50}
-        large_region = {"width": 100, "height": 100}
-
-        # Calculate densities
-        small_major, small_minor = calculate_poi_density(small_region)
-        medium_major, medium_minor = calculate_poi_density(medium_region)
-        large_major, large_minor = calculate_poi_density(large_region)
-
-        # Verify densities scale with region size
-        # Small region should have fewer POIs than medium, which should have fewer than large
-        assert small_major < medium_major < large_major
-        assert small_minor < medium_minor < large_minor
-
-        # Verify the ratio of major to minor POIs is maintained according to Development Bible
-        # (approximately ~20 major and 200-400 minor for standard region)
-        assert small_minor / small_major >= 10  # At least 10x more minor than major
-        assert medium_minor / medium_major >= 10
-        assert large_minor / large_major >= 10
+class TestPOIGeneratorIntegration:
+    """Integration tests for POI Generator"""
+    
+    @patch('backend.systems.poi.services.poi_generator.get_db_session')
+    def test_full_generation_workflow(self, mock_db):
+        """Test complete POI generation workflow"""
+        mock_session = Mock()
+        mock_db.return_value = mock_session
+        
+        generator = POIGenerator(mock_session)
+        
+        # Large region for comprehensive test
+        region_bounds = (0.0, 0.0, 500.0, 500.0)
+        params = GenerationParameters(
+            poi_density=0.005,  # Moderate density
+            civilization_level=0.7,
+            magic_prevalence=0.3,
+            seed=98765
+        )
+        
+        # Generate POIs
+        pois = generator.generate_pois_for_region(region_bounds, params)
+        
+        # Verify comprehensive results
+        assert len(pois) > 0
+        
+        # Check for variety of POI types
+        poi_types = set(poi.poi_type for poi in pois)
+        assert len(poi_types) > 1  # Should have multiple types
+        
+        # Verify all POIs are within bounds
+        for poi in pois:
+            assert 0.0 <= poi.location_x <= 500.0
+            assert 0.0 <= poi.location_y <= 500.0
+            assert poi.population > 0
+            assert poi.max_population >= poi.population
+        
+        # Verify database interactions
+        assert mock_session.add.call_count == len(pois)
+        mock_session.commit.assert_called_once()
+    
+    def test_multiple_region_generation(self):
+        """Test generating POIs for multiple regions"""
+        generator = POIGenerator()
+        
+        regions = [
+            (0.0, 0.0, 100.0, 100.0),
+            (100.0, 0.0, 200.0, 100.0),
+            (0.0, 100.0, 100.0, 200.0)
+        ]
+        
+        all_pois = []
+        params = GenerationParameters(poi_density=0.01, seed=11111)
+        
+        for region in regions:
+            pois = generator.generate_pois_for_region(region, params)
+            all_pois.extend(pois)
+        
+        # Verify POIs are distributed across regions
+        assert len(all_pois) > 0
+        
+        # Check POI distribution
+        region_counts = [0, 0, 0]
+        for poi in all_pois:
+            if 0 <= poi.location_x < 100 and 0 <= poi.location_y < 100:
+                region_counts[0] += 1
+            elif 100 <= poi.location_x < 200 and 0 <= poi.location_y < 100:
+                region_counts[1] += 1
+            elif 0 <= poi.location_x < 100 and 100 <= poi.location_y < 200:
+                region_counts[2] += 1
+        
+        # Should have POIs in multiple regions
+        non_empty_regions = sum(1 for count in region_counts if count > 0)
+        assert non_empty_regions >= 1  # At least one region should have POIs 

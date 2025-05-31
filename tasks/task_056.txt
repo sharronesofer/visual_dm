@@ -1,0 +1,11 @@
+# Task ID: 56
+# Title: Fix Broken Imports After Directory Restructuring
+# Status: done
+# Dependencies: 55
+# Priority: high
+# Description: Update all import statements throughout the codebase to reflect the new directory structure after moving infrastructure concerns from systems to infrastructure and domain models from infrastructure to systems
+# Details:
+**Moved Folders:**\n- analytics: systems → infrastructure\n- auth_user: systems → infrastructure\n- data: systems → infrastructure\n- events: systems → infrastructure\n- integration: systems → infrastructure\n- services: systems → infrastructure\n- shared: systems → infrastructure\n- storage: systems → infrastructure\n- models: infrastructure → systems\n- schemas: infrastructure → systems\n- rules: infrastructure → systems\n- repositories: infrastructure → systems\n\n**Removed:**\n- event_base: deprecated folder removed\n\n**Import Updates Needed:**\n- Update all imports from backend.systems.analytics to backend.infrastructure.analytics\n- Update all imports from backend.systems.auth_user to backend.infrastructure.auth_user\n- Update all imports from backend.systems.events to backend.infrastructure.events\n- Update all imports from backend.infrastructure.models to backend.systems.models\n- Update all imports from backend.infrastructure.schemas to backend.systems.schemas\n- Remove any imports from backend.systems.event_base
+
+# Test Strategy:
+

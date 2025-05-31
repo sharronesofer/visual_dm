@@ -3,14 +3,14 @@ from sqlalchemy import Column, Integer, String, JSON, ForeignKey, Table, DateTim
 from sqlalchemy.orm import relationship
 from typing import List, Dict, Optional, Any, Union
 from uuid import uuid4, UUID
-# Assuming Base is available from backend.core.database or a similar central place
-# For example: from backend.core.database import Base
-# If Base is defined in backend_backup/app/models/base.py, that needs to be handled.
-# For now, I'll assume a placeholder Base or it needs to be imported correctly.
 
-# Placeholder for Base if its actual import path is unknown
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
+# Import from the core database module
+try:
+    from backend.infrastructure.database import Base
+except ImportError:
+    # Fallback if core database is not available
+    from sqlalchemy.ext.declarative import declarative_base
+    Base = declarative_base()
 
 character_skills = Table(
     'character_skills',
@@ -34,40 +34,30 @@ class Character(Base):
     stats = Column(JSON, nullable=False)  # Stores ability scores, HP, etc.
     background = Column(String(100))
     alignment = Column(String(50))
-    # equipment = Column(JSON, default=list)  # REMOVED: Inventory is now managed by Inventory/InventoryItem
     skills = relationship('Skill', secondary=character_skills, backref='characters')
+    visual_data = Column(JSON, default=dict)  # Stores visual model data (CharacterModel serialized)
     notes = Column(JSON, default=list)  # Character-specific notes
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    # Fields from CharacterBuilder that might be missing and could be added:
-    # attributes_json = Column(JSON) # Or expand stats to include all attributes
-    # xp = Column(Integer, default=0)
-    # hp = Column(Integer) # This might be part of 'stats' JSON
-    # mp = Column(Integer) # This might be part of 'stats' JSON
-    # gold = Column(Integer, default=0)
-    # faction_affiliations: Managed by Relationship model
-    # reputation: Managed by Relationship model or a direct field
-    # ... other fields from CharacterBuilder.finalize() output
 
     def __repr__(self):
         return f"<Character {self.name} ({self.uuid})>"
 
     def to_builder(self):
-        from backend.systems.character.core.character_builder_class import CharacterBuilder, RACES_DATA, FEATS_LIST # Assuming FEATS_LIST is what builder uses
-        # Assuming SKILL_LIST is defined in character_builder_class or accessible
-        # For now, let's fetch all skill names from the DB as a list for the builder.
-        # This might need refinement based on where CharacterBuilder expects its skill_list from.
-        from backend.core.database import get_db_session # Temporary for fetching skills
-        db_session = next(get_db_session())
-        all_skills_from_db = [s.name for s in db_session.query(Skill.name).all()]
-        db_session.close()
+        """Convert this Character model to a CharacterBuilder instance for modifications."""
+        from backend.systems.character.services.character_builder import CharacterBuilder, RACES_DATA, FEATS_LIST
+        try:
+            from backend.infrastructure.database import get_db
+            db_session = next(get_db())
+            all_skills_from_db = [s.name for s in db_session.query(Skill.name).all()]
+            db_session.close()
+        except:
+            # Fallback skill list if database is not available
+            all_skills_from_db = ['acrobatics', 'animal_handling', 'arcana', 'athletics', 'deception', 'history', 'insight', 'intimidation', 'investigation', 'medicine', 'nature', 'perception', 'performance', 'persuasion', 'religion', 'sleight_of_hand', 'stealth', 'survival']
 
-        # Initialize builder with necessary static data
-        # Ensure RACES_DATA and FEATS_LIST are correctly loaded in CharacterBuilder or passed appropriately
         builder = CharacterBuilder(race_data=RACES_DATA, feat_data=FEATS_LIST, skill_list=all_skills_from_db)
-
         builder.character_name = self.name
+        
         if self.race in builder.race_data:
             builder.selected_race = self.race
         else:
@@ -76,107 +66,55 @@ class Character(Base):
         # Populate attributes
         if isinstance(self.stats, dict):
             for attr, value in self.stats.items():
-                if attr.upper() in builder.attributes: # Builder uses uppercase keys like STR, DEX
+                if attr.upper() in builder.attributes:
                     builder.attributes[attr.upper()] = value
-                # Also handle direct stat fields if they were on builder (hp, mp, ac, xp, level)
                 elif hasattr(builder, attr):
                     setattr(builder, attr, value)
         
         builder.level = self.level
-        # if hasattr(self, 'xp'): builder.xp = self.xp # If Character ORM has xp
-        # if hasattr(self, 'gold'): builder.gold = self.gold # If Character ORM has gold
-        # Note: HP, MP, AC are usually derived in builder.finalize(), 
-        # so not setting them directly unless the builder expects it.
-
-        # Populate skills (names)
         builder.selected_skills = [skill.name for skill in self.skills]
-
-        # Populate feats (names)
-        # This assumes feats are stored in a way that can be retrieved and matched to builder.feat_data keys
-        # If Character.feats is a relationship to a Feat model similar to Skill:
-        # builder.selected_feats = [feat.name for feat in self.feats_relationship] # Assuming feats_relationship
-        # For now, if feats are stored as a list of names in self.stats or another field:
-        # if isinstance(self.stats.get('feats'), list):
-        #    builder.selected_feats = [f for f in self.stats['feats'] if f in builder.feat_data]
-
-        # Starter kit is usually applied during initial creation, not typically reverse-populated this way.
-        # If needed, specific equipment/gold from inventory could be mapped back if the builder needs it.
-
-        # Alignment, background, notes if they exist on Character ORM and builder has fields for them
-        if hasattr(self, 'alignment') and hasattr(builder, 'alignment'): # builder doesn't have alignment field
-             pass # builder.alignment = self.alignment
-        if hasattr(self, 'background') and hasattr(builder, 'background'): # builder doesn't have background
-             pass # builder.background = self.background
-        # Notes: builder doesn't have a direct notes field. Could be part of some other dict.
-
+        
         return builder
 
     # Relationship System Integration
     def get_relationships(self, relationship_type: Optional[str] = None) -> List[Dict[str, Any]]:
-        """
-        Get all relationships for this character, optionally filtered by type.
+        """Get all relationships for this character, optionally filtered by type."""
+        from backend.systems.character.services.relationship_service import RelationshipService
         
-        Args:
-            relationship_type: Optional filter by relationship type
-            
-        Returns:
-            List of relationship dictionaries
-        """
-        from backend.systems.character import get_relationship_service
-        
-        relationships = get_relationship_service().get_relationships_by_source(self.uuid, relationship_type)
+        service = RelationshipService()
+        relationships = service.get_relationships_by_source(self.uuid, relationship_type)
         return [rel.to_dict() for rel in relationships]
     
     def get_faction_relationships(self) -> List[Dict[str, Any]]:
-        """
-        Get all faction relationships for this character.
-        
-        Returns:
-            List of faction relationship dictionaries
-        """
-        from backend.systems.character import get_relationship_service
+        """Get all faction relationships for this character."""
+        from backend.systems.character.services.relationship_service import RelationshipService
         from backend.systems.character.models.relationship import RelationshipType
         
-        relationships = get_relationship_service().get_relationships_by_source(
+        service = RelationshipService()
+        relationships = service.get_relationships_by_source(
             self.uuid, 
             RelationshipType.FACTION
         )
         return [rel.to_dict() for rel in relationships]
     
     def get_character_relationships(self) -> List[Dict[str, Any]]:
-        """
-        Get all character-to-character relationships for this character.
-        
-        Returns:
-            List of character relationship dictionaries
-        """
-        from backend.systems.character import get_relationship_service
+        """Get all character-to-character relationships for this character."""
+        from backend.systems.character.services.relationship_service import RelationshipService
         from backend.systems.character.models.relationship import RelationshipType
         
-        relationships = get_relationship_service().get_relationships_by_source(
+        service = RelationshipService()
+        relationships = service.get_relationships_by_source(
             self.uuid, 
             RelationshipType.CHARACTER
         )
         return [rel.to_dict() for rel in relationships]
     
-    def add_relationship(self, 
-                        target_id: Union[str, UUID], 
-                        relationship_type: str, 
-                        data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Add a new relationship from this character to another entity.
+    def add_relationship(self, target_id: Union[str, UUID], relationship_type: str, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Add a new relationship from this character to another entity."""
+        from backend.systems.character.services.relationship_service import RelationshipService
         
-        Args:
-            target_id: UUID of the target entity
-            relationship_type: Type of relationship to create
-            data: Relationship-specific data
-            
-        Returns:
-            Dictionary representation of the created relationship
-        """
-        from backend.systems.character import get_relationship_service
-        
-        relationship = get_relationship_service().create_relationship(
+        service = RelationshipService()
+        relationship = service.create_relationship(
             self.uuid,
             target_id,
             relationship_type,
@@ -186,239 +124,116 @@ class Character(Base):
     
     # Mood System Integration
     def get_mood(self) -> Dict[str, Any]:
-        """
-        Get the character's current mood state.
+        """Get the character's current mood state."""
+        from backend.systems.character.services.mood_service import MoodService
         
-        Returns:
-            Dictionary with mood information
-        """
-        from backend.systems.character import get_mood_service
-        
-        mood = get_mood_service().get_mood(self.uuid)
+        service = MoodService()
+        mood = service.get_mood(self.uuid)
         return mood.to_dict()
     
     def get_mood_description(self) -> str:
-        """
-        Get a text description of the character's current mood.
+        """Get a human-readable description of the character's current mood."""
+        from backend.systems.character.services.mood_service import MoodService
         
-        Returns:
-            String description like "extremely angry" or "mildly happy"
-        """
-        from backend.systems.character import get_mood_service
-        
-        return get_mood_service().get_mood_description(self.uuid)
+        service = MoodService()
+        return service.get_mood_description(self.uuid)
     
-    def add_mood_modifier(self, 
-                         emotional_state: str, 
-                         intensity: str, 
-                         reason: str, 
-                         duration_hours: Optional[float] = None) -> Dict[str, Any]:
-        """
-        Add a mood modifier to this character.
+    def update_mood(self, mood_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update the character's mood with new data."""
+        from backend.systems.character.services.mood_service import MoodService
         
-        Args:
-            emotional_state: The emotion being affected
-            intensity: How strongly the modifier affects the mood
-            reason: Description of what caused this modifier
-            duration_hours: How long the modifier lasts (None = permanent)
-            
-        Returns:
-            Dictionary representation of the created modifier
-        """
-        from backend.systems.character import get_mood_service
-        
-        modifier = get_mood_service().add_mood_modifier(
-            self.uuid,
-            emotional_state,
-            intensity,
-            reason,
-            duration_hours
-        )
-        return modifier.to_dict() if modifier else {}
+        service = MoodService()
+        updated_mood = service.update_mood(self.uuid, mood_data)
+        return updated_mood.to_dict()
     
     # Goal System Integration
-    def get_goals(self, 
-                status: Optional[str] = None, 
-                goal_type: Optional[str] = None, 
-                priority: Optional[str] = None) -> List[Dict[str, Any]]:
-        """
-        Get goals for this character, optionally filtered.
+    def get_goals(self, active_only: bool = True) -> List[Dict[str, Any]]:
+        """Get all goals for this character."""
+        from backend.systems.character.services.goal_service import GoalService
         
-        Args:
-            status: Filter by goal status
-            goal_type: Filter by goal type
-            priority: Filter by goal priority
-            
-        Returns:
-            List of goal dictionaries
-        """
-        from backend.systems.character import get_goal_service
-        
-        goals = get_goal_service().get_character_goals(
-            self.uuid,
-            goal_type=goal_type,
-            status=status,
-            priority=priority
-        )
+        service = GoalService()
+        goals = service.get_character_goals(self.uuid, active_only)
         return [goal.to_dict() for goal in goals]
     
-    def add_goal(self, 
-               description: str, 
-               goal_type: str = None, 
-               priority: str = None, 
-               metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """
-        Add a new goal to this character.
+    def add_goal(self, goal_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Add a new goal for this character."""
+        from backend.systems.character.services.goal_service import GoalService
         
-        Args:
-            description: Description of the goal
-            goal_type: Type of goal (narrative, personal, etc.)
-            priority: Priority level (low, medium, high, critical)
-            metadata: Additional goal metadata
-            
-        Returns:
-            Dictionary representation of the created goal
-        """
-        from backend.systems.character import get_goal_service
-        
-        goal = get_goal_service().add_goal(
-            self.uuid,
-            description,
-            goal_type=goal_type,
-            priority=priority,
-            metadata=metadata
-        )
+        service = GoalService()
+        goal = service.create_goal(self.uuid, goal_data)
         return goal.to_dict()
     
-    def get_active_goals(self) -> List[Dict[str, Any]]:
-        """
-        Get all active goals for this character.
+    def update_goal(self, goal_id: str, updates: Dict[str, Any]) -> Dict[str, Any]:
+        """Update a specific goal for this character."""
+        from backend.systems.character.services.goal_service import GoalService
         
-        Returns:
-            List of active goal dictionaries
-        """
-        from backend.systems.character import get_goal_service
+        service = GoalService()
+        updated_goal = service.update_goal(goal_id, updates)
+        return updated_goal.to_dict()
+
+    # Visual Model Integration
+    def get_visual_model(self):
+        """Get the character's visual model (CharacterModel instance)."""
+        from backend.systems.character.models.visual_model import CharacterModel
         
-        goals = get_goal_service().get_active_goals(self.uuid)
-        return [goal.to_dict() for goal in goals]
+        if self.visual_data:
+            return CharacterModel.from_dict(self.visual_data)
+        else:
+            # Create default visual model based on race
+            return CharacterModel(
+                race=self.race,
+                base_mesh=f"base_{self.race.lower()}",
+                scale={"height": 1.0, "build": 0.5}
+            )
     
-    def get_highest_priority_goals(self, 
-                                 status: str = "active", 
-                                 limit: int = 5) -> List[Dict[str, Any]]:
-        """
-        Get the highest priority goals for this character.
+    def set_visual_model(self, visual_model):
+        """Set the character's visual model (from CharacterModel instance)."""
+        from backend.systems.character.models.visual_model import CharacterModel
         
-        Args:
-            status: Filter by goal status
-            limit: Maximum number of goals to return
-            
-        Returns:
-            List of goal dictionaries
-        """
-        from backend.systems.character import get_goal_service
-        
-        goals = get_goal_service().get_highest_priority_goals(
-            self.uuid,
-            status=status,
-            limit=limit
-        )
-        return [goal.to_dict() for goal in goals]
+        if isinstance(visual_model, CharacterModel):
+            self.visual_data = visual_model.to_dict()
+        elif isinstance(visual_model, dict):
+            self.visual_data = visual_model
+        else:
+            raise ValueError("visual_model must be a CharacterModel instance or dict")
     
-    # Memory System Integration
-    def get_memories(self, 
-                   categories: Optional[List[str]] = None, 
-                   min_relevance: float = 0.0, 
-                   core_only: bool = False, 
-                   limit: Optional[int] = None) -> List[Dict[str, Any]]:
-        """
-        Get memories for this character, optionally filtered.
+    def update_visual_appearance(self, updates: Dict[str, Any]):
+        """Update specific aspects of the character's visual appearance."""
+        visual_model = self.get_visual_model()
         
-        Args:
-            categories: Filter by categories
-            min_relevance: Minimum relevance threshold
-            core_only: Only include core memories
-            limit: Maximum number of memories to return
-            
-        Returns:
-            List of memory dictionaries
-        """
-        from backend.systems.character import get_memory_manager
+        if "blendshapes" in updates:
+            for name, value in updates["blendshapes"].items():
+                visual_model.set_blendshape(name, value)
         
-        memory_manager = get_memory_manager().for_entity(self.uuid)
-        memories = memory_manager.query_memories(
-            categories=categories,
-            min_relevance=min_relevance,
-            core_only=core_only,
-            limit=limit
-        )
-        return [memory.to_dict() for memory in memories]
-    
-    def add_memory(self, 
-                 content: str, 
-                 relevance: float = 1.0, 
-                 is_core: bool = False, 
-                 metadata: Optional[Dict[str, Any]] = None, 
-                 categories: Optional[List[str]] = None) -> Dict[str, Any]:
-        """
-        Add a new memory to this character.
+        if "materials" in updates:
+            for slot, material_data in updates["materials"].items():
+                if isinstance(material_data, dict):
+                    visual_model.assign_material(slot, material_data.get("id", "default"), 
+                                               material_data.get("properties", {}))
+                else:
+                    visual_model.assign_material(slot, material_data)
         
-        Args:
-            content: The memory content
-            relevance: Initial relevance score
-            is_core: Whether this is a core memory
-            metadata: Additional memory metadata
-            categories: Categories for this memory
-            
-        Returns:
-            Dictionary representation of the created memory
-        """
-        from backend.systems.character import get_memory_manager
+        if "mesh_slots" in updates:
+            for slot, mesh_id in updates["mesh_slots"].items():
+                visual_model.swap_mesh(slot, mesh_id)
         
-        memory_manager = get_memory_manager().for_entity(self.uuid)
-        memory = memory_manager.add_memory(
-            content,
-            relevance=relevance,
-            is_core=is_core,
-            metadata=metadata,
-            categories=categories
-        )
-        return memory.to_dict()
-    
-    def get_memory_summary(self, 
-                        categories: Optional[List[str]] = None, 
-                        min_relevance: float = 0.5, 
-                        max_memories: int = 10) -> str:
-        """
-        Get a formatted summary of this character's memories for GPT context.
+        if "scale" in updates:
+            visual_model.scale.update(updates["scale"])
         
-        Args:
-            categories: Filter by categories
-            min_relevance: Minimum relevance threshold
-            max_memories: Maximum number of memories to include
-            
-        Returns:
-            Formatted memory summary string
-        """
-        from backend.systems.character import get_memory_manager
-        
-        memory_manager = get_memory_manager().for_entity(self.uuid)
-        return memory_manager.generate_memory_summary(
-            categories=categories,
-            min_relevance=min_relevance,
-            max_memories=max_memories
-        )
+        self.set_visual_model(visual_model)
 
 class Skill(Base):
+    """Skill model representing character abilities and proficiencies."""
     __tablename__ = 'skills'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False, unique=True)
     description = Column(String(500))
-    ability = Column(String(50))  # Associated ability score
+    ability = Column(String(50))  # Associated ability score (STR, DEX, etc.)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"<Skill {self.name}>"
 
-__all__ = ["Character", "Skill"] 
+__all__ = ["Character", "Skill", "character_skills"] 

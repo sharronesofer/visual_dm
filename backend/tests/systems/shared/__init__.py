@@ -1,3 +1,1 @@
-"""
-Tests for the shared modules.
-"""
+# Test package for the shared system

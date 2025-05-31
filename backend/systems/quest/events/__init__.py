@@ -1,0 +1,2 @@
+"""Events for quest system"""
+

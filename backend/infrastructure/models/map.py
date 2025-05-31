@@ -1,0 +1,9 @@
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
+from backend.infrastructure.models import BaseModel
+
+class Map(BaseModel):
+    __tablename__ = 'maps'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now()) 

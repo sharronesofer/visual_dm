@@ -21,11 +21,11 @@ def update_imports_in_file(file_path):
     # Define import patterns and their replacements
     import_patterns = [
         # app.core.database -> backend.core.database
-        (r'from app\.core\.database', r'from backend.systems.shared.database'),
+        (r'from app\.core\.database', r'from backend.infrastructure.shared.database'),
         
         # app.core.models.X -> backend.systems.X.models.X or backend.core.models.X
         (r'from app\.core\.models\.character', r'from backend.systems.character.models.character'),
-        (r'from app\.core\.models\.user', r'from backend.systems.auth_user.models.user_models'),
+        (r'from app\.core\.models\.user', r'from backend.infrastructure.auth_user.models.user_models'),
         (r'from app\.core\.models\.party', r'from backend.systems.party.models.party'),
         (r'from app\.core\.models\.world', r'from backend.systems.world_state.models.world'),
         (r'from app\.core\.models\.region', r'from backend.systems.region.models.region'),
@@ -33,17 +33,17 @@ def update_imports_in_file(file_path):
         (r'from app\.core\.models\.spell', r'from backend.systems.magic.models.spell'),
         (r'from app\.core\.models\.inventory', r'from backend.systems.inventory.models.inventory'),
         (r'from app\.core\.models\.combat', r'from backend.systems.combat.models.stats'),
-        (r'from app\.core\.models\.save', r'from backend.systems.shared.models.save'),
+        (r'from app\.core\.models\.save', r'from backend.infrastructure.shared.models.save'),
         
         # app.core.utils -> backend.core.utils
-        (r'from app\.core\.utils\.error_utils', r'from backend.systems.shared.utils.error'),
-        (r'from app\.core\.utils', r'from backend.systems.shared.utils'),
+        (r'from app\.core\.utils\.error_utils', r'from backend.infrastructure.shared.utils.error'),
+        (r'from app\.core\.utils', r'from backend.infrastructure.shared.utils'),
         
         # app.models -> backend.systems
         (r'from app\.models', r'from backend.systems.character.models'),
         
         # app.rules -> backend.core.rules
-        (r'from app\.rules', r'from backend.systems.shared.rules'),
+        (r'from app\.rules', r'from backend.infrastructure.shared.rules'),
         
         # app.core.services -> backend.systems.X.services
         (r'from app\.core\.services\.character_service', r'from backend.systems.character.services.character_service'),

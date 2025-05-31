@@ -5,26 +5,27 @@
 import os
 import random
 from datetime import datetime
-from app.rules.rules_utils import calculate_dr
-from uuid import uuid4
+from backend.infrastructure.shared.rules.rules_utils import calculate_dr
 import uuid
-# # # # from app.core.database import db
-from app.core.utils.json_utils import load_json
+# # # # from backend.infrastructure.database import db
+from backend.infrastructure.utils.json_utils import load_json
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm.exc import NoResultFound
-from app.core.models.character import Character
-from app.core.models.user import User
-from app.core.models.party import Party
-from app.core.models.world import Region
-from app.core.models.quest import Quest
-from app.core.models.spell import Spell
-from app.core.models.inventory import InventoryItem
-from app.core.models.save import SaveGame
+
+# Remove circular imports - these will be imported lazily when needed
+# from backend.systems.character import Character
+# from backend.infrastructure.auth.auth_user.models import User
+# from backend.systems.party import Party
+# from backend.systems.world import Region
+# from backend.systems.quest import Quest
+# from backend.systems.spell import Spell
+# from backend.systems.inventory import InventoryItem
+# from backend.systems.save import SaveGame
 
 # Get the absolute paths to the JSON files
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'rules')
-EQUIPMENT_DATA = load_json(os.path.join(DATA_DIR, 'equipment.json'))
-FEATS_DATA = load_json(os.path.join(DATA_DIR, 'feats.json'))
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', '..', '..', 'data', 'builders', 'content')
+EQUIPMENT_DATA = load_json(os.path.join(DATA_DIR, 'equipment', 'equipment.json'))
+FEATS_DATA = load_json(os.path.join(DATA_DIR, 'abilities.json'))
 RACES_DATA = load_json(os.path.join(DATA_DIR, 'races.json'))
 
 # Extract feats from the nested structure

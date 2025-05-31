@@ -84,7 +84,7 @@ IMPORT_REPLACEMENTS = [
     (r"from backend\.systems\.character\.models\.history", "from backend.systems.loot.models.history"),
     
     # Auth/User
-    (r"from backend\.systems\.character\.models\.user_models", "from backend.systems.auth_user.models.user_models"),
+    (r"from backend\.systems\.character\.models\.user_models", "from backend.infrastructure.auth_user.models.user_models"),
     
     # Economy
     (r"from backend\.systems\.character\.models\.shop_utils", "from backend.systems.economy.utils.shop_utils"),

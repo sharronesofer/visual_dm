@@ -1,15 +1,11 @@
 """
-Visual Model
------------
+Visual Model for Character System
+--------------------------------
 Classes for managing the visual representation of characters, including meshes, 
 materials, blend shapes (morph targets), and animations.
 
-This file consolidates visual model functionality from:
-- character/character/model.py
-- character/character/mesh.py
-- character/character/materials.py
-- character/character/blendshapes.py
-- character/character/animation.py
+This module is part of the canonical backend.systems.character architecture and
+provides the visual model functionality expected by the character system tests.
 """
 
 from typing import Dict, Any, Optional, List
@@ -23,17 +19,21 @@ class MeshSlot:
         self.mesh_id = mesh_id
         self.compatible_types = compatible_types or []
 
+    def is_compatible(self, mesh_type: str) -> bool:
+        """Check if a mesh type can be attached to this slot."""
+        return mesh_type in self.compatible_types or not self.compatible_types
+
 class BlendShape:
     """
-    Represents a morph target for facial/body feature adjustment.
+    Represents a blend shape (morph target) with a value.
     """
     def __init__(self, name: str, value: float = 0.0):
         self.name = name
-        self.value = value
+        self.value = max(0.0, min(1.0, value))  # Clamp between 0 and 1
 
 class MaterialAssignment:
     """
-    Handles dynamic material property assignment and texture mapping.
+    Represents a material assigned to a specific slot/part of the model.
     """
     def __init__(self, slot: str, material_id: str, properties: Optional[Dict[str, Any]] = None):
         self.slot = slot
@@ -42,7 +42,7 @@ class MaterialAssignment:
 
 class AnimationState:
     """
-    Manages the current animation state of a character.
+    Represents the state of an animation.
     """
     def __init__(self, animation_id: str, speed: float = 1.0, weight: float = 1.0, 
                  loop: bool = True, transition_time: float = 0.25):
@@ -51,12 +51,12 @@ class AnimationState:
         self.weight = weight
         self.loop = loop
         self.transition_time = transition_time
-        self.time = 0.0
         self.is_playing = False
 
 class CharacterModel:
     """
     Main class orchestrating mesh swapping, blend shape adjustment, and material application.
+    Designed for integration with the Character ORM model in the character system.
     """
     def __init__(self, race: str, base_mesh: str, mesh_slots: Optional[Dict[str, MeshSlot]] = None,
                  blendshapes: Optional[Dict[str, BlendShape]] = None,
@@ -116,6 +116,24 @@ class CharacterModel:
             if self.current_animation == animation_id:
                 self.current_animation = None
 
+    def apply_preset(self, preset_data: Dict[str, Any]):
+        """Apply a visual preset to the character model."""
+        if "blendshapes" in preset_data:
+            for name, value in preset_data["blendshapes"].items():
+                self.set_blendshape(name, value)
+        
+        if "materials" in preset_data:
+            for slot, material_data in preset_data["materials"].items():
+                if isinstance(material_data, dict):
+                    self.assign_material(slot, material_data.get("id", "default"), 
+                                       material_data.get("properties", {}))
+                else:
+                    self.assign_material(slot, material_data)
+        
+        if "mesh_slots" in preset_data:
+            for slot, mesh_id in preset_data["mesh_slots"].items():
+                self.swap_mesh(slot, mesh_id)
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize the character model to a dictionary."""
         return {
@@ -168,43 +186,20 @@ class CharacterModel:
         model.current_animation = data.get("current_animation")
         return model
 
-    def apply_preset(self, preset_data: Dict[str, Any]):
-        """Apply a preset to the character model, updating multiple aspects at once."""
-        if "mesh_slots" in preset_data:
-            for slot, mesh_id in preset_data["mesh_slots"].items():
-                self.swap_mesh(slot, mesh_id)
-                
-        if "blendshapes" in preset_data:
-            for name, value in preset_data["blendshapes"].items():
-                self.set_blendshape(name, value)
-                
-        if "materials" in preset_data:
-            for slot, material_data in preset_data["materials"].items():
-                if isinstance(material_data, dict) and "id" in material_data:
-                    self.assign_material(slot, material_data["id"], material_data.get("properties"))
-                else:
-                    self.assign_material(slot, material_data)
-                    
-        if "scale" in preset_data:
-            self.scale.update(preset_data["scale"])
+# Additional models for compatibility with existing visual system
+class VisualModel:
+    """Legacy compatibility class for VisualModel references."""
 
-    def randomize(self, constraints: Optional[Dict[str, Any]] = None):
-        """Randomize character appearance within optional constraints."""
-        from random import random, choice, uniform
-        
-        constraints = constraints or {}
-        
-        # Randomize blendshapes within constraints
-        if "blendshapes" not in constraints:
-            for name in self.blendshapes:
-                self.blendshapes[name].value = uniform(0.0, 1.0)
-        else:
-            for name, range_data in constraints.get("blendshapes", {}).items():
-                if name in self.blendshapes:
-                    min_val = range_data.get("min", 0.0)
-                    max_val = range_data.get("max", 1.0)
-                    self.blendshapes[name].value = uniform(min_val, max_val)
-        
-        # TODO: Implement randomization for meshes, materials, and other aspects
-        # This would require access to available options which would typically
-        # come from a repository of available assets 
+class Mesh:
+    """Legacy compatibility class for Mesh references."""
+
+class Material:
+    """Legacy compatibility class for Material references."""
+
+class Animation:
+    """Legacy compatibility class for Animation references."""
+
+__all__ = [
+    'CharacterModel', 'MeshSlot', 'BlendShape', 'MaterialAssignment', 'AnimationState',
+    'VisualModel', 'Mesh', 'Material', 'Animation'
+] 

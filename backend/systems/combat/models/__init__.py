@@ -1,7 +1,5 @@
-"""
-Models for the combat system.
-"""
+"""Models for combat system"""
 
-from backend.systems.combat.models.stats import CombatStats
-
-__all__ = ['CombatStats']
+# Auto-generated imports
+from .models import *
+from .stats import *

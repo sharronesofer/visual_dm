@@ -12,7 +12,6 @@ from sqlalchemy.orm import Session
 from backend.systems.faction.models.faction import Faction, FactionMembership
 from backend.systems.faction.services.faction_service import FactionNotFoundError
 
-
 class FactionReputationService:
     """Service for managing faction reputation systems."""
     
@@ -544,7 +543,6 @@ class FactionReputationService:
                 modifiers[key] = max(0.1, min(2.0, value))
                 
         return modifiers
-
 
 def get_reputation_bracket(reputation: float) -> str:
     """

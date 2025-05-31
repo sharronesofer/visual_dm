@@ -10,7 +10,7 @@ import uuid
 
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, JSON
 from sqlalchemy.orm import relationship
-from app.core.db_base import Base
+from backend.infrastructure.database import Base
 
 
 @dataclass
@@ -69,7 +69,11 @@ class TradeRoute(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    metadata = Column(JSON, default=dict)
+    last_trade_time = Column(DateTime, nullable=True)
+    
+    # Additional data
+    # Renamed from 'metadata' to avoid SQLAlchemy reserved attribute conflict
+    route_metadata = Column(JSON, default=dict)
 
     # Relationships
     origin_region = relationship('Region', foreign_keys=[origin_region_id])
@@ -93,7 +97,7 @@ class TradeRoute(Base):
             status=self.status,
             created_at=self.created_at,
             updated_at=self.last_updated,
-            metadata=self.metadata or {}
+            metadata=self.route_metadata or {}
         )
     
     @classmethod
@@ -118,5 +122,5 @@ class TradeRoute(Base):
             status=data_model.status,
             created_at=data_model.created_at,
             last_updated=data_model.updated_at,
-            metadata=data_model.metadata
+            route_metadata=data_model.metadata
         ) 

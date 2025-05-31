@@ -21,18 +21,18 @@ class CriticalImportFixer:
         # Critical fixes for imports that point to non-existent modules
         self.critical_fixes = {
             # Fix imports to actual existing modules
-            "from backend.systems.shared.models import": "from backend.systems.shared.models.base import",
-            "from backend.systems.shared.services import": "from backend.systems.shared.services.base import",
-            "from backend.systems.shared.repositories import": "from backend.systems.shared.repositories.base import",
+            "from backend.infrastructure.shared.models import": "from backend.infrastructure.shared.models.base import",
+            "from backend.infrastructure.shared.services import": "from backend.infrastructure.shared.services.base import",
+            "from backend.infrastructure.shared.repositories import": "from backend.infrastructure.shared.repositories.base import",
             
             # Fix module references that don't exist as separate modules
-            "from backend.systems.models.": "from backend.systems.shared.models.",
-            "from backend.systems.services.": "from backend.systems.",
-            "from backend.systems.repositories.": "from backend.systems.shared.repositories.",
+            "from backend.infrastructure.shared.models.": "from backend.infrastructure.shared.models.",
+            "from backend.infrastructure.services.": "from backend.systems.",
+            "from backend.infrastructure.repositories.": "from backend.infrastructure.shared.repositories.",
             
             # Fix event system imports
-            "from backend.systems.event_base import": "from backend.systems.events.event_base import",
-            "from backend.systems.event_dispatcher import": "from backend.systems.events.event_dispatcher import",
+            "# REMOVED: deprecated event_base import
+            "from backend.systems.event_dispatcher import": "from backend.infrastructure.events.event_dispatcher import",
             
             # Fix specific modules that were moved
             "from backend.systems.economy_manager import": "from backend.systems.economy.managers.economy_manager import",
@@ -42,14 +42,14 @@ class CriticalImportFixer:
             # Fix system-specific imports
             "from backend.systems.character_service.services import": "from backend.systems.character.services.character_service import",
             "from backend.systems.npc_service.services import": "from backend.systems.npc.services.npc_service import",
-            "from backend.systems.analytics_service.services import": "from backend.systems.analytics.services.analytics_service import",
+            "from backend.infrastructure.analytics_service.services import": "from backend.infrastructure.analytics.services.analytics_service import",
             
             # Fix model imports
             "from backend.systems.relationship.models import": "from backend.systems.character.models.relationship import",
             "from backend.systems.relationship_events.models import": "from backend.systems.character.models.relationship_events import",
             "from backend.systems.mood.models import": "from backend.systems.character.models.mood import",
             "from backend.systems.goal.models import": "from backend.systems.character.models.goal import",
-            "from backend.systems.user_models.models import": "from backend.systems.auth_user.models.user_models import",
+            "from backend.systems.user_models.models import": "from backend.infrastructure.auth_user.models.user_models import",
             "from backend.systems.faction.models import": "from backend.systems.faction.models.faction import",
             "from backend.systems.faction_goal.models import": "from backend.systems.faction.models.faction_goal import",
             "from backend.systems.rumor.models import": "from backend.systems.rumor.models.rumor import",
@@ -76,16 +76,16 @@ class CriticalImportFixer:
             "from backend.systems.event_scheduler.services import": "from backend.systems.time.services.event_scheduler import",
             "from backend.systems.calendar_service.services import": "from backend.systems.time.services.calendar_service import",
             "from backend.systems.weather_service.services import": "from backend.systems.time.services.weather_service import",
-            "from backend.systems.data_service.services import": "from backend.systems.data.services.data_service import",
+            "from backend.infrastructure.data_service.services import": "from backend.infrastructure.data.services.data_service import",
             "from backend.systems.party_service.services import": "from backend.systems.character.services.party_service import",
             "from backend.systems.relationship_service.services import": "from backend.systems.character.services.relationship_service import",
-            "from backend.systems.auth_service.services import": "from backend.systems.auth_user.services.auth_service import",
-            "from backend.systems.validation_service.services import": "from backend.systems.auth_user.services.validation_service import",
-            "from backend.systems.auth_relationships.services import": "from backend.systems.auth_user.services.auth_relationship_service import",
+            "from backend.systems.auth_service.services import": "from backend.infrastructure.auth_user.services.auth_service import",
+            "from backend.systems.validation_service.services import": "from backend.infrastructure.auth_user.services.validation_service import",
+            "from backend.systems.auth_relationships.services import": "from backend.infrastructure.auth_user.services.auth_relationship_service import",
             
             # Fix data/database imports
-            "from backend.systems.data.database import": "from backend.systems.shared.database import",
-            "from backend.systems.base.models import": "from backend.systems.shared.models.base import",
+            "from backend.infrastructure.data.database import": "from backend.infrastructure.shared.database import",
+            "from backend.systems.base.models import": "from backend.infrastructure.shared.models.base import",
             
             # Fix arc imports
             "from backend.systems.arc.schemas import": "from backend.systems.arc.schemas.arc_schemas import",
@@ -182,7 +182,6 @@ class CriticalImportFixer:
             "error_files": error_files
         }
 
-
 def main():
     """Main execution function."""
     
@@ -202,7 +201,6 @@ def main():
         return 1
     
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main()) 

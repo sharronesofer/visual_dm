@@ -1,7 +1,4 @@
-"""
-FastAPI routers for the combat system.
-"""
+"""Routers for combat system"""
 
-from backend.systems.combat.routers.combat_router import router as combat_router
-
-__all__ = ["combat_router"]
+# Auto-generated imports
+from .combat_router import *

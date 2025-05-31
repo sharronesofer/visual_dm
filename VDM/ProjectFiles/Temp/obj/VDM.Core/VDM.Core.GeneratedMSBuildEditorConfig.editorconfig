@@ -1,0 +1,8 @@
+is_global = true
+build_property.RootNamespace = VDM.Core
+build_property.ProjectDir = /Users/Sharrone/Visual_DM/VDM/ProjectFiles/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 

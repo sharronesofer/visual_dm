@@ -16,12 +16,12 @@ collecting ...
 23:47:54 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
 23:47:54 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
 23:47:54 [INFO] backend.systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
-23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Biome file not found: backend/data/biomes/land_types.json
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Biome file not found: data/system/runtime/biomes/land_types.json
 23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load biome data
-23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Adjacency file not found: backend/data/biomes/adjacency.json
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Adjacency file not found: data/system/runtime/biomes/adjacency.json
 23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Failed to load adjacency rules
-23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: backend/data/entities
-23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: backend/data/items
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: data/system/runtime/entities
+23:47:54 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: data/system/runtime/items
 23:47:54 [INFO] backend.systems.rumor.repository: RumorRepository initialized with storage at data/rumors/
 23:47:54 [INFO] backend.systems.rumor.repository: RumorRepository sync singleton created with storage at data/rumors/
 23:47:54 [INFO] backend.systems.rumor.service: RumorService instance configured.
@@ -29,8 +29,8 @@ collecting ...
 23:47:54 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
 23:47:54 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
 23:47:54 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
 23:47:55 [INFO] root: World Generator initialized.
 23:47:55 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
 23:47:55 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized

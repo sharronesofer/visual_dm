@@ -1,0 +1,4365 @@
+{
+  "timestamp": "2025-05-31T08:27:10.404244",
+  "total_systems": 35,
+  "systems": {
+    "economy": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/market.py",
+            "models/__init__.py",
+            "models/commodity_future.py",
+            "models/trade_route.py"
+          ],
+          "count": 5
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "database_service/__init__.py",
+            "database_service/economy_database_service.py",
+            "resource_service/__init__.py",
+            "resource_service/economy_resource_service.py",
+            "market_service/economy_market_service.py",
+            "market_service/__init__.py",
+            "services/services.py",
+            "services/resource.py",
+            "services/__init__.py",
+            "services/trade_service.py",
+            "services/economy_manager.py",
+            "services/resource_service.py",
+            "services/market_service.py",
+            "services/database_service.py",
+            "services/futures_service.py"
+          ],
+          "count": 15
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/shop_routes.py",
+            "routers/__init__.py",
+            "routers/api_routes.py",
+            "routers/websocket_routes.py",
+            "routers/routes.py"
+          ],
+          "count": 5
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "migrations/001_create_economy_tables.py",
+          "economy_manager/economy_economy_manager.py",
+          "economy_manager/__init__.py",
+          "utils/websocket_events.py",
+          "utils/deployment.py",
+          "utils/__init__.py",
+          "utils/integration.py",
+          "utils/shop_utils.py",
+          "websocket_events/economy_websocket_events.py",
+          "websocket_events/__init__.py",
+          "deployment/__init__.py",
+          "deployment/economy_deployment.py",
+          "events/events.py",
+          "events/__init__.py",
+          "resource/__init__.py",
+          "resource/economy_resource.py"
+        ],
+        "total_files": 44
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_economy_manager.py",
+            "lines": 384
+          },
+          {
+            "file": "test_resource.py",
+            "lines": 34
+          },
+          {
+            "file": "test_shop_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_shop_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_market_service.py",
+            "lines": 479
+          },
+          {
+            "file": "test_basic_functionality.py",
+            "lines": 252
+          },
+          {
+            "file": "test_resource_service.py",
+            "lines": 384
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_websocket_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_database_service.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_api_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_integration.py",
+            "lines": 646
+          },
+          {
+            "file": "test_events.py",
+            "lines": 34
+          },
+          {
+            "file": "test_deployment.py",
+            "lines": 34
+          },
+          {
+            "file": "test_websocket_events.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 20,
+        "total_test_lines": 2750
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "schemas/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "motif": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/manager_core.py",
+            "services/service.py",
+            "services/services.py",
+            "services/__init__.py",
+            "services/motif_engine_class.py"
+          ],
+          "count": 5
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/repository.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/motif_routes.py",
+            "routers/router.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/chaos_utils.py",
+          "utils/__init__.py",
+          "utils/utils.py",
+          "utils/motif_utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 19
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_motif_engine_class.py",
+            "lines": 34
+          },
+          {
+            "file": "test_repository.py",
+            "lines": 34
+          },
+          {
+            "file": "test_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_service.py",
+            "lines": 34
+          },
+          {
+            "file": "test_router.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_chaos_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_motif_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_manager_core.py",
+            "lines": 34
+          },
+          {
+            "file": "test_motif_utils.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 14,
+        "total_test_lines": 571
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "routers/router.py"
+        ]
+      }
+    },
+    "llm": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/conversation_service.py",
+            "services/gpt_client_service.py",
+            "services/__init__.py",
+            "services/llm_service.py",
+            "services/prompt_service.py",
+            "services/integration_service.py",
+            "services/event_processing_service.py"
+          ],
+          "count": 8
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/conversation_repository.py",
+            "repositories/integration_repository.py",
+            "repositories/__init__.py",
+            "repositories/gpt_repository.py",
+            "repositories/prompt_repository.py",
+            "repositories/event_repository.py",
+            "repositories/response_repository.py",
+            "repositories/context_repository.py"
+          ],
+          "count": 8
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "api/llm_router.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "middleware/__init__.py",
+          "middleware/event_integration.py",
+          "middleware/event_middleware.py",
+          "core/__init__.py",
+          "core/gpt_client.py",
+          "core/llm_core.py",
+          "core/dm_core.py",
+          "utils/memory_system.py",
+          "utils/__init__.py",
+          "utils/faction_system.py",
+          "utils/motif_system.py",
+          "utils/rumor_system.py",
+          "api/__init__.py",
+          "api/dm_routes.py",
+          "events/__init__.py"
+        ],
+        "total_files": 37
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_middleware.py",
+            "lines": 30
+          },
+          {
+            "file": "test_services.py",
+            "lines": 36
+          },
+          {
+            "file": "test_core.py",
+            "lines": 45
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 42
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_api.py",
+            "lines": 18
+          }
+        ],
+        "test_count": 8,
+        "total_test_lines": 304
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "middleware/__init__.py",
+          "core/__init__.py",
+          "schemas/__init__.py",
+          "api/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "middleware/event_integration.py",
+          "core/dm_core.py",
+          "api/dm_routes.py"
+        ]
+      }
+    },
+    "tension_war": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/tension_routes.py",
+            "routers/__init__.py",
+            "routers/war_routes.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py",
+            "schemas/schemas.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "utils/examples.py",
+          "events/__init__.py"
+        ],
+        "total_files": 14
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_war_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_tension_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_schemas.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_examples.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 9,
+        "total_test_lines": 401
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "world_generation": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/continent_service.py",
+            "services/__init__.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/continent_repository.py",
+            "repositories/__init__.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/worldgen_routes.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "utils/world_generation_utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 14
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_world_generation_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_continent_repository.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_worldgen_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_continent_service.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 9,
+        "total_test_lines": 401
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "memory": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/memory.py",
+            "services/__init__.py",
+            "services/memory_manager_core.py"
+          ],
+          "count": 4
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/memory_routes.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "memory_categories/memory_memory_categories.py",
+          "memory_categories/__init__.py",
+          "summarization_styles/memory_summarization_styles.py",
+          "summarization_styles/__init__.py",
+          "memory_associations/__init__.py",
+          "memory_associations/memory_memory_associations.py",
+          "utils/cognitive_frames.py",
+          "utils/__init__.py",
+          "utils/saliency_scoring.py",
+          "utils/memory_associations.py",
+          "utils/summarization_styles.py",
+          "utils/memory_categories.py",
+          "utils/memory_utils.py",
+          "saliency_scoring/__init__.py",
+          "saliency_scoring/memory_saliency_scoring.py",
+          "events/__init__.py",
+          "cognitive_frames/__init__.py",
+          "cognitive_frames/memory_cognitive_frames.py"
+        ],
+        "total_files": 29
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_memory_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_memory_basic.py",
+            "lines": 43
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_memory_integration.py",
+            "lines": 364
+          },
+          {
+            "file": "test_memory_categories.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_summarization_styles.py",
+            "lines": 34
+          },
+          {
+            "file": "test_saliency_scoring.py",
+            "lines": 34
+          },
+          {
+            "file": "test_memory_manager_core.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_memory.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_memory_associations.py",
+            "lines": 34
+          },
+          {
+            "file": "test_cognitive_frames.py",
+            "lines": 34
+          },
+          {
+            "file": "test_memory_routes.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 16,
+        "total_test_lines": 978
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "diplomacy": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "core_models/diplomacy_core_models.py",
+            "core_models/__init__.py",
+            "models/diplomacy_model.py",
+            "models/models.py",
+            "models/core_models.py",
+            "models/__init__.py",
+            "models/db_models.py",
+            "db_models/diplomacy_db_models.py",
+            "db_models/__init__.py"
+          ],
+          "count": 9
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/integration_services.py",
+            "services/diplomacy_service.py",
+            "services/core_services.py",
+            "services/__init__.py"
+          ],
+          "count": 5
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/repository.py",
+            "repositories/db_repository.py"
+          ],
+          "count": 3
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/router.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py",
+            "schemas/schemas.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "total_files": 24
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_repository.py",
+            "lines": 34
+          },
+          {
+            "file": "test_db_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_core_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_diplomacy_models.py",
+            "lines": 863
+          },
+          {
+            "file": "test_router.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_core_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_integration_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_schemas.py",
+            "lines": 34
+          },
+          {
+            "file": "test_db_repository.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 13,
+        "total_test_lines": 1302
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "combat": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models/stats.py"
+          ],
+          "count": 3
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py",
+            "services/combat_service.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/combat_repository.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/combat_router.py",
+            "routers/__init__.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/combat.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/combat_ram.py",
+          "utils/fog_of_war.py",
+          "utils/effect_pipeline.py",
+          "utils/combat_area.py",
+          "utils/combat_debug_interface.py",
+          "utils/effect_visualizer.py",
+          "utils/__init__.py",
+          "utils/object_pool.py",
+          "utils/status_effects_utils.py",
+          "utils/combat_handler_class.py",
+          "utils/combat_class.py",
+          "utils/combat_narrative_utils.py",
+          "utils/action_system.py",
+          "utils/combat_animation_system.py",
+          "utils/combat_state_class.py",
+          "utils/turn_queue.py",
+          "utils/combat_state_firebase_utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 31
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_turn_queue.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_state_class.py",
+            "lines": 34
+          },
+          {
+            "file": "test_object_pool.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_handler_class.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_narrative_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_class.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_combat_area.py",
+            "lines": 34
+          },
+          {
+            "file": "test_action_system.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_state_firebase_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_effect_pipeline.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_fog_of_war.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_ram.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_animation_system.py",
+            "lines": 34
+          },
+          {
+            "file": "test_effect_visualizer.py",
+            "lines": 34
+          },
+          {
+            "file": "test_status_effects_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_combat_debug_interface.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 21,
+        "total_test_lines": 809
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/combat_debug_interface.py",
+          "utils/combat_state_firebase_utils.py"
+        ]
+      }
+    },
+    "magic": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/router.py",
+            "router/magic_router.py",
+            "router/__init__.py"
+          ],
+          "count": 4
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "utils/websocket.py",
+          "events/__init__.py"
+        ],
+        "total_files": 14
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_router.py",
+            "lines": 49
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 117
+          }
+        ],
+        "test_count": 5,
+        "total_test_lines": 235
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "character": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "database/models/__init__.py",
+            "core/character_model.py",
+            "models/models.py",
+            "models/character_builder.py",
+            "models/relationship.py",
+            "models/__init__.py",
+            "models/mood.py",
+            "models/character.py",
+            "models/goal.py",
+            "models/visual_model.py"
+          ],
+          "count": 10
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/prompt_manager.py",
+            "services/__init__.py",
+            "services/mood_service.py",
+            "services/relationship_service.py",
+            "services/character_service.py",
+            "services/party_service.py",
+            "services/goal_service.py",
+            "services/location_service.py"
+          ],
+          "count": 9
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/character_repository.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/character_router.py",
+            "routers/__init__.py",
+            "routers/relationship_router.py",
+            "routers/player_routes.py",
+            "api/party_api.py",
+            "api/character_api.py",
+            "api/api.py"
+          ],
+          "count": 7
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/character_schemas.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "database/__init__.py",
+          "database/setup.py",
+          "core/__init__.py",
+          "core/character_builder_class.py",
+          "utils/character_utils.py",
+          "utils/context_manager.py",
+          "utils/extractors.py",
+          "utils/cache.py",
+          "utils/__init__.py",
+          "utils/gpt_client.py",
+          "utils/party_utils.py",
+          "utils/history.py",
+          "utils/validation.py",
+          "api/__init__.py",
+          "events/__init__.py",
+          "services/utils/__init__.py"
+        ],
+        "total_files": 47
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_player_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_prompt_manager.py",
+            "lines": 34
+          },
+          {
+            "file": "test_character_schemas.py",
+            "lines": 34
+          },
+          {
+            "file": "test_gpt_client.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_history.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 10,
+        "total_test_lines": 435
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "core/character_model.py",
+          "core/character_builder_class.py",
+          "utils/cache.py",
+          "utils/history.py",
+          "models/character_builder.py",
+          "models/relationship.py",
+          "models/mood.py",
+          "models/goal.py",
+          "services/mood_service.py",
+          "services/relationship_service.py",
+          "services/character_service.py"
+        ]
+      }
+    },
+    "auth_user": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models/user_models.py",
+            "models/auth_relationship_models.py"
+          ],
+          "count": 4
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/auth_service.py",
+            "services/services.py",
+            "services/__init__.py",
+            "services/password_service.py",
+            "services/security_service.py",
+            "services/token_service.py"
+          ],
+          "count": 6
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/auth_relationship_router.py",
+            "routers/auth_router.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/auth_utils.py",
+          "utils/__init__.py",
+          "utils/validation_utils.py",
+          "utils/base.py",
+          "events/__init__.py"
+        ],
+        "total_files": 21
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_base.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 6,
+        "total_test_lines": 299
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "routers/auth_router.py",
+          "services/auth_service.py"
+        ]
+      }
+    },
+    "integration": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/monitoring.py",
+          "utils/__init__.py",
+          "utils/state_sync.py",
+          "utils/validation.py",
+          "events/__init__.py",
+          "events/event_bus.py"
+        ],
+        "total_files": 14
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_validation.py",
+            "lines": 34
+          },
+          {
+            "file": "test_event_bus.py",
+            "lines": 34
+          },
+          {
+            "file": "test_state_sync.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_monitoring.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 9,
+        "total_test_lines": 401
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "repositories/__init__.py",
+          "schemas/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "faction": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/reputation_service.py",
+            "services/services.py",
+            "services/relationship_service_core.py",
+            "services/faction_manager.py",
+            "services/influence_service.py",
+            "services/__init__.py",
+            "services/faction_service.py",
+            "services/territory_service.py",
+            "services/membership_service.py"
+          ],
+          "count": 9
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/faction_repository.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/faction_router.py",
+            "routers/__init__.py",
+            "routers/faction_routes.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/faction_types.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/validators.py",
+          "utils/faction_tick_utils.py",
+          "utils/__init__.py",
+          "utils/faction_utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 24
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_faction_manager.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_faction_tick_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_faction_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_faction_utils.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 9,
+        "total_test_lines": 401
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "schemas/faction_types.py",
+          "services/relationship_service_core.py",
+          "services/faction_manager.py",
+          "services/faction_service.py"
+        ]
+      }
+    },
+    "event_base": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/event_handler_model.py",
+            "models/event_base_model.py",
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 4
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py",
+            "services/event_base_service.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/event_base_repository.py",
+            "repositories/__init__.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/router.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/event_base_schema.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "total_files": 16
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "conftest.py",
+            "lines": 21
+          },
+          {
+            "file": "test_router.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 98
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 102
+          }
+        ],
+        "test_count": 6,
+        "total_test_lines": 354
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "rumor": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models/rumor.py"
+          ],
+          "count": 3
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py",
+            "services/rumor_service.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/rumor_repository.py",
+            "repositories/__init__.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/npc_rumor_routes.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/rumor_types.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "utils/transformer.py",
+          "utils/decay_and_propagation.py",
+          "utils/truth_tracker.py",
+          "utils/npc_rumor_utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 19
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_decay_and_propagation.py",
+            "lines": 34
+          },
+          {
+            "file": "test_npc_rumor_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_npc_rumor_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_transformer.py",
+            "lines": 34
+          },
+          {
+            "file": "test_truth_tracker.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 10,
+        "total_test_lines": 435
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/npc_rumor_utils.py",
+          "models/rumor.py",
+          "services/rumor_service.py"
+        ]
+      }
+    },
+    "shared": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models/base.py"
+          ],
+          "count": 3
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/base_repository.py",
+            "repositories/__init__.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "exceptions.py",
+          "database/session.py",
+          "database/__init__.py",
+          "database/base.py",
+          "config/__init__.py",
+          "utils/floating_origin.py",
+          "utils/time.py",
+          "utils/logging.py",
+          "utils/config.py",
+          "utils/exceptions_1.py",
+          "utils/error.py",
+          "utils/database.py",
+          "utils/data_loader.py",
+          "utils/security.py",
+          "utils/__init__.py",
+          "utils/file.py",
+          "utils/noise.py",
+          "utils/exceptions.py",
+          "utils/firebase.py",
+          "utils/coordinates.py",
+          "rules/rules_utils.py",
+          "rules/__init__.py",
+          "events/dispatcher.py",
+          "events/__init__.py",
+          "events/bus.py",
+          "events/base.py"
+        ],
+        "total_files": 36
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_config.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 6,
+        "total_test_lines": 299
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "utils/logging.py",
+          "utils/file.py",
+          "utils/firebase.py",
+          "schemas/__init__.py",
+          "events/bus.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "loot": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models_old/__init__.py",
+            "models_old/location.py",
+            "models_old/shop.py",
+            "models_old/item.py"
+          ],
+          "count": 6
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py",
+            "services/loot_manager.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/loot_routes.py",
+            "routers/__init__.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/loot_utils_core.py",
+          "utils/generation.py",
+          "utils/database.py",
+          "utils/__init__.py",
+          "utils/core.py",
+          "utils/loot_core.py",
+          "utils/initialization.py",
+          "utils/loot_shop.py",
+          "events/events.py",
+          "events/__init__.py",
+          "events/loot_events.py"
+        ],
+        "total_files": 25
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_loot_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_database.py",
+            "lines": 34
+          },
+          {
+            "file": "test_loot_manager.py",
+            "lines": 34
+          },
+          {
+            "file": "test_loot_shop.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_core.py",
+            "lines": 34
+          },
+          {
+            "file": "test_initialization.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_loot_utils_core.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_loot_core.py",
+            "lines": 34
+          },
+          {
+            "file": "test_events.py",
+            "lines": 34
+          },
+          {
+            "file": "test_generation.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 15,
+        "total_test_lines": 605
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "schemas/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/generation.py",
+          "utils/database.py",
+          "utils/loot_core.py",
+          "utils/initialization.py",
+          "events/loot_events.py",
+          "services/loot_manager.py",
+          "models_old/location.py",
+          "models_old/shop.py",
+          "models_old/item.py"
+        ]
+      }
+    },
+    "storage": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/storage_config.py",
+            "models/storage_bucket.py",
+            "models/__init__.py",
+            "models/file_record.py",
+            "models/cache_entry.py"
+          ],
+          "count": 6
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "total_files": 14
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 5,
+        "total_test_lines": 265
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "utils/__init__.py",
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "models/storage_config.py",
+          "models/storage_bucket.py",
+          "models/file_record.py",
+          "models/cache_entry.py"
+        ]
+      }
+    },
+    "time": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models/time_model.py"
+          ],
+          "count": 3
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py",
+            "services/time_manager.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/time_repository.py",
+            "repositories/__init__.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/time_router.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "utils/time_utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 15
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 5,
+        "total_test_lines": 265
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/time_utils.py",
+          "models/time_model.py"
+        ]
+      }
+    },
+    "population": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "utils/state_utils.py",
+          "utils/population_utils.py",
+          "utils/utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 13
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 5,
+        "total_test_lines": 265
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "dialogue": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/analytics_integration.py",
+            "services/quest_integration.py",
+            "services/dialogue_system_new.py",
+            "services/services.py",
+            "services/population_integration.py",
+            "services/time_integration.py",
+            "services/war_integration.py",
+            "services/dialogue_system.py",
+            "services/conversation.py",
+            "services/region_integration.py",
+            "services/poi_integration.py",
+            "services/__init__.py",
+            "services/faction_integration.py",
+            "services/memory_integration.py",
+            "services/world_state_integration.py",
+            "services/rumor_integration.py",
+            "services/relationship_integration.py",
+            "services/dialogue_manager.py",
+            "services/motif_integration.py"
+          ],
+          "count": 19
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "total_files": 27
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_dialogue_manager.py",
+            "lines": 34
+          },
+          {
+            "file": "test_rumor_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_faction_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_dialogue_system_new.py",
+            "lines": 34
+          },
+          {
+            "file": "test_relationship_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_memory_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_motif_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_war_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_population_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_region_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_conversation.py",
+            "lines": 34
+          },
+          {
+            "file": "test_quest_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_analytics_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_time_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_dialogue_system.py",
+            "lines": 34
+          },
+          {
+            "file": "test_poi_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_world_state_integration.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 22,
+        "total_test_lines": 843
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "utils/__init__.py",
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "services/quest_integration.py",
+          "services/war_integration.py",
+          "services/dialogue_system.py",
+          "services/region_integration.py",
+          "services/faction_integration.py",
+          "services/memory_integration.py",
+          "services/dialogue_manager.py"
+        ]
+      }
+    },
+    "poi": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/migration_service.py",
+            "services/poi_state_service.py",
+            "services/services.py",
+            "services/resource_management_service.py",
+            "services/poi_generator.py",
+            "services/__init__.py",
+            "services/tilemap_service.py",
+            "services/event_integration_service.py",
+            "services/faction_influence_service.py",
+            "services/landmark_service.py",
+            "services/unity_frontend_integration.py",
+            "services/metropolitan_spread_service.py",
+            "services/lifecycle_events_service.py"
+          ],
+          "count": 13
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/base_repository.py",
+            "repositories/__init__.py",
+            "repositories/poi_repository.py"
+          ],
+          "count": 3
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "total_files": 23
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_poi_generator.py",
+            "lines": 292
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_tilemap_service.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 7,
+        "total_test_lines": 591
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "utils/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "services/tilemap_service.py"
+        ]
+      }
+    },
+    "region": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/__init__.py"
+          ],
+          "count": 1
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/event_service.py",
+            "services/services.py",
+            "services/__init__.py",
+            "services/world_generation_service.py"
+          ],
+          "count": 4
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/region_repository.py",
+            "repositories/__init__.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/region_router.py",
+            "routers/__init__.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "migrations/001_create_region_tables.py",
+          "migrations/__init__.py",
+          "utils/__init__.py",
+          "utils/worldgen.py",
+          "utils/mapping.py",
+          "utils/tension.py",
+          "events/__init__.py",
+          "events/region_events.py"
+        ],
+        "total_files": 19
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_worldgen.py",
+            "lines": 34
+          },
+          {
+            "file": "test_tension.py",
+            "lines": 34
+          },
+          {
+            "file": "test_mapping.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 8,
+        "total_test_lines": 367
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "religion": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/narrative_service.py",
+            "services/__init__.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/repository.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/websocket_routes.py",
+            "routers/religion_router.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py",
+            "schemas/schemas.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "event_publisher.py",
+          "exceptions.py",
+          "websocket_manager.py",
+          "utils/__init__.py",
+          "utils/utils.py",
+          "events/__init__.py",
+          "events/religion_events.py",
+          "events/event_publisher.py"
+        ],
+        "total_files": 21
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 563
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 588
+          },
+          {
+            "file": "test_narrative_service.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 504
+          },
+          {
+            "file": "test_schemas.py",
+            "lines": 572
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 7,
+        "total_test_lines": 2360
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [],
+        "placeholder_files": []
+      }
+    },
+    "quest": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/arc_manager.py",
+            "services/__init__.py",
+            "services/generator.py",
+            "services/manager.py"
+          ],
+          "count": 5
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/journal_routes.py",
+            "routers/quest_routes.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "utils/integration.py",
+          "utils/npc_quests.py",
+          "events/__init__.py"
+        ],
+        "total_files": 17
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_arc_manager.py",
+            "lines": 34
+          },
+          {
+            "file": "test_quest_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_generator.py",
+            "lines": 34
+          },
+          {
+            "file": "test_npc_quests.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_journal_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_integration.py",
+            "lines": 34
+          },
+          {
+            "file": "test_manager.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 12,
+        "total_test_lines": 503
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "inventory": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/validator.py",
+          "utils/notification.py",
+          "utils/__init__.py",
+          "utils/export.py",
+          "utils/factory.py",
+          "utils/operations.py",
+          "utils/migrations.py",
+          "events/__init__.py"
+        ],
+        "total_files": 16
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_operations.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_factory.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_migrations.py",
+            "lines": 34
+          },
+          {
+            "file": "test_notification.py",
+            "lines": 34
+          },
+          {
+            "file": "test_validator.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_export.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 11,
+        "total_test_lines": 469
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/factory.py",
+          "utils/migrations.py"
+        ]
+      }
+    },
+    "world_state": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models/world_models.py"
+          ],
+          "count": 3
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/world_routes.py",
+            "routers/__init__.py",
+            "routers/worldgen_api.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "core/__init__.py",
+          "core/loader.py",
+          "utils/newspaper_system.py",
+          "utils/world_event_utils.py",
+          "utils/__init__.py",
+          "utils/tick_utils.py",
+          "utils/cleanup.py",
+          "utils/terrain_generator.py",
+          "utils/optimized_worldgen.py",
+          "utils/world_utils.py",
+          "mods/mod_synchronizer.py",
+          "mods/__init__.py",
+          "api/__init__.py",
+          "events/handlers.py",
+          "events/__init__.py"
+        ],
+        "total_files": 26
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_world_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_worldgen_api.py",
+            "lines": 34
+          },
+          {
+            "file": "test_optimized_worldgen.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_cleanup.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_world_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_world_routes.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 11,
+        "total_test_lines": 469
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "repositories/__init__.py",
+          "schemas/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/world_event_utils.py",
+          "utils/optimized_worldgen.py",
+          "models/world_models.py",
+          "mods/mod_synchronizer.py"
+        ]
+      }
+    },
+    "crafting": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/ingredient.py",
+            "models/__init__.py",
+            "models/result.py",
+            "models/station.py",
+            "models/recipe.py"
+          ],
+          "count": 6
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/crafting_service.py",
+            "services/__init__.py",
+            "services/station_service.py",
+            "services/crafting_experience_service.py"
+          ],
+          "count": 5
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/crafting_repository.py",
+            "repositories/base_repository.py",
+            "repositories/recipe_repository.py",
+            "repositories/__init__.py",
+            "repositories/station_repository.py"
+          ],
+          "count": 5
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/station_router.py",
+            "routers/recipe_router.py",
+            "routers/__init__.py",
+            "routers/crafting_router.py"
+          ],
+          "count": 4
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py",
+            "schemas/recipe_schemas.py",
+            "schemas/station_schemas.py",
+            "schemas/crafting_schemas.py"
+          ],
+          "count": 4
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "migrations/001_create_crafting_tables.py",
+          "utils/__init__.py",
+          "events/__init__.py",
+          "data/progression_manager.py",
+          "data/recipe_loader.py",
+          "data/station_loader.py",
+          "data/config_manager.py",
+          "data/cache_manager.py",
+          "data/__init__.py"
+        ],
+        "total_files": 34
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 5,
+        "total_test_lines": 265
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "routers/crafting_router.py"
+        ]
+      }
+    },
+    "events": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/events_repository.py",
+            "repositories/__init__.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/events_router.py",
+            "api/plugin_api.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "middleware/logging_middleware.py",
+          "middleware/debugging_middleware.py",
+          "middleware/__init__.py",
+          "middleware/debugging.py",
+          "middleware/error_middleware.py",
+          "middleware/error_handler.py",
+          "middleware/analytics.py",
+          "middleware/analytics_middleware.py",
+          "core/__init__.py",
+          "core/event_base.py",
+          "core/events/__init__.py",
+          "utils/tile_loader.py",
+          "utils/floating_origin.py",
+          "utils/plugins.py",
+          "utils/item_utils.py",
+          "utils/export_utils.py",
+          "utils/batching.py",
+          "utils/event_utils.py",
+          "utils/start_game_routes.py",
+          "utils/screen_utils.py",
+          "utils/world_tick_utils.py",
+          "utils/error_utils.py",
+          "utils/layout.py",
+          "utils/coordinate_validation.py",
+          "utils/coordinate_utils.py",
+          "utils/constants.py",
+          "utils/game_utils.py",
+          "utils/__init__.py",
+          "utils/floating_origin_ecs.py",
+          "utils/database_utils.py",
+          "utils/base_manager.py",
+          "utils/data_loaders.py",
+          "utils/terrain_manager.py",
+          "utils/seed.py",
+          "utils/input_utils.py",
+          "utils/firebase_utils.py",
+          "utils/npc_utils.py",
+          "utils/render_utils.py",
+          "utils/file_utils.py",
+          "utils/shared_utils.py",
+          "utils/__init__ .py",
+          "utils/accessibility.py",
+          "utils/password.py",
+          "utils/json_utils.py",
+          "utils/quest_utils.py",
+          "utils/asset_utils.py",
+          "utils/coordinates.py",
+          "utils/rules_loader.py",
+          "utils/gpt.py",
+          "utils/gpt/intents.py",
+          "utils/gpt/client.py",
+          "utils/gpt/__init__.py",
+          "utils/gpt/dialogue.py",
+          "utils/gpt/flavor.py",
+          "utils/game/json_io.py",
+          "utils/game/__init__.py",
+          "utils/game/world_tick.py",
+          "api/__init__.py",
+          "events/event_dispatcher.py",
+          "events/__init__.py",
+          "events/canonical_events.py",
+          "events/event_types.py"
+        ],
+        "total_files": 73
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_event_dispatcher.py",
+            "lines": 34
+          },
+          {
+            "file": "test_canonical_events.py",
+            "lines": 34
+          },
+          {
+            "file": "test_event_types.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 8,
+        "total_test_lines": 367
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "utils/start_game_routes.py",
+          "utils/terrain_manager.py",
+          "utils/render_utils.py",
+          "utils/gpt/intents.py",
+          "utils/gpt/client.py",
+          "utils/gpt/dialogue.py",
+          "schemas/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/item_utils.py",
+          "utils/layout.py"
+        ]
+      }
+    },
+    "arc": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/arc_completion_record.py",
+            "models/models.py",
+            "models/__init__.py",
+            "models/arc_step.py",
+            "models/arc_progression.py"
+          ],
+          "count": 5
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/arc_generator.py",
+            "services/services.py",
+            "services/progression_tracker.py",
+            "services/__init__.py",
+            "services/arc.py",
+            "services/quest_integration_service.py"
+          ],
+          "count": 6
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/arc_completion_record_repository.py",
+            "repositories/__init__.py",
+            "repositories/arc_repository.py",
+            "repositories/arc_step_repository.py",
+            "repositories/arc_progression_repository.py"
+          ],
+          "count": 5
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/arc_router.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/arc_schemas.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/arc_validators.py",
+          "utils/arc_helpers.py",
+          "utils/__init__.py",
+          "utils/arc_formatters.py",
+          "events/__init__.py"
+        ],
+        "total_files": 26
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_arc.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 6,
+        "total_test_lines": 299
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "events/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/arc_validators.py",
+          "utils/arc_helpers.py",
+          "models/arc_completion_record.py",
+          "models/arc_step.py",
+          "models/arc_progression.py",
+          "schemas/arc_schemas.py",
+          "services/arc_generator.py",
+          "services/progression_tracker.py",
+          "services/quest_integration_service.py"
+        ]
+      }
+    },
+    "data": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py",
+            "models/config_models.py",
+            "models/biome_models.py"
+          ],
+          "count": 4
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/data_service.py",
+            "services/__init__.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/data_repository.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/data_router.py",
+            "routers/__init__.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "utils/schema_validator.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/data_file_loader.py",
+          "utils/__init__.py",
+          "events/event_handlers.py",
+          "events/__init__.py",
+          "events/event_publisher.py",
+          "events/data_events.py",
+          "loaders/game_data_registry.py",
+          "loaders/__init__.py"
+        ],
+        "total_files": 22
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_schema_validator.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 6,
+        "total_test_lines": 299
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "schemas/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "chaos": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/chaos_events.py",
+            "models/pressure_data.py",
+            "models/chaos_state.py",
+            "models/__init__.py"
+          ],
+          "count": 4
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/event_service.py",
+            "services/mitigation_service.py",
+            "services/__init__.py",
+            "services/pressure_service.py",
+            "services/chaos_service.py",
+            "services/event_manager.py"
+          ],
+          "count": 6
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/chaos_router.py",
+            "api/chaos_api.py"
+          ],
+          "count": 3
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/chaos_schemas.py",
+            "schemas/__init__.py"
+          ],
+          "count": 2
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "core/system_integrator.py",
+          "core/config.py",
+          "core/pressure_monitor.py",
+          "core/__init__.py",
+          "core/event_triggers.py",
+          "core/chaos_engine.py",
+          "core/event_trigger.py",
+          "utils/event_utils.py",
+          "utils/pressure_calculations.py",
+          "utils/chaos_calculator.py",
+          "utils/__init__.py",
+          "utils/chaos_math.py",
+          "utils/cross_system_integration.py",
+          "utils/mitigation_factor.py",
+          "utils/event_helpers.py",
+          "api/__init__.py",
+          "analytics/chaos_analytics.py",
+          "analytics/performance_monitor.py",
+          "analytics/__init__.py",
+          "analytics/event_tracker.py",
+          "analytics/configuration_manager.py"
+        ],
+        "total_files": 38
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_task_49_components.py",
+            "lines": 204
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          }
+        ],
+        "test_count": 2,
+        "total_test_lines": 205
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [],
+        "placeholder_files": [
+          "core/pressure_monitor.py"
+        ]
+      }
+    },
+    "equipment": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py"
+          ],
+          "count": 2
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py"
+          ],
+          "count": 1
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py"
+          ],
+          "count": 1
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/set_bonus_utils.py",
+          "utils/identify_item_utils.py",
+          "utils/durability_utils.py",
+          "utils/__init__.py",
+          "utils/inventory_utils.py",
+          "events/__init__.py"
+        ],
+        "total_files": 14
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_inventory_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "test_identify_item_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_set_bonus_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_durability_utils.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 9,
+        "total_test_lines": 401
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "routers/__init__.py",
+          "repositories/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    },
+    "npc": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/npc_location_service.py",
+            "services/__init__.py",
+            "services/npc_service.py"
+          ],
+          "count": 4
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/npc_location_repository.py",
+            "repositories/__init__.py",
+            "repositories/npc_memory_repository.py",
+            "repositories/npc_repository.py"
+          ],
+          "count": 4
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/npc_routes.py",
+            "routers/npc_router.py",
+            "routers/__init__.py",
+            "routers/npc_location_router.py",
+            "routers/npc_character_routes.py"
+          ],
+          "count": 5
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/npc_loyalty_class.py",
+          "utils/npc_builder_class.py",
+          "utils/__init__.py",
+          "utils/npc_travel_utils.py",
+          "events/events.py",
+          "events/__init__.py",
+          "events/event_publisher.py"
+        ],
+        "total_files": 24
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_npc_travel_utils.py",
+            "lines": 34
+          },
+          {
+            "file": "test_npc_character_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_services.py",
+            "lines": 361
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_npc_loyalty_class.py",
+            "lines": 34
+          },
+          {
+            "file": "test_npc_routes.py",
+            "lines": 34
+          },
+          {
+            "file": "test_npc_builder_class.py",
+            "lines": 34
+          },
+          {
+            "file": "test_models.py",
+            "lines": 275
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          },
+          {
+            "file": "test_npc_location_service.py",
+            "lines": 34
+          }
+        ],
+        "test_count": 11,
+        "total_test_lines": 1037
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "schemas/__init__.py"
+        ],
+        "placeholder_files": [
+          "utils/npc_loyalty_class.py"
+        ]
+      }
+    },
+    "analytics": {
+      "status": "\u2705",
+      "structure": {
+        "models": {
+          "exists": true,
+          "files": [
+            "models/models.py",
+            "models/__init__.py"
+          ],
+          "count": 2
+        },
+        "services": {
+          "exists": true,
+          "files": [
+            "services/services.py",
+            "services/__init__.py",
+            "services/analytics_service.py"
+          ],
+          "count": 3
+        },
+        "repositories": {
+          "exists": true,
+          "files": [
+            "repositories/__init__.py",
+            "repositories/analytics_repository.py"
+          ],
+          "count": 2
+        },
+        "routers": {
+          "exists": true,
+          "files": [
+            "routers/__init__.py",
+            "routers/analytics_router.py"
+          ],
+          "count": 2
+        },
+        "schemas": {
+          "exists": true,
+          "files": [
+            "schemas/__init__.py"
+          ],
+          "count": 1
+        },
+        "tests": {
+          "exists": false,
+          "files": [],
+          "count": 0
+        },
+        "other_files": [
+          "__init__.py",
+          "utils/__init__.py",
+          "events/__init__.py"
+        ],
+        "total_files": 13
+      },
+      "tests": {
+        "test_directory_exists": true,
+        "test_files": [
+          {
+            "file": "test_services.py",
+            "lines": 34
+          },
+          {
+            "file": "__init__.py",
+            "lines": 1
+          },
+          {
+            "file": "test_repositories.py",
+            "lines": 98
+          },
+          {
+            "file": "test_models.py",
+            "lines": 34
+          },
+          {
+            "file": "test_routers.py",
+            "lines": 98
+          }
+        ],
+        "test_count": 5,
+        "total_test_lines": 265
+      },
+      "issues": {
+        "syntax_errors": [],
+        "import_errors": [],
+        "empty_files": [
+          "utils/__init__.py",
+          "schemas/__init__.py",
+          "events/__init__.py"
+        ],
+        "placeholder_files": []
+      }
+    }
+  }
+}

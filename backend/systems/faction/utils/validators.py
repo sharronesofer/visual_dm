@@ -7,11 +7,8 @@ This module provides utility functions for validating faction data.
 from typing import Optional
 from backend.systems.faction.schemas.faction_types import DiplomaticStance
 
-
 class FactionValidationError(Exception):
     """Exception raised for faction validation errors."""
-    pass
-
 
 def validate_faction_name(name: str) -> bool:
     """
@@ -37,7 +34,6 @@ def validate_faction_name(name: str) -> bool:
     
     return True
 
-
 def validate_faction_influence(influence: float) -> bool:
     """
     Validate faction influence value.
@@ -58,7 +54,6 @@ def validate_faction_influence(influence: float) -> bool:
         raise FactionValidationError("Influence must be between 0 and 100")
     
     return True
-
 
 def validate_diplomatic_stance(stance: str, allow_none: bool = False) -> bool:
     """

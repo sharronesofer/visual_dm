@@ -9,11 +9,11 @@ This document inventories all hardcoded game data that should be modularized int
 | Category         | Data Type         | File(s) / Location(s)                        | Line(s) / Example | Description / Notes |
 |------------------|-------------------|----------------------------------------------|-------------------|---------------------|
 | Biomes/Regions   | land_types        | backend/app/models/region_tile.py            | terrain_type      | Biome tags for regions/tiles |
-| Biomes/Regions   | adjacency         | backend/data/adjacency.json                  | -                 | Modular adjacency matrix (already modular) |
+| Biomes/Regions   | adjacency         | data/system/runtime/adjacency.json                  | -                 | Modular adjacency matrix (already modular) |
 | Items/Equipment  | weapons           | backend/app/models/weapon.py                 | class Weapon      | Weapon definitions (dataclass, hardcoded) |
 | Items/Equipment  | armor             | backend/app/models/equipment.py              | class Equipment   | Armor/equipment types, hardcoded fields |
 | Items/Equipment  | items             | backend/app/models/item.py                   | class Item, enums | Item types, rarities, properties |
-| Creatures/NPCs   | races             | backend/data/models/races.py                 | -                 | Race definitions (Python, not modular JSON) |
+| Creatures/NPCs   | races             | data/system/runtime/models/races.py                 | -                 | Race definitions (Python, not modular JSON) |
 | Creatures/NPCs   | npcs              | backend/app/models/npc.py                    | class NPC         | NPC archetypes, traits, etc. |
 | Creatures/NPCs   | factions          | backend/app/models/faction.py                | class Faction     | Faction types, minimal stub |
 | Buildings/POIs   | building_types    | backend/app/models/location.py               | LocationType enum | Building/POI types |
@@ -46,7 +46,7 @@ This document inventories all hardcoded game data that should be modularized int
 
 ## Next Steps
 - Design canonical JSON schemas for each category.
-- Migrate all hardcoded data to backend/data/modding/ as JSON files.
+- Migrate all hardcoded data to data/builders/ as JSON files.
 - Refactor code to load from modular data files.
 - Validate all data against schemas.
 - Update documentation and tests. 

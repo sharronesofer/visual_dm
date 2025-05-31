@@ -12,14 +12,16 @@ import logging
 import json
 import os
 
-from app.core.models.world import WorldState, Region, Faction
-from app.core.models.npc import NPC
-from app.core.models.world_event import WorldEvent
-from app.core.enums import RelationshipType
-from app.core.logging import logger
-from app.core.database import db
-from app.core.utils.error_utils import ValidationError
-from app.validation.world_event_validation import (
+from backend.systems.world_state.core.types import WorldState
+from backend.systems.region.models import Region
+from backend.systems.faction.models import Faction
+from backend.systems.npc import NPC
+from backend.systems.world_event import WorldEvent
+from backend.systems.core.enums import RelationshipType
+from backend.infrastructure.shared.logging import logger
+from backend.infrastructure.database import db
+from backend.infrastructure.utils import ValidationError
+from backend.systems.validation.world_event_validation import (
     validate_event_data,
     validate_event_timing,
     validate_event_status,
@@ -142,7 +144,6 @@ def process_world_tick(world_state: WorldState) -> None:
 def process_npc_actions(npc: NPC):
     """Process actions for a single NPC."""
     # TODO: Implement NPC behavior
-    pass
 
 def process_faction_activities(faction: Faction):
     """Process activities for a single faction."""
@@ -373,72 +374,58 @@ def handle_event_effects(event: WorldEvent) -> None:
 def handle_war_effects(event: WorldEvent) -> None:
     """Apply effects of a war event."""
     # Implementation to be added
-    pass
 
 def handle_trade_effects(event: WorldEvent) -> None:
     """Apply effects of a trade event."""
     # Implementation to be added
-    pass
 
 def handle_diplomatic_effects(event: WorldEvent) -> None:
     """Apply effects of a diplomatic event."""
     # Implementation to be added
-    pass
 
 def handle_festival_effects(event: WorldEvent) -> None:
     """Apply effects of a festival event."""
     # Implementation to be added
-    pass
 
 def handle_calamity_effects(event: WorldEvent) -> None:
     """Apply effects of a calamity event."""
     # Implementation to be added
-    pass
 
 def handle_discovery_effects(event: WorldEvent) -> None:
     """Apply effects of a discovery event."""
     # Implementation to be added
-    pass
 
 def handle_religious_effects(event: WorldEvent) -> None:
     """Apply effects of a religious event."""
     # Implementation to be added
-    pass
 
 def handle_war_completion(event: WorldEvent) -> None:
     """Handle completion of a war event."""
     # Implementation to be added
-    pass
 
 def handle_trade_completion(event: WorldEvent) -> None:
     """Handle completion of a trade event."""
     # Implementation to be added
-    pass
 
 def handle_diplomatic_completion(event: WorldEvent) -> None:
     """Handle completion of a diplomatic event."""
     # Implementation to be added
-    pass
 
 def handle_festival_completion(event: WorldEvent) -> None:
     """Handle completion of a festival event."""
     # Implementation to be added
-    pass
 
 def handle_calamity_completion(event: WorldEvent) -> None:
     """Handle completion of a calamity event."""
     # Implementation to be added
-    pass
 
 def handle_discovery_completion(event: WorldEvent) -> None:
     """Handle completion of a discovery event."""
     # Implementation to be added
-    pass
 
 def handle_religious_completion(event: WorldEvent) -> None:
     """Handle completion of a religious event."""
     # Implementation to be added
-    pass
 
 # Random Event Generation
 

@@ -1,1 +1,1 @@
-# tests module
+# Test package for the character system

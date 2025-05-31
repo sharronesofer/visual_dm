@@ -1,3 +1,1 @@
-"""
-Memory system tests.
-"""
+# Test package for the memory system

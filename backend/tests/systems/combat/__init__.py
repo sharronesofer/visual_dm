@@ -1,1 +1,1 @@
-"""Tests for the combat system."""
+# Test package for the combat system

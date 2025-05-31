@@ -1,0 +1,117 @@
+# Task ID: 27
+# Title: Complete Character System Implementation - Bridge Critical Gaps
+# Status: done
+# Dependencies: None
+# Priority: critical
+# Description: Address the critical gaps between comprehensive test expectations and current character system implementation (currently 45% complete)
+# Details:
+Based on analysis of /backend/tests/systems/character (49 test files, 962 test cases) versus /backend/systems/character implementation, significant gaps exist:
+
+**Current State Assessment:**
+- Core Models: 60% complete ✅
+- Visual System: 0% complete ❌ 
+- Event Integration: 20% complete ⚠️
+- API Layer: 10% complete ❌
+- Database Layer: 70% complete ✅
+- Business Services: 80% complete ✅
+- Test Infrastructure: 5% complete ❌
+
+**Critical Issues:**
+- Missing visual model in character system (exists in utils/visual/ but not integrated)
+- Broken event system imports causing fallback classes in tests
+- No REST API endpoints despite comprehensive schemas
+- Missing core character_model.py that tests expect
+- Broken shared database module imports in tests
+- Incomplete Character Builder integration
+
+**Impact:** Character system cannot support frontend integration or full gameplay features until these gaps are addressed.
+
+# Test Strategy:
+1. All 962 character tests pass without fallback classes
+2. Visual model tests use actual character system implementation
+3. Event system integration works end-to-end
+4. REST API endpoints respond correctly
+5. Database operations complete successfully
+6. Character builder integration functional
+
+# Subtasks:
+## 1. Integrate Visual Model into Character System [done]
+### Dependencies: None
+### Description: Move and integrate visual model from utils/visual/ into backend.systems.character.models.visual_model to match test expectations
+### Details:
+Tests expect backend.systems.character.models.visual_model with CharacterModel, MeshSlot, BlendShape, MaterialAssignment, AnimationState classes. Current implementation exists in utils/visual/visual_model.py but is not integrated with character system.
+
+Tasks:
+1. Copy visual_model.py to backend/systems/character/models/
+2. Update imports in character system to use local visual model
+3. Integrate visual model with Character ORM model
+4. Add visual_model field to Character model
+5. Update character service to handle visual operations
+6. Test visual model integration with character CRUD operations
+
+## 2. Fix Event System Integration [done]
+### Dependencies: None
+### Description: Resolve broken event system imports and implement proper canonical events integration
+### Details:
+Many test files show fallback event classes due to import failures. Need to:
+
+1. Fix imports for backend.systems.events modules
+2. Ensure EventDispatcher is properly accessible
+3. Implement missing canonical events for character system
+4. Update character services to properly dispatch events
+5. Test event system end-to-end integration
+6. Remove fallback event classes from tests
+
+## 3. Create Missing Core Character Model [done]
+### Dependencies: None
+### Description: Create backend.systems.character.core.character_model.py that tests expect
+### Details:
+Tests import from backend.systems.character.core.character_model but file doesn't exist. Need to:
+
+1. Create character_model.py in core/ directory
+2. Implement Character class that tests expect
+3. Ensure compatibility with existing Character ORM model
+4. Implement proper model relationships and methods
+5. Update imports throughout character system
+6. Test model functionality against test requirements
+
+## 4. Implement Complete REST API Layer [done]
+### Dependencies: None
+### Description: Create FastAPI routers and endpoints for full character system API
+### Details:
+Currently routers/ directory is empty but schemas exist and tests expect full API. Need to:
+
+1. Create character_router.py with CRUD endpoints
+2. Create relationship_router.py for character relationships
+3. Create mood_router.py for mood management
+4. Create goal_router.py for goal management
+5. Implement proper error handling and validation
+6. Add authentication and authorization
+7. Test all endpoints against API schemas
+
+## 5. Fix Test Infrastructure and Database Module [done]
+### Dependencies: None
+### Description: Resolve broken test imports and implement missing shared database infrastructure
+### Details:
+Many tests fail with 'ModuleNotFoundError: No module named backend.systems.shared.database'. Need to:
+
+1. Create missing backend.systems.shared.database.base module
+2. Implement proper database session management
+3. Fix conftest.py imports and test fixtures
+4. Remove fallback classes from test files
+5. Implement proper test isolation and cleanup
+6. Ensure all 962 character tests run without import errors
+
+## 6. Complete Character Builder Integration [done]
+### Dependencies: None
+### Description: Fully integrate CharacterBuilder with Character model and implement missing methods
+### Details:
+CharacterBuilder exists but integration is incomplete. Tests expect fuller integration. Need to:
+
+1. Enhance Character.to_builder() method implementation
+2. Improve CharacterBuilder.finalize() integration with Character model
+3. Add missing builder validation and error handling
+4. Implement builder pattern for character updates
+5. Test builder integration with character service
+6. Ensure builder supports all character features
+

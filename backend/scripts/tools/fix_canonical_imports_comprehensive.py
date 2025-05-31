@@ -114,12 +114,12 @@ class CanonicalImportFixer:
         
         # Fix the imports
         fixes = [
-            ("from backend.systems.shared.error", 
-             "from backend.systems.shared.utils.common.error"),
-            ("from backend.systems.shared.validation", 
-             "from backend.systems.shared.utils.common.validation"),
-            ("from backend.systems.shared.logging", 
-             "from backend.systems.shared.utils.common.logging"),
+            ("from backend.infrastructure.shared.error", 
+             "from backend.infrastructure.shared.utils.common.error"),
+            ("from backend.infrastructure.shared.validation", 
+             "from backend.infrastructure.shared.utils.common.validation"),
+            ("from backend.infrastructure.shared.logging", 
+             "from backend.infrastructure.shared.utils.common.logging"),
         ]
         
         for old, new in fixes:
@@ -145,23 +145,19 @@ Common error classes for the Visual DM backend.
 
 class VisualDMError(Exception):
     """Base exception for Visual DM errors."""
-    pass
 
 class ValidationError(VisualDMError):
     """Raised when validation fails."""
-    pass
 
 class ConfigurationError(VisualDMError):
     """Raised when configuration is invalid."""
-    pass
 
 class DataError(VisualDMError):
     """Raised when data operations fail."""
-    pass
 
 class ServiceError(VisualDMError):
     """Raised when service operations fail."""
-    pass
+
 '''
             
             with open(error_file, 'w') as f:
@@ -188,11 +184,11 @@ class ServiceError(VisualDMError):
                 # Common problematic patterns and their fixes
                 patterns = [
                     # Fix relative imports to utils
-                    (r'from \.\.utils\.', 'from backend.systems.shared.utils.'),
-                    (r'from \.utils\.', 'from backend.systems.shared.utils.'),
+                    (r'from backend.infrastructure.shared.utils.'),
+                    (r'from backend.infrastructure.shared.utils.'),
                     
                     # Fix non-canonical backend.utils imports
-                    (r'from backend\.utils\.', 'from backend.systems.shared.utils.'),
+                    (r'from backend.infrastructure.shared.utils.'),
                     
                     # Fix missing .models. in paths
                     (r'from backend\.systems\.(\w+)\.(\w+) import', 

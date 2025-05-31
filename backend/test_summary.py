@@ -1,189 +1,184 @@
 #!/usr/bin/env python3
 """
-Backend Test Summary Generator
-Systematically tests each backend system and provides a comprehensive report.
+Backend Test Summary Report
+===========================
+
+This script summarizes the findings from attempting to run all backend tests.
 """
 
-import subprocess
 import sys
-from pathlib import Path
-import json
+import os
 from datetime import datetime
 
-def run_tests_for_system(system_name): pass
-    """Run tests for a specific system and return results."""
-    test_path = f"tests/systems/{system_name}/"
+def generate_test_summary():
+    """Generate a comprehensive test summary report."""
     
-    if not Path(test_path).exists(): pass
-        return {"status": "NOT_FOUND", "message": f"Test directory {test_path} does not exist"}
-    
-    try: pass
-        # Run pytest with minimal output and capture results
-        result = subprocess.run([
-            sys.executable, "-m", "pytest", 
-            test_path, 
-            "--tb=no", 
-            "--maxfail=1000",
-            "-q"
-        ], capture_output=True, text=True, cwd=".")
-        
-        output = result.stdout + result.stderr
-        
-        if result.returncode == 0: pass
-            # Parse successful results
-            lines = output.split('\n')
-            for line in lines: pass
-                if 'passed' in line and '::' not in line: pass
-                    # Extract test count from lines like "283 passed in 0.40s"
-                    parts = line.split()
-                    if parts and parts[0].isdigit(): pass
-                        count = int(parts[0])
-                        return {
-                            "status": "PASS", 
-                            "passed": count, 
-                            "failed": 0,
-                            "message": line.strip()
-                        }
-            return {"status": "PASS", "passed": "unknown", "failed": 0, "message": "Tests passed"}
-            
-        elif "errors during collection" in output: pass
-            return {"status": "IMPORT_ERROR", "message": "Import/collection errors"}
-            
-        else: pass
-            # Parse failure results
-            lines = output.split('\n')
-            passed = failed = 0
-            for line in lines: pass
-                if 'failed' in line and 'passed' in line and '::' not in line: pass
-                    # Extract counts from lines like "5 failed, 21 passed"
-                    parts = line.split()
-                    for i, part in enumerate(parts): pass
-                        if part == "failed," and i > 0: pass
-                            failed = int(parts[i-1])
-                        elif part == "passed" and i > 0: pass
-                            passed = int(parts[i-1])
-                    break
-            
-            return {
-                "status": "PARTIAL", 
-                "passed": passed, 
-                "failed": failed,
-                "message": f"{failed} failed, {passed} passed"
-            }
-            
-    except Exception as e: pass
-        return {"status": "ERROR", "message": str(e)}
-
-def main(): pass
-    """Generate comprehensive test summary."""
-    
-    # List of all backend systems to test
-    systems = [
-        "analytics", "auth_user", "character", "combat", "crafting", 
-        "data", "dialogue", "diplomacy", "economy", "equipment", 
-        "events", "faction", "integration", "inventory", "llm", 
-        "loot", "magic", "memory", "motif", "npc", "poi", 
-        "population", "quest", "region", "religion", "rumor", 
-        "shared", "storage", "tension_war", "time", "world_generation", 
-        "world_state"
-    ]
-    
-    print("🚀 Backend Test Summary Report")
-    print("=" * 60)
-    print(f"📅 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 80)
+    print("BACKEND TEST ANALYSIS REPORT")
+    print("=" * 80)
+    print(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
     
-    results = {}
-    
-    # Test each system
-    for system in systems: pass
-        print(f"Testing {system}...", end=" ")
-        result = run_tests_for_system(system)
-        results[system] = result
-        
-        # Print status
-        if result["status"] == "PASS": pass
-            print(f"✅ {result.get('passed', '?')} tests passed")
-        elif result["status"] == "PARTIAL": pass
-            print(f"⚠️ {result.get('passed', 0)} passed, {result.get('failed', 0)} failed")
-        elif result["status"] == "IMPORT_ERROR": pass
-            print("❌ Import errors")
-        elif result["status"] == "NOT_FOUND": pass
-            print("❓ Not found")
-        else: pass
-            print(f"💥 Error: {result.get('message', 'Unknown error')}")
-    
-    print("\n" + "=" * 60)
-    print("📊 SUMMARY STATISTICS")
-    print("=" * 60)
-    
-    # Calculate statistics
-    total_systems = len(systems)
-    passing_systems = len([r for r in results.values() if r["status"] == "PASS"])
-    partial_systems = len([r for r in results.values() if r["status"] == "PARTIAL"])
-    import_error_systems = len([r for r in results.values() if r["status"] == "IMPORT_ERROR"])
-    error_systems = len([r for r in results.values() if r["status"] == "ERROR"])
-    not_found_systems = len([r for r in results.values() if r["status"] == "NOT_FOUND"])
-    
-    total_passed = sum([r.get('passed', 0) for r in results.values() if isinstance(r.get('passed'), int)])
-    total_failed = sum([r.get('failed', 0) for r in results.values() if isinstance(r.get('failed'), int)])
-    
-    print(f"📈 Systems Overview:")
-    print(f"   • Total Systems: {total_systems}")
-    print(f"   • ✅ Fully Passing: {passing_systems}")
-    print(f"   • ⚠️ Partially Working: {partial_systems}")
-    print(f"   • ❌ Import Errors: {import_error_systems}")
-    print(f"   • 💥 Other Errors: {error_systems}")
-    print(f"   • ❓ Not Found: {not_found_systems}")
+    print("🔍 ANALYSIS OVERVIEW")
+    print("-" * 40)
+    print("Attempted to run all backend tests using pytest but encountered")
+    print("multiple import and dependency issues that prevent test execution.")
     print()
-    print(f"🧪 Test Results:")
-    print(f"   • Total Tests Passed: {total_passed}")
-    print(f"   • Total Tests Failed: {total_failed}")
-    if total_passed + total_failed > 0: pass
-        success_rate = (total_passed / (total_passed + total_failed)) * 100
-        print(f"   • Success Rate: {success_rate:.1f}%")
     
-    print("\n" + "=" * 60)
-    print("✅ WORKING SYSTEMS")
-    print("=" * 60)
+    print("❌ CRITICAL ISSUES FOUND")
+    print("-" * 40)
     
-    for system, result in results.items(): pass
-        if result["status"] == "PASS": pass
-            print(f"• {system}: {result.get('passed', '?')} tests")
+    print("1. PYTEST COMPATIBILITY ISSUES:")
+    print("   • pytest-asyncio version incompatibility")
+    print("   • Fixed: Downgraded pytest-asyncio from 0.24.0 to 0.18.0")
+    print()
     
-    print("\n" + "=" * 60)
-    print("⚠️ PARTIALLY WORKING SYSTEMS")
-    print("=" * 60)
+    print("2. MISSING IMPORTS:")
+    print("   • ConfigDict not imported in combat/models/models.py")
+    print("   • ConfigDict not imported in economy/models/models.py")
+    print("   • Fixed: Added ConfigDict imports")
+    print()
     
-    for system, result in results.items(): pass
-        if result["status"] == "PARTIAL": pass
-            print(f"• {system}: {result.get('passed', 0)} passed, {result.get('failed', 0)} failed")
+    print("3. INCORRECT MODEL IMPORTS:")
+    print("   • CoreBaseModel doesn't exist, should be BaseModel")
+    print("   • Fixed: Updated combat/models/stats.py")
+    print()
     
-    print("\n" + "=" * 60)
-    print("❌ SYSTEMS WITH ISSUES")
-    print("=" * 60)
+    print("4. CIRCULAR IMPORT ISSUES:")
+    print("   • Economy system has complex circular imports")
+    print("   • EconomyManager imports from services/__init__.py")
+    print("   • services/__init__.py imports from economy_manager")
+    print("   • Multiple services try to import from wrong locations")
+    print()
     
-    for system, result in results.items(): pass
-        if result["status"] in ["IMPORT_ERROR", "ERROR"]: pass
-            print(f"• {system}: {result['status']} - {result.get('message', 'Unknown issue')}")
+    print("5. MISSING MODELS/CLASSES:")
+    print("   • SharedEntity not found in infrastructure.shared.models")
+    print("   • Resource class location confusion (services vs models)")
+    print("   • TradeRoute, Market, CommodityFuture import path issues")
+    print()
     
-    # Save detailed results to JSON
-    with open('test_summary_results.json', 'w') as f: pass
-        json.dump({
-            "timestamp": datetime.now().isoformat(),
-            "summary": {
-                "total_systems": total_systems,
-                "passing_systems": passing_systems,
-                "partial_systems": partial_systems,
-                "import_error_systems": import_error_systems,
-                "error_systems": error_systems,
-                "total_passed": total_passed,
-                "total_failed": total_failed
-            },
-            "results": results
-        }, f, indent=2)
+    print("6. CONFTEST.PY DEPENDENCY:")
+    print("   • conftest.py imports main.py which has broken imports")
+    print("   • Prevents any pytest execution")
+    print()
     
-    print(f"\n💾 Detailed results saved to: test_summary_results.json")
+    print("✅ WORKING COMPONENTS")
+    print("-" * 40)
+    
+    print("1. RULES SYSTEM:")
+    print("   • backend.systems.rules.rules module works correctly")
+    print("   • Balance constants accessible")
+    print("   • Ability modifier calculations work")
+    print("   • HP calculations work")
+    print("   • Equipment system functional")
+    print()
+    
+    print("2. BASIC INFRASTRUCTURE:")
+    print("   • SQLAlchemy base models exist")
+    print("   • Pydantic models can be imported")
+    print("   • Basic Python imports work")
+    print()
+    
+    print("🔧 RECOMMENDED FIXES")
+    print("-" * 40)
+    
+    print("1. IMMEDIATE FIXES:")
+    print("   • Fix all missing ConfigDict imports")
+    print("   • Resolve circular imports in economy system")
+    print("   • Create missing SharedEntity and related models")
+    print("   • Fix import paths throughout the codebase")
+    print()
+    
+    print("2. STRUCTURAL IMPROVEMENTS:")
+    print("   • Reorganize economy system to avoid circular imports")
+    print("   • Create proper model exports in __init__.py files")
+    print("   • Separate concerns between models, services, and routers")
+    print("   • Add proper dependency injection")
+    print()
+    
+    print("3. TEST INFRASTRUCTURE:")
+    print("   • Create isolated test fixtures that don't depend on main.py")
+    print("   • Add unit tests that test individual components")
+    print("   • Separate integration tests from unit tests")
+    print("   • Mock external dependencies")
+    print()
+    
+    print("📊 TEST EXECUTION STATUS")
+    print("-" * 40)
+    
+    print("PYTEST EXECUTION: ❌ FAILED")
+    print("  └── Cannot run due to import errors")
+    print()
+    
+    print("INDIVIDUAL COMPONENT TESTS:")
+    print("  ├── Rules System: ✅ PASSED")
+    print("  ├── Economy System: ❌ FAILED (import issues)")
+    print("  ├── Combat System: ❌ FAILED (import issues)")
+    print("  ├── Region System: ❌ FAILED (import issues)")
+    print("  └── Infrastructure: ⚠️  PARTIAL (basic imports work)")
+    print()
+    
+    print("📈 SYSTEM HEALTH ASSESSMENT")
+    print("-" * 40)
+    
+    print("OVERALL STATUS: 🔴 CRITICAL ISSUES")
+    print()
+    print("COMPONENT BREAKDOWN:")
+    print("  • Core Logic: 🟢 HEALTHY (rules system works)")
+    print("  • Import Structure: 🔴 BROKEN (circular imports)")
+    print("  • Model Definitions: 🟡 MIXED (some work, some missing)")
+    print("  • Test Infrastructure: 🔴 BROKEN (cannot execute)")
+    print("  • API Routes: 🔴 BROKEN (depend on broken imports)")
+    print()
+    
+    print("🎯 PRIORITY ACTIONS")
+    print("-" * 40)
+    
+    print("HIGH PRIORITY:")
+    print("1. Fix circular imports in economy system")
+    print("2. Create missing model classes (SharedEntity, etc.)")
+    print("3. Fix all ConfigDict import issues")
+    print("4. Reorganize import structure")
+    print()
+    
+    print("MEDIUM PRIORITY:")
+    print("1. Create isolated test fixtures")
+    print("2. Add proper error handling")
+    print("3. Implement dependency injection")
+    print("4. Add comprehensive unit tests")
+    print()
+    
+    print("LOW PRIORITY:")
+    print("1. Optimize import performance")
+    print("2. Add integration tests")
+    print("3. Improve documentation")
+    print("4. Add type hints throughout")
+    print()
+    
+    print("💡 DEVELOPMENT RECOMMENDATIONS")
+    print("-" * 40)
+    
+    print("1. IMMEDIATE DEVELOPMENT:")
+    print("   • Focus on fixing import issues before adding new features")
+    print("   • Use the working rules system as a template for other systems")
+    print("   • Test each fix in isolation")
+    print()
+    
+    print("2. TESTING STRATEGY:")
+    print("   • Start with unit tests for individual functions")
+    print("   • Avoid testing complex integration until imports are fixed")
+    print("   • Use mocking extensively to isolate components")
+    print()
+    
+    print("3. ARCHITECTURE:")
+    print("   • Consider using dependency injection framework")
+    print("   • Separate data models from business logic")
+    print("   • Use factory patterns for complex object creation")
+    print()
+    
+    print("=" * 80)
+    print("END OF REPORT")
+    print("=" * 80)
 
-if __name__ == "__main__": pass
-    main() 
+if __name__ == "__main__":
+    generate_test_summary() 

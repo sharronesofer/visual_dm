@@ -1,3 +1,1 @@
-"""
-Tests for the Population Control System.
-"""
+# Test package for the population system

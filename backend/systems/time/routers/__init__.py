@@ -1,5 +1,4 @@
-"""
-Time system API routers.
-"""
+"""Routers for time system"""
 
-from backend.systems.time.routers.time_router import router as time_router 
+# Auto-generated imports
+from .time_router import *

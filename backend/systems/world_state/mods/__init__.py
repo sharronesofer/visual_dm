@@ -1,7 +1,7 @@
 """
 Module handling mod synchronization and management.
 """
-from .mod_synchronizer import (
+from backend.systems.world_state.mod_synchronizer import (
     router as mod_router,
     ModInfo,
     ModDependency,

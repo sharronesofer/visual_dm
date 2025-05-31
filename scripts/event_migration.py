@@ -10,10 +10,10 @@ from pathlib import Path
 
 # Define patterns for imports
 patterns = [
-    (r"from backend\.systems\.event import (.*)", r"from backend.systems.events import \1"),
-    (r"from backend\.systems\.event\.(.*) import (.*)", r"from backend.systems.events.\1 import \2"),
-    (r"import backend\.systems\.event\.(.*)", r"import backend.systems.events.\1"),
-    (r"import backend\.systems\.event", r"import backend.systems.events"),
+    (r"from backend\.systems\.event import (.*)", r"from backend.infrastructure.events import \1"),
+    (r"from backend\.systems\.event\.(.*) import (.*)", r"from backend.infrastructure.events.\1 import \2"),
+    (r"import backend\.systems\.event\.(.*)", r"import backend.infrastructure.events.\1"),
+    (r"import backend\.systems\.event", r"import backend.infrastructure.events"),
 ]
 
 def update_imports(file_path):

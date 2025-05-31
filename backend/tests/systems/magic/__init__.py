@@ -1,1 +1,1 @@
-# This file makes the directory a Python package
+# Test package for the magic system

@@ -5,13 +5,15 @@
         "VDM.Systems",
         "VDM.Character",
         "VDM.Modules",
-        "VisualDM.DTOs",
+        "VDM.DTOs",
         "VDM.Common",
         "VDM.Core",
+        "VDM.Services",
         "Unity.Nuget.Newtonsoft-Json",
         "Unity.InputSystem",
         "Unity.TextMeshPro",
-        "Unity.Netcode.Runtime"
+        "Unity.Netcode.Runtime",
+        "com.endel.nativewebsocket"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

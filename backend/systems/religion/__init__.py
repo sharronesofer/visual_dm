@@ -1,74 +1,41 @@
-"""
-Religion System: Manages religion entities, membership, and narrative hooks.
+"""Religion system"""
 
-This module handles religion types, membership, narrative hooks, and integration
-with faction and quest systems. It supports cross-faction membership and
-narrative-driven mechanics.
-"""
+# Import key components for easy access
+try:
+    from .models import *
+except ImportError:
+    pass
 
-from .models import (
-    Religion,
-    ReligionType,
-    ReligionMembership,
-    religiontype_to_string,
-    string_to_religiontype
-)
+try:
+    from .services import *
+except ImportError:
+    pass
 
-from .schemas import (
-    ReligionSchema,
-    ReligionMembershipSchema,
-    ReligionCreateSchema,
-    ReligionUpdateSchema,
-    ReligionMembershipCreateSchema
-)
+try:
+    from .schemas import *
+except ImportError:
+    pass
 
-from .services import (
-    ReligionService,
-    get_religion_service
-)
+try:
+    from backend.infrastructure.utils import *
+except ImportError:
+    pass
 
-from .repository import ReligionRepository
-from .membership_service import ReligionMembershipService
-from .narrative_service import ReligionNarrativeService, get_narrative_service
-from .faction_service import ReligionFactionService, get_faction_service
+try:
+    from .repositories import *
+except ImportError:
+    pass
 
-from .utils import (
-    calculate_devotion_change,
-    generate_conversion_narrative,
-    generate_religion_event,
-    calculate_religion_compatibility,
-    calculate_schism_probability
-)
+try:
+    from .routers import *
+except ImportError:
+    pass
+
+try:
+    from .events import *
+except ImportError:
+    pass
 
 __all__ = [
-    # Models
-    "Religion",
-    "ReligionType",
-    "ReligionMembership",
-    "religiontype_to_string",
-    "string_to_religiontype",
-    
-    # Schemas
-    "ReligionSchema",
-    "ReligionMembershipSchema",
-    "ReligionCreateSchema",
-    "ReligionUpdateSchema",
-    "ReligionMembershipCreateSchema",
-    
-    # Services
-    "ReligionService",
-    "get_religion_service",
-    "ReligionRepository",
-    "ReligionMembershipService",
-    "ReligionNarrativeService",
-    "get_narrative_service",
-    "ReligionFactionService",
-    "get_faction_service",
-    
-    # Utils
-    "calculate_devotion_change",
-    "generate_conversion_narrative",
-    "generate_religion_event",
-    "calculate_religion_compatibility",
-    "calculate_schism_probability"
+    # Add specific exports here as modules are implemented
 ]

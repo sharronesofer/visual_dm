@@ -1,20 +1,4 @@
-"""
-Event handlers and processors for the World State system.
+"""Events for world_state system"""
 
-This module contains event-related functionality, including event generation,
-processing, and handler implementations.
-"""
-
-from .handlers import (
-    WorldEventHandler,
-    RegionEventHandler,
-    FactionEventHandler,
-    NPCEventHandler,
-)
-
-__all__ = [
-    'WorldEventHandler',
-    'RegionEventHandler',
-    'FactionEventHandler',
-    'NPCEventHandler',
-] 
+# Auto-generated imports
+from .handlers import *

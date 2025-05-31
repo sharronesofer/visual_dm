@@ -58,7 +58,7 @@ The modding system primarily serves to generate world seeds rather than runtime 
 
 ## Modular Biome Adjacency Matrix (adjacency.json)
 
-- Biome adjacency rules are defined in `backend/data/adjacency.json`.
+- Biome adjacency rules are defined in `data/system/runtime/adjacency.json`.
 - Each rule specifies two biomes, a rule type (`compatible`, `incompatible`, `transition_needed`), and optional transition biomes, minimum transition width, and weight.
 - Modders can edit this file to:
   - Control which biomes can be directly adjacent
@@ -66,7 +66,7 @@ The modding system primarily serves to generate world seeds rather than runtime 
   - Adjust coastline and beach placement by changing adjacency rules for water/land
   - Influence river placement by defining which biomes rivers can cross or border
 - The adjacency matrix is loaded at runtime; changes take effect on world/server creation.
-- See `Development_Bible.md` for a high-level overview and `backend/data/adjacency.json` for the canonical format.
+- See `Development_Bible.md` for a high-level overview and `data/system/runtime/adjacency.json` for the canonical format.
 
 ## Coastline Smoothing and River Generation
 
@@ -77,13 +77,13 @@ The modding system primarily serves to generate world seeds rather than runtime 
 
 ## References
 - See `Development_Bible.md` (Modular Biome Adjacency, Coastline, and River Generation Systems)
-- See `backend/data/adjacency.json` for the canonical adjacency rules format
+- See `data/system/runtime/adjacency.json` for the canonical adjacency rules format
 
 ## World Seed Schema: The Canonical Entry Point
 
 A canonical, extensible 'seeded world' JSON schema is now the primary entry point for world/continent/server definitions. This schema aggregates references to all modular data categories (biomes, items, races, etc.) and supports all must-have fields for world metadata, settings, factions, religions, regions, canon lists, narrative hooks, and extensibility.
 
-- **Location:** See `backend/data/modding/worlds/world_seed.schema.json` for the schema and `backend/data/modding/worlds/example_world.json` for a rich example.
+- **Location:** See `data/builders/worlds/world_seed.schema.json` for the schema and `data/builders/worlds/example_world.json` for a rich example.
 - **Extensibility:** All fields except `name` and at least one region/faction are optional. Modders can define as much or as little as they want; missing fields are procedurally generated or GPT-filled.
 - **Integration:** The world seed file references or overrides modular JSONs for biomes, items, etc., and is supported by both backend and Unity loaders.
 - **Modder Workflow:** Modders should start by copying the example file, editing fields as desired, and linking or overriding modular data as needed.

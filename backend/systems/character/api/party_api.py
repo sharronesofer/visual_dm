@@ -9,9 +9,9 @@ from typing import Dict, Any, List, Optional
 from uuid import UUID
 from sqlalchemy.orm import Session
 
-from backend.core.database import get_db_session
+from backend.infrastructure.database import get_db
 from backend.systems.character.services.party_service import PartyService
-from backend.core.utils.error import NotFoundError, DatabaseError
+from backend.infrastructure.utils import NotFoundError, DatabaseError
 
 # Assuming schemas will be created later when needed
 # from backend.systems.character.api.schemas import (

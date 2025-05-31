@@ -1,0 +1,628 @@
+{
+  "timestamp": "2025-05-31T02:00:56.939538",
+  "diplomacy_system_status": "operational",
+  "api_analysis": {
+    "total_endpoints": 46,
+    "categories": {
+      "Treaties": 5,
+      "Negotiations": 5,
+      "Relations": 6,
+      "Events": 3,
+      "Violations": 5,
+      "Incidents": 5,
+      "Ultimatums": 6,
+      "Sanctions": 6,
+      "Integration": 5
+    },
+    "endpoints_by_category": {
+      "Treaties": [
+        {
+          "method": "POST",
+          "path": "/diplomacy/treaties",
+          "name": "create_treaty",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/treaties/{treaty_id}",
+          "name": "get_treaty",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/treaties",
+          "name": "list_treaties",
+          "summary": null
+        },
+        {
+          "method": "PATCH",
+          "path": "/diplomacy/treaties/{treaty_id}",
+          "name": "update_treaty",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/treaties/{treaty_id}/expire",
+          "name": "expire_treaty",
+          "summary": null
+        }
+      ],
+      "Negotiations": [
+        {
+          "method": "POST",
+          "path": "/diplomacy/negotiations",
+          "name": "start_negotiation",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/negotiations/{negotiation_id}",
+          "name": "get_negotiation",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/negotiations/{negotiation_id}/offers",
+          "name": "make_offer",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/negotiations/{negotiation_id}/accept",
+          "name": "accept_offer",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/negotiations/{negotiation_id}/reject",
+          "name": "reject_offer",
+          "summary": null
+        }
+      ],
+      "Relations": [
+        {
+          "method": "GET",
+          "path": "/diplomacy/relations/{faction_id}",
+          "name": "get_faction_relationships",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/relations/{faction_a_id}/{faction_b_id}",
+          "name": "get_relationship",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/relations/{faction_a_id}/{faction_b_id}/tension",
+          "name": "update_tension",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/relations/{faction_a_id}/{faction_b_id}/status",
+          "name": "set_status",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/tension/{faction_a_id}/{faction_b_id}",
+          "name": "get_tension",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/war/check/{faction_a_id}/{faction_b_id}",
+          "name": "check_war_status",
+          "summary": null
+        }
+      ],
+      "Events": [
+        {
+          "method": "POST",
+          "path": "/diplomacy/events",
+          "name": "create_event",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/events",
+          "name": "list_events",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/integration/events/test",
+          "name": "test_integration_events",
+          "summary": null
+        }
+      ],
+      "Violations": [
+        {
+          "method": "POST",
+          "path": "/diplomacy/violations",
+          "name": "report_treaty_violation",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/violations",
+          "name": "get_treaty_violations",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/violations/{violation_id}/acknowledge",
+          "name": "acknowledge_violation",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/violations/{violation_id}/resolve",
+          "name": "resolve_violation",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/sanctions/{sanction_id}/violations",
+          "name": "record_sanction_violation",
+          "summary": null
+        }
+      ],
+      "Incidents": [
+        {
+          "method": "POST",
+          "path": "/diplomacy/incidents",
+          "name": "create_diplomatic_incident",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/incidents/{incident_id}",
+          "name": "get_diplomatic_incident",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/incidents",
+          "name": "list_diplomatic_incidents",
+          "summary": null
+        },
+        {
+          "method": "PATCH",
+          "path": "/diplomacy/incidents/{incident_id}",
+          "name": "update_diplomatic_incident",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/incidents/{incident_id}/resolve",
+          "name": "resolve_diplomatic_incident",
+          "summary": null
+        }
+      ],
+      "Ultimatums": [
+        {
+          "method": "POST",
+          "path": "/diplomacy/ultimatums",
+          "name": "create_ultimatum",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/ultimatums/{ultimatum_id}",
+          "name": "get_ultimatum",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/ultimatums",
+          "name": "list_ultimatums",
+          "summary": null
+        },
+        {
+          "method": "PATCH",
+          "path": "/diplomacy/ultimatums/{ultimatum_id}",
+          "name": "update_ultimatum",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/ultimatums/{ultimatum_id}/respond",
+          "name": "respond_to_ultimatum",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/ultimatums/check-expired",
+          "name": "check_expired_ultimatums",
+          "summary": null
+        }
+      ],
+      "Sanctions": [
+        {
+          "method": "POST",
+          "path": "/diplomacy/sanctions",
+          "name": "create_sanction",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/sanctions/{sanction_id}",
+          "name": "get_sanction",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/sanctions",
+          "name": "list_sanctions",
+          "summary": null
+        },
+        {
+          "method": "PATCH",
+          "path": "/diplomacy/sanctions/{sanction_id}",
+          "name": "update_sanction",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/sanctions/{sanction_id}/lift",
+          "name": "lift_sanction",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/sanctions/check-expired",
+          "name": "check_expired_sanctions",
+          "summary": null
+        }
+      ],
+      "Integration": [
+        {
+          "method": "GET",
+          "path": "/diplomacy/integration/status",
+          "name": "get_integration_status",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/integration/initialize",
+          "name": "initialize_integrations",
+          "summary": null
+        },
+        {
+          "method": "POST",
+          "path": "/diplomacy/integration/faction/{faction_id}/sync",
+          "name": "sync_faction_relationships",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/integration/regional/{region_id}/status",
+          "name": "get_regional_diplomatic_status",
+          "summary": null
+        },
+        {
+          "method": "GET",
+          "path": "/diplomacy/integration/health",
+          "name": "check_integration_health",
+          "summary": null
+        }
+      ]
+    }
+  },
+  "schema_analysis": {
+    "TreatySchema": {
+      "field_count": 12,
+      "fields": {
+        "id": "<class 'uuid.UUID'>",
+        "name": "<class 'str'>",
+        "type": "<enum 'TreatyType'>",
+        "parties": "typing.List[uuid.UUID]",
+        "terms": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "start_date": "<class 'datetime.datetime'>",
+        "end_date": "typing.Optional[datetime.datetime]",
+        "is_active": "<class 'bool'>",
+        "is_public": "<class 'bool'>",
+        "created_at": "<class 'datetime.datetime'>",
+        "updated_at": "<class 'datetime.datetime'>",
+        "negotiation_id": "typing.Optional[uuid.UUID]"
+      }
+    },
+    "NegotiationSchema": {
+      "field_count": 11,
+      "fields": {
+        "id": "<class 'uuid.UUID'>",
+        "parties": "typing.List[uuid.UUID]",
+        "initiator_id": "<class 'uuid.UUID'>",
+        "status": "<enum 'NegotiationStatus'>",
+        "offers": "typing.List[backend.systems.diplomacy.schemas.schemas.NegotiationOfferSchema]",
+        "current_offer_id": "typing.Optional[uuid.UUID]",
+        "treaty_type": "typing.Optional[backend.systems.diplomacy.models.core_models.TreatyType]",
+        "start_date": "<class 'datetime.datetime'>",
+        "end_date": "typing.Optional[datetime.datetime]",
+        "result_treaty_id": "typing.Optional[uuid.UUID]",
+        "metadata": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]"
+      }
+    },
+    "DiplomaticEventSchema": {
+      "field_count": 11,
+      "fields": {
+        "id": "<class 'uuid.UUID'>",
+        "event_type": "<enum 'DiplomaticEventType'>",
+        "factions": "typing.List[uuid.UUID]",
+        "timestamp": "<class 'datetime.datetime'>",
+        "description": "<class 'str'>",
+        "severity": "<class 'int'>",
+        "public": "<class 'bool'>",
+        "related_treaty_id": "typing.Optional[uuid.UUID]",
+        "related_negotiation_id": "typing.Optional[uuid.UUID]",
+        "metadata": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "tension_change": "typing.Dict[str, int]"
+      }
+    },
+    "FactionRelationshipSchema": {
+      "field_count": 7,
+      "fields": {
+        "faction_a_id": "<class 'uuid.UUID'>",
+        "faction_b_id": "<class 'uuid.UUID'>",
+        "status": "<enum 'DiplomaticStatus'>",
+        "tension": "<class 'int'>",
+        "treaties": "typing.List[uuid.UUID]",
+        "last_status_change": "<class 'datetime.datetime'>",
+        "negotiations": "typing.List[uuid.UUID]"
+      }
+    },
+    "TreatyViolationSchema": {
+      "field_count": 12,
+      "fields": {
+        "id": "<class 'uuid.UUID'>",
+        "treaty_id": "<class 'uuid.UUID'>",
+        "violator_id": "<class 'uuid.UUID'>",
+        "violation_type": "<enum 'TreatyViolationType'>",
+        "description": "<class 'str'>",
+        "evidence": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "reported_by": "<class 'uuid.UUID'>",
+        "timestamp": "<class 'datetime.datetime'>",
+        "severity": "<class 'int'>",
+        "acknowledged": "<class 'bool'>",
+        "resolved": "<class 'bool'>",
+        "resolution_details": "typing.Optional[str]"
+      }
+    },
+    "DiplomaticIncidentSchema": {
+      "field_count": 16,
+      "fields": {
+        "id": "<class 'uuid.UUID'>",
+        "incident_type": "<enum 'DiplomaticIncidentType'>",
+        "perpetrator_id": "<class 'uuid.UUID'>",
+        "victim_id": "<class 'uuid.UUID'>",
+        "description": "<class 'str'>",
+        "evidence": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "severity": "<enum 'DiplomaticIncidentSeverity'>",
+        "tension_impact": "<class 'int'>",
+        "public": "<class 'bool'>",
+        "timestamp": "<class 'datetime.datetime'>",
+        "witnessed_by": "typing.List[uuid.UUID]",
+        "related_event_id": "typing.Optional[uuid.UUID]",
+        "related_treaty_id": "typing.Optional[uuid.UUID]",
+        "resolved": "<class 'bool'>",
+        "resolution_details": "typing.Optional[str]",
+        "resolution_date": "typing.Optional[datetime.datetime]"
+      }
+    },
+    "UltimatumSchema": {
+      "field_count": 18,
+      "fields": {
+        "id": "<class 'uuid.UUID'>",
+        "issuer_id": "<class 'uuid.UUID'>",
+        "recipient_id": "<class 'uuid.UUID'>",
+        "demands": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "consequences": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "status": "<enum 'UltimatumStatus'>",
+        "issue_date": "<class 'datetime.datetime'>",
+        "deadline": "<class 'datetime.datetime'>",
+        "response_date": "typing.Optional[datetime.datetime]",
+        "justification": "<class 'str'>",
+        "public": "<class 'bool'>",
+        "witnessed_by": "typing.List[uuid.UUID]",
+        "related_incident_id": "typing.Optional[uuid.UUID]",
+        "related_treaty_id": "typing.Optional[uuid.UUID]",
+        "related_event_id": "typing.Optional[uuid.UUID]",
+        "tension_change_on_issue": "<class 'int'>",
+        "tension_change_on_accept": "<class 'int'>",
+        "tension_change_on_reject": "<class 'int'>"
+      }
+    },
+    "SanctionSchema": {
+      "field_count": 19,
+      "fields": {
+        "id": "<class 'uuid.UUID'>",
+        "imposer_id": "<class 'uuid.UUID'>",
+        "target_id": "<class 'uuid.UUID'>",
+        "sanction_type": "<enum 'SanctionType'>",
+        "description": "<class 'str'>",
+        "status": "<enum 'SanctionStatus'>",
+        "justification": "<class 'str'>",
+        "imposed_date": "<class 'datetime.datetime'>",
+        "end_date": "typing.Optional[datetime.datetime]",
+        "lifted_date": "typing.Optional[datetime.datetime]",
+        "conditions_for_lifting": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "severity": "<class 'int'>",
+        "economic_impact": "<class 'int'>",
+        "diplomatic_impact": "<class 'int'>",
+        "enforcement_measures": "typing.Dict[str, typing.Union[str, int, bool, typing.Dict, typing.List]]",
+        "supporting_factions": "typing.List[uuid.UUID]",
+        "opposing_factions": "typing.List[uuid.UUID]",
+        "violations": "typing.List[typing.Dict]",
+        "is_public": "<class 'bool'>"
+      }
+    }
+  },
+  "enum_analysis": {
+    "DiplomaticStatus": {
+      "value_count": 7,
+      "values": [
+        "alliance",
+        "neutral",
+        "friendly",
+        "rivalry",
+        "war",
+        "truce",
+        "hostile"
+      ]
+    },
+    "TreatyType": {
+      "value_count": 6,
+      "values": [
+        "trade",
+        "alliance",
+        "non_aggression",
+        "ceasefire",
+        "mutual_defense",
+        "custom"
+      ]
+    },
+    "NegotiationStatus": {
+      "value_count": 8,
+      "values": [
+        "pending",
+        "active",
+        "accepted",
+        "rejected",
+        "counter_offered",
+        "completed",
+        "expired",
+        "breakdown"
+      ]
+    },
+    "DiplomaticEventType": {
+      "value_count": 20,
+      "values": [
+        "treaty_signed",
+        "treaty_expired",
+        "treaty_terminated",
+        "treaty_breach",
+        "treaty_violation",
+        "negotiation_started",
+        "negotiation_ended",
+        "negotiation_offer",
+        "alliance_formed",
+        "war_declaration",
+        "peace_declaration",
+        "diplomatic_incident",
+        "diplomatic_incident_resolved",
+        "ultimatum_issued",
+        "ultimatum_accepted",
+        "ultimatum_rejected",
+        "ultimatum_expired",
+        "status_change",
+        "tension_change",
+        "other"
+      ]
+    },
+    "TreatyViolationType": {
+      "value_count": 12,
+      "values": [
+        "territorial_intrusion",
+        "trade_embargo",
+        "trade_restriction",
+        "military_buildup",
+        "military_aggression",
+        "broken_promise",
+        "attacked_ally",
+        "espionage",
+        "supported_enemy",
+        "refused_tribute",
+        "broken_terms",
+        "other"
+      ]
+    },
+    "DiplomaticIncidentType": {
+      "value_count": 20,
+      "values": [
+        "border_dispute",
+        "espionage",
+        "insult",
+        "verbal_insult",
+        "assassination",
+        "kidnapping",
+        "trade_dispute",
+        "military_threat",
+        "sabotage",
+        "population_interference",
+        "treaty_violation",
+        "proxy_conflict",
+        "religious_dispute",
+        "cultural_offense",
+        "territory_claim",
+        "resource_dispute",
+        "refused_demand",
+        "piracy",
+        "theft",
+        "other"
+      ]
+    },
+    "DiplomaticIncidentSeverity": {
+      "value_count": 4,
+      "values": [
+        "minor",
+        "moderate",
+        "major",
+        "critical"
+      ]
+    },
+    "UltimatumStatus": {
+      "value_count": 4,
+      "values": [
+        "pending",
+        "accepted",
+        "rejected",
+        "expired"
+      ]
+    },
+    "SanctionType": {
+      "value_count": 12,
+      "values": [
+        "trade_embargo",
+        "economic",
+        "diplomatic",
+        "travel_ban",
+        "asset_freeze",
+        "military_embargo",
+        "resource_restriction",
+        "diplomatic_expulsion",
+        "technology_restriction",
+        "economic_blockade",
+        "treaty_suspension",
+        "custom"
+      ]
+    },
+    "SanctionStatus": {
+      "value_count": 5,
+      "values": [
+        "active",
+        "paused",
+        "lifted",
+        "expired",
+        "violated"
+      ]
+    }
+  },
+  "frontend_readiness": {
+    "api_endpoints": true,
+    "comprehensive_schemas": true,
+    "enum_compatibility": true,
+    "unity_models_generated": true
+  },
+  "recommendations": [
+    "All API endpoints are functional and ready for integration",
+    "Comprehensive schemas support full diplomacy functionality",
+    "Enums are properly defined for frontend compatibility",
+    "Unity C# models have been generated for immediate use",
+    "WebSocket integration should be implemented for real-time updates",
+    "Authentication middleware should be configured",
+    "Error handling patterns should be documented"
+  ],
+  "overall_readiness_score": 100.0
+}

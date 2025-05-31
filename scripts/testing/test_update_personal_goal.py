@@ -20,8 +20,8 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 sys.modules['backend.systems.analytics'] = MagicMock()
 sys.modules['backend.systems.analytics.services'] = MagicMock()
 sys.modules['backend.systems.analytics.services.analytics_service'] = MagicMock()
-sys.modules['backend.systems.shared.database'] = MagicMock()
-sys.modules['backend.systems.shared.database.database_objects'] = MagicMock()
+sys.modules['backend.infrastructure.shared.database'] = MagicMock()
+sys.modules['backend.infrastructure.shared.database.database_objects'] = MagicMock()
 sys.modules['backend.systems.world_state.world_state_manager'] = MagicMock()
 sys.modules['backend.systems.world_state'] = MagicMock()
 
@@ -32,18 +32,18 @@ sys.modules['backend.systems.world_state.world_state_manager'].WorldStateManager
 
 # Setup db mock
 mock_db = MagicMock()
-sys.modules['backend.systems.shared.database.database_objects'].db = mock_db
+sys.modules['backend.infrastructure.shared.database.database_objects'].db = mock_db
 
 # Setup get_db_session mock to return a fake session
 mock_session = MagicMock()
 mock_get_db_session = MagicMock()
 mock_get_db_session.return_value = iter([mock_session])
-sys.modules['backend.systems.shared.database'].get_db_session = mock_get_db_session
+sys.modules['backend.infrastructure.shared.database'].get_db_session = mock_get_db_session
 
 # Import our module
 from backend.systems.character.services.character_service import CharacterService
 from backend.systems.character.models.goal import GoalType
-from backend.systems.events import GoalProgressUpdated
+from backend.infrastructure.events import GoalProgressUpdated
 
 # Extract the update_personal_goal_progress method directly from the CharacterService class
 # This is a trick to test the method in isolation without instantiating the class

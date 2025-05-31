@@ -7,15 +7,15 @@ from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
-from backend.core.models.base import CoreBaseModel
+from backend.infrastructure.models import BaseModel
 
-class CombatStats(CoreBaseModel):
+class CombatStats(BaseModel):
     """
     Model for tracking character combat statistics.
     """
     __tablename__ = 'combat_stats'
     
-    # id, created_at, updated_at are inherited from CoreBaseModel
+    # id, created_at, updated_at are inherited from BaseModel
     
     character_id = Column(UUID(as_uuid=True), ForeignKey('characters.id'), nullable=False)
     armor_class = Column(Integer, default=10)

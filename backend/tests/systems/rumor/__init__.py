@@ -1,5 +1,1 @@
-"""
-Tests for the rumor system.
-
-This package contains tests for the rumor system components.
-"""
+# Test package for the rumor system

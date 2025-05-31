@@ -1,0 +1,342 @@
+# Task ID: 28
+# Title: Complete Combat System Implementation - Bridge Critical Gaps
+# Status: done
+# Dependencies: None
+# Priority: critical
+# Description: Address the critical gaps between comprehensive test expectations and current combat system implementation (currently 35% complete)
+# Details:
+Based on analysis of 50 test files (2000+ test cases) vs 30 implementation files, the combat system has significant implementation gaps blocking integration and functionality.
+
+**ASSESSMENT: 35% Complete**
+
+**✅ IMPLEMENTED (35% Complete):**
+- Core Combat Class (combat_class.py) - Basic combat coordination
+- Action System (action_system.py) - Action definitions and types
+- Effect Pipeline (effect_pipeline.py) - Status effect processing
+- Turn Queue (turn_queue.py) - Turn order management
+- Combat Area (combat_area.py) - Spatial positioning
+- Fog of War (fog_of_war.py) - Visibility management
+- Combat Animation System (combat_animation_system.py) - Animation coordination
+- Basic Utils (utils.py) - Core dice and mechanics
+- Combat Router (routers/combat_router.py) - API endpoints
+- Combat Service (services/combat_service.py) - Business logic
+
+**❌ MISSING CRITICAL COMPONENTS (65% Missing):**
+
+**1. Core Unified Combat Utils** - Tests expect `unified_combat_utils.py` with:
+   - DamageType, StatusEffectType, StatusEffectTarget enums
+   - calculate_base_damage, apply_critical_hit, calculate_mitigation functions
+   - get_valid_targets, resolve_combat_action functions
+   - Comprehensive status effect system
+   - Elemental effectiveness calculations
+
+**2. Combat Facade Layer** - Tests expect `combat_facade.py` with:
+   - High-level Combat class with initialize_combat, execute_action methods
+   - Combat action validation and execution routing
+   - Integration layer between UI and combat subsystems
+
+**3. Combat Types System** - Tests expect `combat_types_stub.py` with:
+   - Character, CombatState, CombatAction data models
+   - StatusEffect, DamageCalculation, ActionResult classes
+   - Complete type system for combat operations
+
+**4. Combat Validator** - Tests expect `combat_validator.py` with:
+   - validate_combat_action function
+   - Action legality checking
+   - Resource availability validation
+
+**5. Unified Effects System** - Tests expect `unified_effects.py` with:
+   - CombatEffect, EffectType classes
+   - Effect application and removal logic
+   - Effect stacking and interaction rules
+
+**CRITICAL INTEGRATION ISSUES:**
+- Import failures prevent basic testing (backend.systems.events.event_dispatcher missing)
+- Tests import modules that don't exist, causing 100% test failure rate
+- No unified damage calculation system
+- Missing comprehensive status effect framework
+- No high-level combat facade for frontend integration
+- Limited combat action validation
+- Incomplete character/combatant model integration
+
+**DEVELOPMENT BIBLE COMPLIANCE:**
+The Development Bible defines comprehensive combat requirements including:
+- Initiative system (✅ Partially implemented)
+- Action economy (✅ Basic implementation exists)
+- Damage/health system (⚠️ Basic framework, missing calculations)
+- Combat conditions (❌ Missing comprehensive status effects)
+- Attack resolution (⚠️ Basic logic exists, missing unified system)
+
+**IMPACT ON PROJECT:**
+- Frontend cannot integrate with combat system
+- No comprehensive combat testing possible
+- Combat gameplay features non-functional
+- API endpoints incomplete
+- Critical gameplay blocker for full system integration
+
+# Test Strategy:
+1. All 50 combat test files pass without import errors
+2. Combat facade provides clean API for frontend integration
+3. Unified damage calculations work end-to-end
+4. Status effect system handles all Development Bible conditions
+5. Combat validator prevents invalid actions
+6. Frontend can successfully integrate with combat system
+
+# Subtasks:
+## 1. Create Missing unified_combat_utils.py [done]
+### Dependencies: None
+### Description: Implement the core unified combat utilities module that 48KB of tests expect
+### Details:
+Tests expect backend.systems.combat.unified_combat_utils with comprehensive functionality:
+
+**Required Enums:**
+- DamageType (physical, magical, fire, ice, lightning, poison, psychic, necrotic, radiant, force, acid, thunder, true)
+- StatusEffectType (buff, debuff, neutral)
+- StatusEffectTarget (self, ally, enemy, all_allies, all_enemies, all)
+- EffectDuration (instant, temporary, permanent)
+
+**Required Functions:**
+- calculate_base_damage(attacker, base_damage, scaling, stat='strength')
+- apply_critical_hit(damage, attacker, critical_chance=None, critical_multiplier=None)
+- calculate_mitigation(damage, target, damage_type)
+- apply_full_damage_calculation(attacker, target, base_damage, damage_type)
+- get_valid_targets(combatants, target_type, source)
+- get_turn_order(combatants)
+- resolve_combat_action(attacker, action_data, battlefield_context)
+- apply_status_effect(target, effect_data)
+- process_status_effects(combatants)
+- remove_status_effect(target, effect_id)
+- dispel_effects(target, effect_types)
+- is_attack_successful(attacker, target, attack_bonus=0)
+- get_elemental_effectiveness(damage_type, target_resistances)
+- has_effect(target, effect_id)
+- get_effect(target, effect_id)
+- get_effect_stacks(target, effect_id)
+- register_combat_event_handlers()
+- create_combat_event_handler(event_type, handler)
+- remove_combat_event_handler(event_type, handler)
+
+This is the most critical missing piece - 1405 lines of tests depend on this module.
+
+## 2. Create Missing combat_facade.py [done]
+### Dependencies: None
+### Description: Implement the high-level combat facade that provides clean API for frontend integration
+### Details:
+Tests expect backend.systems.combat.combat_facade with 769 lines of test coverage:
+
+**Required Combat Class Methods:**
+- initialize_combat(combatants, combat_state)
+- execute_action(combatant, action, combat_state)
+- _execute_attack(combatant, action, combat_state)
+- _execute_skill(combatant, action, combat_state)
+- _execute_item(combatant, action, combat_state)
+- _execute_movement(combatant, action, combat_state)
+
+**Integration Requirements:**
+- Event publishing for combat events
+- Action validation integration
+- Effect pipeline integration
+- Turn order management
+- Combat state management
+
+**Expected Behavior:**
+- Coordinate between all combat subsystems
+- Provide unified API for frontend
+- Handle action validation and execution routing
+- Manage combat flow and state transitions
+- Publish appropriate events for UI updates
+
+This facade is critical for frontend integration and provides the main API surface.
+
+## 3. Create Missing combat_types_stub.py [done]
+### Dependencies: None
+### Description: Implement the combat data models and type system that tests expect
+### Details:
+Tests expect backend.systems.combat.combat_types_stub with comprehensive data models (505 lines of tests):
+
+**Required Classes:**
+
+**Character Class:**
+- Properties: name, id, level, current_hp, max_hp, current_mp, max_mp, is_alive
+- Combat stats: accuracy, evasion, armor_class, armor, magic_resistance
+- Critical stats: critical_chance, critical_multiplier, initiative, speed
+- Attributes: strength, dexterity, constitution, intelligence, wisdom, charisma
+- Collections: resistances, weaknesses, immunities, status_effects, skills, inventory
+- Methods: get_skill(skill_id), spend_resource(resource_type, amount)
+
+**CombatState Class:**
+- Properties: characters, current_turn, round_number, is_active, environment
+- Methods for combat state management
+
+**Supporting Classes:**
+- CombatAction - Action definitions and parameters
+- CombatEvent - Event system integration
+- StatusEffect - Status effect data structures
+- DamageCalculation - Damage calculation results
+- ActionResult - Action execution results
+
+These provide the foundational data structures for all combat operations.
+
+## 4. Create Missing combat_validator.py [done]
+### Dependencies: None
+### Description: Implement combat action validation system
+### Details:
+Tests expect backend.systems.combat.combat_validator with comprehensive validation (656 lines of tests):
+
+**Required Functions:**
+- validate_combat_action(combatant, action, combat_state)
+- validate_target_selection(combatant, target_id, action_type)
+- validate_resource_requirements(combatant, action)
+- validate_action_legality(combatant, action, combat_state)
+- validate_range_requirements(combatant, target, action)
+- validate_cooldown_restrictions(combatant, action)
+
+**Validation Categories:**
+- Target validity (exists, alive, in range, legal target)
+- Resource availability (MP, HP, items, cooldowns)
+- Action legality (can use this action now, action economy)
+- Environmental constraints (line of sight, terrain)
+- Status effect restrictions (silenced, stunned, etc.)
+
+**Return Format:**
+- (is_valid: bool, error_code: str, error_message: str)
+- Standardized error codes for UI feedback
+- Detailed error messages for debugging
+
+Critical for preventing invalid actions and providing user feedback.
+
+## 5. Create Missing unified_effects.py [done]
+### Dependencies: None
+### Description: Implement the unified status effects system
+### Details:
+Tests expect backend.systems.combat.unified_effects with comprehensive effect management:
+
+**Required Classes:**
+
+**CombatEffect Class:**
+- Properties: id, name, description, duration, stacks, effect_type
+- Methods: apply(target), remove(target), tick(target), can_stack()
+
+**EffectType Enum:**
+- Categories: damage_over_time, heal_over_time, stat_modifier, condition, shield
+- Behavior flags: stackable, dispellable, beneficial, harmful
+
+**Effect Management Functions:**
+- create_effect(effect_id, duration, stacks, metadata)
+- apply_effect_to_target(target, effect)
+- remove_effect_from_target(target, effect_id)
+- process_all_effects(targets)
+- get_active_effects(target, filter_type=None)
+- check_effect_interactions(target, new_effect)
+
+**Development Bible Integration:**
+Must handle all combat conditions from Development Bible:
+- Blinded, Charmed, Deafened, Frightened, Grappled
+- Incapacitated, Invisible, Paralyzed, Petrified, Poisoned
+- Prone, Restrained, Stunned, Unconscious
+
+Essential for tactical combat gameplay.
+
+## 6. Fix Event System Integration Issues [done]
+### Dependencies: None
+### Description: Resolve broken event system imports that prevent testing
+### Details:
+Critical import failures blocking all combat testing:
+
+**Primary Issue:**
+KeyError: 'backend.systems.events.event_dispatcher' in systems/__init__.py line 178
+
+**Secondary Issues:**
+- Tests expect event_dispatcher to be available for combat events
+- CombatEvent class needs proper event system integration
+- Event publishing for combat state changes
+- Real-time updates for frontend integration
+
+**Required Fixes:**
+1. Fix backend.systems.events.event_dispatcher import
+2. Ensure event_dispatcher is accessible to combat system
+3. Update combat modules to use working event system
+4. Test event publishing in combat operations
+5. Verify WebSocket integration for real-time updates
+
+**Dependencies:**
+May require coordination with broader event system fixes.
+
+This blocks all combat testing and must be resolved first.
+
+## 7. Enhance Existing Combat Components [done]
+### Dependencies: None
+### Description: Upgrade existing combat components to match comprehensive test expectations
+### Details:
+Existing components need significant enhancement to meet test expectations:
+
+**Combat Class Enhancements (combat_class.py):**
+- Add comprehensive character positioning logic
+- Enhance turn management with proper callbacks
+- Improve combat state persistence
+- Add debug mode and testing interfaces
+
+**Action System Enhancements (action_system.py):**
+- Complete ActionDefinition execute methods
+- Add comprehensive action validation
+- Implement action cooldown management
+- Add resource cost checking
+
+**Effect Pipeline Enhancements (effect_pipeline.py):**
+- Integrate with unified_effects system
+- Add effect interaction rules
+- Implement effect stacking logic
+- Add effect visualization support
+
+**Utils.py Integration:**
+- Merge with unified_combat_utils functionality
+- Eliminate code duplication
+- Ensure consistent API surfaces
+- Improve AI combat logic integration
+
+**Testing Integration:**
+- Update all modules to support comprehensive testing
+- Add mock interfaces for testing
+- Ensure test coverage meets expectations
+- Fix any remaining import issues
+
+## 8. Complete Combat API and Service Layer [done]
+### Dependencies: None
+### Description: Enhance combat router and service to support full combat functionality
+### Details:
+Current API layer needs significant expansion to support comprehensive combat:
+
+**Combat Router Enhancements (combat_router.py):**
+- Add missing endpoints for combat validation
+- Implement real-time combat state streaming
+- Add comprehensive error handling
+- Support for complex combat actions
+- WebSocket integration for live updates
+
+**Combat Service Enhancements (combat_service.py):**
+- Integrate with all new combat modules
+- Add comprehensive business logic
+- Implement combat persistence
+- Add combat analytics and logging
+- Support for AI combat participants
+
+**New Endpoints Needed:**
+- POST /combat/validate-action
+- GET /combat/{id}/state
+- POST /combat/{id}/execute-action
+- GET /combat/{id}/valid-targets
+- POST /combat/{id}/apply-effect
+- WebSocket /combat/{id}/stream
+
+**Database Integration:**
+- Combat state persistence
+- Action history logging
+- Combat analytics storage
+- Character combat statistics
+
+**Performance Requirements:**
+- Sub-100ms action validation
+- Real-time state updates
+- Efficient damage calculations
+- Optimized status effect processing
+

@@ -1,35 +1,10 @@
-"""
-Faction service module package.
+"""Services for faction system"""
 
-This package provides services for managing faction-related operations.
-"""
-
-from backend.systems.faction.services.faction_service import (
-    FactionService,
-    FactionNotFoundError,
-    DuplicateFactionError
-)
-from backend.systems.faction.services.relationship_service import (
-    FactionRelationshipService,
-    InvalidRelationshipError
-)
-from backend.systems.faction.services.membership_service import (
-    FactionMembershipService,
-    MembershipNotFoundError,
-    InvalidMembershipError
-)
-from backend.systems.faction.services.influence_service import (
-    FactionInfluenceService
-)
-
-__all__ = [
-    'FactionService',
-    'FactionRelationshipService',
-    'FactionMembershipService',
-    'FactionInfluenceService',
-    'FactionNotFoundError',
-    'DuplicateFactionError',
-    'InvalidRelationshipError',
-    'MembershipNotFoundError',
-    'InvalidMembershipError'
-] 
+# Auto-generated imports
+from .faction_manager import *
+from .faction_service import *
+from .influence_service import *
+from .membership_service import *
+from .relationship_service_core import *
+from .reputation_service import *
+from .services import *

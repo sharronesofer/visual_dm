@@ -1,1 +1,1 @@
-"""Tests for the time system."""
+# Test package for the time system

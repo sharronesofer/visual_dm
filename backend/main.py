@@ -16,8 +16,11 @@ from typing import List, Dict, Any
 # from backend.api.routers import register_routers # Commenting out the old way
 from backend.systems.combat.routers.combat_router import router as combat_router  # Import the new combat router
 
-# Import character service router
-from backend.systems.character_service.router import router as character_router
+# Import character router
+try:
+    from backend.systems.character.routers.character_router import router as character_router
+except ImportError:
+    character_router = None
 
 # Import error reporting router
 try:
@@ -62,7 +65,7 @@ except ImportError:
     population_router = None
 
 try:
-    from backend.systems.auth_user.routers.auth_router import router as auth_router  # Import auth router
+    from backend.infrastructure.auth.auth_user.routers.auth_router import router as auth_router  # Import auth router
 except ImportError:
     auth_router = None
 
@@ -90,10 +93,22 @@ except ImportError:
     time_router = None
 
 try:
-    from backend.systems.analytics import register_with_event_system
+    from backend.infrastructure.analytics import register_with_event_system
 except ImportError:
     def register_with_event_system():
         return "mock analytics"
+
+# Import analytics router
+try:
+    from backend.infrastructure.analytics.routers.router import router as analytics_router
+except ImportError:
+    analytics_router = None
+
+# Import LLM router
+try:
+    from backend.infrastructure.llm.api.llm_router import router as llm_router
+except ImportError:
+    llm_router = None
 
 
 def create_app() -> FastAPI:
@@ -160,6 +175,14 @@ def create_app() -> FastAPI:
     if error_reporting_router:
         app.include_router(error_reporting_router)  # Include the error reporting router
     
+    # Include analytics router
+    if analytics_router:
+        app.include_router(analytics_router)  # Include the analytics router
+    
+    # Include LLM router
+    if llm_router:
+        app.include_router(llm_router)  # Include the LLM router
+    
     # Basic routes
     @app.get("/")
     async def root():
@@ -175,7 +198,8 @@ def create_app() -> FastAPI:
         try:
             # Import all models to ensure they're registered with Base
             print("Importing character models...")
-            from backend.systems.character_service.models import Character, CharacterProgression
+            from backend.systems.character.models import Character
+            # from backend.systems.character.models.character_progression import CharacterProgression
             
             # Import database directly using importlib to avoid async session issues
             import importlib.util

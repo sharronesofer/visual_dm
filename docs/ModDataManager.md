@@ -12,18 +12,18 @@ The ModDataManager system consists of the following components:
 
 ### Backend Components
 
-1. **`ModDataManager` Class (`backend/data/mod_data_manager.py`)**
+1. **`ModDataManager` Class (`data/system/runtime/mod_data_manager.py`)**
    - Core class that handles loading and managing mod data
    - Provides methods for accessing and validating mod data
    - Singleton pattern for global access
    - Integrates with the existing `GameDataRegistry` system
 
-2. **REST API Routes (`backend/data/api/mod_data_api.py`)**
+2. **REST API Routes (`data/system/runtime/api/mod_data_api.py`)**
    - FastAPI routes for interacting with ModDataManager
    - Endpoints for listing, getting, and manipulating mod data
    - Handles file uploads and conflict resolution
 
-3. **WebSocket Handler (`backend/data/websocket/mod_data_socket.py`)**
+3. **WebSocket Handler (`data/system/runtime/websocket/mod_data_socket.py`)**
    - Real-time communication between backend and frontend
    - Handles events like mod updates and conflict detection
    - Subscription system for targeted updates

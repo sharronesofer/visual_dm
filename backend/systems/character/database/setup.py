@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-from backend.core.config import config as app_config # Get main app config
+from backend.infrastructure.shared.config import config as app_config # Get main app config
 
 # Determine the async database URL
 SYNC_DB_URL = app_config.database_url
@@ -38,19 +38,19 @@ AsyncSessionLocal = sessionmaker(
 )
 
 async def get_async_db() -> AsyncSession:
-    \"\"\"FastAPI dependency to get an async database session.\"\"\"
+    """FastAPI dependency to get an async database session."""
     async with AsyncSessionLocal() as session:
         try:
             yield session
-            await session.commit() # Commit after successful endpoint execution
+            await session.commit()  # Commit after successful endpoint execution
         except Exception:
-            await session.rollback() # Rollback on error
+            await session.rollback()  # Rollback on error
             raise
         finally:
             await session.close()
 
 # Optional: A function to create tables (useful for init or testing)
-# from .models import Base # Assuming Base is accessible here, might need adjustment
+# from backend.systems.character.models import Base # Assuming Base is accessible here, might need adjustment
 # async def create_database_tables():
 #     async with async_engine.begin() as conn:
 #         await conn.run_sync(Base.metadata.create_all) 

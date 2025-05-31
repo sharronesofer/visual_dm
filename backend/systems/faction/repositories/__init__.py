@@ -1,15 +1,4 @@
-"""
-Faction system repositories module.
+"""Repositories for faction system"""
 
-This module provides data access layer components for the faction system.
-"""
-
-from backend.systems.faction.repositories.faction_repository import (
-    FactionRepository,
-    FactionRelationshipRepository
-)
-
-__all__ = [
-    'FactionRepository',
-    'FactionRelationshipRepository'
-]
+# Auto-generated imports
+from .faction_repository import *

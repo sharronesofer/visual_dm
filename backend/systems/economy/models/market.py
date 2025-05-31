@@ -10,8 +10,7 @@ import uuid
 
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, JSON
 from sqlalchemy.orm import relationship
-from app.core.db_base import Base
-
+from backend.infrastructure.database import Base
 
 @dataclass
 class MarketData:
@@ -75,7 +74,6 @@ class MarketData:
             self.trading_volume[resource_id] = 0.0
         self.trading_volume[resource_id] += volume
 
-
 class Market(Base):
     """
     SQLAlchemy ORM model for markets.
@@ -94,7 +92,10 @@ class Market(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    metadata = Column(JSON, default=dict)
+    
+    # Additional metadata
+    # Renamed from 'metadata' to avoid SQLAlchemy reserved attribute conflict
+    market_metadata = Column(JSON, default=dict)
 
     # Relationships
     region = relationship('Region', back_populates='markets')
@@ -113,7 +114,7 @@ class Market(Base):
             tax_rate=self.tax_rate,
             created_at=self.created_at,
             updated_at=self.updated_at,
-            metadata=self.metadata or {}
+            metadata=self.market_metadata or {}
         )
     
     @classmethod
@@ -129,7 +130,7 @@ class Market(Base):
             tax_rate=data_model.tax_rate,
             created_at=data_model.created_at,
             updated_at=data_model.updated_at,
-            metadata=data_model.metadata
+            market_metadata=data_model.metadata
         )
         
     def get_price_modifier(self, resource_id: str) -> float:

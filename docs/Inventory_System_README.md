@@ -114,7 +114,7 @@ The WebSocket at `/ws/inventory/{owner_id}` provides these events:
 
 ### Adding New Item Types
 
-Add entries to the `item_types` array in `backend/data/modding/item_types.json`:
+Add entries to the `item_types` array in `data/builders/item_types.json`:
 
 ```json
 {

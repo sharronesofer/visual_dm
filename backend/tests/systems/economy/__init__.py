@@ -1,1 +1,1 @@
-"""Tests for the economy system."""
+# Test package for the economy system

@@ -12,16 +12,11 @@ from sqlalchemy.orm import Session
 from backend.systems.faction.models.faction import Faction, FactionMembership
 from backend.systems.faction.services.faction_service import FactionNotFoundError
 
-
 class MembershipNotFoundError(Exception):
     """Raised when a membership cannot be found."""
-    pass
-
 
 class InvalidMembershipError(Exception):
     """Raised when an invalid membership operation is attempted."""
-    pass
-
 
 class FactionMembershipService:
     """Service for managing character memberships in factions."""

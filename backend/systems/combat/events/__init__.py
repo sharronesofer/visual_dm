@@ -1,0 +1,2 @@
+"""Events for combat system"""
+

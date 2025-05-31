@@ -1,0 +1,36 @@
+# Task ID: 55
+# Title: Clean Up Directory Structure Inconsistencies
+# Status: done
+# Dependencies: 51
+# Priority: low
+# Description: Resolve minor directory naming inconsistencies in the Systems folder to improve maintainability and reduce developer confusion
+# Details:
+**Inconsistencies to Fix:**
+- Consolidate `quest/` and `quests/` directories
+- Consolidate `npc/` and `npcs/` directories  
+- Consolidate `faction/` and `factions/` directories
+- Consolidate `character/` and `characters/` directories
+- Consolidate `time/` and `timesystem/` directories
+- Consolidate `worldgen/` and `worldgeneration/` directories
+- Consolidate `motif/` and `motifs/` directories
+
+**Recommended Consolidation:**
+- Keep singular forms: `quest/`, `npc/`, `faction/`, `character/`
+- Keep more descriptive names: `timesystem/`, `worldgeneration/`
+- Move duplicate `motifs/` content into `motif/`
+
+**Implementation Steps:**
+1. Audit content in duplicate directories
+2. Merge overlapping functionality
+3. Update assembly definitions
+4. Fix namespace references
+5. Update documentation references
+6. Remove empty directories
+
+**Impact Assessment:**
+- Minimal risk as most directories are currently empty
+- Improves long-term maintainability
+- Reduces confusion for new developers
+
+# Test Strategy:
+Verify no compilation errors after consolidation. Check that all assembly references work correctly. Ensure Unity meta files are properly updated. Test that existing functionality is not broken.

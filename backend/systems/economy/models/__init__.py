@@ -1,19 +1,7 @@
-"""
-Economy models module.
-"""
+"""Models for economy system"""
 
-from .resource import Resource, ResourceData
-from .trade_route import TradeRoute, TradeRouteData
-from .market import Market, MarketData
-from .commodity_future import CommodityFuture, CommodityFutureData
-
-__all__ = [
-    'Resource',
-    'ResourceData',
-    'TradeRoute',
-    'TradeRouteData',
-    'Market',
-    'MarketData',
-    'CommodityFuture',
-    'CommodityFutureData',
-]
+# Auto-generated imports
+from .commodity_future import *
+from .market import *
+from .models import *
+from .trade_route import *

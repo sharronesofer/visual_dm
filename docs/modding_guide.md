@@ -45,7 +45,7 @@ Mods are organized into categories, with each category having its own directory 
 The standard directory structure is:
 
 ```
-backend/data/modding/
+data/builders/
 ├── README.md
 ├── biomes/
 │   ├── biome.schema.json
@@ -80,9 +80,9 @@ To create a mod for Visual DM:
 
 Here's an example of creating a custom weapon:
 
-1. Look at the weapon schema in `backend/data/modding/weapons/weapon.schema.json` to understand the required structure.
+1. Look at the weapon schema in `data/builders/weapons/weapon.schema.json` to understand the required structure.
 
-2. Create a new file `backend/data/modding/weapons/my_custom_sword.json`:
+2. Create a new file `data/builders/weapons/my_custom_sword.json`:
 
 ```json
 {
@@ -154,7 +154,7 @@ To install mods created by others:
 
 1. **Extract the Mod Package**: Unzip the mod package.
 
-2. **Place Files in the Correct Directory**: Copy the JSON files to their respective directories in `backend/data/modding/`.
+2. **Place Files in the Correct Directory**: Copy the JSON files to their respective directories in `data/builders/`.
 
 3. **Launch the Game**: The mod will be loaded automatically when you start the game.
 

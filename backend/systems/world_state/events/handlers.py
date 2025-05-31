@@ -7,7 +7,7 @@ changes in the world state and propagate them to other systems.
 import logging
 from typing import Dict, Any, Optional, List
 
-from backend.systems.events.models.event_dispatcher import EventHandler
+from backend.infrastructure.events import EventHandler
 from backend.systems.world_state.core.events import (
     WorldStateEvent, WorldStateCreatedEvent, WorldStateUpdatedEvent, 
     WorldStateDeletedEvent, WorldStateCalculatedEvent
@@ -281,8 +281,7 @@ class WorldStateEventHandler(EventHandler):
             event: The economy event to handle
         """
         # Implementation for economy-specific handling
-        pass
-    
+
     async def _handle_military_event(self, event: WorldStateEvent) -> None:
         """
         Handle military-related state changes.
@@ -291,8 +290,7 @@ class WorldStateEventHandler(EventHandler):
             event: The military event to handle
         """
         # Implementation for military-specific handling
-        pass
-    
+
     async def _handle_religion_event(self, event: WorldStateEvent) -> None:
         """
         Handle religion-related state changes.
@@ -301,8 +299,7 @@ class WorldStateEventHandler(EventHandler):
             event: The religion event to handle
         """
         # Implementation for religion-specific handling
-        pass
-    
+
     def _log_to_analytics(self, event: WorldStateEvent) -> None:
         """
         Log event to analytics system.

@@ -1,39 +1,25 @@
 """
-Rumor system models for tracking rumor creation, spread, and mutation.
+Rumor system models.
 
-This module defines the core models used in the rumor system.
+This module contains the core data models for the rumor system.
 """
-from typing import Dict, List, Optional, Set, Any, TypeVar, Union
+from typing import Dict, List, Optional, Any
 from enum import Enum
 from datetime import datetime
 import uuid
-import logging
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 
-from backend.systems.events.models.event_dispatcher import EventBase
-
-logger = logging.getLogger(__name__)
-
-T = TypeVar('T', bound='RumorBase')
-
 class RumorCategory(str, Enum):
-    """Categories for rumor classification, aligned with Development Bible."""
-    SCANDAL = "scandal"                # Gossip about personal or political misdeeds
-    SECRET = "secret"                  # Hidden information, often with high stakes
-    PROPHECY = "prophecy"              # Predictions about future events
-    DISCOVERY = "discovery"            # News of new lands, resources, or inventions
-    CATASTROPHE = "catastrophe"        # Warnings of disaster, war, or plague
-    MIRACLE = "miracle"                # Reports of supernatural or miraculous events
-    BETRAYAL = "betrayal"              # Accusations of treachery or broken trust
-    ROMANCE = "romance"                # Tales of love affairs or forbidden relationships
-    TREASURE = "treasure"              # Hints of hidden wealth or valuable items
-    MONSTER = "monster"                # Sightings or rumors of dangerous creatures
-    POLITICAL = "political"            # Shifts in power, alliances, or intrigue (already exists)
-    ECONOMIC = "economic"              # Market crashes, booms, or trade opportunities (already exists)
-    INVENTION = "invention"            # New technologies or magical discoveries
-    DISAPPEARANCE = "disappearance"    # Missing persons or unexplained vanishings
-    UPRISING = "uprising"              # Rebellions, revolts, or civil unrest
-    OTHER = "other"                    # Fallback for unclassified rumors
+    """Categories for rumor classification."""
+    POLITICAL = "political"
+    PERSONAL = "personal"
+    SOCIAL = "social"
+    MILITARY = "military"
+    ECONOMIC = "economic"
+    RELIGIOUS = "religious"
+    HISTORICAL = "historical"
+    GOSSIP = "gossip"
+    OTHER = "other"
 
 class RumorSeverity(str, Enum):
     """Severity levels for rumors."""
@@ -73,7 +59,6 @@ class RumorSpread(BaseModel):
     heard_from_entity_id: Optional[str] = None
     believability: float = 0.5  # 0.0 (totally disbelieve) to 1.0 (fully believe)
     heard_at: datetime = Field(default_factory=datetime.utcnow)
-    last_reinforced_at: datetime = Field(default_factory=datetime.utcnow)
     
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -164,10 +149,3 @@ class Rumor(BaseModel):
     def entity_knows_rumor(self, entity_id: str) -> bool:
         """Check if an entity has heard this rumor."""
         return any(s.entity_id == entity_id for s in self.spread)
-
-class RumorEvent(EventBase):
-    """Event emitted when rumor operations occur."""
-    rumor_id: str
-    operation: str  # "created", "spread", "mutated", etc.
-    entity_id: Optional[str] = None
-    additional_data: Dict[str, Any] = Field(default_factory=dict) 

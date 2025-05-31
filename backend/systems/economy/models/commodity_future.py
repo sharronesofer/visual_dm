@@ -14,8 +14,7 @@ from sqlalchemy import Column, String, Float, DateTime, Boolean, ForeignKey, Int
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
-from app.core.database import Base
-
+from backend.infrastructure.database import Base
 
 @dataclass
 class CommodityFutureData:
@@ -41,7 +40,6 @@ class CommodityFutureData:
     terms: Dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=lambda: datetime.utcnow())
     updated_at: datetime = field(default_factory=lambda: datetime.utcnow())
-
 
 class CommodityFuture(Base):
     """ORM model for commodity futures contracts."""

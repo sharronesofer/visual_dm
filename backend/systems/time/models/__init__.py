@@ -1,9 +1,5 @@
-"""
-Time system data models.
-"""
+"""Models for time system"""
 
-from backend.systems.time.models.time_model import (
-    GameTime, Calendar, TimeConfig, TimeEvent, 
-    EventType, Season, TimeUnit, WeatherCondition,
-    CalendarEvent, WorldTime
-) 
+# Auto-generated imports
+from .models import *
+from .time_model import *

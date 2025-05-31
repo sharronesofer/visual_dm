@@ -28,21 +28,21 @@ def fix_relative_imports():
                 if len(parts) >= 2:
                     system_name = parts[1]  # e.g., 'arc', 'motif', etc.
                     
-                    # Fix relative imports like 'from ..models import'
+                    # Fix relative imports like 'from backend.infrastructure.shared.models import'
                     content = re.sub(
                         r'from \.\.([a-zA-Z_]+) import',
                         f'from backend.systems.{system_name}.\\1 import',
                         content
                     )
                     
-                    # Fix relative imports like 'from .models import'  
+                    # Fix relative imports like 'from backend.infrastructure.shared.models import'  
                     content = re.sub(
                         r'from \.([a-zA-Z_]+) import',
                         f'from backend.systems.{system_name}.\\1 import',
                         content
                     )
                     
-                    # Fix deeper relative imports like 'from ...shared import'
+                    # Fix deeper relative imports like 'from backend.infrastructure.shared import'
                     content = re.sub(
                         r'from \.\.\.([a-zA-Z_]+) import',
                         r'from backend.systems.\1 import',

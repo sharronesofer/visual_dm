@@ -1,1 +1,1 @@
-"""Tests for the motif system."""
+# Test package for the motif system

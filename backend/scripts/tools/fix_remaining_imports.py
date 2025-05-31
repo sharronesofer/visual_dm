@@ -45,21 +45,21 @@ def fix_remaining_imports():
             original = content
             
             # Fix all relative import patterns
-            # Pattern 1: from ..models import
+            # Pattern 1: from backend.infrastructure.shared.models import
             content = re.sub(
                 r'from \.\.([a-zA-Z_]+) import',
                 f'from backend.systems.{system_name}.\\1 import',
                 content
             )
             
-            # Pattern 2: from .models import  
+            # Pattern 2: from backend.infrastructure.shared.models import  
             content = re.sub(
                 r'from \.([a-zA-Z_]+) import',
                 f'from backend.systems.{system_name}.\\1 import',
                 content
             )
             
-            # Pattern 3: from ...shared import
+            # Pattern 3: from backend.infrastructure.shared import
             content = re.sub(
                 r'from \.\.\.([a-zA-Z_]+) import',
                 r'from backend.systems.\1 import',

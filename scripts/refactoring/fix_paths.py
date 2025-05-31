@@ -9,7 +9,7 @@ def fix_paths(file_path):
     # Replace the import paths - now using the correct paths
     new_content = re.sub(
         r'"backend\.systems\.auth_user\.services\.AuthRelationshipService', 
-        r'"backend.systems.auth_user.services.auth_relationships.AuthRelationshipService', 
+        r'"backend.infrastructure.auth.auth_user.services.auth_relationships.AuthRelationshipService', 
         content
     )
     

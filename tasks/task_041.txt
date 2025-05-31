@@ -1,0 +1,31 @@
+# Task ID: 41
+# Title: Fix Motif System Implementation Gaps
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Complete the motif system implementation which analysis shows is only 25% complete
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Fix Repository Layer Issues [done]
+### Dependencies: None
+### Description: Implement proper async/await patterns, complete filter methods, fix position-based querying, and resolve data persistence bugs
+### Details:
+
+
+## 2. Complete Utils Implementation [done]
+### Dependencies: None
+### Description: Implement missing 79% of utility functions including geometric calculations, data validation utilities, advanced narrative synthesis functions, and all test-expected functionality
+### Details:
+
+
+## 3. Create Unity Frontend Implementation [done]
+### Dependencies: None
+### Description: Create complete Unity C# frontend implementation in VDM/Assets/Scripts/Motifs/ directory with UI components for motif management and visualization
+### Details:
+
+

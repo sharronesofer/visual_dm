@@ -1,0 +1,85 @@
+# Task ID: 44
+# Title: Complete POI System Implementation
+# Status: done
+# Dependencies: 35
+# Priority: critical
+# Description: Bridge critical infrastructure gaps in POI system - currently 45% complete
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Implement Missing POIInteractionType Enum [done]
+### Dependencies: None
+### Description: Add POIInteractionType enum to models.py (SOCIAL, COMBAT, NEUTRAL) that tests expect
+### Details:
+
+
+## 2. Implement MetropolitanSpreadService [done]
+### Dependencies: None
+### Description: Create complete MetropolitanSpreadService with metropolis detection, hex claiming logic, and population thresholds
+### Details:
+
+
+## 3. Implement ResourceManagementService [done]
+### Dependencies: None
+### Description: Create complete ResourceManagementService with resource production, consumption, trading, and storage management
+### Details:
+
+
+## 4. Implement MigrationService [done]
+### Dependencies: None
+### Description: Create MigrationService for population movement between POIs and migration triggers
+### Details:
+
+
+## 5. Implement LifecycleEventsService [done]
+### Dependencies: None
+### Description: Create LifecycleEventsService for POI evolution, events, and lifecycle management over time
+### Details:
+
+
+## 6. Implement FactionInfluenceService [done]
+### Dependencies: None
+### Description: Create FactionInfluenceService for faction control, influence mechanics, and political dynamics
+### Details:
+
+
+## 7. Implement LandmarkService [done]
+### Dependencies: None
+### Description: Create LandmarkService for special landmark POIs, unique features, and landmark management
+### Details:
+
+
+## 8. Implement POIGenerator [done]
+### Dependencies: None
+### Description: Create POIGenerator for procedural POI creation, placement, and world generation integration
+### Details:
+
+
+## 9. Enhance POIStateService with Advanced Logic [done]
+### Dependencies: None
+### Description: Upgrade POIStateService with proper state transition validation, constraints, event dispatching, and threshold logic
+### Details:
+
+
+## 10. Implement Database Integration and Repository Layer [done]
+### Dependencies: None
+### Description: Create POI repository layer with SQLAlchemy integration, persistence, and database operations
+### Details:
+
+
+## 11. Fix Event System Integration Throughout POI System [done]
+### Dependencies: None
+### Description: Integrate POI system with event dispatcher for real-time updates and cross-system communication
+### Details:
+
+
+## 12. Update Unity Frontend Models and Integration [done]
+### Dependencies: None
+### Description: Update Unity POI models to match backend complexity and implement comprehensive frontend integration
+### Details:
+
+

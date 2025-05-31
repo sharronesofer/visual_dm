@@ -1,31 +1,10 @@
-"""
-Dialogue System for Visual DM
+"""Dialogue system"""
 
-This module provides a comprehensive system for managing conversation histories,
-dialogue context, information extraction, and caching.
-"""
-
-from backend.systems.dialogue.dialogue_manager import DialogueManager
-from backend.systems.dialogue.conversation import ConversationHistory, ConversationEntry
-from backend.systems.dialogue.cache import DialogueCache
-from backend.systems.dialogue.utils import (
-    count_tokens,
-    relevance_score,
-    extract_key_info,
-    SCORING_WEIGHTS,
-    IMPORTANT_SPEAKERS,
-    KEYWORDS,
-)
-
-__all__ = [
-    'DialogueManager',
-    'ConversationHistory',
-    'ConversationEntry',
-    'DialogueCache',
-    'count_tokens',
-    'relevance_score',
-    'extract_key_info',
-    'SCORING_WEIGHTS',
-    'IMPORTANT_SPEAKERS',
-    'KEYWORDS',
-]
+# Auto-generated imports
+from . import events
+from . import models
+from . import repositories
+from . import routers
+from . import schemas
+from . import services
+from . import utils

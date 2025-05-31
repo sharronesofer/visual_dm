@@ -1,3 +1,1 @@
-"""
-Tests for the analytics system
-"""
+# Test package for the analytics system

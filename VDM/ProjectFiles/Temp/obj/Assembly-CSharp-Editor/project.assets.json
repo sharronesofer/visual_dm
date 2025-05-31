@@ -1,0 +1,271 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETStandard,Version=v2.1": {
+      "Assembly-CSharp/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Net": "1.0.0",
+          "VDM.Core": "1.0.0",
+          "VisualDM.Consolidated": "1.0.0",
+          "VisualDM.Legacy.Systems": "1.0.0",
+          "VisualDM.Legacy.UI": "1.0.0",
+          "VisualDM.Networking": "1.0.0",
+          "VisualDM.Systems": "1.0.0",
+          "VisualDM.World": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Assembly-CSharp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Assembly-CSharp.dll": {}
+        }
+      },
+      "Net/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "compile": {
+          "bin/placeholder/Net.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Net.dll": {}
+        }
+      },
+      "VDM.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "compile": {
+          "bin/placeholder/VDM.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VDM.Core.dll": {}
+        }
+      },
+      "VisualDM.Consolidated/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "compile": {
+          "bin/placeholder/VisualDM.Consolidated.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VisualDM.Consolidated.dll": {}
+        }
+      },
+      "VisualDM.Legacy.Systems/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Net": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/VisualDM.Legacy.Systems.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VisualDM.Legacy.Systems.dll": {}
+        }
+      },
+      "VisualDM.Legacy.UI/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Net": "1.0.0",
+          "VisualDM.Legacy.Systems": "1.0.0",
+          "VisualDM.World": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/VisualDM.Legacy.UI.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VisualDM.Legacy.UI.dll": {}
+        }
+      },
+      "VisualDM.Networking/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Net": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/VisualDM.Networking.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VisualDM.Networking.dll": {}
+        }
+      },
+      "VisualDM.Systems/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Net": "1.0.0",
+          "VisualDM.Legacy.Systems": "1.0.0",
+          "VisualDM.Networking": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/VisualDM.Systems.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VisualDM.Systems.dll": {}
+        }
+      },
+      "VisualDM.World/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "VisualDM.Systems": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/VisualDM.World.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VisualDM.World.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Assembly-CSharp/1.0.0": {
+      "type": "project",
+      "path": "Assembly-CSharp.csproj",
+      "msbuildProject": "Assembly-CSharp.csproj"
+    },
+    "Net/1.0.0": {
+      "type": "project",
+      "path": "Net.csproj",
+      "msbuildProject": "Net.csproj"
+    },
+    "VDM.Core/1.0.0": {
+      "type": "project",
+      "path": "VDM.Core.csproj",
+      "msbuildProject": "VDM.Core.csproj"
+    },
+    "VisualDM.Consolidated/1.0.0": {
+      "type": "project",
+      "path": "VisualDM.Consolidated.csproj",
+      "msbuildProject": "VisualDM.Consolidated.csproj"
+    },
+    "VisualDM.Legacy.Systems/1.0.0": {
+      "type": "project",
+      "path": "VisualDM.Legacy.Systems.csproj",
+      "msbuildProject": "VisualDM.Legacy.Systems.csproj"
+    },
+    "VisualDM.Legacy.UI/1.0.0": {
+      "type": "project",
+      "path": "VisualDM.Legacy.UI.csproj",
+      "msbuildProject": "VisualDM.Legacy.UI.csproj"
+    },
+    "VisualDM.Networking/1.0.0": {
+      "type": "project",
+      "path": "VisualDM.Networking.csproj",
+      "msbuildProject": "VisualDM.Networking.csproj"
+    },
+    "VisualDM.Systems/1.0.0": {
+      "type": "project",
+      "path": "VisualDM.Systems.csproj",
+      "msbuildProject": "VisualDM.Systems.csproj"
+    },
+    "VisualDM.World/1.0.0": {
+      "type": "project",
+      "path": "VisualDM.World.csproj",
+      "msbuildProject": "VisualDM.World.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETStandard,Version=v2.1": [
+      "Assembly-CSharp >= 1.0.0",
+      "Net >= 1.0.0",
+      "VDM.Core >= 1.0.0",
+      "VisualDM.Consolidated >= 1.0.0",
+      "VisualDM.Legacy.Systems >= 1.0.0",
+      "VisualDM.Legacy.UI >= 1.0.0",
+      "VisualDM.Networking >= 1.0.0",
+      "VisualDM.Systems >= 1.0.0",
+      "VisualDM.World >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/Users/Sharrone/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Assembly-CSharp-Editor.csproj",
+      "projectName": "Assembly-CSharp-Editor",
+      "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Assembly-CSharp-Editor.csproj",
+      "packagesPath": "/Users/Sharrone/.nuget/packages/",
+      "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//Assembly-CSharp-Editor/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/Users/Sharrone/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "netstandard2.1"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "targetAlias": "netstandard2.1",
+          "projectReferences": {
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Assembly-CSharp.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Assembly-CSharp.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VDM.Core.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VDM.Core.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Consolidated.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Consolidated.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.UI.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.UI.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Networking.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Networking.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj"
+            },
+            "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.World.csproj": {
+              "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.World.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
+    },
+    "frameworks": {
+      "netstandard2.1": {
+        "targetAlias": "netstandard2.1",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.300/RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

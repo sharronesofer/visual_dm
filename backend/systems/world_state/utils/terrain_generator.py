@@ -20,7 +20,6 @@ import numpy as np
 from dataclasses import dataclass, field
 import os
 
-
 @dataclass
 class NoiseLayer:
     """Configuration for a noise layer in terrain generation."""
@@ -30,7 +29,6 @@ class NoiseLayer:
     persistence: float = 0.5  # How much each octave contributes
     lacunarity: float = 2.0  # How much detail is added in each octave
     seed_offset: int = 0  # Offset to the base seed for this layer
-
 
 @dataclass
 class TerrainConfig:
@@ -62,7 +60,6 @@ class TerrainConfig:
             ],
         )
 
-
 @dataclass
 class BiomeInfo:
     """Detailed information about a biome."""
@@ -77,7 +74,6 @@ class BiomeInfo:
     is_water: bool = False
     is_transition: bool = False
     base_biomes: List[str] = field(default_factory=list)  # For transition biomes
-
 
 class TerrainGenerator:
     """

@@ -25,7 +25,6 @@ import sys
 logging.basicConfig(level=logging.DEBUG)  # Changed to DEBUG to see more detail
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class EndpointInfo:
     """Information about an API endpoint"""
@@ -41,7 +40,6 @@ class EndpointInfo:
     operation_id: str = ""
     security: List[Dict[str, List[str]]] = field(default_factory=list)
 
-
 @dataclass
 class SystemAPI:
     """API information for a complete system"""
@@ -51,7 +49,6 @@ class SystemAPI:
     endpoints: List[EndpointInfo] = field(default_factory=list)
     tags: List[Dict[str, str]] = field(default_factory=list)
     schemas: Dict[str, Any] = field(default_factory=dict)
-
 
 class APIContractExtractor:
     """Extract API contracts from FastAPI router files"""
@@ -585,7 +582,6 @@ class APIContractExtractor:
         
         return unique_endpoints
 
-
 def main():
     """Main execution function"""
     logger.info("Starting API contract extraction for Task 43")
@@ -651,7 +647,6 @@ def main():
     
     logger.info("API contract extraction completed successfully")
 
-
 def generate_summary_report(systems: Dict[str, SystemAPI], spec: Dict[str, Any]):
     """Generate a summary report of extracted API contracts"""
     
@@ -687,7 +682,6 @@ Generated: {datetime.now().isoformat()}
         f.write(report)
     
     logger.info(f"Generated summary report: {summary_file}")
-
 
 if __name__ == "__main__":
     from datetime import datetime

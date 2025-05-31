@@ -1,5 +1,4 @@
-"""
-Time system data repositories.
-"""
+"""Repositories for time system"""
 
-from backend.systems.time.repositories.time_repository import TimeRepository
+# Auto-generated imports
+from .time_repository import *

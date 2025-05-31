@@ -1,0 +1,254 @@
+{
+  "api_endpoints": {
+    "covered_endpoints": [
+      {
+        "frontend": "GET /api/religion/",
+        "backend": "GET /religions/",
+        "method": "GetReligionsAsync"
+      },
+      {
+        "frontend": "GET /api/religion/{id}",
+        "backend": "GET /religions/{religion_id}",
+        "method": "GetReligionAsync"
+      },
+      {
+        "frontend": "POST /api/religion/",
+        "backend": "POST /religions/",
+        "method": "CreateReligionAsync"
+      },
+      {
+        "frontend": "PUT /api/religion/{id}",
+        "backend": "PUT /religions/{religion_id}",
+        "method": "UpdateReligionAsync"
+      },
+      {
+        "frontend": "DELETE /api/religion/{id}",
+        "backend": "DELETE /religions/{religion_id}",
+        "method": "DeleteReligionAsync"
+      }
+    ],
+    "missing_endpoints": [
+      {
+        "frontend": "GET /api/religion/pantheon/{id}",
+        "method": "GetReligionsByPantheonAsync",
+        "expected_backend": "GET /religions/pantheon/{id}"
+      },
+      {
+        "frontend": "GET /api/religion/{id}/practices",
+        "method": "GetReligiousPracticesAsync",
+        "expected_backend": "GET /religions/{religion_id}/practices"
+      },
+      {
+        "frontend": "POST /api/religion/{id}/practices",
+        "method": "AddReligiousPracticeAsync",
+        "expected_backend": "POST /religions/{religion_id}/practices"
+      },
+      {
+        "frontend": "GET /api/religion/{id}/deities",
+        "method": "GetDeitiesAsync",
+        "expected_backend": "GET /religions/{religion_id}/deities"
+      },
+      {
+        "frontend": "POST /api/religion/{id}/deities",
+        "method": "CreateDeityAsync",
+        "expected_backend": "POST /religions/{religion_id}/deities"
+      },
+      {
+        "frontend": "GET /api/religion/{id}/events",
+        "method": "GetReligiousEventsAsync",
+        "expected_backend": "GET /religions/{religion_id}/events"
+      },
+      {
+        "frontend": "POST /api/religion/{id}/events",
+        "method": "CreateReligiousEventAsync",
+        "expected_backend": "POST /religions/{religion_id}/events"
+      },
+      {
+        "frontend": "GET /api/religion/{id}/influence/{region_id}",
+        "method": "GetReligiousInfluenceAsync",
+        "expected_backend": "GET /religions/{religion_id}/influence/{region_id}"
+      },
+      {
+        "frontend": "PUT /api/religion/{id}/influence/{region_id}",
+        "method": "UpdateReligiousInfluenceAsync",
+        "expected_backend": "PUT /religions/{religion_id}/influence/{region_id}"
+      }
+    ],
+    "extra_endpoints": [
+      "GET /religions/search/",
+      "GET /religions/name/{name}",
+      "POST /religions/bulk",
+      "GET /religions/statistics/overview",
+      "GET /religions/health"
+    ],
+    "mapping_issues": []
+  },
+  "data_models": {
+    "religion_dto": {
+      "unity_expected": [
+        "id",
+        "name",
+        "description",
+        "type",
+        "origin_story",
+        "core_beliefs",
+        "practices",
+        "clergy_structure",
+        "holy_texts",
+        "deities",
+        "followers_count",
+        "influence_regions",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "backend_provided": [
+        "id",
+        "name",
+        "description",
+        "status",
+        "created_at",
+        "updated_at",
+        "is_active",
+        "type",
+        "origin_story",
+        "core_beliefs",
+        "practices",
+        "clergy_structure",
+        "holy_texts",
+        "deities",
+        "followers_count",
+        "influence_regions",
+        "properties"
+      ],
+      "missing_in_backend": [],
+      "extra_in_backend": [
+        "is_active",
+        "properties"
+      ],
+      "compatible_fields": [
+        "id",
+        "name",
+        "description",
+        "type",
+        "origin_story",
+        "core_beliefs",
+        "practices",
+        "clergy_structure",
+        "holy_texts",
+        "deities",
+        "followers_count",
+        "influence_regions",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "request_dtos": {
+      "unity_expected": [
+        "name",
+        "description",
+        "type",
+        "origin_story",
+        "core_beliefs",
+        "tenets",
+        "practices",
+        "holy_places",
+        "sacred_texts",
+        "clergy_structure"
+      ],
+      "backend_provided": [
+        "name",
+        "description",
+        "type",
+        "origin_story",
+        "core_beliefs",
+        "tenets",
+        "practices",
+        "holy_places",
+        "sacred_texts",
+        "clergy_structure",
+        "properties"
+      ],
+      "missing_in_backend": [],
+      "extra_in_backend": [
+        "properties"
+      ],
+      "compatible_fields": [
+        "name",
+        "description",
+        "type",
+        "origin_story",
+        "core_beliefs",
+        "tenets",
+        "practices",
+        "holy_places",
+        "sacred_texts",
+        "clergy_structure"
+      ]
+    },
+    "response_dtos": {},
+    "field_mapping": {},
+    "type_compatibility": {}
+  },
+  "websocket_integration": {
+    "channels_available": [
+      "religion",
+      "membership",
+      "religious_events",
+      "religious_narrative",
+      "religious_influence"
+    ],
+    "frontend_expectations": [
+      "religion_updates",
+      "membership_updates",
+      "religious_events",
+      "narrative_updates",
+      "influence_changes"
+    ],
+    "message_format": {},
+    "integration_status": "available",
+    "channel_mapping": {
+      "religion_updates": "religion",
+      "membership_updates": "membership",
+      "religious_events": "religious_events",
+      "narrative_updates": "religious_narrative",
+      "influence_changes": "religious_influence"
+    },
+    "endpoints_available": [
+      "/ws/religion/connect",
+      "/ws/religion/region/{region_id}",
+      "/ws/religion/character/{character_id}",
+      "/ws/religion/narrative"
+    ]
+  },
+  "serialization": {
+    "json_compatibility": {
+      "serializable": true,
+      "round_trip_success": true,
+      "sample_json": "{\"id\": \"550e8400-e29b-41d4-a716-446655440000\", \"name\": \"Test Religion\", \"description\": \"A comprehensive test religion\", \"type\": \"Monotheistic\", \"status\": \"active\", \"created_at\": \"2024-01-01T00:00:00.0..."
+    },
+    "datetime_handling": {},
+    "enum_compatibility": {
+      "unity_types": [
+        "Monotheistic",
+        "Polytheistic",
+        "Pantheistic",
+        "Atheistic",
+        "Agnostic",
+        "Shamanic",
+        "Ancestral"
+      ],
+      "backend_supports": true,
+      "mapping_needed": false
+    },
+    "nullable_fields": {}
+  },
+  "coverage_analysis": {
+    "total_issues": 9,
+    "api_coverage_score": 0.35714285714285715,
+    "websocket_available": true,
+    "serialization_compatible": true,
+    "ready_for_frontend": false
+  }
+}

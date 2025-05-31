@@ -1,0 +1,102 @@
+{
+  "completed": {
+    "zombie_cleanup": {
+      "description": "Archive/remove zombie monolith files",
+      "actions": [
+        "\u2705 Archived economy/economy_manager.py (82% duplicated)",
+        "\u2705 Identified 8 other monoliths as unique (not duplicates)"
+      ],
+      "impact": "Removed 1 major duplicate, 1,003 lines archived"
+    }
+  },
+  "phase_1_directory_cleanup": {
+    "description": "Quick directory consolidation wins",
+    "priority": "HIGH",
+    "estimated_impact": "Reduce directories from 35 to ~25",
+    "actions": [
+      "\ud83d\udd04 Merge character/models/ \u2192 character/",
+      "\ud83d\udd04 Merge faction/services/ \u2192 faction/",
+      "\ud83d\udd04 Merge economy/services/ \u2192 economy/",
+      "\ud83d\udd04 Merge crafting/services/ \u2192 crafting/",
+      "\ud83d\udd04 Merge auth_user/utils/ \u2192 auth_user/",
+      "\ud83d\udd04 Merge time/utils/ \u2192 time/",
+      "\ud83d\udd04 Merge time/services/ \u2192 time/",
+      "\ud83d\udd04 Update all imports and references"
+    ],
+    "estimated_time": "2-3 hours",
+    "risk": "LOW - Simple directory moves"
+  },
+  "phase_2_monolith_splitting": {
+    "description": "Split massive monolithic files into focused modules",
+    "priority": "HIGH",
+    "estimated_impact": "Reduce complexity dramatically, improve maintainability",
+    "targets": [
+      {
+        "file": "loot/loot_utils.py",
+        "current_lines": 4271,
+        "target_modules": [
+          "loot/generation.py (2,768 lines)",
+          "loot/database.py (670 lines)",
+          "loot/events.py (354 lines)",
+          "loot/validation.py (180 lines)",
+          "loot/initialization.py (126 lines)"
+        ],
+        "remaining_core": "loot/loot_utils.py (~173 lines)",
+        "priority": "\ud83e\udd47 HIGHEST - Biggest impact"
+      },
+      {
+        "file": "combat/combat_class.py",
+        "current_lines": 2010,
+        "target_modules": [
+          "combat/core_logic.py (991 lines)",
+          "combat/internal_methods.py (263 lines)",
+          "combat/database.py (238 lines)",
+          "combat/calculations.py (219 lines)",
+          "combat/events.py (211 lines)"
+        ],
+        "remaining_core": "combat/combat_class.py (~88 lines)",
+        "priority": "\ud83e\udd48 HIGH - User mentioned this file"
+      },
+      {
+        "file": "diplomacy/services.py",
+        "current_lines": 2067,
+        "target_modules": [
+          "diplomacy/general.py (826 lines)",
+          "diplomacy/database.py (819 lines)",
+          "diplomacy/validation.py (140 lines)",
+          "diplomacy/events.py (131 lines)"
+        ],
+        "remaining_core": "diplomacy/services.py (~151 lines)",
+        "priority": "\ud83e\udd49 MEDIUM"
+      }
+    ],
+    "estimated_time": "1-2 days per file",
+    "risk": "MEDIUM - Requires careful testing"
+  },
+  "phase_3_smaller_monoliths": {
+    "description": "Split remaining large files",
+    "priority": "MEDIUM",
+    "targets": [
+      "magic/services.py (1,473 lines)",
+      "crafting/services/crafting_service.py (1,472 lines)",
+      "motif/manager.py (1,455 lines)",
+      "memory/memory_manager.py (1,192 lines)"
+    ],
+    "estimated_time": "3-4 days total",
+    "risk": "LOW-MEDIUM"
+  },
+  "phase_4_integration_cleanup": {
+    "description": "Clean up after major refactoring",
+    "priority": "HIGH",
+    "actions": [
+      "\ud83d\udd0d Update all import statements across codebase",
+      "\ud83e\uddea Run comprehensive test suite",
+      "\ud83d\udcdd Update documentation and API references",
+      "\ud83d\udd04 Check for dead code and unused imports",
+      "\u26a1 Performance testing to ensure no regressions",
+      "\ud83d\ude80 Deploy and monitor"
+    ],
+    "estimated_time": "1-2 days",
+    "risk": "MEDIUM - Integration testing critical"
+  }
+}

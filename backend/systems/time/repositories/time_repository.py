@@ -8,7 +8,6 @@ from backend.systems.time.models.time_model import (
     GameTime, Calendar, TimeConfig, TimeEvent, EventType, Season
 )
 
-
 class TimeRepository:
     """
     Repository for persisting time-related data (game time, calendar, events).

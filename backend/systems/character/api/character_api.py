@@ -9,7 +9,7 @@ from typing import Dict, Any, List, Optional
 from uuid import UUID
 from sqlalchemy.orm import Session
 
-from backend.core.database import get_db_session
+from backend.infrastructure.database import get_db
 from backend.systems.character.services.character_service import CharacterService
 from backend.systems.character.models.character_builder import CharacterBuilder
 from backend.systems.character.api.schemas import (

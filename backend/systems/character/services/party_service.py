@@ -10,14 +10,14 @@ from sqlalchemy.exc import SQLAlchemyError
 from uuid import UUID, uuid4
 from datetime import datetime
 
-from backend.core.database import get_db_session
-from backend.core.utils.error import NotFoundError, DatabaseError, ValidationError
+from backend.infrastructure.database import get_db
+from backend.infrastructure.utils import NotFoundError, DatabaseError, ValidationError
 from backend.systems.character.models.character import Character
 from backend.systems.memory.memory_utils import log_permanent_memory
 
 class PartyService:
     def __init__(self, db_session: Optional[Session] = None):
-        self.db = db_session if db_session else next(get_db_session())
+        self.db = db_session if db_session else next(get_db())
     
     def create_party(self, player_id: Union[str, UUID], npc_ids: List[Union[str, UUID]]) -> str:
         """

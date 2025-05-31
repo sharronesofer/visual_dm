@@ -3,9 +3,9 @@
 from uuid import uuid4
 from datetime import datetime
 from typing import List, Dict, Union
-from firebase_admin import db
-from app.memory.memory_utils import log_permanent_memory
-from app.core.repositories.party_repository import PartyRepository
+# from firebase_admin import db  # TODO: Replace with proper database integration
+from backend.systems.memory.memory_utils import log_permanent_memory
+from backend.systems.core.repositories.party_repository import PartyRepository
 
 def create_party(player_id, npc_ids):
     party_id = f"party_{player_id}"
@@ -79,7 +79,6 @@ def award_xp_to_party(party_id, amount):
         awarded[member_id] = char["XP"]
 
     return awarded
-
 
 def abandon_party(npc_id):
     parties_ref = db.reference('/parties')

@@ -3,7 +3,7 @@ Test script for the password fallback mechanism.
 """
 
 # Import the necessary functions from auth_service
-from backend.systems.auth_user.services.auth_service import verify_password, get_password_hash, pwd_context
+from backend.infrastructure.auth_user.services.auth_service import verify_password, get_password_hash, pwd_context
 
 # Test standard password hashing and verification
 password = "test_password"

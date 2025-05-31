@@ -84,7 +84,7 @@ def validate_canonical_imports(root_path: Path) -> Dict[str, List[str]]:
         (r'import\s+app\.', 'Import of "app." should use "backend.systems."'),
         (r'from\s+systems\.(?!.*backend\.systems)', 'Import from "systems." should use "backend.systems."'),
         (r'import\s+systems\.(?!.*backend\.systems)', 'Import of "systems." should use "backend.systems."'),
-        (r'from\s+\.\s+import', 'Relative import "from . import" should be absolute'),
+        (r'from\s+\.\s+import', 'Relative import "from backend.systems import" should be absolute'),
         (r'from\s+\.\.+', 'Relative import with ".." should be absolute'),
     ]
     
@@ -131,7 +131,7 @@ def test_system_imports() -> Dict[str, str]:
     # Core systems to test
     test_imports = [
         'backend.systems',
-        'backend.systems.shared',
+        'backend.infrastructure.shared',
         'backend.systems.events', 
         'backend.systems.data',
         'backend.systems.character',
@@ -158,8 +158,8 @@ def test_system_imports() -> Dict[str, str]:
         'backend.systems.motif',
         'backend.systems.arc',
         'backend.systems.analytics',
-        'backend.systems.auth_user',
-        'backend.systems.llm',
+        'backend.infrastructure.auth.auth_user',
+        'backend.infrastructure.llm',
     ]
     
     for system in test_imports:

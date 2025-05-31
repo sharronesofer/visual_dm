@@ -1,0 +1,2 @@
+"""Events for rumor system"""
+

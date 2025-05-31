@@ -1,0 +1,91 @@
+# Task ID: 42
+# Title: Memory System Implementation Recovery and Completion
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Repair and complete the memory system implementation which is currently 35% complete with broken tests and missing core functionality
+# Details:
+Based on analysis of /backend/tests/systems/memory and /backend/systems/memory, the memory system requires comprehensive repairs and completion. The system currently has basic Memory class structure and some utility functions, but critical components are missing or broken including database integration, service methods, API endpoints, and test infrastructure.
+
+# Test Strategy:
+Fix test infrastructure to run without errors, then verify all memory operations (create, recall, decay, summarization) work correctly through both unit and integration tests
+
+# Subtasks:
+## 1.1. Fix Database Integration Infrastructure [done]
+### Dependencies: None
+### Description: Create missing backend.systems.shared.database module that prevents all memory tests from running
+### Details:
+Tests fail with 'ModuleNotFoundError: No module named backend.systems.shared.database'. Need to create the shared database abstraction layer that the memory system depends on.
+
+## 1.2. Resolve Module Import Conflicts [done]
+### Dependencies: None
+### Description: Fix import issues between memory_manager.py vs memory_manager_core.py and update __init__.py exports
+### Details:
+The __init__.py references memory_manager.py but the actual file is memory_manager_core.py, causing import failures. Need to consolidate or properly reference the correct module.
+
+## 1.3. Complete MemoryManager Service Implementation [done]
+### Dependencies: None
+### Description: Implement missing critical methods in MemoryManager that are expected by the comprehensive test suite
+### Details:
+Missing methods include: create_memory, recall_memory, update_memory_importance, clean_expired_memories, get_memories_by_tag, get_memories_by_category, get_memories_involving_entity, add_memory, delete_memory, update_all_memories, and proper singleton pattern implementation.
+
+## 1.4. Implement Missing API Endpoints [done]
+### Dependencies: None
+### Description: Complete memory route implementations that currently return stub responses
+### Details:
+Routes in memory_routes.py need full implementations for: get_recent_memory, clear_npc_memory, store_npc_interaction, update_npc_long_term_memory, evaluate_beliefs, and get_summarization_styles. Currently most return mock/stub responses.
+
+## 1.5. Integrate Cognitive Frames System [done]
+### Dependencies: None
+### Description: Connect existing cognitive_frames.py functionality with main memory workflow
+### Details:
+Cognitive frames system exists but is not integrated with memory creation, storage, or retrieval. Need to apply cognitive frames during memory processing and expose through APIs.
+
+## 1.6. Complete Memory Association System Integration [done]
+### Dependencies: None
+### Description: Connect memory_associations.py with main MemoryManager for memory relationship tracking
+### Details:
+Memory association functionality exists but is not integrated with the main memory workflow. Need to detect and manage memory relationships during memory operations.
+
+## 1.7. Complete Vector Database Integration [done]
+### Dependencies: None
+### Description: Finish ChromaDB integration for semantic memory search and retrieval
+### Details:
+Vector database integration is partially implemented with MockChromaCollection but needs completion for semantic search, similarity queries, and proper memory storage/retrieval.
+
+## 1.8. Implement Memory Decay Simulation [done]
+### Dependencies: None
+### Description: Complete time-based memory decay algorithms and importance weighting
+### Details:
+Memory decay mechanics are partially implemented but need completion including proper time-based decay calculations, importance weighting, and core vs regular memory differentiation.
+
+## 1.9. Complete LLM Memory Summarization [done]
+### Dependencies: None
+### Description: Finish implementation of memory summarization and cleanup functionality
+### Details:
+Summarization system is partially implemented but needs completion including proper chunk processing, LLM integration, and memory consolidation workflows.
+
+## 1.1. Implement Saliency Scoring System [done]
+### Dependencies: None
+### Description: Complete advanced memory importance and saliency calculation algorithms
+### Details:
+Saliency scoring system exists but needs integration with memory operations and proper importance calculation based on content, context, and access patterns.
+
+## 1.11. Fix Memory Utility Functions [done]
+### Dependencies: None
+### Description: Complete implementation of memory_utils.py functions that support the memory system
+### Details:
+Memory utility functions need completion including store_interaction, update_long_term_memory, summarize_and_clean_memory, and various memory update functions for factions, regions, POIs.
+
+## 1.12. Connect Frontend-Backend Integration [done]
+### Dependencies: None
+### Description: Implement Unity memory UI components and connect to backend APIs
+### Details:
+Unity memory components in /VDM/Assets/Scripts/Runtime/Memory are mostly stubs. Need to implement DTOs, services, and UI components that communicate with backend memory APIs.
+
+## 1.13. Comprehensive Memory System Testing [done]
+### Dependencies: None
+### Description: Ensure all memory tests pass and system works end-to-end
+### Details:
+Run full memory test suite including unit tests, integration tests, and end-to-end workflows to verify the complete memory system functions correctly according to development_bible.md specifications.
+

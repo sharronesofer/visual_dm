@@ -1,23 +1,24 @@
 """
-Futures Service - Functionality for managing commodity futures contracts.
+Futures Service
 
-This service manages the creation, settlement, and expiration of futures contracts
-for resources.
+This module provides service layer functionality for commodity futures contracts
+in the economy system.
 """
 
-import logging
-from typing import Dict, Any, List, Optional, Tuple, Union
+from typing import Optional, List, Dict, Any, Tuple, Union
 from datetime import datetime, timedelta
-import uuid
-
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, and_
+import uuid
+import random
+import math
 
-from app.core.logging import logger
+import logging
+logger = logging.getLogger(__name__)
 from backend.systems.economy.models import (
     CommodityFuture, CommodityFutureData,
-    Resource, Market
+    Market
 )
+from backend.systems.economy.services.resource import Resource
 
 class FuturesService:
     """

@@ -1,365 +1,257 @@
 #!/usr/bin/env python3
 """
-Script to fix systematic import issues preventing backend tests from running.
-
-This script addresses the 145 collection errors by:
-1. Fixing TYPE_CHECKING import issues
-2. Adding missing __init__.py exports
-3. Resolving circular import problems
-4. Adding missing dependencies
+Script to fix broken imports in test files after backend refactoring.
+This script identifies and fixes common import patterns that were broken during the refactoring.
 """
 
 import os
 import re
 import glob
 from pathlib import Path
-from typing import List, Dict, Set
 
-
-class TestImportFixer:
-    def __init__(self, backend_root: str):
-        self.backend_root = Path(backend_root)
-        self.systems_root = self.backend_root / "systems"
-        self.tests_root = self.backend_root / "tests" / "systems"
-        self.fixes_applied = []
+def fix_import_line(line, filename):
+    """
+    Fix a single import line based on common patterns.
+    
+    Args:
+        line: The line of code to potentially fix
+        filename: The filename for context
+    
+    Returns:
+        The fixed line or the original line if no fix needed
+    """
+    # Pattern 1: Fix wildcard imports from systems
+    # from backend.systems.{system} import * -> more specific imports
+    wildcard_pattern = r'from backend\.systems\.(\w+) import \*'
+    match = re.match(wildcard_pattern, line.strip())
+    
+    if match:
+        system_name = match.group(1)
         
-    def fix_all_imports(self):
-        """Run all import fixes."""
-        print("🔧 Starting comprehensive test import fixes...")
+        # Determine what to import based on the test file name
+        test_type = None
+        if 'test_models' in filename:
+            test_type = 'models'
+        elif 'test_repositories' in filename:
+            test_type = 'repositories'
+        elif 'test_routers' in filename:
+            test_type = 'routers'
+        elif 'test_services' in filename:
+            test_type = 'services'
+        elif 'test_schemas' in filename:
+            test_type = 'schemas'
+        elif 'test_events' in filename:
+            test_type = 'events'
+        elif 'test_utils' in filename:
+            test_type = 'utils'
         
-        # Fix TYPE_CHECKING issues
-        self.fix_type_checking_imports()
-        
-        # Fix missing __init__.py exports
-        self.fix_init_exports()
-        
-        # Fix specific module issues
-        self.fix_events_module()
-        self.fix_combat_module()
-        self.fix_character_module()
-        self.fix_shared_module()
-        
-        # Add missing imports to test files
-        self.fix_test_imports()
-        
-        print(f"✅ Applied {len(self.fixes_applied)} fixes")
-        for fix in self.fixes_applied:
-            print(f"  - {fix}")
-            
-    def fix_type_checking_imports(self):
-        """Fix TYPE_CHECKING imports that break runtime usage."""
-        print("🔍 Fixing TYPE_CHECKING import issues...")
-        
-        # Find files with TYPE_CHECKING issues
-        problem_files = [
-            "systems/inventory/events.py",
-            "systems/character/events.py", 
-            "systems/combat/events.py",
-            "systems/events/events.py"
-        ]
-        
-        for file_path in problem_files:
-            full_path = self.backend_root / file_path
-            if full_path.exists():
-                self.fix_type_checking_file(full_path)
-                
-    def fix_type_checking_file(self, file_path: Path):
-        """Fix a specific file's TYPE_CHECKING imports."""
-        try:
-            content = file_path.read_text()
-            
-            # Pattern to find TYPE_CHECKING blocks
-            type_check_pattern = r'if TYPE_CHECKING:\s*\n(.*?)\n\n'
-            
-            # Look for imports used outside TYPE_CHECKING
-            if 'EventBase' in content and 'if TYPE_CHECKING:' in content:
-                # Move EventBase import outside TYPE_CHECKING
-                content = content.replace(
-                    'if TYPE_CHECKING:\n    # Type-only imports to avoid circular dependencies\n\n\n\n    from backend.systems.events import EventDispatcher, EventBase',
-                    'from backend.systems.events import EventDispatcher, EventBase\n\nif TYPE_CHECKING:\n    # Type-only imports to avoid circular dependencies\n    pass'
-                )
-                
-                file_path.write_text(content)
-                self.fixes_applied.append(f"Fixed TYPE_CHECKING in {file_path.name}")
-                
-        except Exception as e:
-            print(f"⚠️  Could not fix {file_path}: {e}")
-            
-    def fix_init_exports(self):
-        """Fix missing exports in __init__.py files."""
-        print("🔍 Fixing missing __init__.py exports...")
-        
-        # Combat system
-        combat_init = self.systems_root / "combat" / "__init__.py"
-        if combat_init.exists():
-            self.fix_combat_init(combat_init)
-            
-        # Events system 
-        events_init = self.systems_root / "events" / "__init__.py"
-        if events_init.exists():
-            self.fix_events_init(events_init)
+        if test_type:
+            # Import the specific module instead of wildcard
+            return f"from backend.systems.{system_name} import {test_type}\n"
         else:
-            self.create_events_init()
-            
-    def fix_combat_init(self, init_path: Path):
-        """Fix combat __init__.py to export needed classes."""
-        content = init_path.read_text()
-        
-        # Uncomment critical imports
-        fixes = [
-            ('# from backend.systems.combat.combat_state_class import CombatState',
-             'from backend.systems.combat.combat_state_class import CombatState'),
-            ('# from backend.systems.combat.combat_handler_class import CombatAction', 
-             'from backend.systems.combat.combat_handler_class import CombatAction'),
-            ('# from backend.systems.combat.combat_validator import',
-             'from backend.systems.combat.combat_validator import')
-        ]
-        
-        for old, new in fixes:
-            if old in content:
-                content = content.replace(old, new)
-                
-        # Add to __all__
-        if '"CombatState",' not in content:
-            content = content.replace(
-                '__all__ = [\n    # Most exports commented out until imports are stable',
-                '__all__ = [\n    "CombatState",\n    # Most exports commented out until imports are stable'
-            )
-            
-        init_path.write_text(content)
-        self.fixes_applied.append("Fixed combat/__init__.py exports")
-        
-    def create_events_init(self):
-        """Create events system __init__.py."""
-        events_dir = self.systems_root / "events"
-        events_dir.mkdir(exist_ok=True)
-        
-        init_content = '''"""
-Events system for Visual DM.
-
-Provides event dispatching and base event classes.
-"""
-
-from typing import Any, Dict, Optional
-from datetime import datetime
-import logging
-
-logger = logging.getLogger(__name__)
-
-
-class EventBase:
-    """Base class for all events in the system."""
+            # For general test files, import common modules
+            return f"from backend.systems.{system_name} import models, repositories, services, schemas\n"
     
-    def __init__(self, event_type: str, **kwargs):
-        self.event_type = event_type
-        self.timestamp = datetime.utcnow()
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-            
-    def dict(self) -> Dict[str, Any]:
-        """Convert event to dictionary."""
-        result = {
-            'event_type': self.event_type,
-            'timestamp': self.timestamp.isoformat()
-        }
-        for key, value in self.__dict__.items():
-            if key not in ['event_type', 'timestamp']:
-                result[key] = value
-        return result
-
-
-class EventDispatcher:
-    """Simple event dispatcher for the system."""
+    # Pattern 2: Fix infrastructure wildcard imports
+    # from backend.infrastructure.{system} import * -> more specific imports
+    infra_wildcard_pattern = r'from backend\.infrastructure\.(\w+) import \*'
+    match = re.match(infra_wildcard_pattern, line.strip())
     
-    _instance = None
+    if match:
+        system_name = match.group(1)
+        
+        # Determine what to import based on the test file name
+        test_type = None
+        if 'test_models' in filename:
+            test_type = 'models'
+        elif 'test_repositories' in filename:
+            test_type = 'repositories'
+        elif 'test_routers' in filename:
+            test_type = 'routers'
+        elif 'test_services' in filename:
+            test_type = 'services'
+        elif 'test_schemas' in filename:
+            test_type = 'schemas'
+        elif 'test_events' in filename:
+            test_type = 'events'
+        elif 'test_utils' in filename:
+            test_type = 'utils'
+        
+        if test_type:
+            # Import the specific module instead of wildcard
+            return f"from backend.infrastructure.{system_name} import {test_type}\n"
+        else:
+            # For general test files, import common modules that might exist
+            return f"from backend.infrastructure.{system_name} import models, services\n"
     
-    @classmethod
-    def get_instance(cls):
-        if cls._instance is None:
-            cls._instance = cls()
-        return cls._instance
-        
-    def __init__(self):
-        self.handlers = {}
-        
-    def publish_sync(self, event: EventBase):
-        """Publish an event synchronously."""
-        logger.debug(f"Publishing event: {event.event_type}")
-        # Simple implementation - just log for now
-        
-    def subscribe(self, event_type: str, handler):
-        """Subscribe to an event type."""
-        if event_type not in self.handlers:
-            self.handlers[event_type] = []
-        self.handlers[event_type].append(handler)
-
-
-__all__ = ["EventBase", "EventDispatcher"]
-'''
-        
-        (self.systems_root / "events" / "__init__.py").write_text(init_content)
-        self.fixes_applied.append("Created events/__init__.py")
-        
-    def fix_events_init(self, init_path: Path):
-        """Fix existing events __init__.py."""
-        content = init_path.read_text()
-        
-        if "EventBase" not in content:
-            # Add EventBase if missing
-            content += '\n\nfrom .base import EventBase\nfrom .dispatcher import EventDispatcher\n'
-            init_path.write_text(content)
-            self.fixes_applied.append("Fixed events/__init__.py exports")
-            
-    def fix_events_module(self):
-        """Fix the events module structure."""
-        events_dir = self.systems_root / "events"
-        
-        # Create base event if missing
-        if not (events_dir / "base.py").exists():
-            base_content = '''"""Base event classes."""
-
-from typing import Any, Dict
-from datetime import datetime
-
-
-class EventBase:
-    """Base class for all events."""
+    # Pattern 3: Fix direct module imports that may have moved structure
+    # from backend.systems.{system} import {module} -> from backend.systems.{system}.{subdir} import {module}
+    direct_module_pattern = r'from backend\.systems\.(\w+) import (\w+)'
+    match = re.match(direct_module_pattern, line.strip())
     
-    def __init__(self, event_type: str, **kwargs):
-        self.event_type = event_type
-        self.timestamp = datetime.utcnow()
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-            
-    def dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
-        result = {'event_type': self.event_type, 'timestamp': self.timestamp.isoformat()}
-        for k, v in self.__dict__.items():
-            if k not in ['event_type', 'timestamp']:
-                result[k] = v
-        return result
-'''
-            (events_dir / "base.py").write_text(base_content)
-            self.fixes_applied.append("Created events/base.py")
-            
-    def fix_combat_module(self):
-        """Fix combat module imports."""
-        # Ensure combat state class exists and is importable
-        combat_state_path = self.systems_root / "combat" / "combat_state_class.py"
-        if combat_state_path.exists():
-            content = combat_state_path.read_text()
-            # Add missing imports if needed
-            if "from typing import Any, Dict" not in content:
-                content = "from typing import Any, Dict, List, Optional, Set\n" + content
-                combat_state_path.write_text(content)
-                self.fixes_applied.append("Fixed combat_state_class.py imports")
-                
-    def fix_character_module(self):
-        """Fix character module imports."""
-        # Fix character events if they exist
-        char_events = self.systems_root / "character" / "events.py"
-        if char_events.exists():
-            self.fix_type_checking_file(char_events)
-            
-    def fix_shared_module(self):
-        """Fix shared module imports."""
-        shared_init = self.systems_root / "shared" / "__init__.py"
-        if shared_init.exists():
-            content = shared_init.read_text()
-            
-            # Add common exports
-            if "from .models import" not in content:
-                content += "\n# Common shared exports\ntry:\n    from .models.base import Base\nexcept ImportError:\n    Base = object\n"
-                shared_init.write_text(content)
-                self.fixes_applied.append("Fixed shared/__init__.py")
-                
-    def fix_test_imports(self):
-        """Fix common import issues in test files."""
-        print("🔍 Fixing test file imports...")
+    if match:
+        system_name = match.group(1)
+        module_name = match.group(2)
         
-        # Common type imports that are missing
-        type_imports = {
-            "Any": "from typing import Any",
-            "Type": "from typing import Type", 
-            "Dict": "from typing import Dict",
-            "List": "from typing import List",
-            "Optional": "from typing import Optional"
+        # Skip if this is already a known good pattern (like models, repositories, etc.)
+        if module_name in ['models', 'repositories', 'services', 'schemas', 'routers', 'events', 'utils']:
+            return line
+        
+        # Map known module patterns to their new locations
+        module_location_map = {
+            # Common patterns
+            'export': 'utils.export',
+            'factory': 'utils.factory', 
+            'migrations': 'utils.migrations',
+            'validator': 'utils.validator',
+            'notification': 'utils.notification',
+            'operations': 'utils.operations',
+            'transformer': 'utils.transformer',
+            'truth_tracker': 'utils.truth_tracker',
+            'manager': 'services.manager',
+            'websocket_events': 'services.websocket_events',
+            'arc': 'core.arc',
+            
+            # NPC specific
+            'npc_builder_class': 'services.npc_builder_class',
+            'npc_location_service': 'services.npc_location_service', 
+            'npc_routes': 'routers.npc_routes',
+            'npc_character_routes': 'routers.npc_character_routes',
+            'npc_travel_utils': 'utils.npc_travel_utils',
+            'npc_loyalty_class': 'utils.npc_loyalty_class',
+            
+            # Equipment specific
+            'durability_utils': 'utils.durability_utils',
+            'set_bonus_utils': 'utils.set_bonus_utils',
+            'inventory_utils': 'utils.inventory_utils',
+            'identify_item_utils': 'utils.identify_item_utils',
+            
+            # World state specific
+            'world_routes': 'routers.world_routes',
         }
         
-        # Find test files with missing imports
-        test_files = glob.glob(str(self.tests_root / "**" / "*.py"), recursive=True)
+        if module_name in module_location_map:
+            new_location = module_location_map[module_name]
+            return f"from backend.systems.{system_name}.{new_location} import {module_name}\n"
+    
+    # Pattern 4: Fix infrastructure direct module imports
+    infra_direct_pattern = r'from backend\.infrastructure\.(\w+) import (\w+)'
+    match = re.match(infra_direct_pattern, line.strip())
+    
+    if match:
+        system_name = match.group(1)
+        module_name = match.group(2)
         
-        for test_file in test_files:
-            try:
-                self.fix_test_file_imports(Path(test_file), type_imports)
-            except Exception as e:
-                print(f"⚠️  Could not fix {test_file}: {e}")
-                
-    def fix_test_file_imports(self, file_path: Path, type_imports: Dict[str, str]):
-        """Fix imports in a specific test file."""
-        content = file_path.read_text()
-        
-        # Check for undefined names and add imports
-        missing_imports = []
-        
-        for name, import_line in type_imports.items():
-            if f"name '{name}' is not defined" in content or (name in content and import_line not in content):
-                missing_imports.append(import_line)
-                
-        if missing_imports:
-            # Add missing imports at the top
-            lines = content.split('\n')
-            import_index = 0
+        # Skip if this is already a known good pattern
+        if module_name in ['models', 'repositories', 'services', 'schemas', 'routers', 'events', 'utils']:
+            return line
             
-            # Find where to insert imports (after existing imports)
-            for i, line in enumerate(lines):
-                if line.startswith('import ') or line.startswith('from '):
-                    import_index = i + 1
-                elif line.strip() and not line.startswith('#') and not line.startswith('"""'):
-                    break
-                    
-            # Insert missing imports
-            for imp in missing_imports:
-                lines.insert(import_index, imp)
-                import_index += 1
-                
-            file_path.write_text('\n'.join(lines))
-            self.fixes_applied.append(f"Added imports to {file_path.name}")
-            
-    def create_missing_modules(self):
-        """Create commonly missing modules that tests depend on."""
-        # Create missing model files
-        missing_modules = [
-            ("systems/shared/repositories/__init__.py", "# Shared repositories\n"),
-            ("systems/schemas/__init__.py", "# Common schemas\n"),
-            ("systems/models/__init__.py", "# Common models\n")
-        ]
+        # Map known infrastructure modules
+        infra_module_map = {
+            'event_dispatcher': 'services.event_dispatcher',
+            'canonical_events': 'events.canonical_events',
+            'event_types': 'events.event_types',
+        }
         
-        for module_path, content in missing_modules:
-            full_path = self.backend_root / module_path
-            full_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            if not full_path.exists():
-                full_path.write_text(content)
-                self.fixes_applied.append(f"Created {module_path}")
+        if module_name in infra_module_map:
+            new_location = infra_module_map[module_name]
+            return f"from backend.infrastructure.{system_name}.{new_location} import {module_name}\n"
+    
+    # Pattern 5: Fix specific module imports that may have moved
+    # This handles cases like from backend.systems.{system}.{old_module} import something
+    specific_pattern = r'from backend\.systems\.(\w+)\.(\w+) import (.+)'
+    match = re.match(specific_pattern, line.strip())
+    
+    if match:
+        system_name = match.group(1)
+        module_name = match.group(2)
+        imports = match.group(3)
+        
+        # Map old module names to new structure
+        module_mapping = {
+            'gpt_client': 'services.gpt_client',
+            'manager': 'services.manager',
+            'core_models': 'models',
+            'database': 'repositories',
+            'repository': 'repositories',
+            'websocket_manager': 'services.websocket_manager',
+            'event_publisher': 'events.event_publisher',
+            'exceptions': 'models.exceptions',
+        }
+        
+        if module_name in module_mapping:
+            new_module = module_mapping[module_name]
+            return f"from backend.systems.{system_name}.{new_module} import {imports}\n"
+    
+    return line
 
+def fix_test_file(filepath):
+    """
+    Fix imports in a single test file.
+    
+    Args:
+        filepath: Path to the test file
+    """
+    print(f"Processing: {filepath}")
+    
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        
+        fixed_lines = []
+        changes_made = False
+        
+        for line in lines:
+            fixed_line = fix_import_line(line, os.path.basename(filepath))
+            if fixed_line != line:
+                changes_made = True
+                print(f"  Fixed: {line.strip()} -> {fixed_line.strip()}")
+            fixed_lines.append(fixed_line)
+        
+        if changes_made:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.writelines(fixed_lines)
+            print(f"  ✅ Updated {filepath}")
+        else:
+            print(f"  ⏭️  No changes needed for {filepath}")
+            
+    except Exception as e:
+        print(f"  ❌ Error processing {filepath}: {e}")
 
 def main():
-    """Main function to run all fixes."""
-    # Get backend root from script location
+    """Main function to fix all test imports."""
+    print("🔧 Starting test import fixes...")
+    
+    # Get the script directory and navigate to backend root
     script_dir = Path(__file__).parent
-    backend_root = script_dir.parent  # backend/scripts -> backend/
+    backend_root = script_dir.parent
     
-    fixer = TestImportFixer(str(backend_root))
-    fixer.fix_all_imports()
-    fixer.create_missing_modules()
+    # Find all Python test files
+    test_patterns = [
+        'tests/systems/**/*.py',
+        'tests/integration/**/*.py',
+    ]
     
-    print(f"\n🎉 Import fixes complete! Applied {len(fixer.fixes_applied)} fixes.")
-    print("\n📋 Next steps:")
-    print("1. Run: python -m pytest tests/systems/ --collect-only")
-    print("2. Check for remaining collection errors")
-    print("3. Run: python -m pytest tests/systems/ -v")
-
+    all_test_files = []
+    for pattern in test_patterns:
+        test_files = glob.glob(str(backend_root / pattern), recursive=True)
+        all_test_files.extend(test_files)
+    
+    # Filter out __init__.py and __pycache__ files
+    test_files = [f for f in all_test_files 
+                 if not f.endswith('__init__.py') 
+                 and '__pycache__' not in f
+                 and '.pyc' not in f]
+    
+    print(f"Found {len(test_files)} test files to process")
+    
+    # Process each file
+    for test_file in sorted(test_files):
+        fix_test_file(test_file)
+    
+    print("\n✅ Import fixes completed!")
+    print("\n🧪 You may want to run the tests to verify the fixes:")
+    print("   python -m pytest backend/tests/ -v")
 
 if __name__ == "__main__":
     main() 

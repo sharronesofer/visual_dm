@@ -11,7 +11,6 @@ from backend.systems.time.models.time_model import (
 
 logger = logging.getLogger(__name__)
 
-
 class EventScheduler:
     """
     Manages scheduling and processing of time-based events.
@@ -172,7 +171,6 @@ class EventScheduler:
         else:
             logger.warning(f"Callback '{event.callback_name}' not found for event '{event.event_id}'")
 
-
 class CalendarService:
     """
     Manages calendar operations, seasons, and special dates.
@@ -286,7 +284,6 @@ class CalendarService:
         if not self._calendar.has_leap_year:
             return False
         return year % self._calendar.leap_year_interval == 0
-
 
 class TimeManager:
     """

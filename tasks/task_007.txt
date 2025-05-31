@@ -1,0 +1,160 @@
+# Task ID: 7
+# Title: Migrate Quest and Arc Narrative Systems
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Migrate quest management and arc systems that handle the core narrative functionality
+# Details:
+Migrate narrative systems with comprehensive UI support:
+
+1. **Quest System Migration**:
+   - Move quest code to new Quest/ directory
+   - Implement quest DTOs and API integration
+   - Create quest log and tracking UI
+   - Add quest creation and editing tools
+   - Implement quest objective tracking
+
+2. **Arc System Migration**:
+   - Migrate arc system to new Arc/ directory
+   - Align with backend arc progression
+   - Create arc visualization and tracking UI
+   - Implement narrative flow interfaces
+   - Add arc analytics and reporting
+
+3. **Integration Features**:
+   - Quest-arc relationship management
+   - Real-time quest state synchronization
+   - Narrative branching visualization
+   - Progress tracking and analytics
+
+4. **UI Components**:
+   - Quest log with filtering and search
+   - Quest creation and editing wizard
+   - Arc progression timeline
+   - Narrative tree visualization
+   - Objective tracking overlay
+
+# Test Strategy:
+1. Test quest creation and progression flows
+2. Verify arc tracking and visualization
+3. Test narrative branching functionality
+4. Validate backend quest synchronization
+5. Confirm UI provides clear quest guidance
+
+# Subtasks:
+## 1. Create Complete Arc System Backend Implementation [done]
+### Dependencies: None
+### Description: Implement the entire Arc system backend from scratch - 0% currently implemented despite being marked as done
+### Details:
+CRITICAL IMPLEMENTATION GAP: The entire Arc system backend needs to be built from scratch.
+
+Current Reality: backend/systems/arc/ directory is COMPLETELY EMPTY
+
+Required Implementation:
+
+1. CORE MODELS (backend/systems/arc/models/):
+   - Arc: Main entity with narrative structure, progression, metadata
+   - ArcStep: Individual steps with completion criteria and narrative text  
+   - ArcProgression: Analytics and progression tracking
+   - ArcCompletionRecord: Completed arcs with outcomes
+   - Supporting enums for types, statuses, and priorities
+
+2. SERVICES LAYER (backend/systems/arc/services/):
+   - ArcManager: Core service for arc lifecycle management
+   - ArcGenerator: GPT-powered arc generation with templates
+   - ProgressionTracker: Advanced analytics and monitoring
+   - QuestIntegrationService: Bridge arcs with quest system
+
+3. REPOSITORY LAYER (backend/systems/arc/repositories/):
+   - ArcRepository, ArcStepRepository, ProgressionRepository
+   - Full database operations and complex queries
+   - Data persistence and analytics support
+
+4. API INFRASTRUCTURE (backend/systems/arc/routers/):
+   - arc_router.py: 20+ endpoints for CRUD operations
+   - analytics_router.py: 15+ endpoints for metrics and reporting
+   - WebSocket integration for real-time updates
+   - Comprehensive validation and error handling
+
+5. GPT INTEGRATION UTILITIES:
+   - Dynamic arc generation with configurable prompts
+   - Template system for different arc types
+   - Content generation and narrative tools
+
+6. EVENT SYSTEM INTEGRATION:
+   - ArcEvent and ArcEventType for system communication
+   - Cross-system event handling and publishing
+
+All 17 test files (1,639 lines) expect this functionality but none exists. This blocks frontend integration and represents the most severe implementation gap in the project.
+
+## 2. Fix Arc System Test Infrastructure [done]
+### Dependencies: None
+### Description: Resolve all 17 failing Arc test files that expect comprehensive functionality
+### Details:
+Arc Test Infrastructure Crisis:
+
+CURRENT STATE: All 17 Arc test files fail with import errors because ZERO implementation exists.
+
+FAILING TESTS:
+- test_models.py (28 lines) - Arc, ArcStep, ArcProgression, ArcCompletionRecord models
+- test_services.py (1,639 lines) - Massive service expectations
+- test_routers.py (839 lines) - API endpoint tests
+- test_repositories.py - Database operation tests  
+- test_integration.py - Cross-system integration tests
+- Plus 12 additional test files
+
+PRIMARY ISSUES:
+1. Import failures: All tests fail on 'from backend.systems.arc.models import...'
+2. Missing modules: No backend.systems.arc modules exist
+3. Placeholder tests: Many contain 'assert True' placeholders
+4. Missing database integration: Tests expect SQLAlchemy models but none exist
+
+REQUIRED FIXES:
+1. Implement all Arc system modules that tests import
+2. Replace placeholder test logic with real validation
+3. Create proper test fixtures and database setup
+4. Ensure all 17 test files pass with real functionality
+5. Add comprehensive test coverage for Arc operations
+
+DEPENDENCIES: Requires completion of Arc system backend implementation (subtask 7.1)
+
+This is blocking all Arc system validation and integration testing.
+
+## 3. Update Development Bible Arc System Documentation [done]
+### Dependencies: None
+### Description: Correct the false claim of Arc system being 'FULLY IMPLEMENTED AND TESTED' in the Development Bible
+### Details:
+Documentation Accuracy Crisis:
+
+CURRENT PROBLEM: The Development Bible contains completely false information about the Arc system.
+
+FALSE CLAIMS IN DEVELOPMENT BIBLE:
+- 'Status: ✅ FULLY IMPLEMENTED AND TESTED'
+- 'Complete Arc System implementation including models, services, repositories, and API endpoints'
+- 'Integration Test: All components tested and working correctly'
+- 'GPT integration utilities with prompt templates and content generation'
+- '20+ endpoints for full CRUD operations, activation, and management'
+
+REALITY:
+- Status: ❌ 0% IMPLEMENTED - Directory is completely empty
+- No models, services, repositories, or API endpoints exist
+- No integration tests possible - all fail with import errors  
+- No GPT integration exists
+- Zero endpoints implemented
+
+REQUIRED CORRECTIONS:
+1. Update Arc system status to '❌ NOT IMPLEMENTED'
+2. Remove all false implementation claims
+3. Add accurate status: 'CRITICAL IMPLEMENTATION GAP - 0% Complete'
+4. Document the scope of work needed
+5. Add warning about frontend integration being blocked
+6. Update task tracking to reflect actual implementation status
+
+IMPACT OF FALSE DOCUMENTATION:
+- Misleads developers about system readiness
+- Blocks accurate project planning and estimation
+- Causes integration failures when systems assume Arc system exists
+- Creates false confidence in project completeness
+
+This documentation must be corrected to prevent further development based on false assumptions.
+

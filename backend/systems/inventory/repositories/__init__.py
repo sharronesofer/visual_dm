@@ -1,0 +1,2 @@
+"""Repositories for inventory system"""
+

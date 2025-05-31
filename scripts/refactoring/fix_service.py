@@ -65,7 +65,7 @@ import pytest_asyncio
 from unittest.mock import patch, MagicMock
 
 # Import from our patched services module
-from backend.systems.auth_user.services.patched_services import (
+from backend.infrastructure.auth_user.services.patched_services import (
     create_auth_relationship,
     update_auth_relationship,
     remove_auth_relationship,

@@ -18,8 +18,8 @@ collecting ...
 00:07:00 [INFO] backend.systems.combat.combat_ram: CombatStateManager initialized and subscribed to combat events
 00:07:00 [INFO] backend.systems.data.loaders.game_data_registry: Loaded 13 biomes
 00:07:00 [INFO] backend.systems.data.loaders.game_data_registry: Loaded 44 adjacency rules
-00:07:00 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: backend/data/entities
-00:07:00 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: backend/data/items
+00:07:00 [WARNING] backend.systems.data.loaders.game_data_registry: Entities directory not found: data/system/runtime/entities
+00:07:00 [WARNING] backend.systems.data.loaders.game_data_registry: Items directory not found: data/system/runtime/items
 00:07:00 [INFO] backend.systems.rumor.repository: RumorRepository initialized with storage at data/rumors/
 00:07:00 [INFO] backend.systems.rumor.repository: RumorRepository sync singleton created with storage at data/rumors/
 00:07:00 [INFO] backend.systems.rumor.service: RumorService instance configured.
@@ -27,8 +27,8 @@ collecting ...
 00:07:00 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
 00:07:01 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
 00:07:01 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/backend/data/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
 00:07:01 [INFO] root: World Generator initialized.
 00:07:02 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
 00:07:02 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized

@@ -13,7 +13,7 @@ from datetime import datetime
 import shutil
 
 from backend.systems.world_state.core.types import WorldState, StateCategory, WorldRegion
-from backend.utils.file_utils import ensure_directory, safe_write_json
+from backend.infrastructure.utils import ensure_directory, safe_write_json
 
 logger = logging.getLogger(__name__)
 

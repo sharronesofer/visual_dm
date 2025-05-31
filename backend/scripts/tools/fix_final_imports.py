@@ -46,28 +46,28 @@ def fix_final_imports():
             
             # Comprehensive pattern fixes
             
-            # Pattern 1: from ..models import -> from backend.systems.SYSTEM.models import
+            # Pattern 1: from backend.infrastructure.shared.models import backend.systems.SYSTEM.models import
             content = re.sub(
                 r'from \.\.([a-zA-Z_]+) import',
                 f'from backend.systems.{system_name}.\\1 import',
                 content
             )
             
-            # Pattern 2: from .models import -> from backend.systems.SYSTEM.models import  
+            # Pattern 2: from backend.infrastructure.shared.models import backend.systems.SYSTEM.models import  
             content = re.sub(
                 r'from \.([a-zA-Z_]+) import',
                 f'from backend.systems.{system_name}.\\1 import',
                 content
             )
             
-            # Pattern 3: from ...shared import -> from backend.systems.shared import
+            # Pattern 3: from backend.infrastructure.shared import backend.infrastructure.shared import
             content = re.sub(
                 r'from \.\.\.([a-zA-Z_]+) import',
                 r'from backend.systems.\1 import',
                 content
             )
             
-            # Pattern 4: from ....shared import -> from backend.systems.shared import (4 dots)
+            # Pattern 4: from backend.infrastructure.shared import backend.infrastructure.shared import (4 dots)
             content = re.sub(
                 r'from \.\.\.\.([a-zA-Z_]+) import',
                 r'from backend.systems.\1 import',
@@ -94,17 +94,17 @@ def fix_final_imports():
                 content
             )
             
-            # Pattern 7: Cross-system imports (e.g., from ..events import)
+            # Pattern 7: Cross-system imports (e.g., from backend.infrastructure.events import)
             # These should map to backend.systems.events
             content = re.sub(
                 r'from \.\.events import',
-                'from backend.systems.events import',
+                'from backend.infrastructure.events import',
                 content
             )
             
             content = re.sub(
                 r'from \.\.shared import',
-                'from backend.systems.shared import',
+                'from backend.infrastructure.shared import',
                 content
             )
             

@@ -12,7 +12,6 @@ from sqlalchemy.orm import Session
 from backend.systems.faction.models.faction import Faction
 from backend.systems.faction.services.faction_service import FactionNotFoundError
 
-
 class FactionInfluenceService:
     """Service for managing faction influence on various entities."""
     

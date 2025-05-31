@@ -1,13 +1,8 @@
-"""
-Crafting System Models
+"""Models for crafting system"""
 
-This module contains the data models for the crafting system.
-"""
-
-# Import models once implemented
-# from .recipe import CraftingRecipe
-# from .ingredient import CraftingIngredient
-# from .station import CraftingStation
-# from .result import CraftingResult
-
-__all__ = []  # Add model classes when implemented
+# Auto-generated imports
+from .ingredient import *
+from .models import *
+from .recipe import *
+from .result import *
+from .station import *

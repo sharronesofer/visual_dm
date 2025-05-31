@@ -9,8 +9,8 @@ from typing import Dict, List, Optional, Any, Union
 from sqlalchemy.orm import Session, Query
 from sqlalchemy.exc import SQLAlchemyError
 
-from backend.core.database import get_db_session
-from backend.core.utils.error import NotFoundError, DatabaseError
+from backend.infrastructure.database import get_db
+from backend.infrastructure.utils import NotFoundError, DatabaseError
 from backend.systems.character.models.character import Character, Skill
 
 class CharacterRepository:
@@ -37,7 +37,7 @@ class CharacterRepository:
         """
         if self.db_session:
             return self.db_session
-        return next(get_db_session())
+        return next(get_db())
     
     def get_by_id(self, character_id: int) -> Optional[Character]:
         """

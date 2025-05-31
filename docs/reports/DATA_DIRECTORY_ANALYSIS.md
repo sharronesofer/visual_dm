@@ -1,7 +1,7 @@
 # Data Directory Analysis
 
 ## Current Structure
-- `/backend/data/` - Contains JSON data files and rule definitions
+- `/data/system/runtime/` - Contains JSON data files and rule definitions
   - `adjacency.json` - Contains biome adjacency rules
   - `/modding/` - Contains modding-related files
   - `/rules_json/` - Contains game rules in JSON format

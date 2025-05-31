@@ -10,7 +10,7 @@ See docs/stubs_needs_consolidation_qna.md for requirements.
 - TODO: Ensure all narrative/mechanical hooks are present and robust; extensibility for new event types; analytics integration.
 """
 from datetime import datetime
-from firebase_admin import db
+# from firebase_admin import db  # TODO: Replace with proper database integration
 
 class Newspaper:
     """

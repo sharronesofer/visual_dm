@@ -7,8 +7,8 @@ from typing import Dict, Any
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 
-from backend.systems.npc.npc_location_service import NpcLocationService
-from backend.core.database import get_db_session
+from backend.systems.npc.services.npc_location_service import NpcLocationService
+from backend.infrastructure.database import get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/npcs", tags=["npcs", "locations"])

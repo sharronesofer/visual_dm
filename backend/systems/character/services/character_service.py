@@ -15,7 +15,7 @@ from datetime import datetime # Added
 # Assuming Character model exists and is an SQLAlchemy model
 from backend.systems.character.models.character import Character, Skill # Assuming Skill is also needed here
 # Assuming CharacterBuilder exists
-from backend.systems.character.models.character_builder import CharacterBuilder
+from backend.systems.character.services.character_builder import CharacterBuilder
 # Import the relationship, mood, and goal models/services
 from backend.systems.character.models.relationship import Relationship, RelationshipType
 from backend.systems.character.models.mood import CharacterMood, EmotionalState, MoodIntensity, MoodModifier
@@ -25,16 +25,16 @@ from backend.systems.character.services.relationship_service import Relationship
 from backend.systems.character.services.mood_service import MoodService
 from backend.systems.character.services.goal_service import GoalService
 # Import event dispatcher
-from backend.systems.events.event_dispatcher import EventDispatcher
-from backend.systems.events.canonical_events import (
+from backend.infrastructure.events.event_dispatcher import EventDispatcher
+from backend.infrastructure.events.canonical_events import (
     CharacterCreated, CharacterLeveledUp, CharacterUpdated, CharacterDeleted,
     MoodChanged, GoalCreated, GoalCompleted, GoalFailed, GoalProgressUpdated
 )
 
 # Assuming utility functions for db interaction and errors
-from backend.core.database import get_db_session # Or however session is managed
-from backend.core.utils.error import NotFoundError, DatabaseError, ValidationError
-from backend.core.rules import balance_constants, load_data # For things like starting gold, etc.
+from backend.infrastructure.database.session import get_db_session # Or however session is managed
+from backend.infrastructure.shared.exceptions import NotFoundError, DatabaseError, ValidationError
+from backend.infrastructure.shared.rules import balance_constants, load_data # For things like starting gold, etc.
 
 # Constants from character_utils, can be moved to a config or rules file if preferred
 RACES = ['human', 'elf', 'dwarf', 'halfling', 'gnome', 'half-elf', 'half-orc', 'tiefling']
@@ -42,7 +42,7 @@ CLASSES = ['fighter', 'wizard', 'cleric', 'rogue', 'barbarian', 'bard', 'druid',
 
 class CharacterService:
     def __init__(self, db_session: Optional[Session] = None):
-        self.db = db_session if db_session else next(get_db_session())
+        self.db = db_session if db_session else next(get_db())
         self.event_dispatcher = EventDispatcher()
         self.relationship_service = RelationshipService(db_session=self.db)
         self.mood_service = MoodService(db_session=self.db)
@@ -711,3 +711,109 @@ class CharacterService:
             reason,
             duration_hours=24  # Initial mood lasts a day
         )
+
+    # --- Visual Model Integration Methods ---
+    def get_character_visual_model(self, character_id: Union[int, UUID]):
+        """Get the visual model for a character."""
+        from backend.systems.character.models.visual_model import CharacterModel
+        
+        character = self._get_character_orm_by_id(character_id)
+        return character.get_visual_model()
+    
+    def set_character_visual_model(self, character_id: Union[int, UUID], 
+                                 visual_model_data: Union[Dict[str, Any], "CharacterModel"], 
+                                 commit: bool = True):
+        """Set the visual model for a character."""
+        character = self._get_character_orm_by_id(character_id)
+        character.set_visual_model(visual_model_data)
+        
+        if commit:
+            try:
+                self.db.commit()
+                self.db.refresh(character)
+            except SQLAlchemyError as e:
+                self.db.rollback()
+                raise DatabaseError(f"Failed to update character visual model: {str(e)}")
+        
+        return character.get_visual_model()
+    
+    def update_character_appearance(self, character_id: Union[int, UUID], 
+                                  appearance_updates: Dict[str, Any], 
+                                  commit: bool = True):
+        """Update specific aspects of a character's visual appearance."""
+        character = self._get_character_orm_by_id(character_id)
+        character.update_visual_appearance(appearance_updates)
+        
+        if commit:
+            try:
+                self.db.commit()
+                self.db.refresh(character)
+            except SQLAlchemyError as e:
+                self.db.rollback()
+                raise DatabaseError(f"Failed to update character appearance: {str(e)}")
+        
+        return character.get_visual_model()
+    
+    def randomize_character_appearance(self, character_id: Union[int, UUID], 
+                                     constraints: Optional[Dict[str, Any]] = None,
+                                     commit: bool = True):
+        """Randomize a character's visual appearance within optional constraints."""
+        character = self._get_character_orm_by_id(character_id)
+        visual_model = character.get_visual_model()
+        visual_model.randomize(constraints)
+        character.set_visual_model(visual_model)
+        
+        if commit:
+            try:
+                self.db.commit()
+                self.db.refresh(character)
+            except SQLAlchemyError as e:
+                self.db.rollback()
+                raise DatabaseError(f"Failed to randomize character appearance: {str(e)}")
+        
+        return visual_model
+    
+    def apply_visual_preset(self, character_id: Union[int, UUID], 
+                          preset_data: Dict[str, Any], 
+                          commit: bool = True):
+        """Apply a visual preset to a character's appearance."""
+        character = self._get_character_orm_by_id(character_id)
+        visual_model = character.get_visual_model()
+        visual_model.apply_preset(preset_data)
+        character.set_visual_model(visual_model)
+        
+        if commit:
+            try:
+                self.db.commit()
+                self.db.refresh(character)
+            except SQLAlchemyError as e:
+                self.db.rollback()
+                raise DatabaseError(f"Failed to apply visual preset: {str(e)}")
+        
+        return visual_model
+    
+    def export_character_visual_data(self, character_id: Union[int, UUID]) -> Dict[str, Any]:
+        """Export a character's visual model data for external use."""
+        character = self._get_character_orm_by_id(character_id)
+        visual_model = character.get_visual_model()
+        return visual_model.to_dict()
+    
+    def import_character_visual_data(self, character_id: Union[int, UUID], 
+                                   visual_data: Dict[str, Any], 
+                                   commit: bool = True):
+        """Import visual model data for a character."""
+        from backend.systems.character.models.visual_model import CharacterModel
+        
+        character = self._get_character_orm_by_id(character_id)
+        visual_model = CharacterModel.from_dict(visual_data)
+        character.set_visual_model(visual_model)
+        
+        if commit:
+            try:
+                self.db.commit()
+                self.db.refresh(character)
+            except SQLAlchemyError as e:
+                self.db.rollback()
+                raise DatabaseError(f"Failed to import visual data: {str(e)}")
+        
+        return visual_model

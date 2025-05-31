@@ -1,6 +1,4 @@
-from .combat_repository import CombatRepository, combat_repository
+"""Repositories for combat system"""
 
-__all__ = [
-    "CombatRepository",
-    "combat_repository",
-]
+# Auto-generated imports
+from .combat_repository import *

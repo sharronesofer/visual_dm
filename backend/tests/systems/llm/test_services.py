@@ -1,27 +1,36 @@
-"""Test llm services."""
-
+"""Test service implementations"""
 import pytest
+import asyncio
+from backend.infrastructure.llm.services.llm_service import LLMService
+from backend.infrastructure.llm.services.conversation_service import ConversationService
 
+class TestLLMService:
+    """Test main LLM service"""
+    
+    @pytest.fixture
+    def llm_service(self):
+        return LLMService()
+    
+    @pytest.mark.asyncio
+    async def test_process_llm_request(self, llm_service):
+        """Test LLM request processing"""
+        request_data = {"prompt": "test prompt"}
+        response = await llm_service.process_llm_request(request_data)
+        
+        assert isinstance(response, dict)
+        assert "id" in response
 
-class TestLlmServices:
-    """Test class for llm services."""
+class TestConversationService:
+    """Test conversation service"""
     
-    def test_llm_basic_functionality(self):
-        """Test basic functionality."""
-        assert True
+    @pytest.fixture
+    def conversation_service(self):
+        return ConversationService()
     
-    def test_llm_initialization(self):
-        """Test initialization."""
-        assert True
-    
-    def test_llm_data_handling(self):
-        """Test data handling."""
-        assert True
-    
-    def test_llm_error_handling(self):
-        """Test error handling."""
-        assert True
-    
-    def test_llm_edge_cases(self):
-        """Test edge cases."""
-        assert True
+    @pytest.mark.asyncio
+    async def test_start_conversation(self, conversation_service):
+        """Test starting conversation"""
+        initial_data = {"user_id": "test_user"}
+        conversation_id = await conversation_service.start_conversation(initial_data)
+        assert isinstance(conversation_id, str)
+        assert len(conversation_id) > 0

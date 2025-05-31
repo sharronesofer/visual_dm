@@ -20,7 +20,7 @@ from pathlib import Path
 # Mapping of old paths to new paths
 PATH_MAPPING = {
     # Biomes
-    "data/adjacency.json": "data/biomes/adjacency.json",
+    "data/builders/world_parameters/biomes/adjacency.json": "data/biomes/adjacency.json",
     "data/rules_json/land_types.json": "data/biomes/land_types.json",
     
     # World generation
@@ -36,7 +36,7 @@ PATH_MAPPING = {
     "data/recipes/alchemy.json": "data/crafting/recipes/alchemy.json",
     
     # Weather
-    "VDM/Assets/StreamingAssets/Data/weather_types.json": "data/systems/weather/weather_types.json",
+    "VDM/Assets/StreamingAssets/Data/weather_types.json": "data/builders/world_parameters/biomes/weather_types.json",
     "VDM/Assets/StreamingAssets/Schemas/weather_types.schema.json": "data/modding/schemas/weather_types.schema.json",
 }
 

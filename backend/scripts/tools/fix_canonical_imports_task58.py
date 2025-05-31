@@ -26,59 +26,59 @@ class CanonicalImportFixer:
             r"from app\.([^.]+) import": r"from backend.systems.\1 import",
             
             # Utils imports should point to shared.utils
-            r"from utils\.([^.]+) import": r"from backend.systems.shared.utils.\1 import",
+            r"from backend.infrastructure.shared.utils.\1 import",
             
             # Direct system imports without backend.systems prefix
             r"from systems\.([^.]+) import": r"from backend.systems.\1 import",
             
             # Fix specific incorrect imports found in the code
-            r"from backend\.systems\.npc_loyalty_class import": r"from backend.systems.npc.npc_loyalty_class import",
-            r"from backend\.systems\.models import": r"from backend.systems.shared.models import", 
-            r"from backend\.systems\.enums import": r"from backend.systems.shared.enums import",
-            r"from backend\.systems\.config import": r"from backend.systems.shared.config import",
+            r"from backend.systems.npc.npc_loyalty_class import",
+            r"from backend.infrastructure.shared.models import", 
+            r"from backend.infrastructure.shared.enums import",
+            r"from backend.infrastructure.shared.config import",
             r"from backend\.systems\.services\.([^.]+) import": r"from backend.systems.\1.services import",
             r"from backend\.systems\.models\.([^.]+) import": r"from backend.systems.\1.models import",
             
             # Fix shortened imports that should be full paths
-            r"from backend\.systems\.tension_manager import": r"from backend.systems.tension_war.services.tension_manager import",
-            r"from backend\.systems\.war_manager import": r"from backend.systems.tension_war.services.war_manager import",
-            r"from backend\.systems\.peace_manager import": r"from backend.systems.tension_war.services.peace_manager import",
-            r"from backend\.systems\.alliance_manager import": r"from backend.systems.tension_war.services.alliance_manager import",
-            r"from backend\.systems\.proxy_war_manager import": r"from backend.systems.tension_war.services.proxy_war_manager import",
-            r"from backend\.systems\.diplomatic_manager import": r"from backend.systems.tension_war.services.diplomatic_manager import",
+            r"from backend.systems.tension_war.services.tension_manager import",
+            r"from backend.systems.tension_war.services.war_manager import",
+            r"from backend.systems.tension_war.services.peace_manager import",
+            r"from backend.systems.tension_war.services.alliance_manager import",
+            r"from backend.systems.tension_war.services.proxy_war_manager import",
+            r"from backend.systems.tension_war.services.diplomatic_manager import",
             
             # Fix utils imports that need proper paths
-            r"from backend\.systems\.tension_utils import": r"from backend.systems.tension_war.utils.tension_utils import",
-            r"from backend\.systems\.war_utils import": r"from backend.systems.tension_war.utils.war_utils import",
-            r"from backend\.systems\.peace_utils import": r"from backend.systems.tension_war.utils.peace_utils import",
-            r"from backend\.systems\.alliance_utils import": r"from backend.systems.tension_war.utils.alliance_utils import",
-            r"from backend\.systems\.diplomatic_utils import": r"from backend.systems.tension_war.utils.diplomatic_utils import",
+            r"from backend.systems.tension_war.utils.tension_utils import",
+            r"from backend.systems.tension_war.utils.war_utils import",
+            r"from backend.systems.tension_war.utils.peace_utils import",
+            r"from backend.systems.tension_war.utils.alliance_utils import",
+            r"from backend.systems.tension_war.utils.diplomatic_utils import",
             
             # Fix equipment utils imports
-            r"from backend\.systems\.inventory_utils import": r"from backend.systems.inventory.utils import",
-            r"from backend\.systems\.identify_item_utils import": r"from backend.systems.equipment.utils.identify_item_utils import",
-            r"from backend\.systems\.set_bonus_utils import": r"from backend.systems.equipment.utils.set_bonus_utils import",
-            r"from backend\.systems\.durability_utils import": r"from backend.systems.equipment.utils.durability_utils import",
+            r"from backend.systems.inventory.utils import",
+            r"from backend.systems.equipment.utils.identify_item_utils import",
+            r"from backend.systems.equipment.utils.set_bonus_utils import",
+            r"from backend.systems.equipment.utils.durability_utils import",
             
             # Fix arc imports
-            r"from backend\.systems\.arc_generator import": r"from backend.systems.arc.services.arc_generator import",
-            r"from backend\.systems\.arc_events import": r"from backend.systems.arc.events import",
-            r"from backend\.systems\.arc_schemas import": r"from backend.systems.arc.schemas import",
+            r"from backend.systems.arc.services.arc_generator import",
+            r"from backend.systems.arc.events import",
+            r"from backend.systems.arc.schemas import",
             
             # Fix analytics imports
-            r"from backend\.systems\.services\.analytics_service import": r"from backend.systems.analytics.services.analytics_service import",
+            r"from backend.infrastructure.analytics.services.analytics_service import",
             
             # Fix specific model imports
-            r"from backend\.systems\.models\.npc_events import": r"from backend.systems.npc.models.npc_events import",
+            r"from backend.systems.npc.models.npc_events import",
             
             # Fix shared imports
-            r"from backend\.systems\.shared\.utils\.base_manager import": r"from backend.systems.shared.utils.base.base_manager import",
+            r"from backend.infrastructure.shared.utils.base.base_manager import",
             
             # Fix database imports
-            r"from backend\.systems\.shared\.database import": r"from backend.systems.data.database import",
+            r"from backend.infrastructure.data.database import",
             
             # Fix narrative imports
-            r"from backend\.systems\.narrative\.utils import": r"from backend.systems.motif.utils import",
+            r"from backend.systems.motif.utils import",
         }
         
         # Files to skip (only temporary files, scripts, etc. - be more specific)
@@ -140,7 +140,7 @@ class CanonicalImportFixer:
             
             # Additional fixes for specific patterns
             
-            # Fix relative imports (from . import, from .. import)
+            # Fix relative imports (from backend.systems import, from backend.systems import)
             if re.match(r'^\s*from\s+\.+\s+import', line):
                 # This should be rare if previous tasks were done correctly
                 changes.append(f"Line {i+1}: Found relative import: '{line.strip()}' - MANUAL FIX NEEDED")
@@ -313,7 +313,6 @@ class CanonicalImportFixer:
             "validation_results": validation_results
         }
 
-
 def main():
     """Main execution function."""
     
@@ -338,7 +337,6 @@ def main():
         return 1
     
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main()) 

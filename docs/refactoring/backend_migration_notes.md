@@ -28,7 +28,7 @@ After updating your imports, please run the test suite to ensure everything cont
 
 ## Additional Changes - GameDataRegistry Migration
 
-3. GameDataRegistry moved from `backend/data/modding/loaders/game_data_registry.py` to `backend/systems/data/loaders/game_data_registry.py`
+3. GameDataRegistry moved from `data/builders/loaders/game_data_registry.py` to `backend/systems/data/loaders/game_data_registry.py`
 
 Please update your import statements as follows:
 

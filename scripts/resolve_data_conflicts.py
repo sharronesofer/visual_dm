@@ -42,7 +42,7 @@ def resolve_conflicts():
     # 2. balance_constants.json - root version is canonical (used in code)
     print("💰 Resolving balance_constants.json conflict...")
     backend_balance = backup_dir / "balance_constants.json"
-    root_balance = Path("data/balance_constants.json")
+    root_balance = Path("data/system/mechanics/balance/balance_constants.json")
     
     if backend_balance.exists():
         # Archive the backend version since root is used in code
@@ -77,7 +77,7 @@ def resolve_conflicts():
     # 5. goals/None_goals.json - archive backend version, keep root
     print("🎯 Resolving goals/None_goals.json conflict...")
     backend_goals = backup_dir / "goals/None_goals.json"
-    root_goals = Path("data/goals/None_goals.json")
+    root_goals = Path("data/system/runtime/goals/None_goals.json")
     
     if backend_goals.exists():
         shutil.copy2(backend_goals, archives_dir / "None_goals_backend_version.json")

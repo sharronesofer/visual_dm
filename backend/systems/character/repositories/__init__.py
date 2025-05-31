@@ -1,9 +1,4 @@
-"""
-Character Repositories
---------------------
-Data access layer for character-related database operations.
-"""
+"""Repositories for character system"""
 
-from backend.systems.character.repositories.character_repository import CharacterRepository
-
-__all__ = ['CharacterRepository']
+# Auto-generated imports
+from .character_repository import *

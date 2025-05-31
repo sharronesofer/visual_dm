@@ -1,0 +1,4084 @@
+🔍 Starting comprehensive backend analysis...
+📁 Analyzing systems directory...
+🧪 Analyzing tests directory...
+🔍 Checking critical modules...
+
+================================================================================
+📊 COMPREHENSIVE ANALYSIS REPORT
+================================================================================
+🚨 Total Issues Found: 1351
+
+❌ SYNTAX ERRORS (380)
+--------------------------------------------------
+  📄 systems/loot/events.py
+     ❌ Syntax error at line 14: unexpected indent
+     📍 Line: 14
+  📄 systems/loot/database.py
+     ❌ Syntax error at line 14: unexpected indent
+     📍 Line: 14
+  📄 systems/loot/core.py
+     ❌ Syntax error at line 14: unexpected indent
+     📍 Line: 14
+  📄 systems/loot/initialization.py
+     ❌ Syntax error at line 14: unexpected indent
+     📍 Line: 14
+  📄 systems/loot/validation.py
+     ❌ Syntax error at line 14: unexpected indent
+     📍 Line: 14
+  📄 tests/integration/test_integration_18.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_19.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_02.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_06.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_07.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_17.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_03.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_13.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_04.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_20.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_10.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_01.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_11.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_05.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/integration/test_integration_15.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/economy/test_economy_manager.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/test___init__.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/test_trade_service.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/economy/test_market_service.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/economy/test_economy_router.py
+     ❌ Syntax error at line 94: unexpected character after line continuation character
+     📍 Line: 94
+  📄 tests/systems/economy/test_shop_utils_functions.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/economy/test_economy_repository.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/economy/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/economy/routers/test___init__.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/routers/test_shop_router.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/routers/test_economy_router.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/utils/test___init__.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/utils/test_shop_utils.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/repositories/test___init__.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/economy/models/test_market.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/motif/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/motif/test_motif_consolidated_manager.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/motif/test_motif_models.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/motif/test_motif_service.py
+     ❌ Syntax error at line 21: unexpected character after line continuation character
+     📍 Line: 21
+  📄 tests/systems/motif/test_motif_manager.py
+     ❌ Syntax error at line 6: invalid syntax
+     📍 Line: 6
+  📄 tests/systems/motif/test_motif_repository.py
+     ❌ Syntax error at line 26: unexpected character after line continuation character
+     📍 Line: 26
+  📄 tests/systems/motif/test_motif_router.py
+     ❌ Syntax error at line 9: unexpected character after line continuation character
+     📍 Line: 9
+  📄 tests/systems/llm/test_middleware_integration.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/llm/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/llm/test_repository_integration.py
+     ❌ Syntax error at line 28: unexpected character after line continuation character
+     📍 Line: 28
+  📄 tests/systems/llm/test_rumor_service.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/llm/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/tension_war/test_tension_war_models.py
+     ❌ Syntax error at line 42: unexpected character after line continuation character
+     📍 Line: 42
+  📄 tests/systems/tension_war/routers/test_tension_router.py
+     ❌ Syntax error at line 31: unexpected character after line continuation character
+     📍 Line: 31
+  📄 tests/systems/tension_war/utils/test_alliance_utils.py
+     ❌ Syntax error at line 27: unexpected character after line continuation character
+     📍 Line: 27
+  📄 tests/systems/tension_war/utils/test_war_utils.py
+     ❌ Syntax error at line 31: unexpected character after line continuation character
+     📍 Line: 31
+  📄 tests/systems/tension_war/utils/test_diplomatic_utils.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/tension_war/utils/test_peace_utils.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/tension_war/utils/test_tension_utils.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/tension_war/schemas/test_tension_schemas.py
+     ❌ Syntax error at line 22: unexpected character after line continuation character
+     📍 Line: 22
+  📄 tests/systems/tension_war/services/test_alliance_manager.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/tension_war/services/test_war_manager.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/tension_war/services/test_diplomatic_manager.py
+     ❌ Syntax error at line 22: unexpected character after line continuation character
+     📍 Line: 22
+  📄 tests/systems/tension_war/services/test_tension_manager.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/world_generation/test_river_generator.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/world_generation/test_biome_utils.py
+     ❌ Syntax error at line 5: unexpected character after line continuation character
+     📍 Line: 5
+  📄 tests/systems/world_generation/test_coastline_utils.py
+     ❌ Syntax error at line 31: unexpected character after line continuation character
+     📍 Line: 31
+  📄 tests/systems/world_generation/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_generation/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_generation/test_modding_system.py
+     ❌ Syntax error at line 37: unexpected character after line continuation character
+     📍 Line: 37
+  📄 tests/systems/world_generation/test_resource_utils.py
+     ❌ Syntax error at line 40: unexpected character after line continuation character
+     📍 Line: 40
+  📄 tests/systems/world_generation/test_continent_repository.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/world_generation/test_world_generator.py
+     ❌ Syntax error at line 22: unexpected character after line continuation character
+     📍 Line: 22
+  📄 tests/systems/world_generation/test_seed_loader.py
+     ❌ Syntax error at line 51: unexpected character after line continuation character
+     📍 Line: 51
+  📄 tests/systems/world_generation/test_config.py
+     ❌ Syntax error at line 170: unexpected indent
+     📍 Line: 170
+  📄 tests/systems/world_generation/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_generation/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_generation/test_worldgen_routes.py
+     ❌ Syntax error at line 35: unexpected character after line continuation character
+     📍 Line: 35
+  📄 tests/systems/world_generation/test_worldgen_routes_endpoints.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/world_generation/test_initialize_modding.py
+     ❌ Syntax error at line 30: unexpected character after line continuation character
+     📍 Line: 30
+  📄 tests/systems/world_generation/test_continent_service.py
+     ❌ Syntax error at line 30: unexpected character after line continuation character
+     📍 Line: 30
+  📄 tests/systems/world_generation/test_settlement_service.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/memory/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/memory/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/memory/test_memory_categories.py
+     ❌ Syntax error at line 28: unexpected character after line continuation character
+     📍 Line: 28
+  📄 tests/systems/memory/test_summarization_styles.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/memory/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/memory/test_memory.py
+     ❌ Syntax error at line 42: unexpected character after line continuation character
+     📍 Line: 42
+  📄 tests/systems/memory/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/memory/test_memory_manager.py
+     ❌ Syntax error at line 39: unexpected character after line continuation character
+     📍 Line: 39
+  📄 tests/systems/diplomacy/test_repository.py
+     ❌ Syntax error at line 35: unexpected character after line continuation character
+     📍 Line: 35
+  📄 tests/systems/diplomacy/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/diplomacy/test_diplomacy_models.py
+     ❌ Syntax error at line 40: unexpected character after line continuation character
+     📍 Line: 40
+  📄 tests/systems/diplomacy/test_parameter_fix.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/diplomacy/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/diplomacy/test_coverage_expansion.py
+     ❌ Syntax error at line 3: invalid syntax
+     📍 Line: 3
+  📄 tests/systems/diplomacy/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/diplomacy/test_diplomacy_router.py
+     ❌ Syntax error at line 4: unexpected character after line continuation character
+     📍 Line: 4
+  📄 tests/systems/diplomacy/test_diplomacy_services.py
+     ❌ Syntax error at line 42: unexpected character after line continuation character
+     📍 Line: 42
+  📄 tests/systems/combat/test_turn_queue.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/combat/test_combat_router.py
+     ❌ Syntax error at line 22: unexpected character after line continuation character
+     📍 Line: 22
+  📄 tests/systems/combat/test_fix_unified_combat_utils.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/combat/test_combat_state_class.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/combat/test_refactoring_complete.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/combat/test_combat_integration.py
+     ❌ Syntax error at line 48: invalid syntax. Perhaps you forgot a comma?
+     📍 Line: 48
+  📄 tests/systems/combat/test_combat_repository.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/combat/test_fix_events.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/combat/test_combat_state_manager.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/combat/test_combat_routes.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/combat/test_combat_narrative_utils.py
+     ❌ Syntax error at line 24: unexpected character after line continuation character
+     📍 Line: 24
+  📄 tests/systems/combat/test_unified_combat.py
+     ❌ Syntax error at line 51: unexpected character after line continuation character
+     📍 Line: 51
+  📄 tests/systems/combat/test_combat_state_management.py
+     ❌ Syntax error at line 17: invalid syntax
+     📍 Line: 17
+  📄 tests/systems/combat/test_combat_service.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/combat/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/combat/test_combat_class.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/combat/test_fix_events_complete.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/combat/test_action_system.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/combat/test_unified_combat_utils.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/combat/test_combat_validator.py
+     ❌ Syntax error at line 36: unexpected character after line continuation character
+     📍 Line: 36
+  📄 tests/systems/combat/test_combat_state_firebase_utils.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/combat/test_fog_of_war.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/combat/test_combat_ram.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/combat/test_combat_animation_system.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/combat/test_combat_facade.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/combat/test_effect_visualizer.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/combat/test_combat_refactoring.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/magic/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/magic/test_magic_models.py
+     ❌ Syntax error at line 26: unexpected character after line continuation character
+     📍 Line: 26
+  📄 tests/systems/magic/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/magic/test_magic_services.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/magic/test_magic.py
+     ❌ Syntax error at line 10: invalid syntax
+     📍 Line: 10
+  📄 tests/systems/magic/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/magic/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/magic/test_magic_router.py
+     ❌ Syntax error at line 4: unexpected character after line continuation character
+     📍 Line: 4
+  📄 tests/systems/character/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/character/test_character_system_integration.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/character/test_event_dispatcher.py
+     ❌ Syntax error at line 3: invalid syntax
+     📍 Line: 3
+  📄 tests/systems/character/test_canonical_events.py
+     ❌ Syntax error at line 9: unexpected character after line continuation character
+     📍 Line: 9
+  📄 tests/systems/character/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/character/test_helpers.py
+     ❌ Syntax error at line 10: unexpected character after line continuation character
+     📍 Line: 10
+  📄 tests/systems/character/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/character/core/test_character_utils.py
+     ❌ Syntax error at line 37: unexpected character after line continuation character
+     📍 Line: 37
+  📄 tests/systems/character/core/test_character_builder.py
+     ❌ Syntax error at line 2: unexpected character after line continuation character
+     📍 Line: 2
+  📄 tests/systems/character/models/test_character_model.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/character/relationship/test_relationship_model.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/character/npc/test_npc_rumor_utils.py
+     ❌ Syntax error at line 49: unexpected indent
+     📍 Line: 49
+  📄 tests/systems/character/services/test_goal_service_file_operations.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/character/services/test_goal_service.py
+     ❌ Syntax error at line 31: unexpected character after line continuation character
+     📍 Line: 31
+  📄 tests/systems/character/services/test_mood_service.py
+     ❌ Syntax error at line 33: unexpected character after line continuation character
+     📍 Line: 33
+  📄 tests/systems/character/services/test_mood_service_operations.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/auth_user/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/auth_user/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/faction/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/faction/test_consolidated_relationship_service.py
+     ❌ Syntax error at line 22: unexpected character after line continuation character
+     📍 Line: 22
+  📄 tests/systems/faction/test_region_political_integration.py
+     ❌ Syntax error at line 31: unexpected character after line continuation character
+     📍 Line: 31
+  📄 tests/systems/faction/test_validators.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/faction/test_faction_router.py
+     ❌ Syntax error at line 32: unexpected character after line continuation character
+     📍 Line: 32
+  📄 tests/systems/faction/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/faction/test_faction_tick_utils.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/faction/test_consolidated_membership_service.py
+     ❌ Syntax error at line 28: unexpected character after line continuation character
+     📍 Line: 28
+  📄 tests/systems/faction/repositories/test_faction_repository.py
+     ❌ Syntax error at line 8: unexpected character after line continuation character
+     📍 Line: 8
+  📄 tests/systems/rumor/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/rumor/test_rumor.py
+     ❌ Syntax error at line 17: invalid syntax
+     📍 Line: 17
+  📄 tests/systems/rumor/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/rumor/test_rumor_repository.py
+     ❌ Syntax error at line 26: unexpected character after line continuation character
+     📍 Line: 26
+  📄 tests/systems/rumor/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/shared/test_cleanup_migrated.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/shared/test_components.py
+     ❌ Syntax error at line 41: unexpected character after line continuation character
+     📍 Line: 41
+  📄 tests/systems/shared/test_database_main.py
+     ❌ Syntax error at line 47: unexpected character after line continuation character
+     📍 Line: 47
+  📄 tests/systems/shared/test_service_utils.py
+     ❌ Syntax error at line 44: unexpected character after line continuation character
+     📍 Line: 44
+  📄 tests/systems/shared/test_firebase_utils.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/shared/test_base_repository.py
+     ❌ Syntax error at line 34: unexpected character after line continuation character
+     📍 Line: 34
+  📄 tests/systems/shared/test_api.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/shared/test_rules.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/shared/test_random_utils.py
+     ❌ Syntax error at line 28: unexpected character after line continuation character
+     📍 Line: 28
+  📄 tests/systems/shared/test_event_bus_utils.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/shared/utils/test_base_init.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/shared/utils/test_verify_utils_imports.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/shared/utils/test_fix_utils_imports.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/shared/utils/test_time_utils.py
+     ❌ Syntax error at line 24: unexpected character after line continuation character
+     📍 Line: 24
+  📄 tests/systems/shared/utils/test_json_storage_utils.py
+     ❌ Syntax error at line 32: unexpected character after line continuation character
+     📍 Line: 32
+  📄 tests/systems/loot/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/loot/test_loot_manager.py
+     ❌ Syntax error at line 28: unexpected character after line continuation character
+     📍 Line: 28
+  📄 tests/systems/loot/test_loot_shop.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/loot/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/loot/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/loot/test_loot_core.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/storage/test_cloud_storage.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/storage/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/storage/test_serialization_helper.py
+     ❌ Syntax error at line 22: expected an indented block after function definition on line 21
+     📍 Line: 22
+  📄 tests/systems/storage/test_autosave_manager.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/storage/test_storage_manager.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/storage/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/storage/test_encryption_service.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/time/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/time/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/time/test_time_manager.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/time/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/population/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/population/test_population_models.py
+     ❌ Syntax error at line 36: unexpected character after line continuation character
+     📍 Line: 36
+  📄 tests/systems/population/test_population_utils.py
+     ❌ Syntax error at line 46: unexpected character after line continuation character
+     📍 Line: 46
+  📄 tests/systems/population/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/population/test_imports.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/population/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/population/test_population_router.py
+     ❌ Syntax error at line 45: unexpected character after line continuation character
+     📍 Line: 45
+  📄 tests/systems/dialogue/test_dialogue_manager.py
+     ❌ Syntax error at line 158: expected ':'
+     📍 Line: 158
+  📄 tests/systems/dialogue/test_rumor_integration.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/dialogue/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/dialogue/test_faction_integration.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/dialogue/test_memory_integration.py
+     ❌ Syntax error at line 299: unexpected indent
+     📍 Line: 299
+  📄 tests/systems/dialogue/test_population_integration.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/dialogue/test_region_integration.py
+     ❌ Syntax error at line 10: unexpected character after line continuation character
+     📍 Line: 10
+  📄 tests/systems/dialogue/test_conversation.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/dialogue/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/dialogue/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/dialogue/test_dialogue_system.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/dialogue/test_cache.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/dialogue/test_poi_integration.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/poi/test_landmark_service.py
+     ❌ Syntax error at line 26: unexpected character after line continuation character
+     📍 Line: 26
+  📄 tests/systems/poi/test_faction_influence_service.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/poi/test_lifecycle_events_service.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/poi/test_poi_models.py
+     ❌ Syntax error at line 5: unexpected character after line continuation character
+     📍 Line: 5
+  📄 tests/systems/poi/test_migration_service_comprehensive.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/poi/test_metropolitan_spread_service_comprehensive.py
+     ❌ Syntax error at line 26: unexpected character after line continuation character
+     📍 Line: 26
+  📄 tests/systems/poi/test_resource_management_service.py
+     ❌ Syntax error at line 24: unexpected character after line continuation character
+     📍 Line: 24
+  📄 tests/systems/poi/test_poi_generator.py
+     ❌ Syntax error at line 22: unexpected character after line continuation character
+     📍 Line: 22
+  📄 tests/systems/poi/test_resource_management_service_comprehensive.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/poi/test_migration_service.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/poi/test_services_main.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/poi/test_poi_state_transitions.py
+     ❌ Syntax error at line 5: unexpected character after line continuation character
+     📍 Line: 5
+  📄 tests/systems/poi/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/poi/test_event_handlers.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/region/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/region/test_region_router.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/region/test_region_revolt_utils.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/region/test_region_gen.py
+     ❌ Syntax error at line 32: unexpected character after line continuation character
+     📍 Line: 32
+  📄 tests/systems/region/test_schemas_comprehensive.py
+     ❌ Syntax error at line 36: unexpected character after line continuation character
+     📍 Line: 36
+  📄 tests/systems/region/test_biome_adjacency.py
+     ❌ Syntax error at line 83: unexpected character after line continuation character
+     📍 Line: 83
+  📄 tests/systems/region/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/region/test_tension.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/region/test_mapping.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/religion/test_religion_schemas.py
+     ❌ Syntax error at line 27: unexpected character after line continuation character
+     📍 Line: 27
+  📄 tests/systems/religion/test_membership_service.py
+     ❌ Syntax error at line 27: unexpected character after line continuation character
+     📍 Line: 27
+  📄 tests/systems/religion/test_religion_service_extended.py
+     ❌ Syntax error at line 26: unexpected character after line continuation character
+     📍 Line: 26
+  📄 tests/systems/religion/test_religion_repository.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/religion/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/religion/test_religion_models.py
+     ❌ Syntax error at line 23: unexpected character after line continuation character
+     📍 Line: 23
+  📄 tests/systems/religion/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/quest/test_arc_manager.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/quest/test_quest_motif_integration.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/quest/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/quest/test_quest_generator.py
+     ❌ Syntax error at line 37: unexpected character after line continuation character
+     📍 Line: 37
+  📄 tests/systems/quest/test_motif_faction_integration.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/quest/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/quest/test_manager.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/quest/test_quest_models.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/inventory/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/inventory/test_service_comprehensive.py
+     ❌ Syntax error at line 28: unexpected character after line continuation character
+     📍 Line: 28
+  📄 tests/systems/inventory/test_router_simple.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/inventory/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/inventory/test_migrations.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/inventory/test_utils_focused.py
+     ❌ Syntax error at line 32: unexpected character after line continuation character
+     📍 Line: 32
+  📄 tests/systems/inventory/test_notification.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/inventory/test_utils_advanced.py
+     ❌ Syntax error at line 36: unexpected character after line continuation character
+     📍 Line: 36
+  📄 tests/systems/inventory/test_validator.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/inventory/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/inventory/test_router_comprehensive.py
+     ❌ Syntax error at line 23: unexpected character after line continuation character
+     📍 Line: 23
+  📄 tests/systems/inventory/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/inventory/test_events_comprehensive.py
+     ❌ Syntax error at line 33: expected an indented block after function definition on line 32
+     📍 Line: 33
+  📄 tests/systems/inventory/test_export.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/inventory/test_models_main.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/world_state/test_final_coverage_push.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/world_state/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_state/test_state_api_comprehensive.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/world_state/test_derivative_state.py
+     ❌ Syntax error at line 27: expected an indented block after function definition on line 26
+     📍 Line: 27
+  📄 tests/systems/world_state/test_loader.py
+     ❌ Syntax error at line 188: unexpected indent
+     📍 Line: 188
+  📄 tests/systems/world_state/test_handlers.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/world_state/test_worldgen_api.py
+     ❌ Syntax error at line 36: unexpected character after line continuation character
+     📍 Line: 36
+  📄 tests/systems/world_state/test_loader_final_push.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/world_state/test_optimized_worldgen.py
+     ❌ Syntax error at line 36: unexpected character after line continuation character
+     📍 Line: 36
+  📄 tests/systems/world_state/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_state/test_cleanup.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/world_state/test_consolidated_manager.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/world_state/test_state_storage.py
+     ❌ Syntax error at line 21: unexpected character after line continuation character
+     📍 Line: 21
+  📄 tests/systems/world_state/test_requirements.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/world_state/test_world_state_manager_character.py
+     ❌ Syntax error at line 21: unexpected character after line continuation character
+     📍 Line: 21
+  📄 tests/systems/world_state/test_consolidated_world_models.py
+     ❌ Syntax error at line 551: unexpected character after line continuation character
+     📍 Line: 551
+  📄 tests/systems/world_state/test_world_utils.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/world_state/test_consolidated_world_models_coverage.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/world_state/test_api_router.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/world_state/test_tick_utils.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/world_state/test_state_storage_coverage.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/world_state/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_state/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/world_state/test_world_event_utils.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/world_state/test_world_routes.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/world_state/test_consolidated_state_models.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/world_state/test_consolidated_manager_coverage.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/world_state/test_terrain_generator.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/crafting/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/crafting/test_station_service.py
+     ❌ Syntax error at line 21: unexpected character after line continuation character
+     📍 Line: 21
+  📄 tests/systems/crafting/test_schemas_init.py
+     ❌ Syntax error at line 22: unexpected character after line continuation character
+     📍 Line: 22
+  📄 tests/systems/crafting/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/crafting/test_crafting_models.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/crafting/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/crafting/test_experience_service.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/crafting/test_crafting_service.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/events/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/events/test_base_compatibility.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/events/test_event_bus.py
+     ❌ Syntax error at line 190: expected an indented block after 'if' statement on line 190
+     📍 Line: 190
+  📄 tests/systems/events/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/events/test_events_system.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/events/test_event_compatibility.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/events/test_event_dispatcher.py
+     ❌ Syntax error at line 11: invalid syntax
+     📍 Line: 11
+  📄 tests/systems/events/test_consolidated_events.py
+     ❌ Syntax error at line 21: unexpected character after line continuation character
+     📍 Line: 21
+  📄 tests/systems/events/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/events/test_events.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/events/test_event_manager.py
+     ❌ Syntax error at line 11: invalid syntax
+     📍 Line: 11
+  📄 tests/systems/events/test_dispatcher.py
+     ❌ Syntax error at line 12: invalid syntax
+     📍 Line: 12
+  📄 tests/systems/events/test_dispatcher_compatibility.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/events/test_event_dispatcher_core.py
+     ❌ Syntax error at line 7: invalid syntax
+     📍 Line: 7
+  📄 tests/systems/arc/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/arc/test_arc_step_model.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/arc/test_services.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/arc/test_analytics_router.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/arc/test_repositories.py
+     ❌ Syntax error at line 8: invalid syntax
+     📍 Line: 8
+  📄 tests/systems/arc/test_models_integration.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/arc/test_quest_integration.py
+     ❌ Syntax error at line 9: invalid syntax
+     📍 Line: 9
+  📄 tests/systems/arc/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/arc/test_routers.py
+     ❌ Syntax error at line 18: invalid syntax
+     📍 Line: 18
+  📄 tests/systems/arc/test_integration.py
+     ❌ Syntax error at line 13: invalid syntax
+     📍 Line: 13
+  📄 tests/systems/arc/test_arc_utils.py
+     ❌ Syntax error at line 31: unexpected character after line continuation character
+     📍 Line: 31
+  📄 tests/systems/data/test_data_loader.py
+     ❌ Syntax error at line 27: unexpected character after line continuation character
+     📍 Line: 27
+  📄 tests/systems/data/test_validation.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/data/test_data_model.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/data/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/data/test_schema_validation.py
+     ❌ Syntax error at line 257: unexpected character after line continuation character
+     📍 Line: 257
+  📄 tests/systems/data/test_data_file_loader.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+  📄 tests/systems/data/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/data/test_biome_schema.py
+     ❌ Syntax error at line 20: unexpected character after line continuation character
+     📍 Line: 20
+  📄 tests/systems/data/test_game_data_registry.py
+     ❌ Syntax error at line 19: unexpected character after line continuation character
+     📍 Line: 19
+  📄 tests/systems/data/test_data_service.py
+     ❌ Syntax error at line 18: unexpected character after line continuation character
+     📍 Line: 18
+  📄 tests/systems/data/models/test_data_model.py
+     ❌ Syntax error at line 39: unexpected character after line continuation character
+     📍 Line: 39
+  📄 tests/systems/data/schemas/test_biome_schema.py
+     ❌ Syntax error at line 52: unexpected character after line continuation character
+     📍 Line: 52
+  📄 tests/systems/data/events/test_data_events.py
+     ❌ Syntax error at line 32: unexpected character after line continuation character
+     📍 Line: 32
+  📄 tests/systems/data/loaders/test_game_data_registry.py
+     ❌ Syntax error at line 42: unexpected character after line continuation character
+     📍 Line: 42
+  📄 tests/systems/data/services/test_data_service.py
+     ❌ Syntax error at line 38: unexpected character after line continuation character
+     📍 Line: 38
+  📄 tests/systems/equipment/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/equipment/test_service.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/equipment/test_inventory_utils.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/equipment/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/equipment/test_identify_item_utils.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/equipment/test_equipment_router.py
+     ❌ Syntax error at line 9: invalid syntax
+     📍 Line: 9
+  📄 tests/systems/equipment/test_set_bonus_utils.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/equipment/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/equipment/test_durability_utils.py
+     ❌ Syntax error at line 11: unexpected character after line continuation character
+     📍 Line: 11
+  📄 tests/systems/npc/test_npc_loyalty_comprehensive.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/npc/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/npc/test_npc_builder_comprehensive.py
+     ❌ Syntax error at line 17: unexpected character after line continuation character
+     📍 Line: 17
+  📄 tests/systems/npc/test_npc_scheduled_tasks_comprehensive.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/npc/test_npc_system_router_comprehensive.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/npc/test_npc_router_comprehensive.py
+     ❌ Syntax error at line 14: unexpected character after line continuation character
+     📍 Line: 14
+  📄 tests/systems/npc/test_npc_travel_utils_comprehensive.py
+     ❌ Syntax error at line 13: unexpected character after line continuation character
+     📍 Line: 13
+  📄 tests/systems/npc/test_npc_location_router_comprehensive.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/npc/test_npc_service.py
+     ❌ Syntax error at line 4: invalid syntax
+     📍 Line: 4
+  📄 tests/systems/npc/test_models.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/npc/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/npc/test_npc_service_comprehensive.py
+     ❌ Syntax error at line 15: unexpected character after line continuation character
+     📍 Line: 15
+  📄 tests/systems/npc/test_npc_location_service_comprehensive.py
+     ❌ Syntax error at line 16: unexpected character after line continuation character
+     📍 Line: 16
+  📄 tests/systems/analytics/test_basic.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/analytics/test_utils.py
+     ❌ Syntax error at line 27: unexpected character after line continuation character
+     📍 Line: 27
+  📄 tests/systems/analytics/test_stub_approach.py
+     ❌ Syntax error at line 90: unexpected character after line continuation character
+     📍 Line: 90
+  📄 tests/systems/analytics/test_analytics_service_async.py
+     ❌ Syntax error at line 10: unexpected indent
+     📍 Line: 10
+  📄 tests/systems/analytics/test_services.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/analytics/test_simple_async.py
+     ❌ Syntax error at line 19: unexpected indent
+     📍 Line: 19
+  📄 tests/systems/analytics/test_async_mock_basic.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/analytics/test_dataset_functions.py
+     ❌ Syntax error at line 24: unexpected character after line continuation character
+     📍 Line: 24
+  📄 tests/systems/analytics/test_schemas.py
+     ❌ Syntax error at line 12: unexpected character after line continuation character
+     📍 Line: 12
+  📄 tests/systems/analytics/test_integration.py
+     ❌ Syntax error at line 6: unexpected character after line continuation character
+     📍 Line: 6
+  📄 tests/systems/analytics/test_analytics_service_core.py
+     ❌ Syntax error at line 14: unexpected indent
+     📍 Line: 14
+  📄 tests/systems/analytics/test_analytics_service_fixed.py
+     ❌ Syntax error at line 19: unexpected indent
+     📍 Line: 19
+  📄 tests/systems/analytics/test_analytics_service_coverage.py
+     ❌ Syntax error at line 24: unexpected character after line continuation character
+     📍 Line: 24
+  📄 tests/systems/analytics/test_event_mapping.py
+     ❌ Syntax error at line 29: unexpected character after line continuation character
+     📍 Line: 29
+  📄 tests/systems/analytics/test_event_integration.py
+     ❌ Syntax error at line 55: unexpected character after line continuation character
+     📍 Line: 55
+  📄 tests/systems/analytics/test_utils_extended.py
+     ❌ Syntax error at line 25: unexpected character after line continuation character
+     📍 Line: 25
+
+📦 MISSING MODULES (405)
+--------------------------------------------------
+  🔍 backend.systems.equipment.loot_utils
+     📄 Referenced in: systems/economy/shop_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.equipment.loot_utils
+     📄 Referenced in: systems/economy/shop_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.economy.resource
+     📄 Referenced in: systems/economy/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.economy.trade_route
+     📄 Referenced in: systems/economy/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.economy.market
+     📄 Referenced in: systems/economy/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.economy.commodity_future
+     📄 Referenced in: systems/economy/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.economy.trade_service
+     📄 Referenced in: systems/economy/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.economy.market_service
+     📄 Referenced in: systems/economy/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.economy.futures_service
+     📄 Referenced in: systems/economy/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/economy/services/trade_service.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/economy/services/resource_service.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/economy/services/market_service.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/economy/services/futures_service.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_rumor_utils
+     📄 Referenced in: systems/motif/chaos_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.motif.manager
+     📄 Referenced in: systems/motif/router.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.event_integration
+     📄 Referenced in: systems/llm/memory_system.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.event_integration
+     📄 Referenced in: systems/llm/faction_system.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.event_integration
+     📄 Referenced in: systems/llm/motif_system.py
+     🎯 Context: systems
+  🔍 backend.systems.region.tension_utils
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.llm.gpt_client
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_relationships_utils
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.event_integration
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.memory_system
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.rumor_system
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.motif_system
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.faction_system
+     📄 Referenced in: systems/llm/dm_core.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.event_integration
+     📄 Referenced in: systems/llm/rumor_system.py
+     🎯 Context: systems
+  🔍 backend.systems.quest.quests_class
+     📄 Referenced in: systems/llm/dm_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.poi.dungeon_enrichment_utils
+     📄 Referenced in: systems/llm/dm_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.dm.dm_core
+     📄 Referenced in: systems/llm/dm_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/tension_war/services.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/tension_war/utils.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.auth
+     📄 Referenced in: systems/tension_war/router.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/tension_war/router.py
+     🎯 Context: systems
+  🔍 backend.systems.quest.player_arc_utils
+     📄 Referenced in: systems/tension_war/war_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.region.services.region_service
+     📄 Referenced in: systems/world_generation/continent_service.py
+     🎯 Context: systems
+  🔍 backend.systems.region.schemas.region
+     📄 Referenced in: systems/world_generation/continent_service.py
+     🎯 Context: systems
+  🔍 backend.systems.combat.combat_utils
+     📄 Referenced in: systems/world_generation/worldgen_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.llm.gpt_client
+     📄 Referenced in: systems/world_generation/worldgen_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.character.party_utils
+     📄 Referenced in: systems/world_generation/worldgen_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.events.models.event_dispatcher
+     📄 Referenced in: systems/memory/memory.py
+     🎯 Context: systems
+  🔍 backend.systems.memory.memory_manager
+     📄 Referenced in: systems/memory/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.models.event_dispatcher
+     📄 Referenced in: systems/memory/memory_manager_core.py
+     🎯 Context: systems
+  🔍 backend.systems.memory.memory_manager
+     📄 Referenced in: systems/memory/memory_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.events.models.event_dispatcher
+     📄 Referenced in: systems/memory/memory_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/diplomacy/services_core.py
+     🎯 Context: systems
+  🔍 backend.systems.llm.gpt_client
+     📄 Referenced in: systems/combat/combat_narrative_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.rules.character_gen_rules_utils
+     📄 Referenced in: systems/combat/utils.py
+     🎯 Context: systems
+  🔍 backend.systems.combat.combat_repository
+     📄 Referenced in: systems/combat/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.combat.combat_service
+     📄 Referenced in: systems/combat/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/magic/models.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.auth
+     📄 Referenced in: systems/magic/router.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.base
+     📄 Referenced in: systems/magic/repositories/spell_effect_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.models
+     📄 Referenced in: systems/magic/repositories/spell_effect_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.base
+     📄 Referenced in: systems/magic/repositories/spellbook_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.models
+     📄 Referenced in: systems/magic/repositories/spellbook_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.base
+     📄 Referenced in: systems/magic/repositories/spell_slot_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.models
+     📄 Referenced in: systems/magic/repositories/spell_slot_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.base
+     📄 Referenced in: systems/magic/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.magic_repository
+     📄 Referenced in: systems/magic/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.spell_repository
+     📄 Referenced in: systems/magic/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.spellbook_repository
+     📄 Referenced in: systems/magic/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.spell_effect_repository
+     📄 Referenced in: systems/magic/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.spell_slot_repository
+     📄 Referenced in: systems/magic/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.base
+     📄 Referenced in: systems/magic/repositories/magic_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.models
+     📄 Referenced in: systems/magic/repositories/magic_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.magic.base
+     📄 Referenced in: systems/magic/repositories/spell_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.models
+     📄 Referenced in: systems/magic/repositories/spell_repository.py
+     🎯 Context: systems
+  🔍 backend.systems.character.character_routes
+     📄 Referenced in: systems/character/player_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.character.setup
+     📄 Referenced in: systems/character/database/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.character.base
+     📄 Referenced in: systems/character/database/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.rules.rules_utils
+     📄 Referenced in: systems/character/core/character_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.json_utils
+     📄 Referenced in: systems/character/core/character_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.user
+     📄 Referenced in: systems/character/core/character_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.party
+     📄 Referenced in: systems/character/core/character_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/character/core/character_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.spell
+     📄 Referenced in: systems/character/core/character_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.save
+     📄 Referenced in: systems/character/core/character_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.error_utils
+     📄 Referenced in: systems/character/utils/character_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.dialogue.scoring
+     📄 Referenced in: systems/character/utils/context_manager.py
+     🎯 Context: systems
+  🔍 backend.systems.dialogue.extractors
+     📄 Referenced in: systems/character/utils/context_manager.py
+     🎯 Context: systems
+  🔍 backend.systems.character.utils.visual_utils
+     📄 Referenced in: systems/character/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.character.character_schemas
+     📄 Referenced in: systems/character/schemas/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.character.rumor_transformer
+     📄 Referenced in: systems/character/api/api.py
+     🎯 Context: systems
+  🔍 backend.systems.character.truth_tracker
+     📄 Referenced in: systems/character/api/api.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.auth_router
+     📄 Referenced in: systems/auth_user/routers/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.auth_relationship_router
+     📄 Referenced in: systems/auth_user/routers/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.schemas.auth_schemas
+     📄 Referenced in: systems/auth_user/routers/auth_router.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.validation_utils
+     📄 Referenced in: systems/auth_user/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.auth_utils
+     📄 Referenced in: systems/auth_user/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.base
+     📄 Referenced in: systems/auth_user/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.user_models
+     📄 Referenced in: systems/auth_user/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.auth_relationship_models
+     📄 Referenced in: systems/auth_user/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.base
+     📄 Referenced in: systems/auth_user/models/user_models.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.base
+     📄 Referenced in: systems/auth_user/models/auth_relationship_models.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.token_service
+     📄 Referenced in: systems/auth_user/services/auth_service.py
+     🎯 Context: systems
+  🔍 backend.systems.utils
+     📄 Referenced in: systems/auth_user/services/auth_service.py
+     🎯 Context: systems
+  🔍 backend.systems.utils
+     📄 Referenced in: systems/auth_user/services/auth_service.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.auth_service
+     📄 Referenced in: systems/auth_user/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.token_service
+     📄 Referenced in: systems/auth_user/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.password_service
+     📄 Referenced in: systems/auth_user/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.security_service
+     📄 Referenced in: systems/auth_user/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.faction.services.relationship_service
+     📄 Referenced in: systems/faction/faction_manager.py
+     🎯 Context: systems
+  🔍 backend.systems.llm.services.gpt_client
+     📄 Referenced in: systems/rumor/gpt_client.py
+     🎯 Context: systems
+  🔍 backend.systems.llm.services.gpt_client
+     📄 Referenced in: systems/rumor/transformer.py
+     🎯 Context: systems
+  🔍 backend.systems.llm.gpt_client
+     📄 Referenced in: systems/rumor/npc_rumor_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_rumor_utils
+     📄 Referenced in: systems/rumor/npc_rumor_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_relationships_utils
+     📄 Referenced in: systems/rumor/npc_rumor_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_rumor_utils
+     📄 Referenced in: systems/rumor/npc_rumor_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.events.models.event_dispatcher
+     📄 Referenced in: systems/rumor/models/rumor.py
+     🎯 Context: systems
+  🔍 backend.systems.rumor.rumor_types
+     📄 Referenced in: systems/rumor/schemas/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.models.event_dispatcher
+     📄 Referenced in: systems/rumor/services/rumor_service.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.base
+     📄 Referenced in: systems/shared/database/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.loot_utils
+     📄 Referenced in: systems/loot/loot_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.base
+     📄 Referenced in: systems/loot/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.item
+     📄 Referenced in: systems/loot/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.location
+     📄 Referenced in: systems/loot/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.shop
+     📄 Referenced in: systems/loot/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.history
+     📄 Referenced in: systems/loot/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.base
+     📄 Referenced in: systems/loot/models/location.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.base
+     📄 Referenced in: systems/loot/models/shop.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.base
+     📄 Referenced in: systems/loot/models/item.py
+     🎯 Context: systems
+  🔍 backend.systems.loot.base
+     📄 Referenced in: systems/loot/models/history.py
+     🎯 Context: systems
+  🔍 backend.systems.analytics.analytics_manager
+     📄 Referenced in: systems/dialogue/analytics_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.analytics.event_logger
+     📄 Referenced in: systems/dialogue/analytics_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.quests.quest_manager
+     📄 Referenced in: systems/dialogue/quest_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.arcs.arc_manager
+     📄 Referenced in: systems/dialogue/quest_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.language.language_generator
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.memory.memory_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.rumors.rumor_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.motifs.motif_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.factions.faction_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.population.population_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.world_state_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.time.time_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.locations.poi_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.quests.quest_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.regions.region_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.factions.war_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.characters.relationship_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.analytics.analytics_manager
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.language.language_generator
+     📄 Referenced in: systems/dialogue/dialogue_system_new.py
+     🎯 Context: systems
+  🔍 backend.systems.population.population_manager
+     📄 Referenced in: systems/dialogue/population_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.calendar.calendar_manager
+     📄 Referenced in: systems/dialogue/time_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.calendar.time_manager
+     📄 Referenced in: systems/dialogue/time_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.factions.war_manager
+     📄 Referenced in: systems/dialogue/war_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.factions.tension_manager
+     📄 Referenced in: systems/dialogue/war_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.events.event
+     📄 Referenced in: systems/dialogue/events.py
+     🎯 Context: systems
+  🔍 backend.systems.regions.region_manager
+     📄 Referenced in: systems/dialogue/region_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.regions.biome_manager
+     📄 Referenced in: systems/dialogue/region_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.poi.poi_manager
+     📄 Referenced in: systems/dialogue/region_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.poi.poi_manager
+     📄 Referenced in: systems/dialogue/poi_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.poi.settlement_manager
+     📄 Referenced in: systems/dialogue/poi_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.factions.faction_manager
+     📄 Referenced in: systems/dialogue/faction_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.factions.tension_manager
+     📄 Referenced in: systems/dialogue/faction_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.factions.war_manager
+     📄 Referenced in: systems/dialogue/faction_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.characters.character_manager
+     📄 Referenced in: systems/dialogue/faction_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.memory.memory_manager
+     📄 Referenced in: systems/dialogue/memory_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.world.world_state_manager
+     📄 Referenced in: systems/dialogue/world_state_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.rumors.rumor_manager
+     📄 Referenced in: systems/dialogue/rumor_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.characters.relationship_manager
+     📄 Referenced in: systems/dialogue/relationship_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.characters.character_manager
+     📄 Referenced in: systems/dialogue/relationship_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.motifs.motif_manager
+     📄 Referenced in: systems/dialogue/motif_integration.py
+     🎯 Context: systems
+  🔍 backend.systems.data.loaders.game_data_registry
+     📄 Referenced in: systems/region/worldgen.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.utils.events
+     📄 Referenced in: systems/region/router.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.utils.rumor
+     📄 Referenced in: systems/region/router.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.utils.events
+     📄 Referenced in: systems/region/tension.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/quest/integration.py
+     🎯 Context: systems
+  🔍 backend.systems.player
+     📄 Referenced in: systems/quest/integration.py
+     🎯 Context: systems
+  🔍 backend.systems.item
+     📄 Referenced in: systems/quest/integration.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/quest/generator.py
+     🎯 Context: systems
+  🔍 backend.systems.item
+     📄 Referenced in: systems/quest/generator.py
+     🎯 Context: systems
+  🔍 backend.systems.quest.player_arc_utils
+     📄 Referenced in: systems/quest/quest_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.quest.quests_class
+     📄 Referenced in: systems/quest/quest_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.region.region_generation_utils
+     📄 Referenced in: systems/world_state/world_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.data.loaders.game_data_registry
+     📄 Referenced in: systems/world_state/world_models.py
+     🎯 Context: systems
+  🔍 backend.systems.data.loaders.game_data_registry
+     📄 Referenced in: systems/world_state/world_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.events.models.event_dispatcher
+     📄 Referenced in: systems/world_state/core/events.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.manager
+     📄 Referenced in: systems/world_state/core/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.loader
+     📄 Referenced in: systems/world_state/core/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.types
+     📄 Referenced in: systems/world_state/core/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.logging.logger
+     📄 Referenced in: systems/world_state/core/manager.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_rumor_utils
+     📄 Referenced in: systems/world_state/utils/world_event_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.tick_utils
+     📄 Referenced in: systems/world_state/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.world_event_utils
+     📄 Referenced in: systems/world_state/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/world_state/utils/tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.world_event
+     📄 Referenced in: systems/world_state/utils/tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.logging
+     📄 Referenced in: systems/world_state/utils/tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.error_utils
+     📄 Referenced in: systems/world_state/utils/tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.mod_synchronizer
+     📄 Referenced in: systems/world_state/mods/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.router
+     📄 Referenced in: systems/world_state/api/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.auth_user.utils.auth
+     📄 Referenced in: systems/world_state/api/router.py
+     🎯 Context: systems
+  🔍 backend.systems.events.models.event_dispatcher
+     📄 Referenced in: systems/world_state/events/handlers.py
+     🎯 Context: systems
+  🔍 backend.systems.world_state.handlers
+     📄 Referenced in: systems/world_state/events/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.crafting.recipe
+     📄 Referenced in: systems/crafting/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.crafting.ingredient
+     📄 Referenced in: systems/crafting/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.crafting.station
+     📄 Referenced in: systems/crafting/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.crafting.result
+     📄 Referenced in: systems/crafting/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.crafting.crafting_service
+     📄 Referenced in: systems/crafting/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/events/middleware/logging.py
+     🎯 Context: systems
+  🔍 backend.systems.events.logging
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_handler
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.analytics
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.debugging
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.logging_middleware
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_middleware
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.analytics_middleware
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.debugging_middleware
+     📄 Referenced in: systems/events/middleware/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/events/middleware/debugging.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/events/middleware/error_handler.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/events/middleware/analytics.py
+     🎯 Context: systems
+  🔍 backend.systems.events.event_base
+     📄 Referenced in: systems/events/core/event_dispatcher.py
+     🎯 Context: systems
+  🔍 backend.systems.events.event_base
+     📄 Referenced in: systems/events/core/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.event_base
+     📄 Referenced in: systems/events/core/canonical_events.py
+     🎯 Context: systems
+  🔍 backend.systems.events.coordinates
+     📄 Referenced in: systems/events/utils/floating_origin.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/events/utils/plugins.py
+     🎯 Context: systems
+  🔍 backend.systems.dispatcher
+     📄 Referenced in: systems/events/utils/plugins.py
+     🎯 Context: systems
+  🔍 backend.systems.event_types
+     📄 Referenced in: systems/events/utils/plugins.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.base_manager
+     📄 Referenced in: systems/events/utils/item_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/events/utils/batching.py
+     🎯 Context: systems
+  🔍 backend.systems.dispatcher
+     📄 Referenced in: systems/events/utils/batching.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_utils
+     📄 Referenced in: systems/events/utils/screen_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/events/utils/world_tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.event_utils
+     📄 Referenced in: systems/events/utils/world_tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.base_manager
+     📄 Referenced in: systems/events/utils/world_tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/events/utils/world_tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/events/utils/world_tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.world
+     📄 Referenced in: systems/events/utils/world_tick_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_handler
+     📄 Referenced in: systems/events/utils/layout.py
+     🎯 Context: systems
+  🔍 backend.systems.events.coordinates
+     📄 Referenced in: systems/events/utils/coordinate_validation.py
+     🎯 Context: systems
+  🔍 backend.systems.events.floating_origin
+     📄 Referenced in: systems/events/utils/coordinate_validation.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.config_utils
+     📄 Referenced in: systems/events/utils/game_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.constants
+     📄 Referenced in: systems/events/utils/game_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.events.terrain_manager
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.tile_loader
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.rules_loader
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_utils
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.screen_utils
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.input_utils
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.render_utils
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.asset_utils
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.coordinates
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.floating_origin
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.manager
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.batching
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.plugins
+     📄 Referenced in: systems/events/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.cache
+     📄 Referenced in: systems/events/utils/database_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.monitoring
+     📄 Referenced in: systems/events/utils/database_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.db_pool
+     📄 Referenced in: systems/events/utils/database_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.user
+     📄 Referenced in: systems/events/utils/seed.py
+     🎯 Context: systems
+  🔍 backend.systems.role
+     📄 Referenced in: systems/events/utils/seed.py
+     🎯 Context: systems
+  🔍 backend.systems.permission
+     📄 Referenced in: systems/events/utils/seed.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_utils
+     📄 Referenced in: systems/events/utils/input_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.time_utils
+     📄 Referenced in: systems/events/utils/npc_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.location_utils
+     📄 Referenced in: systems/events/utils/npc_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.events.base_manager
+     📄 Referenced in: systems/events/utils/file_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.config
+     📄 Referenced in: systems/events/utils/file_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.data.loaders.game_data_registry
+     📄 Referenced in: systems/events/utils/world_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_handler
+     📄 Referenced in: systems/events/utils/accessibility.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.error_utils
+     📄 Referenced in: systems/events/utils/quest_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.base
+     📄 Referenced in: systems/events/utils/manager.py
+     🎯 Context: systems
+  🔍 backend.systems.dispatcher
+     📄 Referenced in: systems/events/utils/manager.py
+     🎯 Context: systems
+  🔍 backend.systems.events.error_utils
+     📄 Referenced in: systems/events/utils/asset_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.events.client
+     📄 Referenced in: systems/events/utils/gpt/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.flavor
+     📄 Referenced in: systems/events/utils/gpt/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.dialogue
+     📄 Referenced in: systems/events/utils/gpt/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.events.intents
+     📄 Referenced in: systems/events/utils/gpt/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.utils.gpt.client
+     📄 Referenced in: systems/events/utils/gpt/flavor.py
+     🎯 Context: systems
+  🔍 backend.systems.events.plugin_api
+     📄 Referenced in: systems/events/api/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.systems.arc_validators
+     📄 Referenced in: systems/arc/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.systems.arc_formatters
+     📄 Referenced in: systems/arc/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.systems.arc_helpers
+     📄 Referenced in: systems/arc/utils/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_repository
+     📄 Referenced in: systems/arc/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_step_repository
+     📄 Referenced in: systems/arc/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_progression_repository
+     📄 Referenced in: systems/arc/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_completion_record_repository
+     📄 Referenced in: systems/arc/repositories/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc
+     📄 Referenced in: systems/arc/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_step
+     📄 Referenced in: systems/arc/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_progression
+     📄 Referenced in: systems/arc/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_completion_record
+     📄 Referenced in: systems/arc/models/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_manager
+     📄 Referenced in: systems/arc/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.arc_generator
+     📄 Referenced in: systems/arc/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.progression_tracker
+     📄 Referenced in: systems/arc/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.arc.quest_integration_service
+     📄 Referenced in: systems/arc/services/__init__.py
+     🎯 Context: systems
+  🔍 backend.systems.narrative.utils
+     📄 Referenced in: systems/equipment/service.py
+     🎯 Context: systems
+  🔍 backend.systems.narrative.utils
+     📄 Referenced in: systems/equipment/router.py
+     🎯 Context: systems
+  🔍 backend.systems.inventory.models.inventory_utils
+     📄 Referenced in: systems/equipment/inventory_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.inventory.models.inventory_validator
+     📄 Referenced in: systems/equipment/inventory_utils.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.rules.rules_utils
+     📄 Referenced in: systems/npc/npc_builder_class.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_rumor_routes
+     📄 Referenced in: systems/npc/npc_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.npc.npc_relationships_routes
+     📄 Referenced in: systems/npc/npc_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.shared.rules.character_gen_rules_utils
+     📄 Referenced in: systems/npc/npc_character_routes.py
+     🎯 Context: systems
+  🔍 backend.systems.storage.storage_service
+     📄 Referenced in: tests/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.storage.storage_service
+     📄 Referenced in: tests/systems/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.economy.utils.shop_utils
+     📄 Referenced in: tests/systems/economy/test_shop_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.economy.routers.shop_router
+     📄 Referenced in: tests/systems/economy/test_shop_router.py
+     🎯 Context: tests
+  🔍 backend.systems.economy.services.economy_service
+     📄 Referenced in: tests/systems/economy/test_economy_service.py
+     🎯 Context: tests
+  🔍 backend.systems.economy.models.economic_metric
+     📄 Referenced in: tests/systems/economy/test_economy_service.py
+     🎯 Context: tests
+  🔍 backend.systems.economy.repositories.economy_repository
+     📄 Referenced in: tests/systems/economy/test_economy_service.py
+     🎯 Context: tests
+  🔍 backend.systems.economy.repositories.economy_repository
+     📄 Referenced in: tests/systems/economy/repositories/test_economy_repository.py
+     🎯 Context: tests
+  🔍 backend.systems.tension_war.utils.proxy_war_utils
+     📄 Referenced in: tests/systems/tension_war/utils/test_proxy_war_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.world_manager
+     📄 Referenced in: tests/systems/world_generation/test_world_manager.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.regional_features
+     📄 Referenced in: tests/systems/world_generation/test_regional_features.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.enums
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.world_generation.elevation_utils
+     📄 Referenced in: tests/systems/world_generation/test_elevation_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.memory.utils.memory_utils
+     📄 Referenced in: tests/systems/memory/test_memory_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.memory.models.memory
+     📄 Referenced in: tests/systems/memory/test_memory_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.combat.combat_types_stub
+     📄 Referenced in: tests/systems/combat/test_combat_types_stub.py
+     🎯 Context: tests
+  🔍 backend.systems.combat.combat_types_stub
+     📄 Referenced in: tests/systems/combat/test_combat_types_stub.py
+     🎯 Context: tests
+  🔍 backend.systems.combat.combat_types_stub
+     📄 Referenced in: tests/systems/combat/test_combat_types_stub.py
+     🎯 Context: tests
+  🔍 backend.systems.combat.clean_events
+     📄 Referenced in: tests/systems/combat/test_clean_events.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.database_objects
+     📄 Referenced in: tests/systems/magic/tests.py
+     🎯 Context: tests
+  🔍 backend.systems.router
+     📄 Referenced in: tests/systems/magic/tests.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/relationship/test_relationship_api.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/relationship/test_relationship_api.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/relationship/test_relationship_api.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/relationship/test_relationship_api.py
+     🎯 Context: tests
+  🔍 backend.systems.character.schemas.relationship
+     📄 Referenced in: tests/systems/character/relationship/test_relationship.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.utils.common.error
+     📄 Referenced in: tests/systems/character/relationship/test_relationship.py
+     🎯 Context: tests
+  🔍 backend.systems.character.core.character_builder
+     📄 Referenced in: tests/systems/character/services/test_character_service.py
+     🎯 Context: tests
+  🔍 backend.systems.character.core.events.event_dispatcher
+     📄 Referenced in: tests/systems/character/services/test_character_service.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.utils.common.error
+     📄 Referenced in: tests/systems/character/services/test_character_service.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/services/test_character_service_db_init.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/services/test_character_service_db_init.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/services/test_character_service_db_init.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/services/test_character_service_db_init.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/services/test_character_service_db_init.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.database.session
+     📄 Referenced in: tests/systems/character/services/test_character_service_db_init.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/auth_user/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.character.core.events.event_bus
+     📄 Referenced in: tests/systems/integration/test_integration_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.schemas.faction_types
+     📄 Referenced in: tests/systems/faction/test_consolidated_faction_service.py
+     🎯 Context: tests
+  🔍 backend.systems.schemas.faction_types
+     📄 Referenced in: tests/systems/faction/test_consolidated_faction_service.py
+     🎯 Context: tests
+  🔍 backend.systems.schemas.faction_types
+     📄 Referenced in: tests/systems/faction/test_consolidated_faction_service.py
+     🎯 Context: tests
+  🔍 backend.systems.schemas.faction_types
+     📄 Referenced in: tests/systems/faction/test_consolidated_faction_service.py
+     🎯 Context: tests
+  🔍 backend.systems.schemas.faction_types
+     📄 Referenced in: tests/systems/faction/test_consolidated_faction_service.py
+     🎯 Context: tests
+  🔍 backend.systems.schemas.faction_types
+     📄 Referenced in: tests/systems/faction/test_consolidated_faction_service.py
+     🎯 Context: tests
+  🔍 backend.systems.faction.services.consolidated_faction_service
+     📄 Referenced in: tests/systems/faction/test_consolidated_faction_service.py
+     🎯 Context: tests
+  🔍 backend.systems.shared.utils.json_storage_utils
+     📄 Referenced in: tests/systems/shared/test_json_storage_utils_legacy.py
+     🎯 Context: tests
+  🔍 backend.systems.remove_deprecated_utils
+     📄 Referenced in: tests/systems/shared/utils/test_remove_deprecated_utils.py
+     🎯 Context: tests
+  🔍 backend.systems.fix_poi_imports
+     📄 Referenced in: tests/systems/shared/utils/test_fix_poi_imports.py
+     🎯 Context: tests
+  🔍 backend.systems.storage.ui_controller
+     📄 Referenced in: tests/systems/storage/test_ui_controller.py
+     🎯 Context: tests
+  🔍 backend.systems.storage.storage_service
+     📄 Referenced in: tests/systems/storage/test_json_storage.py
+     🎯 Context: tests
+  🔍 backend.systems.time.models.calendar_model
+     📄 Referenced in: tests/systems/time/test_time_model.py
+     🎯 Context: tests
+  🔍 backend.systems.time.models.event_model
+     📄 Referenced in: tests/systems/time/test_time_model.py
+     🎯 Context: tests
+  🔍 backend.systems.poi.services.poi_state_service
+     📄 Referenced in: tests/systems/poi/test_poi_state_service_comprehensive.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.region.world_generator
+     📄 Referenced in: tests/systems/region/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.region.generators
+     📄 Referenced in: tests/systems/region/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.region.generators
+     📄 Referenced in: tests/systems/region/test_continent.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/test_worldgen.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/test_worldgen.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/test_worldgen.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/test_worldgen.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/test_worldgen.py
+     🎯 Context: tests
+  🔍 backend.systems.data.registry
+     📄 Referenced in: tests/systems/region/test_worldgen.py
+     🎯 Context: tests
+  🔍 backend.systems.region.world_generator
+     📄 Referenced in: tests/systems/region/test_worldgen.py
+     🎯 Context: tests
+  🔍 backend.systems.quest.faction_integration
+     📄 Referenced in: tests/systems/quest/test_quest_faction_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.quest.faction_integration
+     📄 Referenced in: tests/systems/quest/test_quest_faction_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.quest.faction_integration
+     📄 Referenced in: tests/systems/quest/test_quest_faction_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.quest.faction_integration
+     📄 Referenced in: tests/systems/quest/test_quest_faction_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.quest.faction_integration
+     📄 Referenced in: tests/systems/quest/test_quest_faction_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.quest.faction_integration
+     📄 Referenced in: tests/systems/quest/test_quest_faction_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.quest.faction_integration
+     📄 Referenced in: tests/systems/quest/test_quest_faction_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.inventory
+     📄 Referenced in: tests/systems/inventory/test_factory.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.item
+     📄 Referenced in: tests/systems/inventory/test_models_comprehensive.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.inventory
+     📄 Referenced in: tests/systems/inventory/test_models_comprehensive.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.inventory_item
+     📄 Referenced in: tests/systems/inventory/test_models_comprehensive.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.item_category
+     📄 Referenced in: tests/systems/inventory/test_models_comprehensive.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.item
+     📄 Referenced in: tests/systems/inventory/test_inventory_service.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.inventory
+     📄 Referenced in: tests/systems/inventory/test_inventory_service.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.inventory_item
+     📄 Referenced in: tests/systems/inventory/test_inventory_service.py
+     🎯 Context: tests
+  🔍 backend.systems.world_state.consolidated_world_models
+     📄 Referenced in: tests/systems/world_state/test_optimized_worldgen_targeted.py
+     🎯 Context: tests
+  🔍 backend.systems.world_state.main
+     📄 Referenced in: tests/systems/world_state/test_main.py
+     🎯 Context: tests
+  🔍 backend.systems.world_state.consolidated_manager
+     📄 Referenced in: tests/systems/world_state/test_main.py
+     🎯 Context: tests
+  🔍 backend.systems.world_state.consolidated_state_models
+     📄 Referenced in: tests/systems/world_state/test_main.py
+     🎯 Context: tests
+  🔍 backend.systems.world_state.api.endpoints
+     📄 Referenced in: tests/systems/world_state/test_api_endpoints.py
+     🎯 Context: tests
+  🔍 backend.systems.world_state.api.endpoints
+     📄 Referenced in: tests/systems/world_state/test_api_endpoints.py
+     🎯 Context: tests
+  🔍 backend.systems.world_state.consolidated_state_models
+     📄 Referenced in: tests/systems/world_state/test_api_endpoints.py
+     🎯 Context: tests
+  🔍 backend.systems.arc.repositories.progression_repository
+     📄 Referenced in: tests/systems/arc/test_arc_engine_functions.py
+     🎯 Context: tests
+  🔍 backend.systems.arc.repositories.progression_repository
+     📄 Referenced in: tests/systems/arc/test_arc_integration.py
+     🎯 Context: tests
+  🔍 backend.systems.data.schema_validator
+     📄 Referenced in: tests/systems/data/test_schema_validator.py
+     🎯 Context: tests
+  🔍 backend.systems.data.events.data_events
+     📄 Referenced in: tests/systems/data/test_data_events.py
+     🎯 Context: tests
+  🔍 backend.systems.inventory.models.item
+     📄 Referenced in: tests/systems/equipment/conftest.py
+     🎯 Context: tests
+  🔍 backend.systems.character.routers.mood_router
+     📄 Referenced in: CRITICAL
+     🎯 Context: required_infrastructure
+  🔍 backend.systems.character.routers.goal_router
+     📄 Referenced in: CRITICAL
+     🎯 Context: required_infrastructure
+
+🔗 IMPORT ISSUES (4)
+--------------------------------------------------
+  📄 tests/systems/character/test_world_state_manager.py
+     🔗 non_canonical: backend.app.core.world_state.world_state_manager
+     💡 Consider using backend.systems.* format
+  📄 tests/systems/character/relationship/test_relationship_api.py
+     🔗 non_canonical: backend.main
+     💡 Consider using backend.systems.* format
+  📄 tests/systems/world_state/stress_test_utils.py
+     🔗 non_canonical: backend.world.utils.world_event_utils
+     💡 Consider using backend.systems.* format
+  📄 tests/systems/world_state/utils/stress_test_utils.py
+     🔗 non_canonical: backend.world.utils.world_event_utils
+     💡 Consider using backend.systems.* format
+
+🏗️  STRUCTURE ISSUES (562)
+--------------------------------------------------
+  📁 tests/mocks
+     ❌ missing_init
+     📄 Needed for: tests/mocks/test_basic.py
+  📁 tests/mocks
+     ❌ missing_init
+     📄 Needed for: tests/mocks/test_advanced.py
+  📁 tests/mocks
+     ❌ missing_init
+     📄 Needed for: tests/mocks/test_integration.py
+  📁 tests/stubs
+     ❌ missing_init
+     📄 Needed for: tests/stubs/test_basic.py
+  📁 tests/stubs
+     ❌ missing_init
+     📄 Needed for: tests/stubs/test_advanced.py
+  📁 tests/stubs
+     ❌ missing_init
+     📄 Needed for: tests/stubs/test_integration.py
+  📁 tests/metrics
+     ❌ missing_init
+     📄 Needed for: tests/metrics/test_basic.py
+  📁 tests/metrics
+     ❌ missing_init
+     📄 Needed for: tests/metrics/test_advanced.py
+  📁 tests/metrics
+     ❌ missing_init
+     📄 Needed for: tests/metrics/test_integration.py
+  📁 tests/middleware
+     ❌ missing_init
+     📄 Needed for: tests/middleware/test_basic.py
+  📁 tests/middleware
+     ❌ missing_init
+     📄 Needed for: tests/middleware/test_advanced.py
+  📁 tests/middleware
+     ❌ missing_init
+     📄 Needed for: tests/middleware/test_integration.py
+  📁 tests/settings
+     ❌ missing_init
+     📄 Needed for: tests/settings/test_basic.py
+  📁 tests/settings
+     ❌ missing_init
+     📄 Needed for: tests/settings/test_advanced.py
+  📁 tests/settings
+     ❌ missing_init
+     📄 Needed for: tests/settings/test_integration.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_security.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_recovery.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_migrations.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_indexing.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_transactions.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_performance.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_backup.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_queries.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_models.py
+  📁 tests/database
+     ❌ missing_init
+     📄 Needed for: tests/database/test_optimization.py
+  📁 tests/config
+     ❌ missing_init
+     📄 Needed for: tests/config/test_basic.py
+  📁 tests/config
+     ❌ missing_init
+     📄 Needed for: tests/config/test_advanced.py
+  📁 tests/config
+     ❌ missing_init
+     📄 Needed for: tests/config/test_integration.py
+  📁 tests/decorators
+     ❌ missing_init
+     📄 Needed for: tests/decorators/test_basic.py
+  📁 tests/decorators
+     ❌ missing_init
+     📄 Needed for: tests/decorators/test_advanced.py
+  📁 tests/decorators
+     ❌ missing_init
+     📄 Needed for: tests/decorators/test_integration.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_integration_08.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_04.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_10.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_01.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_data_flow_validation.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_integration_09.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_05.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_integration_12.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_external_service_integration.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_multi_user_scenarios.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_integration_16.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_load_balancing.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_backup_restore.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_cross_system_integration.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_batch_processing.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_failover_scenarios.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_real_time_processing.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_08.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_integration_14.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_09.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_02.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_06.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_end_to_end_workflows.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_07.py
+  📁 tests/integration
+     ❌ missing_init
+     📄 Needed for: tests/integration/test_comprehensive_03.py
+  📁 tests/constants
+     ❌ missing_init
+     📄 Needed for: tests/constants/test_basic.py
+  📁 tests/constants
+     ❌ missing_init
+     📄 Needed for: tests/constants/test_advanced.py
+  📁 tests/constants
+     ❌ missing_init
+     📄 Needed for: tests/constants/test_integration.py
+  📁 tests/health
+     ❌ missing_init
+     📄 Needed for: tests/health/test_basic.py
+  📁 tests/health
+     ❌ missing_init
+     📄 Needed for: tests/health/test_advanced.py
+  📁 tests/health
+     ❌ missing_init
+     📄 Needed for: tests/health/test_integration.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_empty_data.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_permission_errors.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_concurrent_access.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_memory_limits.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_disk_space.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_large_datasets.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_null_handling.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_boundary_conditions.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_encoding_issues.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_timeout_scenarios.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_timezone_handling.py
+  📁 tests/edge_cases
+     ❌ missing_init
+     📄 Needed for: tests/edge_cases/test_network_failures.py
+  📁 tests/enums
+     ❌ missing_init
+     📄 Needed for: tests/enums/test_basic.py
+  📁 tests/enums
+     ❌ missing_init
+     📄 Needed for: tests/enums/test_advanced.py
+  📁 tests/enums
+     ❌ missing_init
+     📄 Needed for: tests/enums/test_integration.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_quest_completion.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_combat_resolution.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_crafting_process.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_character_creation.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_faction_management.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_world_exploration.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_trading_workflow.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_dialogue_interaction.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_user_registration.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_magic_casting.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_inventory_organization.py
+  📁 tests/workflows
+     ❌ missing_init
+     📄 Needed for: tests/workflows/test_equipment_management.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_deserializers.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_sanitizers.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_serializers.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_converters.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_encoders.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_parsers.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_encryptors.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_generators.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_decoders.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_hashers.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_validators.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_calculators.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_compressors.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_transformers.py
+  📁 tests/utils
+     ❌ missing_init
+     📄 Needed for: tests/utils/test_formatters.py
+  📁 tests/status
+     ❌ missing_init
+     📄 Needed for: tests/status/test_basic.py
+  📁 tests/status
+     ❌ missing_init
+     📄 Needed for: tests/status/test_advanced.py
+  📁 tests/status
+     ❌ missing_init
+     📄 Needed for: tests/status/test_integration.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_database_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_websocket_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_authorization_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_authentication_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_performance_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_caching_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_security_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_monitoring_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_api_suite.py
+  📁 tests/specialized
+     ❌ missing_init
+     📄 Needed for: tests/specialized/test_validation_suite.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_gdpr_compliance.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_security_standards.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_api_standards.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_documentation_standards.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_testing_standards.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_accessibility_standards.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_code_quality_standards.py
+  📁 tests/compliance
+     ❌ missing_init
+     📄 Needed for: tests/compliance/test_performance_standards.py
+  📁 tests/exceptions
+     ❌ missing_init
+     📄 Needed for: tests/exceptions/test_basic.py
+  📁 tests/exceptions
+     ❌ missing_init
+     📄 Needed for: tests/exceptions/test_advanced.py
+  📁 tests/exceptions
+     ❌ missing_init
+     📄 Needed for: tests/exceptions/test_integration.py
+  📁 tests/scenarios/data_migration
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/data_migration/test_data_migration_basic_flow.py
+  📁 tests/scenarios/data_migration
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/data_migration/test_data_migration_error_scenarios.py
+  📁 tests/scenarios/data_migration
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/data_migration/test_data_migration_complex_flow.py
+  📁 tests/scenarios/data_migration
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/data_migration/test_data_migration_edge_cases.py
+  📁 tests/scenarios/new_player_onboarding
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/new_player_onboarding/test_new_player_onboarding_edge_cases.py
+  📁 tests/scenarios/new_player_onboarding
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/new_player_onboarding/test_new_player_onboarding_complex_flow.py
+  📁 tests/scenarios/new_player_onboarding
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/new_player_onboarding/test_new_player_onboarding_basic_flow.py
+  📁 tests/scenarios/new_player_onboarding
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/new_player_onboarding/test_new_player_onboarding_error_scenarios.py
+  📁 tests/scenarios/competitive_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/competitive_scenarios/test_competitive_scenarios_error_scenarios.py
+  📁 tests/scenarios/competitive_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/competitive_scenarios/test_competitive_scenarios_complex_flow.py
+  📁 tests/scenarios/competitive_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/competitive_scenarios/test_competitive_scenarios_basic_flow.py
+  📁 tests/scenarios/competitive_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/competitive_scenarios/test_competitive_scenarios_edge_cases.py
+  📁 tests/scenarios/combat_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/combat_scenarios/test_combat_scenarios_basic_flow.py
+  📁 tests/scenarios/combat_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/combat_scenarios/test_combat_scenarios_complex_flow.py
+  📁 tests/scenarios/combat_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/combat_scenarios/test_combat_scenarios_error_scenarios.py
+  📁 tests/scenarios/combat_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/combat_scenarios/test_combat_scenarios_edge_cases.py
+  📁 tests/scenarios/magic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/magic_systems/test_magic_systems_basic_flow.py
+  📁 tests/scenarios/magic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/magic_systems/test_magic_systems_complex_flow.py
+  📁 tests/scenarios/magic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/magic_systems/test_magic_systems_edge_cases.py
+  📁 tests/scenarios/magic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/magic_systems/test_magic_systems_error_scenarios.py
+  📁 tests/scenarios/quest_chains
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/quest_chains/test_quest_chains_complex_flow.py
+  📁 tests/scenarios/quest_chains
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/quest_chains/test_quest_chains_basic_flow.py
+  📁 tests/scenarios/quest_chains
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/quest_chains/test_quest_chains_error_scenarios.py
+  📁 tests/scenarios/quest_chains
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/quest_chains/test_quest_chains_edge_cases.py
+  📁 tests/scenarios/economic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/economic_systems/test_economic_systems_edge_cases.py
+  📁 tests/scenarios/economic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/economic_systems/test_economic_systems_complex_flow.py
+  📁 tests/scenarios/economic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/economic_systems/test_economic_systems_basic_flow.py
+  📁 tests/scenarios/economic_systems
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/economic_systems/test_economic_systems_error_scenarios.py
+  📁 tests/scenarios/content_creation
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/content_creation/test_content_creation_complex_flow.py
+  📁 tests/scenarios/content_creation
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/content_creation/test_content_creation_edge_cases.py
+  📁 tests/scenarios/content_creation
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/content_creation/test_content_creation_basic_flow.py
+  📁 tests/scenarios/content_creation
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/content_creation/test_content_creation_error_scenarios.py
+  📁 tests/scenarios/system_upgrades
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/system_upgrades/test_system_upgrades_edge_cases.py
+  📁 tests/scenarios/system_upgrades
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/system_upgrades/test_system_upgrades_error_scenarios.py
+  📁 tests/scenarios/system_upgrades
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/system_upgrades/test_system_upgrades_complex_flow.py
+  📁 tests/scenarios/system_upgrades
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/system_upgrades/test_system_upgrades_basic_flow.py
+  📁 tests/scenarios/load_testing
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/load_testing/test_load_testing_edge_cases.py
+  📁 tests/scenarios/load_testing
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/load_testing/test_load_testing_error_scenarios.py
+  📁 tests/scenarios/load_testing
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/load_testing/test_load_testing_complex_flow.py
+  📁 tests/scenarios/load_testing
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/load_testing/test_load_testing_basic_flow.py
+  📁 tests/scenarios/admin_workflows
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/admin_workflows/test_admin_workflows_edge_cases.py
+  📁 tests/scenarios/admin_workflows
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/admin_workflows/test_admin_workflows_error_scenarios.py
+  📁 tests/scenarios/admin_workflows
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/admin_workflows/test_admin_workflows_complex_flow.py
+  📁 tests/scenarios/admin_workflows
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/admin_workflows/test_admin_workflows_basic_flow.py
+  📁 tests/scenarios/stress_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/stress_scenarios/test_stress_scenarios_basic_flow.py
+  📁 tests/scenarios/stress_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/stress_scenarios/test_stress_scenarios_complex_flow.py
+  📁 tests/scenarios/stress_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/stress_scenarios/test_stress_scenarios_error_scenarios.py
+  📁 tests/scenarios/stress_scenarios
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/stress_scenarios/test_stress_scenarios_edge_cases.py
+  📁 tests/scenarios/world_events
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/world_events/test_world_events_edge_cases.py
+  📁 tests/scenarios/world_events
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/world_events/test_world_events_complex_flow.py
+  📁 tests/scenarios/world_events
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/world_events/test_world_events_basic_flow.py
+  📁 tests/scenarios/world_events
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/world_events/test_world_events_error_scenarios.py
+  📁 tests/scenarios/social_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/social_interactions/test_social_interactions_edge_cases.py
+  📁 tests/scenarios/social_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/social_interactions/test_social_interactions_error_scenarios.py
+  📁 tests/scenarios/social_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/social_interactions/test_social_interactions_basic_flow.py
+  📁 tests/scenarios/social_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/social_interactions/test_social_interactions_complex_flow.py
+  📁 tests/scenarios/exploration_journeys
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/exploration_journeys/test_exploration_journeys_basic_flow.py
+  📁 tests/scenarios/exploration_journeys
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/exploration_journeys/test_exploration_journeys_error_scenarios.py
+  📁 tests/scenarios/exploration_journeys
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/exploration_journeys/test_exploration_journeys_complex_flow.py
+  📁 tests/scenarios/exploration_journeys
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/exploration_journeys/test_exploration_journeys_edge_cases.py
+  📁 tests/scenarios/collaborative_gameplay
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/collaborative_gameplay/test_collaborative_gameplay_error_scenarios.py
+  📁 tests/scenarios/collaborative_gameplay
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/collaborative_gameplay/test_collaborative_gameplay_basic_flow.py
+  📁 tests/scenarios/collaborative_gameplay
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/collaborative_gameplay/test_collaborative_gameplay_edge_cases.py
+  📁 tests/scenarios/collaborative_gameplay
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/collaborative_gameplay/test_collaborative_gameplay_complex_flow.py
+  📁 tests/scenarios/multiplayer_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/multiplayer_interactions/test_multiplayer_interactions_edge_cases.py
+  📁 tests/scenarios/multiplayer_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/multiplayer_interactions/test_multiplayer_interactions_error_scenarios.py
+  📁 tests/scenarios/multiplayer_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/multiplayer_interactions/test_multiplayer_interactions_basic_flow.py
+  📁 tests/scenarios/multiplayer_interactions
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/multiplayer_interactions/test_multiplayer_interactions_complex_flow.py
+  📁 tests/scenarios/security_audits
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/security_audits/test_security_audits_basic_flow.py
+  📁 tests/scenarios/security_audits
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/security_audits/test_security_audits_complex_flow.py
+  📁 tests/scenarios/security_audits
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/security_audits/test_security_audits_error_scenarios.py
+  📁 tests/scenarios/security_audits
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/security_audits/test_security_audits_edge_cases.py
+  📁 tests/scenarios/modding_support
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/modding_support/test_modding_support_edge_cases.py
+  📁 tests/scenarios/modding_support
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/modding_support/test_modding_support_error_scenarios.py
+  📁 tests/scenarios/modding_support
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/modding_support/test_modding_support_complex_flow.py
+  📁 tests/scenarios/modding_support
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/modding_support/test_modding_support_basic_flow.py
+  📁 tests/scenarios/faction_politics
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/faction_politics/test_faction_politics_complex_flow.py
+  📁 tests/scenarios/faction_politics
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/faction_politics/test_faction_politics_error_scenarios.py
+  📁 tests/scenarios/faction_politics
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/faction_politics/test_faction_politics_edge_cases.py
+  📁 tests/scenarios/faction_politics
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/faction_politics/test_faction_politics_basic_flow.py
+  📁 tests/scenarios/character_lifecycle
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/character_lifecycle/test_character_lifecycle_edge_cases.py
+  📁 tests/scenarios/character_lifecycle
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/character_lifecycle/test_character_lifecycle_complex_flow.py
+  📁 tests/scenarios/character_lifecycle
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/character_lifecycle/test_character_lifecycle_error_scenarios.py
+  📁 tests/scenarios/character_lifecycle
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/character_lifecycle/test_character_lifecycle_basic_flow.py
+  📁 tests/scenarios/disaster_recovery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/disaster_recovery/test_disaster_recovery_error_scenarios.py
+  📁 tests/scenarios/disaster_recovery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/disaster_recovery/test_disaster_recovery_basic_flow.py
+  📁 tests/scenarios/disaster_recovery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/disaster_recovery/test_disaster_recovery_complex_flow.py
+  📁 tests/scenarios/disaster_recovery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/disaster_recovery/test_disaster_recovery_edge_cases.py
+  📁 tests/scenarios/seasonal_cycles
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/seasonal_cycles/test_seasonal_cycles_error_scenarios.py
+  📁 tests/scenarios/seasonal_cycles
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/seasonal_cycles/test_seasonal_cycles_basic_flow.py
+  📁 tests/scenarios/seasonal_cycles
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/seasonal_cycles/test_seasonal_cycles_edge_cases.py
+  📁 tests/scenarios/seasonal_cycles
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/seasonal_cycles/test_seasonal_cycles_complex_flow.py
+  📁 tests/scenarios/crafting_mastery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/crafting_mastery/test_crafting_mastery_basic_flow.py
+  📁 tests/scenarios/crafting_mastery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/crafting_mastery/test_crafting_mastery_error_scenarios.py
+  📁 tests/scenarios/crafting_mastery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/crafting_mastery/test_crafting_mastery_complex_flow.py
+  📁 tests/scenarios/crafting_mastery
+     ❌ missing_init
+     📄 Needed for: tests/scenarios/crafting_mastery/test_crafting_mastery_edge_cases.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_auth_user_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_equipment_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_character_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_faction_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_inventory_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_arc_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_combat_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_quest_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_data_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_analytics_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_diplomacy_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_economy_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_crafting_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_events_api.py
+  📁 tests/api
+     ❌ missing_init
+     📄 Needed for: tests/api/test_dialogue_api.py
+  📁 tests/fixtures
+     ❌ missing_init
+     📄 Needed for: tests/fixtures/test_basic.py
+  📁 tests/fixtures
+     ❌ missing_init
+     📄 Needed for: tests/fixtures/test_advanced.py
+  📁 tests/fixtures
+     ❌ missing_init
+     📄 Needed for: tests/fixtures/test_integration.py
+  📁 tests/precision/performance_optimization
+     ❌ missing_init
+     📄 Needed for: tests/precision/performance_optimization/test_performance_optimization_advanced.py
+  📁 tests/precision/performance_optimization
+     ❌ missing_init
+     📄 Needed for: tests/precision/performance_optimization/test_performance_optimization_intermediate.py
+  📁 tests/precision/performance_optimization
+     ❌ missing_init
+     📄 Needed for: tests/precision/performance_optimization/test_performance_optimization_basic.py
+  📁 tests/precision/configuration_management
+     ❌ missing_init
+     📄 Needed for: tests/precision/configuration_management/test_configuration_management_advanced.py
+  📁 tests/precision/configuration_management
+     ❌ missing_init
+     📄 Needed for: tests/precision/configuration_management/test_configuration_management_intermediate.py
+  📁 tests/precision/configuration_management
+     ❌ missing_init
+     📄 Needed for: tests/precision/configuration_management/test_configuration_management_basic.py
+  📁 tests/precision/validation_rules
+     ❌ missing_init
+     📄 Needed for: tests/precision/validation_rules/test_validation_rules_advanced.py
+  📁 tests/precision/validation_rules
+     ❌ missing_init
+     📄 Needed for: tests/precision/validation_rules/test_validation_rules_intermediate.py
+  📁 tests/precision/validation_rules
+     ❌ missing_init
+     📄 Needed for: tests/precision/validation_rules/test_validation_rules_basic.py
+  📁 tests/precision/system_integration
+     ❌ missing_init
+     📄 Needed for: tests/precision/system_integration/test_system_integration_basic.py
+  📁 tests/precision/system_integration
+     ❌ missing_init
+     📄 Needed for: tests/precision/system_integration/test_system_integration_intermediate.py
+  📁 tests/precision/system_integration
+     ❌ missing_init
+     📄 Needed for: tests/precision/system_integration/test_system_integration_advanced.py
+  📁 tests/precision/event_processing
+     ❌ missing_init
+     📄 Needed for: tests/precision/event_processing/test_event_processing_intermediate.py
+  📁 tests/precision/event_processing
+     ❌ missing_init
+     📄 Needed for: tests/precision/event_processing/test_event_processing_advanced.py
+  📁 tests/precision/event_processing
+     ❌ missing_init
+     📄 Needed for: tests/precision/event_processing/test_event_processing_basic.py
+  📁 tests/precision/transformation_logic
+     ❌ missing_init
+     📄 Needed for: tests/precision/transformation_logic/test_transformation_logic_advanced.py
+  📁 tests/precision/transformation_logic
+     ❌ missing_init
+     📄 Needed for: tests/precision/transformation_logic/test_transformation_logic_intermediate.py
+  📁 tests/precision/transformation_logic
+     ❌ missing_init
+     📄 Needed for: tests/precision/transformation_logic/test_transformation_logic_basic.py
+  📁 tests/precision/backup_systems
+     ❌ missing_init
+     📄 Needed for: tests/precision/backup_systems/test_backup_systems_advanced.py
+  📁 tests/precision/backup_systems
+     ❌ missing_init
+     📄 Needed for: tests/precision/backup_systems/test_backup_systems_basic.py
+  📁 tests/precision/backup_systems
+     ❌ missing_init
+     📄 Needed for: tests/precision/backup_systems/test_backup_systems_intermediate.py
+  📁 tests/precision/data_processing
+     ❌ missing_init
+     📄 Needed for: tests/precision/data_processing/test_data_processing_basic.py
+  📁 tests/precision/data_processing
+     ❌ missing_init
+     📄 Needed for: tests/precision/data_processing/test_data_processing_intermediate.py
+  📁 tests/precision/data_processing
+     ❌ missing_init
+     📄 Needed for: tests/precision/data_processing/test_data_processing_advanced.py
+  📁 tests/precision/security_validation
+     ❌ missing_init
+     📄 Needed for: tests/precision/security_validation/test_security_validation_advanced.py
+  📁 tests/precision/security_validation
+     ❌ missing_init
+     📄 Needed for: tests/precision/security_validation/test_security_validation_basic.py
+  📁 tests/precision/security_validation
+     ❌ missing_init
+     📄 Needed for: tests/precision/security_validation/test_security_validation_intermediate.py
+  📁 tests/precision/user_interface
+     ❌ missing_init
+     📄 Needed for: tests/precision/user_interface/test_user_interface_basic.py
+  📁 tests/precision/user_interface
+     ❌ missing_init
+     📄 Needed for: tests/precision/user_interface/test_user_interface_advanced.py
+  📁 tests/precision/user_interface
+     ❌ missing_init
+     📄 Needed for: tests/precision/user_interface/test_user_interface_intermediate.py
+  📁 tests/precision/monitoring_alerts
+     ❌ missing_init
+     📄 Needed for: tests/precision/monitoring_alerts/test_monitoring_alerts_intermediate.py
+  📁 tests/precision/monitoring_alerts
+     ❌ missing_init
+     📄 Needed for: tests/precision/monitoring_alerts/test_monitoring_alerts_basic.py
+  📁 tests/precision/monitoring_alerts
+     ❌ missing_init
+     📄 Needed for: tests/precision/monitoring_alerts/test_monitoring_alerts_advanced.py
+  📁 tests/precision/cache_management
+     ❌ missing_init
+     📄 Needed for: tests/precision/cache_management/test_cache_management_advanced.py
+  📁 tests/precision/cache_management
+     ❌ missing_init
+     📄 Needed for: tests/precision/cache_management/test_cache_management_intermediate.py
+  📁 tests/precision/cache_management
+     ❌ missing_init
+     📄 Needed for: tests/precision/cache_management/test_cache_management_basic.py
+  📁 tests/precision/authorization_checks
+     ❌ missing_init
+     📄 Needed for: tests/precision/authorization_checks/test_authorization_checks_advanced.py
+  📁 tests/precision/authorization_checks
+     ❌ missing_init
+     📄 Needed for: tests/precision/authorization_checks/test_authorization_checks_basic.py
+  📁 tests/precision/authorization_checks
+     ❌ missing_init
+     📄 Needed for: tests/precision/authorization_checks/test_authorization_checks_intermediate.py
+  📁 tests/precision/authentication_flows
+     ❌ missing_init
+     📄 Needed for: tests/precision/authentication_flows/test_authentication_flows_intermediate.py
+  📁 tests/precision/authentication_flows
+     ❌ missing_init
+     📄 Needed for: tests/precision/authentication_flows/test_authentication_flows_basic.py
+  📁 tests/precision/authentication_flows
+     ❌ missing_init
+     📄 Needed for: tests/precision/authentication_flows/test_authentication_flows_advanced.py
+  📁 tests/precision/core_functionality
+     ❌ missing_init
+     📄 Needed for: tests/precision/core_functionality/test_core_functionality_basic.py
+  📁 tests/precision/core_functionality
+     ❌ missing_init
+     📄 Needed for: tests/precision/core_functionality/test_core_functionality_advanced.py
+  📁 tests/precision/core_functionality
+     ❌ missing_init
+     📄 Needed for: tests/precision/core_functionality/test_core_functionality_intermediate.py
+  📁 tests/precision/error_recovery
+     ❌ missing_init
+     📄 Needed for: tests/precision/error_recovery/test_error_recovery_intermediate.py
+  📁 tests/precision/error_recovery
+     ❌ missing_init
+     📄 Needed for: tests/precision/error_recovery/test_error_recovery_basic.py
+  📁 tests/precision/error_recovery
+     ❌ missing_init
+     📄 Needed for: tests/precision/error_recovery/test_error_recovery_advanced.py
+  📁 tests/systems/economy/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/economy/ultimate_functional/test_economy_ultimate_functional.py
+  📁 tests/systems/economy/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/economy/unit/test_unit_basic.py
+  📁 tests/systems/economy/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/economy/unit/test_unit_advanced.py
+  📁 tests/systems/economy/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/economy/unit/test_unit_edge_cases.py
+  📁 tests/systems/economy/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/economy/ultimate_unit/test_economy_ultimate_unit.py
+  📁 tests/systems/economy/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/economy/ultimate_integration/test_economy_ultimate_integration.py
+  📁 tests/systems/economy/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/economy/ultimate_end_to_end/test_economy_ultimate_end_to_end.py
+  📁 tests/systems/motif/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/motif/ultimate_functional/test_motif_ultimate_functional.py
+  📁 tests/systems/motif/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/motif/unit/test_unit_basic.py
+  📁 tests/systems/motif/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/motif/unit/test_unit_advanced.py
+  📁 tests/systems/motif/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/motif/unit/test_unit_edge_cases.py
+  📁 tests/systems/motif/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/motif/ultimate_unit/test_motif_ultimate_unit.py
+  📁 tests/systems/motif/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/motif/ultimate_integration/test_motif_ultimate_integration.py
+  📁 tests/systems/motif/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/motif/ultimate_end_to_end/test_motif_ultimate_end_to_end.py
+  📁 tests/systems/llm/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/llm/ultimate_functional/test_llm_ultimate_functional.py
+  📁 tests/systems/llm/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/llm/unit/test_unit_basic.py
+  📁 tests/systems/llm/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/llm/unit/test_unit_advanced.py
+  📁 tests/systems/llm/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/llm/unit/test_unit_edge_cases.py
+  📁 tests/systems/llm/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/llm/ultimate_unit/test_llm_ultimate_unit.py
+  📁 tests/systems/llm/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/llm/ultimate_integration/test_llm_ultimate_integration.py
+  📁 tests/systems/llm/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/llm/ultimate_end_to_end/test_llm_ultimate_end_to_end.py
+  📁 tests/systems/world_generation/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_generation/ultimate_functional/test_world_generation_ultimate_functional.py
+  📁 tests/systems/world_generation/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_generation/unit/test_unit_basic.py
+  📁 tests/systems/world_generation/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_generation/unit/test_unit_advanced.py
+  📁 tests/systems/world_generation/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_generation/unit/test_unit_edge_cases.py
+  📁 tests/systems/world_generation/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_generation/ultimate_unit/test_world_generation_ultimate_unit.py
+  📁 tests/systems/world_generation/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_generation/ultimate_integration/test_world_generation_ultimate_integration.py
+  📁 tests/systems/world_generation/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_generation/ultimate_end_to_end/test_world_generation_ultimate_end_to_end.py
+  📁 tests/systems/memory/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/memory/ultimate_functional/test_memory_ultimate_functional.py
+  📁 tests/systems/memory/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/memory/unit/test_unit_basic.py
+  📁 tests/systems/memory/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/memory/unit/test_unit_advanced.py
+  📁 tests/systems/memory/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/memory/unit/test_unit_edge_cases.py
+  📁 tests/systems/memory/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/memory/ultimate_unit/test_memory_ultimate_unit.py
+  📁 tests/systems/memory/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/memory/ultimate_integration/test_memory_ultimate_integration.py
+  📁 tests/systems/memory/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/memory/ultimate_end_to_end/test_memory_ultimate_end_to_end.py
+  📁 tests/systems/diplomacy/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/diplomacy/ultimate_functional/test_diplomacy_ultimate_functional.py
+  📁 tests/systems/diplomacy/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/diplomacy/unit/test_unit_basic.py
+  📁 tests/systems/diplomacy/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/diplomacy/unit/test_unit_advanced.py
+  📁 tests/systems/diplomacy/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/diplomacy/unit/test_unit_edge_cases.py
+  📁 tests/systems/diplomacy/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/diplomacy/ultimate_unit/test_diplomacy_ultimate_unit.py
+  📁 tests/systems/diplomacy/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/diplomacy/ultimate_integration/test_diplomacy_ultimate_integration.py
+  📁 tests/systems/diplomacy/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/diplomacy/ultimate_end_to_end/test_diplomacy_ultimate_end_to_end.py
+  📁 tests/systems/combat/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/combat/ultimate_functional/test_combat_ultimate_functional.py
+  📁 tests/systems/combat/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/combat/unit/test_unit_basic.py
+  📁 tests/systems/combat/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/combat/unit/test_unit_advanced.py
+  📁 tests/systems/combat/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/combat/unit/test_unit_edge_cases.py
+  📁 tests/systems/combat/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/combat/ultimate_unit/test_combat_ultimate_unit.py
+  📁 tests/systems/combat/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/combat/ultimate_integration/test_combat_ultimate_integration.py
+  📁 tests/systems/combat/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/combat/ultimate_end_to_end/test_combat_ultimate_end_to_end.py
+  📁 tests/systems/magic/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/magic/ultimate_functional/test_magic_ultimate_functional.py
+  📁 tests/systems/magic/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/magic/unit/test_unit_basic.py
+  📁 tests/systems/magic/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/magic/unit/test_unit_advanced.py
+  📁 tests/systems/magic/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/magic/unit/test_unit_edge_cases.py
+  📁 tests/systems/magic/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/magic/ultimate_unit/test_magic_ultimate_unit.py
+  📁 tests/systems/magic/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/magic/ultimate_integration/test_magic_ultimate_integration.py
+  📁 tests/systems/magic/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/magic/ultimate_end_to_end/test_magic_ultimate_end_to_end.py
+  📁 tests/systems/character/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/character/ultimate_functional/test_character_ultimate_functional.py
+  📁 tests/systems/character/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/character/unit/test_unit_basic.py
+  📁 tests/systems/character/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/character/unit/test_unit_advanced.py
+  📁 tests/systems/character/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/character/unit/test_unit_edge_cases.py
+  📁 tests/systems/character/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/character/ultimate_unit/test_character_ultimate_unit.py
+  📁 tests/systems/character/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/character/ultimate_integration/test_character_ultimate_integration.py
+  📁 tests/systems/character/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/character/ultimate_end_to_end/test_character_ultimate_end_to_end.py
+  📁 tests/systems/auth_user/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/auth_user/ultimate_functional/test_auth_user_ultimate_functional.py
+  📁 tests/systems/auth_user/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/auth_user/unit/test_unit_basic.py
+  📁 tests/systems/auth_user/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/auth_user/unit/test_unit_advanced.py
+  📁 tests/systems/auth_user/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/auth_user/unit/test_unit_edge_cases.py
+  📁 tests/systems/auth_user/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/auth_user/ultimate_unit/test_auth_user_ultimate_unit.py
+  📁 tests/systems/auth_user/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/auth_user/ultimate_integration/test_auth_user_ultimate_integration.py
+  📁 tests/systems/auth_user/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/auth_user/ultimate_end_to_end/test_auth_user_ultimate_end_to_end.py
+  📁 tests/systems/faction/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/faction/ultimate_functional/test_faction_ultimate_functional.py
+  📁 tests/systems/faction/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/faction/unit/test_unit_basic.py
+  📁 tests/systems/faction/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/faction/unit/test_unit_advanced.py
+  📁 tests/systems/faction/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/faction/unit/test_unit_edge_cases.py
+  📁 tests/systems/faction/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/faction/ultimate_unit/test_faction_ultimate_unit.py
+  📁 tests/systems/faction/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/faction/ultimate_integration/test_faction_ultimate_integration.py
+  📁 tests/systems/faction/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/faction/ultimate_end_to_end/test_faction_ultimate_end_to_end.py
+  📁 tests/systems/rumor/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/rumor/ultimate_functional/test_rumor_ultimate_functional.py
+  📁 tests/systems/rumor/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/rumor/unit/test_unit_basic.py
+  📁 tests/systems/rumor/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/rumor/unit/test_unit_advanced.py
+  📁 tests/systems/rumor/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/rumor/unit/test_unit_edge_cases.py
+  📁 tests/systems/rumor/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/rumor/ultimate_unit/test_rumor_ultimate_unit.py
+  📁 tests/systems/rumor/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/rumor/ultimate_integration/test_rumor_ultimate_integration.py
+  📁 tests/systems/rumor/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/rumor/ultimate_end_to_end/test_rumor_ultimate_end_to_end.py
+  📁 tests/systems/loot/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/loot/ultimate_functional/test_loot_ultimate_functional.py
+  📁 tests/systems/loot/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/loot/unit/test_unit_basic.py
+  📁 tests/systems/loot/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/loot/unit/test_unit_advanced.py
+  📁 tests/systems/loot/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/loot/unit/test_unit_edge_cases.py
+  📁 tests/systems/loot/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/loot/ultimate_unit/test_loot_ultimate_unit.py
+  📁 tests/systems/loot/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/loot/ultimate_integration/test_loot_ultimate_integration.py
+  📁 tests/systems/loot/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/loot/ultimate_end_to_end/test_loot_ultimate_end_to_end.py
+  📁 tests/systems/storage/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/storage/ultimate_functional/test_storage_ultimate_functional.py
+  📁 tests/systems/storage/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/storage/unit/test_unit_basic.py
+  📁 tests/systems/storage/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/storage/unit/test_unit_advanced.py
+  📁 tests/systems/storage/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/storage/unit/test_unit_edge_cases.py
+  📁 tests/systems/storage/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/storage/ultimate_unit/test_storage_ultimate_unit.py
+  📁 tests/systems/storage/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/storage/ultimate_integration/test_storage_ultimate_integration.py
+  📁 tests/systems/storage/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/storage/ultimate_end_to_end/test_storage_ultimate_end_to_end.py
+  📁 tests/systems/time/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/time/ultimate_functional/test_time_ultimate_functional.py
+  📁 tests/systems/time/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/time/unit/test_unit_basic.py
+  📁 tests/systems/time/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/time/unit/test_unit_advanced.py
+  📁 tests/systems/time/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/time/unit/test_unit_edge_cases.py
+  📁 tests/systems/time/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/time/ultimate_unit/test_time_ultimate_unit.py
+  📁 tests/systems/time/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/time/ultimate_integration/test_time_ultimate_integration.py
+  📁 tests/systems/time/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/time/ultimate_end_to_end/test_time_ultimate_end_to_end.py
+  📁 tests/systems/population/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/population/ultimate_functional/test_population_ultimate_functional.py
+  📁 tests/systems/population/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/population/unit/test_unit_basic.py
+  📁 tests/systems/population/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/population/unit/test_unit_advanced.py
+  📁 tests/systems/population/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/population/unit/test_unit_edge_cases.py
+  📁 tests/systems/population/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/population/ultimate_unit/test_population_ultimate_unit.py
+  📁 tests/systems/population/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/population/ultimate_integration/test_population_ultimate_integration.py
+  📁 tests/systems/population/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/population/ultimate_end_to_end/test_population_ultimate_end_to_end.py
+  📁 tests/systems/dialogue/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/dialogue/ultimate_functional/test_dialogue_ultimate_functional.py
+  📁 tests/systems/dialogue/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/dialogue/unit/test_unit_basic.py
+  📁 tests/systems/dialogue/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/dialogue/unit/test_unit_advanced.py
+  📁 tests/systems/dialogue/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/dialogue/unit/test_unit_edge_cases.py
+  📁 tests/systems/dialogue/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/dialogue/ultimate_unit/test_dialogue_ultimate_unit.py
+  📁 tests/systems/dialogue/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/dialogue/ultimate_integration/test_dialogue_ultimate_integration.py
+  📁 tests/systems/dialogue/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/dialogue/ultimate_end_to_end/test_dialogue_ultimate_end_to_end.py
+  📁 tests/systems/poi/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/poi/ultimate_functional/test_poi_ultimate_functional.py
+  📁 tests/systems/poi/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/poi/unit/test_unit_basic.py
+  📁 tests/systems/poi/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/poi/unit/test_unit_advanced.py
+  📁 tests/systems/poi/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/poi/unit/test_unit_edge_cases.py
+  📁 tests/systems/poi/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/poi/ultimate_unit/test_poi_ultimate_unit.py
+  📁 tests/systems/poi/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/poi/ultimate_integration/test_poi_ultimate_integration.py
+  📁 tests/systems/poi/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/poi/ultimate_end_to_end/test_poi_ultimate_end_to_end.py
+  📁 tests/systems/region/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/region/ultimate_functional/test_region_ultimate_functional.py
+  📁 tests/systems/region/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/region/unit/test_unit_basic.py
+  📁 tests/systems/region/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/region/unit/test_unit_advanced.py
+  📁 tests/systems/region/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/region/unit/test_unit_edge_cases.py
+  📁 tests/systems/region/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/region/ultimate_unit/test_region_ultimate_unit.py
+  📁 tests/systems/region/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/region/ultimate_integration/test_region_ultimate_integration.py
+  📁 tests/systems/region/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/region/ultimate_end_to_end/test_region_ultimate_end_to_end.py
+  📁 tests/systems/religion/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/religion/ultimate_functional/test_religion_ultimate_functional.py
+  📁 tests/systems/religion/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/religion/unit/test_unit_basic.py
+  📁 tests/systems/religion/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/religion/unit/test_unit_advanced.py
+  📁 tests/systems/religion/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/religion/unit/test_unit_edge_cases.py
+  📁 tests/systems/religion/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/religion/ultimate_unit/test_religion_ultimate_unit.py
+  📁 tests/systems/religion/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/religion/ultimate_integration/test_religion_ultimate_integration.py
+  📁 tests/systems/religion/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/religion/ultimate_end_to_end/test_religion_ultimate_end_to_end.py
+  📁 tests/systems/quest/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/quest/ultimate_functional/test_quest_ultimate_functional.py
+  📁 tests/systems/quest/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/quest/unit/test_unit_basic.py
+  📁 tests/systems/quest/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/quest/unit/test_unit_advanced.py
+  📁 tests/systems/quest/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/quest/unit/test_unit_edge_cases.py
+  📁 tests/systems/quest/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/quest/ultimate_unit/test_quest_ultimate_unit.py
+  📁 tests/systems/quest/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/quest/ultimate_integration/test_quest_ultimate_integration.py
+  📁 tests/systems/quest/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/quest/ultimate_end_to_end/test_quest_ultimate_end_to_end.py
+  📁 tests/systems/inventory/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/inventory/ultimate_functional/test_inventory_ultimate_functional.py
+  📁 tests/systems/inventory/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/inventory/unit/test_unit_basic.py
+  📁 tests/systems/inventory/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/inventory/unit/test_unit_advanced.py
+  📁 tests/systems/inventory/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/inventory/unit/test_unit_edge_cases.py
+  📁 tests/systems/inventory/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/inventory/ultimate_unit/test_inventory_ultimate_unit.py
+  📁 tests/systems/inventory/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/inventory/ultimate_integration/test_inventory_ultimate_integration.py
+  📁 tests/systems/inventory/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/inventory/ultimate_end_to_end/test_inventory_ultimate_end_to_end.py
+  📁 tests/systems/world_state/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_state/ultimate_functional/test_world_state_ultimate_functional.py
+  📁 tests/systems/world_state/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_state/unit/test_unit_basic.py
+  📁 tests/systems/world_state/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_state/unit/test_unit_advanced.py
+  📁 tests/systems/world_state/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_state/unit/test_unit_edge_cases.py
+  📁 tests/systems/world_state/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_state/ultimate_unit/test_world_state_ultimate_unit.py
+  📁 tests/systems/world_state/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_state/ultimate_integration/test_world_state_ultimate_integration.py
+  📁 tests/systems/world_state/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/world_state/ultimate_end_to_end/test_world_state_ultimate_end_to_end.py
+  📁 tests/systems/crafting/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/crafting/ultimate_functional/test_crafting_ultimate_functional.py
+  📁 tests/systems/crafting/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/crafting/unit/test_unit_basic.py
+  📁 tests/systems/crafting/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/crafting/unit/test_unit_advanced.py
+  📁 tests/systems/crafting/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/crafting/unit/test_unit_edge_cases.py
+  📁 tests/systems/crafting/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/crafting/ultimate_unit/test_crafting_ultimate_unit.py
+  📁 tests/systems/crafting/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/crafting/ultimate_integration/test_crafting_ultimate_integration.py
+  📁 tests/systems/crafting/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/crafting/ultimate_end_to_end/test_crafting_ultimate_end_to_end.py
+  📁 tests/systems/events/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/events/ultimate_functional/test_events_ultimate_functional.py
+  📁 tests/systems/events/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/events/unit/test_unit_basic.py
+  📁 tests/systems/events/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/events/unit/test_unit_advanced.py
+  📁 tests/systems/events/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/events/unit/test_unit_edge_cases.py
+  📁 tests/systems/events/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/events/ultimate_unit/test_events_ultimate_unit.py
+  📁 tests/systems/events/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/events/ultimate_integration/test_events_ultimate_integration.py
+  📁 tests/systems/events/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/events/ultimate_end_to_end/test_events_ultimate_end_to_end.py
+  📁 tests/systems/arc/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/arc/ultimate_functional/test_arc_ultimate_functional.py
+  📁 tests/systems/arc/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/arc/unit/test_unit_basic.py
+  📁 tests/systems/arc/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/arc/unit/test_unit_advanced.py
+  📁 tests/systems/arc/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/arc/unit/test_unit_edge_cases.py
+  📁 tests/systems/arc/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/arc/ultimate_unit/test_arc_ultimate_unit.py
+  📁 tests/systems/arc/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/arc/ultimate_integration/test_arc_ultimate_integration.py
+  📁 tests/systems/arc/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/arc/ultimate_end_to_end/test_arc_ultimate_end_to_end.py
+  📁 tests/systems/data/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/data/ultimate_functional/test_data_ultimate_functional.py
+  📁 tests/systems/data/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/data/unit/test_unit_basic.py
+  📁 tests/systems/data/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/data/unit/test_unit_advanced.py
+  📁 tests/systems/data/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/data/unit/test_unit_edge_cases.py
+  📁 tests/systems/data/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/data/ultimate_unit/test_data_ultimate_unit.py
+  📁 tests/systems/data/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/data/ultimate_integration/test_data_ultimate_integration.py
+  📁 tests/systems/data/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/data/ultimate_end_to_end/test_data_ultimate_end_to_end.py
+  📁 tests/systems/equipment/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/equipment/ultimate_functional/test_equipment_ultimate_functional.py
+  📁 tests/systems/equipment/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/equipment/unit/test_unit_basic.py
+  📁 tests/systems/equipment/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/equipment/unit/test_unit_advanced.py
+  📁 tests/systems/equipment/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/equipment/unit/test_unit_edge_cases.py
+  📁 tests/systems/equipment/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/equipment/ultimate_unit/test_equipment_ultimate_unit.py
+  📁 tests/systems/equipment/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/equipment/ultimate_integration/test_equipment_ultimate_integration.py
+  📁 tests/systems/equipment/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/equipment/ultimate_end_to_end/test_equipment_ultimate_end_to_end.py
+  📁 tests/systems/npc/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/npc/ultimate_functional/test_npc_ultimate_functional.py
+  📁 tests/systems/npc/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/npc/unit/test_unit_basic.py
+  📁 tests/systems/npc/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/npc/unit/test_unit_advanced.py
+  📁 tests/systems/npc/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/npc/unit/test_unit_edge_cases.py
+  📁 tests/systems/npc/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/npc/ultimate_unit/test_npc_ultimate_unit.py
+  📁 tests/systems/npc/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/npc/ultimate_integration/test_npc_ultimate_integration.py
+  📁 tests/systems/npc/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/npc/ultimate_end_to_end/test_npc_ultimate_end_to_end.py
+  📁 tests/systems/analytics/ultimate_functional
+     ❌ missing_init
+     📄 Needed for: tests/systems/analytics/ultimate_functional/test_analytics_ultimate_functional.py
+  📁 tests/systems/analytics/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/analytics/unit/test_unit_basic.py
+  📁 tests/systems/analytics/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/analytics/unit/test_unit_advanced.py
+  📁 tests/systems/analytics/unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/analytics/unit/test_unit_edge_cases.py
+  📁 tests/systems/analytics/ultimate_unit
+     ❌ missing_init
+     📄 Needed for: tests/systems/analytics/ultimate_unit/test_analytics_ultimate_unit.py
+  📁 tests/systems/analytics/ultimate_integration
+     ❌ missing_init
+     📄 Needed for: tests/systems/analytics/ultimate_integration/test_analytics_ultimate_integration.py
+  📁 tests/systems/analytics/ultimate_end_to_end
+     ❌ missing_init
+     📄 Needed for: tests/systems/analytics/ultimate_end_to_end/test_analytics_ultimate_end_to_end.py
+  📁 tests/helpers
+     ❌ missing_init
+     📄 Needed for: tests/helpers/test_basic.py
+  📁 tests/helpers
+     ❌ missing_init
+     📄 Needed for: tests/helpers/test_advanced.py
+  📁 tests/helpers
+     ❌ missing_init
+     📄 Needed for: tests/helpers/test_integration.py
+  📁 tests/logging
+     ❌ missing_init
+     📄 Needed for: tests/logging/test_basic.py
+  📁 tests/logging
+     ❌ missing_init
+     📄 Needed for: tests/logging/test_advanced.py
+  📁 tests/logging
+     ❌ missing_init
+     📄 Needed for: tests/logging/test_integration.py
+  📁 tests/technical/connection_pooling
+     ❌ missing_init
+     📄 Needed for: tests/technical/connection_pooling/test_connection_pooling_advanced.py
+  📁 tests/technical/microservices
+     ❌ missing_init
+     📄 Needed for: tests/technical/microservices/test_microservices_advanced.py
+  📁 tests/technical/backup_strategies
+     ❌ missing_init
+     📄 Needed for: tests/technical/backup_strategies/test_backup_strategies_advanced.py
+  📁 tests/technical/encryption_methods
+     ❌ missing_init
+     📄 Needed for: tests/technical/encryption_methods/test_encryption_methods_advanced.py
+  📁 tests/technical/data_consistency
+     ❌ missing_init
+     📄 Needed for: tests/technical/data_consistency/test_data_consistency_advanced.py
+  📁 tests/technical/load_balancing
+     ❌ missing_init
+     📄 Needed for: tests/technical/load_balancing/test_load_balancing_advanced.py
+  📁 tests/technical/indexing_strategies
+     ❌ missing_init
+     📄 Needed for: tests/technical/indexing_strategies/test_indexing_strategies_advanced.py
+  📁 tests/technical/acid_properties
+     ❌ missing_init
+     📄 Needed for: tests/technical/acid_properties/test_acid_properties_advanced.py
+  📁 tests/technical/network_protocols
+     ❌ missing_init
+     📄 Needed for: tests/technical/network_protocols/test_network_protocols_advanced.py
+  📁 tests/technical/transaction_management
+     ❌ missing_init
+     📄 Needed for: tests/technical/transaction_management/test_transaction_management_advanced.py
+  📁 tests/technical/rate_limiting
+     ❌ missing_init
+     📄 Needed for: tests/technical/rate_limiting/test_rate_limiting_advanced.py
+  📁 tests/technical/serialization
+     ❌ missing_init
+     📄 Needed for: tests/technical/serialization/test_serialization_advanced.py
+  📁 tests/technical/event_sourcing
+     ❌ missing_init
+     📄 Needed for: tests/technical/event_sourcing/test_event_sourcing_advanced.py
+  📁 tests/technical/backpressure
+     ❌ missing_init
+     📄 Needed for: tests/technical/backpressure/test_backpressure_advanced.py
+  📁 tests/technical/cap_theorem
+     ❌ missing_init
+     📄 Needed for: tests/technical/cap_theorem/test_cap_theorem_advanced.py
+  📁 tests/technical/hashing_functions
+     ❌ missing_init
+     📄 Needed for: tests/technical/hashing_functions/test_hashing_functions_advanced.py
+  📁 tests/technical/throttling
+     ❌ missing_init
+     📄 Needed for: tests/technical/throttling/test_throttling_advanced.py
+  📁 tests/technical/compression_algorithms
+     ❌ missing_init
+     📄 Needed for: tests/technical/compression_algorithms/test_compression_algorithms_advanced.py
+  📁 tests/technical/distributed_systems
+     ❌ missing_init
+     📄 Needed for: tests/technical/distributed_systems/test_distributed_systems_advanced.py
+  📁 tests/technical/fault_tolerance
+     ❌ missing_init
+     📄 Needed for: tests/technical/fault_tolerance/test_fault_tolerance_advanced.py
+  📁 tests/technical/query_optimization
+     ❌ missing_init
+     📄 Needed for: tests/technical/query_optimization/test_query_optimization_advanced.py
+  📁 tests/technical/caching_strategies
+     ❌ missing_init
+     📄 Needed for: tests/technical/caching_strategies/test_caching_strategies_advanced.py
+  📁 tests/technical/async_operations
+     ❌ missing_init
+     📄 Needed for: tests/technical/async_operations/test_async_operations_advanced.py
+  📁 tests/technical/retry_mechanisms
+     ❌ missing_init
+     📄 Needed for: tests/technical/retry_mechanisms/test_retry_mechanisms_advanced.py
+  📁 tests/technical/memory_management
+     ❌ missing_init
+     📄 Needed for: tests/technical/memory_management/test_memory_management_advanced.py
+  📁 tests/technical/concurrency_control
+     ❌ missing_init
+     📄 Needed for: tests/technical/concurrency_control/test_concurrency_control_advanced.py
+  📁 tests/technical/garbage_collection
+     ❌ missing_init
+     📄 Needed for: tests/technical/garbage_collection/test_garbage_collection_advanced.py
+  📁 tests/technical/thread_safety
+     ❌ missing_init
+     📄 Needed for: tests/technical/thread_safety/test_thread_safety_advanced.py
+  📁 tests/technical/disaster_recovery
+     ❌ missing_init
+     📄 Needed for: tests/technical/disaster_recovery/test_disaster_recovery_advanced.py
+  📁 tests/technical/database_optimization
+     ❌ missing_init
+     📄 Needed for: tests/technical/database_optimization/test_database_optimization_advanced.py
+  📁 tests/technical/circuit_breakers
+     ❌ missing_init
+     📄 Needed for: tests/technical/circuit_breakers/test_circuit_breakers_advanced.py
+  📁 tests/technical/eventual_consistency
+     ❌ missing_init
+     📄 Needed for: tests/technical/eventual_consistency/test_eventual_consistency_advanced.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_quest_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_validation_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_event_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_character_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_equipment_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_combat_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_storage_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_user_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_analytics_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_faction_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_magic_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_inventory_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_economy_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_notification_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_crafting_service.py
+  📁 tests/services
+     ❌ missing_init
+     📄 Needed for: tests/services/test_dialogue_service.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_cpu_intensive_stress.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_cache_overflow_stress.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_concurrent_users_stress.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_database_stress_stress.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_memory_pressure_stress.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_high_load_stress.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_queue_backlog_stress.py
+  📁 tests/stress
+     ❌ missing_init
+     📄 Needed for: tests/stress/test_network_saturation_stress.py
+
+================================================================================
+✅ Analysis Complete!
+================================================================================
+
+🎯 Next Steps:
+   1. Fix 380 syntax errors
+   2. Create 2 critical modules
+   3. Resolve 4 import issues
+   4. Fix 562 structure issues

@@ -99,7 +99,7 @@ string color = ModularDataSystem.Instance.GetLocationTypeColor(location.type);
 
 To add a new location type:
 
-1. Create a JSON file in the appropriate directory (e.g., `backend/data/modding/building_types/types/`)
+1. Create a JSON file in the appropriate directory (e.g., `data/builders/building_types/types/`)
 2. Follow the schema format (see example below)
 3. Add the location type ID to a world seed or reference it directly
 
@@ -221,7 +221,7 @@ Extracts hardcoded location type enums and converts them to JSON files. The tool
 
 Usage:
 ```bash
-python backend/data/modding/migration_tools/location_types_migrator.py
+python data/builders/migration_tools/location_types_migrator.py
 ```
 
 ### `extract_hardcoded_data.py`
@@ -230,7 +230,7 @@ A general tool for extracting various types of hardcoded data to JSON files.
 
 Usage:
 ```bash
-python backend/data/modding/migration_tools/extract_hardcoded_data.py --type location_types
+python data/builders/migration_tools/extract_hardcoded_data.py --type location_types
 ```
 
 ### `run_all_migrations.py`
@@ -239,7 +239,7 @@ Runs all migration tools to extract all hardcoded data to JSON files.
 
 Usage:
 ```bash
-python backend/data/modding/migration_tools/run_all_migrations.py
+python data/builders/migration_tools/run_all_migrations.py
 ```
 
 ## Troubleshooting
@@ -258,7 +258,7 @@ python backend/data/modding/migration_tools/run_all_migrations.py
 
 ## More Information
 
-- See the full schema at `backend/data/modding/schemas/location_types.schema.json`
-- Review examples in `backend/data/modding/building_types/types/`
-- The main compatibility layer is in `backend/data/modding/loaders/location_type_loader.py`
+- See the full schema at `data/builders/schemas/location_types.schema.json`
+- Review examples in `data/builders/building_types/types/`
+- The main compatibility layer is in `data/builders/loaders/location_type_loader.py`
 - The Unity integration is in `VDM/Assets/Scripts/Data/ModularDataSystem.cs` 

@@ -1,16 +1,10 @@
-"""
-NPC System
-------------------
-Module for managing non-player characters, their locations, behaviors, and relationships.
-"""
+"""Npc system"""
 
-from backend.systems.npc.npc_location_service import NpcLocationService
-from backend.systems.npc.routers.npc_location_router import router as npc_location_router
-
-__all__ = [
-    # Services
-    'NpcLocationService',
-    
-    # Routers
-    'npc_location_router'
-] 
+# Auto-generated imports
+from . import events
+from . import models
+from . import repositories
+from . import routers
+from . import schemas
+from . import services
+from . import utils
