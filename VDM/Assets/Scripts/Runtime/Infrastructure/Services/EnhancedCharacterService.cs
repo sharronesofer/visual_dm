@@ -343,9 +343,9 @@ namespace VDM.Infrastructure.Services
             Debug.Log("[EnhancedCharacterService] WebSocket disconnected");
         }
 
-        private void HandleWebSocketMessage(OptimizedWebSocketClient.WebSocketMessage message)
+        private void HandleWebSocketMessage(WebSocketMessage message)
         {
-            switch (message.type)
+            switch (message.Type)
             {
                 case "character_update":
                     HandleCharacterUpdate(message);
@@ -362,15 +362,14 @@ namespace VDM.Infrastructure.Services
             }
         }
 
-        private void HandleCharacterUpdate(OptimizedWebSocketClient.WebSocketMessage message)
+        private void HandleCharacterUpdate(WebSocketMessage message)
         {
             try
             {
-                var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(message.data.ToString());
+                var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(message.Data.ToString());
                 if (character != null)
                 {
                     CacheCharacter(character);
-                    lastKnownStates[character.Id] = character;
                     OnCharacterUpdated?.Invoke(character);
                 }
             }
@@ -380,69 +379,60 @@ namespace VDM.Infrastructure.Services
             }
         }
 
-        private void HandleCharacterLevelUp(OptimizedWebSocketClient.WebSocketMessage message)
+        private void HandleCharacterLevelUp(WebSocketMessage message)
         {
             try
             {
-                var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(message.data.ToString());
+                var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(message.Data.ToString());
                 if (character != null)
                 {
                     CacheCharacter(character);
-                    lastKnownStates[character.Id] = character;
                     OnCharacterLevelUp?.Invoke(character);
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[EnhancedCharacterService] Failed to handle level up event: {ex.Message}");
+                Debug.LogError($"[EnhancedCharacterService] Failed to handle character level up: {ex.Message}");
             }
         }
 
-        private void HandleCharacterSkillIncrease(OptimizedWebSocketClient.WebSocketMessage message)
+        private void HandleCharacterSkillIncrease(WebSocketMessage message)
         {
             try
             {
-                var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(message.data.ToString());
-                if (data.TryGetValue("character", out object characterObj) && data.TryGetValue("skill", out object skillObj))
+                var data = JsonConvert.DeserializeObject<dynamic>(message.Data.ToString());
+                var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(data.character.ToString());
+                var skillName = data.skillName.ToString();
+                
+                if (character != null)
                 {
-                    var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(characterObj.ToString());
-                    string skillName = skillObj.ToString();
-                    
-                    if (character != null)
-                    {
-                        CacheCharacter(character);
-                        lastKnownStates[character.Id] = character;
-                        OnCharacterSkillIncreased?.Invoke(character, skillName);
-                    }
+                    CacheCharacter(character);
+                    OnCharacterSkillIncreased?.Invoke(character, skillName);
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[EnhancedCharacterService] Failed to handle skill increase event: {ex.Message}");
+                Debug.LogError($"[EnhancedCharacterService] Failed to handle character skill increase: {ex.Message}");
             }
         }
 
-        private void HandleCharacterAbilityGained(OptimizedWebSocketClient.WebSocketMessage message)
+        private void HandleCharacterAbilityGained(WebSocketMessage message)
         {
             try
             {
-                var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(message.data.ToString());
-                if (data.TryGetValue("character", out object characterObj) && data.TryGetValue("ability", out object abilityObj))
+                var data = JsonConvert.DeserializeObject<dynamic>(message.Data.ToString());
+                var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(data.character.ToString());
+                var abilityName = data.abilityName.ToString();
+                
+                if (character != null)
                 {
-                    var character = JsonConvert.DeserializeObject<CharacterResponseDTO>(characterObj.ToString());
-                    string abilityName = abilityObj.ToString();
-                    
-                    if (character != null)
-                    {
-                        CacheCharacter(character);
-                        lastKnownStates[character.Id] = character;
-                        OnCharacterAbilityGained?.Invoke(character, abilityName);
-                    }
+                    CacheCharacter(character);
+                    OnCharacterAbilityGained?.Invoke(character, abilityName);
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[EnhancedCharacterService] Failed to handle ability gained event: {ex.Message}");
+                Debug.LogError($"[EnhancedCharacterService] Failed to handle character ability gained: {ex.Message}");
             }
         }
 

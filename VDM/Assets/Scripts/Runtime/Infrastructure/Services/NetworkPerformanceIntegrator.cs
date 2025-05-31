@@ -38,7 +38,7 @@ namespace VDM.Infrastructure.Services
         public static NetworkPerformanceIntegrator Instance { get; private set; }
 
         // System references
-        private PerformanceManager performanceManager;
+        // private PerformanceManager performanceManager; // TODO: Implement PerformanceManager
         private OptimizedHttpClient httpClient;
         private OptimizedWebSocketClient webSocketClient;
 
@@ -85,7 +85,7 @@ namespace VDM.Infrastructure.Services
             currentMetrics = new NetworkPerformanceMetrics();
 
             // Find or create PerformanceManager
-            performanceManager = PerformanceManager.Instance;
+            // performanceManager = PerformanceManager.Instance;
 
             // Find network clients
             httpClient = FindObjectOfType<OptimizedHttpClient>();
@@ -255,12 +255,12 @@ namespace VDM.Infrastructure.Services
             }
 
             // Performance Manager metrics
-            if (performanceManager != null)
-            {
-                var cacheStats = performanceManager.GetCacheStats();
-                newMetrics.systemCacheSize = cacheStats.size;
-                newMetrics.systemCacheHitRatio = cacheStats.hitRatio;
-            }
+            // if (performanceManager != null)
+            // {
+            //     var cacheStats = performanceManager.GetCacheStats();
+            //     newMetrics.systemCacheSize = cacheStats.size;
+            //     newMetrics.systemCacheHitRatio = cacheStats.hitRatio;
+            // }
 
             // Update timestamp and calculate derived metrics
             newMetrics.timestamp = DateTime.UtcNow;
@@ -336,10 +336,10 @@ namespace VDM.Infrastructure.Services
             }
 
             // Update system cache settings
-            if (performanceManager != null)
-            {
-                ApplySystemOptimizations(preset);
-            }
+            // if (performanceManager != null)
+            // {
+            //     ApplySystemOptimizations(preset);
+            // }
 
             currentOptimizationLevel = level;
             OnOptimizationLevelChanged?.Invoke(level);
@@ -387,7 +387,7 @@ namespace VDM.Infrastructure.Services
         private void ApplySystemOptimizations(NetworkOptimizationPreset preset)
         {
             // Configure PerformanceManager caching based on preset
-            performanceManager.EnableCaching = preset.enableLocalCaching;
+            // performanceManager.EnableCaching = preset.enableLocalCaching;
             
             if (preset.enableLocalCaching)
             {
@@ -467,7 +467,7 @@ namespace VDM.Infrastructure.Services
         {
             httpClient?.ClearCache();
             webSocketClient?.ClearCache();
-            performanceManager?.ClearCache();
+            // performanceManager?.ClearCache();
             
             OnOptimizationAlert?.Invoke("All network caches cleared");
         }

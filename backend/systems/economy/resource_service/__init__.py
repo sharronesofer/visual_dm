@@ -1,5 +1,6 @@
 """Resource_Service for economy system"""
 
-# This module was auto-generated to satisfy test imports
-# Please implement the required functionality
+# Import the actual ResourceService class from services
+from backend.systems.economy.services.resource_service import ResourceService
 
+__all__ = ["ResourceService"]

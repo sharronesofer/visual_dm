@@ -459,7 +459,7 @@ namespace VDM.UI.Core
             }
         }
         
-        protected override void OnPanelClosed()
+        protected virtual void OnPanelClosed()
         {
             base.OnPanelClosed();
             OnModalClosed?.Invoke(this);

@@ -501,7 +501,7 @@ namespace VDM.UI.Core
             OnNotificationDismissed?.Invoke(this);
         }
         
-        protected override void OnPanelClosed()
+        protected virtual void OnPanelClosed()
         {
             base.OnPanelClosed();
             OnNotificationDismissed?.Invoke(this);

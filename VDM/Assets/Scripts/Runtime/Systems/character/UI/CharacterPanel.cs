@@ -6,6 +6,7 @@ using TMPro;
 using VDM.UI.Core;
 using VDM.Systems.Character.Models;
 using VDM.Systems.Character.Services;
+using VDM.Infrastructure.Ui.Ui.Core;
 
 namespace VDM.Systems.Character.Ui
 {

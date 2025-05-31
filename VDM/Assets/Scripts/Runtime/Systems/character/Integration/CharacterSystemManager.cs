@@ -74,7 +74,7 @@ namespace VDM.Systems.Character.Integration
             _lastAutoSave = UnityEngine.Time.time;
         }
 
-        protected override async Task ShutdownSystem()
+        protected override void ShutdownSystem()
         {
             // Cleanup service events in ShutdownSystem (called before OnDestroy)
             if (_characterService != null)
@@ -88,7 +88,7 @@ namespace VDM.Systems.Character.Integration
                 _characterService.OnCharacterAbilityGained -= HandleCharacterAbilityGained;
             }
 
-            await base.ShutdownSystem();
+            base.ShutdownSystem();
         }
 
         protected override void OnDestroy()
