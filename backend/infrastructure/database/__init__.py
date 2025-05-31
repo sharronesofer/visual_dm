@@ -56,6 +56,7 @@ __all__ = [
     'BaseModel',
     'UUIDMixin',
     'TimestampMixin',
+    'GUID',
     'get_db',
     'engine',
     'DATABASE_URL'

@@ -5,6 +5,7 @@ using UnityEngine;
 using VDM.DTOs.Core.Shared;
 using VDM.DTOs.Game.Character;
 using VDM.Systems.Character;
+using VDM.Infrastructure.Core;
 using VDM.Systems;
 
 
