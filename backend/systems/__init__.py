@@ -56,15 +56,17 @@ try:
 except ImportError:
     pass
 
-# Import domain repositories
-try:
-    from .repositories import MarketRepository
-except ImportError:
-    pass
+# Import domain repositories - repositories are in infrastructure/repositories, not systems
+# try:
+#     from .repositories import MarketItemRepository, TradeOfferRepository, TransactionRepository, PriceHistoryRepository
+# except ImportError:
+#     pass
 
 # Import core systems for proper module resolution
 try:
-    from . import motif
+    # Temporarily disabled due to import chain issues - needs fixing
+    # from . import motif
+    pass
 except ImportError:
     motif = None
 

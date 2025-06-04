@@ -17,7 +17,7 @@ from datetime import datetime
 import subprocess
 
 class BackendSystemsInventory:
-    def __init__(self, backend_root: str = "/Users/Sharrone/Visual_DM/backend"):
+    def __init__(self, backend_root: str = "/Users/Sharrone/Dreamforge/backend"):
         self.backend_root = Path(backend_root)
         self.systems_dir = self.backend_root / "systems"
         self.tests_dir = self.backend_root / "tests"

@@ -103,15 +103,22 @@ namespace VDM.Systems.Llm.Ui
         private float lastRefreshTime;
         private bool isInitialized;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
             InitializeControls();
+        }
+
+        protected override void OnInitialize()
+        {
+            Initialize();
         }
 
         private void Start()
         {
-            Initialize();
+            if (!isInitialized)
+            {
+                Initialize();
+            }
         }
 
         private void Update()
@@ -690,10 +697,8 @@ namespace VDM.Systems.Llm.Ui
             RefreshPrompts();
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
-            base.OnDestroy();
-            
             // Unsubscribe from events
             if (llmService != null)
             {

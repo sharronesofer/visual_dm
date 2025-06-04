@@ -1,9 +1,8 @@
 """
-Landmark Service
+Landmark Service for POI System
 
-Handles special landmark POIs, unique features, and landmark management.
-Landmarks are special POIs with unique properties, historical significance,
-and special abilities or effects.
+Manages special landmarks, monuments, and significant locations within POIs,
+including their cultural, historical, and gameplay significance.
 """
 
 from typing import Dict, List, Optional, Tuple, Set, Any, Callable
@@ -15,9 +14,9 @@ from datetime import datetime, timedelta
 import random
 import math
 
-from backend.systems.poi.models import PoiEntity, POIType, POIState
-from backend.infrastructure.database import get_db
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.systems.poi.models import PoiEntity, POIType, POIState
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -211,7 +210,7 @@ class LandmarkService:
     """Service for managing landmarks and their special properties"""
     
     def __init__(self, db_session: Optional[Session] = None):
-        self.db_session = db_session or get_db()
+        self.db_session = db_session or get_db_session()
         self.event_dispatcher = EventDispatcher()
         
         # Landmark data

@@ -3,7 +3,7 @@ logger.test.py - Auto-generated minimal implementation
 This file was automatically fixed due to syntax errors.
 """
 
-class Logger.test:
+class LoggerTest:
     """Auto-generated class for logger.test"""
     
     def __init__(self):

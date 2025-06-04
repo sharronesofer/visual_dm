@@ -1,8 +1,8 @@
 """
-Event Integration Service
+Event Integration Service for POI System
 
-Provides comprehensive event system integration throughout the POI system
-for real-time updates and cross-system communication between services.
+Handles integration between POI events and other game systems,
+managing cross-system event propagation and state synchronization.
 """
 
 from typing import Dict, List, Optional, Any, Callable, Set
@@ -14,9 +14,9 @@ from datetime import datetime, timedelta
 import asyncio
 from functools import wraps
 
-from backend.systems.poi.models import PoiEntity, POIType, POIState
-from backend.infrastructure.database import get_db
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.systems.poi.models import PoiEntity, POIType, POIState
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -169,7 +169,7 @@ class EventIntegrationService:
     """Service for POI system event integration and management"""
     
     def __init__(self, db_session: Optional[Session] = None):
-        self.db_session = db_session or get_db()
+        self.db_session = db_session or get_db_session()
         self.event_dispatcher = EventDispatcher()
         
         # Event management

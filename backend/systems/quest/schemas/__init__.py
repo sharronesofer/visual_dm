@@ -1,2 +1,0 @@
-"""Schemas for quest system"""
-

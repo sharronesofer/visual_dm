@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using VDM.UI.Core;
-using VDM.Systems.Region.Models;
 using VDM.Systems.Region.Services;
 using System.Collections.Generic;
 using System.Linq;
+using VDM.DTOs.Game.Character;
 
 namespace VDM.UI.Systems.Region
 {
@@ -40,7 +40,7 @@ namespace VDM.UI.Systems.Region
         [SerializeField] private Slider zoomSlider;
         
         private RegionService regionService;
-        private RegionModel currentRegion;
+        private VDM.Systems.Region.Models.RegionModel currentRegion;
         private LocationModel selectedLocation;
         private List<GameObject> locationMarkers = new List<GameObject>();
         private Vector2 mapOffset = Vector2.zero;
@@ -52,47 +52,58 @@ namespace VDM.UI.Systems.Region
         protected override void Awake()
         {
             base.Awake();
+            
+            // Get service references
             regionService = FindObjectOfType<RegionService>();
             
-            // Setup button listeners
+            // Setup UI event handlers
             if (travelButton != null)
                 travelButton.onClick.AddListener(OnTravelToLocation);
+            
             if (exploreButton != null)
                 exploreButton.onClick.AddListener(OnExploreLocation);
-            if (zoomInButton != null)
-                zoomInButton.onClick.AddListener(() => SetZoom(zoomLevel + 0.2f));
+            
             if (zoomOutButton != null)
-                zoomOutButton.onClick.AddListener(() => SetZoom(zoomLevel - 0.2f));
+                zoomOutButton.onClick.AddListener(() => SetZoom(zoomLevel - 0.5f));
+            
             if (centerMapButton != null)
                 centerMapButton.onClick.AddListener(CenterMap);
+            
             if (zoomSlider != null)
-                zoomSlider.onValueChanged.AddListener(SetZoom);
-        }
-        
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            if (regionService != null)
             {
-                regionService.OnRegionChanged += OnRegionChanged;
-                regionService.OnLocationDiscovered += OnLocationDiscovered;
+                zoomSlider.minValue = MIN_ZOOM;
+                zoomSlider.maxValue = MAX_ZOOM;
+                zoomSlider.value = zoomLevel;
+                zoomSlider.onValueChanged.AddListener(SetZoom);
             }
         }
         
-        protected override void OnDisable()
+        private void OnEnable()
         {
-            base.OnDisable();
+            // Subscribe to region events when panel becomes active
             if (regionService != null)
             {
-                regionService.OnRegionChanged -= OnRegionChanged;
+                regionService.OnLocationDiscovered += OnLocationDiscovered;
+                regionService.OnLocationUpdated += OnLocationUpdated;
+                regionService.OnRegionChanged += OnRegionChanged;
+            }
+        }
+        
+        private void OnDisable()
+        {
+            // Unsubscribe from region events when panel becomes inactive
+            if (regionService != null)
+            {
                 regionService.OnLocationDiscovered -= OnLocationDiscovered;
+                regionService.OnLocationUpdated -= OnLocationUpdated;
+                regionService.OnRegionChanged -= OnRegionChanged;
             }
         }
         
         /// <summary>
         /// Display a specific region on the map
         /// </summary>
-        public void ShowRegion(RegionModel region)
+        public void ShowRegion(VDM.Systems.Region.Models.RegionModel region)
         {
             currentRegion = region;
             UpdateRegionInfo();
@@ -241,7 +252,7 @@ namespace VDM.UI.Systems.Region
             if (travelButton != null)
                 travelButton.interactable = location.IsAccessible;
             if (exploreButton != null)
-                exploreButton.interactable = location.CanExplore;
+                exploreButton.interactable = location.IsDiscovered;
         }
         
         /// <summary>
@@ -291,7 +302,7 @@ namespace VDM.UI.Systems.Region
         
         #region Event Handlers
         
-        private void OnRegionChanged(RegionModel newRegion)
+        private void OnRegionChanged(VDM.Systems.Region.Models.RegionModel newRegion)
         {
             ShowRegion(newRegion);
         }
@@ -302,6 +313,11 @@ namespace VDM.UI.Systems.Region
             {
                 CreateLocationMarkers(); // Refresh markers to include new location
             }
+        }
+        
+        private void OnLocationUpdated(LocationModel location)
+        {
+            // Handle location update
         }
         
         private void OnTravelToLocation()

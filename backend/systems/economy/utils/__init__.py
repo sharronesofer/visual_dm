@@ -1,7 +1,10 @@
-"""Utils for economy system"""
+"""Utils for economy system - Business Logic Only
 
-# Auto-generated imports
-# from .deployment import *  # Temporarily disabled - missing database_service
-# from .integration import *  # Temporarily disabled - missing dependencies
-from .shop_utils import *
-# from .websocket_events import *  # Temporarily disabled - may have dependencies
+Technical infrastructure utilities have been moved to backend/infrastructure/:
+- config_loader -> backend/infrastructure/config_loaders/economy_config_loader
+- integration -> backend/infrastructure/integration/economy_integration  
+- shop_utils -> backend/infrastructure/utils/shop_utils
+"""
+
+# Note: All technical infrastructure utilities have been moved to backend/infrastructure/
+# This directory now contains only business-logic utilities if any are added in the future

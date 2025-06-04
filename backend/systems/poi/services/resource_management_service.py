@@ -1,21 +1,23 @@
 """
-Resource Management Service
+Resource Management Service for POI System
 
-Handles resource production, consumption, trading, and storage management
-for Points of Interest in the POI system.
+Manages resource production, consumption, and distribution within POIs,
+including economic modeling and resource flow optimization.
 """
 
 from typing import Dict, List, Optional, Tuple, Set, Any
-from uuid import UUID
+from uuid import UUID, uuid4
 from enum import Enum
 from dataclasses import dataclass, field
 import logging
 from datetime import datetime, timedelta
 from decimal import Decimal
+import random
+import math
 
-from backend.systems.poi.models import PoiEntity, POIType, POIState
-from backend.infrastructure.database import get_db
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.systems.poi.models import PoiEntity, POIType, POIState
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -173,7 +175,7 @@ class ResourceManagementService:
     """Service for managing resource production, consumption, and trading"""
     
     def __init__(self, db_session: Optional[Session] = None):
-        self.db_session = db_session or get_db()
+        self.db_session = db_session or get_db_session()
         self.event_dispatcher = EventDispatcher()
         
         # Initialize resource definitions

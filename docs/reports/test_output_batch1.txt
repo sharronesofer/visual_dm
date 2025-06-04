@@ -1,7 +1,7 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
 cachedir: .pytest_cache
-rootdir: /Users/Sharrone/Visual_DM
+rootdir: /Users/Sharrone/Dreamforge
 configfile: pytest.ini
 testpaths: backend/tests
 plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
@@ -11,7 +11,7 @@ collecting ...
 23:46:54 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
 23:46:54 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
 23:46:54 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
-23:46:54 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+23:46:54 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Dreamforge/backend/analytics_data
 23:46:54 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
 23:46:54 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
 23:46:54 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
@@ -29,8 +29,8 @@ collecting ...
 23:46:54 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
 23:46:55 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
 23:46:55 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
 23:46:55 [INFO] root: World Generator initialized.
 23:46:56 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
 23:46:56 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
@@ -89,7 +89,7 @@ _______________ ERROR collecting backend/tests/test_location.py ________________
     exec(co, module.__dict__)
 backend/tests/test_location.py:12: in <module>
     import systems.character.inventory.location
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/inventory/location.py", line 54
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/inventory/location.py", line 54
 E       id = Column(Integer, primary_key=True)
 E   IndentationError: unexpected indent
 ______________ ERROR collecting backend/tests/test_loot_routes.py ______________
@@ -128,7 +128,7 @@ ___________ ERROR collecting backend/tests/test_progression_utils.py ___________
     exec(co, module.__dict__)
 backend/tests/test_progression_utils.py:12: in <module>
     import systems.character.progression.progression_utils
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/progression_utils.py", line 23
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/progression/progression_utils.py", line 23
 E       def apply_ability_score_increase(character: Character, ability: str) -> Dict[str, Any]:
 E   SyntaxError: expected 'except' or 'finally' block
 ________________ ERROR collecting backend/tests/test_scoring.py ________________
@@ -150,7 +150,7 @@ ________________ ERROR collecting backend/tests/test_scoring.py ________________
     exec(co, module.__dict__)
 backend/tests/test_scoring.py:12: in <module>
     import systems.character.progression.scoring
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/scoring.py", line 53
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/progression/scoring.py", line 53
 E       }
 E       ^
 E   SyntaxError: unmatched '}'
@@ -173,7 +173,7 @@ _____________ ERROR collecting backend/tests/test_worldgen_api.py ______________
     exec(co, module.__dict__)
 backend/tests/test_worldgen_api.py:12: in <module>
     import systems.world_state.worldgen_api
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/world_state/worldgen_api.py", line 56
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/world_state/worldgen_api.py", line 56
 E       "example": {
 E   IndentationError: unexpected indent
 =========================== short test summary info ============================

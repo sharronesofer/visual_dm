@@ -9,6 +9,7 @@ using VDM.Systems.Magic.Services;
 using VDM.Systems.Magic.Models;
 using VDM.Infrastructure.Services;
 using VDM.Infrastructure.Core.Core.Systems;
+using VDM.Systems.Magic.Ui;
 
 
 namespace VDM.Systems.Magic.Integration
@@ -80,8 +81,8 @@ namespace VDM.Systems.Magic.Integration
         
         private void Awake()
         {
-            // Register with service locator
-            ServiceLocator.Register<MagicSystemManager>(this);
+            // Register with ServiceLocator
+            ServiceLocator.Instance.RegisterService<MagicSystemManager>(this);
             HealthStatus = SystemHealthStatus.Unknown;
             
             // Initialize magic system state
@@ -108,18 +109,18 @@ namespace VDM.Systems.Magic.Integration
                 Debug.Log("Initializing Magic System...");
                 
                 // Get or create services
-                _magicService = ServiceLocator.Get<MagicService>();
+                _magicService = ServiceLocator.Instance.GetService<MagicService>();
                 if (_magicService == null)
                 {
                     _magicService = new MagicService();
-                    ServiceLocator.Register(_magicService);
+                    ServiceLocator.Instance.RegisterService(_magicService);
                 }
                 
-                _webSocketHandler = ServiceLocator.Get<MagicWebSocketHandler>();
+                _webSocketHandler = ServiceLocator.Instance.GetService<MagicWebSocketHandler>();
                 if (_webSocketHandler == null)
                 {
                     _webSocketHandler = new MagicWebSocketHandler();
-                    ServiceLocator.Register(_webSocketHandler);
+                    ServiceLocator.Instance.RegisterService(_webSocketHandler);
                 }
                 
                 // Initialize services

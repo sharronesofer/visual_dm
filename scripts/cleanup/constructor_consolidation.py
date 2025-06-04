@@ -323,12 +323,12 @@ class Character:
         # ... rest of duplicate pattern
 
 # Use:
-from infrastructure.base_classes import BaseGameEntity
+from backend.infrastructure.base_classes import BaseGameEntity
 
 class Character(BaseGameEntity):
-    def __init__(self, character_class="warrior", level=1, **kwargs):
+    def __init__(self, attribute_specialization="balanced", level=1, **kwargs):
         super().__init__(**kwargs)
-        self.character_class = character_class
+        self.attribute_specialization = attribute_specialization
         self.level = level
         # Only character-specific attributes here
 """
@@ -385,13 +385,13 @@ This guide shows how to migrate duplicate constructors to use the new base class
 
 **Recommended migration to:**
 ```python
-from infrastructure.base_classes import BaseGame{info['type']}
+from backend.infrastructure.base_classes import BaseGame{info['type']}
 
 class YourClass(BaseGame{info['type']}):
-    def __init__(self, specific_param1, specific_param2, **kwargs):
+    def __init__(self, attribute_specialization="balanced", level=1, **kwargs):
         super().__init__(**kwargs)
-        self.specific_param1 = specific_param1
-        self.specific_param2 = specific_param2
+        self.attribute_specialization = attribute_specialization
+        self.level = level
 ```
 
 """

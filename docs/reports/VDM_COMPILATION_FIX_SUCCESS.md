@@ -53,7 +53,7 @@ Your VDM Unity project is now **fully operational** and compiles without errors.
 
 ### **✅ Verification Evidence:**
 ```
-Successfully changed project path to: /Users/Sharrone/Visual_DM/VDM
+Successfully changed project path to: /Users/Sharrone/Dreamforge/VDM
 [Package Manager] Done resolving packages in 2.01 seconds
 ```
 - ✅ **Zero CS#### compilation errors**

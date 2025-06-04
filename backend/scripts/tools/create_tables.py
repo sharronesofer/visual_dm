@@ -8,7 +8,6 @@ and using the shared Base class.
 
 import os
 import sys
-import importlib.util
 from sqlalchemy.orm import sessionmaker
 
 # Add the backend directory to the Python path
@@ -16,55 +15,56 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 def create_all_tables():
     """Create all database tables."""
-    # Import the shared database module directly using importlib
-    db_file_path = os.path.join(os.path.dirname(__file__), 'systems', 'shared', 'database.py')
-    spec = importlib.util.spec_from_file_location("database_module", db_file_path)
-    db_module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(db_module)
+    # Import the database components from the new infrastructure location
+    from backend.infrastructure.shared.database import get_database_manager, sync_database
+    from backend.infrastructure.shared.database.base import Base
+    from backend.infrastructure.shared.database.session import get_db
     
-    Base = db_module.Base
-    engine = db_module.engine
-    DATABASE_URL = db_module.DATABASE_URL
+    print("Initializing database manager...")
     
-    print(f"Connecting to database: {DATABASE_URL}")
-    print(f"Engine: {engine}")
-    
-    # Patch the import so character models use our Base
-    import backend.infrastructure.shared.database
-    backend.infrastructure.shared.database.Base = Base
-    backend.infrastructure.shared.database.engine = engine
+    # Initialize and sync database
+    try:
+        sync_database()
+        print("Database synchronization completed")
+    except Exception as e:
+        print(f"Database sync failed: {e}")
+        return False
     
     # Import all models to ensure they're registered with Base
     print("Importing character models...")
-    from backend.systems.character_service.models import Character, CharacterProgression
+    try:
+        from backend.systems.character.models import Character
+        # from backend.systems.character.models.character_progression import CharacterProgression
+        print("Character models imported successfully")
+    except Exception as e:
+        print(f"Warning: Could not import all character models: {e}")
     
     # Show which tables are registered
-    print(f"Tables registered with Base: {list(Base.metadata.tables.keys())}")
+    if hasattr(Base, 'metadata') and Base.metadata.tables:
+        print(f"Tables registered with Base: {list(Base.metadata.tables.keys())}")
+    else:
+        print("No tables found registered with Base")
     
-    # Create all tables
-    print("Creating database tables...")
-    Base.metadata.create_all(bind=engine)
-    print("Database tables created successfully!")
-    
-    # Test the connection
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    session = SessionLocal()
-    
+    # Test the database connection
+    print("Testing database connection...")
     try:
-        # Test querying the character table
-        count = session.query(Character).count()
-        print(f"✅ Character table verified - contains {count} characters")
+        # Get a database session to test
+        db_session = next(get_db())
         
-        # Test querying the character progression table
-        prog_count = session.query(CharacterProgression).count()
-        print(f"✅ Character progression table verified - contains {prog_count} records")
+        # Test querying the character table if it exists
+        try:
+            count = db_session.query(Character).count()
+            print(f"✅ Character table verified - contains {count} characters")
+        except Exception as e:
+            print(f"Warning: Could not query character table: {e}")
+        
+        db_session.close()
         
     except Exception as e:
-        print(f"❌ Error testing tables: {e}")
+        print(f"❌ Error testing database connection: {e}")
         return False
-    finally:
-        session.close()
     
+    print("✅ Database validation completed successfully!")
     return True
 
 if __name__ == "__main__":

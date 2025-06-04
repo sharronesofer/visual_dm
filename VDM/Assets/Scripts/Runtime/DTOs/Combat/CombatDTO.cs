@@ -51,4 +51,18 @@ namespace VDM.DTOs.Combat
         public int evasion;
         public Dictionary<string, int> resistances;
     }
+
+    /// <summary>
+    /// Types of combat actions that can be performed
+    /// </summary>
+    public enum CombatActionDTOType
+    {
+        Attack,
+        CastSpell,
+        UseItem,
+        Move,
+        Defend,
+        Wait,
+        Flee
+    }
 } 

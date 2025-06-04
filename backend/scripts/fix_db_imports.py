@@ -50,7 +50,7 @@ def fix_db_imports(file_path):
 
 def main():
     """Main function to fix all database imports"""
-    backend_dir = '/Users/Sharrone/Visual_DM/backend'
+    backend_dir = '/Users/Sharrone/Dreamforge/backend'
     
     # Find all Python files
     python_files = []

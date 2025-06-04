@@ -8,16 +8,13 @@ the Development Bible standards.
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from uuid import UUID, uuid4
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
-
-from backend.infrastructure.shared.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
+from backend.infrastructure.shared.models import SharedBaseModel
 
 class IntegrationBaseModel(SharedBaseModel):
     """Base model for integration system with common fields"""
@@ -30,7 +27,6 @@ class IntegrationBaseModel(SharedBaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class IntegrationModel(IntegrationBaseModel):
     """Primary model for integration system"""
     
@@ -38,7 +34,6 @@ class IntegrationModel(IntegrationBaseModel):
     description: Optional[str] = Field(None, description="Description of the integration")
     status: str = Field(default="active", description="Status of the integration")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
 
 class IntegrationEntity(Base):
     """SQLAlchemy entity for integration system"""
@@ -70,7 +65,6 @@ class IntegrationEntity(Base):
             "is_active": self.is_active
         }
 
-
 # Request/Response Models
 class CreateIntegrationRequest(BaseModel):
     """Request model for creating integration"""
@@ -79,7 +73,6 @@ class CreateIntegrationRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateIntegrationRequest(BaseModel):
     """Request model for updating integration"""
     
@@ -87,7 +80,6 @@ class UpdateIntegrationRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class IntegrationResponse(BaseModel):
     """Response model for integration"""
@@ -102,7 +94,6 @@ class IntegrationResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class IntegrationListResponse(BaseModel):
     """Response model for integration lists"""

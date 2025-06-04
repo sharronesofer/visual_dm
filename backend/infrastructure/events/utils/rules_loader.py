@@ -2,6 +2,7 @@ import os
 import json
 from pathlib import Path
 import logging
+from typing import List, Tuple
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +16,7 @@ class RulesLoader:
         self.game_rules_path = os.path.join(workspace_root, "data/builders/content")
         self.cache = {}
         self._races = None
-        self._feats = None
+        self._abilities = None
         self._skills = None
         self._attributes = None
         self._kits = None
@@ -54,15 +55,16 @@ class RulesLoader:
         races_data = self._load_json_file("races.json")
         return races_data.get(race_name, {})
         
-    def get_feats(self) -> list:
-        """Get list of feats with descriptions."""
-        if "feats" not in self.cache:
-            feats_data = self._load_json_file("abilities.json", use_game_rules=True)
-            if isinstance(feats_data, list):
-                self.cache["feats"] = [(feat["name"], feat.get("description", "")) for feat in feats_data]
+    def get_abilities(self) -> List[Tuple[str, str]]:
+        """Get list of available abilities"""
+        if "abilities" not in self.cache:
+            # First try to load from abilities data
+            abilities_data = self._load_json_file("abilities.json", use_game_rules=True)
+            if isinstance(abilities_data, list):
+                self.cache["abilities"] = [(ability["name"], ability.get("description", "")) for ability in abilities_data]
             else:
-                self.cache["feats"] = self._extract_named_pairs(feats_data)
-        return self.cache["feats"]
+                self.cache["abilities"] = self._extract_named_pairs(abilities_data)
+        return self.cache["abilities"]
         
     def get_skills(self) -> list:
         """Get list of skills with descriptions."""
@@ -88,13 +90,24 @@ class RulesLoader:
             self.cache["skills_data"] = self._load_json_file("skills.json")
         return self.cache["skills_data"].get(skill_name, {})
 
-    def get_feat_data(self, feat_name: str) -> dict:
-        """Get detailed data for a specific feat."""
-        if "feats_data" not in self.cache:
-            feats_data = self._load_json_file("abilities.json", use_game_rules=True)
-            if isinstance(feats_data, list):
-                self.cache["feats_data"] = {feat["name"]: feat for feat in feats_data}
+    def get_ability_data(self, ability_name: str) -> dict:
+        """Get specific ability data by name"""
+        if "abilities_data" not in self.cache:
+            abilities_data = self._load_json_file("abilities.json", use_game_rules=True)
+            if isinstance(abilities_data, dict) and "feats" in abilities_data:  # Handle nested structure with legacy "feats" key
+                abilities_data = abilities_data["feats"]
+            if isinstance(abilities_data, list):
+                self.cache["abilities_data"] = {ability["name"]: ability for ability in abilities_data}
             else:
-                self.cache["feats_data"] = feats_data
-        return self.cache["feats_data"].get(feat_name, {})
+                self.cache["abilities_data"] = abilities_data
+        return self.cache["abilities_data"].get(ability_name, {})
+
+    # Legacy methods for backward compatibility
+    def get_feat_data(self, feat_name: str) -> dict:
+        """Get detailed data for a specific ability. (Legacy method name - Visual DM uses 'abilities' not 'feats')"""
+        return self.get_ability_data(feat_name)
+
+    def get_feats(self) -> List[Tuple[str, str]]:
+        """Get list of abilities with descriptions. (Legacy method name - Visual DM uses 'abilities' not 'feats')"""
+        return self.get_abilities()
 

@@ -15,5 +15,5 @@ def ensure_data_file(path, default_content=None):
         print(f'Created data file: {path}')
 
 if __name__ == '__main__':
-    ensure_data_file('data/equipment/items.json', default_content={})
+    ensure_data_file('data/systems/equipment/items.json', default_content={})
     ensure_data_file('backend/rules_json/equipment.json', default_content={}) 

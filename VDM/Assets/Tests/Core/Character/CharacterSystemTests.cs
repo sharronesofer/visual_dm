@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using VDM.Tests.Core;
+using System.Collections.Generic;
 
 namespace VDM.Tests.Core.Character
 {
@@ -264,6 +265,26 @@ namespace VDM.Tests.Core.Character
             AssertPerformance(100f); // Should complete within 100ms
         }
 
+        [Test]
+        public void Character_Creation_ReturnsValidCharacter()
+        {
+            // Arrange
+            var builder = new CharacterBuilder();
+            
+            // Act
+            var character = builder
+                .SetName("Test Character")
+                .SetRace("Human")
+                .SetAbilities(new List<string> { "Combat Training", "Skill Focus" })
+                .Build();
+            
+            // Assert
+            Assert.IsNotNull(character);
+            Assert.AreEqual("Test Character", character.Name);
+            Assert.AreEqual("Human", character.Race);
+            Assert.IsTrue(character.Abilities.Contains("Combat Training"));
+        }
+
         #region Helper Methods
 
         private TestCharacter CreateCharacter(object properties)
@@ -317,6 +338,7 @@ namespace VDM.Tests.Core.Character
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Race { get; set; }
         public string Class { get; set; }
         public int Level { get; set; } = 1;
         public int MaxHealth { get; set; } = 100;
@@ -324,6 +346,14 @@ namespace VDM.Tests.Core.Character
         public int Experience { get; set; }
         public CharacterAttributes Attributes { get; set; } = new CharacterAttributes();
         public CharacterEquipment Equipment { get; set; } = new CharacterEquipment();
+        public List<string> Abilities { get; set; } = new List<string>();
+        
+        // Backward compatibility - Visual DM uses "Abilities" terminology, but "Feats" is supported for legacy code
+        public List<string> Feats 
+        {
+            get => Abilities;
+            set => Abilities = value;
+        }
         
         public bool IsDead => CurrentHealth <= 0;
 
@@ -482,6 +512,50 @@ namespace VDM.Tests.Core.Character
     {
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
+    }
+
+    /// <summary>
+    /// Mock CharacterBuilder for testing purposes
+    /// </summary>
+    public class CharacterBuilder
+    {
+        private string _name;
+        private string _race;
+        private List<string> _abilities = new List<string>();
+
+        public CharacterBuilder SetName(string name)
+        {
+            _name = name;
+            return this;
+        }
+
+        public CharacterBuilder SetRace(string race)
+        {
+            _race = race;
+            return this;
+        }
+
+        public CharacterBuilder SetAbilities(List<string> abilities)
+        {
+            _abilities = abilities ?? new List<string>();
+            return this;
+        }
+
+        // Backward compatibility method - Visual DM uses "Abilities" terminology
+        public CharacterBuilder SetFeats(List<string> feats)
+        {
+            return SetAbilities(feats);
+        }
+
+        public TestCharacter Build()
+        {
+            return new TestCharacter
+            {
+                Name = _name,
+                Race = _race,
+                Abilities = new List<string>(_abilities)
+            };
+        }
     }
 
     #endregion

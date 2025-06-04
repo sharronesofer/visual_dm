@@ -12,8 +12,11 @@ from datetime import datetime
 import random
 from sqlalchemy.orm import Session
 
-from backend.systems.economy.models import TradeRoute, TradeRouteData
-from backend.systems.economy.services.resource import Resource
+# Infrastructure layer - SQLAlchemy models for database operations
+from backend.infrastructure.database.economy.trade_route_models import TradeRoute
+from backend.infrastructure.database.economy.models import Resource
+# Business layer - Pydantic models for business logic
+from backend.systems.economy.models.trade_route import TradeRouteData
 from backend.systems.economy.services.resource_service import ResourceService
 import logging
 logger = logging.getLogger(__name__)
@@ -126,8 +129,21 @@ class TradeService:
                 logger.error("Origin and destination regions cannot be the same")
                 return None
                 
-            # Create route
-            route = TradeRoute.from_data_model(route_data_obj)
+            # Create route directly from the business data
+            route = TradeRoute(
+                name=route_data_obj.name,
+                origin_region_id=int(route_data_obj.origin_region_id) if route_data_obj.origin_region_id else None,
+                destination_region_id=int(route_data_obj.destination_region_id) if route_data_obj.destination_region_id else None,
+                resource_ids=route_data_obj.resource_ids,
+                volume=route_data_obj.volume,
+                profit=route_data_obj.profit,
+                status=route_data_obj.status,
+                is_active=True,
+                created_at=datetime.utcnow(),
+                last_updated=datetime.utcnow(),
+                route_metadata=route_data_obj.metadata
+            )
+            
             self.db_session.add(route)
             self.db_session.commit()
             

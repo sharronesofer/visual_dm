@@ -7,7 +7,7 @@ using UnityEngine;
 using VDM.Infrastructure.Services;
 using VDM.Systems.Faction.Models;
 using VDM.Infrastructure.Integration;
-
+using VDM.Infrastructure.Core;
 
 namespace VDM.Systems.Faction.Services
 {
@@ -41,7 +41,7 @@ namespace VDM.Systems.Faction.Services
         // Coroutines
         private Coroutine _autoSyncCoroutine;
 
-        protected virtual string GetClientName() => "FactionService";
+        protected override string GetClientName() => "FactionService";
 
         protected virtual void InitializeClient()
         {

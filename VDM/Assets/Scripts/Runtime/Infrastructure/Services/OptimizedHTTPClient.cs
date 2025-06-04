@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using VDM.Infrastructure.Services;
 using System.IO.Compression;
 using VDM.Infrastructure.Core;
+using System.IO;
 
 namespace VDM.Infrastructure.Services.Services.Http
 {

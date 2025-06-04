@@ -8,7 +8,9 @@ using VDM.Infrastructure.Services;
 using VDM.DTOs.Common;
 using VDM.Systems.Rumor.Services;
 using VDM.Systems.Rumor.Ui;
-
+using VDM.Infrastructure.Core.Core.Systems;
+using VDM.Systems.Rumor.Models;
+using VDM.Systems.Events.Models;
 
 namespace VDM.Systems.Rumor.Integration
 {
@@ -602,8 +604,14 @@ namespace VDM.Systems.Rumor.Integration
 
     #region Events
 
-    public class RumorCreatedEvent
+    public class RumorCreatedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "rumor.created";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RumorManager";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RumorId { get; set; }
         public string OriginatorId { get; set; }
         public string Content { get; set; }
@@ -613,8 +621,14 @@ namespace VDM.Systems.Rumor.Integration
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
-    public class RumorSpreadEvent
+    public class RumorSpreadEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "rumor.spread";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RumorManager";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RumorId { get; set; }
         public string FromEntityId { get; set; }
         public string ToEntityId { get; set; }
@@ -623,46 +637,94 @@ namespace VDM.Systems.Rumor.Integration
         public DateTime SpreadAt { get; set; } = DateTime.UtcNow;
     }
 
-    public class RumorDeletedEvent
+    public class RumorDeletedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "rumor.deleted";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RumorManager";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RumorId { get; set; }
         public DateTime DeletedAt { get; set; } = DateTime.UtcNow;
     }
 
-    public class RumorDecayAppliedEvent
+    public class RumorDecayAppliedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "rumor.decay_applied";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RumorManager";
+        public EventPriority Priority => EventPriority.Normal;
+
         public int Days { get; set; }
         public DateTime AppliedAt { get; set; }
     }
 
     // External events we listen to
-    public class CharacterCreatedEvent
+    public class CharacterCreatedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "character.created";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "CharacterSystem";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string CharacterId { get; set; }
     }
 
-    public class CharacterDeletedEvent
+    public class CharacterDeletedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "character.deleted";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "CharacterSystem";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string CharacterId { get; set; }
     }
 
-    public class FactionCreatedEvent
+    public class FactionCreatedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "faction.created";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "FactionSystem";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string FactionId { get; set; }
     }
 
-    public class FactionDeletedEvent
+    public class FactionDeletedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "faction.deleted";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "FactionSystem";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string FactionId { get; set; }
     }
 
-    public class RegionCreatedEvent
+    public class RegionCreatedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "region.created";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RegionSystem";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RegionId { get; set; }
     }
 
-    public class RegionDeletedEvent
+    public class RegionDeletedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "region.deleted";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RegionSystem";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RegionId { get; set; }
     }
 

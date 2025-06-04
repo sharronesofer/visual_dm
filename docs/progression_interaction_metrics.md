@@ -4,7 +4,7 @@
 |-------------------|--------------------------------------------------|--------------------------------------------------------|---------------------------------------|-----------------------------------------|
 | Level             | Character's overall advancement                  | Unlocks advanced options, restricts some interactions  | Level >= 10 unlocks advanced dialogue | Temporary boosts, regression            |
 | Skills            | Specific abilities (e.g., lockpicking, combat)   | Unlocks/modifies skill-based interactions              | Lockpicking >= 5 enables safe cracking| Temporary buffs, skill resets           |
-| Attributes        | Core stats (strength, intelligence, etc.)        | Restricts/enables attribute-gated interactions         | Strength >= 8 to move heavy object    | Penalties, temporary boosts             |
+| Attributes        | Core attributes (strength, intelligence, etc.)      | Restricts/enables attribute-gated interactions         | Strength >= 8 to move heavy object    | Penalties, temporary boosts             |
 | Reputation        | Standing with factions/groups                    | Unlocks/restricts faction-specific interactions        | Reputation > 50 unlocks quest         | Reputation loss, multiple factions       |
 | Quest Completion  | Progress in quests                               | Unlocks quest-dependent, restricts obsolete            | Completed "Find Artifact" unlocks vendor | Quest resets, branching questlines   |
 | Achievements      | Special milestones                               | Unlocks unique/cosmetic interactions                   | "Master Thief" unlocks secret fence  | Revocation (rare), hidden triggers      |

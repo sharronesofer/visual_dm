@@ -234,7 +234,7 @@ curl -H "Authorization: Bearer dev_token_123" http://localhost:3001/characters
 curl -X POST \
   -H "Authorization: Bearer dev_token_123" \
   -H "Content-Type: application/json" \
-  -d '{"name": "Test Hero", "race": "ELF", "character_class": "WIZARD"}' \
+  -d '{"name": "Test Hero", "race": "ELF", "feats": ["ARCANE_MASTERY", "SPELL_FOCUS"]}' \
   http://localhost:3001/characters
 
 # Get NPCs in specific region

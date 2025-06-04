@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import List, Dict
 
 class Task59CriticalFixer:
-    def __init__(self, backend_root: str = "/Users/Sharrone/Visual_DM/backend"):
+    def __init__(self, backend_root: str = "/Users/Sharrone/Dreamforge/backend"):
         self.backend_root = Path(backend_root)
         self.fixed_files = []
         self.errors_fixed = 0

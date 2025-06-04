@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj",
+      "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj",
       "projectName": "Net",
-      "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj",
+      "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj",
       "packagesPath": "/Users/Sharrone/.nuget/packages/",
-      "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//Net/",
+      "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//Net/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Sharrone/.nuget/NuGet/NuGet.Config"

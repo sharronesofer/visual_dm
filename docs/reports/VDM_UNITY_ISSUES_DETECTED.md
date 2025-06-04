@@ -1,7 +1,7 @@
 # VDM Unity Project Issues - Live Analysis Report
 
 **Generated:** $(date)
-**Project Path:** /Users/Sharrone/Visual_DM/VDM
+**Project Path:** /Users/Sharrone/Dreamforge/VDM
 **Unity Version:** 2022.3.62f1
 
 ## 🔴 Critical Issues Detected
@@ -68,7 +68,7 @@ rm -rf obj/
 Run this to fix the critical issues:
 
 ```bash
-cd /Users/Sharrone/Visual_DM
+cd /Users/Sharrone/Dreamforge
 
 # 1. Fix package issue - downgrade Mirror to stable version
 sed -i '' 's/"com.mirror-networking.mirror": "89.3.0"/"com.mirror-networking.mirror": "89.2.0"/' VDM/Packages/manifest.json

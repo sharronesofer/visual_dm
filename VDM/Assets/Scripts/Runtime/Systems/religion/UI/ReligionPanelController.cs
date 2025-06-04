@@ -4,10 +4,11 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
-using VDM.DTOs.Common;
 using VDM.Systems.Religion.Services;
 using VDM.Infrastructure.Services;
 using System.Threading.Tasks;
+using VDM.Infrastructure.Core.Core.Ui;
+using VDM.Systems.Religion.Models;
 
 namespace VDM.Systems.Religion.Ui
 {

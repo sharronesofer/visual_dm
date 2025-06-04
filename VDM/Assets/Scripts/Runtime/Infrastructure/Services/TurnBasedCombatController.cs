@@ -284,6 +284,6 @@ namespace VDM.Infrastructure.Core
         public bool IsAlive { get; set; } = true;
         public bool CanAct { get; set; } = true;
         public List<string> Conditions { get; set; } = new List<string>();
-        public Dictionary<string, int> Stats { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> Attributes { get; set; } = new Dictionary<string, int>();
     }
 } 

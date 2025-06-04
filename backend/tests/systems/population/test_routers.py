@@ -11,7 +11,8 @@ from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
 
-from backend.systems.population import routers
+from backend.infrastructure.api.population.router import router as population_router
+from backend.infrastructure.api.population.demographic_router import router as demographic_router
 
 
 class TestPopulationRouters:

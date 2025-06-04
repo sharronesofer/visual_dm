@@ -13,6 +13,7 @@ try:
     from .world_service import WorldService
     from .map_service import MapService
     from .campaign_service import CampaignService
+    from .espionage_service import EspionageInfrastructureService
 except ImportError:
     BaseService = None
     ServiceFactory = None
@@ -22,6 +23,7 @@ except ImportError:
     WorldService = None
     MapService = None
     CampaignService = None
+    EspionageInfrastructureService = None
 
 __all__ = [
     'BaseService',
@@ -31,5 +33,6 @@ __all__ = [
     'NPCService',
     'WorldService',
     'MapService',
-    'CampaignService'
+    'CampaignService',
+    'EspionageInfrastructureService'
 ]

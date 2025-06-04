@@ -1,8 +1,8 @@
-# Visual_DM Character System Test Fixes PRD
+# Dreamforge Character System Test Fixes PRD
 
 ## Overview
 
-The Visual_DM application has several failing tests in the character system component, particularly in the RelationshipService and RelationshipAPI modules. This PRD outlines the issues and required fixes to make these tests pass, ensuring the character system functions correctly.
+The Dreamforge application has several failing tests in the character system component, particularly in the RelationshipService and RelationshipAPI modules. This PRD outlines the issues and required fixes to make these tests pass, ensuring the character system functions correctly.
 
 ## Objectives
 
@@ -40,7 +40,7 @@ The Visual_DM application has several failing tests in the character system comp
 
 1. Fix the character creation with stats:
    - Update the test to use the correct character model structure
-   - Ensure stats dictionary properly includes character class information
+   - Ensure stats dictionary properly includes character build information
    - Fix mock setup for character creation and retrieval
 
 2. Fix relationship and mood integration:

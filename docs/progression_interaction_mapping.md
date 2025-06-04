@@ -16,8 +16,8 @@ This document defines the mapping between character progression metrics and inte
 | Interaction           | Required Metric(s) | Threshold/Condition         | Unlock/Restriction Rule                | Special Cases                | Example Character Profiles         |
 |----------------------|--------------------|----------------------------|----------------------------------------|------------------------------|------------------------------------|
 | Advanced Dialogue    | Level, Reputation  | Level >= 10, Reputation > 50| Unlocks advanced dialogue options      | Temporary level boost, reputation loss| High-level hero, disgraced noble    |
-| Secret Dialogue      | Reputation         | Reputation > 50            | Unlocks secret dialogue                | Story event may override     | High-rep Rogue, Low-rep Outcast       |
-| Skill-based Persuade | Skills (Persuasion)| Persuasion >= 5            | Unlocks persuade option                | Temporary debuff may block   | Persuasion 6 Bard, Persuasion 3 NPC    |
+| Secret Dialogue      | Reputation         | Reputation > 50            | Unlocks secret dialogue                | Story event may override     | High-rep Infiltrator, Low-rep Outcast       |
+| Skill-based Persuade | Skills (Persuasion)| Persuasion >= 5            | Unlocks persuade option                | Temporary debuff may block   | Persuasion 6 Diplomat, Persuasion 3 NPC    |
 
 ### 2.2 Quest Access
 | Interaction      | Required Metric(s) | Threshold/Condition         | Unlock/Restriction Rule                | Special Cases                | Example Character Profiles         |
@@ -29,7 +29,7 @@ This document defines the mapping between character progression metrics and inte
 ### 2.3 Vendor Inventory
 | Interaction      | Required Metric(s) | Threshold/Condition         | Unlock/Restriction Rule                | Special Cases                | Example Character Profiles         |
 |-----------------|--------------------|----------------------------|----------------------------------------|------------------------------|------------------------------------|
-| Rare Items      | Level, Reputation  | Level >= 15, Reputation > 60| Unlocks rare vendor items              | Event unlocks all items        | High-level Hero, Low-rep Thief        |
+| Rare Items      | Level, Reputation  | Level >= 15, Reputation > 60| Unlocks rare vendor items              | Event unlocks all items        | High-level Hero, Low-rep Outcast        |
 | Discounted Goods| Achievements       | Achievement: Bargainer      | Unlocks discount                       | Temporary sale event           | Bargainer, Non-achiever              |
 
 ### 2.4 Skill Checks

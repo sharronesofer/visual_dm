@@ -1,0 +1,180 @@
+[
+  {
+    "id": "a81ec062-af90-4d00-a6d1-15338028ca3a",
+    "arc_id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+    "step_number": 1,
+    "title": "Investigate Guild Activities",
+    "description": "Begin surveillance of merchant guild meetings and financial transactions. Gather initial intelligence on their political connections.",
+    "narrative_text": "The merchants' quarter buzzes with unusual activity. Guild members whisper in shadowed doorways, and coin changes hands in amounts that suggest more than simple trade negotiations.",
+    "completion_criteria": {
+      "type": "investigation",
+      "requirements": [
+        "Observe 3 guild meetings",
+        "Document financial irregularities",
+        "Identify key political contacts"
+      ],
+      "success_threshold": 2
+    },
+    "status": "COMPLETED",
+    "is_optional": false,
+    "prerequisites": [],
+    "rewards": {
+      "experience": 150,
+      "reputation": {
+        "merchants_guild_001": -5,
+        "information_brokers": 10
+      },
+      "items": ["guild_meeting_notes", "financial_records"]
+    },
+    "created_at": "2025-05-07T01:34:24.937549Z",
+    "updated_at": "2025-05-24T01:34:24.937549Z",
+    "completed_at": "2025-05-24T01:34:24.937549Z",
+    "step_metadata": {
+      "difficulty": 3,
+      "estimated_time_hours": 2.0,
+      "location": "merchants_quarter"
+    }
+  },
+  {
+    "id": "91834495-823f-41a9-9ed4-34778435b0a1",
+    "arc_id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+    "step_number": 2,
+    "title": "Infiltrate Noble Circles",
+    "description": "Gain access to noble social gatherings to understand their response to guild pressure. Determine which nobles have been compromised.",
+    "narrative_text": "The grand ballroom glitters with jewels and false smiles. Beneath the veneer of aristocratic elegance, fear and greed dance together as nobles discuss the merchants' growing influence in hushed, worried tones.",
+    "completion_criteria": {
+      "type": "social",
+      "requirements": [
+        "Attend noble gathering",
+        "Identify compromised nobles",
+        "Discover guild pressure tactics"
+      ],
+      "success_threshold": 2
+    },
+    "status": "COMPLETED",
+    "is_optional": false,
+    "prerequisites": ["a81ec062-af90-4d00-a6d1-15338028ca3a"],
+    "rewards": {
+      "experience": 200,
+      "reputation": {
+        "eastern_nobles_002": 15,
+        "merchants_guild_001": -10
+      },
+      "items": ["noble_testimonies", "bribery_evidence"]
+    },
+    "created_at": "2025-05-07T01:34:24.937590Z",
+    "updated_at": "2025-05-25T01:34:24.937590Z",
+    "completed_at": "2025-05-25T01:34:24.937590Z",
+    "step_metadata": {
+      "difficulty": 4,
+      "estimated_time_hours": 3.0,
+      "location": "noble_district"
+    }
+  },
+  {
+    "id": "6b3dfd6a-d64c-4b68-a83c-37d8ffa2bd6e",
+    "arc_id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+    "step_number": 3,
+    "title": "Uncover the Master Plan",
+    "description": "Piece together the guild's ultimate objectives by following the money trail and analyzing their territorial acquisitions.",
+    "narrative_text": "Maps spread across your table reveal a pattern of strategic purchases and political maneuvering. The guild's true ambition becomes clear: they seek nothing less than to establish their own independent trading republic.",
+    "completion_criteria": {
+      "type": "investigation",
+      "requirements": [
+        "Trace financial networks",
+        "Map territorial acquisitions",
+        "Decode strategic documents"
+      ],
+      "success_threshold": 3
+    },
+    "status": "ACTIVE",
+    "is_optional": false,
+    "prerequisites": ["91834495-823f-41a9-9ed4-34778435b0a1"],
+    "rewards": {
+      "experience": 250,
+      "reputation": {
+        "information_brokers": 20
+      },
+      "items": ["master_plan_documents", "territory_maps"]
+    },
+    "created_at": "2025-05-07T01:34:24.937637Z",
+    "updated_at": "2025-05-28T01:34:24.937637Z",
+    "completed_at": null,
+    "step_metadata": {
+      "difficulty": 6,
+      "estimated_time_hours": 4.0,
+      "location": "various"
+    }
+  },
+  {
+    "id": "7baa8696-2647-47fb-97d3-5b0beb059daf",
+    "arc_id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+    "step_number": 4,
+    "title": "Choose Your Allegiance",
+    "description": "With the guild's plan exposed, decide whether to support their vision of merchant rule, aid the traditional nobles, or forge a third path.",
+    "narrative_text": "The moment of truth has arrived. Guild representatives offer you wealth and position in their new order, while desperate nobles promise titles and land for your support. The choice you make will shape the future of the eastern provinces.",
+    "completion_criteria": {
+      "type": "choice",
+      "requirements": [
+        "Meet with guild leaders",
+        "Meet with noble coalition",
+        "Make final decision"
+      ],
+      "success_threshold": 1,
+      "choices": ["support_guild", "support_nobles", "forge_compromise", "expose_both"]
+    },
+    "status": "PENDING",
+    "is_optional": false,
+    "prerequisites": ["6b3dfd6a-d64c-4b68-a83c-37d8ffa2bd6e"],
+    "rewards": {
+      "experience": 300,
+      "reputation": {
+        "varies": "based_on_choice"
+      }
+    },
+    "created_at": "2025-05-07T01:34:24.937676Z",
+    "updated_at": "2025-05-07T01:34:24.937676Z",
+    "completed_at": null,
+    "step_metadata": {
+      "difficulty": 5,
+      "estimated_time_hours": 2.0,
+      "location": "multiple_meetings"
+    }
+  },
+  {
+    "id": "f67e59a6-02c7-44ab-80c2-5cfc4e8a144f",
+    "arc_id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+    "step_number": 5,
+    "title": "Execute the Resolution",
+    "description": "Implement your chosen solution and deal with the consequences. The eastern provinces will never be the same.",
+    "narrative_text": "Your decision ripples through the political landscape like a stone cast into still water. Supporters rally to your cause while enemies plot revenge. The old order crumbles as a new era begins.",
+    "completion_criteria": {
+      "type": "narrative",
+      "requirements": [
+        "Implement chosen solution",
+        "Handle immediate consequences",
+        "Establish new power structure"
+      ],
+      "success_threshold": 3
+    },
+    "status": "PENDING",
+    "is_optional": false,
+    "prerequisites": ["7baa8696-2647-47fb-97d3-5b0beb059daf"],
+    "rewards": {
+      "experience": 500,
+      "reputation": {
+        "varies": "major_based_on_choice"
+      },
+      "world_state_changes": ["eastern_provinces_power_structure"]
+    },
+    "created_at": "2025-05-07T01:34:24.937708Z",
+    "updated_at": "2025-05-07T01:34:24.937708Z",
+    "completed_at": null,
+    "step_metadata": {
+      "difficulty": 7,
+      "estimated_time_hours": 3.0,
+      "location": "eastern_provinces",
+      "world_changing": true
+    }
+  }
+] 

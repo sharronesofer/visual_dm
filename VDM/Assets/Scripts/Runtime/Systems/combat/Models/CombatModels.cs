@@ -312,4 +312,48 @@ namespace VDM.Systems.Combat.Models
         ParticipantRemoved,
         ParticipantDefeated
     }
+
+    /// <summary>
+    /// Represents a combat encounter with multiple participants
+    /// </summary>
+    [System.Serializable]
+    public class CombatEncounter
+    {
+        public string Id;
+        public string Name;
+        public List<Combatant> Participants = new List<Combatant>();
+        public int CurrentTurn;
+        public bool IsActive;
+        public DateTime StartTime;
+        
+        public CombatEncounter()
+        {
+            Id = System.Guid.NewGuid().ToString();
+            StartTime = DateTime.Now;
+        }
+    }
+
+    /// <summary>
+    /// Represents a character in combat (extends Combatant with character-specific data)
+    /// </summary>
+    [System.Serializable]
+    public class CombatCharacter : Combatant
+    {
+        public string CharacterId;
+        public string CharacterName;
+        public int Level;
+        public Dictionary<string, int> Skills = new Dictionary<string, int>();
+        public List<string> Abilities = new List<string>();
+        
+        public CombatCharacter() : base()
+        {
+            CharacterId = System.Guid.NewGuid().ToString();
+        }
+        
+        public CombatCharacter(string characterId, string name) : base()
+        {
+            CharacterId = characterId;
+            CharacterName = name;
+        }
+    }
 } 

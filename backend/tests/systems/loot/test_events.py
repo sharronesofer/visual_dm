@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.loot import events
+    from backend.infrastructure.systems.loot import events
 except ImportError:
-    pytest.skip(f"Module backend.systems.loot.events not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.loot.events not found", allow_module_level=True)
 
 
 class TestEvents:

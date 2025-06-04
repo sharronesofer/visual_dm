@@ -9,24 +9,23 @@ using VDM.Infrastructure.Services;
 namespace VDM.Systems.Loot.Services
 {
     /// <summary>
-    /// Main service for interacting with the loot system backend API.
-    /// Handles loot generation, item identification, enhancement, and shop operations.
+    /// Service for generating and managing loot, item identification, and shop inventories
     /// </summary>
-    public class LootService : MonoBehaviour
+    public class LootService : BaseHTTPClient
     {
         [Header("API Configuration")]
-        [SerializeField] private string baseUrl = "http://localhost:8000/api/v1";
         [SerializeField] private string lootEndpoint = "/loot";
+        [SerializeField] private string baseUrl = "http://localhost:8000/api";
         [SerializeField] private float requestTimeout = 30f;
         
         [Header("Caching")]
         [SerializeField] private bool enableCaching = true;
         [SerializeField] private float cacheExpiration = 300f; // 5 minutes
         
-        // Singleton instance
+        // Singleton pattern
         public static LootService Instance { get; private set; }
         
-        // Events for real-time updates
+        // Events for reactive UI updates
         public event Action<LootItem> OnLootGenerated;
         public event Action<LootItem, bool> OnItemIdentified;
         public event Action<LootItem, bool> OnItemEnhanced;
@@ -34,8 +33,9 @@ namespace VDM.Systems.Loot.Services
         public event Action<ShopTransaction> OnShopTransactionCompleted;
         
         // Private fields
-        private IApiService apiService;
         private Dictionary<string, CachedData> cache = new Dictionary<string, CachedData>();
+        
+        protected override string GetClientName() => "LootService";
         
         private void Awake()
         {
@@ -43,21 +43,11 @@ namespace VDM.Systems.Loot.Services
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                InitializeService();
+                InitializeClient();
             }
             else
             {
                 Destroy(gameObject);
-            }
-        }
-        
-        private void InitializeService()
-        {
-            // Get the API service (assuming it exists in the core services)
-            apiService = FindObjectOfType<ApiService>();
-            if (apiService == null)
-            {
-                Debug.LogError("LootService: ApiService not found! Please ensure ApiService is available.");
             }
         }
         
@@ -75,7 +65,7 @@ namespace VDM.Systems.Loot.Services
                 
                 Debug.Log($"Generating loot: {jsonData}");
                 
-                var response = await apiService.PostAsync<Dictionary<string, object>>(endpoint, jsonData);
+                var response = await PostAsync<Dictionary<string, object>>(endpoint, jsonData);
                 
                 if (response != null)
                 {
@@ -136,7 +126,7 @@ namespace VDM.Systems.Loot.Services
                 };
                 
                 string jsonData = JsonConvert.SerializeObject(requestData);
-                var response = await apiService.PostAsync<Dictionary<string, object>>(endpoint, jsonData);
+                var response = await PostAsync<Dictionary<string, object>>(endpoint, jsonData);
                 
                 if (response != null && response.ContainsKey("item"))
                 {
@@ -170,7 +160,7 @@ namespace VDM.Systems.Loot.Services
                 string endpoint = $"{lootEndpoint}/identify";
                 string jsonData = JsonConvert.SerializeObject(request);
                 
-                var response = await apiService.PostAsync<Dictionary<string, object>>(endpoint, jsonData);
+                var response = await PostAsync<Dictionary<string, object>>(endpoint, jsonData);
                 
                 if (response != null)
                 {
@@ -209,7 +199,7 @@ namespace VDM.Systems.Loot.Services
                 };
                 
                 string jsonData = JsonConvert.SerializeObject(requestData);
-                var response = await apiService.PostAsync<Dictionary<string, object>>(endpoint, jsonData);
+                var response = await PostAsync<Dictionary<string, object>>(endpoint, jsonData);
                 
                 if (response != null)
                 {
@@ -245,7 +235,7 @@ namespace VDM.Systems.Loot.Services
                 string endpoint = $"{lootEndpoint}/enhance";
                 string jsonData = JsonConvert.SerializeObject(request);
                 
-                var response = await apiService.PostAsync<Dictionary<string, object>>(endpoint, jsonData);
+                var response = await PostAsync<Dictionary<string, object>>(endpoint, jsonData);
                 
                 if (response != null)
                 {
@@ -313,7 +303,7 @@ namespace VDM.Systems.Loot.Services
                 };
                 
                 string jsonData = JsonConvert.SerializeObject(requestData);
-                var response = await apiService.PostAsync<List<Dictionary<string, object>>>(endpoint, jsonData);
+                var response = await PostAsync<List<Dictionary<string, object>>>(endpoint, jsonData);
                 
                 if (response != null)
                 {
@@ -360,7 +350,7 @@ namespace VDM.Systems.Loot.Services
                 };
                 
                 string jsonData = JsonConvert.SerializeObject(requestData);
-                var response = await apiService.PostAsync<List<Dictionary<string, object>>>(endpoint, jsonData);
+                var response = await PostAsync<List<Dictionary<string, object>>>(endpoint, jsonData);
                 
                 if (response != null)
                 {
@@ -400,7 +390,7 @@ namespace VDM.Systems.Loot.Services
                 if (worldEvents != null && worldEvents.Count > 0)
                     query += $"&world_events={Uri.EscapeDataString(string.Join(",", worldEvents))}";
                 
-                var response = await apiService.GetAsync<Dictionary<string, object>>(endpoint + query);
+                var response = await GetAsync<Dictionary<string, object>>(endpoint + query);
                 
                 if (response != null && response.ContainsKey("price"))
                 {
@@ -430,7 +420,7 @@ namespace VDM.Systems.Loot.Services
                 string endpoint = $"{lootEndpoint}/item/description";
                 var query = $"?item_data={Uri.EscapeDataString(JsonConvert.SerializeObject(item))}&knowledge_level={knowledgeLevel}";
                 
-                var response = await apiService.GetAsync<Dictionary<string, object>>(endpoint + query);
+                var response = await GetAsync<Dictionary<string, object>>(endpoint + query);
                 
                 if (response != null && response.ContainsKey("description"))
                 {

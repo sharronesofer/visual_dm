@@ -1,6 +1,5 @@
-"""Utils for population system"""
+"""Utilities for population system"""
 
-# Auto-generated imports
-from .population_utils import *
-from .state_utils import *
-from backend.infrastructure.utils import *
+# Import from actual utility modules
+from .consolidated_utils import *
+from .demographic_models import *

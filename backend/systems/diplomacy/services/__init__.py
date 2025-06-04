@@ -1,8 +1,19 @@
-"""Services for diplomacy system"""
+"""
+Diplomacy System Services
 
-# Auto-generated imports
+This package contains all the service layer implementations for the diplomacy system.
+"""
+
+from .diplomacy_service import DiplomacyService
 from .core_services import *
-# Temporarily disabled due to import issues
-# from .diplomacy_service import *
-# from .integration_services import *
-# from .services import *
+from .unified_diplomacy_service import UnifiedDiplomacyService
+from .integration_services import DiplomacyIntegrationManager
+from .crisis_management_service import CrisisManagementService
+from .intelligence_service import *
+
+__all__ = [
+    "DiplomacyService",
+    "UnifiedDiplomacyService", 
+    "DiplomacyIntegrationManager",
+    "CrisisManagementService"
+]

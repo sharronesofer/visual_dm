@@ -41,45 +41,45 @@
 ## ⚠️ Issues Identified
 
 ### Import Issues (457)
-- /Users/Sharrone/Visual_DM/backend/systems/economy/__init__.py:18 - from .economy_manager import EconomyManager
-- /Users/Sharrone/Visual_DM/backend/systems/economy/__init__.py:19 - from .routers.shop_router import router as shop_router
-- /Users/Sharrone/Visual_DM/backend/systems/economy/__init__.py:20 - from .routers.economy_router import router as economy_router
-- /Users/Sharrone/Visual_DM/backend/systems/economy/__init__.py:23 - from .models import (
-- /Users/Sharrone/Visual_DM/backend/systems/economy/__init__.py:37 - from .services import (
-- /Users/Sharrone/Visual_DM/backend/systems/economy/__init__.py:46 - from .repositories import EconomyRepository
-- /Users/Sharrone/Visual_DM/backend/systems/economy/__init__.py:49 - from .utils import calculate_sale_value, calculate_purchase_value
-- /Users/Sharrone/Visual_DM/backend/systems/economy/routers/economy_router.py:10 - from ..services.economy_service import EconomyService
-- /Users/Sharrone/Visual_DM/backend/systems/economy/routers/economy_router.py:11 - from ..repositories.economy_repository import EconomyRepository
-- /Users/Sharrone/Visual_DM/backend/systems/economy/routers/economy_router.py:12 - from ..models.economic_metric import EconomicMetric, MetricType
+- /Users/Sharrone/Dreamforge/backend/systems/economy/__init__.py:18 - from .economy_manager import EconomyManager
+- /Users/Sharrone/Dreamforge/backend/systems/economy/__init__.py:19 - from .routers.shop_router import router as shop_router
+- /Users/Sharrone/Dreamforge/backend/systems/economy/__init__.py:20 - from .routers.economy_router import router as economy_router
+- /Users/Sharrone/Dreamforge/backend/systems/economy/__init__.py:23 - from .models import (
+- /Users/Sharrone/Dreamforge/backend/systems/economy/__init__.py:37 - from .services import (
+- /Users/Sharrone/Dreamforge/backend/systems/economy/__init__.py:46 - from .repositories import EconomyRepository
+- /Users/Sharrone/Dreamforge/backend/systems/economy/__init__.py:49 - from .utils import calculate_sale_value, calculate_purchase_value
+- /Users/Sharrone/Dreamforge/backend/systems/economy/routers/economy_router.py:10 - from ..services.economy_service import EconomyService
+- /Users/Sharrone/Dreamforge/backend/systems/economy/routers/economy_router.py:11 - from ..repositories.economy_repository import EconomyRepository
+- /Users/Sharrone/Dreamforge/backend/systems/economy/routers/economy_router.py:12 - from ..models.economic_metric import EconomicMetric, MetricType
 - ... and 447 more
 
 ### Test Organization Issues (41)
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_river_generator.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_world_manager.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_biome_utils.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_coastline_utils.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_components.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_world_generation_utils.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_service_utils.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_optimized_worldgen.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_router.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_modding_system.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_poi_generator.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_regional_features.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_elevation_utils.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_resource_utils.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_continent_repository.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_world_utils.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_world_generator.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_seed_loader.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_config.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_worldgen_routes.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_api.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_events.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_worldgen_routes_endpoints.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_initialize_modding.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_continent_service.py
-- misplaced: /Users/Sharrone/Visual_DM/backend/tests/test_settlement_service.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_river_generator.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_world_manager.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_biome_utils.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_coastline_utils.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_components.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_world_generation_utils.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_service_utils.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_optimized_worldgen.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_router.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_modding_system.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_poi_generator.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_regional_features.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_elevation_utils.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_resource_utils.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_continent_repository.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_world_utils.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_world_generator.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_seed_loader.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_config.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_worldgen_routes.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_api.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_events.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_worldgen_routes_endpoints.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_initialize_modding.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_continent_service.py
+- misplaced: /Users/Sharrone/Dreamforge/backend/tests/test_settlement_service.py
 - duplicate: test_utils_comprehensive.py
 - duplicate: test_quest_integration.py
 - duplicate: test_utils.py

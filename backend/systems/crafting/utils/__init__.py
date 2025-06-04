@@ -1,2 +1,0 @@
-"""Utils for crafting system"""
-

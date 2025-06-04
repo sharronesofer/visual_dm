@@ -14,11 +14,12 @@ import math
 
 import logging
 logger = logging.getLogger(__name__)
-from backend.systems.economy.models import (
-    CommodityFuture, CommodityFutureData,
-    Market
-)
-from backend.systems.economy.services.resource import Resource
+# Infrastructure layer - SQLAlchemy models for database operations
+from backend.infrastructure.database.economy.commodity_future_models import CommodityFuture
+from backend.infrastructure.database.economy.market_models import Market
+from backend.infrastructure.database.economy.models import Resource
+# Business layer - Pydantic models for business logic
+from backend.systems.economy.models.commodity_future import CommodityFutureData
 
 class FuturesService:
     """
@@ -187,8 +188,26 @@ class FuturesService:
                     logger.error(f"Market {future_data_obj.market_id} not found")
                     return None
             
-            # Create the future
-            future = CommodityFuture.from_data(future_data_obj)
+            # Create the future directly from the business data
+            future = CommodityFuture(
+                id=future_data_obj.id,
+                resource_id=future_data_obj.resource_id,
+                market_id=future_data_obj.market_id,
+                seller_id=future_data_obj.seller_id,
+                buyer_id=future_data_obj.buyer_id,
+                quantity=future_data_obj.quantity,
+                strike_price=future_data_obj.strike_price,
+                expiration_date=future_data_obj.expiration_date,
+                settlement_date=future_data_obj.settlement_date,
+                is_settled=future_data_obj.is_settled,
+                premium=future_data_obj.premium,
+                contract_type=future_data_obj.contract_type,
+                status=future_data_obj.status,
+                terms=future_data_obj.terms,
+                created_at=future_data_obj.created_at,
+                updated_at=future_data_obj.updated_at
+            )
+            
             self.db_session.add(future)
             self.db_session.commit()
             

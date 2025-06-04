@@ -5,7 +5,8 @@ This module provides base classes and utilities for the authentication system.
 """
 
 import uuid
-from sqlalchemy.ext.declarative import declarative_base
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
+
 from sqlalchemy import Column, String, DateTime, Boolean, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
@@ -13,7 +14,6 @@ from datetime import datetime
 from typing import Any, Dict
 
 # Create declarative base for auth models
-Base = declarative_base()
 
 class AuthBaseModel(Base):
     """

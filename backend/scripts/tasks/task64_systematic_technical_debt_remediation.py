@@ -643,8 +643,12 @@ class TechnicalDebtRemediator:
         implementation = '''        
 # Proper import handling with fallback
 try:
-    from backend.systems.motif import get_motif_manager
+    from backend.systems.motif.services.manager_core import MotifManager
     MOTIF_MANAGER_AVAILABLE = True
+    
+    def get_motif_manager():
+        """Get the motif manager instance."""
+        return MotifManager.get_instance()
 except ImportError:
     logger.warning("Motif manager not available, using fallback")
     MOTIF_MANAGER_AVAILABLE = False

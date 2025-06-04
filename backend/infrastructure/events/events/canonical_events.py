@@ -184,6 +184,9 @@ class RelationshipRemoved(EventBase):
         data["event_type"] = "relationship.removed"
         super().__init__(**data)
 
+# Alias for backward compatibility
+RelationshipDeleted = RelationshipRemoved
+
 # Character Events
 class CharacterCreated(EventBase):
     """Event emitted when a new character is created."""

@@ -114,12 +114,12 @@ Visual DM is a comprehensive tabletop roleplaying game companion that brings you
 1. **Basic Information**
    - **Name**: Choose a unique character name
    - **Race**: Select from available races or create custom
-   - **Class**: Choose character class and specialization
+   - **Attribute Specialization**: Choose character attributes and abilities
    - **Background**: Select character history and motivation
 
 2. **Attributes and Skills**
    - **Primary Attributes**: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma
-   - **Skills**: Choose skills based on class and background
+   - **Skills**: Choose skills based on attribute specialization and background
    - **Point Allocation**: Distribute attribute points using point-buy or random generation
    - **Skill Specialization**: Focus on specific skill areas
 
@@ -130,7 +130,7 @@ Visual DM is a comprehensive tabletop roleplaying game companion that brings you
    - **Flaws**: Character weaknesses and challenges
 
 4. **Equipment and Starting Gear**
-   - **Starting Equipment**: Basic gear based on class and background
+   - **Starting Equipment**: Basic gear based on attribute specialization and background
    - **Currency**: Starting money and resources
    - **Special Items**: Unique items with character significance
    - **Inventory Organization**: Arrange items efficiently

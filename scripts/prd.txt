@@ -445,10 +445,10 @@ The economy system is structured into several key components:
 - Comprehensive validation of normal operation and error handling
 - Documentation of testing approach and test cases
 
-# Visual_DM Faction System Testing PRD
+# Dreamforge Faction System Testing PRD
 
 ## Project Overview
-Visual_DM is a digital fantasy RPG world management system that includes a sophisticated faction system. This PRD outlines the testing requirements for the `/backend/systems/faction` directory, ensuring proper functionality of faction mechanics, relationships, and interactions.
+Dreamforge is a digital fantasy RPG world management system that includes a sophisticated faction system. This PRD outlines the testing requirements for the `/backend/systems/faction` directory, ensuring proper functionality of faction mechanics, relationships, and interactions.
 
 ## Background
 The faction system is a core component of the game's political and diplomatic simulation. It manages relationships between different groups (factions) in the game world, their influence levels, tensions, and warfare conditions. The system needs comprehensive testing to ensure proper behavior under various conditions.

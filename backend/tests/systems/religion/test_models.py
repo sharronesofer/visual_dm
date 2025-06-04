@@ -35,7 +35,7 @@ class TestReligionBaseModel:
         assert isinstance(model.created_at, datetime)
         assert model.updated_at is None
         assert model.is_active is True
-        assert model.metadata == {}
+        assert model.extra_metadata == {}
     
     def test_base_model_with_custom_values(self):
         """Test model creation with custom values"""
@@ -48,14 +48,14 @@ class TestReligionBaseModel:
             created_at=custom_time,
             updated_at=custom_time,
             is_active=False,
-            metadata=custom_metadata
+            extra_metadata=custom_metadata
         )
         
         assert model.id == custom_id
         assert model.created_at == custom_time
         assert model.updated_at == custom_time
         assert model.is_active is False
-        assert model.metadata == custom_metadata
+        assert model.extra_metadata == custom_metadata
 
 
 class TestReligionModel:

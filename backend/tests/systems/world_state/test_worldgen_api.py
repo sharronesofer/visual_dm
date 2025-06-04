@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.world_state import worldgen_api
+    from backend.infrastructure.systems.world_state import worldgen_api
 except ImportError:
     pytest.skip(f"Module backend.systems.world_state.worldgen_api not found", allow_module_level=True)
 

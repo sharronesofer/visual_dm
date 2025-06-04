@@ -9,7 +9,10 @@ from typing import Dict, Any, List, Optional, Tuple, Union
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-from backend.systems.economy.models.market import Market, MarketData
+# Infrastructure layer - SQLAlchemy models for database operations
+from backend.infrastructure.database.economy.market_models import Market
+# Business layer - Pydantic models for business logic
+from backend.systems.economy.models.market import MarketData
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +94,20 @@ class MarketService:
                 market_data = MarketData(**market_data)
             
             if self.db_session:
-                market = Market.from_data_model(market_data)
+                # Create market directly from the business data
+                market = Market(
+                    name=market_data.name,
+                    region_id=int(market_data.region_id) if market_data.region_id else None,
+                    market_type=market_data.market_type,
+                    price_modifiers=market_data.price_modifiers,
+                    supply_demand=market_data.supply_demand,
+                    trading_volume=market_data.trading_volume,
+                    tax_rate=market_data.tax_rate,
+                    is_active=True,
+                    created_at=datetime.utcnow(),
+                    updated_at=datetime.utcnow(),
+                    market_metadata=market_data.metadata
+                )
                 self.db_session.add(market)
                 self.db_session.commit()
                 return market

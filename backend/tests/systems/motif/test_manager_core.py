@@ -9,10 +9,7 @@ import pytest
 from unittest.mock import Mock, patch
 
 # Import the module under test
-try:
-    from backend.systems.motif import manager_core
-except ImportError:
-    pytest.skip(f"Module backend.systems.motif.manager_core not found", allow_module_level=True)
+from backend.systems.motif.services import manager_core
 
 
 class TestManager_Core:

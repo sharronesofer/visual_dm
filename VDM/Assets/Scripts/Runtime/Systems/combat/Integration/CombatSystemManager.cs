@@ -8,6 +8,8 @@ using VDM.Systems.Combat.Services;
 using VDM.Systems.Combat.Models;
 using VDM.Infrastructure.Core.Core.Systems;
 using VDM.Infrastructure.Core.Core.Patterns;
+using VDM.Infrastructure.Services;
+using VDM.Systems.Combat.Ui;
 
 namespace VDM.Systems.Combat.Integration
 {
@@ -75,7 +77,7 @@ namespace VDM.Systems.Combat.Integration
         private void Awake()
         {
             // Register with service locator
-            ServiceLocator.Register<CombatSystemManager>(this);
+            ServiceLocator.Instance.RegisterService<CombatSystemManager>(this);
             HealthStatus = SystemHealthStatus.Unknown;
         }
         
@@ -99,18 +101,18 @@ namespace VDM.Systems.Combat.Integration
                 Debug.Log("Initializing Combat System...");
                 
                 // Get or create services
-                _combatService = ServiceLocator.Get<CombatService>();
+                _combatService = ServiceLocator.Instance.GetService<CombatService>();
                 if (_combatService == null)
                 {
                     _combatService = new CombatService();
-                    ServiceLocator.Register(_combatService);
+                    ServiceLocator.Instance.RegisterService(_combatService);
                 }
                 
-                _webSocketHandler = ServiceLocator.Get<CombatWebSocketHandler>();
+                _webSocketHandler = ServiceLocator.Instance.GetService<CombatWebSocketHandler>();
                 if (_webSocketHandler == null)
                 {
                     _webSocketHandler = new CombatWebSocketHandler();
-                    ServiceLocator.Register(_webSocketHandler);
+                    ServiceLocator.Instance.RegisterService(_webSocketHandler);
                 }
                 
                 // Initialize services

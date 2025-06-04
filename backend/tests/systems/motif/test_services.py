@@ -9,10 +9,7 @@ import pytest
 from unittest.mock import Mock, patch
 
 # Import the module under test
-try:
-    from backend.systems.motif import services
-except ImportError:
-    pytest.skip(f"Module backend.systems.motif.services not found", allow_module_level=True)
+from backend.systems.motif import services
 
 
 class TestServices:

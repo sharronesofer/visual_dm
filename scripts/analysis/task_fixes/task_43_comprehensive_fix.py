@@ -465,6 +465,6 @@ def get_event_dispatcher() -> EventDispatcher:
         print(f"5. Validate cross-system integration")
 
 if __name__ == "__main__":
-    project_root = "/Users/Sharrone/Visual_DM"
+    project_root = "/Users/Sharrone/Dreamforge"
     fixer = BackendSystemsFixer(project_root)
     fixer.fix_all() 

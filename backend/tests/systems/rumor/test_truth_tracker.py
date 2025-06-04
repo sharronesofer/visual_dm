@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.rumor.utils.truth_tracker import truth_tracker
+    from backend.systems.rumor.utils.truth_tracker import truth_tracker
 except ImportError:
     pytest.skip(f"Module backend.systems.rumor.truth_tracker not found", allow_module_level=True)
 

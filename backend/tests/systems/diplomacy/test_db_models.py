@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.diplomacy import db_models
+    from backend.infrastructure.database.models import diplomacy_models as db_models
 except ImportError:
-    pytest.skip(f"Module backend.systems.diplomacy.db_models not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.database.models.diplomacy_models not found", allow_module_level=True)
 
 
 class TestDb_Models:

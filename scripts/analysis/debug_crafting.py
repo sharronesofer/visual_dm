@@ -6,9 +6,9 @@ import json
 from pathlib import Path
 
 # Add the backend to the path
-sys.path.insert(0, 'backend')
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
-from backend.systems.crafting import get_recipe_service, learn_recipe
+from backend.infrastructure.crafting.services import CraftingService
 
 def test_recipe_loading():
     # Set up test environment
@@ -37,12 +37,12 @@ def test_recipe_loading():
     os.environ['RECIPE_DIR'] = str(recipe_dir)
 
     # Test recipe loading
-    recipe_service = get_recipe_service()
-    all_recipes = recipe_service.get_all_recipes()
+    crafting_service = CraftingService()
+    all_recipes = crafting_service.get_all_recipes()
     print(f'Loaded recipes: {list(all_recipes.keys())}')
 
     # Test learning
-    result = learn_recipe('test_char', 'iron_sword')
+    result = crafting_service.learn_recipe('test_char', 'iron_sword')
     print(f'Learn result: {result}')
 
     temp_dir.cleanup()

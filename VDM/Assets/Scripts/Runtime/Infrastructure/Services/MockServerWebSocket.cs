@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Text;
+using NativeWebSocket;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 using System.Runtime.InteropServices;
-#else
-using NativeWebSocket;
 #endif
 
 namespace VDM.Infrastructure.Services
@@ -149,10 +148,11 @@ namespace VDM.Infrastructure.Services
             {
                 var message = new WebSocketMessage
                 {
-                    type = messageType,
-                    data = data,
-                    timestamp = DateTime.Now.ToString("O"),
-                    id = Guid.NewGuid().ToString()
+                    Type = messageType,
+                    Data = data,
+                    Timestamp = DateTime.Now,
+                    Id = Guid.NewGuid().ToString(),
+                    Priority = MessagePriority.Normal
                 };
                 
                 string jsonMessage = JsonConvert.SerializeObject(message);
@@ -232,10 +232,10 @@ namespace VDM.Infrastructure.Services
         
         private void HandleMessage(WebSocketMessage message)
         {
-            switch (message.type)
+            switch (message.Type)
             {
                 case "system_message":
-                    LogDebug($"System message: {message.data}");
+                    LogDebug($"System message: {message.Data}");
                     break;
                     
                 case "echo":
@@ -263,7 +263,7 @@ namespace VDM.Infrastructure.Services
                     break;
                     
                 default:
-                    LogDebug($"Unhandled message type: {message.type}");
+                    LogDebug($"Unhandled message type: {message.Type}");
                     break;
             }
         }
@@ -304,17 +304,5 @@ namespace VDM.Infrastructure.Services
         public string ServerUrl => serverUrl;
         
         #endregion
-    }
-    
-    /// <summary>
-    /// WebSocket message structure for communication with mock server
-    /// </summary>
-    [Serializable]
-    public class WebSocketMessage
-    {
-        public string type;
-        public object data;
-        public string timestamp;
-        public string id;
     }
 } 

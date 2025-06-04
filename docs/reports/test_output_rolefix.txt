@@ -1,7 +1,7 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
 cachedir: .pytest_cache
-rootdir: /Users/Sharrone/Visual_DM
+rootdir: /Users/Sharrone/Dreamforge
 configfile: pytest.ini
 testpaths: backend/tests
 plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
@@ -11,7 +11,7 @@ collecting ...
 00:17:05 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
 00:17:05 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
 00:17:05 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
-00:17:05 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+00:17:05 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Dreamforge/backend/analytics_data
 00:17:05 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
 00:17:05 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
 00:17:05 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
@@ -27,8 +27,8 @@ collecting ...
 00:17:06 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
 00:17:06 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
 00:17:06 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
 00:17:07 [INFO] root: World Generator initialized.
 00:17:07 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
 00:17:07 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
@@ -740,109 +740,109 @@ INFO     backend.systems.shared.database.session:session.py:128 Successfully imp
 WARNING  backend.systems.shared.database.session:session.py:140 Failed to create tables from metadata: Foreign key associated with column 'resources.faction_id' could not find table 'factions' with which to generate a foreign key to target column 'id'
 WARNING  backend.systems.shared.database.session:session.py:140 Failed to create tables from metadata: Foreign key associated with column 'equipment.character_id' could not find table 'characters' with which to generate a foreign key to target column 'id'
 ______________ ERROR at setup of TestRoleModel.test_role_creation ______________
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 14
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 14
       def test_role_creation(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:14
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:14
 _______ ERROR at setup of TestRoleModel.test_role_name_unique_constraint _______
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 32
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 32
       def test_role_name_unique_constraint(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:32
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:32
 _________ ERROR at setup of TestRoleModel.test_role_user_relationship __________
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 47
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 47
       def test_role_user_relationship(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:47
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:47
 ______ ERROR at setup of TestRoleModel.test_role_permission_relationship _______
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 64
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 64
       def test_role_permission_relationship(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestRoleModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:64
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:64
 ________ ERROR at setup of TestPermissionModel.test_permission_creation ________
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 109
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 109
       def test_permission_creation(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:109
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:109
 _ ERROR at setup of TestPermissionModel.test_permission_name_unique_constraint _
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 127
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 127
       def test_permission_name_unique_constraint(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:127
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:127
 ___ ERROR at setup of TestPermissionModel.test_permission_role_relationship ____
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 142
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 142
       def test_permission_role_relationship(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:142
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:142
 __ ERROR at setup of TestPermissionModel.test_role_with_multiple_permissions ___
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 183
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py, line 183
       def test_role_with_multiple_permissions(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_role_permission_models.py::<event_loop>, backend/tests/systems/auth_user/unit/test_role_permission_models.py::TestPermissionModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_role_permission_models.py:183
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_role_permission_models.py:183
 ______________ ERROR at setup of TestUserModel.test_user_creation ______________
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 17
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py, line 17
       def test_user_creation(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:17
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py:17
 ______ ERROR at setup of TestUserModel.test_user_email_unique_constraint _______
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 36
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py, line 36
       def test_user_email_unique_constraint(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:36
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py:36
 _________ ERROR at setup of TestUserModel.test_user_role_relationship __________
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 51
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py, line 51
       def test_user_role_relationship(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:51
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py:51
 __________ ERROR at setup of TestUserModel.test_password_reset_fields __________
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 92
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py, line 92
       def test_password_reset_fields(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:92
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py:92
 _________ ERROR at setup of TestUserModel.test_user_is_active_default __________
-file /Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py, line 111
+file /Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py, line 111
       def test_user_is_active_default(self, db_session):
 E       fixture 'db_session' not found
 >       available fixtures: _session_event_loop, anyio_backend, anyio_backend_name, anyio_backend_options, backend/tests/systems/auth_user/unit/test_user_model.py::<event_loop>, backend/tests/systems/auth_user/unit/test_user_model.py::TestUserModel::<event_loop>, backend_root_dir, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, class_mocker, cov, data_dir, doctest_namespace, event_loop, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, mock_dependencies, mock_event_dispatcher, mock_gpt_client, mock_storage, mocker, module_mocker, monkeypatch, no_cover, package_mocker, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, reset_singletons, sample_memory_data, sample_motif_data, sample_rumor_data, session_mocker, tests_root_dir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 
-/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/unit/test_user_model.py:111
+/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/unit/test_user_model.py:111
 =================================== FAILURES ===================================
 __________ TestAuthIntegration.test_protected_endpoint_without_token ___________
 

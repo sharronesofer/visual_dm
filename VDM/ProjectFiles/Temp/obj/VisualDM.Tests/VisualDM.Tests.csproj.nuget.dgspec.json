@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Tests.csproj": {}
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Tests.csproj": {}
   },
   "projects": {
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj": {
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj",
+        "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj",
         "projectName": "Net",
-        "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj",
+        "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj",
         "packagesPath": "/Users/Sharrone/.nuget/packages/",
-        "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//Net/",
+        "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//Net/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Sharrone/.nuget/NuGet/NuGet.Config"
@@ -58,14 +58,14 @@
         }
       }
     },
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj": {
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj",
+        "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj",
         "projectName": "VisualDM.Legacy.Systems",
-        "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj",
+        "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj",
         "packagesPath": "/Users/Sharrone/.nuget/packages/",
-        "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//VisualDM.Legacy.Systems/",
+        "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//VisualDM.Legacy.Systems/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Sharrone/.nuget/NuGet/NuGet.Config"
@@ -80,8 +80,8 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj"
               }
             }
           }
@@ -116,14 +116,14 @@
         }
       }
     },
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Networking.csproj": {
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Networking.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Networking.csproj",
+        "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Networking.csproj",
         "projectName": "VisualDM.Networking",
-        "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Networking.csproj",
+        "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Networking.csproj",
         "packagesPath": "/Users/Sharrone/.nuget/packages/",
-        "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//VisualDM.Networking/",
+        "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//VisualDM.Networking/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Sharrone/.nuget/NuGet/NuGet.Config"
@@ -138,8 +138,8 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj"
               }
             }
           }
@@ -174,14 +174,14 @@
         }
       }
     },
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj": {
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Systems.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj",
+        "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Systems.csproj",
         "projectName": "VisualDM.Systems",
-        "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj",
+        "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Systems.csproj",
         "packagesPath": "/Users/Sharrone/.nuget/packages/",
-        "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//VisualDM.Systems/",
+        "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//VisualDM.Systems/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Sharrone/.nuget/NuGet/NuGet.Config"
@@ -196,14 +196,14 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Net.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Net.csproj"
               },
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Legacy.Systems.csproj"
               },
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Networking.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Networking.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Networking.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Networking.csproj"
               }
             }
           }
@@ -238,14 +238,14 @@
         }
       }
     },
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Tests.csproj": {
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Tests.csproj",
+        "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Tests.csproj",
         "projectName": "VisualDM.Tests",
-        "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Tests.csproj",
+        "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Tests.csproj",
         "packagesPath": "/Users/Sharrone/.nuget/packages/",
-        "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//VisualDM.Tests/",
+        "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//VisualDM.Tests/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Sharrone/.nuget/NuGet/NuGet.Config"
@@ -260,11 +260,11 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Systems.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Systems.csproj"
               },
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.World.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.World.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.World.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.World.csproj"
               }
             }
           }
@@ -299,14 +299,14 @@
         }
       }
     },
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.World.csproj": {
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.World.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.World.csproj",
+        "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.World.csproj",
         "projectName": "VisualDM.World",
-        "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.World.csproj",
+        "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.World.csproj",
         "packagesPath": "/Users/Sharrone/.nuget/packages/",
-        "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//VisualDM.World/",
+        "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//VisualDM.World/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Sharrone/.nuget/NuGet/NuGet.Config"
@@ -321,8 +321,8 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj": {
-                "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Systems.csproj"
+              "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Systems.csproj": {
+                "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Systems.csproj"
               }
             }
           }

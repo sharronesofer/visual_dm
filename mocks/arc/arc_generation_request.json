@@ -1,14 +1,35 @@
 {
-  "arc_type": "SECONDARY",
-  "themes": [
-    "Republican",
-    "floor",
-    "a"
+  "request_id": "gen_req_001",
+  "user_id": "player_001",
+  "arc_type": "CHARACTER",
+  "target_character_id": "hero_protagonist",
+  "region_id": "starting_village_region",
+  "themes": ["personal growth", "heroic journey", "overcoming fear"],
+  "difficulty_preference": "MEDIUM",
+  "estimated_duration_hours": 8.0,
+  "narrative_hooks": [
+    "The character must face their greatest fear",
+    "A mentor figure provides guidance",
+    "Personal sacrifice is required for growth"
   ],
-  "target_characters": [
-    "d80fc55e-6ac6-437b-87a6-2792aa8173da",
-    "71826d18-1d01-44e6-886a-f3bef90747da"
+  "objectives": [
+    "Complete a trial of courage",
+    "Overcome a personal weakness", 
+    "Gain recognition from peers"
   ],
-  "complexity": "MODERATE",
-  "estimated_steps": 8
+  "constraints": {
+    "max_steps": 6,
+    "avoid_themes": ["death", "betrayal"],
+    "required_locations": ["hometown", "training_grounds"],
+    "faction_alignment": "neutral_good"
+  },
+  "generation_parameters": {
+    "complexity_level": 5,
+    "branching_paths": false,
+    "optional_content": true,
+    "time_pressure": false
+  },
+  "requested_at": "2025-05-28T01:34:24.937710Z",
+  "priority": "NORMAL",
+  "status": "PENDING"
 }

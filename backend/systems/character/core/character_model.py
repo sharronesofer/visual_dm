@@ -88,33 +88,25 @@ class Character:
     
     @property
     def background(self) -> Optional[str]:
-        """Character background."""
-        return self._orm.background
+        """Get character background."""
+        return getattr(self._orm, 'background', None)
     
     @background.setter
     def background(self, value: str) -> None:
         """Set character background."""
-        self._orm.background = value
-    
-    @property
-    def alignment(self) -> Optional[str]:
-        """Character alignment."""
-        return self._orm.alignment
-    
-    @alignment.setter
-    def alignment(self, value: str) -> None:
-        """Set character alignment."""
-        self._orm.alignment = value
+        if hasattr(self._orm, 'background'):
+            self._orm.background = value
     
     @property
     def notes(self) -> List[str]:
-        """Character notes."""
-        return self._orm.notes or []
+        """Get character notes."""
+        return getattr(self._orm, 'notes', []) or []
     
     @notes.setter
     def notes(self, value: List[str]) -> None:
         """Set character notes."""
-        self._orm.notes = value
+        if hasattr(self._orm, 'notes'):
+            self._orm.notes = value
     
     @property
     def created_at(self) -> Optional[datetime]:
@@ -157,8 +149,6 @@ class Character:
             builder.set_race(self.race)
         if self.background:
             builder.set_background(self.background)
-        if self.alignment:
-            builder.set_alignment(self.alignment)
         
         # Set stats/attributes
         if self.stats:
@@ -194,7 +184,6 @@ class Character:
             level=character_data.get("level", 1),
             stats=character_data.get("attributes", {}),
             background=character_data.get("background"),
-            alignment=character_data.get("alignment", "Neutral"),
             notes=character_data.get("notes", [])
         )
         
@@ -278,7 +267,6 @@ class Character:
             "level": self.level,
             "stats": self.stats,
             "background": self.background,
-            "alignment": self.alignment,
             "notes": self.notes,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
@@ -302,7 +290,6 @@ class Character:
             level=data.get("level", 1),
             stats=data.get("stats", {}),
             background=data.get("background"),
-            alignment=data.get("alignment"),
             notes=data.get("notes", [])
         )
         

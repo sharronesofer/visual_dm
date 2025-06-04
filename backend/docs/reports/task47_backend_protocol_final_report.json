@@ -11,7 +11,7 @@
   "fixed_files": [],
   "test_results": {
     "exit_code": 4,
-    "stdout": "============================= test session starts ==============================\nplatform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python\ncachedir: .pytest_cache\nrootdir: /Users/Sharrone/Visual_DM/backend\nconfigfile: pytest.ini\nplugins: anyio-4.9.0, Faker-37.3.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1\nasyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function\ncollecting ... collected 0 items\n\n============================ no tests ran in 0.01s =============================\n",
+    "stdout": "============================= test session starts ==============================\nplatform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python\ncachedir: .pytest_cache\nrootdir: /Users/Sharrone/Dreamforge/backend\nconfigfile: pytest.ini\nplugins: anyio-4.9.0, Faker-37.3.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1\nasyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function\ncollecting ... collected 0 items\n\n============================ no tests ran in 0.01s =============================\n",
     "stderr": "ERROR: file or directory not found: backend/tests\n\n",
     "success": false
   }

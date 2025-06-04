@@ -43,12 +43,12 @@ class CharacterService(BaseService[Character]):
         filters = {"campaign_id": campaign_id}
         return await self.get_by_filter(filters)
     
-    async def update_character_stats(self, character_id: int, stats: Dict[str, Any]) -> Character:
-        """Update stats for a character.
+    async def update_character_attributes(self, character_id: int, attributes: Dict[str, Any]) -> Character:
+        """Update attributes for a character.
         
         Args:
             character_id: Character ID
-            stats: Updated stats
+            attributes: Updated attributes
             
         Returns:
             Updated character entity
@@ -63,17 +63,17 @@ class CharacterService(BaseService[Character]):
                 detail=f"Character with ID {character_id} not found"
             )
         
-        # Update only stats-related fields
+        # Update only attributes-related fields
         update_data = {}
-        stats_fields = [
+        attributes_fields = [
             "strength", "dexterity", "constitution", 
             "intelligence", "wisdom", "charisma",
             "health", "max_health", "level", "experience"
         ]
         
-        for field in stats_fields:
-            if field in stats:
-                update_data[field] = stats[field]
+        for field in attributes_fields:
+            if field in attributes:
+                update_data[field] = attributes[field]
         
         return await self.update(character_id, update_data)
     

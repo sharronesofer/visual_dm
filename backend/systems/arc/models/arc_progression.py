@@ -12,13 +12,11 @@ from enum import Enum
 from pydantic import BaseModel, Field, validator, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey, Float
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
 
-from backend.infrastructure.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.shared.models.models import SharedBaseModel
 
 class ProgressionMethod(Enum):
     """Methods of progression tracking"""
@@ -26,7 +24,6 @@ class ProgressionMethod(Enum):
     MANUAL = "manual"
     HYBRID = "hybrid"
     EVENT_DRIVEN = "event_driven"
-
 
 class ArcProgressionModel(SharedBaseModel):
     """Model for tracking player progression through arcs"""
@@ -58,7 +55,6 @@ class ArcProgressionModel(SharedBaseModel):
         return v
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class ArcProgressionEntity(Base):
     """SQLAlchemy entity for arc progression tracking"""
@@ -112,7 +108,6 @@ class ArcProgressionEntity(Base):
             "progression_metadata": self.progression_metadata or {}
         }
 
-
 # Request/Response Models
 class CreateArcProgressionRequest(BaseModel):
     """Request model for creating arc progression"""
@@ -120,7 +115,6 @@ class CreateArcProgressionRequest(BaseModel):
     arc_id: UUID = Field(..., description="ID of the arc to track")
     player_id: Optional[UUID] = Field(None, description="ID of the player")
     session_id: Optional[UUID] = Field(None, description="ID of the game session")
-
 
 class UpdateArcProgressionRequest(BaseModel):
     """Request model for updating arc progression"""
@@ -134,7 +128,6 @@ class UpdateArcProgressionRequest(BaseModel):
     time_spent: Optional[float] = Field(None, ge=0.0)
     difficulty_rating: Optional[float] = Field(None, ge=1.0, le=10.0)
     satisfaction_rating: Optional[float] = Field(None, ge=1.0, le=10.0)
-
 
 class ArcProgressionResponse(BaseModel):
     """Response model for arc progression"""
@@ -161,7 +154,6 @@ class ArcProgressionResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class ArcProgressionListResponse(BaseModel):
     """Response model for arc progression lists"""
     
@@ -171,7 +163,6 @@ class ArcProgressionListResponse(BaseModel):
     size: int
     has_next: bool
     has_prev: bool
-
 
 class ArcProgressionAnalytics(BaseModel):
     """Analytics model for arc progression data"""
@@ -186,7 +177,6 @@ class ArcProgressionAnalytics(BaseModel):
     most_common_stopping_points: List[Dict[str, Any]]
     completion_rate: float
     engagement_metrics: Dict[str, Any]
-
 
 # Alias for repository compatibility
 ArcProgression = ArcProgressionEntity

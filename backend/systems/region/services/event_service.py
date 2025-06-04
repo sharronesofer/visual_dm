@@ -1,591 +1,314 @@
 """
-Region Event Service
+Region Event Service - Pure Business Logic
 
-Service for dispatching region events to other systems. Provides a centralized
-way to publish region-related events to the global event bus for cross-system
-communication.
+Handles event creation and business logic for the region system.
+Technical event dispatching moved to infrastructure layer.
+Fixed: Now uses strings per Bible and follows clean architecture.
 """
 
-import logging
-from typing import Optional, Dict, Any, List
+from typing import Dict, Any, Optional, List
+from datetime import datetime
 from uuid import UUID
 
-# Temporary mock EventDispatcher to avoid circular imports
-class MockEventDispatcher:
-    """Mock event dispatcher for testing"""
-    
-    @classmethod
-    def get_instance(cls):
-        return cls()
-    
-    async def publish(self, event):
-        """Mock publish method"""
-        logger.info(f"Mock publishing event: {event.event_type}")
 
-from backend.systems.region.events.region_events import (
-    RegionCreatedEvent, RegionUpdatedEvent, RegionDeletedEvent,
-    TerritoryClaimedEvent, TerritoryReleasedEvent, TerritoryContestedEvent,
-    PopulationChangedEvent, SettlementCreatedEvent, SettlementDestroyedEvent,
-    RegionDiscoveredEvent, RegionExploredEvent,
-    ResourceDiscoveredEvent, ResourceDepletedEvent, ResourceExtractedEvent,
-    POICreatedEvent, POIUpdatedEvent, POIDiscoveredEvent,
-    BiomeChangedEvent, ClimateChangedEvent, DangerLevelChangedEvent,
-    ContinentGeneratedEvent, WorldGeneratedEvent,
-    CharacterLocationChangedEvent, CharacterEnteredRegionEvent, CharacterLeftRegionEvent,
-    QuestLocationValidatedEvent, QuestRegionCompletedEvent,
-    create_region_created_event, create_territory_claimed_event, create_character_location_event
-)
-from backend.systems.region.models import (
-    RegionMetadata, ContinentMetadata, HexCoordinate, RegionType, BiomeType, 
-    ClimateType, DangerLevel
-)
-
-logger = logging.getLogger(__name__)
-
-
-class RegionEventService:
-    """Service for publishing region events to the global event system"""
+class RegionEventBusinessService:
+    """
+    Service for handling region-related events - pure business logic.
+    Uses strings per Bible and follows clean architecture principles.
+    """
     
     def __init__(self):
-        # Use mock dispatcher for now to avoid circular imports
-        self.dispatcher = MockEventDispatcher.get_instance()
-        logger.info("RegionEventService initialized with mock dispatcher")
-    
-    # ============================================================================
-    # CORE CRUD EVENT METHODS
-    # ============================================================================
-    
-    async def publish_region_created(
-        self,
-        region_metadata: RegionMetadata,
-        created_by: Optional[str] = None
-    ) -> None:
-        """Publish a region created event"""
-        try:
-            event = create_region_created_event(region_metadata, created_by)
-            await self.dispatcher.publish(event)
-            logger.info(f"Published region created event for region {region_metadata.name}")
-        except Exception as e:
-            logger.error(f"Error publishing region created event: {e}")
-    
-    async def publish_region_updated(
+        """Initialize the event service."""
+        self.event_history = []  # Local business cache for recent events
+        self.max_history_size = 1000
+
+    def create_region_created_event(
         self,
         region_id: UUID,
         region_name: str,
-        changed_fields: Dict[str, Any],
+        region_type: str,  # Use string per Bible
+        continent_id: Optional[UUID] = None,
+        created_by: str = "system"
+    ) -> Dict[str, Any]:
+        """
+        Create a region created event with business validation.
+        
+        Returns:
+            Dict containing the event data for infrastructure to handle
+        """
+        event_data = {
+            "event_type": "region_created",
+            "region_id": str(region_id),
+            "region_name": region_name,
+            "region_type": region_type,
+            "continent_id": str(continent_id) if continent_id else None,
+            "created_by": created_by,
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "normal"
+        }
+        
+        # Add to local history for business logic needs
+        self._add_to_history(event_data)
+        
+        return event_data
+
+    def create_region_updated_event(
+        self,
+        region_id: UUID,
+        region_name: str,
+        changed_fields: List[str],
         old_values: Dict[str, Any],
         new_values: Dict[str, Any],
         continent_id: Optional[UUID] = None,
-        updated_by: Optional[str] = None
-    ) -> None:
-        """Publish a region updated event"""
-        try:
-            event = RegionUpdatedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                changed_fields=changed_fields,
-                old_values=old_values,
-                new_values=new_values,
-                updated_by=updated_by
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published region updated event for region {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing region updated event: {e}")
-    
-    async def publish_region_deleted(
+        updated_by: str = "system"
+    ) -> Dict[str, Any]:
+        """
+        Create a region updated event with business validation.
+        """
+        event_data = {
+            "event_type": "region_updated",
+            "region_id": str(region_id),
+            "region_name": region_name,
+            "changed_fields": changed_fields,
+            "old_values": old_values,
+            "new_values": new_values,
+            "continent_id": str(continent_id) if continent_id else None,
+            "updated_by": updated_by,
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "normal"
+        }
+        
+        self._add_to_history(event_data)
+        return event_data
+
+    def create_region_deleted_event(
         self,
         region_id: UUID,
         region_name: str,
         continent_id: Optional[UUID] = None,
-        deleted_by: Optional[str] = None,
+        deleted_by: str = "system",
         backup_data: Optional[Dict[str, Any]] = None
-    ) -> None:
-        """Publish a region deleted event"""
-        try:
-            event = RegionDeletedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                deleted_by=deleted_by,
-                backup_data=backup_data
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published region deleted event for region {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing region deleted event: {e}")
-    
-    # ============================================================================
-    # TERRITORY CONTROL EVENT METHODS
-    # ============================================================================
-    
-    async def publish_territory_claimed(
+    ) -> Dict[str, Any]:
+        """
+        Create a region deleted event with business validation.
+        """
+        event_data = {
+            "event_type": "region_deleted",
+            "region_id": str(region_id),
+            "region_name": region_name,
+            "continent_id": str(continent_id) if continent_id else None,
+            "deleted_by": deleted_by,
+            "backup_data": backup_data or {},
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "high"
+        }
+        
+        self._add_to_history(event_data)
+        return event_data
+
+    def create_territory_claimed_event(
         self,
-        region_metadata: RegionMetadata,
-        faction_id: UUID,
-        faction_name: str,
-        previous_controller: Optional[UUID] = None,
-        claim_method: str = "conquest",
-        control_strength: float = 1.0,
-        claim_details: Optional[Dict[str, Any]] = None
-    ) -> None:
-        """Publish a territory claimed event"""
-        try:
-            event = TerritoryClaimedEvent(
-                region_id=region_metadata.id,
-                region_name=region_metadata.name,
-                continent_id=region_metadata.continent_id,
-                faction_id=faction_id,
-                faction_name=faction_name,
-                previous_controller=previous_controller,
-                control_strength=control_strength,
-                claim_method=claim_method,
-                claim_details=claim_details
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published territory claimed event: {faction_name} claimed {region_metadata.name}")
-        except Exception as e:
-            logger.error(f"Error publishing territory claimed event: {e}")
-    
-    async def publish_territory_released(
+        faction_id: str,
+        region_id: UUID,
+        territory_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Create a territory claimed event.
+        """
+        event_data = {
+            "event_type": "territory_claimed",
+            "faction_id": faction_id,
+            "region_id": str(region_id),
+            "territory_data": territory_data,
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "high"
+        }
+        
+        self._add_to_history(event_data)
+        return event_data
+
+    def create_resource_discovered_event(
         self,
         region_id: UUID,
-        region_name: str,
-        faction_id: UUID,
-        faction_name: str,
-        release_reason: str = "voluntary",
-        new_controller: Optional[UUID] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a territory released event"""
-        try:
-            event = TerritoryReleasedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                faction_id=faction_id,
-                faction_name=faction_name,
-                release_reason=release_reason,
-                new_controller=new_controller
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published territory released event: {faction_name} released {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing territory released event: {e}")
-    
-    async def publish_territory_contested(
+        resource_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Create a resource discovered event.
+        """
+        # Business validation: Ensure resource type is string per Bible
+        if "resource_type" not in resource_data:
+            raise ValueError("resource_type is required for resource discovery events")
+        
+        event_data = {
+            "event_type": "resource_discovered",
+            "region_id": str(region_id),
+            "resource_data": resource_data,
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "normal"
+        }
+        
+        self._add_to_history(event_data)
+        return event_data
+
+    def create_environmental_change_event(
         self,
         region_id: UUID,
-        region_name: str,
-        contesting_factions: List[UUID],
-        current_controller: Optional[UUID] = None,
-        contest_type: str = "military",
-        contest_details: Optional[Dict[str, Any]] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a territory contested event"""
-        try:
-            event = TerritoryContestedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                contesting_factions=contesting_factions,
-                current_controller=current_controller,
-                contest_type=contest_type,
-                contest_details=contest_details
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published territory contested event for region {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing territory contested event: {e}")
-    
-    # ============================================================================
-    # POPULATION EVENT METHODS
-    # ============================================================================
-    
-    async def publish_population_changed(
+        change_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Create an environmental change event.
+        """
+        # Business validation
+        required_fields = ["change_type"]
+        for field in required_fields:
+            if field not in change_data:
+                raise ValueError(f"{field} is required for environmental change events")
+        
+        event_data = {
+            "event_type": "environmental_change",
+            "region_id": str(region_id),
+            "change_data": change_data,
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "normal"
+        }
+        
+        self._add_to_history(event_data)
+        return event_data
+
+    def create_character_entered_region_event(
         self,
-        region_id: UUID,
-        region_name: str,
-        old_population: int,
-        new_population: int,
-        change_reason: str = "natural",
-        affected_demographics: Optional[Dict[str, Any]] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a population changed event"""
-        try:
-            event = PopulationChangedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                old_population=old_population,
-                new_population=new_population,
-                change_reason=change_reason,
-                affected_demographics=affected_demographics
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published population changed event for {region_name}: {old_population} -> {new_population}")
-        except Exception as e:
-            logger.error(f"Error publishing population changed event: {e}")
-    
-    async def publish_settlement_created(
+        character_id: str,
+        region_id: UUID
+    ) -> Dict[str, Any]:
+        """
+        Create a character entered region event.
+        """
+        event_data = {
+            "event_type": "character_entered_region",
+            "character_id": character_id,
+            "region_id": str(region_id),
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "low"
+        }
+        
+        self._add_to_history(event_data)
+        return event_data
+
+    def create_world_generation_event(
         self,
-        region_id: UUID,
-        region_name: str,
-        settlement_name: str,
-        settlement_type: str,
-        location: HexCoordinate,
-        initial_population: int = 0,
-        founder_faction: Optional[UUID] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a settlement created event"""
-        try:
-            event = SettlementCreatedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                settlement_name=settlement_name,
-                settlement_type=settlement_type,
-                location=location,
-                initial_population=initial_population,
-                founder_faction=founder_faction
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published settlement created event: {settlement_name} in {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing settlement created event: {e}")
-    
-    # ============================================================================
-    # EXPLORATION EVENT METHODS
-    # ============================================================================
-    
-    async def publish_region_discovered(
+        generation_type: str,
+        generation_data: Dict[str, Any],
+        continent_id: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Create world generation events with business validation.
+        """
+        # Business rule: Validate generation event types
+        valid_generation_types = [
+            'continent_created', 'world_generated', 'region_generated',
+            'biome_generated', 'resource_placed', 'poi_generated'
+        ]
+        
+        if generation_type not in valid_generation_types:
+            raise ValueError(f"Invalid generation event type: {generation_type}")
+        
+        event_data = {
+            "event_type": f"world_generation_{generation_type}",
+            "generation_type": generation_type,
+            "continent_id": continent_id,
+            "generation_data": generation_data,
+            "timestamp": datetime.utcnow().isoformat(),
+            "priority": "high"
+        }
+        
+        self._add_to_history(event_data)
+        return event_data
+
+    def get_recent_events(
         self,
-        region_id: UUID,
-        region_name: str,
-        discovered_by: Optional[str] = None,
-        discovery_method: str = "exploration",
-        previously_known: bool = False,
-        discovery_details: Optional[Dict[str, Any]] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a region discovered event"""
-        try:
-            event = RegionDiscoveredEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                discovered_by=discovered_by,
-                discovery_method=discovery_method,
-                previously_known=previously_known,
-                discovery_details=discovery_details
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published region discovered event: {region_name} discovered by {discovered_by}")
-        except Exception as e:
-            logger.error(f"Error publishing region discovered event: {e}")
-    
-    async def publish_region_explored(
-        self,
-        region_id: UUID,
-        region_name: str,
-        old_exploration_level: float,
-        new_exploration_level: float,
-        explored_by: Optional[str] = None,
-        discoveries_made: List[str] = None,
-        exploration_details: Optional[Dict[str, Any]] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a region explored event"""
-        try:
-            event = RegionExploredEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                old_exploration_level=old_exploration_level,
-                new_exploration_level=new_exploration_level,
-                explored_by=explored_by,
-                discoveries_made=discoveries_made or [],
-                exploration_details=exploration_details
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published region explored event: {region_name} exploration {old_exploration_level} -> {new_exploration_level}")
-        except Exception as e:
-            logger.error(f"Error publishing region explored event: {e}")
-    
-    # ============================================================================
-    # RESOURCE EVENT METHODS
-    # ============================================================================
-    
-    async def publish_resource_discovered(
-        self,
-        region_id: UUID,
-        region_name: str,
-        resource_type: str,
-        location: HexCoordinate,
-        abundance: float,
-        quality: float,
-        discovered_by: Optional[str] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a resource discovered event"""
-        try:
-            event = ResourceDiscoveredEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                resource_type=resource_type,
-                location=location,
-                abundance=abundance,
-                quality=quality,
-                discovered_by=discovered_by
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published resource discovered event: {resource_type} in {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing resource discovered event: {e}")
-    
-    # ============================================================================
-    # CHARACTER LOCATION EVENT METHODS
-    # ============================================================================
-    
-    async def publish_character_location_changed(
-        self,
-        character_id: UUID,
-        character_name: str,
-        old_region_id: Optional[UUID],
-        new_region_id: Optional[UUID],
-        old_location: Optional[HexCoordinate] = None,
-        new_location: Optional[HexCoordinate] = None,
-        movement_method: str = "walking",
-        travel_time: Optional[float] = None
-    ) -> None:
-        """Publish a character location changed event"""
-        try:
-            event = create_character_location_event(
-                character_id=character_id,
-                character_name=character_name,
-                old_region_id=old_region_id,
-                new_region_id=new_region_id,
-                old_location=old_location,
-                new_location=new_location,
-                movement_method=movement_method
-            )
-            event.travel_time = travel_time
-            await self.dispatcher.publish(event)
-            logger.info(f"Published character location changed event: {character_name} moved from {old_region_id} to {new_region_id}")
-        except Exception as e:
-            logger.error(f"Error publishing character location changed event: {e}")
-    
-    async def publish_character_entered_region(
-        self,
-        character_id: UUID,
-        character_name: str,
-        region_id: UUID,
-        region_name: str,
-        entry_location: HexCoordinate,
-        entry_method: str = "walking",
-        previous_region_id: Optional[UUID] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a character entered region event"""
-        try:
-            event = CharacterEnteredRegionEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                character_id=character_id,
-                character_name=character_name,
-                entry_location=entry_location,
-                entry_method=entry_method,
-                previous_region_id=previous_region_id
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published character entered region event: {character_name} entered {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing character entered region event: {e}")
-    
-    async def publish_character_left_region(
-        self,
-        character_id: UUID,
-        character_name: str,
-        region_id: UUID,
-        region_name: str,
-        exit_location: HexCoordinate,
-        exit_method: str = "walking",
-        destination_region_id: Optional[UUID] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a character left region event"""
-        try:
-            event = CharacterLeftRegionEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                character_id=character_id,
-                character_name=character_name,
-                exit_location=exit_location,
-                exit_method=exit_method,
-                destination_region_id=destination_region_id
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published character left region event: {character_name} left {region_name}")
-        except Exception as e:
-            logger.error(f"Error publishing character left region event: {e}")
-    
-    # ============================================================================
-    # QUEST INTEGRATION EVENT METHODS
-    # ============================================================================
-    
-    async def publish_quest_location_validated(
-        self,
-        region_id: UUID,
-        region_name: str,
-        quest_id: UUID,
-        quest_name: str,
-        location: HexCoordinate,
-        validation_status: str = "valid",
-        validation_details: Optional[Dict[str, Any]] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a quest location validated event"""
-        try:
-            event = QuestLocationValidatedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                quest_id=quest_id,
-                quest_name=quest_name,
-                location=location,
-                validation_status=validation_status,
-                validation_details=validation_details
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published quest location validated event: {quest_name} in {region_name} - {validation_status}")
-        except Exception as e:
-            logger.error(f"Error publishing quest location validated event: {e}")
-    
-    # ============================================================================
-    # WORLD GENERATION EVENT METHODS
-    # ============================================================================
-    
-    async def publish_continent_generated(
-        self,
-        continent_metadata: ContinentMetadata,
-        region_count: int,
-        generated_by: Optional[str] = None
-    ) -> None:
-        """Publish a continent generated event"""
-        try:
-            event = ContinentGeneratedEvent(
-                continent_id=continent_metadata.id,
-                continent_name=continent_metadata.name,
-                region_count=region_count,
-                total_area_square_km=continent_metadata.total_area_square_km,
-                generation_seed=continent_metadata.generation_seed,
-                generation_parameters=continent_metadata.generation_parameters,
-                generated_by=generated_by
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published continent generated event: {continent_metadata.name} with {region_count} regions")
-        except Exception as e:
-            logger.error(f"Error publishing continent generated event: {e}")
-    
-    async def publish_world_generated(
-        self,
-        continent_count: int,
-        total_region_count: int,
-        total_area_square_km: float,
-        generation_seed: Optional[int] = None,
-        generation_time_seconds: Optional[float] = None,
-        generation_statistics: Optional[Dict[str, Any]] = None,
-        generated_by: Optional[str] = None
-    ) -> None:
-        """Publish a world generated event"""
-        try:
-            event = WorldGeneratedEvent(
-                continent_count=continent_count,
-                total_region_count=total_region_count,
-                total_area_square_km=total_area_square_km,
-                generation_seed=generation_seed,
-                generation_time_seconds=generation_time_seconds,
-                generation_statistics=generation_statistics,
-                generated_by=generated_by
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published world generated event: {continent_count} continents, {total_region_count} regions")
-        except Exception as e:
-            logger.error(f"Error publishing world generated event: {e}")
-    
-    # ============================================================================
-    # ENVIRONMENTAL EVENT METHODS
-    # ============================================================================
-    
-    async def publish_biome_changed(
-        self,
-        region_id: UUID,
-        region_name: str,
-        old_biome: BiomeType,
-        new_biome: BiomeType,
-        change_cause: str = "natural",
-        change_speed: str = "gradual",
-        affected_area_percent: float = 100.0,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a biome changed event"""
-        try:
-            event = BiomeChangedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                old_biome=old_biome,
-                new_biome=new_biome,
-                change_cause=change_cause,
-                change_speed=change_speed,
-                affected_area_percent=affected_area_percent
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published biome changed event: {region_name} changed from {old_biome.value} to {new_biome.value}")
-        except Exception as e:
-            logger.error(f"Error publishing biome changed event: {e}")
-    
-    async def publish_danger_level_changed(
-        self,
-        region_id: UUID,
-        region_name: str,
-        old_danger_level: DangerLevel,
-        new_danger_level: DangerLevel,
-        change_cause: str = "unknown",
-        threat_details: Optional[Dict[str, Any]] = None,
-        continent_id: Optional[UUID] = None
-    ) -> None:
-        """Publish a danger level changed event"""
-        try:
-            event = DangerLevelChangedEvent(
-                region_id=region_id,
-                region_name=region_name,
-                continent_id=continent_id,
-                old_danger_level=old_danger_level,
-                new_danger_level=new_danger_level,
-                change_cause=change_cause,
-                threat_details=threat_details
-            )
-            await self.dispatcher.publish(event)
-            logger.info(f"Published danger level changed event: {region_name} danger {old_danger_level.value} -> {new_danger_level.value}")
-        except Exception as e:
-            logger.error(f"Error publishing danger level changed event: {e}")
+        region_id: Optional[UUID] = None,
+        event_type: Optional[str] = None,
+        limit: int = 50
+    ) -> List[Dict[str, Any]]:
+        """
+        Get recent events from local history with business filtering.
+        """
+        filtered_events = self.event_history
+        
+        # Business rule: Filter by region_id if provided
+        if region_id:
+            filtered_events = [
+                event for event in filtered_events 
+                if event.get('region_id') == str(region_id)
+            ]
+        
+        # Business rule: Filter by event_type if provided
+        if event_type:
+            filtered_events = [
+                event for event in filtered_events 
+                if event.get('event_type') == event_type
+            ]
+        
+        # Business rule: Return most recent events first, limited by limit
+        return list(reversed(filtered_events))[:limit]
+
+    def get_event_statistics(self) -> Dict[str, Any]:
+        """
+        Calculate business statistics from event history.
+        """
+        if not self.event_history:
+            return {
+                "total_events": 0,
+                "event_types": {},
+                "priority_distribution": {},
+                "recent_activity": 0
+            }
+        
+        # Business calculations
+        event_types = {}
+        priority_distribution = {}
+        recent_activity = 0
+        current_time = datetime.utcnow()
+        
+        for event in self.event_history:
+            # Count event types
+            event_type = event.get('event_type', 'unknown')
+            event_types[event_type] = event_types.get(event_type, 0) + 1
+            
+            # Count priority distribution
+            priority = event.get('priority', 'normal')
+            priority_distribution[priority] = priority_distribution.get(priority, 0) + 1
+            
+            # Count recent activity (last hour)
+            try:
+                event_time = datetime.fromisoformat(event.get('timestamp', ''))
+                if (current_time - event_time).total_seconds() < 3600:  # 1 hour
+                    recent_activity += 1
+            except:
+                pass
+        
+        return {
+            "total_events": len(self.event_history),
+            "event_types": event_types,
+            "priority_distribution": priority_distribution,
+            "recent_activity": recent_activity
+        }
+
+    def clear_event_history(self):
+        """Clear the local event history - business operation"""
+        self.event_history.clear()
+
+    def _add_to_history(self, event: Dict[str, Any]):
+        """Add event to local history with size management"""
+        self.event_history.append(event)
+        
+        # Business rule: Maintain maximum history size
+        if len(self.event_history) > self.max_history_size:
+            # Remove oldest events
+            excess_count = len(self.event_history) - self.max_history_size
+            self.event_history = self.event_history[excess_count:]
 
 
-# Singleton instance
-_region_event_service: Optional[RegionEventService] = None
-
-
-def get_region_event_service() -> RegionEventService:
-    """Get the singleton region event service instance"""
-    global _region_event_service
-    if _region_event_service is None:
-        _region_event_service = RegionEventService()
-    return _region_event_service 
+def get_region_event_service() -> RegionEventBusinessService:
+    """Get a default region event service instance"""
+    return RegionEventBusinessService() 

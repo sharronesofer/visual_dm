@@ -1,5 +1,10 @@
 """Services for world_generation system"""
 
-# Auto-generated imports
-from .continent_service import *
-from .services import *
+from .world_generator import WorldGenerator, WorldGenerationConfig, WorldGenerationResult, create_world_generator
+
+__all__ = [
+    'WorldGenerator',
+    'WorldGenerationConfig', 
+    'WorldGenerationResult',
+    'create_world_generator'
+]

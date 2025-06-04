@@ -1,143 +1,143 @@
 # Reference Updates Log
 Generated on Wed May 21 08:47:13 EDT 2025
 
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/UI/CalendarPanel.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Motif/MotifBehaviorModifier.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Motif/MotifBehaviorModifier.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Motif/MotifBehaviorModifier.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Motif/MotifDialogueProvider.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Motif/MotifDialogueProvider.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Motif/MotifDialogueProvider.cs
-- Updated path reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestManager.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestManager.cs
-- Updated path reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Factions_Faction_FactionArc.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Factions_Faction_FactionArc.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Factions_Faction_FactionArc.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
-- Updated path reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/FactionLinkManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/QuestArchiveManager.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/GrudgePointManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/GrudgePointManager.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/GrudgePointManager.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/RumorManager.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/RumorManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/WorldManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Core/QuestManagerAPI.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Memory/NPCMemorySystem.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Memory/NPCMemorySystem.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Memory/NPCMemorySystem.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Networking/QuestManagerAPI.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Faction/FactionLinkManager.cs
-- Updated path reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Faction/FactionArc.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Faction/FactionArc.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Faction/FactionArc.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Faction/Faction.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorIndicator.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorIndicator.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandlerTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandlerTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandlerTests.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorDataTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorDataTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorDataTests.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystemTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystemTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystemTests.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandler.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandler.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorAnalytics.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorAnalytics.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorData.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorData.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystem.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystem.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/Rumor.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Rumor/Rumor.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/World/Time/TimeSystemFacade.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/World/WorldManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/World/CityMapController.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/World/WorldStatePersistence.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/World/NPCGenerator.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/World/NPCGenerator.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Storage/WorldStatePersistence.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Time/CalendarPanel.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Time/TimeSystemFacade.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Dialogue/MotifDialogueProvider.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Dialogue/MotifDialogueProvider.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Dialogue/MotifDialogueProvider.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Dialogue/NPCGenerator.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Dialogue/NPCGenerator.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Testing/NPCPersonalityTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Testing/NPCPersonalityTests.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Testing/WorldTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Relationship/NemesisRelationship.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Relationship/NemesisRelationship.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Relationship/RivalRelationship.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Relationship/RivalRelationship.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestArchiveManager.cs
-- Updated path reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestManager.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestManager.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
-- Updated path reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/QuestManagerAPI.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Quest/ArcToQuestMapper.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Events/EventTypes.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCBase.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCPersonalityTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCPersonalityTests.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorIndicator.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorIndicator.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifBehaviorModifier.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifBehaviorModifier.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifBehaviorModifier.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandlerTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandlerTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandlerTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCMemorySystem.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCMemorySystem.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCMemorySystem.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorDataTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorDataTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorDataTests.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifDialogueProvider.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifDialogueProvider.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifDialogueProvider.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystemTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystemTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystemTests.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorManager.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorManager.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandler.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandler.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifManager.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifManager.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/MotifManager.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/Motif.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/Motif.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/Motif.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/BeliefCalculator.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/BeliefCalculator.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorData.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorData.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystem.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystem.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCGenerator.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/NPCGenerator.cs
-- Updated namespace reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/BeliefCalculatorTests.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/BeliefCalculatorTests.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Characters/BeliefCalculatorTests.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Data/NPCBase.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Data/FactionArc.cs
-- Updated class reference in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Data/Faction.cs
-- Updated using statement in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Analytics/RumorAnalytics.cs
-- Updated references in /Users/Sharrone/Visual_DM/vdm/Assets/Scripts/Modules/Analytics/RumorAnalytics.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/UI/CalendarPanel.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Motif/MotifBehaviorModifier.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Motif/MotifBehaviorModifier.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Motif/MotifBehaviorModifier.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Motif/MotifDialogueProvider.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Motif/MotifDialogueProvider.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Motif/MotifDialogueProvider.cs
+- Updated path reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestManager.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestManager.cs
+- Updated path reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Factions_Faction_FactionArc.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Factions_Faction_FactionArc.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Factions_Faction_FactionArc.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
+- Updated path reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Consolidated/Quests_Quest_QuestSystemTests.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/FactionLinkManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/QuestArchiveManager.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/GrudgePointManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/GrudgePointManager.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/GrudgePointManager.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/RumorManager.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/RumorManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/WorldManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Core/QuestManagerAPI.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Memory/NPCMemorySystem.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Memory/NPCMemorySystem.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Memory/NPCMemorySystem.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Networking/QuestManagerAPI.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Faction/FactionLinkManager.cs
+- Updated path reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Faction/FactionArc.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Faction/FactionArc.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Faction/FactionArc.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Faction/Faction.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorIndicator.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorIndicator.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandlerTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandlerTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandlerTests.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorDataTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorDataTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorDataTests.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystemTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystemTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystemTests.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandler.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorResponseHandler.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorAnalytics.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorAnalytics.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorData.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorData.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystem.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/RumorPropagationSystem.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/Rumor.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Rumor/Rumor.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/World/Time/TimeSystemFacade.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/World/WorldManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/World/CityMapController.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/World/WorldStatePersistence.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/World/NPCGenerator.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/World/NPCGenerator.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Storage/WorldStatePersistence.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Time/CalendarPanel.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Time/TimeSystemFacade.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Dialogue/MotifDialogueProvider.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Dialogue/MotifDialogueProvider.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Dialogue/MotifDialogueProvider.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Dialogue/NPCGenerator.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Dialogue/NPCGenerator.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Testing/NPCPersonalityTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Testing/NPCPersonalityTests.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Testing/WorldTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Relationship/NemesisRelationship.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Relationship/NemesisRelationship.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Relationship/RivalRelationship.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Relationship/RivalRelationship.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestArchiveManager.cs
+- Updated path reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestManager.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestManager.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
+- Updated path reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestSystemTests.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/QuestManagerAPI.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Quest/ArcToQuestMapper.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Events/EventTypes.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCBase.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCPersonalityTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCPersonalityTests.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorIndicator.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorIndicator.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifBehaviorModifier.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifBehaviorModifier.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifBehaviorModifier.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandlerTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandlerTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandlerTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCMemorySystem.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCMemorySystem.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCMemorySystem.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorDataTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorDataTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorDataTests.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifDialogueProvider.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifDialogueProvider.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifDialogueProvider.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystemTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystemTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystemTests.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorManager.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorManager.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandler.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorResponseHandler.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifManager.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifManager.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/MotifManager.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/Motif.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/Motif.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/Motif.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/BeliefCalculator.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/BeliefCalculator.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorData.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorData.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystem.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/RumorPropagationSystem.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCGenerator.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/NPCGenerator.cs
+- Updated namespace reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/BeliefCalculatorTests.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/BeliefCalculatorTests.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Characters/BeliefCalculatorTests.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Data/NPCBase.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Data/FactionArc.cs
+- Updated class reference in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Data/Faction.cs
+- Updated using statement in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Analytics/RumorAnalytics.cs
+- Updated references in /Users/Sharrone/Dreamforge/vdm/Assets/Scripts/Modules/Analytics/RumorAnalytics.cs
 
 ## Summary
 

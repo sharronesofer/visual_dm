@@ -230,7 +230,7 @@ class Character(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     level: int = Field(default=1, ge=1, le=100)
     experience: int = Field(default=0, ge=0)
-    stats: CharacterStats = Field(...)
+    attributes: CharacterAttributes = Field(...)
     # ... All fields defined ONCE, used EVERYWHERE
 ```
 
@@ -253,7 +253,7 @@ In game development, entities like Characters, Items, and Quests are referenced 
 # Character consistency across ALL game systems
 def create_combat_encounter(character: Character, enemy: Character):
     # Same Character model used in combat as in character sheet
-    damage = calculate_damage(character.stats.strength, enemy.stats.armor)
+    damage = calculate_damage(character.attributes.strength, enemy.attributes.armor)
     
 def complete_quest(character: Character, quest: Quest):
     # Same Character model used in quest as in combat
@@ -359,8 +359,8 @@ class CombatService:
     def start_combat(self, character: Character) -> CharacterCombatData:
         return CharacterCombatData(
             **character.dict(),  # All core data
-            current_hp=character.stats.max_hp,  # Combat-specific initialization
-            current_mp=character.stats.max_mp,
+            current_hp=character.attributes.max_hp,  # Combat-specific initialization
+            current_mp=character.attributes.max_mp,
             combat_state=CombatState.READY,
             active_effects=[]
         )

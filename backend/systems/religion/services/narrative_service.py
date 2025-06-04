@@ -16,11 +16,11 @@ from backend.systems.religion.utils import generate_conversion_narrative, genera
 # Setup logging
 logger = logging.getLogger(__name__)
 
-# Import proper event dispatcher and religion events
+# Import proper event dispatcher and religion events from infrastructure
 try:
     from backend.infrastructure.events import get_dispatcher
-    from backend.systems.religion.events.event_publisher import get_religion_event_publisher
-    from backend.systems.religion.events import (
+    from backend.infrastructure.systems.religion.events.event_publisher import get_religion_event_publisher
+    from backend.infrastructure.systems.religion.events.religion_events import (
         ReligiousNarrativeEvent,
         ConversionEvent,
         DevotionChangedEvent,
@@ -292,7 +292,7 @@ class ReligionNarrativeService:
             from backend.infrastructure.events import CharacterEvent
             self.dispatcher.subscribe(CharacterEvent, self._handle_character_event)
             
-            # Subscribe to faction events that might affect religion
+            # Subscribe to faction events that might affect religious relationships
             from backend.infrastructure.events import FactionEvent
             self.dispatcher.subscribe(FactionEvent, self._handle_faction_event)
             

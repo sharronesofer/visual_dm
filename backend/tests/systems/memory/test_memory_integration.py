@@ -11,11 +11,16 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Any
 
 from backend.systems.memory import MemoryManager, Memory
-from backend.systems.memory.memory_categories import MemoryCategory, categorize_memory_content
-from backend.systems.memory.saliency_scoring import calculate_memory_saliency, calculate_initial_importance
-from backend.systems.memory.cognitive_frames import detect_cognitive_frames, apply_cognitive_frames
-from backend.systems.memory.memory_associations import auto_detect_associations, build_association_network
-from backend.systems.memory.summarization_styles import get_summarization_styles
+from backend.infrastructure.memory_utils.memory_categorization import MemoryCategory, categorize_memory_content
+from backend.infrastructure.memory_utils import (
+    calculate_memory_saliency, 
+    calculate_initial_importance,
+    detect_cognitive_frames, 
+    auto_detect_associations, 
+    get_summarization_styles
+)
+from backend.infrastructure.memory_utils.cognitive_frame_detection import apply_cognitive_frames
+from backend.infrastructure.memory_utils.memory_associations import build_association_network
 
 
 class TestMemorySystemIntegration:
@@ -197,7 +202,6 @@ class TestMemorySystemIntegration:
         assert len(memory_manager.memories) == len(sample_memories)
         
         # Test retrieval by category
-        from backend.systems.memory.memory_categories import MemoryCategory
         belief_memories = await memory_manager.get_memories_by_category(MemoryCategory.BELIEF)
         # Should find at least some memories (auto-categorization may vary)
         assert isinstance(belief_memories, list)

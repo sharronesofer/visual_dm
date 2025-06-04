@@ -9,28 +9,42 @@ import pytest
 import logging
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
+import uuid
+from sqlalchemy.orm import Session
 
-from backend.systems.economy.economy_manager import EconomyManager
-from backend.systems.economy.resource import Resource, ResourceData
-from backend.systems.economy.models.market import Market, MarketData
-from backend.systems.economy.resource_service import ResourceService
+from backend.systems.economy.services.economy_manager import EconomyManager
+from backend.systems.economy.services.resource import Resource, ResourceData
+from backend.infrastructure.database.economy.market_models import Market
+from backend.systems.economy.models.market import MarketData
+from backend.systems.economy.services.resource_service import ResourceService
 from backend.systems.economy.services.market_service import MarketService
 from backend.systems.economy.services.trade_service import TradeService
 from backend.systems.economy.services.futures_service import FuturesService
 
 
 class TestEconomyManager:
-    """Test suite for EconomyManager - the central coordination layer for the economy system."""
-    
+    """Test class for EconomyManager business logic."""
+
     def setup_method(self):
-        """Set up test fixtures before each test method."""
-        # Reset singleton instance for clean testing
+        """Set up test environment before each test."""
+        # Reset singleton for each test
         EconomyManager._instance = None
-        self.manager = EconomyManager.get_instance()
         
+        # Create a proper mock session
+        self.mock_session = Mock(spec=Session)
+        self.mock_session.query.return_value.filter.return_value.first.return_value = None
+        self.mock_session.query.return_value.filter.return_value.all.return_value = []
+        self.mock_session.query.return_value.count.return_value = 0
+        self.mock_session.commit.return_value = None
+        self.mock_session.rollback.return_value = None
+        self.mock_session.close.return_value = None
+        
+        # Initialize manager with mock session  
+        self.manager = EconomyManager.get_instance(self.mock_session)
+
     def teardown_method(self):
-        """Clean up after each test method."""
-        # Reset singleton for next test
+        """Clean up after each test."""
+        # Reset singleton
         EconomyManager._instance = None
     
     def test_singleton_pattern(self):
@@ -280,10 +294,10 @@ class TestEconomyManager:
     
     def test_logging_functionality(self):
         """Test that logging is working properly."""
-        with patch('backend.systems.economy.economy_manager.logger') as mock_logger:
+        with patch('backend.systems.economy.services.economy_manager.logger') as mock_logger:
             # Create new instance to trigger logging
             EconomyManager._instance = None
-            manager = EconomyManager.get_instance()
+            manager = EconomyManager.get_instance(self.mock_session)
             
             # Verify initialization logging was called
             assert mock_logger.info.called
@@ -317,7 +331,17 @@ class TestEconomyManagerIntegration:
     def setup_method(self):
         """Set up integration test fixtures."""
         EconomyManager._instance = None
-        self.manager = EconomyManager.get_instance()
+        
+        # Create a proper mock session for integration tests too
+        self.mock_session = Mock(spec=Session)
+        self.mock_session.query.return_value.filter.return_value.first.return_value = None
+        self.mock_session.query.return_value.filter.return_value.all.return_value = []
+        self.mock_session.query.return_value.count.return_value = 0
+        self.mock_session.commit.return_value = None
+        self.mock_session.rollback.return_value = None
+        self.mock_session.close.return_value = None
+        
+        self.manager = EconomyManager.get_instance(self.mock_session)
     
     def teardown_method(self):
         """Clean up integration test fixtures."""
@@ -325,10 +349,10 @@ class TestEconomyManagerIntegration:
     
     def test_database_session_handling(self):
         """Test database session management."""
-        # Verify manager can handle None database session gracefully
-        assert self.manager.resource_service.db_session is None
+        # Verify manager has a database session (our mock session)
+        assert self.manager.resource_service.db_session is not None
         
-        # Operations should still work with mock data
+        # Operations should work with mock session
         resource = self.manager.get_resource('1')
         assert resource is not None
     

@@ -1,10 +1,11 @@
-"""Equipment system"""
+"""
+Equipment System Package
 
-# Auto-generated imports
-from . import events
+Entry point for the equipment management system. Provides access to all
+equipment system components including models, services, and schemas.
+"""
+
 from . import models
-from . import repositories
-from . import routers
-from . import schemas
 from . import services
-from . import utils
+
+__all__ = ['models', 'services']

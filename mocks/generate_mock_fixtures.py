@@ -63,7 +63,8 @@ class MockDataGenerator:
                 "enum_values": {
                     "relationship_type": ["FACTION", "QUEST", "SPATIAL", "AUTH"],
                     "character_race": ["HUMAN", "ELF", "DWARF", "HALFLING", "DRAGONBORN"],
-                    "character_class": ["FIGHTER", "WIZARD", "ROGUE", "CLERIC", "RANGER"]
+                    "character_feats": ["COMBAT_EXPERTISE", "ARCANE_MASTERY", "STEALTH_TRAINING", "DIVINE_BLESSING", "NATURE_BOND", "SOCIAL_INFLUENCE"],
+                    "character_abilities": ["STRONG", "AGILE", "SMART", "CHARISMATIC", "RESILIENT", "INTELLIGENT", "CRAFTY", "WISE", "COURAGEOUS", "CHARMING"]
                 }
             },
             "combat": {
@@ -277,77 +278,65 @@ class MockDataGenerator:
         return random.choice(values)
     
     def generate_character_data(self) -> Dict[str, Any]:
-        """Generate character-specific mock data."""
-        character = self.generate_base_object("character", "Character")
-        character.update({
+        """Generate realistic character data."""
+        return {
+            "id": self.generate_id("uuid"),
+            "player_id": self.generate_id("uuid"),
             "name": fake.name(),
             "race": self.get_enum_value("character", "character_race"),
-            "character_class": self.get_enum_value("character", "character_class"),
+            "abilities": [self.get_enum_value("character", "character_abilities") for _ in range(random.randint(3, 7))],
             "level": random.randint(1, 20),
             "experience_points": random.randint(0, 355000),
+            "hit_points": random.randint(8, 200),
+            "armor_class": random.randint(10, 20),
+            "background": fake.paragraph(),
             "stats": {
-                "strength": random.randint(8, 18),
-                "dexterity": random.randint(8, 18),
-                "constitution": random.randint(8, 18),
-                "intelligence": random.randint(8, 18),
-                "wisdom": random.randint(8, 18),
-                "charisma": random.randint(8, 18)
+                "strength": random.randint(-3, 5),
+                "dexterity": random.randint(-3, 5),
+                "constitution": random.randint(-3, 5),
+                "intelligence": random.randint(-3, 5),
+                "wisdom": random.randint(-3, 5),
+                "charisma": random.randint(-3, 5)
             },
-            "hit_points": {
-                "current": random.randint(20, 100),
-                "maximum": random.randint(50, 120)
-            },
-            "location": {
-                "region_id": self.generate_id("uuid"),
-                "coordinates": {
-                    "q": random.randint(-10, 10),
-                    "r": random.randint(-10, 10),
-                    "s": random.randint(-10, 10)
-                }
-            },
-            "background": fake.sentence(nb_words=10),
-            "personality_traits": [fake.word() for _ in range(3)]
-        })
-        return character
+            "current_location": fake.city(),
+            "is_active": random.choice([True, False]),
+            "created_at": self.generate_timestamp(-30),
+            "updated_at": self.generate_timestamp(-1)
+        }
     
     def generate_npc_data(self) -> Dict[str, Any]:
         """Generate NPC-specific mock data."""
         npc = self.generate_base_object("npc", "NPC")
         npc.update({
             "name": fake.name(),
-            "npc_type": self.get_enum_value("npc", "npc_type"),
-            "personality_trait": self.get_enum_value("npc", "personality_trait"),
-            "description": fake.paragraph(nb_sentences=3),
+            "race": self.get_enum_value("character", "character_race"),
+            "feats": [self.get_enum_value("character", "character_feats") for _ in range(random.randint(2, 5))],
+            "background": fake.paragraph(),
+            "stats": {
+                "strength": random.randint(-3, 5),
+                "dexterity": random.randint(-3, 5),
+                "constitution": random.randint(-3, 5),
+                "intelligence": random.randint(-3, 5),
+                "wisdom": random.randint(-3, 5),
+                "charisma": random.randint(-3, 5)
+            },
+            "personality": {
+                "traits": [fake.word() for _ in range(3)],
+                "disposition": random.choice(["friendly", "neutral", "hostile", "helpful", "suspicious"])
+            },
+            "occupation": fake.job(),
             "location": {
                 "region_id": self.generate_id("uuid"),
-                "poi_id": self.generate_id("uuid"),
+                "settlement": fake.city(),
                 "coordinates": {
                     "q": random.randint(-10, 10),
                     "r": random.randint(-10, 10),
                     "s": random.randint(-10, 10)
                 }
             },
-            "stats": {
-                "level": random.randint(1, 15),
-                "hit_points": random.randint(10, 80),
-                "armor_class": random.randint(10, 18)
-            },
-            "faction_affiliations": [
-                {
-                    "faction_id": self.generate_id("uuid"),
-                    "role": self.get_enum_value("faction", "membership_role"),
-                    "reputation": random.randint(-100, 100)
-                }
-            ],
-            "schedule": {
-                "current_activity": random.choice(["WORKING", "RESTING", "TRAVELING", "SOCIALIZING"]),
-                "next_activity_time": self.generate_timestamp(1)
-            },
-            "loyalty": {
-                "player_character_id": self.generate_id("uuid"),
-                "loyalty_score": random.randint(0, 100),
-                "goodwill": random.randint(-50, 50)
-            }
+            "dialogue_options": [fake.sentence() for _ in range(3)],
+            "quests_offered": [self.generate_id("uuid") for _ in range(random.randint(0, 2))],
+            "is_active": random.choice([True, False])
         })
         return npc
     
@@ -574,7 +563,6 @@ class MockDataGenerator:
         create_request = {
             "name": fake.name(),
             "race": self.get_enum_value("character", "character_race"),
-            "character_class": self.get_enum_value("character", "character_class"),
             "background": fake.paragraph(),
             "stats": {
                 "strength": random.randint(8, 15),

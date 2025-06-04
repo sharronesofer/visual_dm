@@ -22,6 +22,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
 
 from backend.infrastructure.auth.auth_user.services.auth_service import AuthService, TokenService
 from backend.infrastructure.auth.auth_user.services.password_service import PasswordService
@@ -32,11 +34,14 @@ from backend.infrastructure.auth.auth_user.schemas.auth_schemas import (
     PasswordResetRequest, PasswordResetConfirm
 )
 from backend.infrastructure.auth.auth_user.models.user_models import User
-from backend.infrastructure.database import get_async_db
+from backend.infrastructure.database import get_async_db, get_db_session
 from backend.infrastructure.shared.exceptions import Auth_UserNotFoundError, Auth_UserValidationError
 
 # OAuth2 scheme for token extraction
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+
+# Initialize rate limiter for authentication endpoints
+limiter = Limiter(key_func=get_remote_address)
 
 # Initialize router
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -46,6 +51,9 @@ async def get_db() -> AsyncSession:
     """Get database session for dependency injection."""
     async for session in get_async_db():
         yield session
+
+# Use get_db_session as an alias for the dependency
+get_db_session = get_db
 
 # Dependency for getting current user from token
 async def get_current_user(
@@ -80,7 +88,9 @@ async def get_current_user(
         )
 
 @router.post("/token", response_model=TokenResponse)
+@limiter.limit("5/minute")  # Allow only 5 login attempts per minute per IP
 async def login_for_access_token(
+    request: Request,  # Required for rate limiting
     form_data: OAuth2PasswordRequestForm = Depends(),
     db_session: AsyncSession = Depends(get_db_session)
 ):
@@ -139,7 +149,9 @@ async def login_for_access_token(
         )
 
 @router.post("/register", response_model=UserResponse)
+@limiter.limit("3/hour")  # Allow only 3 registrations per hour per IP
 async def register_user(
+    request: Request,  # Required for rate limiting
     user_data: UserCreate,
     db_session: AsyncSession = Depends(get_db_session)
 ):

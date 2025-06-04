@@ -1,7 +1,7 @@
 # Combat System API Documentation
 
 ## Overview
-The Combat System provides a modular, extensible framework for handling all combat-related logic in Visual_DM. It is designed for integration with the Action System, supports multiplayer/networked scenarios, and is built for performance and maintainability.
+The Combat System provides a modular, extensible framework for handling all combat-related logic in Dreamforge. It is designed for integration with the Action System, supports multiplayer/networked scenarios, and is built for performance and maintainability.
 
 ## Architecture
 - **CombatStateManager**: Singleton managing global combat state, transitions, rollback, and conflict resolution.

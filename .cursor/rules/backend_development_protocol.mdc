@@ -3,3 +3,221 @@ description:
 globs:
 alwaysApply: false
 ---
+# Backend Development Protocol - Task 26
+
+This rule implements the comprehensive Backend Development Protocol for Visual DM backend development, ensuring code quality, proper architecture, and system integration.
+
+## Assessment and Error Resolution
+
+- **Comprehensive Analysis Required:**
+  - Run analysis on target systems under `/backend/systems/` and `/backend/tests/`
+  - If errors occur, determine whether test or source module violates [development_bible.md](mdc:docs/development_bible.md)
+  - Reference [backend_systems_inventory.md](mdc:backend/docs/backend_systems_inventory.md) for system architecture
+  - Missing logic must be implemented with direct reference to Development_Bible.md
+
+- **Error Resolution Process:**
+  - Identify root cause (test logic vs implementation gap)
+  - Check compliance with Development_Bible.md standards
+  - Implement fixes following canonical patterns
+  - Validate against existing working systems (character, quest as references)
+
+## Structure and Organization Enforcement
+
+- **Test File Organization:**
+  - **ALL test files MUST reside under `/backend/tests/*`**
+  - Tests located elsewhere are invalid and must be moved/deleted
+  - Delete or relocate test files found in `/backend/systems/*/test(s)` directories
+  - Remove empty `test(s)` folders after cleanup
+  - Identify and delete duplicate tests
+
+- **Canonical Directory Structure:**
+  ```
+  backend/systems/
+  ├── analytics/          # Analytics and metrics
+  ├── arc/               # Narrative arc management
+  ├── auth_user/         # Authentication and user management
+  ├── character/         # Character system (includes relationships)
+  ├── combat/            # Combat mechanics
+  ├── crafting/          # Item crafting
+  ├── data/              # Data validation and persistence
+  ├── dialogue/          # Conversation systems
+  ├── diplomacy/         # Diplomatic relations
+  ├── economy/           # Economic simulation
+  ├── equipment/         # Equipment management
+  ├── event_base/        # Core event infrastructure
+  ├── events/            # Game event management
+  ├── faction/           # Faction relationships
+  ├── integration/       # Cross-system integration
+  ├── inventory/         # Item storage
+  ├── llm/               # AI language model integration
+  ├── loot/              # Loot generation
+  ├── magic/             # Magic system
+  ├── memory/            # Game memory management
+  ├── motif/             # Narrative motif tracking
+  ├── npc/               # NPC management
+  ├── poi/               # Points of interest
+  ├── population/        # Population simulation
+  ├── quest/             # Quest system
+  ├── region/            # Regional management
+  ├── religion/          # Religious systems
+  ├── rumor/             # Rumor propagation
+  ├── shared/            # Shared utilities
+  ├── storage/           # Data storage abstraction
+  ├── tension_war/       # Conflict mechanics
+  ├── time/              # Time management
+  ├── world_generation/  # Procedural world creation
+  └── world_state/       # Global world state
+  ```
+
+- **System Organization Requirements:**
+  - Follow canonical `/backend/systems/` hierarchy
+  - Each system follows consistent internal structure
+  - Models, services, repositories, routers organized appropriately
+  - Relationships handled by character system (not separate system)
+
+## Canonical Imports Enforcement
+
+- **Import Standards:**
+  - **ALL imports MUST reference canonical implementations within `/backend/systems/*`**
+  - Convert all imports to `backend.systems.*` format
+  - Any imports from outside `/backend/systems` must be redirected or inlined
+  - Eliminate orphan or non-canonical module dependencies
+
+- **Import Patterns:**
+  ```python
+  # ✅ DO: Canonical imports
+  from backend.systems.character.models import Character
+  from backend.systems.shared.database.base import get_session
+  from backend.systems.events.event_dispatcher import EventDispatcher
+  
+  # ❌ DON'T: Non-canonical imports
+  from utils.character import Character
+  from app.db.session import get_session
+  ```
+
+- **Cross-System Import Rules:**
+  - Use integration system for cross-system communication
+  - Reference shared utilities through `backend.systems.shared`
+  - Event-based communication preferred over direct imports
+
+## Module and Function Development
+
+- **Duplication Prevention:**
+  - **Before implementing, perform exhaustive searches** (grep/code search)
+  - Review `/backend/systems/*` thoroughly for existing implementations
+  - Consult [backend_systems_inventory.md](mdc:backend/docs/backend_systems_inventory.md) for API endpoints
+  - Use existing patterns from working systems (character, quest as references)
+
+- **New Module Creation Standards:**
+  - Reference [development_bible.md](mdc:docs/development_bible.md) for architectural decisions
+  - Follow FastAPI conventions for routing, dependencies, async patterns
+  - Ensure WebSocket compatibility for Unity frontend integration
+  - All backend code MUST reside within `/backend/` structure
+  - Design for event system integration and cross-system communication
+
+- **Integration Requirements:**
+  - Seamless integration with existing event system
+  - Compatible with Unity (2D, runtime-generated) frontend
+  - Support WebSocket-based communication
+  - Follow established data flow patterns
+
+## Data and Schema Standards
+
+- **JSON Schema Organization:**
+  - Use `.json` files for modding templates and structured data
+  - Place JSON schemas in `/backend/data/modding/` directory
+  - Create corresponding Pydantic models in appropriate system
+  - Examples: biomes, land types, equipment templates
+
+- **Pydantic Model Requirements:**
+  - Every JSON schema needs corresponding Pydantic model
+  - Implement comprehensive validation for all data inputs
+  - API endpoints must use Pydantic for request/response validation
+  - Support Unity frontend integration with proper serialization
+
+- **Database Standards:**
+  - Use shared database module: `backend.systems.shared.database.base`
+  - Async session management with SQLAlchemy
+  - Proper transaction management and error handling
+  - Follow patterns from working systems (character, app/db/session.py)
+
+## Quality and Integration Standards
+
+- **Test Coverage Requirements:**
+  - **≥90% test coverage** for all modified/new components
+  - Replace all `assert True` placeholders with real test logic
+  - Verify cross-system compatibility and communication
+  - Test WebSocket compatibility and JSON serialization
+
+- **API Contract Compliance:**
+  - Ensure endpoints match established contracts and schemas
+  - Reference [api_contracts.yaml](mdc:api_contracts.yaml) when available
+  - Test Unity frontend integration compatibility
+  - Validate request/response formats
+
+- **Documentation Standards:**
+  - Update relevant documentation and API specifications
+  - Maintain clean, logical file and function organization
+  - Implement comprehensive error handling and logging
+  - Structure code for future expansion and scalability
+
+## Implementation Autonomy Directive
+
+- **Full Implementation Authority:**
+  - Assume full control over structural and implementation decisions
+  - **Never require user clarification** for technical implementation details
+  - Implement changes directly and iterate until completion
+  - Continue refining until all tests pass and coverage targets met
+
+- **Tool Utilization:**
+  - Utilize ALL available CLI tools, code search, file operations
+  - Use testing utilities as needed for comprehensive validation
+  - Leverage grep/ripgrep for duplication detection
+  - Employ all development tools for optimization
+
+- **System Compatibility:**
+  - Maintain compatibility with existing systems
+  - Preserve API contracts unless explicitly updating them
+  - Ensure cross-system integration remains functional
+  - Test against working system patterns (character, quest)
+
+## Reference Documents and Patterns
+
+- **Primary Standards:**
+  - [development_bible.md](mdc:docs/development_bible.md) - Architectural authority
+  - [backend_systems_inventory.md](mdc:backend/docs/backend_systems_inventory.md) - System inventory
+  - [api_contracts.yaml](mdc:api_contracts.yaml) - API specifications (when available)
+
+- **Working Pattern References:**
+  - `backend/systems/character/` - Complete working system example
+  - `backend/systems/quest/integration.py` - Cross-system integration (629+ lines)
+  - `app/db/session.py` - Database session management
+  - `backend/tests/systems/character/` - Comprehensive testing patterns
+
+- **Shared Infrastructure:**
+  - `backend.systems.shared.database.base` - Database foundation
+  - `backend.systems.events.event_dispatcher` - Event system
+  - `backend.systems.integration.*` - Cross-system utilities
+  - `utils/event_bus.py` - Event bus foundation
+
+## Development Workflow Integration
+
+- **Task Master Integration:**
+  - Follow [dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc) for project management
+  - Use [taskmaster.mdc](mdc:.cursor/rules/taskmaster.mdc) for task tracking
+  - Reference completion criteria from task definitions
+  - Update task status and details during implementation
+
+- **Error Handling Patterns:**
+  - Implement comprehensive error handling and logging
+  - Use FastAPI exception handling patterns
+  - Provide user-friendly error responses for API endpoints
+  - Log errors appropriately for debugging and monitoring
+
+- **Performance Considerations:**
+  - Optimize for Unity frontend integration
+  - Consider WebSocket performance for real-time features
+  - Implement efficient database queries and operations
+  - Test performance under realistic load conditions
+
+This protocol ensures consistent, high-quality backend development that integrates seamlessly with the Visual DM architecture and supports robust Unity frontend integration.

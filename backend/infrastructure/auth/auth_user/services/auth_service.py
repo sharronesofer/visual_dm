@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
+import os
+import logging
 
 from backend.infrastructure.auth.auth_user.services.token_service import (
     verify_token, create_access_token, create_refresh_token
@@ -16,6 +18,8 @@ from backend.infrastructure.auth.auth_user.services.token_service import (
 
 # OAuth2 scheme for token authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+
+logger = logging.getLogger(__name__)
 
 
 class AuthService:
@@ -53,15 +57,20 @@ class AuthService:
         # 
         # return user
         
-        # Placeholder implementation
-        if email == "test@example.com" and password == "test123":
-            return {
-                "id": UUID("12345678-1234-5678-9012-123456789012"),
-                "email": email,
-                "is_active": True,
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()
-            }
+        # SECURITY: Only allow test credentials in development/test environments
+        if os.environ.get("ENVIRONMENT") in ["test", "development"] and os.environ.get("ALLOW_TEST_CREDENTIALS") == "true":
+            if email == "test@example.com" and password == "test123":
+                logger.warning("Using test credentials - only allowed in development/test environments")
+                return {
+                    "id": UUID("12345678-1234-5678-9012-123456789012"),
+                    "email": email,
+                    "is_active": True,
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                }
+        
+        # In production or when test credentials are disabled, return None
+        logger.info(f"Authentication failed for {email}")
         return None
 
     async def create_user(self, email: str, password: str) -> Dict[str, Any]:

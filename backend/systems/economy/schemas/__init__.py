@@ -1,2 +1,0 @@
-"""Schemas for economy system"""
-

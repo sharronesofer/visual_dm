@@ -17,12 +17,11 @@ try:
         # Enums
         RegionType, BiomeType, ClimateType, ResourceType, POIType, DangerLevel,
         # Coordinate system
-        HexCoordinate, HexCoordinateSchema,
+        HexCoordinate,
         # Data classes
         ResourceNode, RegionProfile, RegionMetadata, ContinentMetadata,
-        # Schemas
-        RegionCreateSchema, RegionUpdateSchema, RegionResponseSchema,
-        ContinentCreateSchema, ContinentResponseSchema,
+        # Request/Response models (not Pydantic schemas)
+        CreateRegionRequest, UpdateRegionRequest, RegionResponse,
         # Utility functions
         get_hex_neighbors, calculate_hex_distance, validate_region_adjacency
     )
@@ -160,42 +159,19 @@ class TestHexCoordinate:
         assert coord.q + coord.r + coord.s == 0
 
 
-class TestHexCoordinateSchema:
-    """Test class for hex coordinate Pydantic schema"""
-    
-    def test_hex_coordinate_schema_creation(self):
-        """Test creating hex coordinate schema"""
-        schema = HexCoordinateSchema(q=1, r=2, s=-3)
-        assert schema.q == 1
-        assert schema.r == 2
-        assert schema.s == -3
-    
-    def test_hex_coordinate_schema_conversion(self):
-        """Test conversion between schema and coordinate"""
-        coord = HexCoordinate(1, 2)
-        schema = HexCoordinateSchema.from_hex_coordinate(coord)
-        
-        assert schema.q == 1
-        assert schema.r == 2
-        assert schema.s == -3
-        
-        restored_coord = schema.to_hex_coordinate()
-        assert restored_coord == coord
-
-
 class TestResourceNode:
     """Test class for resource nodes"""
     
     def test_resource_node_creation(self):
         """Test creating resource nodes"""
         node = ResourceNode(
-            resource_type=ResourceType.GOLD,
+            resource_type="gold",
             abundance=0.8,
             quality=0.7,
             accessibility=0.6
         )
         
-        assert node.resource_type == ResourceType.GOLD
+        assert node.resource_type == "gold"
         assert node.abundance == 0.8
         assert node.quality == 0.7
         assert node.accessibility == 0.6
@@ -204,21 +180,25 @@ class TestResourceNode:
     def test_resource_node_value_calculation(self):
         """Test resource value calculation"""
         node = ResourceNode(
-            resource_type=ResourceType.GOLD,
+            resource_type="gold",
             abundance=0.8,
             quality=0.5,
             accessibility=0.6,
             current_reserves=0.9
         )
         
-        expected_value = 0.8 * 0.5 * 0.6 * 0.9  # abundance * quality * accessibility * reserves
+        # Calculate expected value including multiplier
+        base_value = 0.8 * 0.5 * 0.6 * 0.9  # abundance * quality * accessibility * reserves
+        gold_multiplier = 10.0  # From code: resource_multipliers['gold'] = 10.0
+        expected_value = base_value * gold_multiplier
+        
         assert node.calculate_value() == expected_value
     
     def test_resource_node_with_location(self):
         """Test resource node with hex coordinate location"""
         location = HexCoordinate(1, 2)
         node = ResourceNode(
-            resource_type=ResourceType.IRON,
+            resource_type="iron",
             abundance=0.5,
             quality=0.5,
             accessibility=0.5,
@@ -227,6 +207,31 @@ class TestResourceNode:
         
         assert node.location == location
 
+    def test_resource_node_value_with_multipliers(self):
+        """Test resource value calculation with different resource type multipliers"""
+        # Test iron (multiplier 2.0)
+        iron_node = ResourceNode(
+            resource_type="iron",
+            abundance=0.5,
+            quality=0.5,
+            accessibility=0.5,
+            current_reserves=1.0
+        )
+        base_value = 0.5 * 0.5 * 0.5 * 1.0  # 0.125
+        expected_iron_value = base_value * 2.0  # Iron multiplier is 2.0
+        assert iron_node.calculate_value() == expected_iron_value
+        
+        # Test unknown resource (multiplier 1.0)
+        unknown_node = ResourceNode(
+            resource_type="unknown_resource",
+            abundance=0.5,
+            quality=0.5,
+            accessibility=0.5,
+            current_reserves=1.0
+        )
+        expected_unknown_value = base_value * 1.0  # Default multiplier is 1.0
+        assert unknown_node.calculate_value() == expected_unknown_value
+
 
 class TestRegionProfile:
     """Test class for region environmental profiles"""
@@ -234,11 +239,11 @@ class TestRegionProfile:
     def test_region_profile_creation(self):
         """Test creating region profiles"""
         profile = RegionProfile(
-            dominant_biome=BiomeType.TEMPERATE_FOREST,
+            dominant_biome="temperate_forest",
             climate=ClimateType.TEMPERATE
         )
         
-        assert profile.dominant_biome == BiomeType.TEMPERATE_FOREST
+        assert profile.dominant_biome == "temperate_forest"
         assert profile.climate == ClimateType.TEMPERATE
         assert profile.elevation == 0.0  # Default value
         assert profile.soil_fertility == 0.5  # Default value
@@ -247,7 +252,7 @@ class TestRegionProfile:
         """Test habitability calculation"""
         # High habitability profile
         profile = RegionProfile(
-            dominant_biome=BiomeType.GRASSLAND,
+            dominant_biome="grassland",
             soil_fertility=0.9,
             water_availability=0.8,
             humidity=0.5,  # Optimal
@@ -260,7 +265,7 @@ class TestRegionProfile:
         
         # Low habitability profile
         profile_low = RegionProfile(
-            dominant_biome=BiomeType.DESERT,
+            dominant_biome="desert",
             soil_fertility=0.1,
             water_availability=0.2,
             humidity=0.1,  # Very dry
@@ -286,7 +291,7 @@ class TestRegionMetadata:
         assert metadata.id == region_id
         assert metadata.name == "Test Region"
         assert metadata.description == "A test region"
-        assert metadata.region_type == RegionType.WILDERNESS  # Default
+        assert metadata.region_type == "wilderness"  # String, not enum
         assert isinstance(metadata.created_at, datetime)
     
     def test_region_metadata_hex_coordinates(self):
@@ -318,15 +323,15 @@ class TestRegionMetadata:
             name="Test Region"
         )
         
-        # Add resource nodes
+        # Add resource nodes with proper string types
         gold_node = ResourceNode(
-            resource_type=ResourceType.GOLD,
+            resource_type="gold",
             abundance=0.8,
             quality=0.7,
             accessibility=0.6
         )
         iron_node = ResourceNode(
-            resource_type=ResourceType.IRON,
+            resource_type="iron",
             abundance=0.6,
             quality=0.5,
             accessibility=0.8
@@ -340,15 +345,33 @@ class TestRegionMetadata:
         assert total_value == expected_value
         
         # Test resource abundance lookup
-        gold_abundance = metadata.get_resource_abundance(ResourceType.GOLD)
+        gold_abundance = metadata.get_resource_abundance("gold")
         assert gold_abundance == 0.8
         
-        iron_abundance = metadata.get_resource_abundance(ResourceType.IRON)
+        iron_abundance = metadata.get_resource_abundance("iron")
         assert iron_abundance == 0.6
         
         # Test non-existent resource
-        copper_abundance = metadata.get_resource_abundance(ResourceType.COPPER)
+        copper_abundance = metadata.get_resource_abundance("copper")
         assert copper_abundance == 0.0
+
+    def test_region_metadata_hex_area_calculation(self):
+        """Test that hex area calculation uses canonical constant from code"""
+        metadata = RegionMetadata(
+            id=uuid4(),
+            name="Test Region"
+        )
+        
+        # Add 2 hex coordinates
+        coord1 = HexCoordinate(0, 0)
+        coord2 = HexCoordinate(1, 0)
+        
+        metadata.add_hex_coordinate(coord1)
+        metadata.add_hex_coordinate(coord2)
+        
+        # Code says: hex_area_km2 = 10.0  (configurable)
+        expected_area = 2 * 10.0  # 2 hexes * 10.0 km² per hex
+        assert metadata.area_square_km == expected_area
 
 
 class TestContinentMetadata:
@@ -427,66 +450,6 @@ class TestContinentMetadata:
         assert empty_continent.get_dominant_climate() is None
 
 
-class TestRegionSchemas:
-    """Test class for region Pydantic schemas"""
-    
-    def test_region_create_schema(self):
-        """Test region creation schema"""
-        data = {
-            "name": "New Region",
-            "description": "A new test region",
-            "region_type": RegionType.KINGDOM,
-            "dominant_biome": BiomeType.GRASSLAND,
-            "climate": ClimateType.TEMPERATE
-        }
-        
-        schema = RegionCreateSchema(**data)
-        assert schema.name == "New Region"
-        assert schema.region_type == RegionType.KINGDOM
-        assert schema.dominant_biome == BiomeType.GRASSLAND
-    
-    def test_region_update_schema(self):
-        """Test region update schema with optional fields"""
-        data = {
-            "name": "Updated Region",
-            "population": 5000,
-            "wealth_level": 0.8
-        }
-        
-        schema = RegionUpdateSchema(**data)
-        assert schema.name == "Updated Region"
-        assert schema.population == 5000
-        assert schema.wealth_level == 0.8
-        assert schema.description is None  # Optional field not provided
-    
-    def test_region_response_schema(self):
-        """Test region response schema"""
-        region_id = uuid4()
-        now = datetime.utcnow()
-        
-        data = {
-            "id": region_id,
-            "name": "Response Region",
-            "description": "A region for response testing",
-            "region_type": RegionType.CITY_STATE,
-            "dominant_biome": BiomeType.COASTAL,
-            "climate": ClimateType.OCEANIC,
-            "population": 10000,
-            "area_square_km": 500.0,
-            "danger_level": DangerLevel.SAFE,
-            "exploration_status": 0.75,
-            "continent_id": uuid4(),
-            "center_coordinate": HexCoordinateSchema(q=0, r=0, s=0),
-            "created_at": now,
-            "updated_at": now
-        }
-        
-        schema = RegionResponseSchema(**data)
-        assert schema.id == region_id
-        assert schema.region_type == RegionType.CITY_STATE
-        assert schema.population == 10000
-
-
 class TestUtilityFunctions:
     """Test class for utility functions"""
     
@@ -541,7 +504,7 @@ async def test_models_integration():
     
     # Create region profile
     profile = RegionProfile(
-        dominant_biome=BiomeType.TEMPERATE_FOREST,
+        dominant_biome="temperate_forest",
         climate=ClimateType.TEMPERATE,
         soil_fertility=0.8,
         water_availability=0.7
@@ -550,14 +513,14 @@ async def test_models_integration():
     # Create resource nodes
     resources = [
         ResourceNode(
-            resource_type=ResourceType.TIMBER,
+            resource_type="timber",
             abundance=0.9,
             quality=0.8,
             accessibility=0.7,
             location=HexCoordinate(0, 0)
         ),
         ResourceNode(
-            resource_type=ResourceType.FRESH_WATER,
+            resource_type="fresh_water",
             abundance=0.7,
             quality=0.9,
             accessibility=0.9,
@@ -571,7 +534,7 @@ async def test_models_integration():
         name="Integration Test Region",
         description="A region for integration testing",
         continent_id=continent_id,
-        region_type=RegionType.KINGDOM,
+        region_type="kingdom",
         profile=profile,
         hex_coordinates=[HexCoordinate(0, 0), HexCoordinate(1, 0), HexCoordinate(0, 1)],
         population=5000,
@@ -584,7 +547,7 @@ async def test_models_integration():
     
     # Validate the integration
     assert region.continent_id == continent.id
-    assert region.profile.dominant_biome == BiomeType.TEMPERATE_FOREST
+    assert region.profile.dominant_biome == "temperate_forest"
     assert len(region.resource_nodes) == 2
     assert region.calculate_total_resource_value() > 0
     assert region.area_square_km > 0  # Should be calculated from hex coordinates

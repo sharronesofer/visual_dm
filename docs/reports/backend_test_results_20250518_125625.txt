@@ -5,7 +5,7 @@ Exit Code: 2
 Output:
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0
-rootdir: /Users/Sharrone/Visual_DM/backend/tests
+rootdir: /Users/Sharrone/Dreamforge/backend/tests
 configfile: pytest.ini
 plugins: anyio-4.9.0, mock-3.14.0, cov-6.1.1
 collected 57 items / 8 errors / 8 skipped
@@ -14,7 +14,7 @@ ERROR: Coverage failure: total of 2 is less than fail-under=80
 
 ==================================== ERRORS ====================================
 _______________________ ERROR collecting test_combat.py ________________________
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/test_combat.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/test_combat.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -23,7 +23,7 @@ backend/tests/test_combat.py:1: in <module>
     from app.core.models.combat import Combatant, Weapon, CombatSystem
 E   ModuleNotFoundError: No module named 'app.core.models'
 ________________ ERROR collecting test_coordinate_validation.py ________________
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/test_coordinate_validation.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/test_coordinate_validation.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -32,7 +32,7 @@ backend/tests/test_coordinate_validation.py:8: in <module>
     from visual_client.core.utils.coordinates import GlobalCoord, LocalCoord
 E   ModuleNotFoundError: No module named 'visual_client'
 ______________________ ERROR collecting test_inventory.py ______________________
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/test_inventory.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/test_inventory.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -41,7 +41,7 @@ backend/tests/test_inventory.py:2: in <module>
     from app.core.models.inventory import Inventory, Item
 E   ModuleNotFoundError: No module named 'app.core.models'
 ___________________ ERROR collecting test_item_attributes.py ___________________
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/test_item_attributes.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/test_item_attributes.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -50,7 +50,7 @@ backend/tests/test_item_attributes.py:2: in <module>
     from app.core.models.item import AttributeContainer, Item
 E   ModuleNotFoundError: No module named 'app.core.models'
 _______________________ ERROR collecting test_region.py ________________________
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/test_region.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/test_region.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -86,12 +86,12 @@ backend/tests/test_retry.py:5: in <module>
     from backend.utils.retry import retry, retry_sync, retry_async, RetryOptions
 backend/utils/retry.py:10: in <module>
     from app.src.core.utils.logger import Logger
-E     File "/Users/Sharrone/Visual_DM/backend/app/src/core/utils/logger.py", line 5
+E     File "/Users/Sharrone/Dreamforge/backend/app/src/core/utils/logger.py", line 5
 E       /**
 E       ^
 E   SyntaxError: invalid syntax
 _____________________ ERROR collecting test_world_event.py _____________________
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/test_world_event.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/test_world_event.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -100,7 +100,7 @@ backend/tests/test_world_event.py:1: in <module>
     from app.core.models.world_event import WorldEvent
 E   ModuleNotFoundError: No module named 'app.core.models'
 ________________ ERROR collecting unit/test_bible_qa_service.py ________________
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/unit/test_bible_qa_service.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/unit/test_bible_qa_service.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -110,43 +110,43 @@ backend/tests/unit/test_bible_qa_service.py:6: in <module>
 E   ModuleNotFoundError: No module named 'backend.services.bible_qa_service'
 =============================== warnings summary ===============================
 backend/tests/test_async_function_patterns.py:112
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:112: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:112: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:118
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:118: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:118: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:126
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:126: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:126: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:143
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:143: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:143: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:151
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:151: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:151: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:157
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:157: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:157: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:164
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:164: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:164: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:170
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:170: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:170: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:176
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:176: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:176: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 backend/tests/test_async_function_patterns.py:194
-  /Users/Sharrone/Visual_DM/backend/tests/test_async_function_patterns.py:194: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+  /Users/Sharrone/Dreamforge/backend/tests/test_async_function_patterns.py:194: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
     @pytest.mark.asyncio
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html

@@ -2,7 +2,7 @@
 
 ## 1. Initial Scanning Phase
 - Searched for files with similar names/roles using keywords (manager, system, handler, etc.) across C#, Python, and other languages.
-- Inspected Unity C# scripts in Visual_DM/Visual_DM/Assets/Scripts/ (all subfolders), Python modules in src/, backend/, and python_converted/.
+- Inspected Unity C# scripts in Dreamforge/Dreamforge/Assets/Scripts/ (all subfolders), Python modules in src/, backend/, and python_converted/.
 - Reviewed deduplication/consolidation scripts and prior similarity results.
 
 ## 2. Grouping and Classification

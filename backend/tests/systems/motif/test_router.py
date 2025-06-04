@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.motif import router
+    from backend.infrastructure.systems.motif.routers import router
 except ImportError:
     pytest.skip(f"Module backend.systems.motif.router not found", allow_module_level=True)
 
@@ -29,6 +29,9 @@ class TestRouter:
         assert True
         
     def test_module_structure(self):
-        """Test that module has expected structure"""
-        # TODO: Add tests for expected classes, functions, constants
-        assert hasattr(router, '__name__')
+        """Test that router has expected structure"""
+        # Router is a FastAPI router object, not a module
+        # Check for router-specific attributes
+        assert hasattr(router, 'routes') or hasattr(router, 'routes')  # FastAPI router attributes
+        # Basic router object validation
+        assert router is not None

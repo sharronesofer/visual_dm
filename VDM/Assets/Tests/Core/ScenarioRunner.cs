@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 namespace VDM.Tests.Core
 {
@@ -88,16 +89,16 @@ namespace VDM.Tests.Core
                 
                 // Step 2: Fill character details
                 result.AddStep("Fill character details");
-                var characterData = new
-                {
-                    name = parameters.GetValueOrDefault("character_name", "Test Character"),
-                    class_ = parameters.GetValueOrDefault("character_class", "Warrior"),
-                    attributes = new { strength = 15, dexterity = 12, intelligence = 10, constitution = 14 }
-                };
+                var character = new CharacterBuilder()
+                    .SetName(parameters.GetValueOrDefault("character_name", "Test Character"))
+                    .SetRace(parameters.GetValueOrDefault("race", "Human"))
+                    .SetLevel(int.Parse(parameters.GetValueOrDefault("level", "1")))
+                    .SetAbilities(parameters.GetValueOrDefault("abilities", "").Split(',').Where(a => !string.IsNullOrEmpty(a)).ToList())
+                    .Build();
 
                 // Step 3: Submit character creation
                 result.AddStep("Submit character creation");
-                var response = await _mockBackend.CallAPI("POST", "/api/characters", characterData);
+                var response = await _mockBackend.CallAPI("POST", "/api/characters", character);
                 
                 if (!response.IsSuccess)
                 {

@@ -12,9 +12,11 @@ from uuid import UUID
 import json
 import os
 
-from backend.infrastructure.events.event_dispatcher import EventDispatcher
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from backend.systems.character.models.goal import (
-    Goal, GoalType, GoalPriority, GoalStatus,
+    Goal, GoalType, GoalPriority, GoalStatus
+)
+from backend.infrastructure.events.events.canonical_events import (
     GoalCreated, GoalCompleted, GoalFailed, GoalAbandoned, GoalProgressUpdated
 )
 
@@ -206,7 +208,7 @@ class GoalService:
                character_id: Union[str, UUID], 
                description: str, 
                goal_type: Union[str, GoalType] = GoalType.PERSONAL,
-               priority: Union[str, GoalPriority] = GoalPriority.MEDIUM,
+               priority: Union[str, GoalPriority] = GoalPriority.NORMAL,
                metadata: Optional[Dict[str, Any]] = None) -> Goal:
         """
         Add a new goal for a character.
@@ -526,7 +528,7 @@ class GoalService:
         priority_order = {
             GoalPriority.CRITICAL: 0,
             GoalPriority.HIGH: 1,
-            GoalPriority.MEDIUM: 2,
+            GoalPriority.NORMAL: 2,
             GoalPriority.LOW: 3
         }
         

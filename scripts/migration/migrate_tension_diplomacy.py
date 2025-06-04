@@ -21,18 +21,18 @@ from pathlib import Path
 
 # Mapping of old imports to new imports
 IMPORT_MAPPING = {
-    'from backend.systems.tension_war': 'from backend.systems.diplomacy',
-    'from backend.systems.tension_war.models': 'from backend.systems.diplomacy.models',
-    'from backend.systems.tension_war.services': 'from backend.systems.diplomacy.services',
-    'from backend.systems.tension_war.utils': 'from backend.systems.diplomacy.services',
-    'from backend.systems.tension_war.schemas': 'from backend.systems.diplomacy.schemas',
-    'from backend.systems.tension_war.router': 'from backend.systems.diplomacy.router',
-    'import backend.systems.tension_war': 'import backend.systems.diplomacy',
+    'from backend.systems.tension': 'from backend.systems.diplomacy',
+    'from backend.systems.tension.models': 'from backend.systems.diplomacy.models',
+    'from backend.systems.tension.services': 'from backend.systems.diplomacy.services',
+    'from backend.systems.tension.utils': 'from backend.systems.diplomacy.services',
+    'from backend.systems.tension.schemas': 'from backend.infrastructure.schemas.diplomacy_schemas',
+    'from backend.systems.tension.router': 'from backend.infrastructure.api.diplomacy_router',
+    'import backend.systems.tension': 'import backend.systems.diplomacy',
 }
 
 # Mapping of old classes/functions to new classes/functions
 CLASS_MAPPING = {
-    'TensionManager': 'TensionService',
+    'UnifiedTensionManager': 'TensionService',
     'WarManager': 'DiplomacyService',
     'TensionLevel': 'DiplomaticStatus',
     'WarState': 'DiplomaticEvent',  # Approximate mapping

@@ -25,32 +25,37 @@ class DataCleanupManager:
         # Define where legacy directories should be moved
         self.directory_mappings = {
             # Builder content (customizable by builders)
-            "abilities": "builders/content/abilities/legacy",
-            "feats": "builders/content/abilities/legacy_feats", 
-            "equipment": "builders/content/equipment/legacy",
+            "races": "builders/content/races",
+            "abilities": "builders/content/abilities/legacy_abilities",
+            "equipment": "builders/content/equipment",
+            "spells": "builders/content/spells",
+            "items": "builders/content/equipment/items",
             "weapons": "builders/content/equipment/weapons",
             "armor": "builders/content/equipment/armor",
-            "items": "builders/content/equipment/items",
-            "spells": "builders/content/spells/legacy",
-            "monsters": "builders/content/creatures",
-            "entities": "builders/content/races/entities",
+            "biomes": "builders/world_parameters/biomes",
+            "weather": "builders/world_parameters/weather",
+            "factions": "builders/content/factions",
+            "religion": "builders/content/factions/religion",
+            "combat": "system/mechanics/combat",
+            "economy": "system/mechanics/economy",
+            "time": "system/mechanics/progression",
+            "events": "system/runtime/ai_behavior",
+            "world_state": "system/runtime/world_state",
+            "memory": "system/runtime/memory",
+            "analytics": "system/runtime/analytics",
+            "goals": "system/runtime/goals",
+            "quests": "system/runtime/quests",
             
             # World generation parameters
-            "biomes": "builders/world_parameters/biomes/legacy",
             "world": "builders/world_parameters/generation",
             "worlds": "builders/world_parameters/seeds",
             "regions": "builders/world_parameters/regions",
             "narrative": "builders/world_parameters/narrative",
             
             # System mechanics (internal)
-            "combat": "system/mechanics/combat/legacy",
-            "crafting": "system/mechanics/crafting",
-            "leveling": "system/mechanics/progression",
-            "skills": "system/mechanics/progression/skills",
             "rules_json": "system/mechanics/rules",
             
             # System runtime (generated/temporary)
-            "world_state": "system/runtime/world_state/legacy",
             "gameplay": "system/runtime/gameplay",
             "moods": "system/runtime/ai_behavior",
             "rumors": "system/runtime/narrative/rumors",
@@ -63,7 +68,6 @@ class DataCleanupManager:
             "backups": "system/archive/backups",
             "odds_n_ends": "system/archive/misc",
             "ui": "system/archive/ui",
-            "religion": "system/archive/religion"
         }
     
     def create_target_directories(self, dry_run: bool = False) -> None:
@@ -136,20 +140,20 @@ class DataCleanupManager:
         
         report += "\n## Directory Categories\n\n"
         report += "### Builder Content (Customizable)\n"
-        report += "- abilities, feats, equipment, weapons, armor, items\n"
-        report += "- spells, monsters, entities\n\n"
-        
-        report += "### World Generation Parameters\n"
-        report += "- biomes, world, worlds, regions, narrative\n\n"
+        report += "- abilities, equipment, weapons, armor, items\n"
+        report += "- spells, races, biomes, weather, factions, religion\n"
+        report += "- world, worlds, regions, narrative\n\n"
         
         report += "### System Mechanics (Internal)\n"
-        report += "- combat, crafting, leveling, skills, rules_json\n\n"
+        report += "- combat, economy, time, events\n"
+        report += "- rules_json\n\n"
         
         report += "### System Runtime (Generated)\n"
-        report += "- world_state, gameplay, moods, rumors\n\n"
+        report += "- world_state, gameplay, moods, rumors\n"
+        report += "- memory, analytics, goals, quests\n\n"
         
         report += "### Archive/Legacy\n"
-        report += "- _versions, backups, odds_n_ends, ui, religion, modding\n"
+        report += "- _versions, backups, odds_n_ends, ui, modding\n"
         
         return report
 

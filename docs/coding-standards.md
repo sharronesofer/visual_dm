@@ -1,4 +1,4 @@
-# Visual_DM Coding Standards
+# Dreamforge Coding Standards
 
 This document outlines the coding standards enforced by our C# static analysis tools (StyleCop, Roslyn analyzers, SonarAnalyzer) and provides guidance for compliance.
 
@@ -90,7 +90,7 @@ Use interfaces and inject only what is needed.
 - Review the build logs for details on violations.
 
 ## Running Static Analysis Locally
-- Run `dotnet build Visual_DM/Assembly-CSharp.csproj` to see analyzer warnings and errors.
+- Run `dotnet build Dreamforge/Assembly-CSharp.csproj` to see analyzer warnings and errors.
 - Fix issues before pushing code to avoid CI failures.
 
 ## Running Static Analysis in CI

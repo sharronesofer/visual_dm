@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Newtonsoft.Json;
 using VDM.Systems.Chaos.Models;
-using VDM.Infrastructure.Services.Services.Http;
 using VDM.Infrastructure.Services;
 
 namespace VDM.Systems.Chaos.Services
@@ -95,17 +94,22 @@ namespace VDM.Systems.Chaos.Services
 
             try
             {
-                await webSocketClient.ConnectAsync(chaosWebSocketUrl);
+                webSocketClient.SetServerUrl(chaosWebSocketUrl);
+                webSocketClient.Connect();
                 
                 // Subscribe to WebSocket events
-                webSocketClient.OnMessage += HandleWebSocketMessage;
-                webSocketClient.OnConnectionStateChanged += HandleConnectionStateChanged;
+                webSocketClient.OnMessageReceived += HandleWebSocketMessage;
+                webSocketClient.OnConnected += () => HandleConnectionStateChanged(true);
+                webSocketClient.OnDisconnected += (reason) => HandleConnectionStateChanged(false);
                 webSocketClient.OnError += HandleWebSocketError;
 
-                isConnected = true;
-                OnConnectionStatusChanged?.Invoke(true);
+                // Wait a moment for connection to establish
+                await Task.Delay(1000);
+                
+                isConnected = webSocketClient.IsConnected;
+                OnConnectionStatusChanged?.Invoke(isConnected);
                 Debug.Log("ChaosService: WebSocket connected successfully");
-                return true;
+                return isConnected;
             }
             catch (Exception ex)
             {
@@ -122,10 +126,11 @@ namespace VDM.Systems.Chaos.Services
         {
             if (webSocketClient != null)
             {
-                webSocketClient.OnMessage -= HandleWebSocketMessage;
-                webSocketClient.OnConnectionStateChanged -= HandleConnectionStateChanged;
+                webSocketClient.OnMessageReceived -= HandleWebSocketMessage;
+                webSocketClient.OnConnected -= () => HandleConnectionStateChanged(true);
+                webSocketClient.OnDisconnected -= (reason) => HandleConnectionStateChanged(false);
                 webSocketClient.OnError -= HandleWebSocketError;
-                webSocketClient.DisconnectAsync();
+                webSocketClient.Disconnect();
             }
 
             isConnected = false;
@@ -368,11 +373,13 @@ namespace VDM.Systems.Chaos.Services
 
         // WebSocket Event Handlers
 
-        private void HandleWebSocketMessage(string message)
+        private void HandleWebSocketMessage(WebSocketMessage message)
         {
             try
             {
-                var update = JsonConvert.DeserializeObject<ChaosUpdateDTO>(message);
+                // Convert the message data to string if needed
+                string messageData = message.Data?.ToString() ?? string.Empty;
+                var update = JsonConvert.DeserializeObject<ChaosUpdateDTO>(messageData);
                 ProcessChaosUpdate(update);
             }
             catch (Exception ex)

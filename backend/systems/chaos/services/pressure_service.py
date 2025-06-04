@@ -6,15 +6,13 @@ Provides high-level interface for collecting, analyzing, and reporting pressure 
 """
 
 import asyncio
-import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 
 from backend.systems.chaos.core.pressure_monitor import PressureMonitor
 from backend.systems.chaos.core.config import ChaosConfig
-from backend.systems.chaos.models.pressure_data import PressureData
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData
 
-logger = logging.getLogger(__name__)
 
 class PressureService:
     """
@@ -33,9 +31,7 @@ class PressureService:
         """Initialize the pressure service."""
         try:
             await self.pressure_monitor.initialize()
-            logger.info("Pressure Service initialized")
         except Exception as e:
-            logger.error(f"Failed to initialize Pressure Service: {e}")
             raise
     
     async def collect_all_pressure(self) -> PressureData:

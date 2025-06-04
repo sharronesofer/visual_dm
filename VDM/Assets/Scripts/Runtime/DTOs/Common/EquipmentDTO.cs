@@ -137,7 +137,7 @@ namespace VDM.DTOs.Economic.Equipment
 
         public int LevelRequirement { get; set; } = 1;
 
-        public Dictionary<string, int> StatRequirements { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> AttributeBonuses { get; set; } = new Dictionary<string, int>();
 
         public List<string> ClassRestrictions { get; set; } = new List<string>();
 
@@ -240,7 +240,7 @@ namespace VDM.DTOs.Economic.Equipment
 
         public int DamageBonus { get; set; } = 0;
 
-        public Dictionary<string, int> StatBonuses { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> AttributeBonuses { get; set; } = new Dictionary<string, int>();
 
         public Dictionary<DamageType, float> Resistances { get; set; } = new Dictionary<DamageType, float>();
 
@@ -472,7 +472,7 @@ namespace VDM.DTOs.Economic.Equipment
 
         public string Description { get; set; }
 
-        public Dictionary<string, int> StatBonuses { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> AttributeBonuses { get; set; } = new Dictionary<string, int>();
 
         public List<string> SpecialEffects { get; set; } = new List<string>();
 

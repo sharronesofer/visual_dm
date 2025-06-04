@@ -65,13 +65,13 @@ jobs:
       - name: Run Unity Test Runner
         uses: game-ci/unity-test-runner@v3
         with:
-          projectPath: Visual_DM/Visual_DM
+          projectPath: Dreamforge/Dreamforge
           testMode: all
       - name: Upload Unity test results
         uses: actions/upload-artifact@v4
         with:
           name: unity-test-results
-          path: Visual_DM/Visual_DM/TestResults/
+          path: Dreamforge/Dreamforge/TestResults/
 
   weekly-scan:
     runs-on: ubuntu-latest
@@ -122,13 +122,13 @@ jobs:
         with:
           dotnet-version: '9.0.x'
       - name: Restore dependencies
-        run: dotnet restore Visual_DM/Assembly-CSharp.csproj
+        run: dotnet restore Dreamforge/Assembly-CSharp.csproj
       - name: Build with analyzers
-        run: dotnet build Visual_DM/Assembly-CSharp.csproj --no-restore
+        run: dotnet build Dreamforge/Assembly-CSharp.csproj --no-restore
       - name: Run static analysis (StyleCop, Roslyn, Sonar)
-        run: dotnet build Visual_DM/Assembly-CSharp.csproj --no-restore --no-incremental
+        run: dotnet build Dreamforge/Assembly-CSharp.csproj --no-restore --no-incremental
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-logs
-          path: Visual_DM/Visual_DM/Temp/obj/Assembly-CSharp/ 
+          path: Dreamforge/Dreamforge/Temp/obj/Assembly-CSharp/ 

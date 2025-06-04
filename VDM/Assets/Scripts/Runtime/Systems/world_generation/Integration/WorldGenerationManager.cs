@@ -5,7 +5,11 @@ using UnityEngine;
 using VDM.DTOs.Common;
 using VDM.Systems.Worldgeneration.Services;
 using VDM.Systems.Worldgeneration.Ui;
-
+using VDM.Systems.Worldgeneration.Models;
+using ContinentModel = VDM.Systems.Worldgeneration.Models.ContinentModel;
+using WorldGenerationConfig = VDM.Systems.Worldgeneration.Models.WorldGenerationConfig;
+using WorldGenerationResult = VDM.Systems.Worldgeneration.Models.WorldGenerationResult;
+using BiomeModel = VDM.Systems.Worldgeneration.Models.BiomeModel;
 
 namespace VDM.Systems.Worldgeneration.Integration
 {

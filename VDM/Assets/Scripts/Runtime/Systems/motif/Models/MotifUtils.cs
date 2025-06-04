@@ -386,11 +386,11 @@ namespace VDM.Systems.Motifs.Utils
         #region Data Conversion
 
         /// <summary>
-        /// Convert Unity Vector2 to LocationInfo position
+        /// Create a location info object from position and radius
         /// </summary>
-        public static LocationInfo CreateLocationInfo(Vector2 position, float radius = 10f, string regionId = "default")
+        public static VDM.Systems.Motifs.Models.LocationInfo CreateLocationInfo(Vector2 position, float radius = 10f, string regionId = "default")
         {
-            return new LocationInfo
+            return new VDM.Systems.Motifs.Models.LocationInfo
             {
                 position = position,
                 radius = radius,
@@ -399,9 +399,9 @@ namespace VDM.Systems.Motifs.Utils
         }
 
         /// <summary>
-        /// Convert LocationInfo to Unity Vector2
+        /// Get position from location info
         /// </summary>
-        public static Vector2 GetPosition(LocationInfo location)
+        public static Vector2 GetPosition(VDM.Systems.Motifs.Models.LocationInfo location)
         {
             return location?.position ?? Vector2.zero;
         }

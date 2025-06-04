@@ -1,30 +1,38 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, JSON, ForeignKey, Table, DateTime
 from sqlalchemy.orm import relationship
-from typing import List, Dict, Optional, Any, Union
+from typing import List, Dict, Optional, Any, Union, TYPE_CHECKING
 from uuid import uuid4, UUID
+from sqlalchemy.orm import Session
+from pydantic import BaseModel, Field, validator, root_validator
+from dataclasses import dataclass, field
+from enum import Enum
+import json
 
 # Import from the core database module
 try:
     from backend.infrastructure.database import Base
 except ImportError:
     # Fallback if core database is not available
-    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import declarative_base
     Base = declarative_base()
 
 character_skills = Table(
     'character_skills',
     Base.metadata,
     Column('character_id', Integer, ForeignKey('characters.id'), primary_key=True),
-    Column('skill_id', Integer, ForeignKey('skills.id'), primary_key=True)
+    Column('skill_id', Integer, ForeignKey('skills.id'), primary_key=True),
+    extend_existing=True
 )
 
 class Character(Base):
     """
     Character model representing both player and non-player characters.
     Integrated with mood, goal, and relationship systems as described in the Development Bible.
+    Skills are now stored as JSON data with proficiency information.
     """
     __tablename__ = 'characters'
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), default=lambda: str(uuid4()), unique=True, index=True)
@@ -34,7 +42,11 @@ class Character(Base):
     stats = Column(JSON, nullable=False)  # Stores ability scores, HP, etc.
     background = Column(String(100))
     alignment = Column(String(50))
-    skills = relationship('Skill', secondary=character_skills, backref='characters')
+    
+    # Skills are now stored as JSON instead of separate table
+    # Format: {"skill_name": {"proficient": true, "expertise": false, "bonus": 0}, ...}
+    skills = Column(JSON, default=dict)  
+    
     visual_data = Column(JSON, default=dict)  # Stores visual model data (CharacterModel serialized)
     notes = Column(JSON, default=list)  # Character-specific notes
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -45,20 +57,22 @@ class Character(Base):
 
     def to_builder(self):
         """Convert this Character model to a CharacterBuilder instance for modifications."""
-        from backend.systems.character.services.character_builder import CharacterBuilder, RACES_DATA, FEATS_LIST
-        try:
-            from backend.infrastructure.database import get_db
-            db_session = next(get_db())
-            all_skills_from_db = [s.name for s in db_session.query(Skill.name).all()]
-            db_session.close()
-        except:
-            # Fallback skill list if database is not available
-            all_skills_from_db = ['acrobatics', 'animal_handling', 'arcana', 'athletics', 'deception', 'history', 'insight', 'intimidation', 'investigation', 'medicine', 'nature', 'perception', 'performance', 'persuasion', 'religion', 'sleight_of_hand', 'stealth', 'survival']
+        from backend.systems.character.services.character_builder import CharacterBuilder
+        from backend.infrastructure.config_loaders.character_config_loader import config_loader
 
-        builder = CharacterBuilder(race_data=RACES_DATA, feat_data=FEATS_LIST, skill_list=all_skills_from_db)
+        # Load configuration-based data
+        races_config = config_loader.load_races_config()
+        abilities_config = config_loader.load_abilities_config()
+        skill_list = config_loader.get_skill_list()
+
+        builder = CharacterBuilder(
+            race_data=races_config, 
+            ability_data=abilities_config.get("feats", {}),  # JSON still uses "feats" key for backward compatibility, but Visual DM uses "abilities" terminology
+            skill_list=skill_list
+        )
         builder.character_name = self.name
         
-        if self.race in builder.race_data:
+        if self.race in races_config:
             builder.selected_race = self.race
         else:
             print(f"Warning: Character race '{self.race}' not found in builder's race_data.")
@@ -72,9 +86,62 @@ class Character(Base):
                     setattr(builder, attr, value)
         
         builder.level = self.level
-        builder.selected_skills = [skill.name for skill in self.skills]
+        
+        # Extract skill names from the new JSON format
+        if isinstance(self.skills, dict):
+            builder.selected_skills = list(self.skills.keys())
+        else:
+            # Fallback for legacy data
+            builder.selected_skills = []
         
         return builder
+    
+    def get_skill_proficiency(self, skill_name: str) -> Dict[str, Any]:
+        """Get proficiency information for a specific skill."""
+        if not isinstance(self.skills, dict):
+            return {"proficient": False, "expertise": False, "bonus": 0}
+        
+        return self.skills.get(skill_name, {"proficient": False, "expertise": False, "bonus": 0})
+    
+    def set_skill_proficiency(self, skill_name: str, proficient: bool = True, expertise: bool = False, bonus: int = 0):
+        """Set proficiency information for a specific skill."""
+        if not isinstance(self.skills, dict):
+            self.skills = {}
+        
+        self.skills[skill_name] = {
+            "proficient": proficient,
+            "expertise": expertise,
+            "bonus": bonus
+        }
+    
+    def add_skill(self, skill_name: str, proficient: bool = True):
+        """Add a skill with proficiency to the character."""
+        self.set_skill_proficiency(skill_name, proficient)
+    
+    def remove_skill(self, skill_name: str):
+        """Remove a skill from the character."""
+        if isinstance(self.skills, dict) and skill_name in self.skills:
+            del self.skills[skill_name]
+    
+    def get_proficient_skills(self) -> List[str]:
+        """Get a list of all skills the character is proficient in."""
+        if not isinstance(self.skills, dict):
+            return []
+        
+        return [
+            skill_name for skill_name, skill_data in self.skills.items()
+            if skill_data.get("proficient", False)
+        ]
+    
+    def get_expertise_skills(self) -> List[str]:
+        """Get a list of all skills the character has expertise in."""
+        if not isinstance(self.skills, dict):
+            return []
+        
+        return [
+            skill_name for skill_name, skill_data in self.skills.items()
+            if skill_data.get("expertise", False)
+        ]
 
     # Relationship System Integration
     def get_relationships(self, relationship_type: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -222,18 +289,4 @@ class Character(Base):
         
         self.set_visual_model(visual_model)
 
-class Skill(Base):
-    """Skill model representing character abilities and proficiencies."""
-    __tablename__ = 'skills'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False, unique=True)
-    description = Column(String(500))
-    ability = Column(String(50))  # Associated ability score (STR, DEX, etc.)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<Skill {self.name}>"
-
-__all__ = ["Character", "Skill", "character_skills"] 
+__all__ = ["Character"] 

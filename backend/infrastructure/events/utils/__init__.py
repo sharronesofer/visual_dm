@@ -1,8 +1,8 @@
 """Utils for events system"""
 
 # Auto-generated imports
-from .accessibility import *
-from .asset_utils import *
+# from .accessibility import *  # Removed - pygame dependency
+# from .asset_utils import *  # Removed - pygame dependency
 from .base_manager import *
 from .batching import *
 from .constants import *
@@ -20,20 +20,20 @@ from .floating_origin import *
 from .floating_origin_ecs import *
 from .game_utils import *
 from .gpt import *
-from .input_utils import *
+# from .input_utils import *  # Removed - pygame dependency
 from .item_utils import *
 from .json_utils import *
 from .layout import *
 from .npc_utils import *
 from .password import *
 from .plugins import *
-from .quest_utils import *
+# from .quest_utils import *  # Temporarily disabled due to circular import
 from .render_utils import *
 from .rules_loader import *
-from .screen_utils import *
+# from .screen_utils import *  # Removed - pygame dependency
 from .seed import *
 from .shared_utils import *
 from .start_game_routes import *
 from .terrain_manager import *
-from .tile_loader import *
-from .world_tick_utils import *
+# from .tile_loader import *  # Removed - pygame dependency
+# from .world_tick_utils import *  # Temporarily disabled due to circular import

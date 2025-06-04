@@ -6,19 +6,17 @@ the Development Bible standards.
 """
 
 from typing import Optional, List, Dict, Any
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
 from datetime import datetime
 from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ConfigDict
-
-Base = declarative_base()
-
 
 class SharedBaseModel(PydanticBaseModel):
     """Base model for shared system with common fields"""
@@ -34,7 +32,6 @@ class SharedBaseModel(PydanticBaseModel):
         populate_by_name=True
     )
 
-
 class SharedModel(SharedBaseModel):
     """Primary model for shared system"""
     
@@ -42,7 +39,6 @@ class SharedModel(SharedBaseModel):
     description: Optional[str] = Field(None, description="Description of the shared")
     status: str = Field(default="active", description="Status of the shared")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
 
 class SharedEntity(Base):
     """SQLAlchemy entity for shared system"""
@@ -74,7 +70,6 @@ class SharedEntity(Base):
             "is_active": self.is_active
         }
 
-
 # Request/Response Models
 class CreateSharedRequest(BaseModel):
     """Request model for creating shared"""
@@ -83,7 +78,6 @@ class CreateSharedRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateSharedRequest(BaseModel):
     """Request model for updating shared"""
     
@@ -91,7 +85,6 @@ class UpdateSharedRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class SharedResponse(BaseModel):
     """Response model for shared"""
@@ -106,7 +99,6 @@ class SharedResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class SharedListResponse(BaseModel):
     """Response model for shared lists"""

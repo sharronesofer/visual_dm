@@ -15,13 +15,13 @@
   "import_violations": [],
   "duplicate_tests": [
     [
-      "/Users/Sharrone/Visual_DM/backend/tests/systems/poi/test_utils.py",
-      "/Users/Sharrone/Visual_DM/backend/tests/systems/inventory/test_utils.py"
+      "/Users/Sharrone/Dreamforge/backend/tests/systems/poi/test_utils.py",
+      "/Users/Sharrone/Dreamforge/backend/tests/systems/inventory/test_utils.py"
     ],
     [
-      "/Users/Sharrone/Visual_DM/backend/tests/systems/poi/test_utils.py",
-      "/Users/Sharrone/Visual_DM/backend/tests/systems/analytics/test_utils.py"
+      "/Users/Sharrone/Dreamforge/backend/tests/systems/poi/test_utils.py",
+      "/Users/Sharrone/Dreamforge/backend/tests/systems/analytics/test_utils.py"
     ]
   ],
-  "timestamp": "/Users/Sharrone/Visual_DM/backend"
+  "timestamp": "/Users/Sharrone/Dreamforge/backend"
 }

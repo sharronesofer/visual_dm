@@ -8,9 +8,9 @@ using VDM.DTOs.Core;
 using VDM.Systems.Character;
 using VDM.Infrastructure.Services;
 using VDM.DTOs.Character;
-using VDM.Infrastructure.Services.Services.Websocket;
-using VDM.Infrastructure.Services.Services.Http;
-
+using VDM.DTOs.Common;
+using VDM.DTOs.Game.Magic;
+using VDM.Systems.Combat.Services;
 
 namespace VDM.Infrastructure.Services
 {

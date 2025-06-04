@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using System;
 using VDM.UI.Core;
 using TMPro;
+using VDM.Infrastructure.Services;
+using VDM.Infrastructure.Core.Core.Ui;
 
 namespace VDM.Infrastructure.UI.Components
 {
@@ -694,10 +696,8 @@ namespace VDM.Infrastructure.UI.Components
         
         #region Cleanup
         
-        protected override void OnCleanup()
+        private void OnCleanup()
         {
-            base.OnCleanup();
-            
             // Clean up button listeners
             if (inventoryButton)
                 inventoryButton.onClick.RemoveAllListeners();
@@ -716,6 +716,12 @@ namespace VDM.Infrastructure.UI.Components
             
             // Stop any running coroutines
             StopAllCoroutines();
+        }
+        
+        // Call this in OnDestroy
+        private void OnDestroy()
+        {
+            OnCleanup();
         }
         
         #endregion

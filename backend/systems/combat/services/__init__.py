@@ -1,5 +1,4 @@
-"""Services for combat system"""
+"""Services for combat system - Business Logic Services Only"""
 
-# Auto-generated imports
-from .combat_service import *
-from .services import *
+# Business logic services
+from .combat_service import CombatService, ActionResult 

@@ -4,7 +4,7 @@ JSON Structure Migration Script
 
 This script helps migrate from the old JSON organization to the new two-tier 
 builder/system structure. It moves files to appropriate locations and updates
-references to use the new terminology (feats -> abilities, etc.).
+references to use the new terminology (abilities -> abilities, etc.).
 
 Usage:
     python scripts/migrate_json_structure.py [--dry-run] [--force]
@@ -91,7 +91,7 @@ class JSONStructureMigrator:
     def _is_builder_content(self, file_path: Path) -> bool:
         """Determine if a file should be builder-accessible"""
         content_indicators = [
-            "races", "abilities", "feats", "equipment", "items", 
+            "races", "attributes", "abilities", "equipment", "items", 
             "spells", "faction", "religion", "weather", "biome"
         ]
         
@@ -141,7 +141,7 @@ class JSONStructureMigrator:
             content = re.sub(r'\b[Mm]odding\b', 'world_building', content)
             
             # Update file paths in JSON
-            content = re.sub(r'data/feats/', 'data/builders/content/abilities/', content)
+            content = re.sub(r'data/abilities/', 'data/builders/content/abilities/', content)
             content = re.sub(r'data/equipment/', 'data/builders/content/equipment/', content)
             content = re.sub(r'data/spells/', 'data/builders/content/spells/', content)
             
@@ -211,7 +211,7 @@ class JSONStructureMigrator:
         
         if "race" in path_str:
             return self.data_root / "builders/content/races" / file_path.name
-        elif any(x in path_str for x in ["ability", "feat"]):
+        elif any(x in path_str for x in ["ability", "ability"]):
             return self.data_root / "builders/content/abilities" / file_path.name
         elif any(x in path_str for x in ["equipment", "item"]):
             return self.data_root / "builders/content/equipment" / file_path.name

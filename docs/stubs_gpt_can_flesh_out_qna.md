@@ -150,7 +150,7 @@
   - Use SpriteRenderer for 2D; avoid UnityEditor code.
   - Document all public methods and properties.
 - **Implementation Plan:**
-  - Implement as a C# class in Visual_DM/Visual_DM/Assets/Scripts/Rendering/.
+  - Implement as a C# class in Dreamforge/Dreamforge/Assets/Scripts/Rendering/.
 - **Edge Cases/Notes:**
   - Ensure runtime-only, no scene/prefab dependencies.
 

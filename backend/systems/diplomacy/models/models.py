@@ -1,23 +1,16 @@
 """
 Diplomacy System Models
 
-This module defines the data models for the diplomacy system according to
-the Development Bible standards.
+This module defines the Pydantic data models for the diplomacy system according to
+the Development Bible standards. SQLAlchemy database models are in db_models/
 """
 
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from uuid import UUID, uuid4
-from pydantic import BaseModel, Field
-from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from pydantic import BaseModel, Field, ConfigDict
 
-from backend.infrastructure.shared.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.shared.models import SharedBaseModel
 
 class DiplomacyBaseModel(SharedBaseModel):
     """Base model for diplomacy system with common fields"""
@@ -30,7 +23,6 @@ class DiplomacyBaseModel(SharedBaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class DiplomacyModel(DiplomacyBaseModel):
     """Primary model for diplomacy system"""
     
@@ -38,38 +30,6 @@ class DiplomacyModel(DiplomacyBaseModel):
     description: Optional[str] = Field(None, description="Description of the diplomacy")
     status: str = Field(default="active", description="Status of the diplomacy")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
-
-class DiplomacyEntity(Base):
-    """SQLAlchemy entity for diplomacy system"""
-    
-    __tablename__ = f"diplomacy_entities"
-    
-    id = Column(SQLAlchemyUUID(as_uuid=True), primary_key=True, default=uuid4)
-    name = Column(String(255), nullable=False, index=True)
-    description = Column(Text)
-    status = Column(String(50), default="active", index=True)
-    properties = Column(JSONB, default=dict)
-    created_at = Column(DateTime, default=datetime.utcnow, index=True)
-    updated_at = Column(DateTime, onupdate=datetime.utcnow)
-    is_active = Column(Boolean, default=True, index=True)
-
-    def __repr__(self):
-        return f"<DiplomacyEntity(id={self.id}, name={self.name})>"
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert entity to dictionary"""
-        return {
-            "id": str(self.id),
-            "name": self.name,
-            "description": self.description,
-            "status": self.status,
-            "properties": self.properties or {},
-            "created_at": self.created_at.isoformat() if self.created_at else None,
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
-            "is_active": self.is_active
-        }
-
 
 # Request/Response Models
 class CreateDiplomacyRequest(BaseModel):
@@ -79,7 +39,6 @@ class CreateDiplomacyRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateDiplomacyRequest(BaseModel):
     """Request model for updating diplomacy"""
     
@@ -87,7 +46,6 @@ class UpdateDiplomacyRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class DiplomacyResponse(BaseModel):
     """Response model for diplomacy"""
@@ -102,7 +60,6 @@ class DiplomacyResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class DiplomacyListResponse(BaseModel):
     """Response model for diplomacy lists"""

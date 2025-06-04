@@ -1,8 +1,8 @@
 """
-Faction Influence Service
+Faction Influence Service for POI System
 
-Handles faction control, influence mechanics, and political dynamics
-affecting Points of Interest in the POI system.
+Manages faction control, influence zones, and political dynamics within POIs,
+including territory control and diplomatic relationships.
 """
 
 from typing import Dict, List, Optional, Tuple, Set, Any
@@ -14,9 +14,9 @@ from datetime import datetime, timedelta
 import random
 import math
 
-from backend.systems.poi.models import PoiEntity, POIType, POIState
-from backend.infrastructure.database import get_db
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.systems.poi.models import PoiEntity, POIType, POIState
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -170,7 +170,7 @@ class FactionInfluenceService:
     """Service for managing faction influence and political dynamics"""
     
     def __init__(self, db_session: Optional[Session] = None):
-        self.db_session = db_session or get_db()
+        self.db_session = db_session or get_db_session()
         self.event_dispatcher = EventDispatcher()
         
         # Faction and influence data

@@ -1,399 +1,222 @@
 [
   {
+    "id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+    "title": "The Merchants' Guild Rising",
+    "description": "A regional arc focusing on the growing influence of merchant guilds in the eastern provinces.",
+    "arc_type": "REGIONAL",
+    "status": "ACTIVE",
+    "priority": "MEDIUM",
+    "region_id": "eastern_provinces_001",
+    "character_id": null,
+    "npc_id": null,
+    "faction_ids": ["merchants_guild_001", "eastern_nobles_002"],
+    "narrative_summary": "Political intrigue and economic manipulation threaten traditional power structures.",
+    "objectives": ["Investigate guild activities", "Uncover political connections"],
+    "themes": ["political intrigue", "economic power", "social change"],
+    "total_steps": 5,
+    "completed_steps": 2,
+    "progress_percentage": 40.0,
+    "estimated_duration_hours": 12.0,
+    "actual_duration_hours": 5.5,
+    "start_date": "2025-05-07T01:34:24.937380Z",
+    "end_date": null,
+    "last_activity": "2025-05-28T01:34:24.937383Z",
+    "tags": ["politics", "economics", "guilds", "regional"],
+    "difficulty_level": 6,
+    "player_impact": "Moderate - affects reputation with factions",
+    "world_impact": "Significant - could reshape eastern provinces",
+    "created_at": "2025-05-07T01:34:24.937380Z",
+    "updated_at": "2025-05-28T01:34:24.937383Z",
+    "arc_metadata": {}
+  },
+  {
     "id": "9a13e570-977d-4ea0-bc9d-ef43cff1747d",
+    "title": "The Dragon's Shadow",
+    "description": "An ancient evil stirs in the northern mountains, threatening all of civilization.",
+    "arc_type": "GLOBAL",
+    "status": "PENDING",
+    "priority": "HIGH",
+    "region_id": null,
+    "character_id": null,
+    "npc_id": null,
+    "faction_ids": ["dragon_cult", "northern_kingdoms", "mages_circle"],
+    "narrative_summary": "Signs of an ancient dragon's return send ripples of fear across the known world. Heroes must unite to face this apocalyptic threat.",
+    "objectives": [
+      "Investigate the mountain disturbances",
+      "Unite the fractured kingdoms",
+      "Gather artifacts of power",
+      "Confront the ancient evil"
+    ],
+    "themes": ["epic fantasy", "unity", "ancient evil", "heroism"],
+    "total_steps": 8,
+    "completed_steps": 0,
+    "progress_percentage": 0.0,
+    "estimated_duration_hours": 40.0,
+    "actual_duration_hours": null,
+    "start_date": null,
+    "end_date": null,
+    "last_activity": "2025-05-14T01:34:24.937942Z",
+    "tags": ["global", "dragon", "epic", "world-ending"],
+    "difficulty_level": 10,
+    "player_impact": "Extreme - legendary hero status",
+    "world_impact": "World-changing - survival of civilization",
     "created_at": "2025-05-14T01:34:24.937942Z",
     "updated_at": "2025-05-29T01:34:24.937952Z",
-    "title": "Expanded intangible forecast",
-    "description": "Skin possible light. Travel interesting church base arrive bit. Bag charge assume sport. Way wall difficult admit during hotel should agree. Theory us benefit cultural by. So as knowledge reflect grow machine. Training trial suddenly newspaper from whatever.",
-    "arc_type": "SECONDARY",
-    "arc_status": "FAILED",
-    "arc_priority": "MEDIUM",
-    "progression_method": "BRANCHING",
-    "metadata": {
-      "themes": [
-        "reality",
-        "war",
-        "subject"
-      ],
-      "target_characters": [
-        "8603948b-d726-4c77-823f-747639ad571e",
-        "fb20b81f-b92e-4337-a9a0-5bff0c43632a"
-      ],
-      "regions": [
-        "0295d32a-f9ca-40bc-8707-2ad791bddf19",
-        "202f201d-a8ef-403b-b270-c7b711eef86b",
-        "06aebc48-3de5-40bb-b8b4-705c8c221322"
-      ],
-      "estimated_duration": 65
-    },
-    "steps": [
-      {
-        "step_id": "c11553d0-84b1-44af-8d4c-4941904c1e04",
-        "step_number": 1,
-        "title": "Idea few resource.",
-        "description": "Water institution something charge. Hospital campaign shoulder fire film. Talk begin late which true.",
-        "completion_criteria": "Hair spring lay arm already.",
-        "completed": true,
-        "completion_date": null
-      },
-      {
-        "step_id": "9e65bb52-dd45-4728-8993-fa22b3629e06",
-        "step_number": 2,
-        "title": "President technology all onto agree hour.",
-        "description": "Speak best you maintain stop. Although shoulder art word open win before. Ability then chair present put game if join.",
-        "completion_criteria": "Conference small prepare near baby.",
-        "completed": false,
-        "completion_date": "2025-05-21T01:34:24.938218Z"
-      },
-      {
-        "step_id": "9638baee-56b1-4c6b-89db-170f6dc1906f",
-        "step_number": 3,
-        "title": "Several news unit drop as sort.",
-        "description": "Yes other must look. South economic south. Wife range position report develop style interview. Day energy history bit present company.",
-        "completion_criteria": "Analysis soldier college room wind should could.",
-        "completed": true,
-        "completion_date": "2025-05-25T01:34:24.938272Z"
-      },
-      {
-        "step_id": "55b1a5f7-5562-4f5c-843e-6ccdf409a212",
-        "step_number": 4,
-        "title": "Trial easy day war blue.",
-        "description": "Hour they end eye or. Explain film support network ready under.",
-        "completion_criteria": "Entire drug course foot fish left.",
-        "completed": true,
-        "completion_date": "2025-05-29T01:34:24.938312Z"
-      },
-      {
-        "step_id": "845c5c4d-3394-4023-8416-51cc414d141a",
-        "step_number": 5,
-        "title": "Minute win and fire.",
-        "description": "Cold wind notice really break customer. Family simple nice run pull significant technology. Product cause fish stand.",
-        "completion_criteria": "Enter life find stay organization.",
-        "completed": true,
-        "completion_date": "2025-05-26T01:34:24.938358Z"
-      },
-      {
-        "step_id": "e2797a3c-c0f3-4f70-b076-2be0f5a78332",
-        "step_number": 6,
-        "title": "Deep still what hit decide pick.",
-        "description": "Turn success collection music buy without law security. Business smile everybody senior high with mission. Cause beyond blue everything property pull evening paper. Close hair cut wonder attention blood.",
-        "completion_criteria": "Window outside family.",
-        "completed": false,
-        "completion_date": "2025-05-23T01:34:24.938410Z"
-      },
-      {
-        "step_id": "6719b437-c9fe-4321-b93d-fb3203a4088c",
-        "step_number": 7,
-        "title": "Take bar campaign skin.",
-        "description": "Machine suffer identify foot research clearly. Dream set everything wife generation reach anything. Issue not think risk address anyone.",
-        "completion_criteria": "Soldier sell accept claim letter among.",
-        "completed": true,
-        "completion_date": null
-      },
-      {
-        "step_id": "81b1358a-5944-4bb5-b7e5-f034e2f8149d",
-        "step_number": 8,
-        "title": "Affect wonder strategy focus.",
-        "description": "Former figure down wall watch if strong. Management bank life form responsibility control give. Important amount low purpose material a. Organization hear level what future boy cause hotel.",
-        "completion_criteria": "Early lead group hit team.",
-        "completed": false,
-        "completion_date": null
-      }
-    ],
-    "progression": {
-      "current_step": 4,
-      "completion_percentage": 33,
-      "stalled": false,
-      "last_activity": "2025-05-24T01:34:24.938508Z"
+    "arc_metadata": {
+      "epic_scope": true,
+      "requires_multiple_parties": true
     }
   },
   {
     "id": "818439f1-30be-4b7b-b0f0-2303d9450a9c",
-    "created_at": "2025-05-07T01:34:24.938514Z",
+    "title": "Redemption of the Fallen Knight",
+    "description": "A disgraced knight seeks to restore their honor through acts of heroism and sacrifice.",
+    "arc_type": "CHARACTER",
+    "status": "COMPLETED",
+    "priority": "MEDIUM",
+    "region_id": null,
+    "character_id": "sir_gareth_001",
+    "npc_id": null,
+    "faction_ids": ["knights_order"],
+    "narrative_summary": "Sir Gareth must overcome personal demons and prove worthy of redemption through trials of courage, wisdom, and sacrifice.",
+    "objectives": [
+      "Confront past mistakes",
+      "Prove worthiness through service",
+      "Face the tribunal of honor",
+      "Reclaim knightly status"
+    ],
+    "themes": ["redemption", "honor", "personal growth", "sacrifice"],
+    "total_steps": 6,
+    "completed_steps": 6,
+    "progress_percentage": 100.0,
+    "estimated_duration_hours": 15.0,
+    "actual_duration_hours": 18.5,
+    "start_date": "2025-04-15T01:34:24.938514Z",
+    "end_date": "2025-05-29T01:34:24.938515Z",
+    "last_activity": "2025-05-29T01:34:24.938515Z",
+    "tags": ["character development", "knights", "redemption", "honor"],
+    "difficulty_level": 7,
+    "player_impact": "High - character transformation",
+    "world_impact": "Local - restored faith in knightly orders",
+    "created_at": "2025-04-15T01:34:24.938514Z",
     "updated_at": "2025-05-29T01:34:24.938515Z",
-    "title": "Pre-emptive asynchronous migration",
-    "description": "Point to gun model board different everyone point. Accept interview person war entire foot ever. Method wind experience along reveal officer cost available.",
-    "arc_type": "PRIMARY",
-    "arc_status": "COMPLETED",
-    "arc_priority": "LOW",
-    "progression_method": "LINEAR",
-    "metadata": {
-      "themes": [
-        "crime",
-        "explain",
-        "relationship"
-      ],
-      "target_characters": [
-        "42d7f56b-88b0-4de8-91c8-e8b4a2daaef8",
-        "9d9c4a77-567d-4890-90ff-ed171f9cd9be",
-        "65b98578-6d3f-411f-9052-69d5ca4e4114",
-        "4e6426be-d7a5-49f8-8f81-db8336a2dcb0"
-      ],
-      "regions": [
-        "1f77e2b7-490e-4e45-8ee4-9e82a1773f0a"
-      ],
-      "estimated_duration": 85
-    },
-    "steps": [
-      {
-        "step_id": "d67f9f6d-5c81-423c-95b3-b9c709e7e095",
-        "step_number": 1,
-        "title": "Source also story scientist.",
-        "description": "Assume statement day matter wait. At thought produce her purpose structure might.",
-        "completion_criteria": "Specific ready and rich.",
-        "completed": false,
-        "completion_date": null
-      },
-      {
-        "step_id": "543d751c-cf11-483c-a90f-83dae868132f",
-        "step_number": 2,
-        "title": "Particularly voice another exactly usually research.",
-        "description": "Artist whose want door deal because form. Discover have increase alone.",
-        "completion_criteria": "Suggest capital finish hot offer.",
-        "completed": true,
-        "completion_date": "2025-05-26T01:34:24.938655Z"
-      },
-      {
-        "step_id": "89c619d2-c6f8-4265-a4a6-2a411faa1a19",
-        "step_number": 3,
-        "title": "Open hand produce end.",
-        "description": "Really by too difference old. Discuss main learn free second hospital. Decision time song claim ask international.",
-        "completion_criteria": "Much anything end save.",
-        "completed": true,
-        "completion_date": null
-      },
-      {
-        "step_id": "83c8a1ca-d0d5-4f75-94a4-6d2701d82ccb",
-        "step_number": 4,
-        "title": "Many them value.",
-        "description": "Trade job dream. Attorney enter fast care agent customer writer. Allow he assume well side line camera.",
-        "completion_criteria": "Over notice expect store.",
-        "completed": false,
-        "completion_date": null
-      },
-      {
-        "step_id": "797ee37c-588a-4ab7-966a-aebde5355083",
-        "step_number": 5,
-        "title": "Their address continue small play.",
-        "description": "Total through southern house special general indeed.",
-        "completion_criteria": "Kind question choice thought meeting rest story cultural.",
-        "completed": true,
-        "completion_date": "2025-05-28T01:34:24.938767Z"
-      },
-      {
-        "step_id": "61b9f7f2-59e4-4cc6-aec6-c758f490f18c",
-        "step_number": 6,
-        "title": "Thank beyond cup.",
-        "description": "Truth expect final window amount series particular I. Couple stay official.",
-        "completion_criteria": "Too likely little itself.",
-        "completed": false,
-        "completion_date": "2025-05-24T01:34:24.938801Z"
-      }
-    ],
-    "progression": {
-      "current_step": 1,
-      "completion_percentage": 64,
-      "stalled": true,
-      "last_activity": "2025-05-26T01:34:24.938804Z"
+    "arc_metadata": {
+      "character_focus": "sir_gareth_001",
+      "emotional_journey": true
     }
   },
   {
-    "id": "18e1a5b2-43a5-439d-85dd-2d8355cf2941",
-    "created_at": "2025-05-06T01:34:24.938808Z",
-    "updated_at": "2025-05-29T01:34:24.938810Z",
-    "title": "Stand-alone discrete emulation",
-    "description": "Three history area. First serve face town. Station same kid deal support.",
-    "arc_type": "PRIMARY",
-    "arc_status": "STALLED",
-    "arc_priority": "HIGH",
-    "progression_method": "LINEAR",
-    "metadata": {
-      "themes": [
-        "paper",
-        "live",
-        "face"
-      ],
-      "target_characters": [
-        "e2bf138d-00c0-4ba5-acca-05162d134a55",
-        "7de3c1c7-a319-4088-9524-2934b68315e0",
-        "71f14ccb-06ad-4646-b98f-c943262a919a"
-      ],
-      "regions": [
-        "b5ee8221-fe07-47cb-8806-cde65ac58bae"
-      ],
-      "estimated_duration": 31
-    },
-    "steps": [
-      {
-        "step_id": "6b010021-d434-4265-8a3d-afd58614d913",
-        "step_number": 1,
-        "title": "Think over go then.",
-        "description": "Both staff scene what. Certain customer we thank. Leader million trial future among.",
-        "completion_criteria": "Federal actually sign future.",
-        "completed": false,
-        "completion_date": "2025-05-21T01:34:24.938908Z"
-      },
-      {
-        "step_id": "fe986143-ce2f-4916-9076-855928b0a682",
-        "step_number": 2,
-        "title": "Whatever often author live.",
-        "description": "Finally mind company gun take officer stay. Field machine Congress traditional.",
-        "completion_criteria": "Back sure place find suffer paper.",
-        "completed": true,
-        "completion_date": "2025-05-29T01:34:24.938943Z"
-      },
-      {
-        "step_id": "38f10f5b-0901-4388-ae4f-3faea04cefcf",
-        "step_number": 3,
-        "title": "Goal anyone employee.",
-        "description": "Official hit here everybody. All civil decide guess.",
-        "completion_criteria": "They machine serve available imagine check actually.",
-        "completed": true,
-        "completion_date": "2025-05-24T01:34:24.938979Z"
-      },
-      {
-        "step_id": "749e4e8b-d3ba-486c-84d1-b9d5f98cce57",
-        "step_number": 4,
-        "title": "Especially use least message serve number.",
-        "description": "Somebody rule discuss smile edge guess. Table author very performance above. Camera me yeah dark between cause.",
-        "completion_criteria": "Dog important establish look.",
-        "completed": true,
-        "completion_date": null
-      },
-      {
-        "step_id": "05183a23-f70c-4765-b9bf-13cbc5df9685",
-        "step_number": 5,
-        "title": "Kitchen rather go.",
-        "description": "Off hand various. State drop economy. Read produce hundred seem.",
-        "completion_criteria": "Girl report political task deal.",
-        "completed": true,
-        "completion_date": "2025-05-28T01:34:24.939062Z"
-      },
-      {
-        "step_id": "cb54c599-1f5e-4883-977a-90db9fed1318",
-        "step_number": 6,
-        "title": "Exactly suggest city share order identify.",
-        "description": "Purpose opportunity every several piece deep. Account create artist remember. Deep indeed husband player about.",
-        "completion_criteria": "Establish result along know.",
-        "completed": false,
-        "completion_date": null
-      }
+    "id": "45f2d8e1-9876-4321-abcd-123456789def",
+    "title": "The Spy's Gambit",
+    "description": "A master spy infiltrates enemy territory to prevent an assassination that could start a war.",
+    "arc_type": "NPC",
+    "status": "ACTIVE",
+    "priority": "HIGH",
+    "region_id": "border_territories",
+    "character_id": null,
+    "npc_id": "master_spy_vera",
+    "faction_ids": ["shadow_network", "royal_court"],
+    "narrative_summary": "Master Spy Vera races against time to uncover and prevent a plot that threatens to plunge two nations into devastating war.",
+    "objectives": [
+      "Infiltrate enemy court",
+      "Identify the assassination plot",
+      "Neutralize the threat",
+      "Maintain cover identity"
     ],
-    "progression": {
-      "current_step": 3,
-      "completion_percentage": 14,
-      "stalled": true,
-      "last_activity": "2025-05-29T01:34:24.939103Z"
+    "themes": ["espionage", "political intrigue", "time pressure", "stealth"],
+    "total_steps": 4,
+    "completed_steps": 2,
+    "progress_percentage": 50.0,
+    "estimated_duration_hours": 8.0,
+    "actual_duration_hours": 4.2,
+    "start_date": "2025-05-20T01:34:24.938514Z",
+    "end_date": null,
+    "last_activity": "2025-05-28T01:34:24.938515Z",
+    "tags": ["spy", "assassination", "political", "time-sensitive"],
+    "difficulty_level": 8,
+    "player_impact": "Indirect - world events affected",
+    "world_impact": "Major - prevents international war",
+    "created_at": "2025-05-20T01:34:24.938514Z",
+    "updated_at": "2025-05-28T01:34:24.938515Z",
+    "arc_metadata": {
+      "npc_driven": true,
+      "stealth_required": true
     }
   },
   {
-    "id": "387beddd-95d2-4bd2-b432-bd6f58ca4c7e",
-    "created_at": "2025-05-05T01:34:24.939109Z",
-    "updated_at": "2025-05-29T01:34:24.939110Z",
-    "title": "Cross-group next generation framework",
-    "description": "Key physical hospital various last dark. Seven feel suddenly lawyer night letter. These decision on four. Dream anything military. Goal benefit step have so best marriage change. Reveal work others. Speak machine southern brother court sense. Year discussion something head.",
-    "arc_type": "SECONDARY",
-    "arc_status": "STALLED",
-    "arc_priority": "LOW",
-    "progression_method": "BRANCHING",
-    "metadata": {
-      "themes": [
-        "couple",
-        "available",
-        "responsibility"
-      ],
-      "target_characters": [
-        "39710c21-d224-4629-b008-6382ad683382",
-        "0df27e58-a695-496a-b98a-78d766d65496",
-        "aaf0ed99-26fe-431a-ba30-51a26827a884",
-        "342025f0-d3df-437b-b799-aeba240d9a16"
-      ],
-      "regions": [
-        "5ca91930-4f71-4db6-aefa-c4faa2bc0edc",
-        "3bc7d44b-50f4-4443-be54-01ac0c17a46f",
-        "a192cfc7-04c2-4de8-8de5-9c949759b141"
-      ],
-      "estimated_duration": 75
-    },
-    "steps": [
-      {
-        "step_id": "97157ea6-991b-41c6-a83a-3d901c8f5abc",
-        "step_number": 1,
-        "title": "American send capital show write sister.",
-        "description": "Network onto offer expert offer seem. Follow medical assume stop dark believe. Water maintain do owner. Baby blood natural glass inside nor admit.",
-        "completion_criteria": "Safe bill thousand.",
-        "completed": true,
-        "completion_date": "2025-05-23T01:34:24.939261Z"
-      },
-      {
-        "step_id": "88bdb619-eae9-4714-9dcf-16480c11e3e1",
-        "step_number": 2,
-        "title": "How national life alone.",
-        "description": "Listen yourself fish school believe follow seven. Finally anyone notice cup event. You another alone court will look.",
-        "completion_criteria": "Truth professional car could.",
-        "completed": true,
-        "completion_date": "2025-05-21T01:34:24.939306Z"
-      },
-      {
-        "step_id": "0adafac7-e0ae-4bc5-ae8e-a4cad719885b",
-        "step_number": 3,
-        "title": "Business majority sound near can after.",
-        "description": "Against question ahead hour billion. Time matter crime explain.",
-        "completion_criteria": "Carry early reduce.",
-        "completed": false,
-        "completion_date": "2025-05-20T01:34:24.939344Z"
-      },
-      {
-        "step_id": "5d1351af-c36f-46e6-b9c1-9eecf975d11f",
-        "step_number": 4,
-        "title": "Energy music realize.",
-        "description": "Approach history low some management. Million economic others look policy attack special.",
-        "completion_criteria": "Specific myself energy.",
-        "completed": false,
-        "completion_date": "2025-05-27T01:34:24.939392Z"
-      },
-      {
-        "step_id": "df827a1e-035c-44ff-9cad-e1d3b22630d0",
-        "step_number": 5,
-        "title": "Everybody available fine.",
-        "description": "Feeling imagine chance cell. Community how letter first hold president.",
-        "completion_criteria": "Partner financial success rest pull short late.",
-        "completed": false,
-        "completion_date": "2025-05-24T01:34:24.939439Z"
-      },
-      {
-        "step_id": "ff0bd57a-37f0-4eab-b160-9bce7eaa291b",
-        "step_number": 6,
-        "title": "Line task character not you half.",
-        "description": "Exist heart away with sea power mind. Also executive especially white officer specific.",
-        "completion_criteria": "Country believe woman weight air lot.",
-        "completed": true,
-        "completion_date": "2025-05-19T01:34:24.939478Z"
-      },
-      {
-        "step_id": "31626186-0418-44a9-a7d1-79ae97befb9d",
-        "step_number": 7,
-        "title": "Standard provide part.",
-        "description": "Recent baby ago use financial east detail. Yes because interest ten however food write.",
-        "completion_criteria": "Level less poor might over term hot discussion.",
-        "completed": false,
-        "completion_date": "2025-05-27T01:34:24.939517Z"
-      },
-      {
-        "step_id": "61e7f3dc-674d-4f61-a140-c9ce9a472c13",
-        "step_number": 8,
-        "title": "Benefit end home budget.",
-        "description": "Father guy very whether. Worker old artist tough Congress. Wish candidate apply machine.",
-        "completion_criteria": "Let pass down technology movie south prove.",
-        "completed": false,
-        "completion_date": null
-      }
+    "id": "67890abc-def1-2345-6789-abcdef123456",
+    "title": "War of the Three Banners",
+    "description": "The Iron Legion, Storm Riders, and Crimson Company clash for control of the Contested Lands.",
+    "arc_type": "FACTION",
+    "status": "ACTIVE",
+    "priority": "HIGH",
+    "region_id": "contested_lands",
+    "character_id": null,
+    "npc_id": null,
+    "faction_ids": ["iron_legion", "storm_riders", "crimson_company"],
+    "narrative_summary": "Three powerful military factions engage in a complex three-way war for territorial dominance, with alliances shifting like desert sands.",
+    "objectives": [
+      "Establish territorial claims",
+      "Form strategic alliances",
+      "Conduct major battles",
+      "Achieve dominance or peace"
     ],
-    "progression": {
-      "current_step": 2,
-      "completion_percentage": 76,
-      "stalled": true,
-      "last_activity": "2025-05-26T01:34:24.939563Z"
+    "themes": ["warfare", "strategy", "shifting alliances", "territorial control"],
+    "total_steps": 7,
+    "completed_steps": 3,
+    "progress_percentage": 42.8,
+    "estimated_duration_hours": 25.0,
+    "actual_duration_hours": 12.5,
+    "start_date": "2025-05-01T01:34:24.938514Z",
+    "end_date": null,
+    "last_activity": "2025-05-27T01:34:24.938515Z",
+    "tags": ["war", "factions", "strategy", "territorial"],
+    "difficulty_level": 9,
+    "player_impact": "Variable - depends on faction loyalty",
+    "world_impact": "Major - reshapes regional power balance",
+    "created_at": "2025-05-01T01:34:24.938514Z",
+    "updated_at": "2025-05-27T01:34:24.938515Z",
+    "arc_metadata": {
+      "multi_faction": true,
+      "military_campaign": true
+    }
+  },
+  {
+    "id": "11111111-2222-3333-4444-555555555555",
+    "title": "The Lost Heir's Quest",
+    "description": "A simple quest to find a missing person evolves into a journey to restore a lost bloodline.",
+    "arc_type": "QUEST",
+    "status": "PAUSED",
+    "priority": "MEDIUM",
+    "region_id": "southern_kingdoms",
+    "character_id": null,
+    "npc_id": "quest_giver_lord_aldric",
+    "faction_ids": ["royal_bloodline", "usurper_faction"],
+    "narrative_summary": "What began as a search for a missing noble reveals a conspiracy to hide the rightful heir to the throne.",
+    "objectives": [
+      "Find the missing person",
+      "Uncover the true identity",
+      "Prove the bloodline claim",
+      "Decide the succession"
+    ],
+    "themes": ["hidden identity", "royal succession", "mystery", "justice"],
+    "total_steps": 5,
+    "completed_steps": 1,
+    "progress_percentage": 20.0,
+    "estimated_duration_hours": 10.0,
+    "actual_duration_hours": 2.0,
+    "start_date": "2025-05-10T01:34:24.938514Z",
+    "end_date": null,
+    "last_activity": "2025-05-15T01:34:24.938515Z",
+    "tags": ["quest", "royal", "mystery", "succession"],
+    "difficulty_level": 5,
+    "player_impact": "Moderate - reputation and rewards",
+    "world_impact": "Regional - affects royal succession",
+    "created_at": "2025-05-10T01:34:24.938514Z",
+    "updated_at": "2025-05-15T01:34:24.938515Z",
+    "arc_metadata": {
+      "quest_origin": true,
+      "royal_intrigue": true
     }
   }
 ]

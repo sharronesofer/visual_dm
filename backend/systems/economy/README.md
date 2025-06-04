@@ -6,30 +6,57 @@ This directory contains the integrated economy system for Visual DM. The economy
 
 ```
 backend/systems/economy/
-├── __init__.py              # Exports EconomyManager and shop_bp
-├── economy_manager.py       # Main entry point and API for the economy system
-├── shop_routes.py           # Shop API routes integrated with EconomyManager
-├── shop_utils.py            # Shop utilities integrated with EconomyManager
+├── __init__.py              # Main module exports
+├── README.md                # This documentation
+├── config/                  # Configuration files
+│   ├── price_modifiers.json # Price modifier configurations
+│   └── player_economy.json  # Player economy balance settings
+├── events/                  # Event system integration
+│   ├── __init__.py          # Event exports
+│   └── economy_events.py    # Economy event definitions
 ├── models/                  # Data models
-│   ├── __init__.py          # Exports all models
+│   ├── __init__.py          # Model exports
 │   ├── resource.py          # Resource model
 │   ├── trade_route.py       # Trade route model
-│   └── market.py            # Market model
-└── services/                # Business logic
-    ├── __init__.py          # Exports all services
-    ├── resource_service.py  # Resource management
-    ├── trade_service.py     # Trade route management
-    └── market_service.py    # Market and pricing management
+│   ├── market.py            # Market model
+│   └── commodity_future.py  # Futures contract model
+├── resource/                # Legacy resource directory
+│   └── __init__.py          # Resource exports
+├── services/                # Business logic services
+│   ├── __init__.py          # Service exports
+│   ├── economy_manager.py   # Main economy manager (unified API)
+│   ├── resource_service.py  # Resource management
+│   ├── trade_service.py     # Trade route management
+│   ├── market_service.py    # Market and pricing management
+│   ├── futures_service.py   # Futures contract management
+│   └── advanced_economy_service.py # Advanced economic features
+└── utils/                   # Utility functions
+    ├── __init__.py          # Utility exports
+    ├── config_loader.py     # Configuration loading
+    └── shop_utils.py        # Shop utilities (integrated with economy)
 ```
 
 ## Architecture
 
-The economy system follows a layered architecture:
+The economy system follows a clean, layered architecture:
 
-1. **Models**: Data structures representing resources, trade routes, and markets
-2. **Services**: Business logic for managing the models
-3. **Manager**: Central API for accessing all economy functionality
-4. **Shop Integration**: Shop functionality fully integrated with EconomyManager
+1. **Models**: Data structures representing resources, trade routes, markets, and futures
+2. **Services**: Business logic services with clear separation of concerns
+3. **Manager**: Central unified API (EconomyManager) for accessing all economy functionality
+4. **Configuration**: JSON-based configuration for economic parameters
+5. **Events**: Integration with the game's event system
+6. **Utilities**: Helper functions and shop integration
+
+### Removed Legacy Components
+
+As part of recent architecture cleanup, the following stub directories were removed:
+- `market_service/` - Was a stub redirect to main services
+- `economy_manager/` - Was a stub redirect to main services  
+- `resource_service/` - Was a stub redirect to main services
+- `schemas/` - Was empty with no implementation
+- `repositories/` - Was empty with no implementation
+
+All functionality is now consolidated in the main `services/` directory with clear, single-purpose service classes.
 
 ## Core Components
 

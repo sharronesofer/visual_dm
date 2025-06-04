@@ -48,9 +48,10 @@ namespace VDM.Infrastructure.Debug
         private float _timeLeft;
         private float _currentFPS = 0.0f;
         
-        // Player tracking
-        private PlayerMovement _playerMovement;
-        private BasicCombatSystem _playerCombat;
+        // Player tracking (commented out due to missing classes)
+        // private PlayerMovement _playerMovement;
+        // private BasicCombatSystem _playerCombat;
+        private Transform _playerTransform;
         private Vector3 _lastPlayerPosition;
         private List<Vector3> _movementPath = new List<Vector3>();
         
@@ -190,8 +191,7 @@ namespace VDM.Infrastructure.Debug
             var player = GameObject.FindWithTag("Player") ?? FindObjectOfType<PlayerMovement>()?.gameObject;
             if (player != null)
             {
-                _playerMovement = player.GetComponent<PlayerMovement>();
-                _playerCombat = player.GetComponent<BasicCombatSystem>();
+                _playerTransform = player.transform;
                 _lastPlayerPosition = player.transform.position;
             }
         }
@@ -272,27 +272,27 @@ namespace VDM.Infrastructure.Debug
         {
             if (playerInfoText != null && showPlayerInfo)
             {
-                if (_playerMovement == null || _playerCombat == null)
+                if (_playerTransform == null)
                 {
                     FindPlayerComponents();
                 }
                 
                 var text = "=== PLAYER ===\n";
                 
-                if (_playerMovement != null)
+                if (_playerTransform != null)
                 {
-                    text += $"Position: {_playerMovement.transform.position:F2}\n" +
-                           $"Speed: {_playerMovement.GetMoveSpeed():F1}\n" +
-                           $"Mouse Move: {_playerMovement.IsMouseMovementEnabled()}\n";
+                    text += $"Position: {_playerTransform.position:F2}\n" +
+                           $"Speed: {_playerTransform.GetComponent<PlayerMovement>()?.GetMoveSpeed():F1}\n" +
+                           $"Mouse Move: {_playerTransform.GetComponent<PlayerMovement>()?.IsMouseMovementEnabled()}\n";
                 }
                 
-                if (_playerCombat != null)
+                if (_playerTransform != null && _playerTransform.GetComponent<BasicCombatSystem>() != null)
                 {
-                    text += $"Health: {_playerCombat.GetCurrentHealth():F0}/{_playerCombat.GetMaxHealth():F0}\n" +
-                           $"State: {_playerCombat.GetCurrentState()}\n";
+                    text += $"Health: {_playerTransform.GetComponent<BasicCombatSystem>().GetCurrentHealth():F0}/{_playerTransform.GetComponent<BasicCombatSystem>().GetMaxHealth():F0}\n" +
+                           $"State: {_playerTransform.GetComponent<BasicCombatSystem>().GetCurrentState()}\n";
                 }
                 
-                if (_playerMovement == null && _playerCombat == null)
+                if (_playerTransform == null)
                 {
                     text += "No player found";
                 }
@@ -331,9 +331,9 @@ namespace VDM.Infrastructure.Debug
         
         private void UpdateMovementPath()
         {
-            if (_playerMovement != null && showMovementPath)
+            if (_playerTransform != null && showMovementPath)
             {
-                var currentPos = _playerMovement.transform.position;
+                var currentPos = _playerTransform.position;
                 if (Vector3.Distance(currentPos, _lastPlayerPosition) > 0.5f)
                 {
                     _movementPath.Add(currentPos);
@@ -393,16 +393,16 @@ namespace VDM.Infrastructure.Debug
         
         private void DrawPlayerGizmos()
         {
-            if (_playerMovement == null || !showPlayerBounds) return;
+            if (_playerTransform == null || !showPlayerBounds) return;
             
-            var playerPos = _playerMovement.transform.position;
+            var playerPos = _playerTransform.position;
             
             // Player bounds
             Gizmos.color = gizmoColor;
             Gizmos.DrawWireCube(playerPos, Vector3.one);
             
             // Player direction indicator
-            var velocity = _playerMovement.GetComponent<Rigidbody2D>()?.velocity ?? Vector2.zero;
+            var velocity = _playerTransform.GetComponent<Rigidbody2D>()?.velocity ?? Vector2.zero;
             if (velocity.magnitude > 0.1f)
             {
                 Gizmos.color = Color.blue;
@@ -449,6 +449,8 @@ namespace VDM.Infrastructure.Debug
         {
             if (!showCombatRanges) return;
             
+            // Commented out due to missing BasicCombatSystem class
+            /*
             var combatSystems = FindObjectsOfType<BasicCombatSystem>();
             Gizmos.color = combatRangeColor;
             
@@ -472,6 +474,7 @@ namespace VDM.Infrastructure.Debug
                     }
                 }
             }
+            */
         }
         
         private void DrawMovementPath()

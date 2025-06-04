@@ -16,11 +16,15 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from backend.systems.religion.models.models import (
-    CreateReligionRequest, UpdateReligionRequest, ReligionResponse, ReligionEntity
+    ReligionEntity, CreateReligionRequest, UpdateReligionRequest
 )
-from backend.systems.religion.schemas.schemas import (
+from backend.infrastructure.systems.religion.schemas.schemas import (
     ReligionSchema, ReligionCreateSchema, ReligionUpdateSchema
 )
+
+from backend.infrastructure.systems.religion.websocket.websocket_manager import religion_websocket_manager
+
+from backend.infrastructure.systems.religion.routers.websocket_routes import religion_websocket_router
 
 class FrontendIntegrationValidator:
     """Validates frontend-backend integration compatibility"""
@@ -214,8 +218,6 @@ class FrontendIntegrationValidator:
         
         try:
             # Check if WebSocket manager is available
-            from backend.systems.religion.websocket_manager import religion_websocket_manager
-            
             websocket_analysis['channels_available'] = list(religion_websocket_manager.channel_subscribers.keys())
             websocket_analysis['integration_status'] = 'available'
             
@@ -238,7 +240,6 @@ class FrontendIntegrationValidator:
             }
             
             # Test WebSocket endpoints availability
-            from backend.systems.religion.routers.websocket_routes import religion_websocket_router
             websocket_analysis['endpoints_available'] = [
                 '/ws/religion/connect',
                 '/ws/religion/region/{region_id}',

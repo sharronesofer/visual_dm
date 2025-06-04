@@ -1,6 +1,6 @@
 # Event System Documentation
 
-This document provides an overview of the Event System implementation for Visual_DM, which has been migrated from TypeScript to both Python and C#.
+This document provides an overview of the Event System implementation for Dreamforge, which has been migrated from TypeScript to both Python and C#.
 
 ## Overview
 

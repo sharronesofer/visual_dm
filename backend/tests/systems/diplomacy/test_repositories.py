@@ -11,7 +11,8 @@ from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
 
-from backend.systems.diplomacy import repositories
+# Fixed import - repositories are infrastructure concerns per Development Bible
+from backend.infrastructure.repositories import diplomacy_repository as repositories
 
 
 class TestDiplomacyRepositories:

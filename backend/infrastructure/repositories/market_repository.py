@@ -1,11 +1,12 @@
 import functools
 from typing import List, Optional, Type, TypeVar, Generic
 from sqlalchemy.orm import Session
-from backend.systems.market.models import MarketItem, TradeOffer, Transaction, PriceHistory
+from backend.infrastructure.shared.models.market import MarketItem, TradeOffer, Transaction, PriceHistory
 from backend.infrastructure.database.session import SessionLocal
 import logging
 from contextlib import contextmanager
 from sqlalchemy.exc import SQLAlchemyError
+from backend.infrastructure.repositories.base_repository import BaseRepository
 
 T = TypeVar('T')
 

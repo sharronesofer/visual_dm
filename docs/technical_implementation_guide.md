@@ -138,44 +138,103 @@ summary = await memory_mgr.generate_memory_summary(
 
 ## Rumor System
 
-The Rumor System manages rumor creation, mutation, and propagation throughout the game world.
+The Rumor System manages sophisticated rumor creation, mutation, and propagation throughout the game world with comprehensive variant tracking and believability mechanics.
 
 ### Key Components
 
-- **RumorSystem**: Singleton class for rumor operations
-- **Rumor**: Class representing a rumor and its spread
-- **RumorVariant**: Class representing a specific variant of a rumor
+**Business Layer:**
+- **RumorBusinessService**: Core business logic for rumor operations  
+- **RumorData**: Business domain rumor data with variants and spread tracking
+- **RumorVariantData**: Represents mutations and variations of rumors
+- **RumorSpreadData**: Tracks who has heard which variant with believability scores
+
+**Infrastructure Layer:**
+- **RumorEntity**: Database entity for rumors with relationships
+- **RumorVariantEntity**: Database entity for rumor mutations  
+- **RumorSpreadEntity**: Database entity for spread tracking per entity
+- **SQLAlchemyRumorRepository**: Repository bridging business logic and database
+
+**Service Layer:**
+- **RumorService**: Facade service adapting business logic to API expectations
+- **DefaultRumorValidationService**: Validation logic for rumor data
+
+### Sophisticated Features
+
+**Variant & Mutation System:**
+- Each rumor can have multiple variants created through mutation
+- Mutations occur during spread based on receiver personality and social context
+- Mutation templates include uncertainty phrases, location vagueness, and intensity modifiers
+- Parent-child relationships tracked between variants
+
+**Per-Entity Believability:**
+- Each entity has individual believability scores for rumors they've heard
+- Believability affected by source credibility, receiver skepticism, and social context
+- Believability can be modified through reinforcement or contradiction
+- Time-based decay applies to believability over time
+
+**Advanced Spread Mechanics:**
+- Sophisticated spread calculation considering relationship strength and social context
+- Mutation probability based on rumor severity and spread distance
+- Environmental factors affecting decay and spread patterns
+- Receiver personality traits influence mutation and believability
 
 ### Example Usage
 
 ```python
-from app.core.rumors import RumorSystem, RumorCategory, RumorSeverity
+from backend.systems.rumor.services.services import RumorService
+from backend.infrastructure.systems.rumor.models.models import CreateRumorRequest, SpreadRumorRequest
 
-# Get the rumor system
-rumor_system = RumorSystem()
+# Initialize service with database session
+rumor_service = RumorService(db_session)
 
-# Create a rumor
-rumor_id = await rumor_system.create_rumor(
-    originator_id="npc123",
-    content="The king has fallen ill",
-    categories=[RumorCategory.POLITICAL],
-    severity=RumorSeverity.MAJOR,
-    truth_value=0.8
+# Create a rumor with initial variant
+create_request = CreateRumorRequest(
+    content="The dragon has been seen near the eastern mines",
+    originator_id="villager_023", 
+    categories=["sighting", "danger"],
+    severity="major",
+    truth_value=0.9
 )
 
-# Spread a rumor to another entity
-await rumor_system.spread_rumor(
+rumor_response = await rumor_service.create_rumor(create_request)
+rumor_id = UUID(rumor_response.id)
+
+# Spread rumor with potential mutation
+spread_result = await rumor_service.spread_rumor(
     rumor_id=rumor_id,
-    from_entity_id="npc123",
-    to_entity_id="npc456",
-    believability=0.7
+    from_entity_id="villager_023",
+    to_entity_id="merchant_041",
+    allow_mutation=True,
+    social_context={
+        "source_credibility": 0.8,
+        "location": "tavern", 
+        "witnesses_present": 3
+    },
+    receiver_personality={
+        "skepticism": 0.3,
+        "dramatic": True,
+        "careful": False
+    }
 )
 
-# Get rumors heard by an entity
-rumors = await rumor_system.get_rumors_heard_by_entity(
-    entity_id="npc456",
-    categories=[RumorCategory.POLITICAL]
+# Apply time-based decay
+decay_result = await rumor_service.apply_time_decay(
+    rumor_id=rumor_id,
+    days_elapsed=5,
+    environmental_factors={
+        "conflicting_information": True,
+        "authority_contradiction": False
+    }
 )
+
+# Get rumor with all variants and spread data
+rumor_details = await rumor_service.get_rumor_by_id(rumor_id)
+print(f"Rumor has {len(rumor_details.variants)} variants")
+print(f"Known by {rumor_details.spread_count} entities")
+
+# Calculate rumor impact
+impact_result = await rumor_service.calculate_rumor_impact_score(rumor_id)
+print(f"Impact score: {impact_result['impact_score']} ({impact_result['impact_category']})")
 ```
 
 ## World State

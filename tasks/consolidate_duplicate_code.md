@@ -21,7 +21,7 @@ Follow these steps in sequence:
 
 #### Step 1: Create a Backup
 ```bash
-cd /Users/Sharrone/Visual_DM
+cd /Users/Sharrone/Dreamforge
 bash scripts/backup_project.sh
 ```
 - Verify that the backup was created in the `/backups` directory
@@ -29,7 +29,7 @@ bash scripts/backup_project.sh
 
 #### Step 2: Find Duplicate C# Files
 ```bash
-cd /Users/Sharrone/Visual_DM
+cd /Users/Sharrone/Dreamforge
 python scripts/find_duplicate_cs_files.py
 ```
 - Review the generated report at `scripts/duplicate_cs_files.txt`
@@ -38,7 +38,7 @@ python scripts/find_duplicate_cs_files.py
 
 #### Step 3: Find Duplicate Python Modules
 ```bash
-cd /Users/Sharrone/Visual_DM
+cd /Users/Sharrone/Dreamforge
 python scripts/find_duplicate_python_modules.py
 ```
 - Review the generated report at `scripts/duplicate_python_modules.txt`
@@ -47,7 +47,7 @@ python scripts/find_duplicate_python_modules.py
 
 #### Step 4: Merge Duplicates
 ```bash
-cd /Users/Sharrone/Visual_DM
+cd /Users/Sharrone/Dreamforge
 python scripts/merge_duplicates.py
 ```
 - Review the merge report at `scripts/merge_report.txt`
@@ -58,7 +58,7 @@ python scripts/merge_duplicates.py
 
 #### Step 5: Update References
 ```bash
-cd /Users/Sharrone/Visual_DM
+cd /Users/Sharrone/Dreamforge
 python scripts/update_references.py
 ```
 - Review the reference update report at `scripts/reference_update_report.txt`
@@ -67,7 +67,7 @@ python scripts/update_references.py
 
 #### Step 6: Restructure Directories
 ```bash
-cd /Users/Sharrone/Visual_DM
+cd /Users/Sharrone/Dreamforge
 bash scripts/restructure_directories.sh
 ```
 - Review the temporary directory structure at `/VDM/Temp/ConsolidationTemp`

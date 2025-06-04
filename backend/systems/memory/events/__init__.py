@@ -1,2 +1,0 @@
-"""Events for memory system"""
-

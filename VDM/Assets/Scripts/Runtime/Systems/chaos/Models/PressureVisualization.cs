@@ -72,7 +72,7 @@ namespace VDM.Systems.Chaos.Ui.Admin
             public string systemName;
         }
 
-        private enum TimeRange
+        public enum TimeRange
         {
             LastMinute,
             LastHour,

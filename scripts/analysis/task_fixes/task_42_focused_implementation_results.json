@@ -5,12 +5,12 @@
     {
       "type": "verification_issue",
       "test": "memory_imports",
-      "error": "cannot import name 'MemoryCategory' from 'backend.systems.memory.memory_categories' (/Users/Sharrone/Visual_DM/backend/systems/memory/memory_categories.py)"
+      "error": "cannot import name 'MemoryCategory' from 'backend.systems.memory.memory_categories' (/Users/Sharrone/Dreamforge/backend/systems/memory/memory_categories.py)"
     },
     {
       "type": "verification_issue",
       "test": "shared_database_imports",
-      "error": "cannot import name 'mock_db' from 'backend.systems.shared.database' (/Users/Sharrone/Visual_DM/backend/systems/shared/database/__init__.py)"
+      "error": "cannot import name 'mock_db' from 'backend.systems.shared.database' (/Users/Sharrone/Dreamforge/backend/systems/shared/database/__init__.py)"
     },
     {
       "type": "test_success",
@@ -20,7 +20,7 @@
   "modules_created": [
     {
       "type": "memory_test",
-      "path": "/Users/Sharrone/Visual_DM/backend/tests/systems/memory/test_memory_basic.py"
+      "path": "/Users/Sharrone/Dreamforge/backend/tests/systems/memory/test_memory_basic.py"
     }
   ],
   "import_fixes": [],
@@ -28,7 +28,7 @@
   "test_fixes": [
     {
       "type": "create_memory_test",
-      "path": "/Users/Sharrone/Visual_DM/backend/tests/systems/memory/test_memory_basic.py"
+      "path": "/Users/Sharrone/Dreamforge/backend/tests/systems/memory/test_memory_basic.py"
     }
   ],
   "summary": {

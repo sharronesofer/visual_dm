@@ -8,11 +8,11 @@ Add specific tests for the services module functionality.
 import pytest
 from unittest.mock import Mock, patch
 
-# Import the module under test
+# Import the module under test - Fixed import path
 try:
-    from backend.systems.diplomacy import services
+    from backend.systems.diplomacy.services import services
 except ImportError:
-    pytest.skip(f"Module backend.systems.diplomacy.services not found", allow_module_level=True)
+    pytest.skip(f"Module backend.systems.diplomacy.services.services not found", allow_module_level=True)
 
 
 class TestServices:

@@ -18,14 +18,13 @@ from backend.systems.chaos.core.chaos_engine import ChaosEngine
 from backend.systems.chaos.core.pressure_monitor import PressureMonitor
 from backend.systems.chaos.core.event_triggers import EventTriggerSystem
 from backend.systems.chaos.core.config import ChaosConfig
-from backend.systems.chaos.models.chaos_events import (
+from backend.infrastructure.systems.chaos.models.chaos_events import (
     ChaosEvent, ChaosEventType,
     PoliticalUpheavalEvent, NaturalDisasterEvent, EconomicCollapseEvent,
     WarOutbreakEvent, ResourceScarcityEvent, FactionBetrayalEvent,
     CharacterRevelationEvent
 )
 from backend.systems.chaos.services.chaos_service import ChaosService
-from backend.systems.chaos.utils.chaos_math import ChaosMath
 
 __all__ = [
     # Core components
@@ -47,7 +46,4 @@ __all__ = [
     
     # Services
     'ChaosService',
-    
-    # Utilities
-    'ChaosMath',
 ] 

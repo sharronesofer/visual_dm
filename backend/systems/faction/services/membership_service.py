@@ -2,28 +2,28 @@
 Service layer for managing faction memberships.
 
 This module provides the FactionMembershipService class for creating, retrieving,
-and managing character/NPC memberships in factions.
+and managing character/NPC memberships in factions with business logic only.
 """
 
 from typing import List, Dict, Optional, Any
 from datetime import datetime
-from sqlalchemy.orm import Session
 
-from backend.systems.faction.models.faction import Faction, FactionMembership
-from backend.systems.faction.services.faction_service import FactionNotFoundError
+from backend.systems.faction.models.faction import FactionMembership
+from backend.infrastructure.faction_services import (
+    FactionMembershipDatabaseService,
+    MembershipNotFoundError,
+    InvalidMembershipError
+)
 
-class MembershipNotFoundError(Exception):
-    """Raised when a membership cannot be found."""
-
-class InvalidMembershipError(Exception):
-    """Raised when an invalid membership operation is attempted."""
 
 class FactionMembershipService:
-    """Service for managing character memberships in factions."""
+    """Service for managing character memberships in factions with business logic."""
     
-    @staticmethod
+    def __init__(self, database_service: FactionMembershipDatabaseService):
+        self.db_service = database_service
+
     def add_member(
-        db: Session,
+        self,
         faction_id: int,
         character_id: int,
         role: str = "member",
@@ -32,10 +32,9 @@ class FactionMembershipService:
         metadata: Dict[str, Any] = None
     ) -> FactionMembership:
         """
-        Add a character to a faction.
+        Add a character to a faction with business rules validation.
         
         Args:
-            db: Database session
             faction_id: ID of the faction
             character_id: ID of the character to add
             role: Role within faction (e.g., "leader", "member", "recruit")
@@ -49,19 +48,23 @@ class FactionMembershipService:
         Raises:
             FactionNotFoundError: If faction doesn't exist
         """
+        # Validate business rules
+        if rank < 1 or rank > 100:
+            raise InvalidMembershipError("Rank must be between 1 and 100")
+        
+        if role not in ["leader", "officer", "member", "recruit", "exile"]:
+            raise InvalidMembershipError(f"Invalid role: {role}")
+        
         # Check if faction exists
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
+        faction = self.db_service.get_faction_by_id(faction_id)
         if not faction:
-            raise FactionNotFoundError(f"Faction {faction_id} not found")
+            raise MembershipNotFoundError(f"Faction {faction_id} not found")
             
         # Check if membership already exists
-        existing = db.query(FactionMembership).filter(
-            FactionMembership.faction_id == faction_id,
-            FactionMembership.character_id == character_id
-        ).first()
+        existing = self.db_service.get_membership(faction_id, character_id)
         
         if existing:
-            # Update existing membership
+            # Business logic: Update existing membership
             existing.active = True
             existing.role = role
             existing.rank = rank
@@ -87,7 +90,7 @@ class FactionMembershipService:
             
             membership = existing
         else:
-            # Create new membership
+            # Business logic: Create new membership
             history = [{
                 "type": "joined",
                 "timestamp": datetime.utcnow().isoformat(),
@@ -108,47 +111,29 @@ class FactionMembershipService:
                 history=history,
                 metadata=metadata or {}
             )
-            db.add(membership)
-            
-        db.commit()
-        db.refresh(membership)
-        return membership
-    
-    @staticmethod
+        
+        # Delegate to database service
+        return self.db_service.create_membership(membership) if not existing else self.db_service.update_membership(membership)
+
     def get_membership(
-        db: Session,
+        self,
         faction_id: int,
         character_id: int
     ) -> Optional[FactionMembership]:
-        """
-        Get membership information for a character in a faction.
-        
-        Args:
-            db: Database session
-            faction_id: ID of the faction
-            character_id: ID of the character
-            
-        Returns:
-            FactionMembership instance or None if not found
-        """
-        return db.query(FactionMembership).filter(
-            FactionMembership.faction_id == faction_id,
-            FactionMembership.character_id == character_id
-        ).first()
-    
-    @staticmethod
+        """Get membership information for a character in a faction"""
+        return self.db_service.get_membership(faction_id, character_id)
+
     def get_faction_members(
-        db: Session,
+        self,
         faction_id: int,
         active_only: bool = True,
         role: Optional[str] = None,
         min_rank: Optional[int] = None
     ) -> List[FactionMembership]:
         """
-        Get all members of a faction with optional filters.
+        Get all members of a faction with optional filters and business rules.
         
         Args:
-            db: Database session
             faction_id: ID of the faction
             active_only: Only include active memberships (default: True)
             role: Filter by specific role (optional)
@@ -160,76 +145,23 @@ class FactionMembershipService:
         Raises:
             FactionNotFoundError: If faction doesn't exist
         """
-        # Check if faction exists
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
+        # Check if faction exists (business rule)
+        faction = self.db_service.get_faction_by_id(faction_id)
         if not faction:
-            raise FactionNotFoundError(f"Faction {faction_id} not found")
+            raise MembershipNotFoundError(f"Faction {faction_id} not found")
         
-        # Build query
-        query = db.query(FactionMembership).filter(
-            FactionMembership.faction_id == faction_id
-        )
-        
-        if active_only:
-            query = query.filter(FactionMembership.active == True)
-            
-        if role:
-            query = query.filter(FactionMembership.role == role)
-            
-        if min_rank is not None:
-            query = query.filter(FactionMembership.rank >= min_rank)
-            
-        # Order by rank (highest first) and then join date
-        return query.order_by(
-            FactionMembership.rank.desc(),
-            FactionMembership.joined_at
-        ).all()
-    
-    @staticmethod
+        return self.db_service.get_faction_members(faction_id, active_only, role, min_rank)
+
     def get_character_factions(
-        db: Session,
+        self,
         character_id: int,
         active_only: bool = True
     ) -> List[Dict]:
-        """
-        Get all factions a character is a member of.
-        
-        Args:
-            db: Database session
-            character_id: ID of the character
-            active_only: Only include active memberships (default: True)
-            
-        Returns:
-            List of dicts with faction and membership details
-        """
-        query = db.query(
-            FactionMembership, Faction
-        ).join(
-            Faction, Faction.id == FactionMembership.faction_id
-        ).filter(
-            FactionMembership.character_id == character_id
-        )
-        
-        if active_only:
-            query = query.filter(FactionMembership.active == True)
-            
-        results = []
-        for membership, faction in query.all():
-            results.append({
-                "faction_id": faction.id,
-                "faction_name": faction.name,
-                "faction_type": faction.type,
-                "role": membership.role,
-                "rank": membership.rank,
-                "joined_at": membership.joined_at.isoformat() if membership.joined_at else None,
-                "active": membership.active
-            })
-            
-        return results
-    
-    @staticmethod
+        """Get all factions a character is a member of"""
+        return self.db_service.get_character_factions(character_id, active_only)
+
     def update_membership(
-        db: Session,
+        self,
         faction_id: int,
         character_id: int,
         role: Optional[str] = None,
@@ -239,17 +171,16 @@ class FactionMembershipService:
         reason: Optional[str] = None
     ) -> FactionMembership:
         """
-        Update a faction membership.
+        Update membership with business rules validation.
         
         Args:
-            db: Database session
             faction_id: ID of the faction
             character_id: ID of the character
             role: New role (optional)
             rank: New rank (optional)
-            active: Update active status (optional)
-            metadata: Additional metadata to merge (optional)
-            reason: Reason for the update (optional)
+            active: New active status (optional) 
+            metadata: Metadata to merge (optional)
+            reason: Reason for the change (optional)
             
         Returns:
             Updated FactionMembership instance
@@ -257,73 +188,54 @@ class FactionMembershipService:
         Raises:
             MembershipNotFoundError: If membership doesn't exist
         """
-        membership = db.query(FactionMembership).filter(
-            FactionMembership.faction_id == faction_id,
-            FactionMembership.character_id == character_id
-        ).first()
-        
+        membership = self.db_service.get_membership(faction_id, character_id)
         if not membership:
-            raise MembershipNotFoundError(f"Membership for character {character_id} in faction {faction_id} not found")
-            
-        # Create history event
-        event = {
-            "type": "updated",
-            "timestamp": datetime.utcnow().isoformat()
-        }
-        changes = False
+            raise MembershipNotFoundError(f"Membership not found for character {character_id} in faction {faction_id}")
         
+        # Business rules validation
+        if rank is not None and (rank < 1 or rank > 100):
+            raise InvalidMembershipError("Rank must be between 1 and 100")
+        
+        if role is not None and role not in ["leader", "officer", "member", "recruit", "exile"]:
+            raise InvalidMembershipError(f"Invalid role: {role}")
+        
+        # Track changes for history
+        changes = {}
         if role is not None and role != membership.role:
-            old_role = membership.role
+            changes["role"] = {"from": membership.role, "to": role}
             membership.role = role
-            event["old_role"] = old_role
-            event["new_role"] = role
-            changes = True
             
         if rank is not None and rank != membership.rank:
-            old_rank = membership.rank
+            changes["rank"] = {"from": membership.rank, "to": rank}
             membership.rank = rank
-            event["old_rank"] = old_rank
-            event["new_rank"] = rank
-            changes = True
             
         if active is not None and active != membership.active:
-            old_active = membership.active
+            changes["active"] = {"from": membership.active, "to": active}
             membership.active = active
-            event["old_active"] = old_active
-            event["new_active"] = active
-            
-            # Special event types for activation/deactivation
-            if active:
-                event["type"] = "reactivated"
-            else:
-                event["type"] = "deactivated"
-                
-            changes = True
-            
-        # Only add history event if changes were made
-        if changes:
-            if reason:
-                event["reason"] = reason
-                
-            membership.history.append(event)
-            
-        # Update metadata if provided
+        
+        # Update metadata with business logic
         if metadata:
             if not membership.metadata:
                 membership.metadata = {}
             membership.metadata.update(metadata)
-            changes = True
-            
+        
+        # Add history entry if there were changes
         if changes:
-            membership.updated_at = datetime.utcnow()
-            db.commit()
-            db.refresh(membership)
+            history_entry = {
+                "type": "updated",
+                "timestamp": datetime.utcnow().isoformat(),
+                "changes": changes
+            }
             
-        return membership
-    
-    @staticmethod
+            if reason:
+                history_entry["reason"] = reason
+                
+            membership.history.append(history_entry)
+        
+        return self.db_service.update_membership(membership)
+
     def remove_member(
-        db: Session,
+        self,
         faction_id: int,
         character_id: int,
         reason: str = None,
@@ -333,142 +245,104 @@ class FactionMembershipService:
         Remove a character from a faction.
         
         Args:
-            db: Database session
             faction_id: ID of the faction
-            character_id: ID of the character
+            character_id: ID of the character to remove
             reason: Reason for removal (optional)
-            permanent: Whether to permanently delete record (default: False)
-            
-        Raises:
-            MembershipNotFoundError: If membership doesn't exist
+            permanent: Whether to permanently delete (True) or deactivate (False)
         """
-        membership = db.query(FactionMembership).filter(
-            FactionMembership.faction_id == faction_id,
-            FactionMembership.character_id == character_id
-        ).first()
-        
+        membership = self.db_service.get_membership(faction_id, character_id)
         if not membership:
-            raise MembershipNotFoundError(f"Membership for character {character_id} in faction {faction_id} not found")
-            
+            raise MembershipNotFoundError(f"Membership not found for character {character_id} in faction {faction_id}")
+        
         if permanent:
-            # Permanently delete the record
-            db.delete(membership)
+            # Business rule: Permanent deletion
+            self.db_service.delete_membership(membership)
         else:
-            # Just mark as inactive
+            # Business rule: Soft deletion
             membership.active = False
             
-            # Create left event
-            event = {
-                "type": "left",
-                "timestamp": datetime.utcnow().isoformat()
+            # Add history entry
+            history_entry = {
+                "type": "removed",
+                "timestamp": datetime.utcnow().isoformat(),
+                "active": False
             }
             
             if reason:
-                event["reason"] = reason
+                history_entry["reason"] = reason
                 
-            membership.history.append(event)
-            membership.updated_at = datetime.utcnow()
+            membership.history.append(history_entry)
             
-        db.commit()
-    
-    @staticmethod
+            self.db_service.update_membership(membership)
+
     def transfer_leader(
-        db: Session,
+        self,
         faction_id: int,
         new_leader_id: int,
         reason: str = None
     ) -> Dict:
         """
-        Transfer leadership of a faction to a new character.
+        Transfer faction leadership with business rules.
         
         Args:
-            db: Database session
             faction_id: ID of the faction
-            new_leader_id: ID of the new leader character
+            new_leader_id: ID of the character to become new leader
             reason: Reason for transfer (optional)
             
         Returns:
-            Dict with transfer details
-            
-        Raises:
-            FactionNotFoundError: If faction doesn't exist
-            InvalidMembershipError: If new leader isn't a member
+            Dict with transfer results
         """
-        # Check if faction exists
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
-        if not faction:
-            raise FactionNotFoundError(f"Faction {faction_id} not found")
-            
-        # Get old leader (if any)
-        old_leader_id = faction.leader_id
-        
-        # Check if new leader is a member
-        membership = db.query(FactionMembership).filter(
-            FactionMembership.faction_id == faction_id,
-            FactionMembership.character_id == new_leader_id,
-            FactionMembership.active == True
-        ).first()
-        
-        if not membership:
+        # Business rule: Validate new leader exists and is a member
+        new_leader_membership = self.db_service.get_membership(faction_id, new_leader_id)
+        if not new_leader_membership or not new_leader_membership.active:
             raise InvalidMembershipError(f"Character {new_leader_id} is not an active member of faction {faction_id}")
-            
-        # Update faction
-        faction.leader_id = new_leader_id
-        faction.updated_at = datetime.utcnow()
         
-        # Update membership
-        membership.role = "leader"
-        membership.rank = 10  # Highest rank
+        # Business rule: Find current leader
+        current_leaders = self.db_service.get_faction_members(faction_id, active_only=True, role="leader")
         
-        # Record leadership change
-        event = {
-            "type": "became_leader",
-            "timestamp": datetime.utcnow().isoformat(),
-            "old_leader_id": old_leader_id
+        results = {
+            "old_leader": None,
+            "new_leader": new_leader_id,
+            "timestamp": datetime.utcnow().isoformat()
         }
         
-        if reason:
-            event["reason"] = reason
+        # Step down current leader(s)
+        for leader in current_leaders:
+            leader.role = "officer"  # Business rule: demote to officer
+            leader.rank = max(leader.rank - 10, 1)  # Business rule: reduce rank
             
-        membership.history.append(event)
-        
-        # If old leader existed and is different, update their membership
-        if old_leader_id and old_leader_id != new_leader_id:
-            old_leader = db.query(FactionMembership).filter(
-                FactionMembership.faction_id == faction_id,
-                FactionMembership.character_id == old_leader_id,
-                FactionMembership.active == True
-            ).first()
+            # Add history
+            history_entry = {
+                "type": "demoted",
+                "timestamp": datetime.utcnow().isoformat(),
+                "from_role": "leader",
+                "to_role": "officer",
+                "reason": reason or "Leadership transfer"
+            }
+            leader.history.append(history_entry)
             
-            if old_leader:
-                old_leader.role = "former_leader"  # Or another appropriate role
-                
-                # Record change
-                event = {
-                    "type": "leadership_transferred",
-                    "timestamp": datetime.utcnow().isoformat(),
-                    "new_leader_id": new_leader_id
-                }
-                
-                if reason:
-                    event["reason"] = reason
-                    
-                old_leader.history.append(event)
+            self.db_service.update_membership(leader)
+            results["old_leader"] = leader.character_id
         
-        db.commit()
+        # Promote new leader
+        new_leader_membership.role = "leader"
+        new_leader_membership.rank = 100  # Business rule: leaders get max rank
         
-        # Return transfer details
-        return {
-            "faction_id": faction_id,
-            "new_leader_id": new_leader_id,
-            "old_leader_id": old_leader_id,
+        # Add history
+        history_entry = {
+            "type": "promoted",
             "timestamp": datetime.utcnow().isoformat(),
-            "reason": reason
+            "to_role": "leader",
+            "reason": reason or "Leadership transfer"
         }
-    
-    @staticmethod
+        new_leader_membership.history.append(history_entry)
+        
+        self.db_service.update_membership(new_leader_membership)
+        
+        return results
+
     def switch_faction_by_affinity(
-        db: Session,
+        self,
         character_id: int,
         current_faction_id: int,
         target_faction_id: int,
@@ -477,183 +351,79 @@ class FactionMembershipService:
         contextual_restrictions: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Switch a character's faction membership based on affinity score.
-        
-        Implements affinity-based switching as described in the development bible,
-        allowing characters to switch factions based on their affinity/alignment
-        with different faction values and ideologies.
+        Switch faction membership based on affinity and business rules.
         
         Args:
-            db: Database session
-            character_id: Character making the switch
+            character_id: ID of the character
             current_faction_id: Current faction ID
             target_faction_id: Target faction ID
-            affinity_score: Pre-calculated affinity score (optional)
-            min_affinity_threshold: Minimum affinity needed to switch (default: 60)
-            contextual_restrictions: Optional restrictions on switching
+            affinity_score: Character's affinity to target faction
+            min_affinity_threshold: Minimum affinity required
+            contextual_restrictions: Additional business rule restrictions
             
         Returns:
-            Dict with switch details or error information
-            
-        Raises:
-            ValueError: If the switch is not allowed due to restrictions
+            Dict with switch results
         """
-        # Validate inputs
-        current_membership = db.query(FactionMembership).filter(
-            FactionMembership.faction_id == current_faction_id,
-            FactionMembership.character_id == character_id,
-            FactionMembership.is_active == True
-        ).first()
+        # Business rules validation
+        if affinity_score is not None and affinity_score < min_affinity_threshold:
+            return {
+                "success": False,
+                "reason": f"Affinity score {affinity_score} below threshold {min_affinity_threshold}"
+            }
         
+        # Check current membership
+        current_membership = self.db_service.get_membership(current_faction_id, character_id)
         if not current_membership:
             return {
                 "success": False,
-                "error": "character_not_in_faction",
-                "message": f"Character {character_id} is not an active member of faction {current_faction_id}"
+                "reason": f"Character not a member of faction {current_faction_id}"
             }
-            
-        target_faction = db.query(Faction).filter(Faction.id == target_faction_id).first()
-        if not target_faction or not target_faction.is_active:
+        
+        # Business rule: Leaders cannot easily switch factions
+        if current_membership.role == "leader":
             return {
                 "success": False,
-                "error": "target_faction_not_found",
-                "message": f"Target faction {target_faction_id} not found or inactive"
+                "reason": "Leaders cannot switch factions without transferring leadership first"
             }
-            
-        # Check if the character is already a member of the target faction
-        existing_target_membership = db.query(FactionMembership).filter(
-            FactionMembership.faction_id == target_faction_id,
-            FactionMembership.character_id == character_id
-        ).first()
         
-        if existing_target_membership and existing_target_membership.is_active:
+        # Check target faction exists
+        target_faction = self.db_service.get_faction_by_id(target_faction_id)
+        if not target_faction:
             return {
                 "success": False,
-                "error": "already_member",
-                "message": f"Character {character_id} is already an active member of faction {target_faction_id}"
+                "reason": f"Target faction {target_faction_id} not found"
             }
-            
-        # Calculate affinity if not provided
-        if affinity_score is None:
-            # Import here to avoid circular imports
-            from backend.systems.faction.faction_manager import FactionManager
-            
-            faction_manager = FactionManager(db)
-            affinity_score = faction_manager.calculate_affinity(character_id, target_faction_id)
-            
-        # Check if affinity is high enough
-        if affinity_score < min_affinity_threshold:
-            return {
-                "success": False,
-                "error": "insufficient_affinity",
-                "message": f"Affinity score {affinity_score} is below threshold {min_affinity_threshold}",
-                "affinity_score": affinity_score,
-                "threshold": min_affinity_threshold
-            }
-            
-        # Check contextual restrictions
-        if contextual_restrictions:
-            # Check if war between factions prevents switching
-            if contextual_restrictions.get("check_war", False):
-                relationship = db.query(FactionRelationship).filter(
-                    FactionRelationship.faction_id == current_faction_id,
-                    FactionRelationship.other_faction_id == target_faction_id
-                ).first()
-                
-                if relationship and relationship.diplomatic_stance == "at_war":
-                    if not contextual_restrictions.get("allow_defection_during_war", False):
-                        return {
-                            "success": False,
-                            "error": "at_war",
-                            "message": "Cannot switch to an enemy faction during active war without defection approval"
-                        }
-                        
-            # Check if character is a leader (leaders might be restricted)
-            if contextual_restrictions.get("check_leadership", False):
-                faction = db.query(Faction).filter(Faction.id == current_faction_id).first()
-                if faction and faction.leader_id == character_id:
-                    if not contextual_restrictions.get("allow_leader_switch", False):
-                        return {
-                            "success": False,
-                            "error": "is_leader",
-                            "message": "Faction leaders cannot switch factions without special approval"
-                        }
-                        
-            # Check for loyalty lockout period
-            if contextual_restrictions.get("check_loyalty_period", False):
-                days_since_join = (datetime.utcnow() - current_membership.joined_at).days
-                min_days = contextual_restrictions.get("min_days_before_switch", 30)
-                
-                if days_since_join < min_days:
-                    return {
-                        "success": False,
-                        "error": "loyalty_period",
-                        "message": f"Cannot switch factions within {min_days} days of joining",
-                        "days_remaining": min_days - days_since_join
-                    }
         
-        # All checks passed, perform the switch
-        # 1. Update the current membership
-        current_membership.is_active = False
-        current_membership.status = "switched"
-        current_membership.history.append({
-            "type": "faction_switch",
-            "to_faction_id": target_faction_id,
-            "affinity_score": affinity_score,
-            "timestamp": datetime.utcnow().isoformat()
-        })
-        
-        # 2. Create or reactivate membership in the target faction
-        if existing_target_membership:
-            # Reactivate and update existing membership
-            existing_target_membership.is_active = True
-            existing_target_membership.status = "active"
-            existing_target_membership.joined_at = datetime.utcnow()
-            existing_target_membership.history.append({
-                "type": "rejoined",
-                "from_faction_id": current_faction_id,
-                "affinity_score": affinity_score,
-                "timestamp": datetime.utcnow().isoformat()
-            })
-            
-            new_membership = existing_target_membership
-        else:
-            # Create new membership
-            new_membership = FactionMembership(
-                faction_id=target_faction_id,
-                character_id=character_id,
-                role="member",  # Default role for new members
-                rank=0,  # Starting rank
-                reputation=max(0, min(60, affinity_score - 20)),  # Initial reputation based on affinity
-                is_active=True,
-                status="active",
-                joined_at=datetime.utcnow(),
-                history=[{
-                    "type": "joined",
-                    "from_faction_id": current_faction_id,
-                    "affinity_score": affinity_score,
-                    "timestamp": datetime.utcnow().isoformat()
-                }],
-                metadata={
-                    "previous_faction_id": current_faction_id,
-                    "switch_date": datetime.utcnow().isoformat(),
-                    "affinity_score": affinity_score
-                }
+        try:
+            # Remove from current faction
+            self.remove_member(
+                current_faction_id, 
+                character_id, 
+                reason=f"Switched to faction {target_faction_id}"
             )
-            db.add(new_membership)
             
-        # Commit changes
-        db.commit()
-        db.refresh(current_membership)
-        db.refresh(new_membership)
-        
-        # Return success with details
-        return {
-            "success": True,
-            "character_id": character_id,
-            "from_faction_id": current_faction_id,
-            "to_faction_id": target_faction_id,
-            "affinity_score": affinity_score,
-            "timestamp": datetime.utcnow().isoformat(),
-            "new_membership_id": new_membership.id
-        } 
+            # Add to target faction
+            new_membership = self.add_member(
+                target_faction_id,
+                character_id,
+                role="recruit",  # Business rule: start as recruit
+                rank=1,  # Business rule: start with lowest rank
+                join_reason=f"Switched from faction {current_faction_id}",
+                metadata={"previous_faction": current_faction_id, "affinity_score": affinity_score}
+            )
+            
+            return {
+                "success": True,
+                "old_faction": current_faction_id,
+                "new_faction": target_faction_id,
+                "new_membership": new_membership,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            # Rollback on error
+            self.db_service.rollback_changes()
+            return {
+                "success": False,
+                "reason": f"Switch failed: {str(e)}"
+            } 

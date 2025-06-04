@@ -2,12 +2,11 @@
 Diplomacy model definitions.
 """
 
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
 from sqlalchemy import Column, Integer, String, DateTime, Text
-from sqlalchemy.ext.declarative import declarative_base
+
 from datetime import datetime
 from typing import Dict, Any, Optional
-
-Base = declarative_base()
 
 class DiplomacyModel(Base):
     """Base model for diplomacy system."""

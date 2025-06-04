@@ -1,7 +1,6 @@
 {
   "name": "Carmen Cross",
   "race": "DWARF",
-  "character_class": "CLERIC",
   "background": "New hear happen head knowledge place. Without young economic cut his. Late one few significant appear machine collection. Your shoulder finish raise.",
   "stats": {
     "strength": 13,
@@ -10,5 +9,14 @@
     "intelligence": 12,
     "wisdom": 8,
     "charisma": 11
-  }
+  },
+  "feats": [
+    "martial_prowess",
+    "divine_magic",
+    "combat_reflexes",
+    "weapon_mastery",
+    "shield_expert",
+    "tactical_awareness",
+    "endurance"
+  ]
 }

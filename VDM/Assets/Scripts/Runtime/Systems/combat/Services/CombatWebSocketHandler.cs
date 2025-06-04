@@ -118,7 +118,7 @@ namespace VDM.Systems.Combat.Services
         /// <summary>
         /// Send a combat action via WebSocket for immediate processing
         /// </summary>
-        public void SendVDM.DTOs.Combat.CombatActionDTO(string combatId, string actorId, VDM.DTOs.Combat.CombatActionDTO action, string targetId = null)
+        public void SendCombatAction(string combatId, string actorId, VDM.DTOs.Combat.CombatActionDTO action, string targetId = null)
         {
             var message = new
             {

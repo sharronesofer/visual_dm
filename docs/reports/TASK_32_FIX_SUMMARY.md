@@ -56,16 +56,16 @@
 - ... and 61 more
 
 ### Structure
-- /Users/Sharrone/Visual_DM/backend/app/03_high_complexity/backend/core
-- /Users/Sharrone/Visual_DM/backend/app/03_high_complexity/src
-- /Users/Sharrone/Visual_DM/backend/app/02_medium_complexity/backend/core
-- /Users/Sharrone/Visual_DM/backend/app/02_medium_complexity/src
-- /Users/Sharrone/Visual_DM/backend/app/01_low_complexity/backend/core
-- /Users/Sharrone/Visual_DM/backend/app/backend/core
-- /Users/Sharrone/Visual_DM/backend/app/04_very_high_complexity/backend/core
-- /Users/Sharrone/Visual_DM/backend/app/04_very_high_complexity/src
-- /Users/Sharrone/Visual_DM/backend/app/src
-- /Users/Sharrone/Visual_DM/backend/tests
+- /Users/Sharrone/Dreamforge/backend/app/03_high_complexity/backend/core
+- /Users/Sharrone/Dreamforge/backend/app/03_high_complexity/src
+- /Users/Sharrone/Dreamforge/backend/app/02_medium_complexity/backend/core
+- /Users/Sharrone/Dreamforge/backend/app/02_medium_complexity/src
+- /Users/Sharrone/Dreamforge/backend/app/01_low_complexity/backend/core
+- /Users/Sharrone/Dreamforge/backend/app/backend/core
+- /Users/Sharrone/Dreamforge/backend/app/04_very_high_complexity/backend/core
+- /Users/Sharrone/Dreamforge/backend/app/04_very_high_complexity/src
+- /Users/Sharrone/Dreamforge/backend/app/src
+- /Users/Sharrone/Dreamforge/backend/tests
 
 ### Cleanup
 - backend/core/utils

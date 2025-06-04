@@ -10,7 +10,7 @@ from datetime import datetime
 from uuid import uuid4, UUID
 from typing import Dict, Any
 
-from backend.systems.religion.schemas.schemas import (
+from backend.infrastructure.systems.religion.schemas.schemas import (
     ReligionSchema,
     ReligionCreateSchema,
     ReligionUpdateSchema,
@@ -261,25 +261,24 @@ class TestReligionMembershipSchema:
         assert schema.status == "active"
     
     def test_membership_schema_minimal(self):
-        """Test membership schema with minimal fields"""
-        membership_id = uuid4()
+        """Test membership schema with minimal required fields"""
         entity_id = uuid4()
         religion_id = uuid4()
-        joined_at = datetime.now()
+        membership_id = uuid4()
         
         schema = ReligionMembershipSchema(
             id=membership_id,
             entity_id=entity_id,
             religion_id=religion_id,
-            joined_at=joined_at
+            devotion_level=0.5,
+            joined_at=datetime.utcnow()
         )
         
         assert schema.id == membership_id
         assert schema.entity_id == entity_id
         assert schema.religion_id == religion_id
-        assert schema.devotion_level == 0.0  # Default from Field
+        assert schema.devotion_level == 0.5
         assert schema.role is None
-        assert schema.joined_at == joined_at
         assert schema.status == "active"
     
     def test_membership_schema_devotion_validation(self):

@@ -6,29 +6,213 @@ Add specific tests for the services module functionality.
 """
 
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, AsyncMock
+from uuid import uuid4, UUID
+from sqlalchemy.orm import Session
 
 # Import the module under test
 try:
-    from backend.systems.dialogue import services
+    from backend.systems.dialogue.services import services
+    from backend.infrastructure.dialogue_models.models import (
+        CreateDialogueRequest,
+        UpdateDialogueRequest,
+        DialogueResponse
+    )
+    SERVICES_AVAILABLE = True
 except ImportError:
+    services = None
+    SERVICES_AVAILABLE = False
     pytest.skip(f"Module backend.systems.dialogue.services not found", allow_module_level=True)
 
 
-class TestServices:
-    """Test class for services module"""
+class TestDialogueService:
+    """Test class for DialogueService"""
+    
+    @pytest.fixture
+    def mock_db_session(self):
+        """Mock database session"""
+        return Mock(spec=Session)
+    
+    @pytest.fixture
+    def dialogue_service(self, mock_db_session):
+        """Create DialogueService instance with mocked dependencies"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+        return services.DialogueService(mock_db_session)
+    
+    @pytest.fixture
+    def sample_create_request(self):
+        """Sample create dialogue request"""
+        return CreateDialogueRequest(
+            name="Test Dialogue",
+            description="Test description",
+            properties={"test": "value"}
+        )
+    
+    @pytest.fixture
+    def sample_update_request(self):
+        """Sample update dialogue request"""
+        return UpdateDialogueRequest(
+            name="Updated Name",
+            description="Updated description"
+        )
     
     def test_module_imports(self):
         """Test that the module can be imported successfully"""
-        assert services is not None
+        if SERVICES_AVAILABLE:
+            assert services is not None
+            assert hasattr(services, 'DialogueService')
+        else:
+            pytest.skip("Services module not available")
         
     @pytest.mark.asyncio
-    async def test_basic_functionality(self):
-        """Test basic functionality - replace with actual tests"""
-        # TODO: Add specific tests for services functionality
-        assert True
+    async def test_create_dialogue_success(self, dialogue_service, sample_create_request, mock_db_session):
+        """Test successful dialogue creation"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        # Mock the database operations
+        mock_entity = Mock()
+        mock_entity.id = uuid4()
+        mock_entity.name = sample_create_request.name
+        mock_entity.description = sample_create_request.description
         
-    def test_module_structure(self):
-        """Test that module has expected structure"""
-        # TODO: Add tests for expected classes, functions, constants
-        assert hasattr(services, '__name__')
+        mock_db_session.query.return_value.filter.return_value.first.return_value = None  # No existing
+        mock_db_session.add = Mock()
+        mock_db_session.commit = Mock()
+        mock_db_session.refresh = Mock()
+        
+        # Mock the entity creation
+        with patch('backend.systems.dialogue.services.services.DialogueEntity') as mock_entity_class:
+            mock_entity_class.return_value = mock_entity
+            
+            result = await dialogue_service.create_dialogue(sample_create_request)
+            
+            mock_db_session.add.assert_called_once()
+            mock_db_session.commit.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_create_dialogue_conflict(self, dialogue_service, sample_create_request, mock_db_session):
+        """Test dialogue creation with name conflict"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        # Mock existing dialogue with same name
+        existing_dialogue = Mock()
+        existing_dialogue.name = sample_create_request.name
+        mock_db_session.query.return_value.filter.return_value.first.return_value = existing_dialogue
+        
+        with pytest.raises(Exception):  # Should raise conflict error
+            await dialogue_service.create_dialogue(sample_create_request)
+    
+    @pytest.mark.asyncio
+    async def test_get_dialogue_by_id_success(self, dialogue_service, mock_db_session):
+        """Test successful dialogue retrieval by ID"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        dialogue_id = uuid4()
+        mock_entity = Mock()
+        mock_entity.id = dialogue_id
+        mock_entity.name = "Test Dialogue"
+        
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_entity
+        
+        result = await dialogue_service.get_dialogue_by_id(dialogue_id)
+        
+        assert result is not None
+    
+    @pytest.mark.asyncio
+    async def test_get_dialogue_by_id_not_found(self, dialogue_service, mock_db_session):
+        """Test dialogue retrieval when dialogue doesn't exist"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        dialogue_id = uuid4()
+        mock_db_session.query.return_value.filter.return_value.first.return_value = None
+        
+        result = await dialogue_service.get_dialogue_by_id(dialogue_id)
+        
+        assert result is None
+    
+    @pytest.mark.asyncio
+    async def test_update_dialogue_success(self, dialogue_service, sample_update_request, mock_db_session):
+        """Test successful dialogue update"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        dialogue_id = uuid4()
+        mock_entity = Mock()
+        mock_entity.id = dialogue_id
+        mock_entity.name = "Original Name"
+        
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_entity
+        mock_db_session.commit = Mock()
+        mock_db_session.refresh = Mock()
+        
+        result = await dialogue_service.update_dialogue(dialogue_id, sample_update_request)
+        
+        mock_db_session.commit.assert_called_once()
+        assert mock_entity.name == sample_update_request.name
+    
+    @pytest.mark.asyncio
+    async def test_delete_dialogue_success(self, dialogue_service, mock_db_session):
+        """Test successful dialogue deletion (soft delete)"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        dialogue_id = uuid4()
+        mock_entity = Mock()
+        mock_entity.id = dialogue_id
+        mock_entity.is_active = True
+        
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_entity
+        mock_db_session.commit = Mock()
+        
+        result = await dialogue_service.delete_dialogue(dialogue_id)
+        
+        assert result is True
+        assert mock_entity.is_active is False
+        mock_db_session.commit.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_list_dialogues_with_pagination(self, dialogue_service, mock_db_session):
+        """Test dialogue listing with pagination"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        mock_entities = [Mock() for _ in range(3)]
+        for i, entity in enumerate(mock_entities):
+            entity.id = uuid4()
+            entity.name = f"Dialogue {i}"
+        
+        # Mock the query chain
+        mock_query = Mock()
+        mock_query.filter.return_value = mock_query
+        mock_query.count.return_value = 3
+        mock_query.order_by.return_value = mock_query
+        mock_query.offset.return_value = mock_query
+        mock_query.limit.return_value = mock_query
+        mock_query.all.return_value = mock_entities
+        
+        mock_db_session.query.return_value = mock_query
+        
+        result, total = await dialogue_service.list_dialogues(page=1, size=10)
+        
+        assert total == 3
+        assert len(result) == 3
+
+
+class TestDialogueServiceFactory:
+    """Test the service factory function"""
+    
+    def test_create_dialogue_service(self):
+        """Test dialogue service factory function"""
+        if not SERVICES_AVAILABLE:
+            pytest.skip("Services not available")
+            
+        mock_session = Mock(spec=Session)
+        service = services.create_dialogue_service(mock_session)
+        
+        assert service is not None
+        assert isinstance(service, services.DialogueService)

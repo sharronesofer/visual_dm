@@ -9,7 +9,7 @@ import sys
 import os
 
 # Add the backend directory to path
-backend_path = '/Users/Sharrone/Visual_DM/backend'
+backend_path = '/Users/Sharrone/Dreamforge/backend'
 sys.path.insert(0, backend_path)
 
 def test_region_models():
@@ -40,29 +40,29 @@ def test_region_models():
         print("  ├── Testing region models...")
         
         # Import enums
-        from systems.region.models.models import (
+        from backend.systems.region.models import (
             RegionType, BiomeType, ClimateType, ResourceType, POIType, DangerLevel
         )
         print("  │   ✅ All enums imported")
         
         # Import coordinate system
-        from systems.region.models.models import HexCoordinate, HexCoordinateSchema
+        from backend.systems.region.models import HexCoordinate, HexCoordinateSchema
         print("  │   ✅ Coordinate system imported")
         
         # Import dataclass models
-        from systems.region.models.models import (
+        from backend.systems.region.models import (
             ResourceNode, RegionProfile, RegionMetadata, ContinentMetadata
         )
         print("  │   ✅ Dataclass models imported")
         
         # Import database models
-        from systems.region.models.models import (
+        from backend.systems.region.models import (
             Region, Continent, RegionResourceNode, RegionPOI
         )
         print("  │   ✅ Database models imported")
         
         # Import compatibility aliases
-        from systems.region.models.models import (
+        from backend.systems.region.models import (
             RegionEntity, TerrainType, POICategory, RegionStatus,
             CreateRegionRequest, UpdateRegionRequest, RegionResponse
         )
@@ -109,7 +109,7 @@ def test_constants_and_utilities():
     print("🧪 Testing Constants and Utilities...")
     
     try:
-        from systems.region.models.models import (
+        from backend.systems.region.models import (
             REGION_HEXES_PER_REGION, REGION_AREA_SQ_KM,
             get_hex_neighbors, calculate_hex_distance
         )
@@ -117,7 +117,7 @@ def test_constants_and_utilities():
         print(f"  ├── Constants: {REGION_HEXES_PER_REGION} hexes, {REGION_AREA_SQ_KM} km²")
         
         # Test utility functions
-        from systems.region.models.models import HexCoordinate
+        from backend.systems.region.models import HexCoordinate
         hex1 = HexCoordinate(0, 0)
         hex2 = HexCoordinate(1, 0)
         

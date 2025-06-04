@@ -10,8 +10,10 @@ import asyncio
 from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
+from fastapi.testclient import TestClient
 
-from backend.systems.region import routers
+# Import the routers from infrastructure
+from backend.infrastructure.systems.region import routers
 
 
 class TestRegionRouters:
@@ -96,3 +98,10 @@ class TestRegionRoutersIntegration:
 # WebSocket compatibility: Ensure JSON serialization for Unity frontend
 # Cross-system compatibility: Test communication with other systems
 # API contract compliance: Verify endpoints match established contracts
+
+class TestRouters:
+    """Test cases for region router functionality"""
+    
+    def test_module_imports(self):
+        """Test that the module can be imported successfully"""
+        assert routers is not None

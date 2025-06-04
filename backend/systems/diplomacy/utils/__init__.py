@@ -1,2 +1,0 @@
-"""Utils for diplomacy system"""
-

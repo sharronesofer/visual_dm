@@ -3,6 +3,9 @@ Test repositories for economy system.
 
 Tests the repositories component according to Development_Bible.md standards.
 Achieves ≥90% coverage target as specified in backend_development_protocol.md.
+
+NOTE: The repositories directory has been removed as part of architecture cleanup.
+This test file is kept as a placeholder for future repository implementations.
 """
 
 import pytest
@@ -11,7 +14,8 @@ from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
 
-from backend.systems.economy import repositories
+# NOTE: repositories import removed - directory was cleaned up
+# from backend.systems.economy import repositories
 
 
 class TestEconomyRepositories:
@@ -32,12 +36,14 @@ class TestEconomyRepositories:
             "is_active": True
         }
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     def test_repositories_initialization(self, mock_db_session):
         """Test repositories initialization."""
         # Test initialization logic
         assert mock_db_session is not None
         # Add specific initialization tests here
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     @pytest.mark.asyncio
     async def test_repositories_basic_operations(self, mock_db_session, sample_economy_data):
         """Test basic repositories operations."""
@@ -45,6 +51,7 @@ class TestEconomyRepositories:
         # Add specific operation tests here
         assert sample_economy_data is not None
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     @pytest.mark.asyncio 
     async def test_repositories_error_handling(self, mock_db_session):
         """Test repositories error handling."""
@@ -52,6 +59,7 @@ class TestEconomyRepositories:
         # Add specific error handling tests here
         pass
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     @pytest.mark.asyncio
     async def test_repositories_validation(self, mock_db_session, sample_economy_data):
         """Test repositories validation logic."""
@@ -59,6 +67,7 @@ class TestEconomyRepositories:
         # Add specific validation tests here
         assert sample_economy_data["name"] is not None
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     def test_repositories_integration(self, mock_db_session):
         """Test repositories integration with other components."""
         # Test cross-component integration
@@ -69,6 +78,7 @@ class TestEconomyRepositories:
 class TestEconomyRepositoriesIntegration:
     """Integration tests for economy repositories."""
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     @pytest.mark.integration
     @pytest.mark.asyncio
     async def test_repositories_full_workflow(self):
@@ -77,6 +87,7 @@ class TestEconomyRepositoriesIntegration:
         # Add specific integration workflow tests here
         pass
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     @pytest.mark.integration
     def test_repositories_database_integration(self):
         """Test repositories database integration."""
@@ -84,6 +95,7 @@ class TestEconomyRepositoriesIntegration:
         # Add specific database integration tests here  
         pass
     
+    @pytest.mark.skip(reason="Repositories directory removed during architecture cleanup")
     @pytest.mark.integration
     def test_repositories_api_integration(self):
         """Test repositories API integration."""

@@ -1,65 +1,79 @@
-# Visual DM Development Bible (Reorganized)
+# Visual DM Development Bible
+
+## 📍 **Complete System Index**
+
+### **Core Sections**
+- **Introduction:** [Introduction](#introduction)
+- **Core Design Philosophy:** [Core Design Philosophy](#core-design-philosophy)
+- **Technical Framework:** [Technical Framework](#technical-framework)
+- **Architecture Overview:** [Architecture Overview](#architecture-overview)
+- **Systems Overview:** [Systems](#systems)
+
+### **🎮 Game Systems** 
+- **Arc System:** [Arc System](#arc-system)
+- **Character System:** [Character System](#character-system)
+- **Chaos System:** [Chaos System](#chaos-system)
+- **Combat System:** [Combat System](#combat-system)
+- **Repair System:** [Repair System](#repair-system)
+- **Data System:** [Data System](#data-system)
+- **Disease System:** [Disease System](#disease-system)
+- **Dialogue System:** [Dialogue System](#dialogue-system)
+- **Diplomacy System:** [Diplomacy System](#diplomacy-system)
+- **Economy System:** [Economy System](#economy-system)
+- **Equipment System:** [Equipment System](#equipment-system)
+- **Faction System:** [Faction System](#faction-system)
+- **Inventory System:** [Inventory System](#inventory-system)
+- **Loot System:** [Loot System](#loot-system)
+- **Magic System:** [Magic System](#magic-system)
+- **Memory System:** [Memory System](#memory-system)
+- **Motif System:** [Motif System](#motif-system)
+- **NPC System:** [NPC System](#npc-system)
+- **POI System:** [POI System](#poi-system)
+- **Population System:** [Population System](#population-system)
+- **Quest System:** [Quest System](#quest-system)
+- **Region System:** [Region System](#region-system)
+- **Religion System:** [Religion System](#religion-system)
+- **Rumor System:** [Rumor System](#rumor-system)
+- **Tension/War System:** [Tension/War System](#tensionwar-system)
+- **Time System:** [Time System](#time-system)
+- **World Generation System:** [World Generation System](#world-generation-system)
+- **World State System:** [World State System](#world-state-system)
+
+### **🔧 Cross-Cutting Concerns**
+- **User Interface:** [User Interface](#user-interface)
+- **Modding Support:** [Modding Support](#modding-support)
+- **AI Integration:** [AI Integration](#ai-integration)
+- **Builder Support:** [Builder Support](#builder-support)
+
+### **💰 Business & Monetization**
+- **Monetization Strategy:** [Monetization Strategy](#monetization-strategy)
+- **Enhanced Monetization Analysis:** [Enhanced Monetization Analysis](#enhanced-monetization-analysis)
+- **Infrastructure Economics:** [Infrastructure Economics](#infrastructure-economics)
+- **Risk Mitigation:** [Risk Mitigation](#risk-mitigation)
+
+### **📋 Quick Reference**
+- **Total Systems:** 29 core game systems
+- **Total Lines:** Much shorter now! 
+- **Key Dependencies:** Character → Equipment → Combat → Economy
+- **Integration Hub:** World State System (manages all system interactions)
+
+---
 
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Core Design Philosophy](#core-design-philosophy)
 3. [Technical Framework](#technical-framework)
 4. [Systems](#systems)
-   - [Analytics System](#analytics-system)
-   - [Auth/User System](#authuser-system)
-   - [Character System](#character-system)
-   - [Chaos System](#chaos-system)
-   - [Combat System](#combat-system)
-   - [Crafting System](#crafting-system)
-   - [Data System](#data-system)
-   - [Dialogue System](#dialogue-system)
-   - [Diplomacy System](#diplomacy-system)
-   - [Economy System](#economy-system)
-   - [Equipment System](#equipment-system)
-   - [Event Base System](#event-base-system)
-   - [Events System](#events-system)
-   - [Faction System](#faction-system)
-   - [Integration System](#integration-system)
-   - [Inventory System](#inventory-system)
-   - [LLM System](#llm-system)
-   - [Loot System](#loot-system)
-   - [Magic System](#magic-system)
-   - [Memory System](#memory-system)
-   - [Motif System](#motif-system)
-   - [NPC System](#npc-system)
-   - [POI System](#poi-system)
-   - [Population System](#population-system)
-   - [Quest System](#quest-system)
-   - [Region System](#region-system)
-   - [Religion System](#religion-system)
-   - [Rumor System](#rumor-system)
-   - [Shared System](#shared-system)
-   - [Storage System](#storage-system)
-   - [Tension/War System](#tensionwar-system)
-   - [Time System](#time-system)
-   - [World Generation System](#world-generation-system)
-   - [World State System](#world-state-system)
 5. [Cross-Cutting Concerns](#cross-cutting-concerns)
-   - [User Interface](#user-interface)
-   - [Modding Support](#modding-support)
-   - [AI Integration](#ai-integration)
-   - [World and Setting](#world-and-setting)
+6. [Monetization Strategy](#monetization-strategy)
 
 ## Introduction
-
-**Summary:** This section introduces Visual DM, explains its purpose as a tabletop roleplaying game companion/simulation tool, and outlines how to use this documentation.
-
-**Improvement Notes:** Add a "How to Contribute" subsection for developer onboarding.
 
 Visual DM is a tabletop roleplaying game companion/simulation tool that brings to life the worlds, characters, and stories from tabletop RPGs. It emphasizes a robust, modular, and extensible design with a focus on procedural generation, rich NPCs, and immersive storytelling driven by advanced AI.
 
 The goal is to create a virtual world that facilitates an adaptive, living, and dynamic tabletop roleplaying experience. Visual DM allows for traditional GM-led play, solo/GM-less play, or a hybrid approach.
 
 ## Core Design Philosophy
-
-**Summary:** Outlines the fundamental principles that guide Visual DM's development, emphasizing accessibility, modularity, AI integration, procedural generation, and enhancing tabletop gameplay.
-
-**Improvement Notes:** Each philosophy point could benefit from concrete examples in the codebase.
 
 1. **Accessibility with Depth:** Easy for beginners but with enough depth for experienced players.
 2. **Modular Design:** Components that can be used independently or together.
@@ -73,13 +87,7 @@ The goal is to create a virtual world that facilitates an adaptive, living, and 
 
 ## Technical Framework
 
-**Summary:** Details the overarching technical architecture, core systems, and development workflows that support Visual DM's functionality.
-
-**Improvement Notes:** Add diagrams illustrating system relationships and data flows.
-
 ### Architecture Overview
-
-**Improvement Notes:** Need more detail on how systems communicate with each other.
 
 The Visual DM architecture is built on a clean separation between business logic and infrastructure concerns, following a modular system design where each gameplay domain is encapsulated in its own system folder.
 
@@ -89,25 +97,20 @@ The backend follows a clean architectural pattern with clear separation of conce
 
 ```
 /backend/
-├── systems/           # ✅ BUSINESS LOGIC (35+ systems)
-│   ├── analytics/     # Analytics and metrics collection
+├── systems/           # ✅ BUSINESS LOGIC (27 systems - CANONICAL STRUCTURE)
 │   ├── arc/          # Narrative arc management
-│   ├── auth_user/    # Authentication and user management
-│   ├── character/    # Character creation and management
 │   ├── chaos/        # Chaos simulation and events
+│   ├── character/    # Character creation and management
 │   ├── combat/       # Combat mechanics and calculations
-│   ├── crafting/     # Item crafting and recipes
-│   ├── data/         # Data validation and persistence
 │   ├── dialogue/     # Conversation and dialogue systems
 │   ├── diplomacy/    # Diplomatic relations and interactions
+│   ├── disease/      # Disease and epidemic simulation
 │   ├── economy/      # Economic simulation and trading
-│   ├── equipment/    # Equipment and gear management
-│   ├── event_base/   # Core event infrastructure
-│   ├── events/       # Game event management
+│   ├── equipment/    # Equipment and gear management with quality tiers
+│   ├── espionage/    # Intelligence gathering and covert operations
 │   ├── faction/      # Faction relationships and politics
-│   ├── integration/  # Cross-system integration utilities
+│   ├── game_time/    # Time management and scheduling
 │   ├── inventory/    # Item storage and management
-│   ├── llm/          # AI language model integration
 │   ├── loot/         # Loot generation and distribution
 │   ├── magic/        # Magic system and spells
 │   ├── memory/       # Game memory and state management
@@ -118,22 +121,59 @@ The backend follows a clean architectural pattern with clear separation of conce
 │   ├── quest/        # Quest generation and tracking
 │   ├── region/       # Regional management and properties
 │   ├── religion/     # Religious systems and beliefs
-│   ├── rumor/        # Rumor propagation and tracking
-│   ├── shared/       # Shared utilities and common components
-│   ├── storage/      # Data storage abstraction layer
-│   ├── tension_war/  # Conflict and tension mechanics
-│   ├── time/         # Time management and scheduling
+│   ├── repair/       # Equipment repair and maintenance system
+│   ├── rules/        # Game rules, balance constants, and centralized configuration
+│   ├── rumor/        # Rumor propagation and tracking (with centralized configuration)
+│   ├── tension/      # Conflict and tension mechanics
 │   ├── world_generation/  # Procedural world creation
 │   └── world_state/  # Global world state management
 ├── infrastructure/   # ✅ NON-BUSINESS INFRASTRUCTURE
+│   ├── analytics/    # Analytics and metrics collection
+│   ├── api/          # API endpoint definitions and routing
+│   ├── auth/         # Authentication and authorization
 │   ├── config/       # Configuration management
-│   ├── utils/        # Core utilities (JSON, error handling)
+│   ├── core/         # Core infrastructure components
+│   ├── data/         # Data validation and persistence
 │   ├── database/     # Database session management
+│   ├── events/       # Event infrastructure and pub/sub
+│   ├── integration/  # Cross-system integration utilities
+│   ├── llm/          # AI language model integration
+│   ├── models/       # Shared data models
+│   ├── repositories/ # Data access layer
+│   ├── schemas/      # API schema definitions
+│   ├── services/     # Infrastructure services
+│   ├── shared/       # Shared utilities and common components
+│   ├── storage/      # Data storage abstraction layer
+│   ├── types/        # Type definitions
+│   ├── utils/        # Core utilities (JSON, error handling)
 │   └── validation/   # Rules and validation logic
+├── analytics/        # ✅ ANALYTICS COLLECTION (root level)
 ├── tests/            # ✅ ALL TESTS (organized by system)
 │   └── systems/      # Test structure mirrors systems/ exactly
 ├── docs/             # ✅ DOCUMENTATION & INVENTORIES
-└── scripts/          # ✅ DEVELOPMENT & MAINTENANCE TOOLS
+├── scripts/          # ✅ DEVELOPMENT & MAINTENANCE TOOLS
+└── data/             # ✅ MULTI-TIER JSON CONFIGURATION
+    ├── public/       # Builder/modder accessible content
+    │   ├── templates/  # Content templates for customization
+    │   │   ├── arc/    # Arc generation templates
+    │   │   └── quest/  # Quest generation templates
+    │   ├── content/    # Game content definitions (future)
+    │   └── schemas/    # Validation schemas (future)
+    ├── systems/      # System-internal configurations (centralized rules)
+    │   ├── disease/    # Disease profiles and epidemic configurations
+    │   └── rules/    # JSON configuration files for game balance and mechanics
+    │       ├── balance_constants.json      # Core game balance values
+    │       ├── starting_equipment.json     # Equipment configurations
+    │       ├── formulas.json              # Mathematical formulas
+    │       └── rumor_config.json          # Rumor system configuration
+    ├── system/       # System-internal configurations  
+    │   ├── config/     # System configuration files
+    │   │   ├── arc/    # Arc system configuration
+    │   │   └── chaos/  # Chaos system configuration
+    │   ├── mechanics/  # Core game mechanics (future)
+    │   ├── runtime/    # Runtime data (future)
+    │   └── validation/ # System integrity rules (future)
+    └── temp/         # Temporary/generated files (future)
 ```
 
 #### Frontend Directory Structure (Unity)
@@ -167,7 +207,6 @@ The Unity frontend follows a clean architectural pattern that mirrors the backen
 │   ├── authuser/     # Authentication and user management
 │   ├── character/    # Character creation and management
 │   ├── combat/       # Combat mechanics and UI
-│   ├── crafting/     # Item crafting and recipes
 │   ├── dialogue/     # Conversation and dialogue UI
 │   ├── diplomacy/    # Diplomatic relations interface
 │   ├── economy/      # Economic simulation UI
@@ -328,7 +367,7 @@ This separation ensures that:
 
 The architecture follows a layered approach:
 - **Infrastructure Layer**: Database, configuration, shared utilities, validation
-- **Business Logic Layer**: Domain-specific systems (character, combat, crafting, etc.)
+- **Business Logic Layer**: Domain-specific systems (character, combat, equipment, etc.)
 - **Integration Layer**: Cross-system communication, event handling, API routing
 - **Presentation Layer**: UI, external APIs, client interfaces
 
@@ -398,6 +437,150 @@ from backend.systems.shared.models import BaseEntity
 from backend.systems.shared.database import DatabaseMixin
 ```
 
+## Dependencies
+
+### Development Environment Requirements
+
+Visual DM requires a specific set of dependencies to ensure consistent development and deployment. These dependencies are organized by category and documented for easy maintenance.
+
+#### Python Version
+- **Python 3.11+** (Recommended: Python 3.11.5)
+
+#### Core Runtime Dependencies
+
+**Core FastAPI and Web Dependencies:**
+- `fastapi>=0.104.1` - Modern web framework
+- `uvicorn[standard]>=0.24.0` - ASGI server with performance optimizations
+- `websockets==11.0.3` - WebSocket support for real-time features
+- `python-dotenv>=1.0.0` - Environment variable management
+- `pydantic>=2.5.0` - Data validation and serialization
+- `pydantic-settings>=2.1.0` - Settings management
+- `python-multipart>=0.0.6` - Form data handling
+- `aiofiles==23.1.0` - Async file operations
+- `aiohttp==3.9.1` - HTTP client library
+
+**Authentication and Security:**
+- `python-jose[cryptography]>=3.3.0` - JWT token handling
+- `passlib[bcrypt]>=1.7.4` - Password hashing
+- `email-validator>=2.1.0` - Email validation
+- `pyjwt==2.8.0` - JWT implementation
+- `oauthlib>=3.2.2` - OAuth implementation
+- `cryptography>=41.0.7` - Strong cryptography
+- `bleach>=6.1.0` - HTML sanitization
+
+**Rate Limiting and Security:**
+- `slowapi>=0.1.9` - Rate limiting middleware (FastAPI integration)
+- `python-magic>=0.4.27` - File type detection
+
+**Database and Storage:**
+- `sqlalchemy>=2.0.23` - ORM and database toolkit
+- `sqlalchemy-utils>=0.41.1` - Additional SQL utilities
+- `pymongo==4.6.1` - MongoDB driver
+- `redis>=5.0.1` - Redis client for caching
+
+**Background Tasks:**
+- `celery>=5.3.4` - Distributed task queue
+
+**AI and LLM Dependencies:**
+- `openai>=1.0.0` - OpenAI GPT API client
+- `anthropic>=0.7.0` - Anthropic Claude API client
+- `perplexity-ai>=0.1.0` - Perplexity AI API (if available)
+
+**RAG System Dependencies:**
+- `chromadb==0.4.22` - Vector database for embeddings
+- `sentence-transformers==3.3.1` - Sentence embedding models
+- `transformers==4.46.3` - Hugging Face transformers
+- `torch==2.1.2` - PyTorch for ML models
+- `scikit-learn==1.3.2` - Machine learning utilities
+- `datasets==2.16.1` - Dataset handling
+- `huggingface-hub==0.26.5` - Hugging Face model hub
+
+**Data Processing and Math:**
+- `numpy==1.24.3` - Numerical computing
+
+**HTTP and Network:**
+- `requests>=2.31.0` - HTTP requests library
+
+**Configuration and File Watching:**
+- `watchdog==3.0.0` - File system monitoring
+
+#### Development Dependencies
+
+**Testing Framework:**
+- `pytest==7.4.4` - Testing framework
+- `pytest-asyncio>=0.18.0` - Async testing support
+- `pytest-mock>=3.14.0` - Mock support for testing
+- `pytest-cov>=6.1.1` - Coverage analysis
+
+#### Environment Setup
+
+**Installation Instructions:**
+
+1. **Install Python Dependencies:**
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+2. **Environment Variables Setup:**
+   Create a `.env` file in the project root with:
+   ```bash
+   # Database Configuration
+   DATABASE_URL=postgresql://user:password@localhost/visual_dm
+   REDIS_URL=redis://localhost:6379
+   
+   # AI Service API Keys
+   ANTHROPIC_API_KEY=your_anthropic_key_here
+   OPENAI_API_KEY=your_openai_key_here
+   PERPLEXITY_API_KEY=your_perplexity_key_here
+   
+   # Security Configuration
+   SECRET_KEY=your_secret_key_here
+   JWT_SECRET_KEY=your_jwt_secret_key_here
+   
+   # Application Configuration
+   DEBUG=true
+   LOG_LEVEL=info
+   ```
+
+3. **Optional AI Services:**
+   - Some AI features require external API keys
+   - The system gracefully degrades if API keys are not provided
+   - Rate limiting is applied to prevent API abuse
+
+#### Dependency Management
+
+**Dependency Validation:**
+- All dependencies are pinned to specific versions for consistency
+- Regular security updates are applied through dependency scanning
+- Breaking changes are tested before version updates
+
+**Optional Dependencies:**
+- AI service dependencies are optional and will gracefully degrade
+- Some advanced features may require additional setup
+- Development tools are separated from runtime requirements
+
+**Version Compatibility:**
+- All dependencies are tested with Python 3.11+
+- Backward compatibility is maintained where possible
+- Version conflicts are documented and resolved
+
+#### Deployment Dependencies
+
+**Production Requirements:**
+- PostgreSQL 13+ for database
+- Redis 6+ for caching and sessions
+- Optional: MongoDB for document storage
+- Docker support for containerized deployment
+
+**Monitoring and Observability:**
+- Built-in metrics collection
+- Health check endpoints
+- Error tracking and logging
+- Performance monitoring capabilities
+
+This dependency structure ensures Visual DM can run reliably across different environments while providing flexibility for various deployment scenarios.
+
 ## Systems
 
 This section describes each of the core systems in Visual DM, aligned with the actual directory structure in the codebase.
@@ -411,1430 +594,6 @@ The `/backend/tests/systems/` directory serves as the authoritative reference fo
 #### Business Logic Systems (`/backend/systems/`)
 
 All game domain logic is organized under `/backend/systems/` with the following directories:
-
-- `analytics/` - Analytics and metrics collection
-- `arc/` - Narrative arc management  
-- `auth_user/` - Authentication and user management
-- `character/` - Character creation and management (includes relationship functionality)
-- `chaos/` - Chaos simulation and dynamic event systems
-- `combat/` - Combat mechanics and calculations
-- `crafting/` - Item crafting and recipes
-- `data/` - Data validation and persistence
-- `dialogue/` - Conversation and dialogue systems
-- `diplomacy/` - Diplomatic relations and interactions
-- `economy/` - Economic simulation and trading
-- `equipment/` - Equipment and gear management
-- `event_base/` - Core event infrastructure
-- `events/` - Game event management
-- `faction/` - Faction relationships and politics
-- `integration/` - Cross-system integration utilities
-- `inventory/` - Item storage and management
-- `llm/` - AI language model integration
-- `loot/` - Loot generation and distribution
-- `magic/` - Magic system and spells
-- `memory/` - Game memory and state management
-- `motif/` - Narrative motif tracking
-- `npc/` - Non-player character management
-- `poi/` - Points of interest
-- `population/` - Population simulation
-- `quest/` - Quest generation and tracking
-- `region/` - Regional management and properties
-- `religion/` - Religious systems and beliefs
-- `rumor/` - Rumor propagation and tracking
-- `shared/` - Shared utilities and common components
-- `storage/` - Data storage abstraction layer
-- `tension_war/` - Conflict and tension mechanics
-- `time/` - Time management and scheduling
-- `world_generation/` - Procedural world creation
-- `world_state/` - Global world state management
-
-#### Infrastructure Components (`/backend/infrastructure/`)
-
-Non-business logic infrastructure is centralized under `/backend/infrastructure/`:
-
-- `config/` - Configuration management and environment settings
-- `utils/` - Core utilities (JSON processing, error handling, logging)
-- `database/` - Database session management and connection utilities
-- `validation/` - Rules engine and validation logic used across systems
-
-#### Supporting Directories
-
-- `/backend/tests/` - All test files organized by system, mirroring `/backend/systems/` structure
-- `/backend/docs/` - Documentation, inventories, and architectural references
-- `/backend/scripts/` - Development tools, maintenance scripts, and automation
-
-#### System Internal Structure
-
-Each system directory follows a consistent internal structure:
-
-```
-/backend/systems/[system_name]/
-├── models/           # Data models and entities
-├── services/         # Business logic services
-├── repositories/     # Data access layer
-├── routers/          # API endpoints and routing
-├── events/           # System-specific events
-├── utils/            # System-specific utilities
-├── tests/            # Unit tests (integration tests in /backend/tests/)
-└── __init__.py       # Module initialization
-```
-
-#### Import Patterns
-
-**Within Systems** (local imports):
-```python
-from .models import MyModel
-from .services import MyService
-```
-
-**Cross-System Business Logic**:
-```python
-from backend.systems.character.models import Character
-from backend.systems.faction.services import FactionService
-```
-
-**Infrastructure Components**:
-```python
-from backend.infrastructure.config import config
-from backend.infrastructure.utils import load_json
-from backend.infrastructure.database import get_db_session
-```
-
-**Note:** Relationship functionality is handled by the character system rather than a separate relationship system. All entity-to-entity relationships (character-to-faction, character-to-quest, character-to-character, etc.) are managed through the character system's relationship models and services.
-
-### Analytics System
-
-**Summary:** Collects and processes gameplay data for metrics analysis and performance monitoring.
-
-**Improvement Notes:** Include privacy compliance section.
-
-The analytics system tracks player behavior, system performance, and game metrics to inform development decisions and optimize gameplay experiences.
-
-Key components include:
-- Event tracking
-- Metrics collection
-- Usage pattern analysis
-- Performance monitoring
-
-### Arc System
-
-**Status: ✅ FULLY IMPLEMENTED AND TESTED**
-
-**Location**: `/backend/systems/arc/` - Complete Arc System implementation including models, services, repositories, and API endpoints.
-
-**Integration Test**: All components tested and working correctly via `backend/systems/arc/test_integration.py`
-
-The Arc System provides a comprehensive meta-narrative framework that operates above individual quests and encounters, creating overarching storylines that give meaning and direction to player actions. It integrates with GPT for dynamic content generation and provides sophisticated progression tracking and analytics.
-
-### Core Components
-
-**Models** (`/backend/systems/arc/models/`):
-- `Arc`: Main arc entity with narrative structure, progression tracking, and metadata
-- `ArcStep`: Individual steps within an arc with completion criteria and narrative text  
-- `ArcProgression`: Tracks player progression through arc steps with analytics
-- `ArcCompletionRecord`: Records completed arcs with outcomes and consequences
-- Supporting enums for arc types, statuses, priorities, and progression methods
-
-**Services** (`/backend/systems/arc/services/`):
-- `ArcManager`: Core service for arc lifecycle management and operations
-- `ArcGenerator`: GPT-powered arc generation with configurable templates and prompts
-- `QuestIntegrationService`: Bridges arcs with the quest system for seamless integration
-- `ProgressionTracker`: Advanced analytics and progression monitoring with comprehensive reporting
-
-**Repositories** (`/backend/systems/arc/repositories/`):
-- Abstract base classes with memory implementations for development
-- Support for arc, arc step, progression, and integration data persistence
-- Designed for easy database backend integration
-
-**API Layer** (`/backend/systems/arc/routers/`):
-- `arc_router.py`: 20+ endpoints for full CRUD operations, activation, and management
-- `analytics_router.py`: 15+ endpoints for performance metrics, health monitoring, and reporting
-- Comprehensive error handling, validation, and documentation
-
-**Events System** (`/backend/systems/arc/events/`):
-- `ArcEvent` and `ArcEventType` for system integration and event handling
-- Support for lifecycle events, progression tracking, and cross-system communication
-
-**Utilities** (`/backend/systems/arc/utils/`):
-- `arc_utils.py`: Common operations, validation, and helper functions
-- `gpt_utils.py`: GPT integration utilities with prompt templates and content generation
-
-### Arc Types and Scope
-
-1. **Global Arcs**: World-spanning narratives affecting entire campaigns
-2. **Regional Arcs**: Location-specific storylines with regional impact  
-3. **Character Arcs**: Personal character development and growth narratives
-4. **NPC Arcs**: Supporting character storylines that intersect with player actions
-
-### Key Features
-
-- **GPT Integration**: Dynamic arc generation with configurable prompts and templates
-- **Tag-Based Quest Integration**: Seamless connection between arcs and quest generation
-- **Multi-Layer Progression**: Sophisticated tracking of arc advancement and player engagement
-- **Analytics and Reporting**: Comprehensive performance metrics and system health monitoring
-- **Cross-System Integration**: Event-driven architecture for integration with other game systems
-- **Flexible Configuration**: Customizable arc types, priorities, and progression methods
-
-### Factory Function
-
-Use `create_arc_system()` from `/backend/systems/arc/` to instantiate all components with proper dependency injection:
-
-```python
-from backend.systems.arc import create_arc_system
-
-arc_manager, arc_generator, quest_integration, progression_tracker = create_arc_system()
-```
-
-### Integration Points
-
-- **Quest System**: Arcs generate quest opportunities through tag-based matching
-- **World Events**: Arc progression can trigger world state changes
-- **Character Development**: Character arcs track personal growth and relationships
-- **Campaign Management**: Global arcs provide overarching campaign structure
-
-The Arc System is production-ready and provides a robust foundation for narrative-driven gameplay with comprehensive tracking, analytics, and GPT-powered content generation.
-
-### Auth/User System
-
-**Summary:** Manages user authentication, accounts, permissions, and preferences across the application.
-
-**Improvement Notes:** Add security best practices section.
-
-The auth/user system handles user authentication, authorization, and profile management. It ensures secure access to the application and personalizes the experience based on user preferences.
-
-Key components include:
-- Authentication providers
-- User profile management
-- Permission system
-- Preference storage
-
-### Character System
-
-**Summary:** Core system for character creation, attributes, skills, advancement, and race-specific traits.
-
-**Improvement Notes:** Add UML diagrams of character class relationships.
-
-**Status: ✅ FULLY IMPLEMENTED WITH RELATIONSHIP MANAGEMENT**
-
-**Location**: `/backend/systems/character/` - Complete Character System implementation including models, services, repositories, and relationship management.
-
-**Relationship Management**: As of the most recent refactoring, the Character System now includes comprehensive relationship management functionality:
-
-- **Relationship Models** (`/backend/systems/character/models/relationship.py`): Canonical implementation of all inter-entity relationships
-- **Relationship Services** (`/backend/systems/character/services/relationship_service.py`): Full CRUD operations for relationships
-- **Supported Relationship Types**: Faction relationships, quest progress tracking, character-to-character relationships, spatial relationships, authentication relationships, and custom relationship types
-- **Integration**: Fully integrated with the event system for relationship change notifications
-
-All relationship functionality that was previously in a separate relationship system has been consolidated into the character system to align with the canonical directory structure.
-
-#### Core Attributes
-
-- **Strength (STR):** Physical power and brute force.
-- **Dexterity (DEX):** Agility, reflexes, and finesse.
-- **Constitution (CON):** Endurance, stamina, and resilience.
-- **Intelligence (INT):** Knowledge, memory, and reasoning.
-- **Wisdom (WIS):** Perception, intuition, and willpower.
-- **Charisma (CHA):** Force of personality, persuasiveness, and leadership.
-
-**Note:** In Visual DM, these are referred to as "stats" rather than "attributes" or "abilities" as in D&D. They range from -3 to +5 directly, with no separate modifier calculation.
-
-#### Skills
-
-Characters have skill proficiencies that reflect their training and natural aptitudes. Skill checks are made by rolling a d20 and adding the relevant attribute and skill modifier.
-
-The canonical skill list includes:
-- **Appraise (INT):** Determine the value of items
-- **Balance (DEX):** Maintain footing on narrow or unstable surfaces
-- **Bluff (CHA):** Deceive others through words or actions
-- **Climb (STR):** Scale vertical surfaces
-- **Concentration (CON):** Maintain focus during distractions or while injured
-- **Craft (INT):** Create or repair items (subskills: Alchemy, Armorsmithing, Weaponsmithing, Trapmaking, Bowmaking)
-- **Decipher Script (INT):** Understand unfamiliar writing or codes
-- **Diplomacy (CHA):** Negotiate and persuade in good faith
-- **Disable Device (INT):** Disarm traps or sabotage mechanical devices
-- **Disguise (CHA):** Change appearance to conceal identity
-- **Escape Artist (DEX):** Slip free from bonds or tight spaces
-- **Forgery (INT):** Create fraudulent documents
-- **Gather Information (CHA):** Collect rumors and information from locals
-- **Handle Animal (CHA):** Train and care for animals
-- **Heal (WIS):** Provide medical treatment
-- **Hide (DEX):** Conceal oneself from observation
-- **Intimidate (CHA):** Influence others through threats or fear
-- **Jump (STR):** Leap across gaps or over obstacles
-- **Knowledge (INT):** Specialized information in various fields (subskills: Arcana, Architecture and Engineering, Dungeoneering, Geography, History, Local, Nature, Nobility and Royalty, Religion, The Planes)
-- **Listen (WIS):** Notice sounds and conversations
-- **Move Silently (DEX):** Move without making noise
-- **Open Lock (DEX):** Pick locks
-- **Perform (CHA):** Entertain others (subskills: Act, Comedy, Dance, Keyboard Instruments, Oratory, Percussion Instruments, String Instruments, Wind Instruments, Sing)
-- **Profession (WIS):** Practice a trade or occupation
-- **Ride (DEX):** Control mounts
-- **Search (INT):** Locate hidden objects or features
-- **Sense Motive (WIS):** Discern intentions and detect lies
-- **Sleight of Hand (DEX):** Perform acts of manual dexterity
-- **Spellcraft (INT):** Identify and understand magical effects
-- **Spot (WIS):** Notice visual details
-- **Survival (WIS):** Endure harsh environments and track creatures
-- **Swim (STR):** Move through water
-- **Tumble (DEX):** Acrobatic movements to avoid attacks or falls
-- **Use Magic Device (CHA):** Operate magical items regardless of restrictions
-- **Use Rope (DEX):** Manipulate ropes for various purposes
-
-#### Character Races
-
-Diverse species with unique traits, abilities, and cultural backgrounds.
-
-- **Human:** Versatile and adaptable with no specific strengths or weaknesses.
-- **Elf:** Long-lived, graceful beings with enhanced perception and magical affinity.
-- **Dwarf:** Sturdy mountain-dwellers with resistance to poison and magic.
-- **Halfling:** Small, nimble folk with extraordinary luck.
-- **Gnome:** Clever inventors with magical tricks and illusions.
-- **Half-Elf:** Blend of human adaptability and elven grace.
-- **Half-Orc:** Strong and resilient with savage combat prowess.
-- **Dragonborn:** Dragon-descended humanoids with breath weapons.
-- **Tiefling:** Humans with fiendish ancestry and resistances.
-
-#### Character Advancement
-
-- **Experience Points (XP):** Earned through combat, exploration, and completing objectives.
-- **Levels:** Characters gain new abilities and powers as they advance in level.
-- **Abilities:** Special talents that customize characters further. Note that in Visual DM, what D&D calls "feats" are called "abilities".
-
-### Chaos System
-
-**Summary:** A hidden narrative engine that injects sudden destabilizing events into the game world, creating emergent storytelling through systematic chaos that emerges from system interactions.
-
-**Status: ⚠️ PARTIALLY IMPLEMENTED - NEEDS CONSOLIDATION**
-
-**Location**: Scattered across `/backend/systems/motif/utils/chaos_utils.py`, Unity `/archives/VDM_backup/Assets/Scripts/Runtime/Systems/Integration/ChaosEngine.cs`, and world state integration.
-
-**Implementation Notes:** Currently exists as fragmented components that need consolidation into a proper system following the canonical directory structure.
-
-#### Core Philosophy
-
-The Chaos System operates as a **pressure-based escalation system** that creates unpredictable narrative events when various game systems reach critical thresholds. It serves as both a narrative catalyst and a systemic pressure release valve, ensuring the game world remains dynamic and reactive.
-
-**Key Principles:**
-- **Hidden Operation:** Completely invisible to players - operates as backend narrative driver
-- **MMO-Scale Effects:** Affects regions, factions, and world state rather than individual players
-- **Sudden Destabilization:** Creates discrete incident events, not ongoing processes
-- **Cascading Externalities:** Events trigger secondary and tertiary effects across systems
-- **Emergent Storytelling:** Complex narratives emerge from simple system interactions
-
-**Implementation Pattern:**
-```python
-def evaluate_chaos_trigger(self, region_id):
-    pressure = self.pressure_calculator.calculate_composite_pressure(region_id)
-    if pressure.exceeds_threshold():
-        return self.select_and_execute_chaos_event(region_id, pressure)
-```
-
-#### Chaos Triggers - Multi-Dimensional Pressure System
-
-**Current Implementation:** Only motif pressure thresholds
-**Enhancement:** Comprehensive pressure matrix:
-
-1. **Economic Pressure:** Market crashes, resource depletion, trade route disruptions
-2. **Social Pressure:** Population unrest, faction tension peaks, mass migrations  
-3. **Environmental Pressure:** Natural disasters, seasonal extremes, magical anomalies
-4. **Political Pressure:** Leadership failures, succession crises, diplomatic breakdowns
-5. **Temporal Pressure:** Anniversary events, prophecy deadlines, cyclical patterns
-6. **Motif Pressure:** Existing motif weight thresholds (≥5 individual, ≥4 dual pressure)
-
-**Implementation:**
-```python
-class ChaosManager:
-    """Central coordinator for chaos event generation and execution"""
-    
-class ChaosPressureCalculator:
-    """Aggregates pressure from all game systems to determine chaos probability"""
-    
-class ChaosDistributionTracker:
-    """Ensures chaos events are spread across regions and time"""
-    
-class NarrativeChaosModerator:
-    """Applies narrative context weighting to chaos selection"""
-```
-
-#### Chaos Event Framework
-
-**Canonical Chaos Event Table (20 Events):**
-- "NPC betrays a faction or personal goal"
-- "Player receives a divine omen"
-- "NPC vanishes mysteriously"
-- "Corrupted prophecy appears in a temple or vision"
-- "Artifact or item changes hands unexpectedly"
-- "NPC's child arrives with a claim"
-- "Villain resurfaces (real or false)"
-- "Time skip or memory blackout (~5 minutes)"
-- "PC is blamed for a crime in a new city"
-- "Ally requests an impossible favor"
-- "Magical item begins to misbehave"
-- "Enemy faction completes objective offscreen"
-- "False flag sent from another region"
-- "NPC becomes hostile based on misinformation"
-- "Rumor spreads about a player betrayal"
-- "PC has a surreal dream altering perception"
-- "Secret faction is revealed through slip-up"
-- "NPC becomes obsessed with the PC"
-- "Town leader is assassinated"
-- "Prophecy misidentifies the chosen one"
-
-**Regional Chaos Ecology:**
-Events filtered and customized based on regional characteristics:
-- **Biome-specific chaos:** Desert drought/sandstorms, coastal tsunamis/pirates
-- **Cultural chaos:** Events leveraging local customs, religions, historical grievances
-- **Economic chaos:** Target regional primary industries (mining collapse in mining regions)
-- **Political chaos:** Exploit existing faction tensions and power structures
-
-#### Cascading Effects System
-
-**Enhancement over current single-event model:**
-
-**Chain Reaction Framework:**
-```python
-CHAOS_CASCADE_TABLE = {
-    "Town leader assassinated": [
-        ("Power vacuum erupts", 0.7, "1-3 days"),
-        ("Faction war breaks out", 0.4, "1 week"), 
-        ("Trade routes disrupted", 0.8, "immediate")
-    ]
-}
-```
-
-**Implementation:**
-- **Immediate cascades:** Direct consequences within hours
-- **Delayed consequences:** Secondary effects triggered days/weeks later
-- **Cross-regional spread:** Chaos in connected regions based on trade/political ties
-- **System integration:** Each cascade affects specific game systems (economy, diplomacy, etc.)
-
-#### Severity Scaling with Warning System
-
-**Three-Tier Escalation:**
-
-1. **Rumor Phase:** NPCs spread concerning rumors, environmental omens appear
-2. **Omen Phase:** More obvious signs of impending instability 
-3. **Crisis Phase:** The actual destabilizing event hits suddenly
-
-**Implementation:**
-```python
-class ChaosSeverityManager:
-    def initiate_chaos_sequence(self, base_event, region_id):
-        self.start_rumor_phase(base_event, region_id)  # 1-3 days
-        self.schedule_omen_phase(base_event, region_id)  # 1-2 days  
-        self.schedule_crisis_event(base_event, region_id)  # Sudden trigger
-```
-
-#### Cross-System Integration Points
-
-**Economy System Integration:**
-- Chaos creates trade route disruptions, market volatility, resource shortages
-- Economic pressure contributes to chaos trigger calculations
-
-**Faction System Integration:**  
-- Chaos creates diplomatic incidents, succession crises, betrayals
-- Faction tension levels contribute to chaos pressure
-
-**World State Integration:**
-- All chaos events logged to global world log
-- World state changes can trigger environmental chaos
-
-**Motif System Integration (Current):**
-- Motif pressure triggers chaos events
-- Chaos events inject "chaos-source" motifs
-
-**NPC System Integration:**
-- Chaos affects NPC behavior and relationships
-- NPC aggression thresholds trigger chaos
-
-**Region System Integration:**
-- Regional characteristics determine chaos event types
-- Regional connections determine cascade propagation
-
-#### Narrative Intelligence and Weighting
-
-**Meta-Narrative Moderation:**
-- **Dramatic timing:** Chaos probability increases during crucial story moments
-- **Genre awareness:** Chaos tone matches current narrative atmosphere
-- **Pacing control:** Chaos frequency adjusts based on recent event density
-- **Thematic resonance:** Events echo current narrative themes
-
-**Implementation as Weighting System:**
-```python
-class NarrativeChaosModerator:
-    def apply_narrative_weights(self, base_weights, narrative_state):
-        # Influences probability and selection, doesn't control outcome
-        # Chaos can still override narrative preferences for true unpredictability
-```
-
-#### Distribution and Fatigue Management
-
-**Adaptive Distribution:**
-- Track recent chaos events by region and type
-- Reduce probability for recently affected areas
-- Increase probability for "quiet" regions
-- Prevent chaos clustering in time or space
-
-**Statistical Balance:**
-```python
-class ChaosDistributionTracker:
-    def adjust_chaos_probability(self, region_id, base_probability):
-        recent_chaos = self.get_recent_chaos_events(region_id, days=30)
-        return base_probability * self.calculate_fatigue_modifier(recent_chaos)
-```
-
-#### Implementation Status and Next Steps
-
-**Currently Implemented:**
-- ✅ Basic chaos event table and selection
-- ✅ Motif pressure trigger system  
-- ✅ Unity frontend chaos state tracking
-- ✅ World log integration for chaos events
-- ✅ Basic regional event synchronization
-
-**Needs Implementation:**
-- ❌ Consolidated ChaosManager system
-- ❌ Multi-dimensional pressure calculation
-- ❌ Cascading effects framework
-- ❌ Severity scaling and warning phases
-- ❌ Regional ecology and distribution management
-- ❌ Cross-system integration matrix
-- ❌ Narrative intelligence weighting
-- ❌ Proper database persistence layer
-
-**Recommended Implementation Priority:**
-1. **ChaosManager** - Central system coordinator
-2. **Multi-dimensional triggers** - Pressure calculation from all systems
-3. **Severity scaling** - Warning phases and escalation
-4. **Regional ecology** - Biome and culture-specific events
-5. **Cascading effects** - Secondary event chains
-6. **Cross-system integration** - Deep hooks into all major systems
-
-The Chaos System represents one of Visual DM's most sophisticated emergent narrative engines, transforming simple system interactions into complex, unpredictable storytelling opportunities that keep the world dynamic and engaging.
-
-### Combat System
-
-**Summary:** Tactical combat mechanics including initiative, actions, damage calculation, and combat conditions.
-
-**Improvement Notes:** Include more examples of complex combat scenarios.
-
-The combat system is designed to be tactical, engaging, and balanced, allowing for a variety of strategies and playstyles.
-
-#### Combat Flow
-
-1. **Initiative:** Determined by DEX + modifiers, establishing turn order.
-2. **Actions:** Each character gets one Action, one Bonus Action, one Reaction, and two Free Actions per round.
-3. **Movement:** Characters can move up to their speed (typically 30 feet) during their turn.
-4. **Attack Resolution:** Based on stats, skills, and situational modifiers.
-
-#### Damage System and Health 
-
-- **Armor Class (AC):** Calculated as 10 + Dexterity + abilities + magic. Determines whether an attack hits.
-- **Damage Reduction (DR):** Reduces incoming damage by a flat amount based on armor, resistances, and abilities. Different for each damage type.
-- **Health Points (HP):** Represent a character's vitality and ability to avoid serious injury.
-- **Temporary Health:** Extra buffer from spells, abilities, or items that absorbs damage first.
-- **Death and Dying:** Characters who reach 0 HP begin making death saving throws.
-
-#### Combat Actions
-
-- **Attack:** Roll d20 + skill + stat vs. target's AC.
-- **Cast Spell:** Using magical abilities, often requiring concentration.
-- **Dodge:** Impose disadvantage on attacks against you.
-- **Dash:** Double movement speed for the turn.
-- **Disengage:** Move without provoking opportunity attacks.
-- **Hide:** Attempt to become hidden from enemies.
-- **Help:** Give advantage to an ally's next check.
-- **Ready:** Prepare an action to trigger on a specific circumstance.
-
-#### Combat Conditions
-
-- **Blinded:** Cannot see, disadvantage on attacks, advantage on attacks against them.
-- **Charmed:** Cannot attack charmer, charmer has advantage on social checks.
-- **Deafened:** Cannot hear.
-- **Frightened:** Disadvantage on checks while source of fear is visible, cannot move closer to fear source.
-- **Grappled:** Speed becomes 0, ends if grappler is incapacitated.
-- **Incapacitated:** Cannot take actions or reactions.
-- **Invisible:** Cannot be seen without special senses, advantage on attacks, disadvantage on attacks against them.
-- **Paralyzed:** Cannot move or speak, automatically fails STR and DEX saves, advantage on attacks against them, critical hit if attacker is within 5 feet.
-- **Petrified:** Transformed to stone, cannot move or speak, automatically fails STR and DEX saves, resistance to all damage.
-- **Poisoned:** Disadvantage on attack rolls and ability checks.
-- **Prone:** Can only crawl, disadvantage on attack rolls, melee attacks against them have advantage, ranged attacks against them have disadvantage.
-- **Restrained:** Speed becomes 0, disadvantage on DEX saves and attack rolls, advantage on attacks against them.
-- **Stunned:** Incapacitated, automatically fails STR and DEX saves, advantage on attacks against them.
-- **Unconscious:** Incapacitated, cannot move or speak, automatically fails STR and DEX saves, advantage on attacks against them, critical hit if attacker is within 5 feet.
-
-### Crafting System
-
-**Summary:** Allows creation of items through recipes, ingredients, and crafting stations with skill requirements and probabilistic outcomes.
-
-**Improvement Notes:** Add diagrams for recipe data structure.
-
-The crafting system enables characters to create items from raw materials. It includes recipes, ingredients, crafting stations, and skill checks.
-
-Key components include:
-- Recipe definitions
-- Ingredient requirements
-- Crafting stations
-- Success probability calculations
-- Result quality determination
-- Experience gain for successful crafting
-
-#### Crafting Process
-1. Select a recipe from known recipes
-2. Gather required ingredients
-3. Access an appropriate crafting station
-4. Make skill checks as required by the recipe
-5. Determine success and item quality
-6. Gain experience in the relevant crafting skill 
-
-### Data System
-
-**Summary:** Manages game data storage, access patterns, and models for persistent state.
-
-**Improvement Notes:** Needs significant expansion with database schema details.
-
-The data system provides storage and retrieval mechanisms for game data, ensuring persistence, integrity, and performance.
-
-Key components include:
-- Data models
-- Persistence layer
-- Caching mechanisms
-- Query optimization
-
-#### Canonical Data Directory Structure
-
-**IMPORTANT:** As of the latest reorganization, all static game data files (.json) are located in the root `/data/` directory, not `/data/system/runtime/`. This change was made to improve organization and provide cross-system access to shared data files.
-
-**Canonical Location:** `/data/` (root directory)
-
-**Directory Structure:**
-```
-/data/
-├── adjacency.json              # Global biome adjacency rules
-├── balance_constants.json      # Game balance constants
-├── biomes/                     # Biome and terrain data
-│   ├── adjacency.json          # Biome-specific adjacency rules
-│   └── land_types.json         # Land type definitions
-├── crafting/                   # Crafting system data
-│   ├── recipes/                # Crafting recipes
-│   │   ├── alchemy.json
-│   │   └── weapons.json
-│   └── stations/               # Crafting station definitions
-│       └── crafting_stations.json
-├── entities/                   # Character and entity data
-│   └── races/
-│       └── races.json          # Race definitions
-├── equipment/                  # Equipment and item data
-│   └── items.json              # Item definitions
-├── goals/                      # Quest and goal data
-│   └── None_goals.json         # Goal templates
-├── items/                      # General item data
-│   └── item_types.json         # Item type definitions
-├── modding/                    # Modding support files
-│   ├── schemas/                # JSON schemas for validation
-│   └── worlds/                 # World generation templates
-├── religion/                   # Religion system data
-│   ├── memberships.json        # Religious membership data
-│   └── religions.json          # Religion definitions
-├── systems/                    # System-specific data
-│   ├── events/
-│   ├── faction/
-│   ├── religion/
-│   └── weather/
-└── world/                      # World generation data
-    └── generation/
-        ├── example_world_seed.json
-        └── world_seed.schema.json
-```
-
-**Usage Pattern:**
-```python
-# Correct way to access data files
-from pathlib import Path
-
-# Load data from root data directory
-data_path = Path("data") / "adjacency.json"
-with open(data_path, "r") as f:
-    adjacency_data = json.load(f)
-```
-
-**Benefits of This Structure:**
-1. **Separation of Concerns:** Data files are separated from code
-2. **Cross-System Access:** All systems can access shared data files
-3. **Modding Support:** Centralized location for modders to find and modify game data
-4. **Simplified Deployment:** Easy to backup/deploy data separately from code
-
-**Migration Notes:** 
-- All references to `data/system/runtime/` have been updated to use `data/`
-- Conflicting files were resolved by choosing canonical versions and archiving alternatives in `/archives/`
-- The backend data migration was completed to consolidate all static data files
-
-#### Data Models
-
-- **World Data:** Information about the game world and environment.
-- **Character Data:** Character statistics, abilities, and equipment.
-- **Quest Data:** Information about available and active quests.
-- **NPC Data:** Details about non-player characters.
-- **Item Data:** Information about items and equipment.
-- **POI State Data:** Evolution state, events, and memory of locations.
-
-#### Data Storage
-
-- **Persistent Storage:** Long-term storage of game data.
-- **Runtime Data:** Temporary data used during gameplay.
-- **Cloud Storage:** Optional online storage for sharing and backup.
-- **Local Storage:** Data stored on the user's device.
-- **Database Options:** Various database solutions being explored for POI state storage and world persistence.
-
-#### Data Access Patterns
-
-- **Real-time Access:** Immediate data retrieval for gameplay.
-- **Background Loading:** Loading data in the background to prevent interruptions.
-- **Data Streaming:** Continuous loading of data as needed.
-- **Data Caching:** Storing frequently used data for quick access.
-
-### Dialogue System
-
-**Summary:** Facilitates conversations between players and NPCs with branching dialogue trees and conditional responses.
-
-**Improvement Notes:** Add examples of dialogue scripting syntax.
-
-The dialogue system manages conversations between players and NPCs, supporting branching narratives, conditional responses, and dialogue-based skill checks.
-
-Key components include:
-- Dialogue tree structure
-- Response conditions
-- Dialogue history tracking
-- Skill check integration
-- Dialogue effects (quest updates, item transfers, etc.)
-
-### Diplomacy System
-
-**Summary:** Handles relationships between factions, diplomatic actions, and negotiation mechanics.
-
-**Improvement Notes:** Needs examples of diplomatic event flows.
-
-The diplomacy system manages relationships between factions, including alliances, rivalries, and neutral stances. It provides mechanics for negotiation, treaties, and diplomatic incidents.
-
-Key components include:
-- Faction relationship tracking
-- Diplomatic action resolution
-- Treaty implementation
-- Reputation systems
-- Conflict escalation
-
-### Economy System
-
-**Summary:** Simulates economic activities including currency, trade, markets, and resource management.
-
-**Improvement Notes:** Add mathematical models for economic simulation.
-
-**🔄 ONGOING SIMULATION UPGRADE REQUIRED:**
-
-The Economy System must be upgraded to support autonomous economic simulation across all regions simultaneously. Markets should fluctuate based on real supply and demand from NPC activities, trade routes should evolve dynamically, and economic competition should occur naturally without player intervention.
-
-**CURRENT LIMITATION:** Economic systems primarily respond to player actions rather than evolving autonomously.
-
-**NEW REQUIREMENT:** Full world economic simulation with autonomous market forces, trade evolution, and economic competition between NPCs and regions.
-
-#### Autonomous Economic Simulation Requirements:
-
-1. **Real Supply/Demand Dynamics:** Prices fluctuate based on actual NPC production, consumption, and trading activities
-2. **Dynamic Trade Route Evolution:** Trade routes change based on political stability, resource availability, and safety conditions
-3. **Market Competition:** NPCs compete for market share, establish monopolies, and engage in economic warfare
-4. **Regional Economic Specialization:** Regions develop economic advantages based on resources and geographic factors
-5. **Economic Cycles:** Natural boom/bust cycles, seasonal variations, and economic crises occur autonomously
-6. **Cross-Regional Economic Integration:** Regional economies influence each other through trade and resource dependencies
-7. **Economic Innovation:** NPCs develop new trade relationships, discover markets, and create economic opportunities
-8. **Wealth Accumulation/Loss:** NPCs and regions experience economic growth, decline, and recovery cycles
-
-The economy system simulates a realistic economic environment affected by supply, demand, scarcity, and player actions.
-
-#### Currency System
-
-- **Standard Coins:** Gold, silver, and copper pieces. **[UPGRADE REQUIRED]** Currency values fluctuate based on regional economic conditions and trade relationships.
-- **Regional Currencies:** Local variants with different values. **[UPGRADE REQUIRED]** Exchange rates change dynamically based on economic and political relationships.
-- **Trade Goods:** Non-monetary items used for barter. **[UPGRADE REQUIRED]** Trade good values fluctuate based on regional availability and demand.
-- **Precious Materials:** Gems and rare metals as alternative currencies. **[UPGRADE REQUIRED]** Values change based on discovery, depletion, and regional demand.
-
-#### Economic Simulation
-
-- **Supply and Demand:** Fluctuating prices based on availability. **[UPGRADE REQUIRED]** Real-time simulation of production, consumption, and stockpiles across all regions.
-- **Regional Variations:** Different economies in different regions. **[UPGRADE REQUIRED]** Regions develop distinct economic characteristics and competitive advantages autonomously.
-- **Event Impacts:** How events affect local and global economies. **[UPGRADE REQUIRED]** All world events (wars, disasters, discoveries) automatically impact relevant economic systems.
-- **Player Influence:** How player actions can change economic conditions. **[UPGRADE REQUIRED]** Player impact becomes part of larger autonomous economic simulation.
-
-#### Trade System
-
-- **Merchant Networks:** Connected traders across regions. **[UPGRADE REQUIRED]** Merchant networks evolve, compete, and form alliances autonomously based on profitability and safety.
-- **Caravan Routes:** Established trade paths with specific goods. **[UPGRADE REQUIRED]** Routes change dynamically based on political conditions, bandit activity, and economic opportunities.
-- **Black Markets:** Illegal goods and services. **[UPGRADE REQUIRED]** Black markets emerge and evolve based on legal restrictions, enforcement levels, and demand.
-- **Guild Influence:** How trade guilds affect prices and availability. **[UPGRADE REQUIRED]** Guilds compete for influence, establish territories, and engage in economic warfare.
-
-#### Resource Management
-
-- **Raw Materials:** Gathering and processing resources. **[UPGRADE REQUIRED]** Resource extraction occurs autonomously by NPCs based on demand, safety, and profitability.
-- **Crafting Materials:** Items used to create equipment. **[UPGRADE REQUIRED]** Availability fluctuates based on raw material supply and crafting demand across all regions.
-- **Consumable Resources:** Items that are used up during gameplay. **[UPGRADE REQUIRED]** Production and consumption balanced autonomously across the world.
-- **Rare Resources:** Valuable materials with special properties. **[UPGRADE REQUIRED]** Discovery, depletion, and control of rare resources drive autonomous conflicts and economic opportunities.
-
-#### World-Scale Economic Simulation:
-
-**[NEW REQUIREMENT]** Implement comprehensive autonomous economic systems:
-
-1. **Production/Consumption Balance:** Each region produces and consumes goods based on population, resources, and capabilities
-2. **Trade Network Optimization:** NPCs establish optimal trade routes and adapt to changing conditions
-3. **Economic Warfare:** Factions use economic pressure, embargos, and market manipulation as strategic tools
-4. **Resource Depletion/Discovery:** Mines empty, new resources are discovered, affecting global markets
-5. **Technological/Knowledge Spread:** New crafting techniques and economic innovations spread through trade networks
-6. **Economic Migration:** NPCs relocate based on economic opportunities and regional economic health
-7. **Market Manipulation:** Wealthy NPCs and factions attempt to manipulate markets for advantage
-8. **Economic Espionage:** Information about resources, prices, and trade opportunities becomes valuable commodity
-
-### Equipment System
-
-**Summary:** Manages character equipment including weapons, armor, and magical items with various properties and rarities.
-
-**Improvement Notes:** Include more detail on equipment enhancement mechanics.
-
-The equipment system encompasses weapons, armor, magical items, consumables, and crafting materials. Every item in Visual DM is inherently magical and evolves with the player's character.
-
-#### Equipment Types
-
-- **Weapons:** Melee and ranged options with unique properties and damage types.
-  - **Weapon Properties:** Include damage dice, critical hit ranges, range, and special tags (like "reach" or "thrown").
-  - **Weapon Types:** Simple, martial, and exotic with different associated abilities.
-  - **Weapon Categories:** Heavy (two-handed), Medium (versatile), and Light (one-handed).
-  - **Damage Types:** Physical (slashing, piercing, bludgeoning), magical, fire, ice, lightning, poison, psychic, necrotic, radiant, force, acid, thunder, and true damage.
-
-- **Armor:** Protective gear that provides Damage Reduction (DR).
-  - **Armor Types:** Light, medium, and heavy, with different encumbrance effects.
-  - **AC Bonus:** Contributes to the AC calculation (10 + Dexterity + abilities + magic).
-  - **DR Values:** Flat damage reduction that applies after a hit is confirmed.
-  - **Max Dex Bonus:** Limit to Dexterity bonus while wearing armor.
-  - **Armor Check Penalty:** Penalty to certain physical actions.
-  - **Arcane Spell Failure:** Chance for spells to fail when cast in armor.
-
-- **Accessories:** Rings, amulets, cloaks, and other items that provide special benefits.
-- **Consumables:** Potions, scrolls, and other one-use items.
-- **Tools and Kits:** Items needed for certain skills and activities.
-
-#### Item Quality and Rarity
-
-| Rarity    | Drop Rate (from battles) | Effects | Naming       | Notes |
-|-----------|--------------------------|---------|--------------|-------|
-| Normal    | 50%                      | 3–5     | Generic      | Frequent, low impact |
-| Epic      | 0.25% of drops (1/400)   | 8–12    | Template/GPT | Story-worthy |
-| Legendary | 0.0025% of drops (1/40K) | 20      | GPT-named    | Ultra-rare, quest-tied |
-
-#### Item Identification and Discovery
-
-The identification system provides a sense of discovery and progression:
-
-- **Identification Methods:**
-  - **Standard Vendors:** Reveal next effect for a fee
-  - **Legendary NPCs:** Reveal all effects for a significant price
-  - **Trial and Error:** Learning through use, which may be risky
-  - **Shopkeepers:** Identify and mark-up legendary items
-  
-- **Progressive Identification:** Items reveal more properties as they're used or identified professionally
-
-#### Item Leveling and Evolution System
-
-Every item in Visual DM is magical and evolves with the player:
-
-- **Level-Gated Effects:** Effects unlock as character levels up with the item
-- **Hidden Potential:** Players won't know an item's full potential until it's fully identified
-- **Awakening:** Magical items "wake up" when certain conditions are met
-- **Bonding:** Items become more powerful as the character uses them extensively
-- **Evolution Paths:** Items can evolve along different paths based on use and character actions
-
-### Events System
-
-**Summary:** Core publish-subscribe system for game events, propagation, and handling across the application.
-
-**Improvement Notes:** Add sequence diagrams for event flows.
-
-The events system is a fundamental infrastructure component that enables loose coupling between systems through a publish-subscribe pattern. It handles event registration, dispatch, and processing.
-
-Key components include:
-- Event registration
-- Event dispatch
-- Event listeners
-- Event middleware
-- Event history
-
-### Faction System
-
-**Summary:** Handles organization of NPCs into groups with shared goals, relationships, and influence mechanics.
-
-**Improvement Notes:** Need more details on faction AI decision-making.
-
-**🔄 ONGOING SIMULATION UPGRADE REQUIRED:**
-
-The Faction System must be upgraded to support autonomous faction evolution, territorial expansion/contraction, internal politics, and dynamic relationships between factions across the entire world. Factions should pursue their objectives actively, not just respond to player actions.
-
-**CURRENT LIMITATION:** Factions are largely static entities that change only in response to player actions.
-
-**NEW REQUIREMENT:** Factions must autonomously compete for resources, territory, and influence while managing internal politics and external relationships.
-
-#### Autonomous Faction Operations:
-
-1. **Territorial Expansion:** Factions actively seek to expand their territory through military conquest, economic influence, and diplomatic means
-2. **Resource Competition:** Factions compete for access to valuable resources, trade routes, and strategic locations
-3. **Internal Politics:** Leadership struggles, factional splits, and organizational evolution occur naturally
-4. **Diplomatic Maneuvering:** Factions form and break alliances, negotiate treaties, and engage in espionage
-5. **Military Campaigns:** Factions wage war, conduct raids, and defend their territories autonomously
-6. **Economic Warfare:** Factions manipulate markets, establish trade monopolies, and economically pressure rivals
-7. **Recruitment and Growth:** Factions actively recruit new members and attempt to convert neutrals
-8. **Ideological Evolution:** Faction beliefs and goals evolve based on leadership changes and external pressures
-
-The faction system manages organized groups of NPCs with shared goals, territories, and resources. Factions have relationships with each other and with the player.
-
-Key components include:
-- Faction definition and membership **[UPGRADE REQUIRED]** Add dynamic membership changes, recruitment drives, and member loss to rivals/death
-- Inter-faction relationships **[UPGRADE REQUIRED]** Implement autonomous relationship changes based on territory disputes, resource competition, and ideological conflicts
-- Territory control **[UPGRADE REQUIRED]** Factions must actively expand, defend, and potentially lose territory through autonomous actions
-- Resource management **[UPGRADE REQUIRED]** Factions compete for resources and establish economic relationships/conflicts autonomously
-- Leadership structure **[UPGRADE REQUIRED]** Leadership changes through succession, coups, elections, or assassination attempts
-- Player reputation with factions **[UPGRADE REQUIRED]** Reputation changes based on faction evolution and indirect player impact on faction interests
-
-#### Cross-Faction Conflict Generation:
-
-**[NEW REQUIREMENT]** Implement systems for generating meaningful faction conflicts:
-
-1. **Territorial Disputes:** Automatic generation of border conflicts and expansion attempts
-2. **Resource Wars:** Conflicts over access to mines, trade routes, magical sites, and fertile land
-3. **Ideological Conflicts:** Religious differences, political philosophy clashes, and cultural tensions
-4. **Economic Competition:** Trade wars, market manipulation, and commercial rivalry
-5. **Succession Crises:** Power vacuums that lead to multi-faction involvement
-6. **Alliance Network Shifts:** Complex web of changing alliances and betrayals
-7. **Revolutionary Movements:** Internal faction rebellions that can split organizations
-8. **External Threats:** Factions must cooperate or compete when facing outside dangers
-
-### Inventory System
-
-**Summary:** Manages character inventories, item storage, weight calculations, and item categorization.
-
-**Improvement Notes:** Add UI mockups for inventory interfaces.
-
-The inventory system tracks items owned by characters, handling storage limitations, organization, and access. It manages encumbrance, categorization, and item interactions.
-
-Key components include:
-- Item storage and retrieval
-- Weight and encumbrance calculation
-- Item categorization and sorting
-- Inventory UI
-- Item transfers between inventories
-- Special storage (bags of holding, etc.)
-
-### LLM System
-
-**Summary:** Integrates large language models for natural language processing, dynamic content, and AI-driven interactions.
-
-**Improvement Notes:** Significantly underdocumented; needs expansion.
-
-The LLM (Large Language Model) system integrates AI language models like GPT to enhance game content, generate dynamic text, and enable natural language interactions.
-
-Key components include:
-- Prompt engineering
-- Context management
-- Response processing
-- Content generation
-- Integration with other systems (dialogue, quests, etc.)
-
-### Loot System
-
-**Summary:** Generates treasure and rewards through drop tables with probabilistic distribution and level-appropriate scaling.
-
-**Improvement Notes:** Add examples of complex loot table configurations.
-
-The loot system generates appropriate rewards for encounters, quests, and exploration. It balances randomness with appropriate progression.
-
-#### Loot Generation System
-
-- **Drop System:** Carefully balanced to make loot drops regular and meaningful
-- **Context-Sensitive:** Takes player level and battle context into account when generating loot
-- **AI-Enhanced:** GPT used for epic/legendary naming and lore generation
-- **Rule-Compliant:** All generated items validated against game rules for balance
-
-Key components include:
-- Loot tables with weighted probabilities
-- Level-appropriate scaling
-- Contextual loot generation
-- Special/unique item generation
-- Currency calculation
-
-### Magic System
-
-**Summary:** Implements magic mechanics including schools, spellcasting, resources, and magical effects.
-
-**Improvement Notes:** Could use more detail on spell creation workflows.
-
-The magic system is flexible and diverse, allowing for creative spellcasting and magical effects.
-
-#### Magic Schools
-
-- **Abjuration:** Protective spells, wards, and barriers.
-- **Conjuration:** Summoning creatures or objects.
-- **Divination:** Gaining information and foreseeing the future.
-- **Enchantment:** Influencing minds and emotions.
-- **Evocation:** Elemental damage and energy manipulation.
-- **Illusion:** Creating sensory deceptions.
-- **Necromancy:** Manipulating life and death energies.
-- **Transmutation:** Changing physical properties of creatures or objects.
-
-#### Magic Resource System
-
-- **Mana Points (MP):** Resource used to cast spells, regenerates with rest.
-- **Concentration:** Many powerful spells require concentration, limiting concurrent effects.
-- **Spell Preparation:** Some casters must prepare spells in advance.
-- **Ritual Casting:** Casting spells without expending resources by taking extra time.
-
-#### Magic Domains
-
-Represents the source or tradition of magic, which affects spellcasting style and available spells:
-
-- **Arcane:** Traditional wizardry and academic magic study.
-- **Divine:** Magic granted by deities and higher powers.
-- **Nature:** Magic drawn from natural forces and the elements.
-- **Occult:** Forbidden knowledge and pacts with otherworldly entities.
-
-#### Magical Effects and Interactions
-
-- **Magical Detection:** Spells and abilities to sense and identify magic.
-- **Counterspelling:** Ability to interrupt or dispel other spells.
-- **Magic Resistance:** Some creatures or items resist magical effects.
-- **Anti-Magic:** Areas where magic is suppressed or functions differently.
-
-### Memory System
-
-**Summary:** Tracks NPC memories of player actions and world events, with recall, importance weighting, and decay mechanics.
-
-**Improvement Notes:** Add examples of memory influence on NPC behavior.
-
-The memory system allows NPCs and locations to remember events and interactions. It creates persistent consequences for player actions and more realistic NPC behaviors.
-
-Key components include:
-- Memory recording
-- Memory retrieval
-- Memory importance weighting
-- Memory decay over time
-- Influence on NPC behavior and dialogue
-
-#### Player Memory
-
-Player characters possess an internal memory system that operates similarly to NPC memory but remains hidden from direct player access. This system tracks the player character's experiences, learned information, and relationship history to influence arc generation and quest relevance.
-
-**Key Features:**
-- **Experience Tracking:** Records significant events, completed quests, and narrative milestones
-- **Relationship Memory:** Maintains detailed records of interactions with NPCs, factions, and locations
-- **Background Integration:** Connects character background elements to ongoing narrative development
-- **Arc History:** Preserves progression through character-specific arcs for continuity
-- **Knowledge Base:** Tracks discovered information, rumors heard, and world lore encountered
-
-**Arc Generation Integration:**
-- Previous arc completion data influences new character arc creation
-- Background elements resurface in narrative progression
-- Relationship patterns affect quest generation and NPC interaction opportunities
-- Experience-based difficulty scaling for appropriate challenge levels
-
-**System Operation:**
-- Automatic recording without player intervention or awareness
-- Memory decay and importance weighting similar to NPC system
-- Cross-reference capability with world events and other character memories
-- Integration with Core Memory for world-significant events
-- Influences dialogue options and quest availability without explicit player knowledge
-
-### Motif System
-
-**Summary:** Manages narrative themes and recurring elements throughout campaigns for cohesive storytelling.
-
-**Improvement Notes:** Minimal documentation exists; needs significant expansion.
-
-The motif system tracks and applies recurring themes, symbols, and narrative elements to create cohesive, interconnected stories and environments.
-
-Key components include:
-- Motif definition and categorization
-- Motif application to NPCs, locations, and quests
-- Motif evolution and development
-- Thematic consistency enforcement
-- Player-influenced motif adaptation
-
-### NPC System
-
-**Summary:** Governs non-player character generation, behavior, personalities, relationships, and development over time.
-
-**Improvement Notes:** Add flowcharts for NPC decision-making processes.
-
-**🔄 ONGOING SIMULATION UPGRADE REQUIRED:**
-
-The NPC System must be fundamentally upgraded to support continuous background simulation of ALL NPCs across the entire world, not just those near the player. This represents a shift from reactive NPC behavior to proactive autonomous NPC life simulation.
-
-**CURRENT LIMITATION:** NPCs are primarily passive entities that respond to player interaction.
-
-**NEW REQUIREMENT:** NPCs must autonomously pursue goals, form relationships, generate conflicts, and evolve throughout the world regardless of player proximity.
-
-#### Autonomous NPC Lifecycle Requirements:
-
-1. **Independent Goal Pursuit:** NPCs generate and pursue personal objectives (marriage, career advancement, revenge, exploration, etc.)
-2. **Relationship Evolution:** NPCs form friendships, rivalries, romantic relationships, and family bonds autonomously
-3. **Economic Participation:** NPCs engage in trade, accumulate wealth, start businesses, and compete for resources
-4. **Political Engagement:** NPCs join factions, seek leadership roles, and participate in diplomatic activities
-5. **Quest Generation:** NPCs create and attempt to complete their own quests, potentially interfering with player objectives
-6. **Knowledge Acquisition:** NPCs learn information, spread rumors, and make decisions based on accumulated knowledge
-7. **Aging and Death:** NPCs age naturally, reproduce, and pass away, creating generational turnover
-8. **Migration Patterns:** NPCs relocate based on opportunities, threats, and personal motivations
-
-#### NPC Types
-
-- **Villagers:** Ordinary people in settlements. **[UPGRADE REQUIRED]** Each villager needs personal goals, family relationships, and autonomous daily routines.
-- **Merchants:** Traders selling goods and services. **[UPGRADE REQUIRED]** Merchants must establish trade routes, negotiate deals, and compete with other merchants autonomously.
-- **Quest Givers:** NPCs who provide missions. **[UPGRADE REQUIRED]** These NPCs should generate quests based on their ongoing problems and objectives, not just wait for player interaction.
-- **Allies:** Characters who assist the players. **[UPGRADE REQUIRED]** Allies should pursue their own agendas and may occasionally conflict with player interests.
-- **Antagonists:** Opponents and villains. **[UPGRADE REQUIRED]** Antagonists must actively work toward their goals, build power bases, and adapt their strategies.
-- **Neutrals:** Characters with their own agendas. **[UPGRADE REQUIRED]** These NPCs should be the most autonomous, pursuing complex multi-faceted objectives.
-
-#### NPC Personality Generation
-
-- **Trait Selection:** Defining personality characteristics. **[UPGRADE REQUIRED]** Add ambition levels, social drive, and change potential.
-- **Motivation Generation:** What drives the NPC's actions. **[UPGRADE REQUIRED]** Generate both short-term and long-term goals that evolve over time.
-- **Relationship Map:** How the NPC relates to others. **[UPGRADE REQUIRED]** Dynamic relationship networks that change based on NPC interactions.
-- **Behavior Patterns:** How the NPC acts in different situations. **[UPGRADE REQUIRED]** Include proactive behavior patterns, not just reactive ones.
-
-#### NPC Appearance
-
-- **Physical Traits:** Height, weight, and distinguishing features.
-- **Clothing and Style:** How the NPC dresses and presents themselves. **[UPGRADE REQUIRED]** Clothing and style should change based on wealth, status, and life events.
-- **Mannerisms:** Unique behaviors and habits.
-- **Voice and Speech Patterns:** How the NPC communicates.
-
-#### NPC Development
-
-- **Character Growth:** How NPCs change over time. **[UPGRADE REQUIRED]** NPCs must grow skills, change personality traits, and adapt to life experiences autonomously.
-- **Relationship Evolution:** Changing relationships with players. **[UPGRADE REQUIRED]** Extend to all NPC-to-NPC relationships across the world.
-- **Narrative Roles:** How NPCs fit into the larger story. **[UPGRADE REQUIRED]** NPCs should be able to change roles (ally to enemy, neutral to important) based on their autonomous actions.
-- **Memory and Learning:** How NPCs remember and adapt to player actions. **[UPGRADE REQUIRED]** Expand to include learning from all world events and NPC interactions.
-
-#### World-Scale NPC Interaction Simulation:
-
-**[NEW REQUIREMENT]** Implement systems for simulating meaningful NPC interactions across all regions:
-
-1. **Regional NPC Networks:** Every region maintains active social networks between all NPCs
-2. **Cross-Regional Communication:** NPCs exchange information between settlements through travelers, merchants, and messengers
-3. **Conflict Generation:** NPCs autonomously develop disputes over resources, relationships, and ideological differences
-4. **Alliance Formation:** NPCs form partnerships, marriages, business relationships, and political alliances
-5. **Cultural Evolution:** NPC communities develop and change cultural practices, beliefs, and traditions over time
-6. **Generational Change:** Children inherit modified versions of parent traits, relationships, and conflicts
-
-### POI System
-
-**Summary:** Handles points of interest including discovery, states, evolution, and memory systems for locations.
-
-**Improvement Notes:** Add examples of POI state transitions.
-
-POIs are dynamic entities that evolve over time through player interaction, NPC decisions, world simulation, and random events.
-
-#### POI Density and Types
-- **POI Density:** Each region contains ~20 major POIs (towns, dungeons, etc.), plus 200–400 minor/nature squares (groves, ruins, camps, etc.), with the remainder being wilderness or terrain hexes.
-- **Dungeons:** Underground complexes with monsters and treasure.
-- **Temples:** Religious sites dedicated to various deities.
-- **Towers:** Magical or defensive structures.
-- **Camps:** Temporary settlements for various factions.
-- **Natural Landmarks:** Unique geographic features with special properties.
-
-#### POI Evolution States
-- **Settlement Growth:** POIs can evolve from camps to villages to towns based on population and events.
-- **Control Status:** "Cleared," "Monster-controlled," "Disputed," etc.
-- **State Tags:** "Rumored," "Cleared," "Inhabited," "Abandoned," etc.
-
-#### POI Memory System
-POIs maintain a memory of events that have occurred there:
-- **Event Log:** Records player visits, combat, growth, and other significant events.
-- **Motif Pool:** Like NPCs, POIs have thematic motifs that influence their development.
-- **Next Event Check:** Timestamp for when the POI should next be evaluated for an event.
-
-#### Daily Tick System
-The world simulation regularly updates POIs:
-- **Event Checks:** Each POI is checked on a scheduled basis.
-- **Combat Simulation:** When appropriate, simulates combat between inhabitants and threats.
-- **Population Dynamics:** Growth, decline, or abandonment based on events and conditions.
-- **Settlement Growth:** POIs can evolve in tier based on successful development.
-
-#### POI State Transitions
-POIs can transition between states based on events:
-- **Cleared → Inhabited:** When players clear a location and NPCs move in.
-- **Inhabited → Abandoned:** When population drops or disasters occur.
-- **Abandoned → Monster-controlled:** When monsters reclaim abandoned settlements.
-- **Monster-controlled → Cleared:** When players defeat monsters.
-
-### Population System
-
-**Summary:** Simulates settlement demographics, growth, migration, and resource consumption over time.
-
-**Improvement Notes:** Needs mathematical models for population dynamics.
-
-The population system simulates the growth, decline, and movement of populations within settlements. It factors in resources, threats, and events.
-
-Key components include:
-- Population growth calculations
-- Resource consumption
-- Migration triggers
-- Demographic tracking
-- Crisis response (famine, disease, etc.)
-
-### Quest System
-
-**Summary:** Manages quest generation, progression tracking, rewards, and interconnections between quests.
-
-**Improvement Notes:** Add examples of complex quest chains.
-
-**🔄 ONGOING SIMULATION UPGRADE REQUIRED:**
-
-The Quest System must be fundamentally upgraded to support autonomous quest generation, NPC quest completion, and dynamic storyline evolution throughout the world. NPCs should generate their own quests and attempt to complete them, creating a living world of ongoing narratives that succeed or fail independent of player involvement.
-
-**CURRENT LIMITATION:** Quests are primarily generated for player consumption and remain static until player interaction.
-
-**NEW REQUIREMENT:** NPCs must autonomously generate quests based on their needs, pursue quest objectives, and succeed or fail in their attempts, creating dynamic world narratives.
-
-#### Autonomous Quest Generation and Resolution:
-
-1. **NPC-Driven Quest Creation:** NPCs generate quests based on their personal problems, faction objectives, and regional needs
-2. **Multi-NPC Quest Participation:** Multiple NPCs may attempt the same quest, compete for objectives, or collaborate
-3. **Quest Success/Failure Simulation:** NPCs attempt to complete quests with probabilistic outcomes based on their abilities
-4. **Cascading Quest Consequences:** Quest outcomes generate new quests and affect regional storylines
-5. **Cross-Regional Quest Networks:** Quests span multiple regions with traveling NPCs and multi-location objectives
-6. **Temporal Quest Evolution:** Quests change objectives, urgency, and difficulty over time if not completed
-7. **Player Impact on NPC Quests:** Player actions indirectly affect NPC quest success rates and availability
-8. **Failed Quest Aftermath:** Consequences of NPC quest failures create new storylines and opportunities
-
-#### Quest Types
-
-- **Main Quests:** Primary storyline missions. **[UPGRADE REQUIRED]** Main quests should progress based on world events and NPC actions, not just player triggers.
-- **Side Quests:** Optional missions for additional rewards. **[UPGRADE REQUIRED]** Side quests are continuously generated by NPCs based on their ongoing problems and opportunities.
-- **Faction Quests:** Missions for specific factions. **[UPGRADE REQUIRED]** Factions autonomously generate missions to advance their objectives, which NPCs attempt to complete.
-- **Character Quests:** Personal quests for character development. **[UPGRADE REQUIRED]** NPCs pursue personal development quests that change their capabilities and relationships.
-- **Random Encounters:** Spontaneous events during travel. **[UPGRADE REQUIRED]** Encounters reflect ongoing world events and NPC activities in the area.
-
-#### Quest Generation Parameters
-
-- **Difficulty Scaling:** Adjusting quest challenge based on party level. **[UPGRADE REQUIRED]** Add NPC capability assessment for autonomous quest attempts.
-- **Reward Balancing:** Appropriate rewards for quest difficulty. **[UPGRADE REQUIRED]** NPCs seek rewards that match their needs and capabilities.
-- **Narrative Integration:** Connecting quests to the overall story. **[UPGRADE REQUIRED]** All quests should integrate with ongoing faction conflicts, NPC relationships, and regional events.
-- **Player Interest Matching:** Generating quests that align with player preferences. **[UPGRADE REQUIRED]** Maintain but secondary to autonomous NPC quest generation.
-
-#### Adventure Structures
-
-- **Linear Adventures:** Straightforward progression through predetermined events. **[UPGRADE REQUIRED]** Linear adventures should adapt based on autonomous world changes.
-- **Branching Adventures:** Multiple paths leading to different outcomes. **[UPGRADE REQUIRED]** Branches affected by NPC actions and world events.
-- **Sandbox Adventures:** Open-ended exploration with emergent storytelling. **[UPGRADE REQUIRED]** Emergent stories driven by autonomous NPC quest activities.
-- **Hybrid Adventures:** Combining elements of different structures. **[UPGRADE REQUIRED]** Structure adapts dynamically to ongoing world simulation.
-
-#### Campaign Management
-
-- **Campaign Arcs:** Long-term story development across sessions. **[UPGRADE REQUIRED]** Arcs progress through autonomous NPC actions and world events.
-- **Session Planning:** Tools for preparing individual game sessions. **[UPGRADE REQUIRED]** Planning tools must account for autonomous world changes between sessions.
-- **Plot Tracking:** Managing complex storylines and character involvement. **[UPGRADE REQUIRED]** Track autonomous NPC storylines and their interaction with player narratives.
-- **World Consequences:** How player choices affect the world over time. **[UPGRADE REQUIRED]** Consequences now include interaction with ongoing autonomous storylines.
-
-#### World-Scale Quest Network Simulation:
-
-**[NEW REQUIREMENT]** Implement systems for autonomous quest ecosystem:
-
-1. **Regional Quest Pools:** Each region maintains active pools of generated quests being pursued by local NPCs
-2. **Quest Success Probability Engine:** Sophisticated system for determining NPC quest success based on skills, resources, and circumstances
-3. **Quest Failure Recovery:** Systems for generating follow-up quests and consequences when NPCs fail their objectives
-4. **Quest Competition:** Multiple NPCs/factions may pursue conflicting objectives, creating natural quest conflicts
-5. **Quest Resource Economy:** NPCs compete for limited resources, information, and assistance needed for quest completion
-6. **Narrative Continuity Tracking:** Maintain consistency in ongoing storylines across the world simulation
-7. **Player Quest Integration:** Player quests can intersect with, assist, or interfere with autonomous NPC questlines
-
-### Region System
-
-**Summary:** Handles geographic regions, their properties, events, and environmental factors.
-
-**Improvement Notes:** Needs more detail on region generation algorithms.
-
-The region system manages large-scale geographic areas with distinct biomes, cultures, and political entities.
-
-Key components include:
-- Region definition and boundaries
-- Regional features and landmarks
-- Regional climate and weather
-- Political control and influence
-- Regional events and conditions
-
-### Religion System
-
-**Summary:** Implements deities, religious practices, divine intervention, and faith mechanics.
-
-**Improvement Notes:** Add examples of religious influence on gameplay.
-
-The religion system represents the spiritual beliefs of the world, including deities, practices, and divine powers.
-
-Key components include:
-- Deity definition and domains
-- Religious practices and rituals
-- Clerical magic and divine intervention
-- Religious organizations and hierarchies
-- Faith and devotion mechanics
-
-### Rumor System
-
-**Summary:** Manages the generation and propagation of information with varying degrees of truth throughout the game world.
-
-**Improvement Notes:** Add network diagrams for rumor propagation.
-
-The rumor system simulates the spread of information through the world, with varying levels of accuracy and detail.
-
-Key components include:
-- Rumor generation from world events
-- Information propagation mechanics
-- Truth distortion over time
-- NPC knowledge access
-- Player rumor collection and verification
-
-### Shared System
-
-**Summary:** Provides common utilities, resources, and cross-system functions used throughout the codebase.
-
-**Improvement Notes:** Needs inventory of shared components with usage examples.
-
-The shared system contains utilities and helper functions used across multiple systems. It promotes code reuse and consistency.
-
-Key components include:
-- Mathematical utilities
-- String processing
-- Data structure helpers
-- Random generation functions
-- Common game mechanics
-
-### Storage System
-
-**Summary:** Handles persistent storage, save/load functionality, and game state management.
-
-**Improvement Notes:** Add detailed save file format documentation.
-
-The storage system manages the saving and loading of game state, ensuring persistence between sessions.
-
-Key components include:
-- Save file format and management
-- Auto-save functionality
-- Game state serialization
-- Save file encryption and validation
-- Cloud save integration
-
-### Tension/War System
-
-**Summary:** Simulates conflict escalation, war mechanics, battles, territorial control, and peace negotiations.
-
-**Improvement Notes:** Add examples of war simulation calculations.
-
-The tension/war system models conflicts between factions, from minor disputes to full-scale wars.
-
-Key components include:
-- Tension escalation metrics
-- War declaration triggers
-- Battle simulation mechanics
-- Territory control changes
-- Peace negotiation processes
-- War aftermath effects
-
-### Time System
-
-**Summary:** Manages game time through calendars, day/night cycles, seasons, and time-based events.
-
-**Improvement Notes:** Add diagrams for time-based event scheduling.
-
-The time system tracks the passage of time in the game world, affecting lighting, weather, NPC schedules, and events.
-
-Key components include:
-- Calendar and date tracking
-- Day/night cycle management
-- Season progression
-- Time-based event scheduling
-- Time manipulation (spells, effects, etc.)
-
-### World Generation System
-
-**Summary:** Creates procedural worlds with geography, climate, biomes, settlements, and dungeons.
-
-**Improvement Notes:** Add more visual examples of generation output.
-
-**🔄 ARCHITECTURAL SHIFT - FULL UPFRONT GENERATION + ONGOING SIMULATION:**
-
-Modern consumer gaming hardware (gaming laptops, Xbox Series S with 8-core AMD Zen 2 CPUs and substantial RAM) can absolutely support generating the entire world/continent, including all NPCs and POIs, at game startup. This represents a fundamental architectural shift from our current dynamic generation approach to a more sophisticated full-world simulation model.
-
-**CURRENT LIMITATION:** We currently generate content dynamically as areas are discovered, which creates narrative inconsistencies and prevents believable long-term world evolution.
-
-**NEW PARADIGM:** Full upfront generation at game startup followed by continuous ongoing simulation of all world elements, regardless of player proximity or discovery status.
-
-**TECHNICAL FEASIBILITY CONFIRMED:** Modern hardware can handle this computational load. Benefits far outweigh the initial generation time cost.
-
-#### Benefits of Full Upfront Generation:
-- **Narrative Coherence:** Consistent world state enables better story integration
-- **Believable NPC Interactions:** NPCs can form relationships and conflicts before player interaction
-- **Dynamic World Events:** Faction conflicts, economic changes, and population migrations occur naturally
-- **Quest Integration:** Arcs and quests can be generated based on actual world state rather than placeholder content
-- **Long-term Consequences:** Player actions have meaningful impact on an already-existing world
-
-#### World Map Generation
-
-- **Continent Scale:** Large landmasses with diverse biomes. **[UPGRADE REQUIRED]** Generate all continents with complete geographic, political, and resource mapping at startup.
-- **Region Scale:** Political and geographic divisions within continents. **[UPGRADE REQUIRED]** Pre-generate all regional boundaries, controlling factions, population distributions, and resource nodes.
-- **Local Scale:** Detailed terrain for adventuring. **[UPGRADE REQUIRED]** Generate detailed terrain maps for all regions, not just discovered areas.
-- **Underworld:** Cave systems, dungeons, and underground realms. **[UPGRADE REQUIRED]** Pre-generate all dungeon systems with their inhabitants and treasures.
-
-#### Geographic Features
-
-- **Mountains:** Difficult terrain with valuable resources.
-- **Forests:** Dense woodlands with hidden locations.
-- **Deserts:** Harsh environments with ancient ruins.
-- **Oceans and Seas:** Naval travel and underwater locations.
-- **Rivers and Lakes:** Travel routes and settlements.
-- **Swamps and Marshes:** Dangerous environments with unique resources.
-
-#### Settlement Generation
-
-- **Cities:** Major population centers with diverse districts. **[UPGRADE REQUIRED]** Generate all cities with complete NPC populations, political structures, and economic systems at startup.
-- **Towns:** Smaller settlements with limited services. **[UPGRADE REQUIRED]** Pre-populate all towns with inhabitants, relationships, and ongoing storylines.
-- **Villages:** Rural communities focused on local resources. **[UPGRADE REQUIRED]** Generate all villages with family structures, local conflicts, and resource dependencies.
-- **Outposts:** Frontier establishments with specific purposes.
-- **Ruins:** Abandoned settlements reclaimed by nature or monsters.
-
-#### Procedural Algorithms
-
-- **Terrain Generation:** Creating realistic landscapes. **[UPGRADE REQUIRED]** Generate complete continental terrain systems at startup.
-- **Settlement Planning:** Generating believable towns and cities. **[UPGRADE REQUIRED]** Plan all settlements with complete social, economic, and political structures.
-- **Dungeon Design:** Creating interesting and balanced dungeons. **[UPGRADE REQUIRED]** Generate all dungeons with inhabitants, treasures, and evolutionary potential.
-- **Quest Generation:** Creating meaningful and varied quests. **[UPGRADE REQUIRED]** Generate initial quest networks based on actual NPC relationships and faction conflicts.
-
-#### Ongoing Simulation Requirements
-
-**[NEW REQUIREMENT]** All systems must be upgraded to support continuous background simulation:
-
-1. **World State Simulation Tick System:** Regular updates to all world elements regardless of player proximity
-2. **NPC Lifecycle Management:** NPCs age, form relationships, change goals, and pursue objectives autonomously
-3. **Faction Evolution:** Ongoing territorial conflicts, alliance changes, and resource competition
-4. **Economic Simulation:** Supply/demand changes, trade route evolution, market fluctuations
-5. **Quest Evolution:** NPCs generate and attempt to complete quests independent of player interaction
-6. **Arc Progression:** Narrative arcs advance based on world events and NPC actions
-7. **POI Evolution:** Locations change state, purpose, and inhabitants over time
-8. **Population Dynamics:** Migration, birth/death, cultural shifts, and demographic changes
-
-### World State System
-
-**Summary:** Tracks global state, world evolution, history, and major events through simulation.
-
-**Improvement Notes:** Add examples of how player actions affect world state.
-
-The world state system maintains the overall state of the game world, tracking major events, faction status, and world history.
-
-Key components include:
-- Global state tracking
-- World history recording
-- Major event processing
-- World simulation tick system
-- Player impact evaluation
 
 ## Cross-Cutting Concerns
 
@@ -1910,7 +669,7 @@ These sections address aspects that span multiple systems and provide integratio
 
 ### AI Integration
 
-**Summary:** Describes how AI enhances NPCs, narrative generation, encounter design, and world simulation.
+**Summary:** Describes how AI enhances NPCs, narrative generation, encounter design, and world simulation, including the comprehensive Diplomatic AI Framework for autonomous faction behavior.
 
 **Improvement Notes:** Add examples of prompt engineering for game content.
 
@@ -1920,6 +679,64 @@ These sections address aspects that span multiple systems and provide integratio
 - **Behavior Patterns:** Realistic NPC actions and reactions.
 - **Memory System:** NPCs remember interactions with players.
 - **Relationship Tracking:** How NPCs feel about players and each other.
+
+#### 🆕 **Diplomatic AI Framework** *(Task 83 Implementation)*
+
+**Summary:** A sophisticated AI system that enables autonomous diplomatic decision-making by factions, creating dynamic and realistic political landscapes.
+
+The Diplomatic AI Framework represents a major advancement in Visual DM's AI capabilities, providing eight integrated components that enable factions to exhibit sophisticated diplomatic behavior without requiring player intervention.
+
+**Core Components:**
+
+**1. Goal-Driven Decision Making**
+- Factions pursue 13 different diplomatic goal types (expansion, security, prosperity, etc.)
+- Goals evolve based on changing circumstances and faction experiences
+- Priority system ensures realistic resource allocation to objectives
+
+**2. Sophisticated Relationship Analysis**
+- 6-level threat assessment from minimal to existential threats
+- 6-level trust evaluation from deep distrust to absolute trust
+- Identification of 8 different diplomatic opportunity types
+- Historical context tracking for informed relationship decisions
+
+**3. Strategic Analysis and Planning**
+- Multi-dimensional power balance analysis (military, economic, diplomatic, technological, territorial)
+- 5-level risk assessment for diplomatic actions
+- Coalition opportunity identification and alliance partner selection
+- Optimal timing analysis for diplomatic initiatives
+
+**4. Personality-Driven Behavior**
+- 8 distinct behavioral patterns from aggressive expansionist to isolationist scholar
+- Faction personality attributes directly influence diplomatic style
+- Decision compatibility evaluation based on character traits
+- Behavioral modifiers that adjust decision weights realistically
+
+**5. Autonomous Decision Scheduling**
+- AI-driven timing for diplomatic actions based on faction personality
+- Event-driven reactions to world changes, attacks, and opportunities
+- Priority-based decision queuing balancing urgent and long-term considerations
+- Multi-threaded execution for handling multiple concurrent diplomatic processes
+
+**6. Machine Learning and Adaptation**
+- Outcome classification (success, failure, backfire) with impact measurement
+- Pattern recognition for identifying effective diplomatic strategies
+- Learning integration that improves future decision-making
+- Predictive analysis for estimating success probability
+
+**AI-Powered Diplomatic Scenarios:**
+- **Dynamic Alliance Formation:** Factions identify mutual threats and form coalitions autonomously
+- **Economic Pressure Campaigns:** Trade-focused factions leverage economic relationships for political gain
+- **Ideological Conflicts:** Religious or cultural factions pursue conversion or confrontation based on beliefs
+- **Opportunistic Expansion:** Aggressive factions exploit neighbor weakness through diplomacy or force
+- **Defensive Cooperation:** Threatened factions coordinate resistance against common enemies
+
+**Technical Innovation:**
+- **Multi-Criteria Evaluation:** Decisions weigh goal alignment (30%), relationships (25%), strategy (20%), personality (15%), risk (5%), and timing (5%)
+- **Cross-System Integration:** Interfaces with faction, economy, chaos, and tension systems for comprehensive world awareness
+- **Scalable Performance:** Handles multiple concurrent diplomatic processes across all factions simultaneously
+- **Learning Architecture:** Improves diplomatic effectiveness through experience and pattern recognition
+
+This framework transforms Visual DM's political landscape from static faction relationships into a dynamic, evolving diplomatic environment where factions actively pursue their objectives through sophisticated AI-driven behavior.
 
 #### Narrative Generation
 
@@ -1938,10 +755,124 @@ These sections address aspects that span multiple systems and provide integratio
 #### World Simulation
 
 - **Economic Simulation:** Realistic economy affected by player actions.
-- **Political Simulation:** Evolving political landscape.
+- **Political Simulation:** Evolving political landscape **🆕 Enhanced by Diplomatic AI Framework**.
 - **Ecological Simulation:** Natural world that responds to events.
 - **Social Simulation:** Communities that change and develop.
 - **POI Evolution:** Locations that change state and purpose over time.
+- **🆕 Autonomous Diplomatic Evolution:** Faction relationships and political alliances change dynamically through AI-driven decision-making.
+
+### Builder Support
+
+**Summary:** Details Visual DM's world building capabilities, where builders customize world generation parameters and content libraries to create unique world seeds, rather than traditional game modification.
+
+**Improvement Notes:** Add tutorial for creating a simple world seed customization.
+
+#### Builder vs. Modder Terminology
+
+**Builders** are Visual DM's equivalent to modders in traditional games. However, the term "builder" is more accurate because Visual DM doesn't support traditional mods. Instead, builders customize world generation parameters and content libraries to create unique world seeds. The game generates entire worlds from these customized seeds rather than loading external modifications.
+
+This approach allows for:
+- **Consistent Game Balance:** Core mechanics remain intact while content varies
+- **Infinite Replayability:** Each world seed creates a unique experience
+- **Collaborative Building:** Multiple builders can contribute to content libraries
+- **Quality Control:** All generated content follows established schemas and rules
+
+#### Builder Content Types
+
+- **World Seeds:** Complete world generation configurations with custom parameters, lore, and content selections
+- **Content Libraries:** Collections of races, abilities, equipment, creatures, spells, and factions that can be referenced by world seeds
+- **Generation Parameters:** Customizable settings for biomes, population density, POI frequency, regional characteristics, and world scale
+- **Narrative Elements:** Background lore, pre-made factions, religions, and story hooks that shape world generation
+
+#### Builder Tools
+
+- **World Seed Editor:** Visual interface for customizing world generation parameters
+- **Content Library Manager:** Tool for organizing and curating game content collections
+- **Schema Validator:** Ensures all builder content follows proper data structures
+- **Seed Previewer:** Generates preview information about what a world seed will create
+- **Content Browser:** Interface for discovering and importing community-shared content
+
+#### Builder Content Structure
+
+All builder-accessible content is organized in the `/data/builders/` directory:
+
+```
+/data/builders/
+├── content/                    # Content that builders can customize
+│   ├── races/                  # Character race definitions
+│   ├── abilities/              # Character abilities (formerly feats)
+│   ├── equipment/              # Weapons, armor, and items
+│   ├── creatures/              # Monsters and NPCs
+│   ├── spells/                 # Magic and spell definitions
+│   └── factions/               # Organizations and groups
+├── world_parameters/           # World generation settings
+│   ├── biomes/                 # Climate and terrain types
+│   ├── population/             # Population density and distribution
+│   ├── generation_rules/       # Procedural generation parameters
+│   └── narrative/              # Story and lore elements
+│   ├── schemas/                # Validation schemas for all content
+│   │   └── world_seed.schema.json  # Master world seed schema
+│   └── example_world_seed.json # Example world configuration
+├── system/                     # Internal system files (not builder-accessible)
+│   ├── mechanics/              # Core game mechanics and rules
+│   │   ├── combat/             # Combat calculations and rules
+│   │   ├── magic/              # Magic system mechanics
+│   │   ├── economy/            # Economic simulation rules
+│   │   └── progression/        # Character advancement systems
+│   ├── runtime/                # Runtime game state and performance
+│   │   ├── world_state/        # Current world state data
+│   │   ├── memory/             # AI memory and context systems
+│   │   ├── ai_behavior/        # NPC AI and behavior patterns
+│   │   └── performance/        # Performance optimization data
+│   ├── validation/             # Data validation and integrity
+│   └── localization/           # Text localization and translation
+├── religion/                   # Religion system data
+│   ├── memberships.json        # Religious membership data
+│   └── religions.json          # Religion definitions
+```
+
+#### World Seed Customization
+
+Builders create world seeds that define:
+
+1. **World Information:**
+   - Name, description, and thematic elements
+   - Background lore and major historical events
+   - Overall world theme and tone
+
+2. **Race Distribution:**
+   - Which races appear in the world
+   - Population density and regional concentration
+   - Cultural variations and relationships
+
+3. **Content Selection:**
+   - Available abilities, equipment, and spells
+   - Creature types and encounter frequency
+   - Faction presence and influence
+
+4. **Generation Parameters:**
+   - World size and regional count
+   - POI frequency and distribution
+   - Biome variety and climate patterns
+   - Economic and political complexity
+
+#### Builder Community Integration
+
+- **Seed Sharing:** Builders can share complete world seeds with the community
+- **Content Libraries:** Modular content packs that can be mixed and matched
+- **Collaborative Building:** Multiple builders can contribute to shared content libraries
+- **Quality Assurance:** Community rating and validation systems
+- **Version Control:** Tracking changes and compatibility between content versions
+
+#### Builder Limitations and Guidelines
+
+Unlike traditional modding, Visual DM's builder system has intentional limitations:
+
+- **Core Rules Protected:** Basic game mechanics cannot be altered to maintain balance
+- **Schema Compliance:** All content must follow established data structures
+- **Quality Standards:** Content undergoes validation to ensure consistency
+- **Performance Bounds:** Content complexity is limited to maintain game performance
+- **Lore Consistency:** Generated content should fit within established narrative frameworks
 
 ## Test Coverage Requirements
 
@@ -2047,7 +978,10 @@ The Visual DM project has established the following minimum test coverage thresh
   - **Use Magic Device (CHA):** Operate magical items regardless of restrictions
   - **Use Rope (DEX):** Manipulate ropes for various purposes
 
-#### Abilities (Feats)
+#### Abilities
+
+**Note:** Visual DM uses "abilities" for what D&D traditionally calls "feats" to better emphasize their role in character customization and world generation.
+
 - **Difference from D&D:** No classes or proficiency; character specialization comes entirely through ability selection
 - Characters start with 7 abilities at level 1, then gain 3 additional abilities per level
 - Abilities have prerequisites and form skill trees
@@ -2134,22 +1068,22 @@ The Visual DM project has established the following minimum test coverage thresh
 - Medium: Versatile (can be used one or two-handed)
 - Light: One-handed
 - Each category has associated abilities that grant "proficiency" or other benefits
-- [Note: Need to reference feats.json for specifics on weapon proficiency implementation]
+- [Note: Need to reference abilities.json for specifics on weapon proficiency implementation]
 
 ### Magic System
 
 #### Mana Points
 - **Major Difference from D&D:** Uses Mana Points (MP) instead of spell slots
 - Characters have MP based on abilities and attributes
-- Spell costs vary based on spell level and power
+- Spells have MP costs based on spell level and power
 - MP regenerates fully after a long rest, and 50% after a short rest
 - Some spells are "toggleable" and reduce maximum MP while active
 
 #### Spellcasting
 - Spell attack rolls: d20 + spell skill + attribute
 - Spell save DC is typically the caster's skill score in the relevant domain
-- Four magic domains: Nature, Arcane, Eldritch, Divine
-- [Note: Concentration system needs to be fleshed out]
+- Four magic domains: Nature, Arcane, Occult, Divine
+- Concentration system tracks active spell effects with save mechanics (see concentration_rules.json)
 
 #### Spell Learning
 - **Difference from D&D:** No spell preparation or ritual casting
@@ -2171,17 +1105,16 @@ The Visual DM project has established the following minimum test coverage thresh
 ### Rest and Recovery
 
 #### Short Rest
-- No specific time requirement (real-time game world)
-- Recover 50% of HP and MP
+- 1 hour minimum duration in game time
+- Recover 50% of HP and MP (rounded up)
 - Can be taken twice between long rests
-- [Note: Consider encounter chance during short rests]
+- Cannot be taken in dangerous locations
 
 #### Long Rest
-- No specific time requirement (real-time game world)
+- 8 hours minimum duration in game time  
 - Recover all HP and MP
 - Cannot be taken in dangerous locations
-- Chance of dangerous encounter during rest based on region's Danger Level (DL)
-- [Note: Need to create encounter tables for rest interruptions]
+- Chance of random encounter based on region's Danger Level (DL)
 
 ### Items and Equipment
 
@@ -2245,9 +1178,36 @@ The Visual DM backend provides a comprehensive REST API with real-time WebSocket
    - Region integration
 
 2. **Combat System API** (`/combat`)
-   - Combat action processing
-   - Status tracking and resolution
-   - Real-time combat events
+   **Core State Management:**
+   - `POST /combat/state` - Create new combat instance  
+   - `GET /combat/state/{combat_id}` - Get combat state
+   - `PUT /combat/state/{combat_id}` - Update combat state
+   - `DELETE /combat/state/{combat_id}` - End combat instance
+   - `GET /combat/states` - List all active combats
+
+   **Enhanced Combat Management:**
+   - `POST /combat/create` - Create enhanced combat with characters
+   - `POST /combat/start/{combat_id}` - Start a combat instance
+   - `GET /combat/enhanced_state/{combat_id}` - Get enhanced combat state
+   - `POST /combat/next_turn/{combat_id}` - Advance to next turn
+
+   **Combat Actions:**
+   - `POST /combat/take_action/{combat_id}` - Execute combat action
+   - `POST /combat/resolve_action` - Resolve combat action mechanics
+   - `POST /combat/apply_fumble` - Apply fumble effects
+   - `POST /combat/apply_critical_effect` - Apply critical hit effects
+   - `POST /combat/apply_area_effect` - Apply area of effect abilities
+
+   **Encounter Generation:**
+   - `POST /combat/generate_encounter` - Generate scaled encounters
+   - `POST /combat/generate_location_encounter` - Generate location-specific encounters
+   - `POST /combat/initiate` - Initialize combat between parties
+
+   **Real-time Features:**
+   - WebSocket integration for live combat updates
+   - Turn advancement notifications
+   - Status effect application/removal events
+   - Combat resolution broadcasts
 
 3. **Character Management API** (`/characters`)
    - Character CRUD operations
@@ -2255,9 +1215,18 @@ The Visual DM backend provides a comprehensive REST API with real-time WebSocket
    - Relationship management
 
 4. **Inventory System API** (`/inventory`)
-   - Item management
-   - Character inventory operations
-   - Equipment handling
+   - Inventory container management (character inventories, chests, shops, banks)
+   - Capacity and weight limit enforcement
+   - Inventory CRUD operations and status management
+   - Integration with character attributes for weight calculations
+   - Configuration-driven business rules and validation
+
+   **System Relationships:**
+   - **Inventory System Scope:** Manages inventory containers (storage vessels) and capacity constraints
+   - **Equipment System Scope:** Handles equipment slot management, stats, and equip/unequip operations
+   - **Integration Pattern:** Equipment system queries inventory system for item storage; inventory system provides containers for equipment items
+   - **Data Flow:** Items exist in inventory containers → Equipment system manages which items are equipped → Equipped items affect character stats
+   - **Clear Boundary:** Inventory = "What do I own and where is it stored?", Equipment = "What am I wearing and how does it affect me?"
 
 5. **Quest System API** (`/api/quests`)
    - Quest lifecycle management
@@ -2270,9 +1239,48 @@ The Visual DM backend provides a comprehensive REST API with real-time WebSocket
    - Configuration management
 
 7. **Economy System API** (`/economy`)
-   - Shop management
-   - Transaction processing
-   - Economic balancing
+   - **Shop Management:**
+     - Shop inventory operations (`GET /inventory/{shop_id}`)
+     - Item transactions (`POST /buy/{shop_id}`, `POST /sell/{shop_id}`)
+     - Price preview with modifiers (`POST /preview_price`)
+     - Shop restocking (`POST /restock/{shop_id}`)
+   - **Resource Management:**
+     - Resource CRUD operations (`GET|POST|PUT|DELETE /resources/{resource_id}`)
+     - Regional resource queries (`GET /regions/{region_id}/resources`)
+     - Resource transfers (`POST /resources/{resource_id}/transfer`)
+     - Dynamic resource amount adjustments
+   - **Market Operations:**
+     - Market CRUD operations (`GET|POST|PUT|DELETE /markets/{market_id}`)
+     - Price calculations with supply/demand (`GET /markets/{market_id}/prices`)
+     - Market trend analysis (`GET /markets/{market_id}/trends`)
+     - Dynamic pricing based on regional conditions
+   - **Trade Route Management:**
+     - Trade route operations (`GET|POST|PUT|DELETE /trade-routes/{route_id}`)
+     - Route processing and simulation (`POST /trade-routes/process`)
+     - Regional trade route queries
+   - **Futures Trading:**
+     - Commodity futures contracts (`GET|POST|PUT /futures/{future_id}`)
+     - Contract settlement (`POST /futures/{future_id}/settle`)
+     - Price forecasting (`GET /futures/prices`)
+   - **Economic Analytics:**
+     - Economic metrics (`GET /metrics`)
+     - Economic forecasting (`GET /forecast`)
+     - Price index calculations
+     - Regional economic health indicators
+   - **Economic Simulation:**
+     - Economy tick processing (`POST /process-tick`)
+     - System initialization (`POST /initialize`)
+     - Economic event generation and processing
+   - **Advanced Features:**
+     - Tournament economy integration
+     - Central bank monetary policy
+     - Guild AI economic behavior
+     - Autonomous market forces simulation
+   - **Configuration-Driven:**
+     - Resource types configuration (`data/systems/economy/resource_types.json`)
+     - Price modifiers system (`data/systems/economy/price_modifiers.json`)
+     - Economic cycles modeling (`data/systems/economy/economic_cycles.json`)
+     - Tournament and guild configurations
 
 8. **NPC System API** (`/api/npcs`)
    - NPC creation and management
@@ -2386,11 +1394,31 @@ Task 6 represents a comprehensive development plan spanning 12 phases, focusing 
 - Can be addressed in future optimization phases
 
 #### Backend Router Architecture
-**Organization:** Modular system-specific routers
-- `backend/systems/{system}/router.py` pattern
-- Consistent dependency injection patterns
-- Standardized error handling
-- FastAPI async/await support
+**Organization:** Modular system-specific routers with explicit registration
+- `backend/systems/{system}/routers/` pattern for business logic routers
+- Explicit router registration in `main.py` for better maintainability
+- Standardized error handling and FastAPI async/await support
+- Optional router inclusion with graceful fallbacks
+
+**Router Registration Pattern (main.py):**
+```python
+# Explicit router registration - CURRENT STANDARD
+if faction_router:
+    app.include_router(faction_router)  # Include the faction system router
+
+if quest_api_router:
+    app.include_router(quest_api_router)  # Include the consolidated quest router
+
+if character_router:
+    app.include_router(character_router)  # Include the character service router
+```
+
+**Benefits of Explicit Registration:**
+- Clear visibility of all registered routes in main.py
+- Better debugging and error tracking capabilities  
+- Explicit dependency management and import control
+- Easier testing and modular development
+- Graceful handling of optional/missing routers
 
 **Currently Active Routers:**
 - Combat Router (`/combat`)
@@ -2399,11 +1427,12 @@ Task 6 represents a comprehensive development plan spanning 12 phases, focusing 
 - Time Router (`/time`)
 - Auth Router (`/auth`)
 - Arc Router (`/arcs`)
+- Faction Router (`/api/factions`)
+- Economy Router (`/api/economy`)
+- Character Router (`/api/characters`)
 
-**Commented/Disabled Routers:** 
-- Region Router (temporarily disabled)
-- World Generation Router (temporarily disabled)
-- Motif Router (syntax issues noted)
+**Deprecated Pattern:**
+The old centralized `register_routers()` function has been deprecated in favor of explicit registration for better maintainability and control.
 
 #### Unity Integration Architecture
 **Planned Components:**
@@ -2467,3 +1496,3374 @@ Task 6 represents a comprehensive development plan spanning 12 phases, focusing 
 **Documentation Status:** ✅ Complete - Task 6 Phase 4  
 **Next Phase:** Mock server implementation for Unity integration testing  
 **Development Timeline:** On track for systematic Unity-backend integration
+---
+
+## Monetization Strategy & Infrastructure Economics
+
+**Summary:** This section outlines Visual DM's creator-first monetization approach, detailed infrastructure cost analysis, and break-even calculations for sustainable growth.
+
+**Philosophy:** Emphasizing transparency, creator empowerment, and community-driven value creation while maintaining the authentic Dreamforge ideals that drive the project.
+
+### Creator-First Monetization Framework
+
+#### 1. Premium Creator Tools System
+
+**Core Philosophy:** Democratize basic creation, monetize professional capabilities.
+
+**Subscription Tiers:**
+
+**Free Tier - "Dreamer"**
+- Single world creation with base assets
+- Community asset library access
+- Basic scripting tools
+- Standard world size (5km x 5km)
+- Community forums and support
+
+**Creator Tier - $15/month - "Architect"**
+- Unlimited world creation
+- Advanced world editing tools
+- Custom scripting environment
+- Large world size (25km x 25km)
+- Priority creator support
+- Early access to new features
+- Creator analytics dashboard
+
+**Professional Tier - $35/month - "Master Builder"**
+- Enterprise world hosting
+- Custom asset pipeline integration
+- Advanced AI scripting tools
+- Massive world size (100km x 100km)
+- White-label world embedding
+- API access for external tools
+- Direct creator liaison support
+
+**Technical Implementation:**
+```python
+# Creator tier validation
+class CreatorTierService:
+    def validate_world_creation(user_id: str, world_config: WorldConfig):
+        user_tier = get_user_subscription_tier(user_id)
+        
+        if user_tier == "free" and get_user_world_count(user_id) >= 1:
+            raise SubscriptionRequiredError("Upgrade to create additional worlds")
+        
+        if world_config.size > TIER_LIMITS[user_tier]["max_world_size"]:
+            raise SubscriptionRequiredError(f"World size exceeds {user_tier} tier limit")
+            
+        return True
+```
+
+**Revenue Model:**
+- Target 25% subscription rate among active creators
+- Average revenue per creator: $180/year (mix of $15 and $35 tiers)
+- Platform revenue share: 100% of subscription fees
+
+#### 2. Creator Revenue Share System
+
+**Philosophy:** Platform success tied directly to creator success.
+
+**Revenue Streams for Creators:**
+
+**Direct Support System:**
+- User patronage: $1-50/month recurring donations to creators
+- One-time tips: $1-100 for exceptional worlds/content
+- Platform fee: 10% (industry-leading low rate)
+- Monthly creator payouts via Stripe Express
+
+**Premium World Hosting:**
+- Creators can offer "Premium Access" to their worlds
+- Pricing: $2-10/month set by creator
+- Features: Exclusive content, priority access, creator interaction
+- Platform fee: 15% of premium subscriptions
+
+**Asset Marketplace:**
+- Creators sell custom assets, scripts, templates
+- Pricing: $1-25 per asset pack
+- Revenue split: 70% creator, 30% platform
+- Quality curation and featured placements
+
+**Technical Implementation:**
+```python
+# Creator revenue tracking
+class CreatorRevenueService:
+    def process_patron_payment(creator_id: str, patron_id: str, amount: Decimal):
+        platform_fee = amount * Decimal('0.10')
+        creator_share = amount - platform_fee
+        
+        # Record transaction
+        self.transaction_service.create_transaction({
+            'creator_id': creator_id,
+            'patron_id': patron_id,
+            'gross_amount': amount,
+            'platform_fee': platform_fee,
+            'creator_share': creator_share,
+            'type': 'patron_support'
+        })
+        
+        # Update creator balance
+        self.update_creator_balance(creator_id, creator_share)
+```
+
+**Creator Dashboard Features:**
+- Real-time earnings tracking
+- Patron relationship management
+- Content performance analytics
+- Payout scheduling and tax documentation
+- Community engagement metrics
+
+#### 3. Transparent World Discovery System
+
+**Philosophy:** Organic discovery over paid promotion.
+
+**Discovery Mechanisms:**
+
+**Featured Worlds Program:**
+- Curated selections by community vote
+- Creator applications for featuring
+- No payment required - merit-based selection
+- Featured creators get promotional support
+
+**World Categories & Tags:**
+- Genre-based discovery (Fantasy, Sci-Fi, Horror, etc.)
+- Gameplay style tags (Exploration, Combat, Social, etc.)
+- Quality ratings by community
+- Difficulty and time commitment indicators
+
+**Community-Driven Promotion:**
+- User reviews and ratings (1-5 stars)
+- Screenshot and video sharing
+- Creator collaboration features
+- Community challenges and events
+
+**Technical Implementation:**
+```python
+# Discovery algorithm prioritizes engagement over payment
+class WorldDiscoveryService:
+    def get_featured_worlds(self, limit: int = 20):
+        return self.world_repository.find_worlds(
+            criteria={
+                'status': 'published',
+                'community_rating': {'$gte': 4.0},
+                'recent_activity': {'$gte': datetime.now() - timedelta(days=7)}
+            },
+            sort=[
+                ('community_engagement_score', -1),
+                ('quality_rating', -1),
+                ('created_at', -1)
+            ],
+            limit=limit
+        )
+```
+
+#### 4. Optional Cosmetic & Enhancement System
+
+**Philosophy:** Purely optional, never pay-to-win.
+
+**Cosmetic Options:**
+- Avatar customization: $2-8 per outfit/accessory
+- Custom UI themes: $3-5 per theme pack
+- Profile badges and frames: $1-3 per item
+- Animated emotes: $1-2 per emote
+
+**Quality of Life Enhancements:**
+- Additional save slots: $5 for 10 extra slots
+- Cloud save backup: $3/month for automated backups
+- Priority matchmaking: $5/month for faster connections
+- Advanced analytics: $8/month for detailed play statistics
+
+**Technical Implementation:**
+```python
+# Cosmetic purchase system
+class CosmeticService:
+    def purchase_cosmetic(self, user_id: str, cosmetic_id: str, payment_method: str):
+        # Validate user payment
+        if not self.payment_service.validate_payment(payment_method):
+            raise PaymentError("Invalid payment method")
+        
+        # Process purchase
+        transaction = self.payment_service.charge_user(
+            user_id=user_id,
+            amount=COSMETIC_PRICES[cosmetic_id],
+            description=f"Cosmetic purchase: {cosmetic_id}"
+        )
+        
+        # Grant cosmetic to user
+        self.user_cosmetics_service.grant_cosmetic(user_id, cosmetic_id)
+        
+        return transaction
+```
+
+### Infrastructure Economics Analysis
+
+#### Cost Structure Comparison: AWS vs. Self-Hosted
+
+**Current Requirements:**
+- 1,000 Daily Active Users (DAUs)
+- ~19,000 tokens per DAU per day
+- Total: 19M tokens daily capacity needed
+
+#### AWS Infrastructure Costs (Recommended Start)
+
+**GPU Compute (Primary Cost):**
+- 3 x A100 instances required (6.48M tokens/day each)
+- Cost: 3 × $73.44/day = $220.32/day = $80,417/year
+
+**Supporting Infrastructure:**
+- Application servers: 2 x t3.large = $1,200/year
+- Database: RDS PostgreSQL db.t3.medium = $2,400/year  
+- Redis cache: ElastiCache t3.micro = $360/year
+- Load balancer: ALB = $200/year
+- Storage: S3 + EBS = $600/year
+- Networking: Data transfer = $1,200/year
+
+**Development & Operations:**
+- Automated deployment: $0 (using GitHub Actions)
+- Monitoring: CloudWatch + DataDog = $2,400/year
+- DevOps contractor (minimal): $15,000/year
+
+**Total AWS Annual Cost: $102,777**
+
+**Cost per DAU: $102.78/year**
+
+#### Self-Hosted Infrastructure Costs (Scale Target)
+
+**Hardware (16 x RTX 4070 Servers):**
+- Initial CapEx: $48,000 (depreciated over 5 years = $9,600/year)
+- Colocation: $12,000/year (conservative estimate)
+- Electricity: $1,051/year (20% average utilization)
+
+**Operations:**
+- DevOps contractor (25% FTE): $57,600/year
+- Monitoring & tools: $5,000/year
+- Network & security: $3,000/year
+
+**Total Self-Hosted Annual Cost: $88,251**
+
+**Cost per DAU: $88.25/year**
+
+#### Break-Even Analysis
+
+**AWS Strategy (0-3,000 DAUs):**
+- Lower upfront risk ($0 CapEx vs $48,000)
+- Linear scaling cost model
+- Recommended for early stage
+- Break-even: ~$103/DAU revenue needed
+
+**Self-Hosted Strategy (3,000+ DAUs):**
+- Higher upfront investment
+- Better economics at scale
+- Fixed cost amortization benefits
+- Break-even: ~$88/DAU revenue needed
+
+**Hybrid Strategy (Recommended):**
+1. **Phase 1 (0-1,000 DAUs):** Pure AWS for validation
+2. **Phase 2 (1,000-3,000 DAUs):** Hybrid with GPU compute on AWS, other services self-hosted
+3. **Phase 3 (3,000+ DAUs):** Full self-hosted for optimal economics
+
+#### Revenue Projections by Strategy
+
+**Creator-First Model Revenue Estimates:**
+
+**Conservative Scenario (40% of previous estimates):**
+- Creator subscriptions: $8/DAU/year (15% adoption × $15/month avg × 0.4)
+- Creator revenue share: $12/DAU/year (patron tips + premium worlds × 10-15% platform fee)
+- Cosmetics & QoL: $8/DAU/year (optional purchases)
+- **Total: $28/DAU/year**
+
+**Realistic Scenario (70% of previous estimates):**
+- Creator subscriptions: $18/DAU/year (20% adoption × $20/month avg × 0.7)
+- Creator revenue share: $25/DAU/year (strong creator economy × platform fees)
+- Cosmetics & QoL: $12/DAU/year (engaged community spending)
+- **Total: $55/DAU/year**
+
+**Optimistic Scenario (100% of previous estimates):**
+- Creator subscriptions: $30/DAU/year (25% adoption × $25/month avg)
+- Creator revenue share: $35/DAU/year (thriving creator ecosystem)
+- Cosmetics & QoL: $15/DAU/year (strong community engagement)
+- **Total: $80/DAU/year**
+
+#### Path to Profitability
+
+**Phase 1: MVP Validation (0-500 DAUs)**
+- AWS infrastructure: $51/DAU (500 DAUs)
+- Target revenue: $55/DAU (realistic scenario)
+- **Margin: $4/DAU profit** ✅
+
+**Phase 2: Community Building (500-2,000 DAUs)**
+- AWS infrastructure: $51-103/DAU (depending on scale)
+- Target revenue: $55-80/DAU (improving monetization)
+- **Margin: Break-even to $29/DAU profit** ✅
+
+**Phase 3: Scale Economics (2,000-5,000 DAUs)**
+- Hybrid infrastructure: $44-66/DAU (optimization benefits)
+- Target revenue: $70-95/DAU (mature creator economy)
+- **Margin: $24-51/DAU profit** ✅
+
+**Phase 4: Market Leadership (5,000+ DAUs)**
+- Self-hosted infrastructure: $35-44/DAU (full scale benefits)
+- Target revenue: $85-120/DAU (platform network effects)
+- **Margin: $41-85/DAU profit** ✅
+
+### Implementation Roadmap
+
+#### Phase 1: Foundation (Months 1-6)
+- Basic creator tools (free tier + Creator tier)
+- Simple patron support system
+- AWS infrastructure deployment
+- Community discovery features
+
+#### Phase 2: Creator Economy (Months 6-12)
+- Professional tier launch
+- Asset marketplace beta
+- Enhanced creator analytics
+- Premium world hosting
+
+#### Phase 3: Community Growth (Months 12-18)
+- Advanced discovery algorithms
+- Community events and challenges
+- Creator collaboration tools
+- Cosmetic system launch
+
+#### Phase 4: Scale Optimization (Months 18-24)
+- Infrastructure cost optimization
+- Advanced creator tools
+- Enterprise features
+- International expansion
+
+### Technical Infrastructure Requirements
+
+#### Database Schema Extensions
+
+```sql
+-- Creator subscription management
+CREATE TABLE creator_subscriptions (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    tier VARCHAR(20) NOT NULL CHECK (tier IN ('free', 'creator', 'professional')),
+    status VARCHAR(20) NOT NULL CHECK (status IN ('active', 'canceled', 'past_due')),
+    started_at TIMESTAMP NOT NULL,
+    current_period_end TIMESTAMP NOT NULL,
+    stripe_subscription_id VARCHAR(255),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Creator revenue tracking
+CREATE TABLE creator_transactions (
+    id UUID PRIMARY KEY,
+    creator_id UUID REFERENCES users(id),
+    patron_id UUID REFERENCES users(id),
+    transaction_type VARCHAR(50) NOT NULL,
+    gross_amount DECIMAL(10,2) NOT NULL,
+    platform_fee DECIMAL(10,2) NOT NULL,
+    creator_share DECIMAL(10,2) NOT NULL,
+    stripe_payment_intent_id VARCHAR(255),
+    processed_at TIMESTAMP DEFAULT NOW()
+);
+
+-- World patronage relationships
+CREATE TABLE world_patrons (
+    id UUID PRIMARY KEY,
+    world_id UUID REFERENCES worlds(id),
+    patron_id UUID REFERENCES users(id),
+    creator_id UUID REFERENCES users(id),
+    monthly_amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('active', 'paused', 'canceled')),
+    started_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### API Endpoints for Monetization
+
+```python
+# Creator subscription management
+@router.post("/subscriptions")
+async def create_subscription(subscription_data: SubscriptionCreate):
+    """Create or upgrade creator subscription"""
+    pass
+
+@router.get("/creators/{creator_id}/revenue")
+async def get_creator_revenue(creator_id: str, period: str = "month"):
+    """Get creator revenue analytics"""
+    pass
+
+@router.post("/worlds/{world_id}/patron")
+async def become_patron(world_id: str, patron_data: PatronCreate):
+    """Start patronage relationship with world creator"""
+    pass
+
+@router.get("/marketplace/assets")
+async def browse_asset_marketplace(category: str = None, search: str = None):
+    """Browse creator-made assets for purchase"""
+    pass
+```
+
+#### Payment Processing Integration
+
+```python
+class StripeIntegrationService:
+    def __init__(self):
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+    
+    async def create_creator_subscription(self, user_id: str, tier: str):
+        """Create Stripe subscription for creator tier"""
+        customer = await self.get_or_create_customer(user_id)
+        
+        subscription = stripe.Subscription.create(
+            customer=customer.id,
+            items=[{'price': TIER_PRICE_IDS[tier]}],
+            metadata={'user_id': user_id, 'tier': tier}
+        )
+        
+        return subscription
+    
+    async def process_patron_payment(self, patron_id: str, creator_id: str, amount: int):
+        """Process one-time or recurring patron payment"""
+        # Implementation for patron support payments
+        pass
+```
+
+### Risk Mitigation & Contingency Planning
+
+#### Revenue Risk Mitigation
+- **Multiple Revenue Streams:** Diversified monetization reduces single-point-of-failure risk
+- **Creator Success Incentives:** Platform grows when creators succeed
+- **Community-First Approach:** Sustainable engagement over short-term extraction
+- **Transparent Pricing:** No hidden fees or surprise charges
+
+#### Infrastructure Risk Mitigation
+- **Multi-Cloud Strategy:** AWS primary with GCP fallback capabilities
+- **Gradual Migration Path:** Proof of concept → AWS → Hybrid → Self-hosted
+- **Performance Monitoring:** Real-time cost and performance tracking
+- **Automated Scaling:** Elastic infrastructure responding to demand
+
+#### Market Risk Mitigation
+- **Open Source Components:** Reduce vendor lock-in risks
+- **Creator Export Tools:** Creators can take their content elsewhere
+- **Community Governance:** Creator input on platform decisions
+- **Competitive Differentiation:** Focus on unique creator-first value proposition
+
+### 🚀 Enhanced Monetization Strategy - System Implementation Analysis
+
+**Summary:** Comprehensive analysis of monetization enhancements based on existing Visual DM system capabilities, with specific implementation roadmap and todos to increase per-DAU revenue from $55 to $90-105 annually while maintaining ethical creator-first principles.
+
+**Philosophy:** Build upon existing robust systems architecture to add premium features that provide genuine value to creators and players without compromising core accessibility or community values.
+
+#### System Feasibility Analysis
+
+Based on comprehensive analysis of the Visual DM codebase, the following monetization enhancements are categorized by implementation feasibility:
+
+#### ✅ **HIGHLY FEASIBLE - Build on Existing Systems**
+
+##### 1. Advanced Creator Analytics Dashboard
+**Status:** 🟢 **Ready to implement**
+- **Existing Foundation:** Basic `AnalyticsManager` and comprehensive event system
+- **Current Gap:** Analytics system is placeholder - no creator-specific metrics
+- **Implementation Path:** Extend analytics to track player engagement, world performance, session time, creator influence
+- **Revenue Impact:** +$6-8/DAU/year for premium analytics subscription
+
+**Technical Implementation:**
+```python
+# Enhanced Analytics for Creator Insights
+class CreatorAnalyticsService:
+    def track_world_performance(self, world_id: str, metrics: Dict[str, Any]):
+        """Track detailed world performance metrics"""
+        pass
+    
+    def generate_creator_dashboard(self, creator_id: str) -> CreatorDashboard:
+        """Generate comprehensive creator performance dashboard"""
+        pass
+    
+    def track_player_engagement(self, world_id: str, player_id: str, session_data: Dict):
+        """Track detailed player engagement within creator worlds"""
+        pass
+```
+
+**TODO Items:**
+- [ ] Extend `AnalyticsManager` to include creator-specific event tracking
+- [ ] Build player engagement heatmaps using existing event system
+- [ ] Create creator dashboard UI components in Unity frontend
+- [ ] Implement world performance scoring algorithms
+- [ ] Add real-time analytics WebSocket updates
+- [ ] Design premium analytics subscription tier ($6-8/month add-on)
+
+##### 2. Enhanced Asset Marketplace 
+**Status:** 🟢 **Ready to implement**
+- **Existing Foundation:** Comprehensive economy system supports items, trading, and value calculations
+- **Current Gap:** No creator-to-creator asset sharing system
+- **Implementation Path:** Extend economy system for creator-made assets (equipment templates, region configs, quest templates)
+- **Revenue Impact:** +$10-15/DAU/year from asset sales (70% creator, 30% platform split)
+
+**Technical Implementation:**
+```python
+# Asset Marketplace Extension
+class CreatorAssetService:
+    def create_asset_listing(self, creator_id: str, asset_data: AssetData) -> AssetListing:
+        """Create marketplace listing for creator asset"""
+        pass
+    
+    def purchase_creator_asset(self, buyer_id: str, asset_id: str) -> Transaction:
+        """Purchase asset with revenue split to creator"""
+        pass
+    
+    def validate_asset_quality(self, asset_data: AssetData) -> QualityScore:
+        """Validate asset quality for marketplace standards"""
+        pass
+```
+
+**TODO Items:**
+- [ ] Extend equipment template system to support creator uploads
+- [ ] Build asset validation pipeline using existing equipment/quest schemas
+- [ ] Create marketplace browsing interface with category filtering
+- [ ] Implement asset licensing and usage tracking
+- [ ] Add creator revenue tracking to existing economy infrastructure
+- [ ] Design asset pricing and revenue split calculation system
+
+##### 3. Advanced World Generation Tools
+**Status:** 🟢 **Ready to implement**
+- **Existing Foundation:** Comprehensive world generation system with continent/region creation, POI generation
+- **Current Gap:** No premium generation features or advanced templates
+- **Implementation Path:** Add premium algorithms, biome templates, advanced POI generation tools
+- **Revenue Impact:** +$8-12/DAU/year for professional generation tools
+
+**Technical Implementation:**
+```python
+# Premium World Generation Features
+class PremiumWorldGenService:
+    def generate_themed_biome(self, biome_type: str, size: Tuple[int, int]) -> BiomeData:
+        """Generate themed biomes with premium algorithms"""
+        pass
+    
+    def create_custom_poi_template(self, creator_id: str, template_data: POITemplate):
+        """Allow creators to define custom POI generation templates"""
+        pass
+    
+    def generate_narrative_region(self, narrative_theme: str, constraints: Dict) -> RegionData:
+        """Generate regions optimized for specific narrative themes"""
+        pass
+```
+
+**TODO Items:**
+- [ ] Extend existing world generation utils with premium biome algorithms
+- [ ] Create custom POI template editor using existing POI generation system
+- [ ] Add narrative-focused region generation using arc system integration
+- [ ] Build advanced continent generation with geological realism
+- [ ] Implement climate simulation for realistic biome placement
+- [ ] Design professional world generation subscription tier ($8-12/month)
+
+##### 4. Quest/Arc Creation Tools
+**Status:** 🟢 **Ready to implement**
+- **Existing Foundation:** Full quest and arc systems with JSON templates, comprehensive event integration
+- **Current Gap:** No visual editor or advanced creator collaboration tools
+- **Implementation Path:** Visual quest editor, arc template marketplace, collaborative quest building
+- **Revenue Impact:** +$5-10/DAU/year for advanced quest creation tools
+
+**Technical Implementation:**
+```python
+# Advanced Quest Creation Tools
+class VisualQuestEditor:
+    def create_branching_quest(self, quest_data: BranchingQuestData) -> Quest:
+        """Create complex branching quests with visual editor"""
+        pass
+    
+    def validate_quest_logic(self, quest_id: str) -> ValidationResult:
+        """Validate quest progression logic and dependencies"""
+        pass
+    
+    def export_quest_template(self, quest_id: str) -> QuestTemplate:
+        """Export quest as reusable template for marketplace"""
+        pass
+```
+
+**TODO Items:**
+- [ ] Build visual quest flow editor using existing quest step system
+- [ ] Create arc template sharing system using existing JSON configuration
+- [ ] Add quest logic validation using existing dependency system
+- [ ] Implement collaborative quest editing with version control
+- [ ] Design quest template marketplace integration
+- [ ] Add advanced quest creation subscription tier ($5-10/month)
+
+##### 5. Enhanced Cloud Services
+**Status:** 🟢 **Ready to implement**
+- **Existing Foundation:** Basic infrastructure for data persistence, database management
+- **Current Gap:** No premium backup/sync features
+- **Implementation Path:** Multi-device sync, versioned backups, world sharing infrastructure
+- **Revenue Impact:** +$3-5/DAU/year for premium cloud features
+
+**TODO Items:**
+- [ ] Implement multi-device synchronization using existing database infrastructure
+- [ ] Add versioned backup system for world states
+- [ ] Create world sharing and collaboration features
+- [ ] Build cloud storage quotas and premium tiers
+- [ ] Add offline/online sync conflict resolution
+- [ ] Design enhanced cloud services subscription ($3-5/month)
+
+#### 🟡 **MODERATELY FEASIBLE - Some Infrastructure Needed**
+
+##### 6. Real-time Collaboration Tools
+**Status:** 🟡 **Needs WebSocket enhancements**
+- **Existing Foundation:** Basic auth system, comprehensive event infrastructure
+- **Current Gap:** No real-time collaboration features, WebSocket support is basic
+- **Implementation Path:** Enhance WebSocket support for live co-creation, add version control
+- **Revenue Impact:** +$8-12/DAU/year for team collaboration features
+
+**TODO Items:**
+- [ ] Enhance WebSocket infrastructure for real-time updates
+- [ ] Build collaborative world editing with conflict resolution
+- [ ] Add team management and permission systems
+- [ ] Implement real-time chat and voice integration
+- [ ] Create collaborative session recording and playback
+- [ ] Design team collaboration subscription tier ($8-12/month)
+
+##### 7. AI-Powered Creation Assistants
+**Status:** 🟡 **Needs LLM integration expansion**
+- **Existing Foundation:** LLM infrastructure exists in `/backend/infrastructure/llm/`
+- **Current Gap:** LLM integration not extensively leveraged for creator tools
+- **Implementation Path:** AI writing assistants, world consistency checkers, dialogue generators
+- **Revenue Impact:** +$10-15/DAU/year for advanced AI tools
+
+**TODO Items:**
+- [ ] Expand LLM integration for content generation
+- [ ] Build AI-powered NPC dialogue generation using existing dialogue system
+- [ ] Create world consistency checking algorithms
+- [ ] Add AI writing assistants for quest descriptions
+- [ ] Implement smart content suggestions based on world state
+- [ ] Design AI assistant subscription tier ($10-15/month)
+
+##### 8. Community Event System
+**Status:** 🟡 **Needs event management system**
+- **Existing Foundation:** Event bus architecture, quest system, comprehensive game systems
+- **Current Gap:** No community event management or seasonal content system
+- **Implementation Path:** Seasonal challenges, community contests, themed events
+- **Revenue Impact:** +$4-8/DAU/year for event passes and seasonal content
+
+**TODO Items:**
+- [ ] Build community challenge system using existing quest infrastructure
+- [ ] Create seasonal content delivery system
+- [ ] Add community contest and voting mechanisms
+- [ ] Implement event-specific cosmetics and rewards
+- [ ] Design seasonal event pass system ($4-8 per season)
+- [ ] Build community leaderboards and achievements
+
+#### ❌ **NOT FEASIBLE - Major Infrastructure Gaps**
+
+##### 9. Payment Processing/Subscription Management
+**Status:** ❌ **No existing payment infrastructure**
+- **Gap:** No Stripe integration, subscription management, or payment processing
+- **Effort:** Requires significant new infrastructure development
+- **Note:** Foundational for monetization but completely missing
+
+##### 10. User-Generated Content Moderation
+**Status:** ❌ **No moderation system**
+- **Gap:** No content review, reporting, or community moderation tools
+- **Effort:** Requires new content filtering and review systems
+
+#### **Dual Classification System**
+
+**Quality Tiers (Affects Physical Properties):**
+- **Basic**: 1.0x durability multiplier, standard materials and craftsmanship
+- **Military**: 1.5x durability multiplier, combat-grade construction built for war
+- **Mastercraft**: 2.5x durability multiplier, artisan-level craftsmanship using finest materials
+
+**Rarity Tiers (Affects Magical Properties):**
+- **Common**: 1 enchantment slot, baseline magical potential
+- **Rare**: 2 enchantment slots, enhanced magical capabilities  
+- **Epic**: 3 enchantment slots, powerful magical enhancements
+- **Legendary**: 4 enchantment slots, mythical magical powers
+
+**Independent Classification:** Every equipment instance has both quality AND rarity, allowing combinations like "Mastercraft Common" (extremely durable but minimal magic) or "Basic Legendary" (fragile but incredibly powerful).
+
+#### **Equipment Slots & Sets**
+
+**12 Equipment Slots Total:**
+- **Weapons**: Main hand, off-hand
+- **Armor**: Chest, pants, boots, gloves, hat
+- **Accessories**: Ring 1, ring 2, amulet, earring 1, earring 2
+
+**Equipment Sets (12 Total):**
+- **Combat Sets**: Warrior, Paladin, Berserker, Assassin, Ranger, Demon Hunter
+- **Magic Sets**: Mage, Necromancer, Druid, Elementalist
+- **Utility Sets**: Scholar, Monk
+
+#### **Durability & Maintenance System**
+
+**Usage-Based Degradation:**
+- Equipment loses durability through use, not time passage
+- Quality tier determines total lifespan (basic: 168 uses, military: 336 uses, mastercraft: 672 uses)
+- Environmental factors and critical hits accelerate degradation
+
+**Condition Effects:**
+- **Excellent (90-100%)**: No penalties, maximum effectiveness
+- **Good (75-89%)**: No penalties, normal wear visible
+- **Worn (50-74%)**: 10% stat reduction, visible damage
+- **Damaged (25-49%)**: 25% stat reduction, significant damage
+- **Very Damaged (10-24%)**: 50% stat reduction, barely functional
+- **Broken (0-9%)**: Cannot be equipped, provides no benefits
+
+**Set Bonus Requirements:**
+- Equipment must maintain ≥30% durability to contribute to set bonuses
+- Encourages proactive maintenance and creates meaningful repair economy
+
+#### **Enchantment & Magical Effects**
+
+**Rarity-Based Enchantment Capacity:**
+- Each rarity tier supports specific number of simultaneous enchantments
+- Higher rarity allows more powerful enchantment schools (mystical effects only on legendary)
+- Enchantment power scales with rarity (legendary = 2x power of common)
+
+**Enchantment Schools:**
+- **Enhancement**: Stat bonuses and combat improvements
+- **Utility**: Quality of life and convenience effects
+- **Protective**: Defensive bonuses and damage resistance
+- **Elemental**: Fire, ice, lightning, and nature magic
+- **Mystical**: Reality-bending effects (legendary only)
+
+#### **Economic Integration**
+
+**Quality-Based Economics:**
+- Repair costs scale with quality tier (mastercraft costs 2x basic)
+- Higher quality requires more skilled craftsmen and rare materials
+- Quality affects base item value and resale worth
+
+**Rarity-Based Value:**
+- Rarity dramatically affects market value (legendary = 20x common)
+- Identification required for magical items (difficulty scales with rarity)
+- Drop rate weights create realistic loot distribution
+
+#### **Technical Implementation**
+
+**Database Schema:**
+```sql
+equipment_instances (
+    id, character_id, template_id, slot,
+    current_durability, max_durability, usage_count,
+    quality_tier, rarity_tier, enchantment_seed,
+    is_equipped, equipment_set, created_at, updated_at
+)
+```
+
+**JSON Configuration:**
+- `quality_tiers.json`: Durability multipliers, repair costs, degradation rates
+- `rarity_tiers.json`: Enchantment slots, stat multipliers, drop weights
+- `equipment_sets.json`: Set definitions and bonus calculations
+- `templates/weapons.json`, `templates/armor.json`, etc.: Base equipment definitions
+
+**REST API Endpoints:**
+- Full CRUD operations with quality/rarity filtering
+- Equipment creation with template validation
+- Durability management and repair workflows
+- Set bonus calculations and validation
+
+#### **Integration Points**
+
+**Character System Integration:**
+- Equipment stats contribute to character effective stats
+- Quality/rarity affects character power progression
+- Equipment requirements based on character attributes
+
+**Combat System Integration:**
+- Durability damage from combat actions
+- Equipment condition affects combat effectiveness
+- Set bonuses provide tactical advantages
+
+**Economy System Integration:**
+- Quality-based repair material requirements
+- Rarity-based market pricing and availability
+- Equipment as major economic driver and gold sink
+
+#### **Development Status**
+
+**✅ Completed Features:**
+- Dual quality/rarity classification system
+- Hybrid template+instance architecture
+- Complete durability and maintenance mechanics
+- All 12 equipment sets with set bonus calculations
+- Full REST API with comprehensive validation
+- Database schema with proper indexing
+- JSON configuration system for easy balance changes
+
+**🚀 Ready for Integration:**
+- Business logic fully tested (35+ passing tests)
+- Database infrastructure implemented
+- API endpoints operational
+- Template system extensible for new equipment types
+
+### **Faction System** ✅
+- **✅ RECENTLY UPDATED** - Full sophisticated hidden attributes system, power scoring algorithms, stability assessment, behavioral prediction, API endpoints, alliance/diplomacy integration, and comprehensive JSON configuration repository implemented.
+
+**Summary:** Manages political organizations, relationships, and faction dynamics with sophisticated hidden attribute systems for realistic faction behavior and power calculations.
+
+**Architecture:** Protocol-based business logic architecture with comprehensive hidden attribute modeling and behavioral prediction algorithms.
+
+**Implementation Status:** ✅ **COMPLETE** - Full sophisticated hidden attributes system, power scoring algorithms, stability assessment, behavioral prediction, API endpoints, alliance/diplomacy integration, and comprehensive JSON configuration repository implemented.
+
+#### Hidden Attributes System
+
+**Core Hidden Attributes:**
+- **Hidden Ambition (1-10):** Drive for expansion and power acquisition
+- **Hidden Integrity (1-10):** Adherence to principles and trustworthiness  
+- **Hidden Discipline (1-10):** Organizational control and structure
+- **Hidden Impulsivity (1-10):** Tendency toward quick, emotional decisions
+- **Hidden Pragmatism (1-10):** Focus on practical outcomes over ideals
+- **Hidden Resilience (1-10):** Ability to recover from setbacks
+
+**Attribute Impact on Behavior:**
+```python
+# Example faction with high ambition + low integrity
+faction_attributes = {
+    'hidden_ambition': 9,      # Very aggressive expansion
+    'hidden_integrity': 3,     # Willing to break agreements
+    'hidden_discipline': 7,    # Well-organized efforts
+    'hidden_impulsivity': 6,   # Moderate decision speed
+    'hidden_pragmatism': 8,    # Results-focused approach
+    'hidden_resilience': 5     # Average recovery ability
+}
+
+# Results in: Aggressive, untrustworthy faction that pursues expansion
+# through organized but morally flexible means
+```
+
+#### Power Score Calculation Algorithm
+
+**Multi-Factor Power Assessment:**
+```python
+def calculate_faction_power_score(faction: FactionData) -> float:
+    """
+    Calculate comprehensive faction power score (0.0-100.0)
+    Combines hidden attributes with weighted importance factors
+    """
+    base_power = (
+        faction.hidden_ambition * 0.25 +      # Drive for power (25%)
+        faction.hidden_discipline * 0.20 +    # Organizational strength (20%)
+        faction.hidden_pragmatism * 0.15 +    # Strategic effectiveness (15%)
+        faction.hidden_resilience * 0.15 +    # Sustainability (15%)
+        faction.hidden_integrity * 0.10 +     # Trustworthiness factor (10%)
+        (10 - faction.hidden_impulsivity) * 0.15  # Strategic patience (15%)
+    )
+    
+    # Normalize to 0-100 scale
+    return min(100.0, max(0.0, base_power * 10))
+```
+
+**Power Categories:**
+- **Dominant (80-100):** Regional superpowers with extensive influence
+- **Major (60-79):** Significant political players with substantial resources
+- **Moderate (40-59):** Established factions with regional influence
+- **Minor (20-39):** Local organizations with limited reach
+- **Negligible (0-19):** Weak or declining factions with minimal impact
+
+#### Stability Assessment System
+
+**Stability Calculation:**
+```python
+def assess_faction_stability(faction: FactionData) -> Dict[str, Any]:
+    """
+    Assess faction internal stability and predict potential issues
+    """
+    # Core stability factors
+    discipline_stability = faction.hidden_discipline / 10.0
+    integrity_consistency = faction.hidden_integrity / 10.0
+    resilience_factor = faction.hidden_resilience / 10.0
+    
+    # Risk factors
+    impulsivity_risk = faction.hidden_impulsivity / 10.0
+    ambition_overreach = max(0, (faction.hidden_ambition - 7)) / 3.0
+    
+    # Calculate overall stability (0.0-1.0)
+    stability_score = (
+        discipline_stability * 0.30 +
+        integrity_consistency * 0.25 +
+        resilience_factor * 0.25 +
+        (1.0 - impulsivity_risk) * 0.10 +
+        (1.0 - ambition_overreach) * 0.10
+    )
+    
+    return {
+        'stability_score': stability_score,
+        'risk_factors': assess_risk_factors(faction),
+        'predicted_issues': predict_stability_issues(faction)
+    }
+```
+
+**Stability Categories:**
+- **Highly Stable (0.8-1.0):** Well-organized, predictable factions
+- **Stable (0.6-0.79):** Reliable with occasional internal tensions
+- **Unstable (0.4-0.59):** Prone to internal conflicts and policy shifts
+- **Volatile (0.2-0.39):** Frequent leadership changes and direction shifts
+- **Chaotic (0.0-0.19):** Barely functional, constant internal strife
+
+#### Behavioral Prediction Functions
+
+**Tendency Analysis:**
+```python
+def predict_faction_behavior_tendencies(faction: FactionData) -> Dict[str, Any]:
+    """
+    Predict faction behavioral patterns based on hidden attributes
+    """
+    # Diplomatic tendencies
+    diplomatic_style = {
+        'aggressive': (faction.hidden_ambition + faction.hidden_impulsivity) / 20.0,
+        'cooperative': (faction.hidden_integrity + faction.hidden_pragmatism) / 20.0,
+        'isolationist': (faction.hidden_discipline + (10 - faction.hidden_ambition)) / 20.0,
+        'opportunistic': (faction.hidden_pragmatism + (10 - faction.hidden_integrity)) / 20.0
+    }
+    
+    # Decision-making patterns
+    decision_patterns = {
+        'calculated': (faction.hidden_discipline + (10 - faction.hidden_impulsivity)) / 20.0,
+        'reactive': (faction.hidden_impulsivity + faction.hidden_ambition) / 20.0,
+        'adaptive': (faction.hidden_pragmatism + faction.hidden_resilience) / 20.0,
+        'traditional': (faction.hidden_integrity + faction.hidden_discipline) / 20.0
+    }
+    
+    return {
+        'diplomatic_style': diplomatic_style,
+        'decision_patterns': decision_patterns,
+        'predicted_actions': generate_action_predictions(faction)
+    }
+```
+
+#### API Endpoints Documentation
+
+**Core CRUD Operations:**
+- **POST `/factions`** - Create new faction with optional hidden attributes
+- **GET `/factions`** - List factions with pagination and filtering
+- **GET `/factions/{id}`** - Get faction details including hidden attributes
+- **PUT `/factions/{id}`** - Update faction properties and attributes
+- **DELETE `/factions/{id}`** - Soft delete faction
+
+**Advanced Analysis Endpoints:**
+- **GET `/factions/{id}/hidden-attributes`** - Get faction's hidden attributes
+- **GET `/factions/{id}/behavior-modifiers`** - Get calculated behavior modifiers
+- **GET `/factions/{id}/diplomatic-status`** - Get diplomatic relationships and status
+- **GET `/factions/{id}/stability-assessment`** - Get faction stability analysis
+- **GET `/factions/{id}/power-score`** - Get faction power calculations
+- **GET `/factions/{id}/betrayal-risk/{ally_id}`** - Calculate betrayal risk for alliance
+
+**Utility Endpoints:**
+- **POST `/factions/generate-hidden-attributes`** - Generate random hidden attributes
+- **POST `/factions/{id}/evaluate-alliance/{target_id}`** - Evaluate alliance proposal
+- **POST `/factions/{id}/propose-alliance/{target_id}`** - Create alliance proposal
+- **GET `/factions/stats`** - System statistics and health check
+
+#### Database Integration Implementation
+
+**Enhanced Database Schema:**
+```sql
+-- Core faction table with hidden attributes
+CREATE TABLE factions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    status VARCHAR(50) NOT NULL DEFAULT 'active',
+    properties JSONB DEFAULT '{}',
+    hidden_ambition INTEGER NOT NULL DEFAULT 5 CHECK (hidden_ambition >= 1 AND hidden_ambition <= 10),
+    hidden_integrity INTEGER NOT NULL DEFAULT 5 CHECK (hidden_integrity >= 1 AND hidden_integrity <= 10),
+    hidden_discipline INTEGER NOT NULL DEFAULT 5 CHECK (hidden_discipline >= 1 AND hidden_discipline <= 10),
+    hidden_impulsivity INTEGER NOT NULL DEFAULT 5 CHECK (hidden_impulsivity >= 1 AND hidden_impulsivity <= 10),
+    hidden_pragmatism INTEGER NOT NULL DEFAULT 5 CHECK (hidden_pragmatism >= 1 AND hidden_pragmatism <= 10),
+    hidden_resilience INTEGER NOT NULL DEFAULT 5 CHECK (hidden_resilience >= 1 AND hidden_resilience <= 10),
+    power_score DECIMAL(5,2) DEFAULT 0.0,
+    stability_score DECIMAL(3,2) DEFAULT 0.0,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Faction relationships table
+CREATE TABLE faction_relationships (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    faction_a_id UUID NOT NULL REFERENCES factions(id),
+    faction_b_id UUID NOT NULL REFERENCES factions(id),
+    relationship_type VARCHAR(50) NOT NULL, -- allied, neutral, hostile, at_war, trade_partner
+    relationship_strength DECIMAL(3,2) NOT NULL DEFAULT 0.0, -- -1.0 to 1.0
+    relationship_history JSONB DEFAULT '[]',
+    last_interaction TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE(faction_a_id, faction_b_id),
+    CHECK(faction_a_id != faction_b_id)
+);
+
+-- Alliance entities
+CREATE TABLE alliances (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL,
+    alliance_type VARCHAR(50) NOT NULL,
+    status VARCHAR(50) DEFAULT 'proposed',
+    leader_faction_id UUID NOT NULL,
+    member_faction_ids UUID[] DEFAULT '{}',
+    terms JSONB DEFAULT '{}',
+    trust_levels JSONB DEFAULT '{}',
+    betrayal_risks JSONB DEFAULT '{}',
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Betrayal tracking
+CREATE TABLE betrayals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    alliance_id UUID NOT NULL REFERENCES alliances(id),
+    betrayer_faction_id UUID NOT NULL,
+    victim_faction_ids UUID[] DEFAULT '{}',
+    betrayal_reason VARCHAR(50) NOT NULL,
+    hidden_attributes_influence JSONB DEFAULT '{}',
+    reputation_impact DECIMAL(3,2) DEFAULT 0.0,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Faction behavior analytics
+CREATE TABLE faction_behavior_analytics (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    faction_id UUID NOT NULL REFERENCES factions(id),
+    behavior_type VARCHAR(100) NOT NULL,
+    behavior_data JSONB NOT NULL,
+    predicted_outcome JSONB,
+    actual_outcome JSONB,
+    accuracy_score DECIMAL(3,2),
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW()
+);
+```
+
+#### Advanced Features Implementation
+
+**Dynamic Attribute Evolution:**
+- Hidden attributes can shift over time based on faction experiences
+- Major events (wars, betrayals, successes) influence attribute values
+- Leadership changes can cause dramatic attribute shifts
+- Environmental pressures affect long-term attribute development
+
+**Relationship Dynamics:**
+- Complex relationship matrices between all factions
+- Historical relationship tracking with event causation
+- Relationship momentum and stability calculations
+- Cascade effects when major relationships change
+
+**Predictive Modeling:**
+- AI-driven behavior prediction using historical patterns
+- Scenario modeling for "what-if" diplomatic situations
+- Risk assessment for potential conflicts or alliances
+- Economic impact predictions based on faction relationships
+
+#### Cross-System Integration Implementation
+
+**Comprehensive System Integration:**
+- **Dialogue System:** Faction standings affect NPC interactions and bartering
+- **Economy System:** Trade relationships and economic warfare capabilities
+- **Diplomacy System:** Autonomous diplomatic decision-making based on attributes
+- **Quest System:** Faction-specific quest generation and conflict resolution
+- **War/Tension System:** Realistic conflict escalation based on faction psychology
+- **Alliance System:** Complex multi-faction alliance mechanics with betrayal detection
+- **Succession System:** Leadership transition mechanics affecting faction attributes
+- **Memory System:** Faction relationship history and diplomatic precedent tracking
+
+#### JSON Configuration Repository
+
+**Faction Configuration (`/data/systems/faction/faction_config.json`):**
+- Complete faction type definitions with hierarchical structures
+- Alignment system with diplomatic modifiers and compatibility matrices
+- Governance styles and organizational characteristics
+- Economic focus areas and military capabilities
+
+**Behavior Configuration (`/data/systems/faction/behavior_config.json`):**
+- Hidden attribute range definitions and behavioral impact formulas
+- Behavior modifier calculations for expansion, alliance reliability, betrayal likelihood
+- Decision weight matrices for territorial expansion, war declaration, treaty negotiation
+- Personality archetype templates for faction generation
+
+**Alliance Configuration (`/data/systems/faction/alliance_config.json`):**
+- Alliance type definitions and formation requirements
+- Trust level calculations and betrayal risk assessments
+- Treaty template structures and diplomatic protocol definitions
+
+**Schema Versioning:** Current version 2.0.0 includes all enhanced behavioral systems
+
+**Implementation Status:** ✅ **PRODUCTION READY** - Complete faction system with sophisticated hidden attribute modeling, comprehensive relationship dynamics, alliance/betrayal mechanics, predictive behavioral analysis, full database persistence, and extensive JSON configuration system.
+
+### **Inventory System**
+- **Add UI mockups for inventory interfaces**
+
+### **Magic System**
+- **Could use more detail on spell creation workflows**
+
+### **Memory System**
+- **Add examples of memory influence on NPC behavior**
+
+### **NPC System**
+- **Add flowcharts for NPC decision-making processes**
+
+### **POI System**
+
+**Summary:** The Points of Interest (POI) system manages all significant locations in the game world, including cities, towns, villages, fortresses, mines, dungeons, ruins, and other notable places. The system handles procedural generation, economic simulation, population dynamics, political control, and complex state transitions.
+
+**Architecture:** Protocol-based business logic architecture with comprehensive state management, resource simulation, and cross-system integration following clean separation of concerns.
+
+#### Core Components
+
+**1. Core POI Management (`PoiBusinessService`)**
+- **Business Logic:** Pure domain logic for creating, updating, querying, and lifecycle management of POI entities
+- **Validation:** Business rule enforcement (name uniqueness, population limits, capacity constraints)
+- **Data Models:** `PoiData`, `CreatePoiData`, `UpdatePoiData` with comprehensive field validation
+- **Repository Protocol:** `PoiRepository` for data access abstraction
+
+**2. State Transition System (`POIStateBusinessService`)**
+- **State Machine:** Configuration-driven state transitions with validation rules
+- **States:** `active`, `inactive`, `abandoned`, `ruined`, `under_construction`, `declining`, `growing`, `normal`, `ruins`, `dungeon`, `repopulating`, `special`
+- **Transition Validation:** `StateTransitionValidator` with population, resource, and faction requirements
+- **Event System:** `StateTransitionEvent` with metadata tracking and cross-system notifications
+
+**3. POI Types and Interaction Types**
+- **POI Types:** `city`, `village`, `town`, `settlement`, `outpost`, `fortress`, `temple`, `market`, `mine`, `other`
+- **Interaction Types:** `trade`, `diplomacy`, `combat`, `exploration`, `quest`, `social`, `neutral`
+- **Type-Specific Rules:** Different generation parameters, state transition modifiers, and gameplay mechanics per type
+
+#### Advanced Subsystems
+
+**4. Economic Simulation (`ResourceManagementService`)**
+- **Resource Types:** Production, consumption, storage, and quality tracking
+- **Trade System:** Inter-POI trading with offers, routes, and market dynamics
+- **Economic Health:** Prosperity calculations based on resource abundance and trade activity
+
+**5. Population Dynamics (`MigrationService`)**
+- **Migration Types:** Voluntary, forced, seasonal, trade-based, refugee movements
+- **Demographic Tracking:** Age distribution, occupations, cultural groups
+- **Population Flow:** Route safety, travel time, capacity limits, and success rates
+
+**6. Political Control (`FactionInfluenceService`)**
+- **Influence Types:** Political, economic, cultural, military influence tracking
+- **Faction Relations:** Allied, neutral, hostile relationships affecting interactions
+- **Control Mechanics:** Faction treasury, investment costs, and influence actions
+
+**7. Urban Development (`MetropolitanSpreadService`)**
+- **City Growth:** Hexagonal expansion patterns with economic and population thresholds
+- **Metropolitan Areas:** Multi-POI urban regions with shared infrastructure
+- **Development Costs:** Economic requirements for expansion and growth
+
+#### State Transition Examples
+
+**Growth Cycle:**
+```
+normal → growing (population increase + resource abundance)
+growing → active (population stabilization)
+active → declining (resource shortage + population decrease)
+declining → abandoned (critical population + resource crisis)
+abandoned → ruins (time passage + no maintenance)
+```
+
+**Recovery Cycle:**
+```
+ruins → under_construction (major reconstruction + massive investment)
+under_construction → active (construction completion + population settlement)
+abandoned → repopulating (faction investment + repopulation effort)
+repopulating → active (population success + resource establishment)
+```
+
+#### Data Models and Validation
+
+**Core POI Model:**
+```python
+class PointOfInterest:
+    id: UUID
+    name: str
+    description: Optional[str]
+    poi_type: POIType  # city, town, village, etc.
+    state: POIState    # active, declining, ruins, etc.
+    interaction_type: POIInteractionType  # trade, combat, social, etc.
+    location_x/y/z: Optional[float]
+    region_id: Optional[UUID]
+    faction_id: Optional[UUID]
+    population: Optional[int]
+    max_population: Optional[int]
+    resources: Dict[str, Any]
+    properties: Dict[str, Any]
+```
+
+**Business Rules:**
+- POI names must be unique within the system
+- Population cannot exceed max_population capacity
+- State transitions require specific conditions (population thresholds, resource levels, faction control)
+- Some transitions require faction investment and time requirements
+- Location coordinates and region association for spatial queries
+
+#### Configuration-Driven Architecture
+
+**Generation Rules (`poi_generation_rules.json`):**
+- Biome preferences and avoidance patterns
+- Minimum distance constraints between same-type POIs
+- Population scaling factors and resource requirements
+- Elevation preferences and trade route requirements
+
+**State Transitions (`state_transitions.json`):**
+- Complete transition matrix with required conditions
+- Population and resource thresholds for each transition
+- Time requirements and probability modifiers
+- Faction investment costs and influence requirements
+
+#### API Contracts
+
+**POI Creation:**
+```python
+POST /api/poi/
+{
+  "name": "Oakvale",
+  "poi_type": "village",
+  "interaction_type": "social",
+  "population": 120,
+  "max_population": 200,
+  "location_x": 150.5,
+  "location_y": 75.2
+}
+```
+
+**State Transition:**
+```python
+POST /api/poi/{id}/transition
+{
+  "target_state": "growing",
+  "reason": "Economic boom from new trade route",
+  "conditions": ["population_increase", "resource_abundance"]
+}
+```
+
+#### Integration Points
+
+**Cross-System Dependencies:**
+- **Region System:** POIs belong to regions and inherit environmental modifiers
+- **Faction System:** Political control affects state transitions and economic activities  
+- **Economy System:** Resource production, consumption, and trade route management
+- **Population System:** Migration flows between POIs based on conditions and opportunities
+- **Time System:** Environmental degradation, seasonal modifiers, and event scheduling
+
+**Event Integration:**
+- State transition events published to other systems
+- Population change notifications trigger migration calculations
+- Economic events affect resource levels and trade opportunities
+- Faction control changes influence diplomatic relations
+
+#### Infrastructure Separation
+
+**Business Logic (systems/poi/):**
+- Pure domain services with protocol-based dependency injection
+- Business rule validation and state management logic
+- Cross-system event publishing and subscription
+
+**Infrastructure (infrastructure/poi_*):**
+- Database repositories and data access layer
+- Procedural generation algorithms and tilemap services
+- Unity frontend integration and real-time updates
+- Configuration loading and validation services
+
+#### Performance Considerations
+
+- Efficient spatial queries for nearby POI discovery
+- Bulk state transition processing for world simulation
+- Caching of frequently accessed POI data
+- Asynchronous event processing for cross-system updates
+
+### **Population System**
+- **Needs mathematical models for population dynamics**
+
+### **Quest System**
+- **Add examples of complex quest chains**
+
+### **Region System**
+- **Needs more detail on region generation algorithms**
+
+### **Religion System**
+- **Add examples of religious influence on gameplay**
+
+### **Rumor System**
+- **Add network diagrams for rumor propagation**
+
+### **Tension/War System**
+- **Add examples of war simulation calculations**
+
+### **World Generation System**
+- **Add more visual examples of generation output**
+
+### **World State System**
+- **Add examples of how player actions affect world state**
+
+## 🖥️ **Cross-Cutting Concerns Improvements**
+
+### **User Interface**
+- **Add wireframes for key interfaces**
+
+### **Modding Support**
+- **Add tutorial for creating a simple mod**
+
+### **AI Integration**
+- **Add examples of prompt engineering for game content**
+
+### **Builder Support**
+- **Add tutorial for creating a simple world seed customization**
+
+## 📖 **Game Rules & Documentation**
+
+### **Game Rules**
+- **Consider adding examples of play and sample character sheets**
+
+## 🎯 **Implementation Priority Matrix**
+
+### **High Priority (Core Functionality)**
+1. Database schema expansion (Data System)
+2. Combat scenario examples (Combat System)
+3. Economic simulation models (Economy System)
+4. System communication diagrams (Technical Framework)
+
+### **Medium Priority (User Experience)**
+1. UI wireframes and mockups (User Interface, Inventory)
+2. Dialogue scripting examples (Dialogue System)
+3. World generation visual examples (World Generation)
+4. Quest chain examples (Quest System)
+
+### **Low Priority (Developer Experience)**
+1. Troubleshooting guides (Development Workflow)
+2. Code pattern examples (Core Systems)
+3. Modding tutorials (Modding Support)
+4. Play examples and character sheets (Game Rules)
+
+## 📅 **Suggested Implementation Timeline**
+
+### **Phase 1 (Immediate - Next 2 Weeks)**
+- Database schema documentation expansion
+- Core system communication diagrams
+- Combat and economic examples
+
+### **Phase 2 (Short Term - Next Month)**
+- UI wireframes and mockups
+- Visual examples for world generation
+- Dialogue and quest system examples
+
+### **Phase 3 (Medium Term - Next Quarter)**
+- Comprehensive developer tutorials
+- Advanced system interaction diagrams
+- Complete workflow documentation
+
+### **Phase 4 (Long Term - Next 6 Months)**
+- Interactive documentation with examples
+- Video tutorials and walkthroughs
+- Community contribution guidelines
+
+---
+
+**📝 Note:** This roadmap should be updated as improvements are completed. When addressing any improvement note, remove it from this list and update the main documentation sections accordingly.
+
+### Repair System
+
+**Summary:** The repair system handles equipment maintenance, cost calculations, and repair station interactions. The system has been significantly improved to consolidate scattered durability logic into a centralized, comprehensive architecture.
+
+**🔧 Recent Major Improvements (Fixed):**
+- **✅ Consolidated Durability Logic:** All scattered durability calculations have been centralized into `DurabilityService`
+- **✅ Enhanced Cross-System Integration:** Created `EquipmentDurabilityIntegration` service for unified durability management
+- **✅ Comprehensive Damage Modeling:** Added time-based, combat, and environmental degradation calculations
+- **✅ Intelligent Repair System:** Enhanced `RepairService` with success/failure mechanics and cost optimization
+- **✅ Condition-Based Penalties:** Implemented equipment stat penalties based on durability condition
+
+#### Current Architecture (Post-Fix)
+
+The repair and durability system now follows a clean, centralized architecture:
+
+**1. Core Durability Service (`DurabilityService`)**
+- **Centralized Calculations:** All durability math consolidated into one service
+- **Comprehensive Degradation:** Handles time-based, combat, and environmental wear
+- **Condition Management:** Maps durability percentages to condition states and penalties
+- **Repair Cost Calculations:** Unified cost and time estimation algorithms
+
+**2. Equipment Durability Integration (`EquipmentDurabilityIntegration`)**
+- **Unified Interface:** Single entry point for all durability operations across systems
+- **Cross-System Coordination:** Manages durability updates from time, combat, and environmental systems
+- **Bulk Operations:** Efficient processing for multiple characters and equipment
+- **Repair Recommendations:** Intelligent repair priority and cost analysis
+
+**3. Enhanced Repair Service (`RepairService`)**
+- **Request Management:** Complete repair workflow from request to completion
+- **Success/Failure Mechanics:** Realistic repair outcomes based on skill and conditions
+- **Economic Integration:** Cost processing and repairer management
+- **Queue Management:** Repair scheduling and priority handling
+
+#### Equipment Condition System
+
+Equipment now has a sophisticated condition system affecting functionality:
+
+**Condition Thresholds:**
+- **Perfect (100%):** No penalties, maximum effectiveness
+- **Excellent (90-99%):** No penalties, slight wear visible
+- **Good (75-89%):** No penalties, normal wear
+- **Worn (50-74%):** 10% stat reduction, visible damage
+- **Damaged (25-49%):** 25% stat reduction, significant damage
+- **Very Damaged (10-24%):** 50% stat reduction, barely functional
+- **Broken (0-9%):** Cannot be equipped or used
+
+**Stat Penalty Application:**
+```python
+# Example: A weapon with 30% durability (damaged condition)
+base_attack_bonus = +5
+effective_attack_bonus = +5 * (1 - 0.25) = +3.75 = +4 (rounded)
+```
+
+#### Degradation Mechanics
+
+**Time-Based Degradation:**
+- Quality-dependent daily decay rates
+- Environmental modifiers (rain, desert, magic zones)
+- Usage intensity multipliers
+- Random variance for realistic wear patterns
+
+**Combat Degradation:**
+- Equipment type-specific damage rates
+- Critical hit damage bonuses for weapons
+- Armor stress from damage taken
+- Shield wear from blocking actions
+
+**Environmental Degradation:**
+- Material-specific resistance factors
+- Climate-based wear acceleration
+- Exposure duration calculations
+- Equipment type vulnerability differences
+
+#### Integration Points
+
+**Combat System Integration:**
+```python
+# Combat applies durability damage automatically
+combat_result = process_combat_durability_damage(
+    combat_participants=participants,
+    combat_duration_rounds=8,
+    combat_intensity=1.5  # High intensity fight
+)
+```
+
+**Time System Integration:**
+```python
+# Time passage applies environmental and usage wear
+time_update = process_equipment_durability_update(
+    character_id="char_123",
+    time_elapsed_hours=24.0,
+    environmental_exposure={'environment': 'desert', 'exposure_hours': 24.0}
+)
+```
+
+**Equipment System Integration:**
+```python
+# Equipment stats automatically include condition penalties
+effective_stats = get_equipment_effective_stats(
+    equipment_id="sword_001",
+    base_stats={'attack_bonus': 5, 'damage': '1d8+2'}
+)
+```
+
+#### Repair Mechanics
+
+**Repair Success Rates:**
+- **Novice:** 60% base success, 15% critical failure chance
+- **Apprentice:** 75% base success, 8% critical failure chance
+- **Journeyman:** 85% base success, 4% critical failure chance
+- **Expert:** 95% base success, 2% critical failure chance
+- **Master:** 99% base success, 1% critical failure chance
+
+**Repair Cost Factors:**
+- Base item value and quality tier
+- Damage severity multipliers
+- Repairer skill level modifiers
+- Material and tool requirements
+
+**Repair Time Estimation:**
+- Quality-based time multipliers
+- Skill-based efficiency modifiers
+- Damage complexity considerations
+- Tool and material availability
+
+#### Future Enhancements
+
+**Planned Improvements:**
+- **Material System Integration:** Different materials affect durability and repair costs
+- **Enchantment Preservation:** Magic item repair with enchantment risk/preservation
+- **Regional Repairer Specializations:** Different regions excel at different equipment types
+- **Bulk Repair Operations:** Efficient repair workflows for multiple items
+- **Repair Skill Progression:** Character skill development in equipment maintenance
+
+**Implementation Status:** ✅ **COMPLETE** - All core durability and repair logic has been consolidated and enhanced. The system now provides a robust, centralized architecture for equipment maintenance across all game systems.
+
+### Disease System
+
+**Summary:** Manages disease outbreaks, epidemics, and health impacts on populations with sophisticated SIR modeling, environmental factors, and cross-system integration for realistic disease simulation.
+
+**Architecture:** Protocol-based business logic architecture with comprehensive disease modeling, outbreak tracking, and environmental factor calculations.
+
+**Implementation Status:** ✅ **Core Architecture Complete** - Comprehensive disease modeling system, SIR simulation, environmental factors, and cross-system integration implemented.
+
+#### Disease Classification System
+
+**Disease Configuration:** Disease types, stages, transmission modes, and treatment types are now defined in JSON configuration files following the project's standard configuration pattern (see JSON Configuration Guide). This allows content creators to modify disease characteristics without code changes.
+
+**Configuration Files:**
+- **`data/systems/disease/disease_enums.json`:** Core disease type definitions, stages, transmission modes, and treatment types
+- **`data/systems/disease/disease_profiles.json`:** Detailed disease profile configurations with full mechanical parameters
+
+**Disease Types (Configurable via JSON):**
+All disease types are defined in `disease_enums.json` with full descriptions and categorization. Current types include plague, fever, pox, wasting, flux, sweating_sickness, lung_rot, bone_fever, cursed_blight, magical_corruption, and undead_plague.
+
+**Disease Stages (JSON-Configured):**
+- **Emerging (0-10% infected):** Initial outbreak detection and response
+- **Spreading (10-30% infected):** Rapid transmission phase requiring intervention
+- **Peak (30-60% infected):** Maximum impact phase with severe consequences
+- **Declining (15-30% infected):** Natural or intervention-driven reduction
+- **Endemic (5-15% infected):** Stable low-level presence in population
+- **Eradicated (0% infected):** Complete elimination from region
+
+#### SIR Disease Modeling
+
+**Core SIR Implementation:**
+```python
+def calculate_sir_progression(
+    susceptible: int,
+    infected: int, 
+    recovered: int,
+    transmission_rate: float,
+    recovery_rate: float,
+    environmental_factors: Dict[str, float]
+) -> Tuple[int, int, int]:
+    """
+    Calculate disease progression using SIR model with environmental modifiers
+    """
+    # Apply environmental factors to transmission
+    effective_transmission = transmission_rate * calculate_environmental_modifier(environmental_factors)
+    
+    # Calculate new infections
+    new_infections = (effective_transmission * susceptible * infected) / (susceptible + infected + recovered)
+    
+    # Calculate recoveries
+    new_recoveries = recovery_rate * infected
+    
+    # Update populations
+    new_susceptible = max(0, susceptible - new_infections)
+    new_infected = max(0, infected + new_infections - new_recoveries)
+    new_recovered = recovered + new_recoveries
+    
+    return (int(new_susceptible), int(new_infected), int(new_recovered))
+```
+
+**Transmission Modes (JSON-Configured):**
+All transmission modes are defined in `disease_enums.json` including airborne, contact, vector, waterborne, foodborne, magical, and cursed transmission types. Each mode has specific environmental interaction patterns.
+
+#### Environmental Factor System
+
+**Environmental Modifiers:**
+```python
+def calculate_environmental_modifier(factors: Dict[str, float]) -> float:
+    """
+    Calculate transmission rate modifier based on environmental conditions
+    """
+    base_modifier = 1.0
+    
+    # Temperature effects (disease-specific)
+    temp_modifier = calculate_temperature_effect(factors.get('temperature', 20.0))
+    
+    # Humidity effects
+    humidity_modifier = calculate_humidity_effect(factors.get('humidity', 0.5))
+    
+    # Population density effects
+    crowding_modifier = 1.0 + (factors.get('crowding', 0.5) * 0.8)
+    
+    # Sanitation and healthcare effects
+    hygiene_modifier = 1.0 - (factors.get('hygiene', 0.5) * 0.6)
+    healthcare_modifier = 1.0 - (factors.get('healthcare', 0.5) * 0.4)
+    
+    return base_modifier * temp_modifier * humidity_modifier * crowding_modifier * hygiene_modifier * healthcare_modifier
+```
+
+**Environmental Categories:**
+- **Temperature:** Optimal ranges for different disease types
+- **Humidity:** Affects airborne transmission and vector survival
+- **Crowding:** Population density impact on transmission rates
+- **Hygiene:** Sanitation levels affecting contact transmission
+- **Healthcare:** Medical infrastructure reducing transmission and mortality
+
+#### Disease Profile System
+
+**Comprehensive Disease Profiles (8 Detailed Profiles):**
+
+**1. Black Death (Plague)**
+- **Mortality Rate:** 60-80% untreated, 20-40% with treatment
+- **Transmission:** Primarily vector (fleas), secondary airborne
+- **Environmental Factors:** Thrives in moderate temperatures, poor sanitation
+- **Symptoms:** Fever, chills, swollen lymph nodes, blackened extremities
+- **Economic Impact:** Severe labor shortage, trade disruption, social upheaval
+
+**2. Marsh Fever (Fever)**
+- **Mortality Rate:** 15-25% untreated, 5-10% with treatment
+- **Transmission:** Vector (mosquitoes), waterborne
+- **Environmental Factors:** High humidity, standing water, warm temperatures
+- **Symptoms:** Recurring fever, chills, weakness, delirium
+- **Economic Impact:** Reduced productivity, increased medical costs
+
+**3. Red Pox (Pox)**
+- **Mortality Rate:** 20-30% untreated, 8-15% with treatment
+- **Transmission:** Airborne, contact with lesions
+- **Environmental Factors:** Spreads rapidly in crowded conditions
+- **Symptoms:** Fever, distinctive red pustules, scarring
+- **Economic Impact:** Quarantine costs, reduced trade, social stigma
+
+**4. Wasting Sickness (Wasting)**
+- **Mortality Rate:** 40-60% over extended period
+- **Transmission:** Unknown/magical, possibly hereditary
+- **Environmental Factors:** Stress and malnutrition accelerate progression
+- **Symptoms:** Gradual weight loss, weakness, organ failure
+- **Economic Impact:** Long-term care costs, reduced workforce
+
+**5. Bloody Flux (Flux)**
+- **Mortality Rate:** 25-35% untreated, 10-20% with treatment
+- **Transmission:** Foodborne, waterborne, poor sanitation
+- **Environmental Factors:** Hot weather, contaminated water supplies
+- **Symptoms:** Severe diarrhea, dehydration, abdominal pain
+- **Economic Impact:** Food safety measures, water infrastructure costs
+
+**6. Cursed Blight (Cursed Blight)**
+- **Mortality Rate:** 50-70% (magical treatment required)
+- **Transmission:** Magical exposure, cursed objects
+- **Environmental Factors:** Areas of high magical activity
+- **Symptoms:** Necrotic tissue, magical energy drain, madness
+- **Economic Impact:** Magical research costs, area abandonment
+
+**7. Magical Corruption (Magical Corruption)**
+- **Mortality Rate:** 30-50% (varies by magical exposure)
+- **Transmission:** Prolonged magical exposure, arcane accidents
+- **Environmental Factors:** Magical ley lines, unstable magic zones
+- **Symptoms:** Physical mutations, magical instability, organ failure
+- **Economic Impact:** Magical safety regulations, specialized treatment
+
+**8. Undead Plague (Undead Plague)**
+- **Mortality Rate:** 80-95% (risk of undead transformation)
+- **Transmission:** Undead bite/scratch, necromantic magic
+- **Environmental Factors:** Areas with undead presence, necromantic activity
+- **Symptoms:** Rapid necrosis, loss of life force, potential reanimation
+- **Economic Impact:** Military response costs, area evacuation, holy intervention
+
+#### Treatment and Intervention System
+
+**Treatment Types (JSON-Configured):**
+All treatment types are defined in `disease_enums.json` with full descriptions and effectiveness parameters. Current types include herbal, alchemical, magical, divine, quarantine, and natural recovery treatments. Each treatment type has disease-specific effectiveness ratings and cost modifiers.
+
+**Treatment Effectiveness:**
+```python
+def calculate_treatment_effectiveness(
+    disease_type: DiseaseType,
+    treatment_types: List[TreatmentType],
+    treatment_quality: float,
+    disease_stage: DiseaseStage
+) -> float:
+    """
+    Calculate overall treatment effectiveness based on disease and treatment factors
+    """
+    base_effectiveness = 0.0
+    
+    for treatment in treatment_types:
+        # Get disease-specific treatment effectiveness
+        treatment_effectiveness = DISEASE_TREATMENT_MATRIX[disease_type][treatment]
+        
+        # Apply quality modifier
+        quality_modifier = 0.5 + (treatment_quality * 0.5)
+        
+        # Apply stage modifier (early treatment more effective)
+        stage_modifier = STAGE_EFFECTIVENESS_MODIFIERS[disease_stage]
+        
+        base_effectiveness += treatment_effectiveness * quality_modifier * stage_modifier
+    
+    return min(1.0, base_effectiveness)
+```
+
+#### Cross-System Integration
+
+**Population System Integration:**
+- Disease outbreaks affect population growth and mortality rates
+- Population density influences transmission rates
+- Demographic factors affect disease susceptibility and outcomes
+
+**Economy System Integration:**
+- Disease outbreaks impact trade routes and economic activity
+- Treatment costs and quarantine measures affect regional economies
+- Labor shortages from illness reduce productivity
+
+**Faction System Integration:**
+- Disease responses reveal faction priorities and capabilities
+- Quarantine decisions create diplomatic tensions
+- Medical aid becomes diplomatic tool
+
+**Quest System Integration:**
+- Disease outbreaks generate urgent quest opportunities
+- Medical supply quests and research missions
+- Evacuation and rescue operations
+
+**Region System Integration:**
+- Regional climate affects disease transmission
+- Healthcare infrastructure varies by region
+- Trade routes spread diseases between regions
+
+**Chaos System Integration:**
+- Disease outbreaks contribute to regional chaos levels
+- Pandemic events trigger major chaos spikes
+- Social unrest from disease impacts
+
+#### Database Schema
+
+**Core Disease Tables:**
+```sql
+-- Disease outbreak tracking
+CREATE TABLE disease_outbreaks (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    disease_type VARCHAR(50) NOT NULL,
+    region_id UUID NOT NULL,
+    stage VARCHAR(20) NOT NULL,
+    susceptible_population INTEGER NOT NULL DEFAULT 0,
+    infected_population INTEGER NOT NULL DEFAULT 0,
+    recovered_population INTEGER NOT NULL DEFAULT 0,
+    deceased_population INTEGER NOT NULL DEFAULT 0,
+    transmission_rate DECIMAL(5,4) NOT NULL DEFAULT 0.0,
+    mortality_rate DECIMAL(5,4) NOT NULL DEFAULT 0.0,
+    environmental_factors JSONB DEFAULT '{}',
+    active_treatments JSONB DEFAULT '[]',
+    outbreak_start TIMESTAMP NOT NULL DEFAULT NOW(),
+    last_update TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Disease impact tracking
+CREATE TABLE disease_impacts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    outbreak_id UUID NOT NULL REFERENCES disease_outbreaks(id),
+    impact_type VARCHAR(50) NOT NULL, -- economic, social, political
+    impact_data JSONB NOT NULL,
+    severity_level INTEGER NOT NULL CHECK (severity_level >= 1 AND severity_level <= 10),
+    affected_systems JSONB DEFAULT '[]',
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Treatment effectiveness tracking
+CREATE TABLE disease_treatments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    outbreak_id UUID NOT NULL REFERENCES disease_outbreaks(id),
+    treatment_type VARCHAR(50) NOT NULL,
+    treatment_quality DECIMAL(3,2) NOT NULL DEFAULT 0.5,
+    effectiveness_score DECIMAL(3,2) NOT NULL DEFAULT 0.0,
+    cost_per_person DECIMAL(10,2) NOT NULL DEFAULT 0.0,
+    people_treated INTEGER NOT NULL DEFAULT 0,
+    success_rate DECIMAL(3,2) NOT NULL DEFAULT 0.0,
+    started_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    ended_at TIMESTAMP NULL
+);
+```
+
+#### Advanced Features
+
+**Outbreak Prediction System:**
+- Environmental monitoring for outbreak risk assessment
+- Population vulnerability analysis
+- Early warning systems for high-risk regions
+- Seasonal disease pattern recognition
+
+**Mutation and Evolution:**
+- Disease strains can mutate over time
+- Treatment resistance development
+- New transmission modes emerging
+- Cross-species transmission events
+
+**Social and Political Impact:**
+- Public health policy decisions
+- Resource allocation during outbreaks
+- Social unrest from quarantine measures
+- International cooperation and conflict
+
+#### JSON Configuration Repository
+
+**Disease Profiles (`/data/systems/disease/disease_profiles.json`):**
+- Complete disease definitions with all characteristics
+- Environmental factor matrices
+- Treatment effectiveness tables
+- Economic impact calculations
+
+**Configuration Structure:**
+```json
+{
+  "disease_profiles": {
+    "plague": {
+      "name": "Black Death",
+      "type": "plague",
+      "mortality_rates": {
+        "untreated": [0.6, 0.8],
+        "treated": [0.2, 0.4]
+      },
+      "transmission": {
+        "primary_mode": "vector",
+        "secondary_modes": ["airborne"],
+        "base_rate": 0.15
+      },
+      "environmental_factors": {
+        "temperature_optimal": [15, 25],
+        "humidity_preference": [0.4, 0.7],
+        "crowding_multiplier": 2.0,
+        "sanitation_sensitivity": 0.8
+      },
+      "symptoms": [
+        "High fever and chills",
+        "Swollen, painful lymph nodes",
+        "Blackened extremities",
+        "Severe weakness"
+      ],
+      "economic_impact": {
+        "labor_reduction": 0.6,
+        "trade_disruption": 0.8,
+        "medical_costs": 1.5
+      }
+    }
+  }
+}
+```
+
+**Implementation Status:** ✅ **COMPLETE** - Comprehensive disease system with SIR modeling, environmental factors, cross-system integration, and JSON configuration repository. Ready for full deployment and integration with all game systems.
+
+### Espionage System
+
+**Summary:** Manages intelligence gathering, covert operations, spy networks, and counter-intelligence activities with sophisticated agent management, risk assessment, and cross-system integration for dynamic espionage campaigns.
+
+**Architecture:** Protocol-based business logic architecture with comprehensive operational modeling, network tracking, counter-intelligence mechanics, and extensive cross-system integration.
+
+**Implementation Status:** ✅ **Core Architecture Complete** - Comprehensive espionage modeling system, agent management, operation execution, and cross-system integration implemented.
+
+#### Espionage Core Components
+
+**Espionage Configuration:** All espionage mechanics, operation types, agent classifications, and risk factors are defined in JSON configuration files following the project's standard configuration pattern (see JSON Configuration Guide). This allows content creators to modify espionage characteristics without code changes.
+
+**Configuration Files:**
+- **`data/systems/espionage/espionage_config.json`:** Core espionage definitions including operation types, agent ranks, infiltration mechanics, and risk calculations
+
+**Operation Types (JSON-Configured):**
+All operation types are defined in `espionage_config.json` with full mechanical parameters. Current types include intelligence_gathering, sabotage, assassination, infiltration, surveillance, counter_intelligence, disinformation, extraction, and recruitment operations.
+
+**Agent Classifications (JSON-Configured):**
+- **Sleeper Agents:** Long-term embedded operatives with deep cover
+- **Active Operatives:** Openly operating intelligence personnel
+- **Double Agents:** Agents working for multiple factions simultaneously
+- **Informants:** Local contacts providing intelligence
+- **Handlers:** Experienced agents managing networks
+- **Specialists:** Agents with specific skill focuses (infiltration, assassination, etc.)
+
+#### Core Espionage Mechanics
+
+**Operation Execution System:**
+```python
+def execute_espionage_operation(
+    operation_type: str,
+    agent_id: UUID,
+    target_data: Dict[str, Any],
+    difficulty_modifiers: Dict[str, float]
+) -> OperationResult:
+    """
+    Execute espionage operation with comprehensive risk assessment
+    """
+    # Calculate base success probability
+    base_success = calculate_operation_difficulty(operation_type, target_data)
+    
+    # Apply agent skill modifiers
+    agent_modifier = calculate_agent_effectiveness(agent_id, operation_type)
+    
+    # Apply environmental and situational modifiers
+    env_modifier = calculate_environmental_factors(target_data, difficulty_modifiers)
+    
+    # Execute operation with risk assessment
+    final_probability = base_success * agent_modifier * env_modifier
+    
+    # Determine outcome and consequences
+    result = determine_operation_outcome(final_probability, operation_type)
+    
+    return result
+```
+
+**Agent Network Management:**
+```python
+def manage_agent_network(
+    network_id: UUID,
+    operation_parameters: Dict[str, Any]
+) -> NetworkStatus:
+    """
+    Manage spy network coordination and communication
+    """
+    # Assess network security and exposure risk
+    security_status = assess_network_security(network_id)
+    
+    # Coordinate multi-agent operations
+    coordination_efficiency = calculate_network_coordination(network_id)
+    
+    # Handle counter-intelligence threats
+    counter_intel_risk = assess_counter_intelligence_risk(network_id)
+    
+    # Update network status and agent assignments
+    updated_status = update_network_operations(
+        network_id, 
+        security_status, 
+        coordination_efficiency, 
+        counter_intel_risk
+    )
+    
+    return updated_status
+```
+
+#### Risk Assessment Framework
+
+**Comprehensive Risk Calculation:**
+```python
+def calculate_operation_risk(
+    operation_data: Dict[str, Any],
+    agent_profile: Dict[str, Any],
+    target_security: Dict[str, Any]
+) -> RiskAssessment:
+    """
+    Calculate multi-dimensional risk assessment for espionage operations
+    """
+    base_risk = operation_data.get('base_risk_level', 0.5)
+    
+    # Agent capability modifiers
+    agent_skill_modifier = calculate_agent_skill_bonus(agent_profile)
+    agent_cover_quality = assess_cover_integrity(agent_profile)
+    
+    # Target security assessment
+    security_level = target_security.get('security_rating', 0.5)
+    counter_intel_presence = target_security.get('counter_intelligence', 0.3)
+    
+    # Environmental factors
+    political_climate = assess_political_stability(operation_data)
+    local_surveillance = assess_surveillance_density(operation_data)
+    
+    # Calculate composite risk
+    total_risk = (
+        base_risk * 
+        (1.0 - agent_skill_modifier) * 
+        (1.0 - agent_cover_quality) * 
+        (1.0 + security_level) * 
+        (1.0 + counter_intel_presence) * 
+        (1.0 + political_climate) * 
+        (1.0 + local_surveillance)
+    )
+    
+    return RiskAssessment(
+        total_risk=min(0.95, max(0.05, total_risk)),
+        component_risks={
+            'detection_risk': calculate_detection_probability(total_risk),
+            'capture_risk': calculate_capture_probability(total_risk),
+            'compromise_risk': calculate_network_compromise_risk(total_risk),
+            'extraction_risk': calculate_extraction_difficulty(total_risk)
+        },
+        mitigation_options=generate_risk_mitigation_options(total_risk)
+    )
+```
+
+#### Counter-Intelligence Operations
+
+**Active Counter-Intelligence:**
+```python
+def execute_counter_intelligence(
+    defending_faction_id: UUID,
+    suspected_operation: Dict[str, Any]
+) -> CounterIntelResult:
+    """
+    Execute counter-intelligence operations to detect and neutralize threats
+    """
+    # Analyze suspicious activity patterns
+    threat_assessment = analyze_threat_indicators(suspected_operation)
+    
+    # Deploy counter-intelligence assets
+    asset_deployment = deploy_counter_assets(defending_faction_id, threat_assessment)
+    
+    # Execute detection and neutralization protocols
+    detection_result = execute_detection_protocols(asset_deployment)
+    
+    if detection_result.threat_confirmed:
+        neutralization_result = execute_neutralization_protocols(
+            threat_assessment,
+            detection_result
+        )
+        
+        return CounterIntelResult(
+            threat_detected=True,
+            threat_neutralized=neutralization_result.success,
+            intelligence_gathered=neutralization_result.intelligence,
+            network_exposure=calculate_network_exposure(neutralization_result)
+        )
+    
+    return CounterIntelResult(
+        threat_detected=False,
+        false_positive=detection_result.false_positive_probability
+    )
+```
+
+#### Intelligence Value System
+
+**Information Assessment:**
+```python
+def assess_intelligence_value(
+    information_data: Dict[str, Any],
+    requesting_faction: UUID,
+    context_parameters: Dict[str, Any]
+) -> IntelligenceAssessment:
+    """
+    Assess the strategic and tactical value of gathered intelligence
+    """
+    # Base information value
+    base_value = information_data.get('base_intelligence_value', 0.5)
+    
+    # Time sensitivity factors
+    time_decay = calculate_time_sensitivity_decay(information_data)
+    
+    # Strategic relevance to requesting faction
+    strategic_relevance = calculate_strategic_relevance(
+        information_data, 
+        requesting_faction
+    )
+    
+    # Cross-reference with existing intelligence
+    novelty_factor = assess_information_novelty(
+        information_data,
+        requesting_faction
+    )
+    
+    # Verification confidence
+    verification_confidence = assess_source_reliability(information_data)
+    
+    final_value = (
+        base_value * 
+        time_decay * 
+        strategic_relevance * 
+        novelty_factor * 
+        verification_confidence
+    )
+    
+    return IntelligenceAssessment(
+        intelligence_value=final_value,
+        confidence_rating=verification_confidence,
+        strategic_priority=determine_priority_level(final_value),
+        recommended_actions=generate_action_recommendations(information_data),
+        sharing_classification=determine_classification_level(final_value)
+    )
+```
+
+#### Cross-System Integration
+
+**Faction System Integration:**
+```python
+def integrate_espionage_with_factions(
+    operation_result: OperationResult,
+    target_faction_id: UUID,
+    executing_faction_id: UUID
+) -> FactionImpactResult:
+    """
+    Apply espionage operation results to faction relationships and standings
+    """
+    # Calculate reputation impacts
+    reputation_changes = calculate_reputation_impacts(
+        operation_result,
+        target_faction_id,
+        executing_faction_id
+    )
+    
+    # Assess diplomatic consequences
+    diplomatic_fallout = assess_diplomatic_consequences(
+        operation_result,
+        target_faction_id,
+        executing_faction_id
+    )
+    
+    # Update faction intelligence databases
+    intelligence_updates = update_faction_intelligence(
+        operation_result.intelligence_gathered,
+        executing_faction_id
+    )
+    
+    return FactionImpactResult(
+        reputation_changes=reputation_changes,
+        diplomatic_consequences=diplomatic_fallout,
+        intelligence_updates=intelligence_updates,
+        long_term_effects=calculate_long_term_impacts(operation_result)
+    )
+```
+
+**Economy System Integration:**
+```python
+def integrate_espionage_with_economy(
+    operation_data: Dict[str, Any],
+    economic_targets: List[Dict[str, Any]]
+) -> EconomicImpactResult:
+    """
+    Apply espionage operations to economic systems and trade networks
+    """
+    # Economic intelligence gathering
+    market_intelligence = gather_market_intelligence(economic_targets)
+    
+    # Trade route disruption assessment
+    trade_disruption = assess_trade_route_disruption(operation_data)
+    
+    # Commercial espionage results
+    commercial_intel = execute_commercial_espionage(economic_targets)
+    
+    # Economic sabotage impacts
+    sabotage_effects = calculate_economic_sabotage_effects(operation_data)
+    
+    return EconomicImpactResult(
+        market_intelligence=market_intelligence,
+        trade_disruption_level=trade_disruption,
+        commercial_secrets=commercial_intel,
+        economic_damage=sabotage_effects,
+        market_manipulation_potential=assess_manipulation_opportunities(
+            market_intelligence
+        )
+    )
+```
+
+#### Operation Categories
+
+**Intelligence Gathering Operations:**
+- **Surveillance:** Long-term observation and monitoring
+- **Infiltration:** Placement of agents within target organizations
+- **Information Extraction:** Targeted retrieval of specific intelligence
+- **Communication Interception:** Monitoring of target communications
+- **Document Acquisition:** Obtaining classified or sensitive documents
+
+**Active Operations:**
+- **Sabotage:** Disruption of target infrastructure or operations
+- **Assassination:** Elimination of high-value targets
+- **Disinformation:** Spreading false or misleading information
+- **Counter-Intelligence:** Neutralizing enemy espionage activities
+- **Network Disruption:** Dismantling enemy spy networks
+
+**Support Operations:**
+- **Agent Recruitment:** Expanding operational capabilities
+- **Safe House Management:** Maintaining secure operational bases
+- **Equipment Acquisition:** Obtaining specialized espionage tools
+- **Cover Identity Creation:** Establishing false identities for operatives
+- **Extraction Operations:** Retrieving compromised agents
+
+#### Specialized Espionage Mechanics
+
+**Deep Cover Operations:**
+- Long-term infiltration with gradual trust building
+- Cover identity maintenance and development
+- Slow intelligence gathering to avoid detection
+- Risk of "going native" and losing operational focus
+- Complex extraction requirements when operations conclude
+
+**Counter-Surveillance Protocols:**
+- Detection of enemy surveillance activities
+- Evasion techniques and misdirection
+- Communication security and dead drops
+- Identity protection and operational security
+- Network compartmentalization for security
+
+**Technology and Magic Integration:**
+- Magical scrying and divination detection
+- Enchanted communication devices
+- Magical disguises and illusion magic
+- Technological surveillance equipment
+- Counter-magical defensive measures
+
+#### Future Enhancements
+
+**Planned Improvements:**
+- **Advanced AI Integration:** Machine learning for pattern recognition in counter-intelligence
+- **Dynamic Network Generation:** Procedural spy network creation based on faction resources
+- **Real-time Operation Tracking:** Live monitoring of ongoing espionage activities
+- **Multi-Faction Coordination:** Complex operations involving multiple allied factions
+- **Historical Intelligence Database:** Long-term intelligence value tracking and analysis
+
+**Implementation Status:** ✅ **COMPLETE** - All core espionage logic has been implemented with comprehensive operation management, risk assessment, and cross-system integration. The system provides a robust, realistic framework for intelligence operations across all game scenarios.
+
+### Dialogue System
+
+**Summary:** Facilitates conversations between players and NPCs with AI-powered dynamic dialogue generation, RAG (Retrieval-Augmented Generation) enhancement, and real-time WebSocket communication.
+
+**Architecture:** WebSocket-first design using Python -> WebSocket -> Unity communication pattern. Primary communication is WebSocket-based, with auxiliary HTTP endpoints for administration, health checks, and monitoring.
+
+**Implementation Status:** ✅ **COMPLETE** - Full WebSocket infrastructure, business logic, RAG integration, database persistence, extended message types, and comprehensive system integration implemented.
+
+#### Enhanced Features
+
+**RAG (Retrieval-Augmented Generation) Integration:**
+- Dynamic knowledge retrieval from multiple game systems
+- Context-aware response enhancement using semantic search
+- Cross-system knowledge integration (memory, faction, quest, lore)
+- Vector-based knowledge storage and retrieval
+- Real-time context enhancement during conversations
+
+**Extended Message Types:**
+- **Dialogue:** Standard conversational messages
+- **Action:** Physical actions performed during conversation
+- **Emote:** Emotional expressions and gestures
+- **Placeholder:** Real-time processing indicators with context-aware placeholders
+- **System:** Administrative and event messages
+
+**Enhanced Context Management:**
+- Personality trait integration for consistent character behavior
+- Memory system integration for conversation history and character knowledge
+- Faction reputation and relationship context
+- Quest state and narrative context awareness
+- Regional and environmental context inclusion
+- Rumor system integration for dynamic information flow
+
+#### WebSocket API Documentation
+
+**Base WebSocket URL:** `ws://localhost:8000/dialogue/ws/{connection_id}`
+
+**Connection Types:**
+- **General Connection:** `ws://localhost:8000/dialogue/ws/general` - System-wide dialogue events
+- **Latency Connection:** `ws://localhost:8000/dialogue/ws/latency` - Real-time latency management with placeholders
+- **Conversation Connection:** `ws://localhost:8000/dialogue/ws/conversation/{conversation_id}` - Specific conversation updates
+
+#### WebSocket Message Schema
+
+**Standard Message Format:**
+```json
+{
+  "type": "message_type",
+  "payload": {
+    // Type-specific payload data
+  },
+  "timestamp": "2024-01-01T12:00:00.000Z"
+}
+```
+
+**Enhanced Message Types:**
+
+**1. Connection Status Messages**
+```json
+{
+  "type": "dialogue_general_connection_status",
+  "payload": {
+    "message": "Connected to dialogue system successfully",
+    "connection_id": "unique-connection-id",
+    "server_time": "2024-01-01T12:00:00.000Z",
+    "subscribed_channels": ["general", "conversation_updates"]
+  }
+}
+```
+
+**2. Enhanced Conversation Start**
+```json
+{
+  "type": "dialogue_conversation_start",
+  "payload": {
+    "conversation_id": "uuid",
+    "npc_id": "uuid", 
+    "player_id": "uuid",
+    "npc_name": "Merchant Aldric",
+    "interaction_type": "trading",
+    "rag_enabled": true,
+    "context": {
+      "location": "Market Square",
+      "location_id": "uuid",
+      "time_of_day": "afternoon",
+      "previous_interactions": 3,
+      "relationship_level": 0.7,
+      "dialogue_context": "bartering",
+      "personality_traits": ["friendly", "shrewd", "knowledgeable"],
+      "current_mood": "cheerful",
+      "memory_context": [
+        {
+          "memory_id": "uuid",
+          "content": "Player helped with bandit problem",
+          "relevance": 0.8
+        }
+      ],
+      "faction_context": {
+        "faction_id": "merchants_guild",
+        "reputation": 0.75,
+        "standing": "friendly"
+      },
+      "quest_context": {
+        "active_quests": ["find_rare_herbs"],
+        "available_quests": ["merchant_protection"]
+      }
+    }
+  }
+}
+```
+
+**3. RAG-Enhanced Dialogue Response**
+```json
+{
+  "type": "dialogue_response_ready",
+  "payload": {
+    "conversation_id": "uuid",
+    "npc_id": "uuid",
+    "player_id": "uuid",
+    "content": "Ah, I remember you helped us with those bandits. I have just the herbs you seek!",
+    "speaker": "npc",
+    "message_type": "dialogue",
+    "emotion": "grateful",
+    "confidence_score": 0.9,
+    "rag_enhanced": true,
+    "context_sources": ["memory_system", "faction_system", "quest_system"],
+    "metadata": {
+      "personality_traits": ["grateful", "helpful"],
+      "memory_references": [
+        {
+          "memory_id": "bandit_help_memory",
+          "relevance": 0.8
+        }
+      ],
+      "faction_context": {
+        "faction_id": "merchants_guild",
+        "standing": "friendly",
+        "reputation": 0.75
+      }
+    }
+  }
+}
+```
+
+**4. Context-Aware Placeholder Messages**
+```json
+{
+  "type": "dialogue_placeholder_message",
+  "payload": {
+    "conversation_id": "uuid",
+    "npc_id": "uuid",
+    "placeholder_text": "consulting memories...",
+    "placeholder_category": "remembering",
+    "processing_time": 2.5,
+    "estimated_completion": 1.2
+  }
+}
+```
+
+**5. Extended Message Types**
+```json
+{
+  "type": "dialogue_player_action",
+  "payload": {
+    "conversation_id": "uuid",
+    "player_id": "uuid",
+    "content": "*examines the herb carefully*",
+    "speaker": "player",
+    "message_type": "action",
+    "metadata": {
+      "action": "examine",
+      "items_mentioned": ["rare_herb"]
+    }
+  }
+}
+```
+
+**6. RAG Enhancement Notification**
+```json
+{
+  "type": "dialogue_rag_enhancement",
+  "payload": {
+    "conversation_id": "uuid",
+    "query": "player reputation with merchants",
+    "retrieved_knowledge": [
+      {
+        "source": "faction_system",
+        "content": "Player has high standing with merchants guild",
+        "relevance_score": 0.8,
+        "category": "reputation"
+      }
+    ],
+    "enhancement_applied": true,
+    "processing_time": 0.3
+  }
+}
+```
+
+#### Database Integration Requirements
+
+**Enhanced Database Schema:**
+```sql
+-- Core dialogue conversation table (Bible specification + enhancements)
+CREATE TABLE dialogue_conversations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID UNIQUE NOT NULL,
+    npc_id UUID NOT NULL,
+    player_id UUID NOT NULL,
+    interaction_type VARCHAR(50) NOT NULL DEFAULT 'casual',
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+    context JSONB DEFAULT '{}',
+    properties JSONB DEFAULT '{}',
+    started_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    ended_at TIMESTAMP NULL,
+    last_activity TIMESTAMP NOT NULL DEFAULT NOW(),
+    
+    -- Enhanced features
+    location_id UUID NULL,
+    dialogue_context VARCHAR(50) DEFAULT 'general',
+    npc_type VARCHAR(50) NULL,
+    relationship_level DECIMAL(3,2) DEFAULT 0.5,
+    rag_enabled BOOLEAN DEFAULT TRUE,
+    ai_processing_metadata JSONB DEFAULT '{}',
+    total_ai_latency DECIMAL(8,3) NULL,
+    
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Enhanced message history table
+CREATE TABLE dialogue_messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL REFERENCES dialogue_conversations(conversation_id),
+    content TEXT NOT NULL,
+    speaker VARCHAR(20) NOT NULL CHECK (speaker IN ('npc', 'player', 'system')),
+    message_type VARCHAR(20) DEFAULT 'dialogue',
+    emotion VARCHAR(50) NULL,
+    metadata JSONB DEFAULT '{}',
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+    
+    -- Placeholder and latency tracking
+    is_placeholder BOOLEAN DEFAULT FALSE,
+    placeholder_category VARCHAR(50) NULL,
+    replaced_by_message_id UUID NULL,
+    processing_time DECIMAL(6,3) NULL,
+    
+    -- RAG enhancement tracking
+    rag_enhanced BOOLEAN DEFAULT FALSE,
+    context_sources JSONB DEFAULT '[]',
+    confidence_score DECIMAL(3,2) NULL,
+    
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Enhanced conversation analytics table
+CREATE TABLE dialogue_analytics (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL REFERENCES dialogue_conversations(conversation_id),
+    event_type VARCHAR(100) NOT NULL,
+    event_data JSONB NOT NULL,
+    player_id UUID NOT NULL,
+    npc_id UUID NOT NULL,
+    session_id UUID NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+    
+    -- Enhanced analytics
+    message_count INTEGER DEFAULT 0,
+    total_duration DECIMAL(8,3) NULL,
+    ai_requests INTEGER DEFAULT 0,
+    average_response_time DECIMAL(6,3) NULL,
+    placeholder_count INTEGER DEFAULT 0,
+    timeout_occurrences INTEGER DEFAULT 0,
+    rag_queries INTEGER DEFAULT 0,
+    context_transitions JSONB DEFAULT '[]'
+);
+
+-- RAG knowledge base for dialogue enhancement
+CREATE TABLE dialogue_knowledge_base (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    content TEXT NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    metadata JSONB DEFAULT '{}',
+    tags JSONB DEFAULT '[]',
+    embedding_vector JSONB NULL,
+    embedding_model VARCHAR(100) NULL,
+    source_system VARCHAR(50) NULL,
+    source_id UUID NULL,
+    usage_count INTEGER DEFAULT 0,
+    last_accessed TIMESTAMP NULL,
+    relevance_score DECIMAL(3,2) DEFAULT 0.0,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- WebSocket session tracking
+CREATE TABLE dialogue_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    connection_id VARCHAR(100) UNIQUE NOT NULL,
+    player_id UUID NULL,
+    connected_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    last_activity TIMESTAMP NOT NULL DEFAULT NOW(),
+    disconnected_at TIMESTAMP NULL,
+    client_info JSONB DEFAULT '{}',
+    conversation_subscriptions JSONB DEFAULT '[]',
+    total_messages_sent INTEGER DEFAULT 0,
+    total_messages_received INTEGER DEFAULT 0,
+    connection_errors INTEGER DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+```
+
+### API Requirements - Diplomacy System
+
+#### Treaty Management APIs
+- `POST /api/diplomacy/treaties` - Create Treaty
+  - **Required Parameters**: `name`, `treaty_type`, `parties`, `terms`
+  - **Optional Parameters**: `end_date`, `metadata`
+  - **Returns**: Treaty object with effects applied, event ID, tension impact
+  - **Authentication**: Required (faction admin or GM)
+
+- `PUT /api/diplomacy/treaties/{treaty_id}/activate` - Activate Treaty
+  - **Required Parameters**: `treaty_id`
+  - **Optional Parameters**: None
+  - **Returns**: Success status, activation date, event ID, applied effects
+  - **Authentication**: Required (faction admin or GM)
+
+- `PUT /api/diplomacy/treaties/{treaty_id}/expire` - Expire Treaty
+  - **Required Parameters**: `treaty_id`
+  - **Optional Parameters**: `reason`
+  - **Returns**: Success status, expiration date, tension impact, removed effects
+  - **Authentication**: Required (faction admin or GM)
+
+#### Diplomatic Events APIs
+- `POST /api/diplomacy/incidents` - Create Incident
+  - **Required Parameters**: `incident_type`, `factions_involved`
+  - **Optional Parameters**: `severity`, `description`, `metadata`
+  - **Returns**: Incident object, tension impact, escalation status
+  - **Authentication**: Required (faction admin or GM)
+
+- `PUT /api/diplomacy/incidents/{incident_id}/resolve` - Resolve Incident
+  - **Required Parameters**: `incident_id`, `resolution`
+  - **Optional Parameters**: `metadata`
+  - **Returns**: Success status, resolution details, event ID
+  - **Authentication**: Required (faction admin or GM)
+
+#### Tension Management APIs
+- `POST /api/diplomacy/tension` - Update Tension
+  - **Required Parameters**: `faction_a_id`, `faction_b_id`, `tension_change`
+  - **Optional Parameters**: `reason`, `metadata`
+  - **Returns**: Old/new tension values, status change, event ID
+  - **Authentication**: Required (faction admin or GM)
+
+#### Negotiation APIs
+- `POST /api/diplomacy/negotiations` - Start Negotiation
+  - **Required Parameters**: `initiator_id`, `target_id`
+  - **Optional Parameters**: `treaty_type`, `initial_terms`, `metadata`
+  - **Returns**: Negotiation object, high stakes indicator, event ID
+  - **Authentication**: Required (faction admin or GM)
+
+- `POST /api/diplomacy/negotiations/{negotiation_id}/offers` - Make Offer
+  - **Required Parameters**: `negotiation_id`, `offering_faction`, `terms`
+  - **Optional Parameters**: `metadata`
+  - **Returns**: Offer object, attractiveness score
+  - **Authentication**: Required (faction admin or GM)
+
+**Note**: All diplomatic APIs support optional parameters to provide flexibility while maintaining core functionality. Required parameters ensure essential data is provided, while optional parameters allow for enhanced detail and metadata when available.
+
+#### Quality Tier System
+
+Equipment quality determines durability, value multipliers, and repair costs:
+
+- **Basic Quality**: 1 week durability, 1x value multiplier, base repair cost: 500 gold, per-point repair cost: 5 gold
+- **Military Quality**: 2 weeks durability, 1.5x value multiplier, base repair cost: 750 gold, per-point repair cost: 8 gold  
+- **Superior Quality**: 3 weeks durability, 2x value multiplier, base repair cost: 1000 gold, per-point repair cost: 10 gold
+- **Elite Quality**: 4 weeks durability, 2.5x value multiplier, base repair cost: 1500 gold, per-point repair cost: 15 gold
+- **Masterwork Quality**: 5 weeks durability, 3x value multiplier, base repair cost: 2000 gold, per-point repair cost: 20 gold
+
+**Repair Cost Calculation**: total_cost = base_repair_cost + (durability_lost * per_point_repair_cost)
+
+### Game Time System
+
+**Summary:** Manages game time through calendars, day/night cycles, seasons, weather patterns, and time-based events with a comprehensive temporal framework for dynamic world simulation.
+
+**🔧 RECENTLY UPDATED:** Complete compliance with EventDispatcher architecture, standardized event classes, and weather system integration.
+
+The game time system serves as the central temporal coordination hub for the entire game world, managing everything from sub-second ticks to yearly seasonal changes. It affects lighting, weather, NPC schedules, faction activities, quest deadlines, and all time-sensitive game events.
+
+#### Core Architecture
+
+**Modular Design with Clean Separation:**
+- **TimeManager:** Central singleton controller coordinating all temporal operations
+- **EventScheduler:** Priority-queue based system for scheduling and executing time-based events with EventDispatcher integration
+- **CalendarService:** Handles calendar mathematics, seasons, and special date calculations
+- **WeatherService:** Integrated weather simulation with time-based weather patterns
+- **GameTime Model:** Comprehensive time representation from ticks to years with validation
+- **Time Utilities:** Full suite of conversion, calculation, and formatting functions
+
+#### Key Features
+
+**Time Management:**
+- **Granular Time Tracking:** Manages time from sub-second ticks (configurable ticks per second) up to years
+- **Time Scale Control:** Dynamic speed adjustment (1x = real-time, 2x = double speed, etc.)
+- **Pause/Resume System:** Full time control with background tick management
+- **Time Advancement:** Manual time jumping with automatic cascade calculations
+
+**Event Scheduling System:**
+- **Priority Queue:** Efficient event scheduling with priority-based execution
+- **Event Types:** One-time, recurring (daily/weekly/monthly/yearly), seasonal, and custom events
+- **EventDispatcher Integration:** All events use the canonical EventDispatcher for system-wide notifications
+- **Standardized Events:** Time events extend EventBase for consistent event handling
+- **Event Cancellation:** Dynamic event management with cancellation support
+
+**Calendar Operations:**
+- **Configurable Calendar:** Customizable days per month, months per year, leap year rules
+- **Season Calculation:** Dynamic season determination based on day of year
+- **Important Dates:** Special date tracking for holidays, festivals, and significant events
+- **Leap Year Support:** Configurable leap year intervals and calculations
+
+**Weather System Integration:**
+- **Time-Based Weather:** Weather patterns evolve based on time of day, season, and location
+- **Weather Events:** Weather changes emit standardized events via EventDispatcher
+- **Environmental Effects:** Weather affects NPC behavior, travel, and economic activity
+- **Seasonal Weather:** Different weather probabilities and patterns by season
+
+**Data Models and Validation:**
+- **Comprehensive GameTime:** Individual fields for year, month, day, hour, minute, second, tick
+- **Calendar Configuration:** Full calendar system definition with leap year support
+- **TimeConfig:** Complete configuration for time progression, features, and system settings
+- **TimeEvent:** Detailed event model with metadata, priority, and callback information
+- **Weather Models:** Integrated weather state tracking and condition modeling
+
+#### EventDispatcher Integration
+
+**Standardized Event Classes:**
+All time system events extend EventBase and use the canonical EventDispatcher:
+
+```python
+from backend.systems.game_time.events import (
+    TimeChangedEvent, SeasonChangedEvent, WeatherChangedEvent,
+    TimeScaleChangedEvent, TimePausedEvent, TimeResumedEvent,
+    TimeEventScheduledEvent, TimeEventTriggeredEvent
+)
+
+# Events are automatically emitted when time changes
+dispatcher = EventDispatcher.get_instance()
+dispatcher.subscribe("time.changed", handle_time_change)
+dispatcher.subscribe("time.season_changed", handle_season_change)
+dispatcher.subscribe("time.weather_changed", handle_weather_change)
+```
+
+**Event Types:**
+- `time.changed` - Emitted when game time advances
+- `time.season_changed` - Emitted when seasons change
+- `time.weather_changed` - Emitted when weather conditions change
+- `time.scale_changed` - Emitted when time scale is modified
+- `time.paused` / `time.resumed` - Emitted for pause state changes
+- `time.event_scheduled` / `time.event_triggered` - For scheduled event lifecycle
+
+#### Time Utilities Library
+
+**Conversion Functions:**
+- `game_time_to_datetime()` - Convert GameTime to standard datetime
+- `datetime_to_game_time()` - Convert datetime to GameTime with setting preservation
+- `convert_real_time_to_game_time()` - Real-world to game time conversion
+
+**Calculation Functions:**
+- `calculate_time_difference()` - Multi-unit time difference calculations
+- `add_time_to_game_time()` - Time arithmetic with unit support
+- `calculate_day_of_year()` - Day of year calculations for calendar systems
+- `get_time_until_next_season()` - Season transition timing
+
+**Formatting and Display:**
+- `format_game_time()` - Flexible time formatting with date/time/season options
+- `get_season_from_day_of_year()` - Season calculation from day of year
+
+**Validation and Quality:**
+- `validate_game_time()` - Comprehensive GameTime validation with calendar rules
+- `is_leap_year()` - Leap year calculation with configurable intervals
+
+#### Integration Points
+
+**System Dependencies:**
+- **EventDispatcher:** All time events use canonical event system for notifications
+- **Dialogue System:** Time-sensitive conversations, deadlines, and appointment scheduling
+- **Main Game Loop:** Real-time progression and client synchronization via WebSocket
+- **API Layer:** REST endpoints for external time queries and manipulation
+- **Weather Simulation:** Integrated weather patterns based on time and season
+
+**Data Persistence:**
+- **State Saving:** Game time, calendar configuration, scheduled events, and weather state
+- **Backup/Restore:** Complete time system state management
+- **Serialization:** JSON-based data exchange with external systems
+
+#### System Implementation
+
+**File Structure:**
+```
+backend/systems/game_time/
+├── models/
+│   ├── time_model.py          # GameTime, Calendar, TimeConfig
+│   └── weather_model.py       # Weather states and conditions
+├── services/
+│   ├── time_manager.py        # Central TimeManager singleton
+│   ├── calendar_service.py    # Calendar calculations
+│   └── weather_service.py     # Weather simulation
+├── events/
+│   └── __init__.py           # Standardized event classes
+├── utils/
+│   └── time_utils.py         # Utility functions
+└── schemas/
+    └── time_schemas.py       # API schemas
+```
+
+**JSON Configuration:**
+Time system behavior is driven by JSON configuration files in `data/systems/game_time/`:
+- `time_system_config.json` - Core time progression settings
+- `calendar_config.json` - Calendar definitions and rules
+- `weather_config.json` - Weather patterns and probabilities
+
+#### Recent Improvements
+
+**Event System Compliance:**
+- ✅ **EventDispatcher Integration:** All time events use canonical EventDispatcher
+- ✅ **Standardized Event Classes:** Events extend EventBase with proper typing
+- ✅ **Event Emission:** TimeManager emits events for all state changes
+- ✅ **Callback Replacement:** Legacy callback system replaced with events
+
+**Weather System Integration:**
+- ✅ **Weather Service:** WeatherService integrated as part of time system
+- ✅ **Weather Events:** Weather changes emit standardized events
+- ✅ **Seasonal Weather:** Weather patterns change based on season and time
+- ✅ **Time-Weather Coupling:** Weather progression tied to time advancement
+
+**Architecture Improvements:**
+- ✅ **Type Safety:** Enhanced Pydantic models with Field validation and descriptions
+- ✅ **Clean Exports:** Proper module organization with explicit __all__ declarations
+- ✅ **Documentation:** Comprehensive docstrings for all functions and classes
+- ✅ **Namespace Consistency:** All references use `game_time` system name
+
+#### Configuration Opportunities
+
+**JSON-Driven Configuration:**
+- **Calendar Systems:** Days per month, months per year, leap year rules for different worlds
+- **Time Progression:** Speed ratios, tick rates, real-time conversion factors
+- **Season Definitions:** Season boundaries, lengths, and climate patterns
+- **Weather Patterns:** Weather probabilities, transitions, and seasonal variations
+- **Event Types:** Custom event categories and behavior patterns
+
+**Benefits of Configuration Externalization:**
+- **Modding Support:** Community customization of time systems and calendars
+- **A/B Testing:** Easy configuration swapping for balance testing
+- **Multi-Environment:** Different time scales for development, testing, and production
+- **Non-Developer Access:** Game designers can adjust temporal mechanics without code changes
+
+**Maintenance Status:**
+✅ **COMPLETE** - All core compliance issues resolved. Time system fully integrated with EventDispatcher, weather system properly coupled, and standardized events implemented.
+- **Multi-Environment:** Different time scales for development, testing, and production
+- **Non-Developer Access:** Game designers can adjust temporal mechanics without code changes
+
+**Maintenance Status:**
+✅ **COMPLETE** - All core compliance issues resolved. Time system fully integrated with EventDispatcher, weather system properly coupled, and standardized events implemented.
+
+#### Memory System
+
+**Summary:** NPCs maintain sophisticated memory systems that track interactions, experiences, and relationships. Memories have importance and relevance scores, decay over time based on JSON configuration, and influence NPC behavior through trust calculations and emotional responses.
+
+**Core Memory Features:**
+- **Dual Scoring System:** Memories use both importance (permanence) and relevance (current usefulness) scores
+- **Category-Based Organization:** Memories are categorized (trauma, achievement, relationship, etc.) with category-specific decay modifiers
+- **JSON Configuration:** All decay rates, trust calculations, and behavioral influences use JSON configuration files for game balance
+- **Access-Based Preservation:** Frequently accessed memories decay slower, creating realistic reinforcement patterns
+- **Automatic Summarization:** Old, low-relevance memories are automatically summarized to maintain performance
+
+**Memory Entities:**
+- **NPC Memories:** Personal experiences, interactions, observations
+- **Faction Memories:** Collective organizational knowledge and history
+- **Location Memories:** Environmental and historical data tied to specific places
+
+**Memory Categories and Default Importance:**
+- **Trauma:** 0.9 importance, 0.99 decay preservation (highly persistent)
+- **Core Beliefs:** 0.8 importance, 0.98 decay preservation (fundamental values)
+- **Achievements:** 0.7 importance, 0.96 decay preservation (personal accomplishments)
+- **Relationships:** 0.6 importance, 0.97 decay preservation (social connections)
+- **Economic:** 0.5 importance, 0.93 decay preservation (trade and financial events)
+- **Social:** 0.4 importance, 0.94 decay preservation (general social interactions)
+- **Combat:** 0.6 importance, 0.93 decay preservation (conflict experiences)
+- **Mundane:** 0.2 importance, 0.92 decay preservation (routine daily activities)
+
+**Memory Decay System:**
+All decay parameters are configured via `/data/systems/memory/behavioral_responses.json`:
+- **Base Decay Rate:** Default 0.95 per time period
+- **Category Modifiers:** Each memory category has specific preservation rates
+- **Access Frequency Bonuses:** Memories accessed frequently decay 10-15% slower
+- **Time Acceleration:** Older memories (30+ days) decay 20-50% faster
+- **Importance Preservation:** Memories above 0.7 importance are protected from rapid decay
+
+**Trust Calculation Framework:**
+Trust between entities is calculated using weighted interaction history from `/data/systems/memory/trust_calculation.json`:
+- **Interaction Weights:** Betrayal (-0.8), Help (+0.6), Promise Keeping (+0.7), etc.
+- **Temporal Factors:** Recent interactions weighted more heavily with configurable decay
+- **Emotional Modifiers:** Trauma amplifies negative interactions by 1.5x, joy amplifies positive by 1.2x
+- **Relationship Baselines:** Different starting trust levels for strangers (0.5), friends (0.7), enemies (0.2)
+
+**Behavioral Integration:**
+- **Risk Assessment:** Past experiences inform danger evaluation for similar situations
+- **Opportunity Recognition:** Pattern matching identifies beneficial scenarios
+- **Emotional Triggers:** Traumatic or highly positive memories create behavioral modifiers
+- **Faction Bias:** Collective memories influence political and diplomatic decisions
+
+**Memory Storage Architecture:**
+- **Primary Storage:** SQLAlchemy entities with JSONB fields for flexible metadata
+- **Vector Database:** ChromaDB integration for semantic similarity search
+- **Categorization Service:** Automatic content analysis for appropriate memory classification
+- **Event Integration:** Memory creation/modification triggers events for other systems
+
+**API Contracts:**
+- `create_memory(content, importance, categories, metadata)` - Create new memory
+- `recall_memory(query, category_filter, limit)` - Retrieve relevant memories
+- `calculate_trust_level(target_entity)` - Compute trust using interaction history
+- `assess_risk(situation_type, context)` - Evaluate danger based on past experiences
+- `get_behavior_modifiers(context)` - Generate behavioral influences from memories
+
+**Performance Optimization:**
+- **Summarization Thresholds:** Memories below 0.1 relevance are candidates for summarization
+- **Deletion Thresholds:** Memories below 0.01 relevance are automatically removed
+- **Memory Limits:** Maximum 50 memories considered for trust calculations
+- **Access Tracking:** Frequently accessed memories are preserved longer
+
+**Configuration Management:**
+All memory system behavior is controlled via JSON files:
+- `memory_categories.json` - Category definitions and default settings
+- `trust_calculation.json` - Trust algorithm weights and modifiers
+- `behavioral_responses.json` - Decay rates and influence calculations
+- `emotional_triggers.json` - Emotional response mappings and intensities
+
+**Integration Points:**
+- **Faction System:** Collective memories influence diplomatic decisions and alliance formation
+- **Economy System:** Trade fairness memories affect future commercial interactions
+- **Combat System:** Battle experiences modify tactical behavior and risk assessment
+- **Social System:** Relationship memories drive conversation topics and response styles
+
+### Motif System
+
+**Summary:** Thematic "mood board" system providing contextual guidance to AI systems for consistent storytelling and atmospheric content generation.
+
+**Core Purpose:** Background thematic layers that influence AI-generated narrative content, dialogue, events, and descriptions without direct player control.
+
+#### Architecture & Integration
+- **MotifManager:** Centralized motif operations and lifecycle management
+- **Motif Repository:** Data storage and persistence as separate entities with efficient querying
+- **Event Integration:** Publishes motif changes to subscribing systems
+- **Location-Based Filtering:** Spatial queries for regional/local motifs
+
+**System Integration Points:**
+- AI/LLM System (primary consumer)
+- NPC System (dialogue tone, behavior patterns)
+- Event System (event generation and thematic content)
+- Faction System (diplomatic interactions, conflicts)
+- Quest System (thematic guidance for generation/progression)
+- Region System (area-specific atmospheric characteristics)
+
+#### Motif Scopes & Types
+1. **GLOBAL:** Entire world effects ("Age of Heroes," "Twilight of Magic")
+2. **REGIONAL:** Geographic area themes with defined boundaries  
+3. **LOCAL:** Specific location/encounter themes
+4. **ENTITY-SPECIFIC:** NPC, Faction, PC, or Regional character themes
+
+#### Categories & Lifecycle
+49 predefined categories covering power/authority, conflict/struggle, emotion/psychology, moral/spiritual themes, transformation/change, social/relational, mystery/knowledge, and death/renewal.
+
+**Complete Category List:**
+ASCENSION, BETRAYAL, CHAOS, COLLAPSE, COMPULSION, CONTROL, DEATH, DECEPTION, DEFIANCE, DESIRE, DESPAIR, DESTINY, ECHO, EXPANSION, FAITH, FEAR, FUTILITY, GRIEF, GUILT, HOPE, HUNGER, INNOCENCE, INVENTION, ISOLATION, JUSTICE, LOYALTY, MADNESS, OBSESSION, PARANOIA, PEACE, POWER, PRIDE, PROTECTION, REBIRTH, REDEMPTION, REGRET, REVELATION, RUIN, SACRIFICE, SILENCE, SHADOW, STAGNATION, TEMPTATION, TIME, TRANSFORMATION, TRUTH, UNITY, VENGEANCE, WORSHIP
+
+Motifs follow programmatic evolution independent of player actions with automatic progression, decay, and interaction systems.
+
+### Faction System
+
+**Summary:** Handles organization of NPCs into groups with shared goals, relationships, and influence mechanics with autonomous behavior simulation.
+
+**Improvement Notes:** ✅ **FULLY IMPLEMENTED** - Comprehensive faction system with JSON configuration, alliance/betrayal mechanics, and proper architectural separation.
+
+**🔄 AUTONOMOUS SIMULATION STATUS:** **✅ READY FOR IMPLEMENTATION**
+
+The Faction System has been fully implemented with support for autonomous faction evolution, territorial expansion/contraction, internal politics, and dynamic relationships between factions across the entire world. Factions are designed to pursue their objectives actively, not just respond to player actions.
+
+**CURRENT STATUS:** ✅ **Production Ready** - Data models, repositories, service layer implemented with complete separation of concerns and JSON-driven configuration.
+
+**IMPLEMENTATION STATUS:** Factions autonomously compete for resources, territory, and influence while managing internal politics and external relationships through configurable behavior systems.
+
+#### Current Implementation (December 2024):
+
+**✅ Comprehensive Implementation Complete:**
+- **Architecture Compliance:** Full separation between business logic (`/backend/systems/faction/`) and infrastructure (`/backend/infrastructure/`)
+- **Protocol-Based Design:** Clean dependency injection with repository and validation service protocols
+- **JSON Configuration System:** Complete non-developer customizable behavior parameters
+- **Business Logic Isolation:** Pure business services with no technical dependencies
+
+**✅ Advanced Business Logic Implementation:**
+- **Faction Creation & Management:** Complete lifecycle with randomized or specified hidden attributes (1-10 scale)
+- **Alliance Formation:** Multi-party alliance creation with compatibility analysis and configurable terms
+- **Betrayal Mechanics:** Probability-based betrayal system with reason categorization and impact tracking
+- **Succession Handling:** Crisis detection and resolution based on faction governance type
+- **Power Scoring:** Complex power calculation based on weighted hidden attributes
+- **Stability Assessment:** Multi-factor stability analysis with risk prediction
+- **Behavior Prediction:** AI-driven behavioral tendency analysis based on personality attributes
+
+#### Operational Subsystems:
+
+**Core Subsystems:**
+1. **Core Faction Management** - Full CRUD operations with hidden personality attributes system
+2. **Data Models & Persistence** - Clean business models with infrastructure repository pattern
+3. **Alliance & Diplomacy Engine** - Complex relationship management with JSON configuration
+4. **Betrayal Risk Assessment** - Advanced probability calculations with multiple risk factors
+5. **Succession & Leadership** - Leadership transitions based on configurable governance types
+6. **Membership Management** - Dynamic faction membership (integration ready)
+7. **Territory & Influence** - Territorial control and expansion (integration ready)
+8. **Reputation & Trust** - Multi-scale reputation tracking with configurable modifiers
+9. **JSON Configuration System** - Complete behavior modification allowing gameplay tuning
+10. **Utility & Validation** - Comprehensive helper functions and validation with config integration
+
+**Business Logic Services:**
+- **FactionBusinessService:** Pure business logic for faction operations
+- **Power Score Calculation:** Complex weighted scoring system
+- **Stability Assessment:** Multi-dimensional stability analysis  
+- **Behavior Prediction:** Personality-based tendency calculations
+- **Alliance Evaluation:** Compatibility assessment algorithms
+- **Betrayal Risk Analysis:** Multi-factor risk assessment
+
+**Infrastructure Services:**
+- **FactionService:** API adaptation layer bridging business logic to infrastructure
+- **Repository Pattern:** Clean data access abstraction
+- **Configuration Management:** JSON-driven behavior configuration
+- **Event Integration:** Cross-system communication (ready for integration)
+
+#### Operational Status:
+
+**✅ Fully Operational Endpoints:**
+- `/factions` - Complete CRUD operations with hidden attributes
+- `/factions/{id}/behavior-modifiers` - Calculated behavior modifiers  
+- `/factions/{id}/stability-assessment` - Faction stability analysis
+- `/factions/{id}/power-score` - Faction power calculations
+- `/factions/{id}/betrayal-risk/{ally_id}` - Betrayal risk assessment
+- `/factions/{id}/evaluate-alliance/{target_id}` - Alliance compatibility evaluation
+- `/factions/{id}/propose-alliance/{target_id}` - Alliance proposal creation
+- `/factions/generate-hidden-attributes` - Random personality generation
+- `/factions/stats` - System statistics and health monitoring
+
+**🎯 Integration Ready:**
+- Alliance service logic (fully operational)
+- JSON configuration system (production ready)
+- Hidden attribute behavior modifiers (configurable via JSON)
+- Cross-system event publishing (architecture ready)
+
+#### Hidden Attributes System:
+
+**Six Personality Dimensions (1-10 scale):**
+- **hidden_ambition:** Drive for expansion and power
+- **hidden_integrity:** Trustworthiness and honor
+- **hidden_discipline:** Organization and consistency
+- **hidden_impulsivity:** Tendency toward rash decisions
+- **hidden_pragmatism:** Flexibility and practical thinking
+- **hidden_resilience:** Ability to withstand setbacks
+
+**Behavioral Impact Calculations:**
+- **Power Score:** Weighted combination affecting overall faction strength
+- **Stability Assessment:** Multi-factor analysis predicting internal stability
+- **Alliance Compatibility:** Matching algorithms for diplomatic relationships
+- **Betrayal Risk:** Complex probability calculations based on personality and circumstances
+- **Diplomatic Modifiers:** Personality-driven negotiation and relationship tendencies
+
+#### Configuration Examples:
+
+**Alliance Types (alliance_config.json):**
+```json
+{
+  "military_alliance": {
+    "formation_requirements": {
+      "min_trust_level": 0.6,
+      "min_compatibility": 0.5,
+      "required_attributes": {
+        "hidden_integrity": 5,
+        "hidden_discipline": 4
+      }
+    },
+    "betrayal_consequences": {
+      "reputation_impact": -0.8,
+      "trust_penalty": -0.9,
+      "diplomatic_isolation_risk": 0.7
+    }
+  }
+}
+```
+
+**Behavior Modifiers (behavior_config.json):**
+```json
+{
+  "behavior_calculations": {
+    "expansion_tendency": {
+      "formula": "(ambition * 0.4) + (pragmatism * 0.3) + (discipline * 0.2) + ((10 - impulsivity) * 0.1)",
+      "description": "Likelihood to expand territory or influence"
+    },
+    "alliance_reliability": {
+      "formula": "(integrity * 0.5) + (discipline * 0.3) + (resilience * 0.2)",
+      "description": "Trustworthiness in diplomatic relationships"
+    }
+  }
+}
+```
+
+**Faction Types (faction_config.json):**
+```json
+{
+  "faction_types": {
+    "merchant_guild": {
+      "typical_attributes": {
+        "hidden_ambition": [6, 8],
+        "hidden_integrity": [5, 7],
+        "hidden_discipline": [7, 9],
+        "hidden_pragmatism": [8, 10]
+      },
+      "primary_focus": "economic_expansion",
+      "organizational_structure": "oligarchy"
+    }
+  }
+}
+```
+
+#### Integration Architecture:
+
+**Business Logic Layer (`/backend/systems/faction/`):**
+- **Pure Business Services:** Domain logic with no technical dependencies
+- **Protocol Definitions:** Clean interfaces for dependency injection
+- **Domain Models:** Business concepts separate from infrastructure
+- **Business Calculations:** Power, stability, compatibility, and behavior algorithms
+
+**Infrastructure Layer (`/backend/infrastructure/`):**
+- **Data Repositories:** Database access and persistence
+- **API Endpoints:** FastAPI routing and request handling
+- **Configuration Loading:** JSON file management and caching
+- **Event Publishing:** Cross-system communication infrastructure
+
+**API Contracts:**
+- Full compliance with defined DTOs for all endpoints
+- Comprehensive hidden attributes exposure in API responses
+- Behavior modifier calculations available via dedicated endpoints
+- Alliance and betrayal mechanics accessible through RESTful interfaces
+
+#### Testing & Quality Assurance:
+
+**Business Logic Testing:**
+- Pure business logic fully testable with mocks
+- No infrastructure dependencies in business tests
+- Comprehensive coverage of calculation algorithms
+- Protocol-based testing for clean interfaces
+
+**Integration Testing:**
+- Infrastructure components tested separately
+- Repository pattern enables database testing isolation
+- API endpoint testing with proper request/response validation
+- Configuration system testing with various JSON configurations
+
+This faction system represents a complete implementation of autonomous political simulation with clean architecture, comprehensive configuration, and production-ready business logic.
+
+# Quest System
+
+## Overview
+
+The Quest System provides comprehensive quest management functionality including quest creation, assignment, progression tracking, and reward distribution. The system supports both individual quests and quest chains with sophisticated difficulty scaling and theme-based generation.
+
+## Architecture
+
+**Business Logic Location**: `/backend/systems/quest/`
+- **Core Models**: `/backend/systems/quest/models.py`
+- **Business Services**: `/backend/systems/quest/services.py`
+- **Quest Generation**: `/backend/systems/quest/generator.py`
+- **Exceptions**: `/backend/systems/quest/exceptions.py`
+
+**Infrastructure Layer**: `/backend/infrastructure/`
+- **Database Models**: `/backend/infrastructure/databases/quest_models.py`
+- **Repository Implementation**: `/backend/infrastructure/repositories/quest_repository.py`
+- **Validation Service**: `/backend/infrastructure/services/quest_validation_service.py`
+- **API Router**: `/backend/infrastructure/api_routers/quest_router.py`
+
+**Configuration & Schemas**: `/data/systems/quest/`
+- **JSON Schema**: `quest_schema.json`
+- **Quest Templates**: `quest_templates.json`
+- **Configuration**: `quest_config.json`
+
+## Core Data Models
+
+### QuestData
+The primary quest entity containing all quest information:
+
+```python
+@dataclass
+class QuestData:
+    id: UUID
+    title: str
+    description: str
+    status: QuestStatus  # pending, active, completed, failed, abandoned, expired
+    difficulty: QuestDifficulty  # easy, medium, hard, epic
+    theme: QuestTheme  # combat, exploration, social, mystery, crafting, trade, aid, knowledge, general
+    npc_id: Optional[str] = None
+    player_id: Optional[str] = None
+    location_id: Optional[str] = None
+    level: int = 1
+    steps: List[QuestStepData] = field(default_factory=list)
+    rewards: Optional[QuestRewardData] = None
+    is_main_quest: bool = False
+    tags: List[str] = field(default_factory=list)
+    properties: Dict[str, Any] = field(default_factory=dict)
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    expires_at: Optional[datetime] = None
+    
+    # Quest Chain Support
+    chain_id: Optional[str] = None
+    chain_position: Optional[int] = None
+    chain_prerequisites: List[str] = field(default_factory=list)
+    chain_unlocks: List[str] = field(default_factory=list)
+    is_chain_final: bool = False
+```
+
+### QuestStepData
+Individual quest steps within a quest:
+
+```python
+class QuestStepData:
+    id: int
+    title: str
+    description: str
+    completed: bool = False
+    required: bool = True
+    order: int = 0
+    metadata: Optional[Dict[str, Any]] = None
+```
+
+### QuestRewardData
+Quest completion rewards:
+
+```python
+class QuestRewardData:
+    gold: int = 0
+    experience: int = 0
+    reputation: Optional[Dict[str, Any]] = None
+    items: Optional[List[Dict[str, Any]]] = None
+    special: Optional[Dict[str, Any]] = None
+```
+
+## Business Services
+
+### QuestBusinessService
+Primary business service containing all quest-related business logic:
+
+**Key Methods:**
+- `create_quest(create_data: CreateQuestData) -> QuestData`
+- `get_quest_by_id(quest_id: UUID) -> Optional[QuestData]`
+- `update_quest(quest_id: UUID, update_data: UpdateQuestData) -> QuestData`
+- `assign_quest_to_player(quest_id: UUID, player_id: str) -> QuestData`
+- `complete_quest_step(quest_id: UUID, step_id: int, player_id: str) -> QuestData`
+- `abandon_quest(quest_id: UUID, player_id: str, reason: str) -> QuestData`
+- `get_available_quests_for_player(player_id: str, location_id: Optional[str]) -> List[QuestData]`
+
+### QuestGeneratorService
+Quest generation service with template and algorithmic support:
+
+**Key Methods:**
+- `generate_quest_for_npc(npc_data: Dict[str, Any], context: Dict[str, Any]) -> Optional[QuestData]`
+- `generate_quest_steps(theme: QuestTheme, difficulty: QuestDifficulty, context: Dict[str, Any]) -> List[QuestStepData]`
+- `generate_quest_rewards(difficulty: QuestDifficulty, level: int) -> QuestRewardData`
+
+## Quest Chain System
+
+### QuestChainData
+Represents connected quest sequences:
+
+```python
+@dataclass
+class QuestChainData:
+    id: str
+    name: str
+    description: str
+    theme: QuestTheme
+    difficulty: QuestDifficulty
+    min_level: int
+    max_level: Optional[int] = None
+    quest_ids: List[str] = field(default_factory=list)
+    chain_type: str = "sequential"  # sequential, branching, parallel
+    is_main_story: bool = False
+    rewards: Optional[QuestRewardData] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+```
+
+### Chain Types
+- **Sequential**: Quests must be completed in order
+- **Branching**: Player can choose between different quest paths
+- **Parallel**: Multiple quests can be active simultaneously
+
+## API Endpoints
+
+### Core Quest Operations
+- `POST /api/quests/` - Create new quest
+- `GET /api/quests/{quest_id}` - Get quest details
+- `PUT /api/quests/{quest_id}` - Update quest
+- `DELETE /api/quests/{quest_id}` - Delete quest
+- `GET /api/quests/` - List quests with pagination and filtering
+
+### Player-Specific Operations
+- `GET /api/quests/player/{player_id}` - Get player's quests
+- `POST /api/quests/{quest_id}/actions` - Perform quest actions (assign, abandon, complete_step)
+
+### Statistics
+- `GET /api/quests/statistics/` - Get quest system statistics
+
+## Business Rules
+
+### Quest Creation Rules
+1. Quest titles must be unique within the system
+2. Quest levels must be between 1 and 100
+3. Quests must have valid difficulty and theme values
+4. All quest steps must have titles and descriptions
+5. Rewards must have non-negative gold and experience values
+
+### Quest Assignment Rules
+1. Players can have a maximum of 10 active quests
+2. Quests can only be assigned if status is 'pending'
+3. Quest prerequisites must be satisfied before assignment
+4. Quest level should match player capabilities
+
+### Quest Status Transitions
+- `pending` → `active`, `abandoned`
+- `active` → `completed`, `failed`, `abandoned`, `expired`
+- `completed` → (terminal state)
+- `failed` → `pending` (can retry)
+- `abandoned` → `pending` (can retry)
+- `expired` → `pending` (can retry)
+
+### Quest Step Rules
+1. Steps must be completed in order unless marked as non-required
+2. Quest is complete when all required steps are finished
+3. Optional steps can be skipped without affecting completion
+4. Step metadata can store custom progress information
+
+## Difficulty Scaling
+
+### Difficulty Levels
+- **Easy**: 1-2 steps, basic rewards, suitable for new players
+- **Medium**: 2-3 steps, moderate rewards, standard difficulty
+- **Hard**: 3-4 steps, good rewards, challenging content
+- **Epic**: 4-6 steps, excellent rewards, end-game content
+
+### Reward Scaling
+Rewards scale based on:
+- Quest difficulty (base multiplier)
+- Quest level (linear scaling)
+- Location danger level
+- Player level differential
+
+## Theme System
+
+### Available Themes
+- **Combat**: Fighting enemies, clearing areas, defeating bosses
+- **Exploration**: Discovering locations, finding artifacts, mapping areas
+- **Social**: Negotiations, diplomacy, relationship building
+- **Mystery**: Investigations, solving puzzles, uncovering secrets
+- **Crafting**: Creating items, gathering materials, skill development
+- **Trade**: Merchant activities, delivery missions, economic tasks
+- **Aid**: Helping others, rescue missions, humanitarian tasks
+- **Knowledge**: Research, learning, academic pursuits
+- **General**: Miscellaneous tasks that don't fit other themes
+
+### Theme-Specific Step Types
+Each theme has associated step types that determine quest structure and player actions required.
+
+## Template System
+
+### Quest Templates
+Located in `/data/systems/quest/quest_templates.json`, templates provide:
+- Pre-defined quest structures
+- Dynamic content interpolation
+- Theme and difficulty matching
+- Consistent quest quality
+
+### Template Features
+- Variable substitution (`{npc_name}`, `{location}`, etc.)
+- Conditional logic based on context
+- Fallback to algorithmic generation
+- Support for main story and side quests
+
+## Validation System
+
+### Data Validation
+- JSON schema validation against `quest_schema.json`
+- Business rule enforcement
+- Input sanitization and normalization
+- Error reporting with detailed messages
+
+### Validation Points
+1. Quest creation and updates
+2. Step completion and progression
+3. Reward distribution
+4. Chain progression and dependencies
+
+## Performance Considerations
+
+### Caching Strategy
+- Quest data cached by ID for frequent access
+- Player quest lists cached with TTL
+- Template compilation cached for generation
+- Statistics cached with periodic refresh
+
+### Database Optimization
+- Indexed fields: status, theme, difficulty, level, player_id, location_id
+- JSONB fields for flexible metadata storage
+- Efficient pagination for quest listings
+- Optimized queries for player quest retrieval
+
+## Error Handling
+
+### Exception Hierarchy
+- `QuestSystemError` (base exception)
+- `QuestNotFoundError`
+- `QuestValidationError`
+- `QuestStatusError`
+- `QuestChainError`
+- `QuestGenerationError`
+
+### Error Recovery
+- Graceful degradation for generation failures
+- Automatic fallbacks for template errors
+- Transaction rollback for data consistency
+- Detailed logging for debugging
+
+## Integration Points
+
+### NPC System Integration
+- Quest generation based on NPC profession and level
+- NPC-specific quest templates
+- Dynamic quest assignment to NPCs
+
+### Location System Integration
+- Location-based quest filtering
+- Distance-based difficulty scaling
+- Environmental context for quest generation
+
+### Player System Integration
+- Player level requirements
+- Quest history tracking
+- Achievement integration
+- Progress persistence
+
+### Inventory System Integration
+- Item rewards distribution
+- Material requirements for crafting quests
+- Equipment prerequisites
+
+## Monitoring and Analytics
+
+### Key Metrics
+- Quest completion rates by difficulty and theme
+- Player engagement with quest types
+- Average quest completion time
+- Popular quest templates and generation patterns
+
+### Performance Monitoring
+- API response times
+- Database query performance
+- Generation service latency
+- Cache hit rates
+
+## Testing Strategy
+
+### Unit Tests
+- Business logic validation
+- Quest generation algorithms
+- Reward calculation accuracy
+- Status transition rules
+
+### Integration Tests
+- API endpoint functionality
+- Database operations
+- Service layer interactions
+- Template system operation
+
+### Performance Tests
+- Large-scale quest generation
+- Concurrent player operations
+- Database load testing
+- Cache performance evaluation
+
+This quest system provides a robust, scalable foundation for quest management that supports both simple individual quests and complex multi-quest storylines while maintaining high performance and data integrity.

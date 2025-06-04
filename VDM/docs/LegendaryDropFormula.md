@@ -1,7 +1,7 @@
 # Legendary Drop Formula Documentation
 
 ## Overview
-This document explains the mathematical formula, implementation, configuration, and design intent for the legendary item drop system in Visual_DM.
+This document explains the mathematical formula, implementation, configuration, and design intent for the legendary item drop system in Dreamforge.
 
 ---
 

@@ -37,8 +37,8 @@ ITEM_WEIGHTS = {
 # Valid races
 VALID_RACES = ['human', 'elf', 'dwarf', 'halfling']
 
-# Valid classes
-VALID_CLASSES = ['warrior', 'mage', 'rogue', 'cleric']
+# Valid archetypes (descriptive only, not mechanical classes)
+VALID_ARCHETYPES = ['warrior', 'scholar', 'scout', 'mystic']
 
 # Valid difficulties
 VALID_DIFFICULTIES = ['easy', 'normal', 'hard', 'epic']

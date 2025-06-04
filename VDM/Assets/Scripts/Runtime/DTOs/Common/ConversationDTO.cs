@@ -49,6 +49,20 @@ namespace VDM.DTOs.Social.Dialogue
     }
 
     /// <summary>
+    /// Dialogue node data transfer object for conversation structure
+    /// </summary>
+    [Serializable]
+    public class DialogueNodeDTO
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
+        public string SpeakerId { get; set; } = string.Empty;
+        public List<DialogueOptionDTO> Options { get; set; } = new List<DialogueOptionDTO>();
+        public Dictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
+        public bool IsEndNode { get; set; } = false;
+    }
+
+    /// <summary>
     /// Start conversation request
     /// </summary>
     [Serializable]

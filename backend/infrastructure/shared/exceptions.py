@@ -30,6 +30,11 @@ class RepositoryError(BaseSystemError):
     pass
 
 
+class ServiceError(BaseSystemError):
+    """Base exception for service layer errors"""
+    pass
+
+
 class EntityNotFoundError(NotFoundError):
     """Exception raised when entity is not found"""
     pass
@@ -296,17 +301,209 @@ class EventsConflictError(ConflictError):
 
 # Equipment System Exceptions
 class EquipmentNotFoundError(NotFoundError):
-    """Exception raised when equipment is not found"""
+    """Exception raised when Equipment is not found"""
     pass
 
 
 class EquipmentValidationError(ValidationError):
-    """Exception raised when equipment validation fails"""
+    """Exception raised when Equipment validation fails"""
     pass
 
 
 class EquipmentConflictError(ConflictError):
-    """Exception raised when equipment conflicts occur"""
+    """Exception raised when Equipment conflicts occur"""
+    pass
+
+
+# Data System Exceptions
+class DataNotFoundError(NotFoundError):
+    """Exception raised when Data is not found"""
+    pass
+
+
+class DataValidationError(ValidationError):
+    """Exception raised when Data validation fails"""
+    pass
+
+
+class DataConflictError(ConflictError):
+    """Exception raised when Data conflicts occur"""
+    pass
+
+
+# Crafting System Exceptions
+class CraftingNotFoundError(NotFoundError):
+    """Exception raised when Crafting is not found"""
+    pass
+
+
+class CraftingValidationError(ValidationError):
+    """Exception raised when Crafting validation fails"""
+    pass
+
+
+class CraftingConflictError(ConflictError):
+    """Exception raised when Crafting conflicts occur"""
+    pass
+
+
+# Time System Exceptions
+class TimeNotFoundError(NotFoundError):
+    """Exception raised when Time is not found"""
+    pass
+
+
+class TimeValidationError(ValidationError):
+    """Exception raised when Time validation fails"""
+    pass
+
+
+class TimeConflictError(ConflictError):
+    """Exception raised when Time conflicts occur"""
+    pass
+
+
+# Inventory System Exceptions
+class InventoryNotFoundError(NotFoundError):
+    """Exception raised when Inventory is not found"""
+    pass
+
+
+class InventoryValidationError(ValidationError):
+    """Exception raised when Inventory validation fails"""
+    pass
+
+
+class InventoryConflictError(ConflictError):
+    """Exception raised when Inventory conflicts occur"""
+    pass
+
+
+# Population System Exceptions
+class PopulationNotFoundError(NotFoundError):
+    """Exception raised when Population is not found"""
+    pass
+
+
+class PopulationValidationError(ValidationError):
+    """Exception raised when Population validation fails"""
+    pass
+
+
+class PopulationConflictError(ConflictError):
+    """Exception raised when Population conflicts occur"""
+    pass
+
+
+# Storage System Exceptions
+class StorageNotFoundError(NotFoundError):
+    """Exception raised when Storage is not found"""
+    pass
+
+
+class StorageValidationError(ValidationError):
+    """Exception raised when Storage validation fails"""
+    pass
+
+
+class StorageConflictError(ConflictError):
+    """Exception raised when Storage conflicts occur"""
+    pass
+
+
+# Memory System Exceptions
+class MemoryNotFoundError(NotFoundError):
+    """Exception raised when Memory is not found"""
+    pass
+
+
+class MemoryValidationError(ValidationError):
+    """Exception raised when Memory validation fails"""
+    pass
+
+
+class MemoryConflictError(ConflictError):
+    """Exception raised when Memory conflicts occur"""
+    pass
+
+
+# Faction System Exceptions
+class FactionNotFoundError(NotFoundError):
+    """Exception raised when Faction is not found"""
+    pass
+
+
+class FactionValidationError(ValidationError):
+    """Exception raised when Faction validation fails"""
+    pass
+
+
+class FactionConflictError(ConflictError):
+    """Exception raised when Faction conflicts occur"""
+    pass
+
+
+# Loot System Exceptions
+class LootNotFoundError(NotFoundError):
+    """Exception raised when Loot is not found"""
+    pass
+
+
+class LootValidationError(ValidationError):
+    """Exception raised when Loot validation fails"""
+    pass
+
+
+class LootConflictError(ConflictError):
+    """Exception raised when Loot conflicts occur"""
+    pass
+
+
+# Integration System Exceptions
+class IntegrationNotFoundError(NotFoundError):
+    """Exception raised when Integration is not found"""
+    pass
+
+
+class IntegrationValidationError(ValidationError):
+    """Exception raised when Integration validation fails"""
+    pass
+
+
+class IntegrationConflictError(ConflictError):
+    """Exception raised when Integration conflicts occur"""
+    pass
+
+
+# World_Generation System Exceptions
+class World_GenerationNotFoundError(NotFoundError):
+    """Exception raised when World_Generation is not found"""
+    pass
+
+
+class World_GenerationValidationError(ValidationError):
+    """Exception raised when World_Generation validation fails"""
+    pass
+
+
+class World_GenerationConflictError(ConflictError):
+    """Exception raised when World_Generation conflicts occur"""
+    pass
+
+
+# World_State System Exceptions
+class World_StateNotFoundError(NotFoundError):
+    """Exception raised when World_State is not found"""
+    pass
+
+
+class World_StateValidationError(ValidationError):
+    """Exception raised when World_State validation fails"""
+    pass
+
+
+class World_StateConflictError(ConflictError):
+    """Exception raised when World_State conflicts occur"""
     pass
 
 
@@ -317,6 +514,7 @@ __all__ = [
     "ValidationError",
     "ConflictError",
     "RepositoryError",
+    "ServiceError",
     "EntityNotFoundError",
     "EntityConflictError",
     "NpcNotFoundError",
@@ -370,4 +568,40 @@ __all__ = [
     "EquipmentNotFoundError",
     "EquipmentValidationError",
     "EquipmentConflictError",
+    "CraftingNotFoundError",
+    "CraftingValidationError",
+    "CraftingConflictError",
+    "TimeNotFoundError",
+    "TimeValidationError",
+    "TimeConflictError",
+    "InventoryNotFoundError",
+    "InventoryValidationError",
+    "InventoryConflictError",
+    "DataNotFoundError",
+    "DataValidationError",
+    "DataConflictError",
+    "PopulationNotFoundError",
+    "PopulationValidationError",
+    "PopulationConflictError",
+    "StorageNotFoundError",
+    "StorageValidationError",
+    "StorageConflictError",
+    "MemoryNotFoundError",
+    "MemoryValidationError",
+    "MemoryConflictError",
+    "FactionNotFoundError",
+    "FactionValidationError",
+    "FactionConflictError",
+    "LootNotFoundError",
+    "LootValidationError",
+    "LootConflictError",
+    "IntegrationNotFoundError",
+    "IntegrationValidationError",
+    "IntegrationConflictError",
+    "World_GenerationNotFoundError",
+    "World_GenerationValidationError",
+    "World_GenerationConflictError",
+    "World_StateNotFoundError",
+    "World_StateValidationError",
+    "World_StateConflictError",
 ] 

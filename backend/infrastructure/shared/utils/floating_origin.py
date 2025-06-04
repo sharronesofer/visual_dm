@@ -3,6 +3,9 @@ Shared utility module for floating_origin
 Redirected from visual_client.core.utils.floating_origin
 """
 
+# Import floating origin classes from events utils
+from backend.infrastructure.events.utils.floating_origin import FloatingOrigin, floating_origin
+
 # Basic implementations - extend as needed
 def secure_filename(filename: str) -> str:
     """Secure a filename by removing potentially dangerous characters."""

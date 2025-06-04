@@ -13,10 +13,10 @@ This document serves as the comprehensive guide for migrating the Visual DM code
 
 ### Directory Structure
 - **Backend**: `/backend/` directory with Python modules
-- **Frontend**: `/Visual_DM/Visual_DM/Assets/Scripts/` directory with C# scripts
+- **Frontend**: `/Dreamforge/Dreamforge/Assets/Scripts/` directory with C# scripts
 - **Tests**: 
   - Python: `/backend/tests/`
-  - C#: `/Visual_DM/Visual_DM/Assets/Tests/`
+  - C#: `/Dreamforge/Dreamforge/Assets/Tests/`
 
 ## Migration Patterns
 

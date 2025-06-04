@@ -9,10 +9,7 @@ import pytest
 from unittest.mock import Mock, patch
 
 # Import the module under test
-try:
-    from backend.systems.motif import utils
-except ImportError:
-    pytest.skip(f"Module backend.systems.motif.utils not found", allow_module_level=True)
+from backend.systems.motif import utils
 
 
 class TestUtils:

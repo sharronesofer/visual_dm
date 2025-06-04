@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.memory import models
+    from backend.infrastructure.systems.memory import models
 except ImportError:
-    pytest.skip(f"Module backend.systems.memory.models not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.memory.models not found", allow_module_level=True)
 
 
 class TestModels:

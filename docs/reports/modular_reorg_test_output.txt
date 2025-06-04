@@ -1,6 +1,6 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0
-rootdir: /Users/Sharrone/Visual_DM/backend
+rootdir: /Users/Sharrone/Dreamforge/backend
 configfile: pyproject.toml
 plugins: anyio-4.9.0
 collected 0 items
@@ -11,7 +11,7 @@ collected 0 items
     warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
 
 backend/app/db/session.py:35
-  /Users/Sharrone/Visual_DM/backend/app/db/session.py:35: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  /Users/Sharrone/Dreamforge/backend/app/db/session.py:35: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
     Base = declarative_base()
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html

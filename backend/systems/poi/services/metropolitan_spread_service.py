@@ -1,21 +1,22 @@
 """
-Metropolitan Spread Service
+Metropolitan Spread Service for POI System
 
-Handles urban expansion, metropolitan area detection, and population-driven
-city growth mechanics for the POI system.
+Manages urban expansion, suburban development, and metropolitan area growth
+patterns for cities and large settlements.
 """
 
 from typing import Dict, List, Optional, Tuple, Set, Any
-from uuid import UUID
+from uuid import UUID, uuid4
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import math
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 
-from backend.systems.poi.models import PoiEntity, POIType, POIState
-from backend.infrastructure.database import get_db
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.systems.poi.models import PoiEntity, POIType, POIState
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -100,7 +101,7 @@ class MetropolitanSpreadService:
     """Service for managing metropolitan area expansion and urban growth"""
     
     def __init__(self, db_session: Optional[Session] = None):
-        self.db_session = db_session or get_db()
+        self.db_session = db_session or get_db_session()
         self.event_dispatcher = EventDispatcher()
         
         # Configuration

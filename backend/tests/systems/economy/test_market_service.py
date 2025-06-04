@@ -10,7 +10,8 @@ from unittest.mock import Mock, patch
 from datetime import datetime
 
 from backend.systems.economy.services.market_service import MarketService
-from backend.systems.economy.models.market import Market, MarketData
+from backend.infrastructure.database.economy.market_models import Market
+from backend.systems.economy.models.market import MarketData
 
 
 class TestMarketService:

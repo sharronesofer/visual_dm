@@ -14,14 +14,14 @@ Technical Architecture
 •	Database: Firebase Realtime DB
 •	Semantic Memory: ChromaDB
 •	AI Integration: OpenAI GPT (gpt-4.1o and gpt-4.1o-mini)
-•	Data Formats: JSON for structured data (rules, feats, skills, characters)
+•	Data Formats: JSON for structured data (rules, abilities, skills, characters)
 Core System Components
 1. World and Procedural Generation
 •	Hierarchical Structure: Global → Region → POI → Building.
 •	Dynamic Generation: Autonomous events, terrain, factions, and narrative arcs.
 •	Entropy and Motifs: Narrative escalation driven by rotating character motifs and world entropy.
 2. Character Creation and Management
-•	Step-by-step Creation: Race, attributes, skills, feats, alignment, background, and equipment.
+•	Step-by-step Creation: Race, attributes, skills, abilities, alignment, background, and equipment.
 •	Persistent Storage: Incremental saving and validation logic with backend integration.
 •	UI/UX: Interactive, clear navigation, and detailed summary confirmation.
 3. NPC Simulation
@@ -39,13 +39,13 @@ Core System Components
 •	Structured Inventory: Persistent item storage, equipment validation, and modifiers for DR, MP, skills, and special resistances.
 •	JSON-driven Equipment: Clear definitions and easy maintenance.
 Custom RPG System Overview
-•	No Player Classes: Characters are built freely via feats, skills, and racial traits, eliminating fixed classes.
+•	No Player Classes: Characters are built freely via abilities, skills, and racial traits, eliminating fixed classes.
 •	Attributes: STR, DEX, CON, INT, WIS, CHA, each influencing skills, combat, and saving throws.
 •	Saving Throws: Fortitude (CON), Reflex (DEX), and Will (WIS), determining resistance to various threats.
-•	Leveling System: Experience-driven with clear XP thresholds, offering incremental feats and skills per level.
-•	Feats: Extensive system providing specialized abilities, skill enhancements, combat options, and magic usage.
+•	Leveling System: Experience-driven with clear XP thresholds, offering incremental abilities and skills per level.
+•	Abilities: Extensive system providing specialized abilities, skill enhancements, combat options, and magic usage.
 Races and Special Traits
-•	Humans: Extra feats, flexible skill points.
+•	Humans: Extra abilities, flexible skill points.
 •	Elves: Agility, magic affinity, enchantment resistance.
 •	Dwarves: Physical resilience, poison resistance, combat bonuses against specific foes.
 •	Halflings: Luck-driven abilities, stealth, bravery.
@@ -54,7 +54,7 @@ Races and Special Traits
 •	Half-Elves: Hybrid traits, balance of versatility and senses.
 •	Tieflings: Elemental resistances, fiendish heritage, special spell-like abilities.
 Item Effects
-•	Equipment Modifiers: Include skill bonuses, damage reduction, elemental resistances, MP enhancements, and special feats.
+•	Equipment Modifiers: Include skill bonuses, damage reduction, elemental resistances, MP enhancements, and special abilities.
 Combat Actions
 •	Core Actions: Include Attack, Dash, Disengage, Dodge, Help, Hide, Grapple, Shove, and more, clearly defined with specific tactical applications.
 •	Free and Bonus Actions: Quick item use, off-hand attacks, tactical positioning adjustments.

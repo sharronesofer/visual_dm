@@ -5,7 +5,7 @@ Clean up orphaned motif records and ensure data consistency.
 import asyncio
 import json
 from pathlib import Path
-from backend.systems.motif.repository import MotifRepository
+from backend.infrastructure.systems.motif.repositories import MotifRepository
 
 async def cleanup_motifs():
     """Clean up all motifs from the test database"""

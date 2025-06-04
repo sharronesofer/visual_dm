@@ -439,13 +439,13 @@ global_dispatcher = EventDispatcher()
         
         # Utility function patterns to replace
         utility_patterns = {
-            'generate_hash': 'from infrastructure.shared_utils import generate_hash',
-            'random_choice': 'from infrastructure.shared_utils import random_choice', 
-            'format_number': 'from infrastructure.shared_utils import format_number',
-            'safe_divide': 'from infrastructure.shared_utils import safe_divide',
-            'validate_data': 'from infrastructure.shared_utils import validate_data',
-            'serialize_data': 'from infrastructure.shared_utils import serialize_data',
-            'deserialize_data': 'from infrastructure.shared_utils import deserialize_data',
+            'generate_hash': 'from backend.infrastructure.shared_utils import generate_hash',
+            'random_choice': 'from backend.infrastructure.shared_utils import random_choice', 
+            'format_number': 'from backend.infrastructure.shared_utils import format_number',
+            'safe_divide': 'from backend.infrastructure.shared_utils import safe_divide',
+            'validate_data': 'from backend.infrastructure.shared_utils import validate_data',
+            'serialize_data': 'from backend.infrastructure.shared_utils import serialize_data',
+            'deserialize_data': 'from backend.infrastructure.shared_utils import deserialize_data',
         }
         
         for file_path in python_files:
@@ -503,7 +503,7 @@ global_dispatcher = EventDispatcher()
         python_files = list(self.backend_dir.rglob("*.py"))
         updated_count = 0
         
-        event_import = "from infrastructure.event_system import EventBase, EventDispatcher"
+        event_import = "from backend.infrastructure.event_system import EventBase, EventDispatcher"
         
         for file_path in python_files:
             if str(file_path) in self.files_removed:

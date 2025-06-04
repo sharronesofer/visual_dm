@@ -1,12 +1,58 @@
 {
-  "total_arcs": 112,
-  "active_arcs": 28,
-  "completion_rate": 0.6,
-  "average_duration": 29,
-  "most_common_failure_point": "Step 3 - Investigation",
-  "engagement_metrics": {
-    "player_retention": 0.87,
-    "average_session_time": 124,
-    "quest_completion_rate": 0.91
-  }
+  "analytics_period": "30_days",
+  "total_arcs": 47,
+  "active_arcs": 23,
+  "completed_arcs": 19,
+  "paused_arcs": 3,
+  "failed_arcs": 2,
+  "arc_type_distribution": {
+    "GLOBAL": 3,
+    "REGIONAL": 12,
+    "CHARACTER": 18,
+    "NPC": 8,
+    "FACTION": 4,
+    "QUEST": 2
+  },
+  "priority_distribution": {
+    "HIGH": 8,
+    "MEDIUM": 26,
+    "LOW": 13
+  },
+  "completion_metrics": {
+    "average_completion_time_hours": 14.7,
+    "average_steps_per_arc": 5.2,
+    "most_common_difficulty": 6,
+    "success_rate_percentage": 85.7
+  },
+  "player_engagement": {
+    "arcs_started_this_period": 12,
+    "arcs_completed_this_period": 8,
+    "most_popular_themes": [
+      "political intrigue",
+      "personal growth", 
+      "heroic journey",
+      "mystery",
+      "redemption"
+    ],
+    "most_active_regions": [
+      "eastern_provinces_001",
+      "starting_village_region", 
+      "contested_lands",
+      "border_territories"
+    ]
+  },
+  "performance_trends": {
+    "completion_rate_trend": "increasing",
+    "player_satisfaction": 4.2,
+    "average_session_length_hours": 2.8,
+    "retention_rate": 0.92
+  },
+  "narrative_impact": {
+    "world_changing_events": 5,
+    "faction_relationships_altered": 12,
+    "character_developments": 28,
+    "regions_affected": 8
+  },
+  "generated_at": "2025-05-28T01:34:24.937710Z",
+  "next_update": "2025-06-28T01:34:24.937710Z"
 }

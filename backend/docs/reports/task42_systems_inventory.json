@@ -4,7 +4,7 @@
   "systems": {
     "economy": {
       "name": "economy",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/economy",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/economy",
       "components": {
         "__init__.py": {
           "type": "init",
@@ -191,7 +191,7 @@
     },
     "motif": {
       "name": "motif",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/motif",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/motif",
       "components": {
         "service.py": {
           "type": "service",
@@ -424,7 +424,7 @@
     },
     "llm": {
       "name": "llm",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/llm",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/llm",
       "components": {
         "__init__.py": {
           "type": "init",
@@ -566,7 +566,7 @@
     },
     "tension_war": {
       "name": "tension_war",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/tension_war",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/tension_war",
       "components": {
         "models.py": {
           "type": "model",
@@ -783,7 +783,7 @@
     },
     "world_generation": {
       "name": "world_generation",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/world_generation",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/world_generation",
       "components": {
         "initialize_modding.py": {
           "type": "other",
@@ -974,7 +974,7 @@
     },
     "memory": {
       "name": "memory",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/memory",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/memory",
       "components": {
         "cognitive_frames.py": {
           "type": "other",
@@ -1060,7 +1060,7 @@
     },
     "diplomacy": {
       "name": "diplomacy",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/diplomacy",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/diplomacy",
       "components": {
         "services.py": {
           "type": "service",
@@ -1343,7 +1343,7 @@
     },
     "combat": {
       "name": "combat",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/combat",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/combat",
       "components": {
         "combat_routes.py": {
           "type": "router",
@@ -1746,7 +1746,7 @@
     },
     "magic": {
       "name": "magic",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/magic",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/magic",
       "components": {
         "services.py": {
           "type": "service",
@@ -1983,7 +1983,7 @@
     },
     "character": {
       "name": "character",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/character",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/character",
       "components": {
         "__init__.py": {
           "type": "init",
@@ -2552,7 +2552,7 @@
     },
     "auth_user": {
       "name": "auth_user",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/auth_user",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/auth_user",
       "components": {
         "__init__.py": {
           "type": "init",
@@ -2734,7 +2734,7 @@
     },
     "integration": {
       "name": "integration",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/integration",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/integration",
       "components": {
         "monitoring.py": {
           "type": "other",
@@ -2776,7 +2776,7 @@
     },
     "faction": {
       "name": "faction",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/faction",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/faction",
       "components": {
         "faction_tick_utils.py": {
           "type": "utils",
@@ -2954,7 +2954,7 @@
     },
     "rumor": {
       "name": "rumor",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/rumor",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/rumor",
       "components": {
         "service.py": {
           "type": "service",
@@ -3027,7 +3027,7 @@
     },
     "shared": {
       "name": "shared",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/shared",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/shared",
       "components": {
         "config.py": {
           "type": "other",
@@ -3246,7 +3246,7 @@
     },
     "loot": {
       "name": "loot",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/loot",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/loot",
       "components": {
         "loot_routes.py": {
           "type": "router",
@@ -3426,7 +3426,7 @@
     },
     "storage": {
       "name": "storage",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/storage",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/storage",
       "components": {
         "cloud_storage.py": {
           "type": "other",
@@ -3486,7 +3486,7 @@
     },
     "time": {
       "name": "time",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/time",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/time",
       "components": {
         "__init__.py": {
           "type": "init",
@@ -3688,7 +3688,7 @@
     },
     "population": {
       "name": "population",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/population",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/population",
       "components": {
         "service.py": {
           "type": "service",
@@ -3849,7 +3849,7 @@
     },
     "dialogue": {
       "name": "dialogue",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/dialogue",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/dialogue",
       "components": {
         "analytics_integration.py": {
           "type": "other",
@@ -3963,7 +3963,7 @@
     },
     "poi": {
       "name": "poi",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/poi",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/poi",
       "components": {
         "models.py": {
           "type": "model",
@@ -4076,7 +4076,7 @@
     },
     "region": {
       "name": "region",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/region",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/region",
       "components": {
         "service.py": {
           "type": "service",
@@ -4359,7 +4359,7 @@
     },
     "religion": {
       "name": "religion",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/religion",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/religion",
       "components": {
         "services.py": {
           "type": "service",
@@ -4416,7 +4416,7 @@
     },
     "quest": {
       "name": "quest",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/quest",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/quest",
       "components": {
         "system_hooks.py": {
           "type": "other",
@@ -4630,7 +4630,7 @@
     },
     "inventory": {
       "name": "inventory",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/inventory",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/inventory",
       "components": {
         "validator.py": {
           "type": "other",
@@ -4907,7 +4907,7 @@
     },
     "world_state": {
       "name": "world_state",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/world_state",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/world_state",
       "components": {
         "world_routes.py": {
           "type": "router",
@@ -5160,7 +5160,7 @@
     },
     "crafting": {
       "name": "crafting",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/crafting",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/crafting",
       "components": {
         "__init__.py": {
           "type": "init",
@@ -5279,7 +5279,7 @@
     },
     "events": {
       "name": "events",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/events",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/events",
       "components": {
         "batch_processor.py": {
           "type": "other",
@@ -5345,7 +5345,7 @@
     },
     "arc": {
       "name": "arc",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/arc",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/arc",
       "components": {
         "__init__.py": {
           "type": "init",
@@ -5663,7 +5663,7 @@
     },
     "data": {
       "name": "data",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/data",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/data",
       "components": {
         "schema_validator.py": {
           "type": "schema",
@@ -5767,7 +5767,7 @@
     },
     "equipment": {
       "name": "equipment",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/equipment",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/equipment",
       "components": {
         "set_bonus_utils.py": {
           "type": "utils",
@@ -5937,7 +5937,7 @@
     },
     "npc": {
       "name": "npc",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/npc",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/npc",
       "components": {
         "npc_loyalty_class.py": {
           "type": "other",
@@ -6239,7 +6239,7 @@
     },
     "analytics": {
       "name": "analytics",
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/analytics",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/analytics",
       "components": {
         "__init__.py": {
           "type": "init",

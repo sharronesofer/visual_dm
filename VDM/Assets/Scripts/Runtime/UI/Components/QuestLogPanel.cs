@@ -6,6 +6,7 @@ using VDM.Systems.Quest.Models;
 using VDM.Systems.Quest.Services;
 using System.Collections.Generic;
 using System.Linq;
+using VDM.DTOs.Game.Character;
 
 namespace VDM.UI.Systems.Quest
 {
@@ -143,9 +144,9 @@ namespace VDM.UI.Systems.Quest
                 sortDescendingButton.onClick.AddListener(() => SetSortOrder(false));
         }
         
-        protected override void OnEnable()
+        private void OnEnable()
         {
-            base.OnEnable();
+            // Subscribe to quest events when panel becomes active
             if (questService != null)
             {
                 questService.OnQuestAdded += OnQuestAdded;
@@ -157,9 +158,9 @@ namespace VDM.UI.Systems.Quest
             }
         }
         
-        protected override void OnDisable()
+        private void OnDisable()
         {
-            base.OnDisable();
+            // Unsubscribe from quest events when panel becomes inactive
             if (questService != null)
             {
                 questService.OnQuestAdded -= OnQuestAdded;

@@ -31,7 +31,7 @@ Each turn, a character may use:
 ### Damage
 - Based on weapon or feat
 - Apply relevant attribute bonus
-- Reduce final value by target’s **DR**
+- Reduce final value by target's **DR**
 
 ### Crits
 - Natural 20 = **Critical Hit** (double damage)
@@ -58,7 +58,7 @@ Each turn, a character may use:
 
 ## 📚 Leveling Rules
 - XP: See leveling table
-- **Feats**: 7 at level 1, +3 per level after
+- **Abilities**: 7 at level 1, +3 per level after
 - **Skills**: Max rank = `Level + 3`
 - Skill points per level = `4 + INT`
 
@@ -77,5 +77,5 @@ Each feat should include:
 Optional flags:
 - `spellcasting_granted`, `spellcasting_type`
 - `repeatable`, `usable_once_per_turn`
-- `combat_irrelevant` (for feats like Beast Speech, Eldritch Sight)
+- `combat_irrelevant` (for abilities like Beast Speech, Eldritch Sight)
 

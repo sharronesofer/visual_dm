@@ -1,28 +1,23 @@
 """
-Test module for NPC models
+Test NPC Models
 
-Comprehensive testing of SQLAlchemy models and Pydantic schemas.
-Tests model creation, relationships, validation, and data integrity.
+Tests for NPC database models and Pydantic schemas.
 """
 
 import pytest
-from uuid import uuid4, UUID
 from datetime import datetime
+from uuid import uuid4
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 
-# Import the models under test directly from models.py
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+# Test database setup
+from backend.tests.conftest import test_db_session
 
-from backend.systems.npc.models import (
-    NpcEntity, NpcMemory, NpcFactionAffiliation, NpcRumor, 
+# Import models from infrastructure
+from backend.infrastructure.systems.npc.models.models import (
+    NpcEntity, NpcMemory, NpcFactionAffiliation, NpcRumor,
     NpcLocationHistory, NpcMotif, CreateNpcRequest, 
     UpdateNpcRequest, NpcResponse
 )
-from backend.infrastructure.shared.database.base import get_db_session
-
 
 class TestNPCModels:
     """Test class for NPC SQLAlchemy models"""
@@ -30,7 +25,8 @@ class TestNPCModels:
     @pytest.fixture
     def db_session(self):
         """Create a test database session"""
-        session = get_db()
+        from backend.infrastructure.database import get_db
+        session = next(get_db())
         yield session
         session.close()
     
@@ -40,7 +36,6 @@ class TestNPCModels:
         return {
             "name": "Test Warrior",
             "race": "Human",
-            "class_name": "Fighter",
             "level": 5,
             "strength": 15,
             "dexterity": 12,
@@ -51,7 +46,7 @@ class TestNPCModels:
             "region_id": "test_region",
             "location": "Village Center",
             "status": "active",
-            "loyalty": 7,
+            "loyalty_score": 7,
             "goodwill": 3
         }
     
@@ -64,7 +59,7 @@ class TestNPCModels:
         assert npc.race == "Human" 
         assert npc.level == 5
         assert npc.strength == 15
-        assert npc.loyalty == 7
+        assert npc.loyalty_score == 7
         assert isinstance(npc.id, UUID)
         assert isinstance(npc.created_at, datetime)
         
@@ -105,7 +100,7 @@ class TestNPCModels:
         assert memory.importance == 6.0
         assert memory.emotion == "friendly"
         assert "merchant_bob" in memory.participants
-        assert memory.recall_count == 0
+        assert memory.recalled_count == 0
         
     def test_npc_faction_affiliation_model(self):
         """Test NPC faction affiliation model"""
@@ -136,13 +131,13 @@ class TestNPCModels:
             content="Strange lights seen in the forest",
             source="traveling_merchant",
             credibility=6.5,
-            spread_probability=0.3
+            spread_chance=0.3
         )
         
         assert rumor.npc_id == npc_id
         assert rumor.rumor_id == "rumor_001"
         assert rumor.credibility == 6.5
-        assert rumor.spread_probability == 0.3
+        assert rumor.spread_chance == 0.3
         assert rumor.times_shared == 0
         
     def test_npc_location_history_model(self):
@@ -192,7 +187,6 @@ class TestNPCPydanticSchemas:
         request_data = {
             "name": "Test Wizard",
             "race": "Elf",
-            "class_name": "Wizard",
             "level": 8,
             "strength": 10,
             "dexterity": 14,

@@ -87,7 +87,7 @@ class AnalyticsService(BaseService[AnalyticsEntity]):
             return AnalyticsResponse.from_orm(entity)
             
         except Exception as e:
-            logger.error(f"Error getting analytics {_analytics_id}: {str(e)}")
+            logger.error(f"Error getting analytics {analytics_id}: {str(e)}")
             raise
 
     async def update_analytics(
@@ -99,7 +99,7 @@ class AnalyticsService(BaseService[AnalyticsEntity]):
         try:
             entity = await self._get_entity_by_id(analytics_id)
             if not entity:
-                raise AnalyticsNotFoundError(f"Analytics {_analytics_id} not found")
+                raise AnalyticsNotFoundError(f"Analytics {analytics_id} not found")
             
             # Update fields
             update_data = request.dict(exclude_unset=True)
@@ -115,7 +115,7 @@ class AnalyticsService(BaseService[AnalyticsEntity]):
             return AnalyticsResponse.from_orm(entity)
             
         except Exception as e:
-            logger.error(f"Error updating analytics {_analytics_id}: {str(e)}")
+            logger.error(f"Error updating analytics {analytics_id}: {str(e)}")
             self.db.rollback()
             raise
 
@@ -124,7 +124,7 @@ class AnalyticsService(BaseService[AnalyticsEntity]):
         try:
             entity = await self._get_entity_by_id(analytics_id)
             if not entity:
-                raise AnalyticsNotFoundError(f"Analytics {_analytics_id} not found")
+                raise AnalyticsNotFoundError(f"Analytics {analytics_id} not found")
             
             entity.is_active = False
             entity.updated_at = datetime.utcnow()
@@ -134,7 +134,7 @@ class AnalyticsService(BaseService[AnalyticsEntity]):
             return True
             
         except Exception as e:
-            logger.error(f"Error deleting analytics {_analytics_id}: {str(e)}")
+            logger.error(f"Error deleting analytics {analytics_id}: {str(e)}")
             self.db.rollback()
             raise
 

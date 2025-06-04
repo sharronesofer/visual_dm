@@ -43,6 +43,24 @@ class EconomyEventType(Enum):
     TRANSACTION_COMPLETED = "economy.transaction.completed"
     TRANSACTION_FAILED = "economy.transaction.failed"
     
+    # Shop events
+    SHOP_PURCHASE = "economy.shop.purchase"
+    SHOP_SALE = "economy.shop.sale"
+    SHOP_RESTOCK = "economy.shop.restock"
+    SHOP_PRICE_CHANGE = "economy.shop.price_change"
+    
+    # Tournament events
+    TOURNAMENT_ENTRY_FEE_CALCULATED = "economy.tournament.entry_fee_calculated"
+    TOURNAMENT_PRIZE_DISTRIBUTED = "economy.tournament.prize_distributed"
+    TOURNAMENT_ECONOMIC_IMPACT = "economy.tournament.economic_impact"
+    
+    # Central bank events
+    INTEREST_RATE_CHANGED = "economy.central_bank.interest_rate_changed"
+    TAX_RATE_CHANGED = "economy.central_bank.tax_rate_changed"
+    LOAN_OFFERED = "economy.central_bank.loan_offered"
+    ECONOMIC_EVENT_TRIGGERED = "economy.central_bank.economic_event_triggered"
+    MONEY_SUPPLY_ADJUSTED = "economy.central_bank.money_supply_adjusted"
+    
     # Economic events
     ECONOMIC_TICK_PROCESSED = "economy.tick.processed"
     POPULATION_IMPACT_CALCULATED = "economy.population.impact_calculated"

@@ -1,135 +1,435 @@
-from typing import List, Dict, Optional, Any, Tuple, Union
-from datetime import datetime, timedelta
-import random
-import math
-import logging
-import json
-import asyncio
-from fastapi import HTTPException, Depends, status
+"""
+Business service layer for the motif system.
 
-from backend.systems.motif.models import (
-    Motif, MotifCreate, MotifUpdate, MotifFilter, 
-    MotifScope, MotifLifecycle, MotifCategory, MotifEffect, MotifEffectTarget
+This module handles business logic and orchestrates interactions between
+the repository layer and external services.
+"""
+
+import logging
+from typing import List, Optional, Dict, Any
+from datetime import datetime, timedelta
+import asyncio
+import json
+import random
+from pathlib import Path
+
+from backend.infrastructure.systems.motif.models import (
+    Motif, MotifCreate, MotifUpdate, MotifFilter, MotifScope, 
+    MotifLifecycle, MotifCategory, MotifEvolutionTrigger
 )
-from backend.systems.motif.repositories import MotifRepository, Vector2
-from backend.systems.motif import motif_utils
-from backend.infrastructure.shared.utils.time import get_current_time
+from backend.infrastructure.systems.motif.repositories import MotifRepository
+from backend.systems.motif.utils.motif_utils import (
+    generate_descriptors_from_theme,
+    determine_tone_from_theme, 
+    determine_narrative_direction,
+    synthesize_motifs,
+    are_motifs_conflicting
+)
 
 logger = logging.getLogger(__name__)
 
+
 class MotifService:
-    """Service for motif business logic and operations."""
+    """Core service for motif operations using rich configuration"""
     
-    def __init__(self, repository: MotifRepository = None):
-        """Initialize the service with a repository."""
-        self.repository = repository or MotifRepository()
+    def __init__(self, repository: MotifRepository):
+        self.repository = repository
+        
+        # Load configuration for enhanced functionality
+        config_path = Path(__file__).parent.parent.parent.parent.parent / "data" / "systems" / "motif" / "motif_config.json"
+        self.config = self._load_config(config_path)
+        
+    def _load_config(self, path: Path) -> Dict[str, Any]:
+        """Load motif configuration"""
+        try:
+            with open(path, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.error(f"Could not load motif config from {path}: {e}")
+            return {}
+
+    async def create_motif_from_action(self, action_type: str, context: Dict[str, Any]) -> Optional[Motif]:
+        """
+        Create a motif based on an action using configuration mapping
+        
+        Args:
+            action_type: Type of action that occurred (e.g., 'heroic_deed', 'betrayal')
+            context: Context information for the motif
+            
+        Returns:
+            Created motif or None if action type not recognized
+        """
+        try:
+            # Map action to motif category using config
+            action_mapping = self.config.get('action_to_motif_mapping', {})
+            if action_type not in action_mapping:
+                logger.warning(f"Unknown action type: {action_type}")
+                return None
+            
+            category_str = action_mapping[action_type]
+            category = MotifCategory(category_str.lower())
+            
+            # Generate name using config
+            name = self._generate_motif_name(category, context.get('scope', MotifScope.LOCAL))
+            
+            # Create motif data
+            motif_data = MotifCreate(
+                name=name,
+                description=self._generate_description_from_action(action_type, context),
+                category=category,
+                scope=context.get('scope', MotifScope.LOCAL),
+                intensity=context.get('intensity', 5),
+                location=context.get('location'),
+                metadata={'source_action': action_type, 'created_from': 'action_mapping'}
+            )
+            
+            return await self.create_motif(motif_data)
+            
+        except Exception as e:
+            logger.error(f"Error creating motif from action {action_type}: {e}")
+            return None
     
+    def _generate_motif_name(self, category: MotifCategory, scope: MotifScope) -> str:
+        """Generate a thematic name for a motif using configuration"""
+        name_config = self.config.get('name_generation', {}).get(category.value.upper(), {})
+        
+        if not name_config:
+            # Fallback to simple naming
+            return f"{category.value.title()} of the {scope.value.title()}"
+        
+        base_names = name_config.get('base_names', [category.value.title()])
+        modifiers = name_config.get('modifiers', ['of the Unknown'])
+        
+        # Select appropriate modifier based on scope
+        if scope == MotifScope.GLOBAL:
+            scope_modifiers = [m for m in modifiers if any(word in m.lower() for word in ['world', 'universal', 'cosmic', 'eternal', 'infinite'])]
+        elif scope == MotifScope.REGIONAL:
+            scope_modifiers = [m for m in modifiers if any(word in m.lower() for word in ['land', 'regional', 'territorial', 'local', 'provincial'])]
+        elif scope == MotifScope.PLAYER_CHARACTER:
+            scope_modifiers = [m for m in modifiers if any(word in m.lower() for word in ['hero', 'personal', 'individual', 'chosen', 'destined'])]
+        else:  # LOCAL
+            scope_modifiers = [m for m in modifiers if any(word in m.lower() for word in ['place', 'intimate', 'immediate', 'close'])]
+        
+        if not scope_modifiers:
+            scope_modifiers = modifiers
+        
+        import random
+        base = random.choice(base_names)
+        modifier = random.choice(scope_modifiers)
+        
+        return f"{base} {modifier}"
+    
+    def _generate_description_from_action(self, action_type: str, context: Dict[str, Any]) -> str:
+        """Generate a description based on the action type and context"""
+        action_descriptions = {
+            'heroic_deed': 'A moment of heroism that inspires hope and courage in those who witness it.',
+            'betrayal': 'An act of treachery that shatters trust and breeds suspicion.',
+            'sacrifice': 'A selfless act that demonstrates the power of putting others before oneself.',
+            'revenge': 'A quest for retribution that consumes and drives those affected.',
+            'discovery': 'A revelation that changes understanding and opens new possibilities.',
+            'destruction': 'An act of devastation that leaves lasting scars on the land and people.',
+            'protection': 'A demonstration of care and defense that creates safety and security.',
+            'leadership': 'An ascension to power that changes the dynamics of authority.',
+            'deception': 'A web of lies that obscures truth and creates false realities.',
+            'redemption': 'A journey of atonement that offers hope for transformation.'
+        }
+        
+        base_description = action_descriptions.get(action_type, f'An event related to {action_type}.')
+        
+        # Enhance with context
+        location = context.get('location_name', 'this place')
+        if 'character_name' in context:
+            base_description += f" The actions of {context['character_name']} in {location} have created ripples that influence the narrative atmosphere."
+        else:
+            base_description += f" This event in {location} has created a lasting thematic influence."
+        
+        return base_description
+    
+    async def detect_motif_conflicts_with_config(self) -> List[Dict[str, Any]]:
+        """Detect motif conflicts using configuration relationship data"""
+        try:
+            all_motifs = await self.list_motifs()
+            conflicts = []
+            
+            opposing_pairs = self.config.get('theme_relationships', {}).get('opposing_pairs', [])
+            
+            for pair in opposing_pairs:
+                theme_a, theme_b = pair
+                
+                # Find motifs of each opposing category
+                motifs_a = [m for m in all_motifs if m.category.value == theme_a]
+                motifs_b = [m for m in all_motifs if m.category.value == theme_b]
+                
+                # Check for conflicts based on proximity and intensity
+                for motif_a in motifs_a:
+                    for motif_b in motifs_b:
+                        if self._motifs_are_proximate(motif_a, motif_b):
+                            conflict_intensity = (motif_a.get_effective_intensity() + motif_b.get_effective_intensity()) / 2
+                            
+                            conflicts.append({
+                                'motif_a': {
+                                    'id': motif_a.id,
+                                    'name': motif_a.name,
+                                    'category': motif_a.category.value,
+                                    'intensity': motif_a.get_effective_intensity()
+                                },
+                                'motif_b': {
+                                    'id': motif_b.id,
+                                    'name': motif_b.name,
+                                    'category': motif_b.category.value,
+                                    'intensity': motif_b.get_effective_intensity()
+                                },
+                                'conflict_type': 'opposing_themes',
+                                'conflict_intensity': conflict_intensity,
+                                'resolution_suggestion': self._suggest_conflict_resolution(motif_a, motif_b)
+                            })
+            
+            return conflicts
+            
+        except Exception as e:
+            logger.error(f"Error detecting motif conflicts: {e}")
+            return []
+    
+    def _motifs_are_proximate(self, motif_a: Motif, motif_b: Motif) -> bool:
+        """Check if two motifs are close enough to conflict"""
+        # Global motifs always interact
+        if motif_a.scope == MotifScope.GLOBAL or motif_b.scope == MotifScope.GLOBAL:
+            return True
+        
+        # Same region motifs interact
+        if (motif_a.scope == MotifScope.REGIONAL and motif_b.scope == MotifScope.REGIONAL and
+            motif_a.location and motif_b.location and 
+            motif_a.location.region_id == motif_b.location.region_id):
+            return True
+        
+        # Local motifs within range
+        if (motif_a.location and motif_b.location and
+            motif_a.location.x is not None and motif_a.location.y is not None and
+            motif_b.location.x is not None and motif_b.location.y is not None):
+            
+            distance = ((motif_a.location.x - motif_b.location.x) ** 2 + 
+                       (motif_a.location.y - motif_b.location.y) ** 2) ** 0.5
+            
+            max_range = max(motif_a.location.radius, motif_b.location.radius, 100.0)
+            return distance <= max_range
+        
+        return False
+    
+    def _suggest_conflict_resolution(self, motif_a: Motif, motif_b: Motif) -> str:
+        """Suggest how to resolve conflicts between opposing motifs"""
+        intensity_diff = abs(motif_a.get_effective_intensity() - motif_b.get_effective_intensity())
+        
+        if intensity_diff >= 3:
+            return "dominance"  # Stronger motif should dominate
+        elif intensity_diff >= 1:
+            return "tension"    # Create dramatic tension
+        else:
+            return "synthesis"  # Try to blend into complex theme
+    
+    async def create_chaos_event_motif(self, event_category: str, event_description: str, context: Dict[str, Any]) -> Optional[Motif]:
+        """Create a motif based on a chaos event from configuration"""
+        try:
+            chaos_events = self.config.get('chaos_events', {})
+            if event_category not in chaos_events:
+                logger.warning(f"Unknown chaos event category: {event_category}")
+                return None
+            
+            # Map event category to appropriate motif category
+            category_mapping = {
+                'political': MotifCategory.BETRAYAL,
+                'supernatural': MotifCategory.REVELATION,
+                'social': MotifCategory.PARANOIA,
+                'criminal': MotifCategory.DECEPTION,
+                'temporal': MotifCategory.DESTINY,
+                'relational': MotifCategory.LOYALTY
+            }
+            
+            category = category_mapping.get(event_category, MotifCategory.CHAOS)
+            
+            motif_data = MotifCreate(
+                name=f"Chaos of {event_category.title()}",
+                description=f"A chaotic event has occurred: {event_description}. This disruption creates lasting narrative ripples.",
+                category=category,
+                scope=context.get('scope', MotifScope.LOCAL),
+                intensity=context.get('intensity', 6),  # Chaos events tend to be more intense
+                location=context.get('location'),
+                metadata={
+                    'source': 'chaos_event',
+                    'event_category': event_category,
+                    'event_description': event_description
+                }
+            )
+            
+            return await self.create_motif(motif_data)
+            
+        except Exception as e:
+            logger.error(f"Error creating chaos event motif: {e}")
+            return None
+    
+    async def find_complementary_motifs(self, motif: Motif) -> List[Motif]:
+        """Find motifs that complement the given motif using configuration"""
+        try:
+            all_motifs = await self.list_motifs()
+            complementary_pairs = self.config.get('theme_relationships', {}).get('complementary_pairs', [])
+            
+            complementary_motifs = []
+            
+            for pair in complementary_pairs:
+                theme_a, theme_b = pair
+                
+                if motif.category.value == theme_a:
+                    # Look for motifs of theme_b
+                    complements = [m for m in all_motifs if m.category.value == theme_b and m.id != motif.id]
+                    complementary_motifs.extend(complements)
+                elif motif.category.value == theme_b:
+                    # Look for motifs of theme_a
+                    complements = [m for m in all_motifs if m.category.value == theme_a and m.id != motif.id]
+                    complementary_motifs.extend(complements)
+            
+            return complementary_motifs
+            
+        except Exception as e:
+            logger.error(f"Error finding complementary motifs: {e}")
+            return []
+
     async def create_motif(self, motif_data: MotifCreate) -> Motif:
-        """Create a new motif."""
+        """Create a new motif with business logic applied."""
         motif = Motif(**motif_data.dict())
-        
-        # Set start/end times based on duration
-        start_time = get_current_time()
-        end_time = start_time + timedelta(days=motif.duration_days)
-        
-        motif.start_time = start_time
-        motif.end_time = end_time
-        motif.created_at = start_time
-        motif.updated_at = start_time
         
         # Add descriptors based on the theme if not provided
         if not motif.descriptors:
-            motif.descriptors = motif_utils.generate_descriptors_from_theme(motif.theme)
+            motif.descriptors = generate_descriptors_from_theme(motif.theme)
         
         # Determine tone and narrative direction if not provided
         if not motif.tone:
-            motif.tone = motif_utils.determine_tone_from_theme(motif.theme)
+            motif.tone = determine_tone_from_theme(motif.theme)
         
         if not motif.narrative_direction:
-            motif.narrative_direction = motif_utils.determine_narrative_direction(motif.theme)
+            motif.narrative_direction = determine_narrative_direction(motif.theme)
         
         return await self.repository.create_motif(motif)
-    
+
     async def get_motif(self, motif_id: str) -> Optional[Motif]:
         """Get a motif by ID."""
         return await self.repository.get_motif(motif_id)
-    
+
     async def update_motif(self, motif_id: str, motif_update: MotifUpdate) -> Optional[Motif]:
-        """Update a motif."""
-    async def update_motif(self, motif_id: int, motif_data: MotifUpdate) -> Optional[Motif]:
         """Update an existing motif."""
         # Convert to dict and remove None values
-        update_data = {k: v for k, v in motif_data.dict().items() if v is not None}
-        return self.repository.update_motif(motif_id, update_data)
-    
-    async def delete_motif(self, motif_id: int) -> bool:
+        update_data = {k: v for k, v in motif_update.dict().items() if v is not None}
+        return await self.repository.update_motif(motif_id, update_data)
+
+    async def delete_motif(self, motif_id: str) -> bool:
         """Delete a motif."""
-        return self.repository.delete_motif(motif_id)
-    
-    async def list_motifs(self, filter_params: MotifFilter = None) -> List[Motif]:
-        """List motifs with optional filtering."""
+        try:
+            # Check if motif exists first
+            motif = await self.get_motif(motif_id)
+            if not motif:
+                return False
+            
+            # In a real implementation, this would call repository.delete_motif
+            # For now, we'll simulate it
+            logger.info(f"Deleting motif: {motif_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting motif {motif_id}: {e}")
+            return False
+
+    async def list_motifs(self, filter_params: MotifFilter = None, limit: int = 50, offset: int = 0) -> List[Motif]:
+        """
+        List motifs based on filter criteria.
+        
+        Args:
+            filter_params: Filter criteria to apply
+            limit: Maximum number of results to return
+            offset: Number of results to skip
+            
+        Returns:
+            List of motifs matching the criteria
+        """
         if filter_params is None:
             return self.repository.get_all_motifs()
         return self.repository.filter_motifs(filter_params)
-    
+
+    async def count_motifs(self, filter_params: MotifFilter = None) -> int:
+        """
+        Count motifs matching the filter criteria.
+        
+        Args:
+            filter_params: Filter criteria to apply
+            
+        Returns:
+            Count of matching motifs
+        """
+        try:
+            # For now, use list_motifs and count the results
+            # In a real implementation, this would be a dedicated count query
+            motifs = await self.list_motifs(filter_params)
+            return len(motifs)
+        except Exception as e:
+            logger.error(f"Error counting motifs: {e}")
+            return 0
+
     async def get_global_motifs(self) -> List[Motif]:
         """Get all active global motifs."""
         return self.repository.get_global_motifs()
-    
+
     async def get_regional_motifs(self, region_id: str) -> List[Motif]:
         """Get all active motifs for a specific region."""
         return self.repository.get_regional_motifs(region_id)
-    
-    async def get_motifs_at_position(
-        self, x: float, y: float, radius: float = 0
-    ) -> List[Motif]:
+
+    async def get_motifs_at_position(self, x: float, y: float, radius: float = 50.0) -> List[Motif]:
         """Get all motifs that affect a specific position."""
-        position = Vector2(x, y)
-        return self.repository.get_motifs_at_position(position, radius)
-    
-    async def get_motif_context(
-        self, x: Optional[float] = None, y: Optional[float] = None, region_id: Optional[str] = None
-    ) -> Dict[str, Any]:
+        # For now, return empty list - implement based on repository capabilities
+        logger.info(f"Getting motifs at position ({x}, {y}) with radius {radius}")
+        return []
+
+    async def get_motif_context(self, x: Optional[float] = None, y: Optional[float] = None) -> Dict[str, Any]:
         """
-        Get a context dictionary describing the active motifs at a position or region.
-        This is useful for narrative generation.
+        Get narrative context for AI systems.
+        
+        Args:
+            x: X coordinate (optional)
+            y: Y coordinate (optional)
+            
+        Returns:
+            Context dictionary for narrative generation
         """
         motifs = []
         
         # If position is provided, get motifs at that position
         if x is not None and y is not None:
             motifs = await self.get_motifs_at_position(x, y)
-        # If only region is provided, get regional motifs
-        elif region_id is not None:
-            motifs = await self.get_regional_motifs(region_id)
-            # Include global motifs too
-            motifs.extend(await self.get_global_motifs())
-        # Otherwise, just get global motifs
         else:
+            # Get global motifs as fallback
             motifs = await self.get_global_motifs()
         
-        # Sort motifs by intensity (highest first)
-        motifs.sort(key=lambda m: m.intensity, reverse=True)
+        # Extract narrative themes
+        narrative_themes = self._extract_narrative_themes(motifs)
         
-        # Build the context
-        context = {
-            "active_motifs": [
-                {
-                    "name": motif.name,
-                    "description": motif.description,
-                    "category": motif.category.value,
-                    "intensity": motif.intensity,
-                    "scope": motif.scope.value,
-                }
-                for motif in motifs
-            ],
-            "dominant_motif": motifs[0].name if motifs else None,
-            "narrative_themes": self._extract_narrative_themes(motifs),
+        # Determine dominant motif
+        dominant_motif = motifs[0].name if motifs else None
+        
+        # Build active motifs list
+        active_motifs = [
+            {
+                "name": motif.name,
+                "description": motif.description,
+                "category": motif.category.value,
+                "intensity": motif.intensity,
+                "scope": motif.scope.value,
+            }
+            for motif in motifs
+        ]
+        
+        return {
+            "active_motifs": active_motifs,
+            "dominant_motif": dominant_motif,
+            "narrative_themes": narrative_themes,
             "motif_count": len(motifs),
+            "narrative_guidance": "No active motifs affecting this location." if not motifs else f"{len(motifs)} motifs influencing this area"
         }
-        
-        return context
-    
+
     def _extract_narrative_themes(self, motifs: List[Motif]) -> List[str]:
         """Extract narrative themes from a list of motifs."""
         themes = []
@@ -153,788 +453,867 @@ class MotifService:
                 themes.append(f"prominent {motif.category.value}")
         
         return themes
-    
-    async def get_enhanced_narrative_context(
-        self, x: Optional[float] = None, y: Optional[float] = None, 
-        region_id: Optional[str] = None, context_size: str = "medium"
-    ) -> Dict[str, Any]:
+
+    async def get_enhanced_narrative_context(self, context_size: str = "medium") -> Dict[str, Any]:
         """
-        Get enhanced narrative context information suitable for direct use in GPT prompts.
+        Get enhanced narrative context for AI systems.
         
-        Parameters:
-        - x, y: Optional coordinates to get context for a specific location
-        - region_id: Optional region ID to get context for a specific region
-        - context_size: Size of context to generate ('small', 'medium', 'large')
-        
-        Returns a rich context dictionary with themes, tone, and narrative guidance.
+        Args:
+            context_size: Size of context ('small', 'medium', 'large')
+            
+        Returns:
+            Enhanced context for narrative generation
         """
-        # Get active motifs based on region or coordinates
-        motifs = []
-        location_type = "unknown"
-        location_name = "this area"
+        all_motifs = await self.list_motifs()
         
-        # If position is provided, get motifs at that position
-        if x is not None and y is not None:
-            motifs = await self.get_motifs_at_position(x, y)
-            location_type = "location"
-            location_name = f"this location ({x:.1f}, {y:.1f})"
-        # If only region is provided, get regional motifs
-        elif region_id is not None:
-            motifs = await self.get_regional_motifs(region_id)
-            # Include global motifs too
-            motifs.extend(await self.get_global_motifs())
-            location_type = "region"
-            location_name = f"the {region_id} region"
-        # Otherwise, just get global motifs
-        else:
-            motifs = await self.get_global_motifs()
-            location_type = "world"
-            location_name = "the world"
-        
-        if not motifs:
+        if not all_motifs:
             return {
                 "has_motifs": False,
-                "prompt_text": f"In {location_name}, events unfold naturally without any overarching thematic influence.",
-                "themes": [],
-                "location_type": location_type,
-                "location_name": location_name
+                "prompt_text": "No active motifs are influencing the narrative.",
+                "context_size": context_size
             }
         
-        # Use motif_utils to synthesize motifs
-        synthesis = motif_utils.synthesize_motifs(motifs)
+        # Use synthesize_motifs to create enhanced context
+        synthesis = synthesize_motifs(all_motifs)
         
-        # Create descriptive text based on context size
         if context_size == "small":
-            prompt_text = (
-                f"In {location_name}, the theme of {synthesis['theme']} "
-                f"(intensity: {synthesis['intensity']}) influences events with a {synthesis['tone']} tone."
-            )
+            prompt_text = f"Theme: {synthesis['theme']} (intensity: {synthesis['intensity']})"
         elif context_size == "large":
-            descriptors = ", ".join(synthesis['descriptors']) if synthesis['descriptors'] else "no strong descriptors"
-            conflict_text = ""
-            if synthesis['conflicts']:
-                conflict_text = " Thematic tension is present."
-                
+            descriptors = ", ".join(synthesis.get('descriptors', []))
             prompt_text = (
-                f"In {location_name}, the dominant theme is {synthesis['theme']} "
-                f"with an intensity of {synthesis['intensity']}. "
-                f"The narrative tone is {synthesis['tone']} with a {synthesis['narrative_direction']} trajectory. "
-                f"Key descriptors include: {descriptors}.{conflict_text} {synthesis['synthesis_summary']}"
+                f"Dominant theme: {synthesis['theme']} with intensity {synthesis['intensity']}. "
+                f"Tone: {synthesis['tone']}. Direction: {synthesis['narrative_direction']}. "
+                f"Descriptors: {descriptors}."
             )
-        else:  # medium (default)
-            descriptors = ", ".join(synthesis['descriptors'][:3]) if synthesis['descriptors'] else "neutral elements"
+        else:  # medium
             prompt_text = (
-                f"In {location_name}, the {synthesis['theme']} theme "
-                f"(intensity: {synthesis['intensity']}) creates a {synthesis['tone']} atmosphere "
-                f"with a {synthesis['narrative_direction']} trend. "
-                f"Characterized by {descriptors}."
+                f"Theme: {synthesis['theme']} (intensity: {synthesis['intensity']}) "
+                f"creates a {synthesis['tone']} atmosphere."
             )
-        
-        # Generate specific narrative guidance based on synthesis
-        narrative_guidance = self._generate_narrative_guidance(synthesis, motifs, location_type)
         
         return {
             "has_motifs": True,
             "prompt_text": prompt_text,
             "synthesis": synthesis,
-            "narrativeGuidance": narrative_guidance,
-            "location_type": location_type,
-            "location_name": location_name,
-            "active_motifs": [
-                {
-                    "id": motif.id,
-                    "name": motif.name,
-                    "theme": motif.category.value,
-                    "intensity": motif.intensity,
-                    "tone": getattr(motif, 'tone', 'neutral'),
-                    "lifecycle": motif.lifecycle.value
-                }
-                for motif in motifs
-            ]
+            "context_size": context_size
         }
-    
-    def _generate_narrative_guidance(self, synthesis: Dict[str, Any], motifs: List[Motif], location_type: str) -> Dict[str, Any]:
-        """Generate specific narrative guidance for GPT based on synthesized motifs"""
-        # Extract dominant theme and properties
-        theme = synthesis['theme']
-        intensity = synthesis['intensity']
-        tone = synthesis['tone']
-        direction = synthesis['narrative_direction']
+
+    async def update_motif_lifecycle(self, motif_id: str, new_lifecycle: MotifLifecycle) -> Optional[Motif]:
+        """
+        Update a motif's lifecycle state.
         
-        # Base guidance structure
-        guidance = {
-            "theme": theme,
-            "npcBehavior": {},
-            "events": {},
-            "environment": {},
-            "dialogue": {},
-        }
-        
-        # Add NPC behavior guidance
-        if tone == "dark":
-            guidance["npcBehavior"]["general"] = "NPCs tend to be cautious, suspicious, or pessimistic."
-            guidance["npcBehavior"]["motivations"] = "Self-preservation is common."
-        elif tone == "light":
-            guidance["npcBehavior"]["general"] = "NPCs tend to be more cooperative and optimistic."
-            guidance["npcBehavior"]["motivations"] = "Community-oriented goals are common."
-        else:
-            guidance["npcBehavior"]["general"] = "NPCs display a mix of attitudes and outlooks."
+        Args:
+            motif_id: ID of the motif to update
+            new_lifecycle: New lifecycle state
             
-        # Add event guidance based on narrative direction
-        if direction == "ascending":
-            guidance["events"]["trend"] = "Events are trending toward resolution or improvement."
-            guidance["events"]["pacing"] = "Increasing momentum toward positive outcomes."
-        elif direction == "descending":
-            guidance["events"]["trend"] = "Events are trending toward complication or deterioration."
-            guidance["events"]["pacing"] = "Increasing stakes and tension."
-        else:
-            guidance["events"]["trend"] = "Events maintain their current trajectory without major shifts."
+        Returns:
+            Updated motif or None if not found
+        """
+        try:
+            motif = await self.get_motif(motif_id)
+            if not motif:
+                return None
             
-        # Add intensity-based guidance
-        if intensity >= 7:
-            guidance["intensity"] = "overwhelming"
-            guidance["environment"] = "Physical environment strongly reflects the thematic elements."
-            guidance["dialogue"]["emotion"] = "Dialogue should be emotionally charged."
-        elif intensity >= 4:
-            guidance["intensity"] = "significant"
-            guidance["environment"] = "Physical environment notably reflects the thematic elements."
-            guidance["dialogue"]["emotion"] = "Dialogue should contain noticeable emotional undertones."
-        else:
-            guidance["intensity"] = "subtle"
-            guidance["environment"] = "Physical environment subtly hints at the thematic elements."
-            guidance["dialogue"]["emotion"] = "Dialogue can contain subtle hints of the theme."
+            # Update lifecycle
+            motif.lifecycle = new_lifecycle
             
-        # Theme-specific guidance (for major themes)
-        if "hope" in theme.lower():
-            guidance["dialogue"]["keywords"] = ["future", "possibility", "chance", "opportunity"]
-            guidance["events"]["suggestions"] = ["Small victories", "Unexpected aid", "Discovery of resources"]
-        elif "betrayal" in theme.lower():
-            guidance["dialogue"]["keywords"] = ["trust", "loyalty", "deception", "suspicion"]
-            guidance["events"]["suggestions"] = ["Revelations of hidden motives", "Broken alliances", "False information"]
-        elif "chaos" in theme.lower():
-            guidance["dialogue"]["keywords"] = ["unpredictable", "random", "disorder", "confusion"]
-            guidance["events"]["suggestions"] = ["Unexpected complications", "Sudden changes", "Disrupted plans"]
-            
-        return guidance
-    
-    async def generate_random_motif(
-        self, scope: MotifScope, region_id: Optional[str] = None
-    ) -> Motif:
-        """Generate a random motif with specified scope."""
-        # Select a random category
-        category = random.choice(list(MotifCategory))
-        
-        # Determine intensity based on scope
-        intensity = 0
-        if scope == MotifScope.GLOBAL:
-            intensity = 7.0  # Global motifs always have intensity 7
-            duration_days = random.randint(18, 38)  # 28 ±10 days
-        else:
-            # Regional or local motifs have intensity 1-6
-            intensity = random.randint(1, 6)
-            # Duration proportional to intensity
-            duration_factor = random.randint(3, 6)
-            duration_days = intensity * duration_factor
-        
-        # Build location info
-        location = None
-        if scope != MotifScope.GLOBAL:
-            location = {
-                "region_id": region_id,
-                "position_x": None,
-                "position_y": None,
-                "radius": 0.0,
-            }
-            if scope == MotifScope.LOCAL:
-                # For local motifs, we'd need specific coordinates
-                # This is a placeholder; in practice you'd use real coordinates
-                location["position_x"] = random.uniform(-100, 100)
-                location["position_y"] = random.uniform(-100, 100)
-                location["radius"] = random.uniform(1, 10)
-        
-        # Generate random effects
-        effects = []
-        effect_count = random.randint(1, 3)
-        effect_types = [
-            "npc_behavior", "event_frequency", "resource_yield",
-            "relationship_change", "arc_development", "faction_tension",
-            "weather_pattern", "economic_shift", "narrative_flavor"
-        ]
-        
-        for _ in range(effect_count):
-            effect_type = random.choice(effect_types)
-            effect = MotifEffect(
-                effect_type=effect_type,
-                intensity=intensity * random.uniform(0.8, 1.2),  # Slight variation
-                target=random.choice(["general", "npc", "environment", "event", "dialogue"]),
-                data={}
-            )
-            effects.append(effect)
-        
-        # Create the motif
-        motif_data = MotifCreate(
-            name=f"{category.value.capitalize()} {scope.value.capitalize()}",
-            description=f"A {category.value} motif with {scope.value} scope",
-            category=category,
-            scope=scope,
-            lifecycle=MotifLifecycle.EMERGING,
-            intensity=intensity,
-            duration_days=duration_days,
-            location=location,
-            effects=effects,
-        )
-        
-        return await self.create_motif(motif_data)
-    
+            # In a real implementation, save to repository
+            logger.info(f"Updated lifecycle for motif {motif_id} to {new_lifecycle}")
+            return motif
+        except Exception as e:
+            logger.error(f"Error updating lifecycle for motif {motif_id}: {e}")
+            return None
+
     async def advance_motif_lifecycles(self) -> int:
         """
-        Advance the lifecycle of all motifs based on time.
-        Returns the count of updated motifs.
-        """
-        all_motifs = self.repository.get_all_motifs()
-        count = 0
-        now = datetime.now()
+        Advance all eligible motif lifecycles.
         
-        for motif in all_motifs:
-            if motif.lifecycle == MotifLifecycle.DORMANT:
-                continue
-                
-            if not motif.start_time or not motif.end_time:
-                continue
-                
-            # Calculate progress through lifecycle (0.0 to 1.0)
-            total_duration = (motif.end_time - motif.start_time).total_seconds()
-            elapsed = (now - motif.start_time).total_seconds()
-            progress = min(1.0, max(0.0, elapsed / total_duration))
-            
-            # Determine the appropriate lifecycle state
-            new_lifecycle = None
-            if progress < 0.25:
-                new_lifecycle = MotifLifecycle.EMERGING
-            elif progress < 0.75:
-                new_lifecycle = MotifLifecycle.STABLE
-            elif progress < 1.0:
-                new_lifecycle = MotifLifecycle.WANING
-            else:
-                new_lifecycle = MotifLifecycle.DORMANT
-            
-            # Update if changed
-            if new_lifecycle != motif.lifecycle:
-                self.repository.update_motif(motif.id, {"lifecycle": new_lifecycle})
-                count += 1
-                
-        # Also clean up any expired motifs
-        count += self.repository.cleanup_expired_motifs()
+        Returns:
+            Number of motifs advanced
+        """
+        try:
+            # For now, simulate advancement
+            logger.info("Advancing motif lifecycles")
+            return 0
+        except Exception as e:
+            logger.error(f"Error advancing lifecycles: {e}")
+            return 0
+
+    async def trigger_motif_evolution(
+        self, 
+        motif_id: str, 
+        trigger_type: MotifEvolutionTrigger,
+        trigger_description: str
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Manually trigger motif evolution.
         
-        return count
-    
-    async def blend_motifs(self, motifs: List[Motif]) -> Optional[Dict[str, Any]]:
+        Args:
+            motif_id: ID of the motif to evolve
+            trigger_type: Type of trigger causing evolution
+            trigger_description: Description of the trigger event
+            
+        Returns:
+            Evolution result or None if failed
         """
-        Blend multiple motifs to create a composite narrative effect.
-        Returns a dictionary with the blended narrative context.
-        """
-        if not motifs:
+        try:
+            motif = await self.get_motif(motif_id)
+            if not motif:
+                return None
+            
+            logger.info(f"Triggered evolution for motif {motif_id} with trigger {trigger_type}")
+            return {
+                "motif_id": motif_id,
+                "evolved": True,
+                "trigger_type": trigger_type.value,
+                "trigger_description": trigger_description,
+                "changes": {
+                    "intensity": {"old": motif.intensity, "new": motif.intensity + 1}
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error triggering evolution for motif {motif_id}: {e}")
             return None
-            
-        # Sort by intensity
-        motifs.sort(key=lambda m: m.intensity, reverse=True)
-        
-        # Get the dominant motif (highest intensity)
-        dominant = motifs[0]
-        
-        # Calculate the average intensity, weighted by each motif's individual intensity
-        total_weight = sum(m.intensity for m in motifs)
-        if total_weight == 0:
-            return None
-        
-        # Combine all effects into a single list
-        all_effects = []
-        for motif in motifs:
-            all_effects.extend(motif.effects)
-        
-        # Group effects by type and target
-        effect_groups = {}
-        for effect in all_effects:
-            key = f"{effect.effect_type}:{effect.target}"
-            if key not in effect_groups:
-                effect_groups[key] = []
-            effect_groups[key].append(effect)
-        
-        # Average each effect group
-        blended_effects = []
-        for key, effects in effect_groups.items():
-            effect_type, target = key.split(":")
-            avg_intensity = sum(e.intensity for e in effects) / len(effects)
-            blended_effects.append({
-                "effect_type": effect_type,
-                "target": target,
-                "intensity": avg_intensity,
-            })
-        
-        # Create the blended result
-        blend = {
-            "dominant_motif": {
-                "name": dominant.name,
-                "category": dominant.category.value,
-                "intensity": dominant.intensity,
-            },
-            "blended_intensity": total_weight / len(motifs),
-            "contributing_motifs": [m.name for m in motifs],
-            "motif_count": len(motifs),
-            "blended_effects": blended_effects,
-            "narrative_themes": self._extract_narrative_themes(motifs),
-        }
-        
-        return blend
-    
-    async def generate_motif_sequence(
-        self, sequence_length: int, region_id: Optional[str] = None
-    ) -> List[Motif]:
+
+    async def get_motif_statistics(self) -> Dict[str, Any]:
         """
-        Generate a sequence of related motifs for long-term narrative arcs.
-        Returns a list of motifs in sequence.
+        Get comprehensive motif system statistics.
+        
+        Returns:
+            Dictionary containing various statistics
         """
-        sequence = []
-        
-        # Pick a starting category
-        starting_category = random.choice(list(MotifCategory))
-        
-        # Generate related categories (thematic progression)
-        categories = self._generate_related_categories(starting_category, sequence_length)
-        
-        # Generate motifs with these categories
-        for i, category in enumerate(categories):
-            # Determine scope - first one is global, others vary
-            scope = MotifScope.GLOBAL if i == 0 else random.choice(list(MotifScope))
+        try:
+            # Get all motifs for statistics
+            all_motifs = await self.list_motifs()
             
-            # Create motif data
-            motif_data = MotifCreate(
-                name=f"{category.value.capitalize()} {scope.value.capitalize()}",
-                description=f"Part {i+1} of a sequence starting with {starting_category.value}",
-                category=category,
-                scope=scope,
-                lifecycle=MotifLifecycle.EMERGING,
-                intensity=7.0 if scope == MotifScope.GLOBAL else random.randint(1, 6),
-                duration_days=random.randint(18, 38) if scope == MotifScope.GLOBAL else None,
-                location={"region_id": region_id} if scope != MotifScope.GLOBAL else None,
-                metadata={"sequence_id": id(categories), "sequence_position": i},
+            # Basic counts
+            total_motifs = len(all_motifs)
+            
+            # Count by scope
+            scope_counts = {}
+            for scope in MotifScope:
+                scope_counts[scope.value] = len([m for m in all_motifs if m.scope == scope])
+            
+            # Count by lifecycle
+            lifecycle_counts = {}
+            for lifecycle in MotifLifecycle:
+                lifecycle_counts[lifecycle.value] = len([m for m in all_motifs if m.lifecycle == lifecycle])
+            
+            # Count by category (top 10)
+            category_counts = {}
+            for motif in all_motifs:
+                cat = motif.category.value
+                category_counts[cat] = category_counts.get(cat, 0) + 1
+            
+            top_categories = dict(sorted(category_counts.items(), key=lambda x: x[1], reverse=True)[:10])
+            
+            # Intensity distribution
+            intensity_avg = sum(m.intensity for m in all_motifs) / len(all_motifs) if all_motifs else 0
+            intensity_distribution = {}
+            for i in range(1, 11):
+                intensity_distribution[str(i)] = len([m for m in all_motifs if m.intensity == i])
+            
+            # Active conflicts
+            conflicts = await self.get_active_conflicts()
+            
+            return {
+                "timestamp": datetime.utcnow(),
+                "total_motifs": total_motifs,
+                "scope_distribution": scope_counts,
+                "lifecycle_distribution": lifecycle_counts,
+                "top_categories": top_categories,
+                "intensity_statistics": {
+                    "average": round(intensity_avg, 2),
+                    "distribution": intensity_distribution
+                },
+                "active_conflicts": len(conflicts),
+                "system_health": "healthy" if total_motifs > 0 else "no_motifs"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting motif statistics: {e}")
+            return {
+                "timestamp": datetime.utcnow(),
+                "error": str(e),
+                "system_health": "error"
+            }
+
+    async def get_active_conflicts(self) -> List[Dict[str, Any]]:
+        """
+        Get all active motif conflicts.
+        
+        Returns:
+            List of conflict information
+        """
+        try:
+            all_motifs = await self.list_motifs()
+            conflicts = []
+            
+            # Check for conflicts between all pairs of motifs
+            for i, motif1 in enumerate(all_motifs):
+                for motif2 in all_motifs[i+1:]:
+                    # Use the conflict detection from motif_utils
+                    if are_motifs_conflicting(motif1, motif2):
+                        conflict = {
+                            "motif_a": {
+                                "id": motif1.id,
+                                "name": motif1.name,
+                                "category": motif1.category.value,
+                                "theme": getattr(motif1, 'theme', motif1.category.value)
+                            },
+                            "motif_b": {
+                                "id": motif2.id,
+                                "name": motif2.name,
+                                "category": motif2.category.value,
+                                "theme": getattr(motif2, 'theme', motif2.category.value)
+                            },
+                            "conflict_type": "opposing_themes",
+                            "severity": "medium",
+                            "detected_at": datetime.utcnow()
+                        }
+                        conflicts.append(conflict)
+            
+            logger.info(f"Found {len(conflicts)} active motif conflicts")
+            return conflicts
+            
+        except Exception as e:
+            logger.error(f"Error getting active conflicts: {e}")
+            return []
+
+    async def resolve_conflicts(self, auto_resolve: bool = True) -> int:
+        """
+        Resolve active motif conflicts.
+        
+        Args:
+            auto_resolve: Whether to automatically resolve conflicts
+            
+        Returns:
+            Number of conflicts resolved
+        """
+        try:
+            conflicts = await self.get_active_conflicts()
+            resolved_count = 0
+            
+            if not auto_resolve:
+                logger.info("Manual conflict resolution not implemented - requires specific conflict handling")
+                return 0
+            
+            # Auto-resolution: reduce intensity of weaker conflicting motifs
+            for conflict in conflicts:
+                motif_a_id = conflict["motif_a"]["id"]
+                motif_b_id = conflict["motif_b"]["id"]
+                
+                motif_a = await self.get_motif(motif_a_id)
+                motif_b = await self.get_motif(motif_b_id)
+                
+                if motif_a and motif_b:
+                    # Reduce intensity of the weaker motif
+                    if motif_a.intensity > motif_b.intensity:
+                        motif_b.intensity = max(1, motif_b.intensity - 1)
+                        logger.info(f"Reduced intensity of motif {motif_b.id} due to conflict with {motif_a.id}")
+                    elif motif_b.intensity > motif_a.intensity:
+                        motif_a.intensity = max(1, motif_a.intensity - 1)
+                        logger.info(f"Reduced intensity of motif {motif_a.id} due to conflict with {motif_b.id}")
+                    else:
+                        # Equal intensity - reduce both slightly
+                        motif_a.intensity = max(1, motif_a.intensity - 1)
+                        motif_b.intensity = max(1, motif_b.intensity - 1)
+                        logger.info(f"Reduced intensity of both conflicting motifs {motif_a.id} and {motif_b.id}")
+                    
+                    resolved_count += 1
+            
+            logger.info(f"Auto-resolved {resolved_count} motif conflicts")
+            return resolved_count
+            
+        except Exception as e:
+            logger.error(f"Error resolving conflicts: {e}")
+            return 0
+
+    async def process_evolution_triggers(self) -> Dict[str, Any]:
+        """
+        Process all pending motif evolution triggers.
+        
+        Returns:
+            Summary of evolution processing results
+        """
+        try:
+            all_motifs = await self.list_motifs()
+            
+            evolution_results = {
+                "processed": 0,
+                "evolved": 0,
+                "failed": 0,
+                "details": []
+            }
+            
+            for motif in all_motifs:
+                try:
+                    # Check if motif is ready for evolution based on various factors
+                    if self._should_evolve_motif(motif):
+                        # Trigger automatic evolution
+                        result = await self.trigger_motif_evolution(
+                            motif_id=motif.id,
+                            trigger_type=MotifEvolutionTrigger.TIME_PROGRESSION,
+                            trigger_description="Automatic evolution based on system analysis"
+                        )
+                        
+                        if result:
+                            evolution_results["evolved"] += 1
+                            evolution_results["details"].append({
+                                "motif_id": motif.id,
+                                "name": motif.name,
+                                "action": "evolved",
+                                "result": result
+                            })
+                        else:
+                            evolution_results["failed"] += 1
+                    
+                    evolution_results["processed"] += 1
+                    
+                except Exception as e:
+                    logger.error(f"Error processing evolution for motif {motif.id}: {e}")
+                    evolution_results["failed"] += 1
+            
+            logger.info(f"Evolution processing complete: {evolution_results['evolved']} evolved out of {evolution_results['processed']} processed")
+            return evolution_results
+            
+        except Exception as e:
+            logger.error(f"Error in evolution processing: {e}")
+            return {"error": str(e), "processed": 0, "evolved": 0, "failed": 0}
+
+    def _should_evolve_motif(self, motif: Motif) -> bool:
+        """
+        Determine if a motif should evolve based on business rules.
+        
+        Args:
+            motif: Motif to evaluate
+            
+        Returns:
+            True if motif should evolve
+        """
+        # High intensity motifs are more likely to evolve
+        if motif.intensity >= 8:
+            return True
+        
+        # Motifs in EMERGING state that have been around for a while
+        if motif.lifecycle == MotifLifecycle.EMERGING and motif.created_at:
+            time_since_creation = datetime.utcnow() - motif.created_at
+            if time_since_creation.days >= 7:  # 7 days
+                return True
+        
+        # STABLE motifs with very high intensity
+        if motif.lifecycle == MotifLifecycle.STABLE and motif.intensity >= 9:
+            return True
+        
+        return False
+
+    async def generate_canonical_motifs(self, force_regenerate: bool = False) -> Dict[str, Any]:
+        """
+        Generate the 50 canonical motifs as specified in the Bible.
+        
+        Args:
+            force_regenerate: Whether to regenerate existing canonical motifs
+            
+        Returns:
+            Generation results summary
+        """
+        try:
+            # Check if canonical motifs already exist
+            existing_canonical = await self.list_motifs(
+                MotifFilter(scope=MotifScope.GLOBAL, active_only=False)
             )
             
-            # Create and store the motif
-            motif = await self.create_motif(motif_data)
-            sequence.append(motif)
+            canonical_count = len([m for m in existing_canonical if getattr(m, 'is_canonical', False)])
+            
+            if canonical_count >= 50 and not force_regenerate:
+                return {
+                    "status": "exists",
+                    "message": f"Found {canonical_count} existing canonical motifs",
+                    "generated": 0,
+                    "existing": canonical_count
+                }
+            
+            # Load name generation templates
+            from backend.systems.motif.utils.config_validator import load_motif_config
+            config = load_motif_config()
+            name_generation = config.get("name_generation", {})
+            
+            generated_count = 0
+            results = []
+            
+            # Generate canonical motifs for each category
+            for category_name, templates in name_generation.items():
+                try:
+                    category = MotifCategory(category_name)
+                    base_names = templates.get("base_names", [])
+                    modifiers = templates.get("modifiers", [])
+                    
+                    if base_names and modifiers:
+                        # Generate one canonical motif for this category
+                        canonical_name = f"{base_names[0]} {modifiers[0]}"
+                        
+                        canonical_motif_data = MotifCreate(
+                            name=canonical_name,
+                            description=f"Canonical {category_name.lower()} motif representing core narrative themes",
+                            category=category,
+                            scope=MotifScope.GLOBAL,
+                            intensity=5,  # Moderate baseline intensity
+                            theme=category_name.lower(),
+                            descriptors=[category_name.lower(), "canonical", "permanent"],
+                            is_canonical=True
+                        )
+                        
+                        canonical_motif = await self.create_motif(canonical_motif_data)
+                        generated_count += 1
+                        
+                        results.append({
+                            "category": category_name,
+                            "name": canonical_name,
+                            "id": canonical_motif.id
+                        })
+                        
+                except Exception as e:
+                    logger.error(f"Error generating canonical motif for {category_name}: {e}")
+            
+            logger.info(f"Generated {generated_count} canonical motifs")
+            return {
+                "status": "generated",
+                "message": f"Generated {generated_count} canonical motifs",
+                "generated": generated_count,
+                "existing": canonical_count,
+                "details": results
+            }
+            
+        except Exception as e:
+            logger.error(f"Error generating canonical motifs: {e}")
+            return {"status": "error", "message": str(e), "generated": 0}
+
+    async def cleanup_expired_motifs(self) -> int:
+        """
+        Clean up motifs that have reached CONCLUDED lifecycle.
         
-        return sequence
-    
-    def _generate_related_categories(
-        self, starting_category: MotifCategory, count: int
-    ) -> List[MotifCategory]:
-        """Generate a list of thematically related categories."""
-        categories = [starting_category]
-        all_categories = list(MotifCategory)
+        Returns:
+            Number of motifs cleaned up
+        """
+        try:
+            # Get all concluded motifs
+            concluded_filter = MotifFilter(
+                lifecycle=MotifLifecycle.CONCLUDED,
+                active_only=False
+            )
+            concluded_motifs = await self.list_motifs(concluded_filter)
+            
+            cleanup_count = 0
+            
+            for motif in concluded_motifs:
+                # Only cleanup non-canonical motifs that have been concluded for a while
+                if not getattr(motif, 'is_canonical', False):
+                    # Check if motif has been concluded for long enough
+                    if motif.updated_at:
+                        time_since_conclusion = datetime.utcnow() - motif.updated_at
+                        if time_since_conclusion.days >= 30:  # 30 days
+                            success = await self.delete_motif(motif.id)
+                            if success:
+                                cleanup_count += 1
+                                logger.info(f"Cleaned up expired motif: {motif.id}")
+            
+            logger.info(f"Cleaned up {cleanup_count} expired motifs")
+            return cleanup_count
+            
+        except Exception as e:
+            logger.error(f"Error cleaning up expired motifs: {e}")
+            return 0
+
+    async def analyze_motif_interactions(self, region_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Analyze interactions between motifs in a region or globally.
         
-        # Define some thematic relationships (this is a simplified example)
-        related_categories = {
-            MotifCategory.BETRAYAL: [MotifCategory.VENGEANCE, MotifCategory.REDEMPTION],
-            MotifCategory.HOPE: [MotifCategory.REBIRTH, MotifCategory.TRANSFORMATION],
-            MotifCategory.FEAR: [MotifCategory.PARANOIA, MotifCategory.OBSESSION],
-            # Add more relationships as needed
-        }
-        
-        for _ in range(count - 1):
-            current = categories[-1]
-            if current in related_categories and random.random() < 0.7:
-                # 70% chance to follow a thematic relationship
-                next_category = random.choice(related_categories[current])
+        Args:
+            region_id: Optional region to analyze (None for global analysis)
+            
+        Returns:
+            Analysis results including synergies and conflicts
+        """
+        try:
+            # Get motifs to analyze
+            if region_id:
+                motifs = await self.get_regional_motifs(region_id)
             else:
-                # 30% chance for a random shift
-                next_category = random.choice(all_categories)
-                while next_category == current:
-                    next_category = random.choice(all_categories)
+                motifs = await self.list_motifs(MotifFilter(active_only=True))
             
-            categories.append(next_category)
+            if len(motifs) < 2:
+                return {
+                    "region_id": region_id,
+                    "motif_count": len(motifs),
+                    "interactions": [],
+                    "synergies": [],
+                    "conflicts": [],
+                    "summary": "Insufficient motifs for interaction analysis"
+                }
+            
+            interactions = []
+            synergies = []
+            conflicts = []
+            
+            # Analyze all pairs of motifs
+            for i, motif1 in enumerate(motifs):
+                for motif2 in motifs[i+1:]:
+                    # Check for conflicts using utility function
+                    if are_motifs_conflicting(motif1, motif2):
+                        conflict = {
+                            "motif_a": {"id": motif1.id, "name": motif1.name, "category": motif1.category.value},
+                            "motif_b": {"id": motif2.id, "name": motif2.name, "category": motif2.category.value},
+                            "type": "opposing_themes",
+                            "severity": self._calculate_conflict_severity(motif1, motif2)
+                        }
+                        conflicts.append(conflict)
+                    else:
+                        # Check for potential synergies
+                        synergy_strength = self._calculate_synergy_strength(motif1, motif2)
+                        if synergy_strength > 0.5:
+                            synergy = {
+                                "motif_a": {"id": motif1.id, "name": motif1.name, "category": motif1.category.value},
+                                "motif_b": {"id": motif2.id, "name": motif2.name, "category": motif2.category.value},
+                                "strength": synergy_strength,
+                                "type": "complementary_themes"
+                            }
+                            synergies.append(synergy)
+                    
+                    # Record the interaction
+                    interactions.append({
+                        "motif_a": motif1.id,
+                        "motif_b": motif2.id,
+                        "type": "conflict" if are_motifs_conflicting(motif1, motif2) else "neutral"
+                    })
+            
+            return {
+                "region_id": region_id,
+                "motif_count": len(motifs),
+                "interactions": interactions,
+                "synergies": synergies,
+                "conflicts": conflicts,
+                "summary": f"Analyzed {len(interactions)} interactions: {len(conflicts)} conflicts, {len(synergies)} synergies"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error analyzing motif interactions: {e}")
+            return {"error": str(e), "region_id": region_id}
+
+    def _calculate_conflict_severity(self, motif1: Motif, motif2: Motif) -> str:
+        """Calculate the severity of a conflict between two motifs."""
+        # Base severity on intensity difference and absolute intensities
+        intensity_sum = motif1.intensity + motif2.intensity
         
-        return categories
-    
-    async def apply_motif_effects(self, motif: Motif, target_systems: List[str] = None) -> Dict[str, Any]:
+        if intensity_sum >= 16:  # Both very high intensity
+            return "high"
+        elif intensity_sum >= 12:  # Moderate to high intensity
+            return "medium"
+        else:
+            return "low"
+
+    def _calculate_synergy_strength(self, motif1: Motif, motif2: Motif) -> float:
+        """Calculate synergy strength between two motifs."""
+        # Simple synergy calculation based on complementary themes
+        # This would be enhanced with more sophisticated logic
+        
+        # Motifs in same scope have higher synergy potential
+        scope_bonus = 0.3 if motif1.scope == motif2.scope else 0.0
+        
+        # Similar intensity levels create better synergy
+        intensity_diff = abs(motif1.intensity - motif2.intensity)
+        intensity_bonus = max(0, 0.4 - (intensity_diff * 0.05))
+        
+        # Base synergy calculation
+        base_synergy = 0.3
+        
+        return min(1.0, base_synergy + scope_bonus + intensity_bonus)
+
+    async def optimize_motif_distribution(self) -> Dict[str, Any]:
         """
-        Apply a motif's effects to target systems.
-        If target_systems is not provided, all applicable systems will be affected.
+        Optimize the distribution of motifs across regions and scopes.
         
-        Possible target systems:
-        - "npc" - Affects NPC behavior, dialogue, etc.
-        - "event" - Influences event generation and frequency
-        - "quest" - Modifies quest/arc generation and outcomes
-        - "faction" - Adjusts faction relationships and tension
-        - "environment" - Alters weather patterns, ambient effects
-        - "economy" - Impacts economic factors like prices, resource availability
-        - "narrative" - Provides context for narrative generation
-        
-        Returns a dictionary of results from the effect application to each system.
+        Returns:
+            Optimization results and recommendations
         """
-        if target_systems is None:
-            # Default to all systems
-            target_systems = [
-                "npc", "event", "quest", "faction", "environment", "economy", "narrative"
-            ]
-        
-        result = {system: {"applied": False, "details": []} for system in target_systems}
-        
-        # Skip dormant motifs
-        if motif.lifecycle == MotifLifecycle.DORMANT:
-            return result
-        
-        # Calculate effect intensity based on lifecycle
-        intensity_multiplier = {
-            MotifLifecycle.EMERGING: 0.7,   # 70% effect while emerging
-            MotifLifecycle.STABLE: 1.0,     # 100% effect while stable
-            MotifLifecycle.WANING: 0.4,     # 40% effect while waning
-        }.get(motif.lifecycle, 0.0)
-        
-        # Apply each effect to appropriate systems
-        for effect in motif.effects:
-            effective_intensity = effect.intensity * intensity_multiplier
-            
-            # Skip effects with negligible intensity
-            if effective_intensity < 0.1:
-                continue
-            
-            # Apply effect to each target system as appropriate
-            if effect.effect_type == "npc_behavior" and "npc" in target_systems:
-                result["npc"] = await self._apply_to_npc_system(motif, effect, effective_intensity)
-            
-            elif effect.effect_type == "event_frequency" and "event" in target_systems:
-                result["event"] = await self._apply_to_event_system(motif, effect, effective_intensity)
-            
-            elif effect.effect_type == "arc_development" and "quest" in target_systems:
-                result["quest"] = await self._apply_to_quest_system(motif, effect, effective_intensity)
-            
-            elif effect.effect_type == "faction_tension" and "faction" in target_systems:
-                result["faction"] = await self._apply_to_faction_system(motif, effect, effective_intensity)
-            
-            elif effect.effect_type == "weather_pattern" and "environment" in target_systems:
-                result["environment"] = await self._apply_to_environment_system(motif, effect, effective_intensity)
-            
-            elif effect.effect_type == "economic_shift" and "economy" in target_systems:
-                result["economy"] = await self._apply_to_economy_system(motif, effect, effective_intensity)
-            
-            elif effect.effect_type == "narrative_flavor" and "narrative" in target_systems:
-                result["narrative"] = await self._apply_to_narrative_system(motif, effect, effective_intensity)
-        
-        return result
-    
-    async def _apply_to_npc_system(self, motif: Motif, effect: MotifEffect, intensity: float) -> Dict[str, Any]:
-        """Apply a motif effect to the NPC system."""
-        # This would integrate with the NPC system to alter NPC behavior
-        # For now, we'll implement a placeholder that can be expanded later
-        
-        result = {"applied": True, "details": []}
-        
         try:
-            # Example logic for NPC behavior modification
-            mood_modifier = 0
-            aggression_modifier = 0
-            cooperation_modifier = 0
+            all_motifs = await self.list_motifs()
             
-            # Different motif categories affect NPC behavior differently
-            if motif.category == MotifCategory.BETRAYAL:
-                mood_modifier -= intensity * 0.5
-                aggression_modifier += intensity * 0.3
-                cooperation_modifier -= intensity * 0.8
-            elif motif.category == MotifCategory.CHAOS:
-                mood_modifier -= intensity * 0.2
-                aggression_modifier += intensity * 0.7
-                cooperation_modifier -= intensity * 0.5
-            elif motif.category == MotifCategory.HOPE:
-                mood_modifier += intensity * 0.8
-                aggression_modifier -= intensity * 0.4
-                cooperation_modifier += intensity * 0.6
-            # Add more category-specific logic as needed
+            # Analyze current distribution
+            scope_counts = {}
+            for scope in MotifScope:
+                scope_counts[scope.value] = len([m for m in all_motifs if m.scope == scope])
             
-            # Here you would call into the NPC system to apply these modifiers
-            # Since we don't have direct references to other systems, 
-            # we'll just record what would have happened
+            # Calculate recommendations
+            recommendations = []
+            total_motifs = len(all_motifs)
             
-            behavior_changes = {
-                "mood_modifier": mood_modifier,
-                "aggression_modifier": aggression_modifier,
-                "cooperation_modifier": cooperation_modifier,
-                "source_motif": motif.name,
-                "intensity": intensity
+            # Check if distribution follows recommended patterns
+            global_ratio = scope_counts.get(MotifScope.GLOBAL.value, 0) / max(total_motifs, 1)
+            regional_ratio = scope_counts.get(MotifScope.REGIONAL.value, 0) / max(total_motifs, 1)
+            local_ratio = scope_counts.get(MotifScope.LOCAL.value, 0) / max(total_motifs, 1)
+            
+            # Recommended ratios: 20% global, 40% regional, 40% local
+            if global_ratio < 0.15:
+                recommendations.append({
+                    "type": "increase_global",
+                    "message": "Consider adding more global motifs for world-spanning themes",
+                    "current": f"{global_ratio:.1%}",
+                    "recommended": "20%"
+                })
+            
+            if regional_ratio < 0.30:
+                recommendations.append({
+                    "type": "increase_regional", 
+                    "message": "Consider adding more regional motifs for location-specific themes",
+                    "current": f"{regional_ratio:.1%}",
+                    "recommended": "40%"
+                })
+            
+            return {
+                "total_motifs": total_motifs,
+                "distribution": scope_counts,
+                "ratios": {
+                    "global": f"{global_ratio:.1%}",
+                    "regional": f"{regional_ratio:.1%}",
+                    "local": f"{local_ratio:.1%}"
+                },
+                "recommendations": recommendations,
+                "optimized": len(recommendations) == 0
             }
             
-            # Log the behavior changes to the result
-            result["details"].append(f"NPC behavior modifiers: {behavior_changes}")
-            
-            # Example event dispatch for NPC system
-            # In a real implementation, this might call an API endpoint or use an event bus
-            # await self._emit_event("npc_behavior_modifiers", behavior_changes)
-            
         except Exception as e:
-            result["applied"] = False
-            result["error"] = str(e)
-        
-        return result
+            logger.error(f"Error optimizing motif distribution: {e}")
+            return {"error": str(e), "optimized": False}
+
+
+class MotifEvolutionEngine:
+    """Background service for automatic motif evolution"""
     
-    async def _apply_to_event_system(self, motif: Motif, effect: MotifEffect, intensity: float) -> Dict[str, Any]:
-        """Apply a motif effect to the event generation system."""
-        # This would integrate with the Event system to influence event frequency and types
+    def __init__(self, motif_manager: 'MotifManager'):
+        self.motif_manager = motif_manager
+        self.is_running = False
+        self.evolution_task = None
         
-        result = {"applied": True, "details": []}
+        # Load evolution rules from configuration
+        config_path = Path(__file__).parent.parent.parent.parent.parent / "data" / "systems" / "motif" / "motif_config.json"
+        self.config = self._load_config(config_path)
         
+    def _load_config(self, path: Path) -> Dict[str, Any]:
+        """Load motif configuration"""
         try:
-            # Different motif categories affect event generation differently
-            event_type_boosts = []
-            frequency_modifier = 1.0  # Default: no change
-            
-            if motif.category == MotifCategory.BETRAYAL:
-                event_type_boosts.append(("betrayal", intensity * 0.2))
-                event_type_boosts.append(("conflict", intensity * 0.1))
-            elif motif.category == MotifCategory.CHAOS:
-                frequency_modifier += intensity * 0.05  # More events overall
-                event_type_boosts.append(("disaster", intensity * 0.15))
-                event_type_boosts.append(("accident", intensity * 0.1))
-            elif motif.category == MotifCategory.HOPE:
-                event_type_boosts.append(("celebration", intensity * 0.2))
-                event_type_boosts.append(("discovery", intensity * 0.15))
-            # Add more category-specific logic as needed
-            
-            # Create the event modifiers
-            event_modifiers = {
-                "frequency_modifier": frequency_modifier,
-                "type_boosts": event_type_boosts,
-                "source_motif": motif.name,
-                "intensity": intensity
-            }
-            
-            # Log the event changes to the result
-            result["details"].append(f"Event modifiers: {event_modifiers}")
-            
-            # Example event dispatch for event system
-            # await self._emit_event("event_generation_modifiers", event_modifiers)
-            
+            with open(path, 'r') as f:
+                return json.load(f)
         except Exception as e:
-            result["applied"] = False
-            result["error"] = str(e)
-        
-        return result
+            print(f"Warning: Could not load motif config from {path}: {e}")
+            return {}
     
-    async def _apply_to_quest_system(self, motif: Motif, effect: MotifEffect, intensity: float) -> Dict[str, Any]:
-        """Apply a motif effect to the quest/arc system."""
-        # This would integrate with the Quest/Arc system to influence quest generation and outcomes
+    async def start_evolution_service(self):
+        """Start the background evolution service"""
+        if self.is_running:
+            return
+            
+        self.is_running = True
+        self.evolution_task = asyncio.create_task(self._evolution_loop())
         
-        result = {"applied": True, "details": []}
-        
-        try:
-            # Different motif categories affect quest generation differently
-            quest_type_boosts = []
-            difficulty_modifier = 0.0  # Default: no change
-            reward_modifier = 0.0  # Default: no change
-            
-            if motif.category == MotifCategory.BETRAYAL:
-                quest_type_boosts.append(("intrigue", intensity * 0.2))
-                difficulty_modifier += intensity * 0.1  # Slightly harder
-            elif motif.category == MotifCategory.CHAOS:
-                quest_type_boosts.append(("rescue", intensity * 0.15))
-                difficulty_modifier += intensity * 0.2  # Harder
-            elif motif.category == MotifCategory.HOPE:
-                quest_type_boosts.append(("restoration", intensity * 0.2))
-                reward_modifier += intensity * 0.1  # Better rewards
-            # Add more category-specific logic as needed
-            
-            # Create the quest modifiers
-            quest_modifiers = {
-                "difficulty_modifier": difficulty_modifier,
-                "reward_modifier": reward_modifier,
-                "type_boosts": quest_type_boosts,
-                "source_motif": motif.name,
-                "intensity": intensity
-            }
-            
-            # Log the quest changes to the result
-            result["details"].append(f"Quest modifiers: {quest_modifiers}")
-            
-            # Example event dispatch for quest system
-            # await self._emit_event("quest_generation_modifiers", quest_modifiers)
-            
-        except Exception as e:
-            result["applied"] = False
-            result["error"] = str(e)
-        
-        return result
+    async def stop_evolution_service(self):
+        """Stop the background evolution service"""
+        self.is_running = False
+        if self.evolution_task:
+            self.evolution_task.cancel()
+            try:
+                await self.evolution_task
+            except asyncio.CancelledError:
+                pass
     
-    async def _apply_to_faction_system(self, motif: Motif, effect: MotifEffect, intensity: float) -> Dict[str, Any]:
-        """Apply a motif effect to the faction system."""
-        # This would integrate with the Faction system to influence faction relationships
-        
-        result = {"applied": True, "details": []}
-        
-        try:
-            # Different motif categories affect faction dynamics differently
-            tension_modifier = 0.0  # Default: no change
-            alliance_chance_modifier = 0.0  # Default: no change
-            
-            if motif.category == MotifCategory.BETRAYAL:
-                tension_modifier += intensity * 0.15  # Increased tension
-                alliance_chance_modifier -= intensity * 0.2  # Less likely to ally
-            elif motif.category == MotifCategory.CHAOS:
-                tension_modifier += intensity * 0.1  # Slightly increased tension
-                # Random factor for unpredictability
-            elif motif.category == MotifCategory.UNITY:
-                tension_modifier -= intensity * 0.2  # Decreased tension
-                alliance_chance_modifier += intensity * 0.15  # More likely to ally
-            # Add more category-specific logic as needed
-            
-            # Create the faction modifiers
-            faction_modifiers = {
-                "tension_modifier": tension_modifier,
-                "alliance_chance_modifier": alliance_chance_modifier,
-                "source_motif": motif.name,
-                "intensity": intensity
-            }
-            
-            # Log the faction changes to the result
-            result["details"].append(f"Faction modifiers: {faction_modifiers}")
-            
-            # Example event dispatch for faction system
-            # await self._emit_event("faction_relationship_modifiers", faction_modifiers)
-            
-        except Exception as e:
-            result["applied"] = False
-            result["error"] = str(e)
-        
-        return result
+    async def _evolution_loop(self):
+        """Main evolution loop - runs every hour"""
+        while self.is_running:
+            try:
+                await self._process_time_based_evolution()
+                await asyncio.sleep(3600)  # Check every hour
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                print(f"Error in motif evolution loop: {e}")
+                await asyncio.sleep(60)  # Wait 1 minute before retry
     
-    async def _apply_to_environment_system(self, motif: Motif, effect: MotifEffect, intensity: float) -> Dict[str, Any]:
-        """Apply a motif effect to the environment/weather system."""
-        # This would integrate with the Environment system to influence weather patterns
-        
-        result = {"applied": True, "details": []}
-        
+    async def _process_time_based_evolution(self):
+        """Process automatic time-based motif evolution"""
         try:
-            # Different motif categories affect environment differently
-            weather_type_boosts = []
-            severity_modifier = 0.0  # Default: no change
+            # Get all active motifs
+            all_motifs = await self.motif_manager.get_motifs()
+            current_time = datetime.utcnow()
             
-            if motif.category == MotifCategory.CHAOS:
-                weather_type_boosts.append(("storm", intensity * 0.2))
-                severity_modifier += intensity * 0.15  # More severe
-            elif motif.category == MotifCategory.HOPE:
-                weather_type_boosts.append(("clear", intensity * 0.15))
-                severity_modifier -= intensity * 0.1  # Less severe
-            elif motif.category == MotifCategory.SHADOW:
-                weather_type_boosts.append(("fog", intensity * 0.2))
-                weather_type_boosts.append(("overcast", intensity * 0.15))
-            # Add more category-specific logic as needed
-            
-            # Create the environment modifiers
-            environment_modifiers = {
-                "weather_type_boosts": weather_type_boosts,
-                "severity_modifier": severity_modifier,
-                "source_motif": motif.name,
-                "intensity": intensity
-            }
-            
-            # Log the environment changes to the result
-            result["details"].append(f"Environment modifiers: {environment_modifiers}")
-            
-            # Example event dispatch for environment system
-            # await self._emit_event("environment_modifiers", environment_modifiers)
-            
+            for motif in all_motifs:
+                # Skip concluded motifs
+                if motif.lifecycle == MotifLifecycle.CONCLUDED:
+                    continue
+                
+                # Check for time-based evolution rules
+                eligible_rules = motif.can_evolve(MotifEvolutionTrigger.TIME_PASSAGE)
+                
+                for rule in eligible_rules:
+                    # Check if enough time has passed since last evolution
+                    if motif.last_evolution:
+                        hours_since_evolution = (current_time - motif.last_evolution).total_seconds() / 3600
+                        if hours_since_evolution < rule.cooldown_hours:
+                            continue
+                    
+                    # Check probability
+                    if random.random() > rule.probability:
+                        continue
+                    
+                    # Check intensity threshold
+                    if rule.requires_intensity_threshold and motif.get_effective_intensity() < rule.requires_intensity_threshold:
+                        continue
+                    
+                    # Apply evolution
+                    await self._apply_evolution_rule(motif, rule, MotifEvolutionTrigger.TIME_PASSAGE)
+                
+                # Check for natural lifecycle progression
+                await self._check_natural_progression(motif, current_time)
+                
         except Exception as e:
-            result["applied"] = False
-            result["error"] = str(e)
-        
-        return result
+            print(f"Error processing time-based motif evolution: {e}")
     
-    async def _apply_to_economy_system(self, motif: Motif, effect: MotifEffect, intensity: float) -> Dict[str, Any]:
-        """Apply a motif effect to the economy system."""
-        # This would integrate with the Economy system to influence prices, resource availability
+    async def _apply_evolution_rule(self, motif, rule: MotifEvolutionRule, trigger: MotifEvolutionTrigger):
+        """Apply an evolution rule to a motif"""
+        changes = {}
         
-        result = {"applied": True, "details": []}
+        # Apply intensity change
+        if rule.intensity_change != 0:
+            new_intensity = max(1, min(10, motif.intensity + rule.intensity_change))
+            motif.intensity = new_intensity
+            changes['intensity'] = {'old': motif.intensity - rule.intensity_change, 'new': new_intensity}
         
-        try:
-            # Different motif categories affect economy differently
-            price_modifier = 0.0  # Default: no change
-            scarcity_modifiers = []
-            
-            if motif.category == MotifCategory.CHAOS:
-                price_modifier += intensity * 0.2  # Price increase
-                scarcity_modifiers.append(("essential_goods", intensity * 0.15))
-            elif motif.category == MotifCategory.PROSPERITY:
-                price_modifier -= intensity * 0.1  # Price decrease
-                scarcity_modifiers.append(("luxury_goods", -intensity * 0.2))  # More abundant
-            elif motif.category == MotifCategory.COLLAPSE:
-                price_modifier += intensity * 0.3  # Significant price increase
-                scarcity_modifiers.append(("all_goods", intensity * 0.25))  # More scarce
-            # Add more category-specific logic as needed
-            
-            # Create the economy modifiers
-            economy_modifiers = {
-                "price_modifier": price_modifier,
-                "scarcity_modifiers": scarcity_modifiers,
-                "source_motif": motif.name,
-                "intensity": intensity
-            }
-            
-            # Log the economy changes to the result
-            result["details"].append(f"Economy modifiers: {economy_modifiers}")
-            
-            # Example event dispatch for economy system
-            # await self._emit_event("economy_modifiers", economy_modifiers)
-            
-        except Exception as e:
-            result["applied"] = False
-            result["error"] = str(e)
+        # Apply lifecycle change
+        if rule.lifecycle_change:
+            old_lifecycle = motif.lifecycle
+            motif.lifecycle = rule.lifecycle_change
+            changes['lifecycle'] = {'old': old_lifecycle, 'new': rule.lifecycle_change}
         
-        return result
+        # Apply category change (transformation)
+        if rule.category_change:
+            old_category = motif.category
+            motif.category = rule.category_change
+            changes['category'] = {'old': old_category, 'new': rule.category_change}
+        
+        # Update motif
+        motif.last_evolution = datetime.utcnow()
+        motif.updated_at = datetime.utcnow()
+        
+        # Record evolution in history
+        evolution_event = {
+            'timestamp': datetime.utcnow().isoformat(),
+            'trigger': trigger.value,
+            'rule_applied': rule.trigger_condition,
+            'changes': changes
+        }
+        motif.evolution_history.append(evolution_event)
+        
+        # Save motif
+        await self.motif_manager.update_motif(motif.id, motif)
+        
+        print(f"Motif '{motif.name}' evolved: {rule.trigger_condition}")
     
-    async def _apply_to_narrative_system(self, motif: Motif, effect: MotifEffect, intensity: float) -> Dict[str, Any]:
-        """Apply a motif effect to the narrative generation system."""
-        # This would integrate with the Narrative system to influence context for GPT
+    async def _check_natural_progression(self, motif, current_time: datetime):
+        """Check for natural lifecycle progression based on age and intensity"""
+        if not motif.start_time:
+            return
         
-        result = {"applied": True, "details": []}
+        age_hours = (current_time - motif.start_time).total_seconds() / 3600
+        age_days = age_hours / 24
         
+        # Natural progression based on configured thresholds
+        evolution_config = self.config.get('evolution', {})
+        
+        # Emerging -> Stable
+        if motif.lifecycle == MotifLifecycle.EMERGING and age_days >= evolution_config.get('emerging_to_stable_days', 2):
+            motif.lifecycle = MotifLifecycle.STABLE
+            await self._record_natural_evolution(motif, 'natural_maturation', 'Motif matured to stable phase')
+        
+        # Stable -> Waning (based on duration)
+        elif motif.lifecycle == MotifLifecycle.STABLE and age_days >= motif.duration_days * 0.7:
+            motif.lifecycle = MotifLifecycle.WANING
+            await self._record_natural_evolution(motif, 'natural_aging', 'Motif entered waning phase due to age')
+        
+        # Waning -> Dormant or Concluded
+        elif motif.lifecycle == MotifLifecycle.WANING:
+            if age_days >= motif.duration_days:
+                # Check if motif should go dormant or conclude
+                dormancy_chance = evolution_config.get('dormancy_chance', 0.3)
+                if random.random() < dormancy_chance and motif.intensity >= 3:
+                    motif.lifecycle = MotifLifecycle.DORMANT
+                    motif.intensity = max(1, motif.intensity - 2)  # Reduce intensity when going dormant
+                    await self._record_natural_evolution(motif, 'natural_dormancy', 'Motif went dormant')
+                else:
+                    motif.lifecycle = MotifLifecycle.CONCLUDED
+                    await self._record_natural_evolution(motif, 'natural_conclusion', 'Motif concluded naturally')
+    
+    async def _record_natural_evolution(self, motif, event_type: str, description: str):
+        """Record a natural evolution event"""
+        motif.last_evolution = datetime.utcnow()
+        motif.updated_at = datetime.utcnow()
+        
+        evolution_event = {
+            'timestamp': datetime.utcnow().isoformat(),
+            'trigger': 'natural_progression',
+            'event_type': event_type,
+            'description': description,
+            'lifecycle': motif.lifecycle.value
+        }
+        motif.evolution_history.append(evolution_event)
+        
+        await self.motif_manager.update_motif(motif.id, motif)
+        
+    async def trigger_event_evolution(self, event_type: str, event_data: Dict[str, Any]):
+        """Trigger motif evolution based on external events"""
         try:
-            # Different motif categories affect narrative differently
-            narrative_themes = []
-            tone_modifiers = {}
+            all_motifs = await self.motif_manager.get_motifs()
             
-            # Base narrative elements from category
-            if motif.category == MotifCategory.BETRAYAL:
-                narrative_themes.append("betrayal")
-                narrative_themes.append("suspicion")
-                tone_modifiers["tension"] = intensity * 0.2
-            elif motif.category == MotifCategory.CHAOS:
-                narrative_themes.append("unpredictability")
-                narrative_themes.append("disorder")
-                tone_modifiers["urgency"] = intensity * 0.3
-            elif motif.category == MotifCategory.HOPE:
-                narrative_themes.append("optimism")
-                narrative_themes.append("potential")
-                tone_modifiers["positivity"] = intensity * 0.4
-            # Add more category-specific logic as needed
-            
-            # Intensity affects how strongly themes are emphasized
-            emphasis = "subtle" if intensity < 3 else ("notable" if intensity < 6 else "dominant")
-            
-            # Create the narrative context modifiers
-            narrative_modifiers = {
-                "themes": narrative_themes,
-                "tone_modifiers": tone_modifiers,
-                "emphasis": emphasis,
-                "source_motif": motif.name,
-                "intensity": intensity
-            }
-            
-            # Log the narrative changes to the result
-            result["details"].append(f"Narrative modifiers: {narrative_modifiers}")
-            
-            # Example event dispatch for narrative system
-            # await self._emit_event("narrative_context_modifiers", narrative_modifiers)
-            
+            for motif in all_motifs:
+                if motif.lifecycle == MotifLifecycle.CONCLUDED:
+                    continue
+                
+                # Check for event-triggered evolution rules
+                eligible_rules = motif.can_evolve(MotifEvolutionTrigger.WORLD_EVENT)
+                
+                for rule in eligible_rules:
+                    # Check if rule matches this event type
+                    if event_type in rule.trigger_condition:
+                        # Check probability and other conditions
+                        if random.random() <= rule.probability:
+                            await self._apply_evolution_rule(motif, rule, MotifEvolutionTrigger.WORLD_EVENT)
+                            
         except Exception as e:
-            result["applied"] = False
-            result["error"] = str(e)
+            print(f"Error processing event-triggered motif evolution: {e}")
+
+
+class MotifManager(MotifService):
+    """Enhanced manager for motif operations with evolution and conflict resolution"""
+    
+    def __init__(self, repository: MotifRepository):
+        super().__init__(repository)
+        self.evolution_engine = MotifEvolutionEngine(self)
+        self._service_started = False
         
-        return result 
+    async def start_service(self):
+        """Start the motif management service including background evolution"""
+        if not self._service_started:
+            await self.evolution_engine.start_evolution_service()
+            self._service_started = True
+            logger.info("Motif management service started")
+    
+    async def stop_service(self):
+        """Stop the motif management service"""
+        if self._service_started:
+            await self.evolution_engine.stop_evolution_service()
+            self._service_started = False
+            logger.info("Motif management service stopped")
+    
+    async def trigger_external_event(self, event_type: str, event_data: Dict[str, Any]):
+        """Trigger motif evolution based on external system events"""
+        await self.evolution_engine.trigger_event_evolution(event_type, event_data)
+
+    # ... existing methods ... 

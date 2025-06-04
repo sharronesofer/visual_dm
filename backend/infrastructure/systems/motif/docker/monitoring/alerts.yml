@@ -1,0 +1,250 @@
+groups:
+  # Motif System Critical Alerts
+  - name: motif_system_critical
+    rules:
+      # API Availability Alerts
+      - alert: MotifAPIDown
+        expr: up{job="motif-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: api
+          service: motif-system
+        annotations:
+          summary: "Motif API is down"
+          description: "The Motif API has been down for more than 1 minute. Service is unavailable."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/api-down"
+          
+      - alert: MotifAPIHighErrorRate
+        expr: rate(http_requests_total{job="motif-api",status=~"5.."}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          component: api
+          service: motif-system
+        annotations:
+          summary: "High error rate in Motif API"
+          description: "Error rate is {{ $value | humanizePercentage }} for more than 2 minutes."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-error-rate"
+          
+      - alert: MotifAPIHighLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="motif-api"}[5m])) > 5
+        for: 3m
+        labels:
+          severity: warning
+          component: api
+          service: motif-system
+        annotations:
+          summary: "High response latency in Motif API"
+          description: "95th percentile latency is {{ $value }}s for more than 3 minutes."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-latency"
+
+  # Database Alerts
+  - name: motif_database_alerts
+    rules:
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: database
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL database is down"
+          description: "PostgreSQL has been down for more than 1 minute."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/database-down"
+          
+      - alert: DatabaseConnectionsHigh
+        expr: pg_stat_database_numbackends{datname="motif_db"} > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+          service: postgresql
+        annotations:
+          summary: "High number of database connections"
+          description: "Number of connections to motif_db is {{ $value }}, above threshold of 80."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-connections"
+          
+      - alert: DatabaseSlowQueries
+        expr: rate(pg_stat_database_tup_returned{datname="motif_db"}[5m]) / rate(pg_stat_database_tup_fetched{datname="motif_db"}[5m]) < 0.8
+        for: 10m
+        labels:
+          severity: warning
+          component: database
+          service: postgresql
+        annotations:
+          summary: "Database queries are running slowly"
+          description: "Query efficiency is below 80% for more than 10 minutes."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/slow-queries"
+
+  # Cache System Alerts
+  - name: motif_cache_alerts
+    rules:
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: cache
+          service: redis
+        annotations:
+          summary: "Redis cache is down"
+          description: "Redis has been down for more than 1 minute."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/redis-down"
+          
+      - alert: RedisCacheHitRateLow
+        expr: motif_cache_hit_rate < 0.85
+        for: 5m
+        labels:
+          severity: warning
+          component: cache
+          service: redis
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is {{ $value | humanizePercentage }}, below 85% threshold."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/low-cache-hit-rate"
+          
+      - alert: RedisMemoryUsageHigh
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          component: cache
+          service: redis
+        annotations:
+          summary: "High Redis memory usage"
+          description: "Redis memory usage is {{ $value | humanizePercentage }}, above 90% threshold."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-memory-usage"
+
+  # Motif System Business Logic Alerts
+  - name: motif_business_alerts
+    rules:
+      - alert: HighMotifConflictRate
+        expr: rate(motif_conflicts_detected_total[15m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: business-logic
+          service: motif-system
+        annotations:
+          summary: "High motif conflict rate detected"
+          description: "Motif conflict rate is {{ $value }} conflicts per second, indicating narrative tension issues."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-conflicts"
+          
+      - alert: ChaosThresholdExceeded
+        expr: motif_chaos_level > 7.5
+        for: 2m
+        labels:
+          severity: critical
+          component: business-logic
+          service: motif-system
+        annotations:
+          summary: "Chaos threshold exceeded"
+          description: "Current chaos level is {{ $value }}, exceeding threshold of 7.5."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/chaos-threshold"
+          
+      - alert: MotifEvolutionStalled
+        expr: increase(motif_evolutions_total[1h]) == 0
+        for: 30m
+        labels:
+          severity: warning
+          component: business-logic
+          service: motif-system
+        annotations:
+          summary: "Motif evolution system appears stalled"
+          description: "No motif evolutions detected in the last hour."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/evolution-stalled"
+
+  # System Resource Alerts
+  - name: motif_system_resources
+    rules:
+      - alert: HighCPUUsage
+        expr: (100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+          service: infrastructure
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}"
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-cpu"
+          
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+          service: infrastructure
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}"
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-memory"
+          
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 0.1
+        for: 5m
+        labels:
+          severity: critical
+          component: system
+          service: infrastructure
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space is {{ $value | humanizePercentage }} available on {{ $labels.instance }}"
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/low-disk-space"
+
+  # AI/ML Service Alerts
+  - name: motif_ai_alerts
+    rules:
+      - alert: AIRequestsHigh
+        expr: rate(motif_ai_requests_total[5m]) > 10
+        for: 3m
+        labels:
+          severity: warning
+          component: ai-service
+          service: motif-system
+        annotations:
+          summary: "High AI request rate"
+          description: "AI request rate is {{ $value }} requests per second, approaching rate limits."
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/high-ai-requests"
+          
+      - alert: AIRequestFailureRate
+        expr: rate(motif_ai_requests_failed_total[5m]) / rate(motif_ai_requests_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          component: ai-service
+          service: motif-system
+        annotations:
+          summary: "High AI request failure rate"
+          description: "AI request failure rate is {{ $value | humanizePercentage }}"
+          runbook_url: "https://docs.motif.dreamforge.ai/troubleshooting/ai-failures"
+
+  # Security Alerts
+  - name: motif_security_alerts
+    rules:
+      - alert: HighAuthenticationFailures
+        expr: rate(motif_auth_failures_total[5m]) > 5
+        for: 2m
+        labels:
+          severity: warning
+          component: security
+          service: motif-system
+        annotations:
+          summary: "High authentication failure rate"
+          description: "Authentication failure rate is {{ $value }} failures per second."
+          runbook_url: "https://docs.motif.dreamforge.ai/security/auth-failures"
+          
+      - alert: SuspiciousAPIActivity
+        expr: rate(http_requests_total{job="motif-api",status="429"}[5m]) > 1
+        for: 1m
+        labels:
+          severity: warning
+          component: security
+          service: motif-system
+        annotations:
+          summary: "High rate of rate-limited requests"
+          description: "Rate limiting is being triggered frequently, indicating possible abuse."
+          runbook_url: "https://docs.motif.dreamforge.ai/security/rate-limiting" 

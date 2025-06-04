@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.memory import memory_routes
+    from backend.infrastructure.systems.memory.routers import memory_routes
 except ImportError:
-    pytest.skip(f"Module backend.systems.memory.memory_routes not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.memory.routers.memory_routes not found", allow_module_level=True)
 
 
 class TestMemory_Routes:

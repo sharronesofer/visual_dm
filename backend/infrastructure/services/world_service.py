@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from backend.systems.world_state.core.types import WorldState as World
+from backend.systems.world_state.world_types import WorldState as World
 from backend.infrastructure.services import BaseService
 from backend.infrastructure.database import get_db
 

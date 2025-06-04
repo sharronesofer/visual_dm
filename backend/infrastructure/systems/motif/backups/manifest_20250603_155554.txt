@@ -1,0 +1,9 @@
+Motif System Backup Manifest
+Created: Tue Jun  3 15:55:54 EDT 2025
+Backup Directory: /Users/Sharrone/Dreamforge/backend/infrastructure/systems/motif/backups
+Configuration Backup: true
+Data Backup: false
+
+Files:
+-rw-r--r--  1 Sharrone  staff    61K Jun  3 15:55 /Users/Sharrone/Dreamforge/backend/infrastructure/systems/motif/backups/config_backup_20250603_155554.tar.gz
+-rw-r--r--  1 Sharrone  staff   211B Jun  3 15:55 /Users/Sharrone/Dreamforge/backend/infrastructure/systems/motif/backups/manifest_20250603_155554.txt

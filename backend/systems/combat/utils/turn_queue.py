@@ -10,6 +10,8 @@ Following the design principles from the Development Bible, this implementation:
 2. Supports dynamic join/leave operations 
 3. Handles reordering of combatants mid-combat
 4. Provides hooks for turn start/end events
+
+This is pure business logic - no I/O or database operations.
 """
 
 import logging

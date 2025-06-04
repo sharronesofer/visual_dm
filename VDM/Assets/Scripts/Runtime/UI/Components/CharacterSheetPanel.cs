@@ -24,7 +24,7 @@ namespace VDM.UI.Systems.Character
         [SerializeField] private Slider experienceSlider;
         [SerializeField] private TextMeshProUGUI experienceText;
         
-        [Header("Core Stats")]
+        [Header("Core Attributes")]
         [SerializeField] private TextMeshProUGUI strengthText;
         [SerializeField] private TextMeshProUGUI dexterityText;
         [SerializeField] private TextMeshProUGUI constitutionText;
@@ -126,7 +126,7 @@ namespace VDM.UI.Systems.Character
         {
             currentCharacter = character;
             UpdateCharacterInfo();
-            UpdateCoreStats();
+            UpdateCoreAttributes();
             UpdateCombatStats();
             UpdateSkills();
             UpdateEquipment();
@@ -173,22 +173,22 @@ namespace VDM.UI.Systems.Character
         /// <summary>
         /// Update core ability scores
         /// </summary>
-        private void UpdateCoreStats()
+        private void UpdateCoreAttributes()
         {
-            if (currentCharacter?.Stats == null) return;
+            if (currentCharacter?.Attributes == null) return;
             
             if (strengthText != null)
-                strengthText.text = $"{currentCharacter.Stats.Strength} ({GetModifierText(currentCharacter.Stats.Strength)})";
+                strengthText.text = $"{currentCharacter.Attributes.Strength} ({GetModifierText(currentCharacter.Attributes.Strength)})";
             if (dexterityText != null)
-                dexterityText.text = $"{currentCharacter.Stats.Dexterity} ({GetModifierText(currentCharacter.Stats.Dexterity)})";
+                dexterityText.text = $"{currentCharacter.Attributes.Dexterity} ({GetModifierText(currentCharacter.Attributes.Dexterity)})";
             if (constitutionText != null)
-                constitutionText.text = $"{currentCharacter.Stats.Constitution} ({GetModifierText(currentCharacter.Stats.Constitution)})";
+                constitutionText.text = $"{currentCharacter.Attributes.Constitution} ({GetModifierText(currentCharacter.Attributes.Constitution)})";
             if (intelligenceText != null)
-                intelligenceText.text = $"{currentCharacter.Stats.Intelligence} ({GetModifierText(currentCharacter.Stats.Intelligence)})";
+                intelligenceText.text = $"{currentCharacter.Attributes.Intelligence} ({GetModifierText(currentCharacter.Attributes.Intelligence)})";
             if (wisdomText != null)
-                wisdomText.text = $"{currentCharacter.Stats.Wisdom} ({GetModifierText(currentCharacter.Stats.Wisdom)})";
+                wisdomText.text = $"{currentCharacter.Attributes.Wisdom} ({GetModifierText(currentCharacter.Attributes.Wisdom)})";
             if (charismaText != null)
-                charismaText.text = $"{currentCharacter.Stats.Charisma} ({GetModifierText(currentCharacter.Stats.Charisma)})";
+                charismaText.text = $"{currentCharacter.Attributes.Charisma} ({GetModifierText(currentCharacter.Attributes.Charisma)})";
         }
         
         /// <summary>
@@ -407,7 +407,7 @@ namespace VDM.UI.Systems.Character
         {
             if (character.Id == currentCharacter?.Id)
             {
-                UpdateCoreStats();
+                UpdateCoreAttributes();
                 UpdateCombatStats();
             }
         }
@@ -417,7 +417,7 @@ namespace VDM.UI.Systems.Character
             if (character.Id == currentCharacter?.Id)
             {
                 UpdateCharacterInfo();
-                UpdateCoreStats();
+                UpdateCoreAttributes();
                 UpdateCombatStats();
                 UpdateAbilities();
                 

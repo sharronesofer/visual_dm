@@ -455,7 +455,7 @@ class BackendAssessment:
 
 def main():
     """Main execution function"""
-    backend_path = "/Users/Sharrone/Visual_DM/backend"
+    backend_path = "/Users/Sharrone/Dreamforge/backend"
     
     if not os.path.exists(backend_path):
         print(f"❌ Backend path not found: {backend_path}")

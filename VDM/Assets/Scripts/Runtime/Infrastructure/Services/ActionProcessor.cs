@@ -289,9 +289,9 @@ namespace VDM.Infrastructure.Core
         /// </summary>
         private int GetAbilityModifier(CharacterState state, string abilityName)
         {
-            if (state.Stats.ContainsKey(abilityName))
+            if (state.Attributes.ContainsKey(abilityName))
             {
-                var abilityScore = state.Stats[abilityName];
+                var abilityScore = state.Attributes[abilityName];
                 return (abilityScore - 10) / 2;
             }
             

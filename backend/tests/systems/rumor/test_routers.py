@@ -11,7 +11,9 @@ from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
 
-from backend.systems.rumor import routers
+# Import from infrastructure layer, not business logic
+from backend.infrastructure.systems.rumor import routers
+from backend.systems.rumor.services.services import RumorData, CreateRumorData, RumorBusinessService
 
 
 class TestRumorRouters:
@@ -27,8 +29,11 @@ class TestRumorRouters:
         """Sample data for rumor testing."""
         return {
             "id": str(uuid4()),
-            "name": f"Test Rumor",
-            "description": "Test description",
+            "content": "Test rumor content",
+            "originator_id": "test_entity_123",
+            "categories": ["test"],
+            "severity": "minor",
+            "truth_value": 0.7,
             "is_active": True
         }
     
@@ -44,6 +49,8 @@ class TestRumorRouters:
         # Test basic CRUD operations
         # Add specific operation tests here
         assert sample_rumor_data is not None
+        assert sample_rumor_data["content"] is not None
+        assert sample_rumor_data["originator_id"] is not None
     
     @pytest.mark.asyncio 
     async def test_routers_error_handling(self, mock_db_session):
@@ -57,7 +64,9 @@ class TestRumorRouters:
         """Test routers validation logic."""
         # Test input validation and constraints
         # Add specific validation tests here
-        assert sample_rumor_data["name"] is not None
+        assert sample_rumor_data["content"] is not None
+        assert sample_rumor_data["originator_id"] is not None
+        assert sample_rumor_data["severity"] in ["trivial", "minor", "moderate", "major", "critical"]
     
     def test_routers_integration(self, mock_db_session):
         """Test routers integration with other components."""

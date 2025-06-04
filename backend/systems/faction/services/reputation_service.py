@@ -3,31 +3,67 @@ Reputation service for factions in the Visual DM system.
 
 This module handles the reputation system for factions, including region-specific, 
 character-specific, and global reputation tracking and modification.
+
+Pure business logic implementation.
 """
 
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple
-from sqlalchemy.orm import Session
 
-from backend.systems.faction.models.faction import Faction, FactionMembership
-from backend.systems.faction.services.faction_service import FactionNotFoundError
+from backend.infrastructure.faction_services import ReputationDatabaseService
+from backend.infrastructure.shared.exceptions import (
+    FactionNotFoundError,
+    ValidationError
+)
+
+
+def get_reputation_bracket(reputation: float) -> str:
+    """
+    Determine reputation bracket based on numerical score - pure function.
+    
+    Args:
+        reputation: Numerical reputation score (-100 to 100)
+        
+    Returns:
+        String representation of reputation bracket
+    """
+    if reputation >= 80:
+        return "heroic"
+    elif reputation >= 60:
+        return "respected"
+    elif reputation >= 40:
+        return "trusted"
+    elif reputation >= 20:
+        return "neutral_positive"
+    elif reputation >= -20:
+        return "neutral"
+    elif reputation >= -40:
+        return "mistrusted"
+    elif reputation >= -60:
+        return "disliked"
+    elif reputation >= -80:
+        return "despised"
+    else:
+        return "reviled"
+
 
 class FactionReputationService:
-    """Service for managing faction reputation systems."""
+    """Service for managing faction reputation systems - pure business logic."""
     
-    @staticmethod
+    def __init__(self, database_service: ReputationDatabaseService):
+        self.db_service = database_service
+
     def modify_global_reputation(
-        db: Session,
+        self,
         faction_id: int,
         amount: float,
         reason: str,
         source: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
-        Modify a faction's global reputation score.
+        Modify a faction's global reputation score with business rules.
         
         Args:
-            db: Database session
             faction_id: Faction ID
             amount: Amount to modify reputation by (positive or negative)
             reason: Reason for reputation change
@@ -38,72 +74,58 @@ class FactionReputationService:
             
         Raises:
             FactionNotFoundError: If faction not found
+            ValidationError: If amount is invalid
         """
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
+        # Business rules validation
+        if not reason or not reason.strip():
+            raise ValidationError("Reason for reputation change is required")
+        
+        if abs(amount) > 50:  # Business rule: prevent extreme single changes
+            raise ValidationError("Single reputation change cannot exceed 50 points")
+        
+        faction = self.db_service.get_faction_for_reputation(faction_id)
         if not faction:
             raise FactionNotFoundError(f"Faction with ID {faction_id} not found")
             
-        # Store previous reputation for reporting
+        # Store previous reputation for business logic
         previous_reputation = faction.reputation
         
-        # Update reputation
-        faction.reputation += amount
+        # Apply business rules for reputation calculation
+        new_reputation = self._calculate_new_reputation(previous_reputation, amount)
+        faction.reputation = new_reputation
         
-        # Cap reputation between -100 and 100
-        faction.reputation = max(-100.0, min(100.0, faction.reputation))
+        # Business logic for reputation history tracking
+        reputation_event = self._create_reputation_event(
+            previous_reputation, new_reputation, amount, reason, source
+        )
         
-        # Record reputation change in history
-        if "reputation_history" not in faction.state:
-            faction.state["reputation_history"] = []
-            
-        reputation_event = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "previous_reputation": previous_reputation,
-            "new_reputation": faction.reputation,
-            "change": amount,
-            "reason": reason,
-            "source": source or {}
-        }
+        # Update reputation history using business rules
+        self._update_reputation_history(faction, reputation_event)
         
-        faction.state["reputation_history"].append(reputation_event)
+        # Business logic for reputation bracket tracking
+        previous_bracket = get_reputation_bracket(previous_reputation)
+        current_bracket = get_reputation_bracket(new_reputation)
+        bracket_changed = self._update_reputation_brackets(
+            faction, previous_bracket, current_bracket, reason
+        )
         
-        # Record reputation bracket changes for significant shifts
-        if "reputation_brackets" not in faction.state:
-            faction.state["reputation_brackets"] = {
-                "current": get_reputation_bracket(faction.reputation),
-                "history": []
-            }
+        # Persist changes via database service
+        self.db_service.update_faction_reputation(faction)
         
-        previous_bracket = faction.state["reputation_brackets"]["current"]
-        current_bracket = get_reputation_bracket(faction.reputation)
-        
-        if previous_bracket != current_bracket:
-            faction.state["reputation_brackets"]["current"] = current_bracket
-            faction.state["reputation_brackets"]["history"].append({
-                "timestamp": datetime.utcnow().isoformat(),
-                "from_bracket": previous_bracket,
-                "to_bracket": current_bracket,
-                "reason": reason
-            })
-        
-        # Commit changes
-        db.commit()
-        
-        # Return details of the change
+        # Return business logic results
         return {
             "faction_id": faction_id,
             "previous_reputation": previous_reputation,
-            "new_reputation": faction.reputation,
+            "new_reputation": new_reputation,
             "change": amount,
             "previous_bracket": previous_bracket,
             "current_bracket": current_bracket,
-            "bracket_changed": previous_bracket != current_bracket,
+            "bracket_changed": bracket_changed,
             "reason": reason
         }
     
-    @staticmethod
     def modify_regional_reputation(
-        db: Session,
+        self,
         faction_id: int,
         region_id: int,
         amount: float,
@@ -111,10 +133,9 @@ class FactionReputationService:
         source: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
-        Modify a faction's reputation in a specific region.
+        Modify a faction's reputation in a specific region with business rules.
         
         Args:
-            db: Database session
             faction_id: Faction ID
             region_id: Region ID
             amount: Amount to modify reputation by (positive or negative)
@@ -126,58 +147,45 @@ class FactionReputationService:
             
         Raises:
             FactionNotFoundError: If faction not found
+            ValidationError: If parameters are invalid
         """
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
+        # Business rules validation
+        if not reason or not reason.strip():
+            raise ValidationError("Reason for reputation change is required")
+        
+        if region_id <= 0:
+            raise ValidationError("Region ID must be positive")
+        
+        if abs(amount) > 50:
+            raise ValidationError("Single reputation change cannot exceed 50 points")
+        
+        faction = self.db_service.get_faction_for_reputation(faction_id)
         if not faction:
             raise FactionNotFoundError(f"Faction with ID {faction_id} not found")
             
-        # Initialize regional reputations if not present
-        if "regional_reputations" not in faction.state:
-            faction.state["regional_reputations"] = {}
-            
+        # Business logic for regional reputation management
+        regional_reps = self._ensure_regional_reputations(faction)
         region_id_str = str(region_id)
         
-        # Initialize this region's reputation if not present
-        if region_id_str not in faction.state["regional_reputations"]:
-            faction.state["regional_reputations"][region_id_str] = 0.0
-            
-        # Store previous reputation for reporting
-        previous_reputation = faction.state["regional_reputations"][region_id_str]
+        # Initialize region if not present (business rule)
+        if region_id_str not in regional_reps:
+            regional_reps[region_id_str] = 0.0
         
-        # Update reputation
-        faction.state["regional_reputations"][region_id_str] += amount
+        # Apply business rules for regional reputation
+        previous_reputation = regional_reps[region_id_str]
+        new_reputation = self._calculate_new_reputation(previous_reputation, amount)
+        regional_reps[region_id_str] = new_reputation
         
-        # Cap reputation between -100 and 100
-        faction.state["regional_reputations"][region_id_str] = max(
-            -100.0, 
-            min(100.0, faction.state["regional_reputations"][region_id_str])
+        # Business logic for regional history tracking
+        reputation_event = self._create_reputation_event(
+            previous_reputation, new_reputation, amount, reason, source
         )
         
-        current_reputation = faction.state["regional_reputations"][region_id_str]
+        self._update_regional_reputation_history(faction, region_id_str, reputation_event)
         
-        # Record regional reputation change in history
-        if "regional_reputation_history" not in faction.state:
-            faction.state["regional_reputation_history"] = {}
-            
-        if region_id_str not in faction.state["regional_reputation_history"]:
-            faction.state["regional_reputation_history"][region_id_str] = []
-            
-        reputation_event = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "previous_reputation": previous_reputation,
-            "new_reputation": current_reputation,
-            "change": amount,
-            "reason": reason,
-            "source": source or {}
-        }
-        
-        faction.state["regional_reputation_history"][region_id_str].append(reputation_event)
-        
-        # Update global reputation with a small effect
-        # Regional reputation changes influence global reputation at a reduced rate
-        global_amount = amount * 0.2  # 20% influence on global reputation
-        
-        if abs(global_amount) >= 0.1:  # Only update if the change is significant
+        # Business rule: Regional changes influence global reputation
+        global_influence = self._calculate_global_influence(amount)
+        if abs(global_influence) >= 0.1:  # Business threshold
             global_reason = f"Regional reputation change in region {region_id}"
             global_source = {
                 "type": "regional_influence",
@@ -186,57 +194,29 @@ class FactionReputationService:
                 "original_amount": amount
             }
             
-            FactionReputationService.modify_global_reputation(
-                db=db,
+            # Recursive call for global reputation (business rule)
+            self.modify_global_reputation(
                 faction_id=faction_id,
-                amount=global_amount,
+                amount=global_influence,
                 reason=global_reason,
                 source=global_source
             )
         else:
-            # Commit changes if we didn't call the global method (which would commit)
-            db.commit()
+            # Persist changes if no global update
+            self.db_service.update_faction_reputation(faction)
         
-        # Record if this is now the most positive or negative regional reputation
-        current_extremes = faction.state.get("regional_reputation_extremes", {
-            "most_positive": {"region_id": None, "value": -100.0},
-            "most_negative": {"region_id": None, "value": 100.0}
-        })
-        
-        if current_reputation > current_extremes["most_positive"]["value"]:
-            current_extremes["most_positive"] = {
-                "region_id": region_id,
-                "value": current_reputation
-            }
-            
-        if current_reputation < current_extremes["most_negative"]["value"]:
-            current_extremes["most_negative"] = {
-                "region_id": region_id,
-                "value": current_reputation
-            }
-            
-        faction.state["regional_reputation_extremes"] = current_extremes
-        
-        # Get reputation brackets
-        previous_bracket = get_reputation_bracket(previous_reputation)
-        current_bracket = get_reputation_bracket(current_reputation)
-        
-        # Return details of the change
         return {
             "faction_id": faction_id,
             "region_id": region_id,
             "previous_reputation": previous_reputation,
-            "new_reputation": current_reputation,
+            "new_reputation": new_reputation,
             "change": amount,
-            "previous_bracket": previous_bracket,
-            "current_bracket": current_bracket,
-            "bracket_changed": previous_bracket != current_bracket,
+            "global_influence": global_influence,
             "reason": reason
         }
-    
-    @staticmethod
+
     def modify_character_reputation(
-        db: Session,
+        self,
         faction_id: int,
         character_id: int,
         amount: float,
@@ -245,326 +225,287 @@ class FactionReputationService:
         affect_membership: bool = True
     ) -> Dict[str, Any]:
         """
-        Modify a faction's reputation with a specific character.
-        
-        This differs from membership reputation, which is about a character's standing
-        within a faction. This tracks how a faction views a character.
+        Modify faction reputation with specific character with business rules.
         
         Args:
-            db: Database session
             faction_id: Faction ID
             character_id: Character ID
-            amount: Amount to modify reputation by (positive or negative)
+            amount: Amount to modify reputation by
             reason: Reason for reputation change
-            source: Optional data about the source of the reputation change
-            affect_membership: Whether to also affect membership reputation if applicable
+            source: Optional source information
+            affect_membership: Whether to affect membership status
             
         Returns:
-            Dict with details of the reputation change
-            
-        Raises:
-            FactionNotFoundError: If faction not found
+            Dict with reputation change details
         """
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
+        # Business rules validation
+        if not reason or not reason.strip():
+            raise ValidationError("Reason for reputation change is required")
+        
+        if character_id <= 0:
+            raise ValidationError("Character ID must be positive")
+        
+        if abs(amount) > 30:  # Business rule: character interactions are more limited
+            raise ValidationError("Character reputation change cannot exceed 30 points")
+        
+        faction = self.db_service.get_faction_for_reputation(faction_id)
         if not faction:
             raise FactionNotFoundError(f"Faction with ID {faction_id} not found")
-            
-        # Initialize character reputations if not present
-        if "character_reputations" not in faction.state:
-            faction.state["character_reputations"] = {}
-            
+        
+        # Business logic for character-specific reputation
+        char_reps = self._ensure_character_reputations(faction)
         character_id_str = str(character_id)
         
-        # Initialize this character's reputation if not present
-        if character_id_str not in faction.state["character_reputations"]:
-            faction.state["character_reputations"][character_id_str] = 0.0
-            
-        # Store previous reputation for reporting
-        previous_reputation = faction.state["character_reputations"][character_id_str]
+        if character_id_str not in char_reps:
+            char_reps[character_id_str] = 0.0
         
-        # Update reputation
-        faction.state["character_reputations"][character_id_str] += amount
+        previous_reputation = char_reps[character_id_str]
+        new_reputation = self._calculate_new_reputation(previous_reputation, amount)
+        char_reps[character_id_str] = new_reputation
         
-        # Cap reputation between -100 and 100
-        faction.state["character_reputations"][character_id_str] = max(
-            -100.0, 
-            min(100.0, faction.state["character_reputations"][character_id_str])
+        # Business logic for character reputation history
+        reputation_event = self._create_reputation_event(
+            previous_reputation, new_reputation, amount, reason, source
         )
         
-        current_reputation = faction.state["character_reputations"][character_id_str]
+        self._update_character_reputation_history(faction, character_id_str, reputation_event)
         
-        # Record character reputation change in history
-        if "character_reputation_history" not in faction.state:
-            faction.state["character_reputation_history"] = {}
-            
-        if character_id_str not in faction.state["character_reputation_history"]:
-            faction.state["character_reputation_history"][character_id_str] = []
-            
-        reputation_event = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "previous_reputation": previous_reputation,
-            "new_reputation": current_reputation,
-            "change": amount,
-            "reason": reason,
-            "source": source or {}
-        }
-        
-        faction.state["character_reputation_history"][character_id_str].append(reputation_event)
-        
-        # If the character is a member, also update their membership reputation
+        # Business rule: Character reputation affects membership
+        membership_effects = {}
         if affect_membership:
-            membership = db.query(FactionMembership).filter(
-                FactionMembership.faction_id == faction_id,
-                FactionMembership.character_id == character_id,
-                FactionMembership.is_active == True
-            ).first()
+            membership_effects = self._apply_character_reputation_to_membership(
+                faction_id, character_id, new_reputation
+            )
+        
+        # Business rule: Character interactions have smaller global influence
+        global_influence = self._calculate_global_influence(amount) * 0.3  # 30% influence
+        if abs(global_influence) >= 0.05:
+            global_reason = f"Character {character_id} reputation change"
+            global_source = {
+                "type": "character_influence",
+                "character_id": character_id,
+                "original_reason": reason,
+                "original_amount": amount
+            }
             
-            if membership:
-                # Update membership reputation (at a reduced rate)
-                membership_amount = amount * 0.5  # 50% influence on membership reputation
-                previous_member_rep = membership.reputation
-                
-                # Update and cap
-                membership.reputation += membership_amount
-                membership.reputation = max(-100.0, min(100.0, membership.reputation))
-                
-                # Record in membership history
-                if not membership.history:
-                    membership.history = []
-                    
-                membership.history.append({
-                    "timestamp": datetime.utcnow().isoformat(),
-                    "type": "reputation_change",
-                    "previous_reputation": previous_member_rep,
-                    "new_reputation": membership.reputation,
-                    "change": membership_amount,
-                    "reason": reason,
-                    "source": "faction_perception_change"
-                })
+            self.modify_global_reputation(
+                faction_id=faction_id,
+                amount=global_influence,
+                reason=global_reason,
+                source=global_source
+            )
+        else:
+            self.db_service.update_faction_reputation(faction)
         
-        # Commit changes
-        db.commit()
-        
-        # Get reputation brackets
-        previous_bracket = get_reputation_bracket(previous_reputation)
-        current_bracket = get_reputation_bracket(current_reputation)
-        
-        # Return details of the change
         return {
             "faction_id": faction_id,
             "character_id": character_id,
             "previous_reputation": previous_reputation,
-            "new_reputation": current_reputation,
+            "new_reputation": new_reputation,
             "change": amount,
-            "previous_bracket": previous_bracket,
-            "current_bracket": current_bracket,
-            "bracket_changed": previous_bracket != current_bracket,
-            "reason": reason,
-            "membership_updated": affect_membership and membership is not None
+            "membership_effects": membership_effects,
+            "global_influence": global_influence,
+            "reason": reason
         }
-    
-    @staticmethod
-    def get_regional_reputation_summary(
-        db: Session,
-        faction_id: int
-    ) -> Dict[str, Any]:
+
+    def get_regional_reputation_summary(self, faction_id: int) -> Dict[str, Any]:
         """
-        Get a summary of a faction's regional reputations.
+        Get comprehensive regional reputation summary with business insights.
         
         Args:
-            db: Database session
             faction_id: Faction ID
             
         Returns:
-            Dict with regional reputation summary
-            
-        Raises:
-            FactionNotFoundError: If faction not found
+            Dict with regional reputation analysis
         """
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
+        faction = self.db_service.get_faction_for_reputation(faction_id)
         if not faction:
             raise FactionNotFoundError(f"Faction with ID {faction_id} not found")
-            
-        regional_reputations = faction.state.get("regional_reputations", {})
         
-        # Generate statistics
-        regions_count = len(regional_reputations)
+        regional_reps = self._ensure_regional_reputations(faction)
         
-        # Calculate averages and extremes
-        if regions_count > 0:
-            values = list(regional_reputations.values())
-            avg_reputation = sum(values) / regions_count
-            most_positive = max(values)
-            most_negative = min(values)
-            
-            # Find the regions with extreme values
-            most_positive_region = next(
-                (region_id for region_id, rep in regional_reputations.items() 
-                 if rep == most_positive),
-                None
-            )
-            most_negative_region = next(
-                (region_id for region_id, rep in regional_reputations.items() 
-                 if rep == most_negative),
-                None
-            )
-            
-            # Group by brackets
-            bracket_counts = {
-                "revered": 0,
-                "respected": 0,
-                "friendly": 0,
-                "neutral": 0,
-                "unfriendly": 0,
-                "hostile": 0,
-                "reviled": 0
+        # Business logic for reputation analysis
+        if not regional_reps:
+            return {
+                "faction_id": faction_id,
+                "total_regions": 0,
+                "average_reputation": faction.reputation,
+                "reputation_range": 0,
+                "strongest_region": None,
+                "weakest_region": None
             }
-            
-            for rep in values:
-                bracket = get_reputation_bracket(rep)
-                bracket_counts[bracket] += 1
-        else:
-            avg_reputation = 0
-            most_positive = 0
-            most_negative = 0
-            most_positive_region = None
-            most_negative_region = None
-            bracket_counts = {
-                "revered": 0,
-                "respected": 0,
-                "friendly": 0,
-                "neutral": 0,
-                "unfriendly": 0,
-                "hostile": 0,
-                "reviled": 0
-            }
+        
+        reputations = list(regional_reps.values())
+        strongest_region = max(regional_reps.items(), key=lambda x: x[1])
+        weakest_region = min(regional_reps.items(), key=lambda x: x[1])
         
         return {
             "faction_id": faction_id,
-            "global_reputation": faction.reputation,
-            "global_bracket": get_reputation_bracket(faction.reputation),
-            "regional_count": regions_count,
-            "average_regional_reputation": avg_reputation,
-            "most_positive": {
-                "region_id": most_positive_region,
-                "value": most_positive,
-                "bracket": get_reputation_bracket(most_positive)
+            "total_regions": len(regional_reps),
+            "average_reputation": sum(reputations) / len(reputations),
+            "reputation_range": max(reputations) - min(reputations),
+            "strongest_region": {
+                "region_id": int(strongest_region[0]),
+                "reputation": strongest_region[1],
+                "bracket": get_reputation_bracket(strongest_region[1])
             },
-            "most_negative": {
-                "region_id": most_negative_region,
-                "value": most_negative,
-                "bracket": get_reputation_bracket(most_negative)
+            "weakest_region": {
+                "region_id": int(weakest_region[0]),
+                "reputation": weakest_region[1],
+                "bracket": get_reputation_bracket(weakest_region[1])
             },
-            "bracket_distribution": bracket_counts,
-            "regional_extremes": faction.state.get("regional_reputation_extremes", {
-                "most_positive": {"region_id": None, "value": -100.0},
-                "most_negative": {"region_id": None, "value": 100.0}
-            })
+            "regional_details": {
+                int(region_id): {
+                    "reputation": rep,
+                    "bracket": get_reputation_bracket(rep)
+                }
+                for region_id, rep in regional_reps.items()
+            }
         }
-    
-    @staticmethod
-    def calculate_faction_reputation_modifiers(
-        db: Session,
-        faction_id: int
-    ) -> Dict[str, float]:
+
+    def calculate_faction_reputation_modifiers(self, faction_id: int) -> Dict[str, float]:
         """
-        Calculate faction-wide modifiers based on reputation.
-        
-        These modifiers can be used for mechanical effects in gameplay.
+        Calculate reputation-based modifiers for faction interactions.
         
         Args:
-            db: Database session
             faction_id: Faction ID
             
         Returns:
-            Dict of modifier name to float value
-            
-        Raises:
-            FactionNotFoundError: If faction not found
+            Dict with calculated modifiers based on reputation
         """
-        faction = db.query(Faction).filter(Faction.id == faction_id).first()
+        faction = self.db_service.get_faction_for_reputation(faction_id)
         if not faction:
             raise FactionNotFoundError(f"Faction with ID {faction_id} not found")
-            
-        # Base modifiers
+        
+        global_rep = faction.reputation
+        
+        # Business rules for reputation modifiers
         modifiers = {
-            "trade_price": 1.0,  # Multiplier for trade prices
-            "quest_reward": 1.0,  # Multiplier for quest rewards
-            "recruiting_cost": 1.0,  # Cost to recruit from this faction
-            "diplomatic_leverage": 1.0,  # Modifier for diplomatic actions
-            "information_access": 1.0,  # Access to faction information
-            "favor_cost": 1.0,  # Cost to request favors from faction
+            "diplomacy_bonus": self._calculate_diplomacy_modifier(global_rep),
+            "trade_bonus": self._calculate_trade_modifier(global_rep),
+            "recruitment_bonus": self._calculate_recruitment_modifier(global_rep),
+            "territory_defense_bonus": self._calculate_defense_modifier(global_rep),
+            "information_gathering_bonus": self._calculate_info_modifier(global_rep)
         }
         
-        # Apply reputation-based modifiers
-        reputation = faction.reputation
-        bracket = get_reputation_bracket(reputation)
-        
-        # Calculate normalized value from -1.0 to 1.0 for easier calculations
-        normalized_rep = reputation / 100.0
-        
-        # Apply specific modifiers
-        modifiers["trade_price"] = max(0.5, 1.0 - (normalized_rep * 0.25))
-        modifiers["quest_reward"] = min(1.5, 1.0 + (normalized_rep * 0.25))
-        modifiers["recruiting_cost"] = max(0.5, 1.0 - (normalized_rep * 0.25))
-        modifiers["diplomatic_leverage"] = min(2.0, 1.0 + (normalized_rep * 0.5))
-        modifiers["information_access"] = min(2.0, 1.0 + (normalized_rep * 0.5))
-        modifiers["favor_cost"] = max(0.5, 1.0 - (normalized_rep * 0.25))
-        
-        # Additional bracket-specific bonuses
-        if bracket == "revered":
-            modifiers["trade_price"] -= 0.1
-            modifiers["quest_reward"] += 0.2
-            modifiers["recruiting_cost"] -= 0.2
-            modifiers["diplomatic_leverage"] += 0.3
-            modifiers["information_access"] += 0.3
-            modifiers["favor_cost"] -= 0.2
-        elif bracket == "respected":
-            modifiers["trade_price"] -= 0.05
-            modifiers["quest_reward"] += 0.1
-            modifiers["diplomatic_leverage"] += 0.1
-        elif bracket == "hostile":
-            modifiers["trade_price"] += 0.2
-            modifiers["quest_reward"] -= 0.2
-            modifiers["recruiting_cost"] += 0.3
-        elif bracket == "reviled":
-            modifiers["trade_price"] += 0.5
-            modifiers["quest_reward"] -= 0.5
-            modifiers["recruiting_cost"] += 0.5
-            modifiers["diplomatic_leverage"] -= 0.5
-            modifiers["information_access"] -= 0.5
-            modifiers["favor_cost"] += 0.5
-        
-        # Ensure bounds
-        for key, value in modifiers.items():
-            if key == "diplomatic_leverage" or key == "information_access":
-                modifiers[key] = max(0.1, min(3.0, value))
-            else:
-                modifiers[key] = max(0.1, min(2.0, value))
-                
         return modifiers
 
-def get_reputation_bracket(reputation: float) -> str:
-    """
-    Get a string representation of a reputation bracket.
+    # Private business logic methods
     
-    Args:
-        reputation: Reputation value (-100 to +100)
+    def _calculate_new_reputation(self, current: float, change: float) -> float:
+        """Apply business rules for reputation calculation"""
+        new_value = current + change
+        return max(-100.0, min(100.0, new_value))  # Cap between -100 and 100
+    
+    def _calculate_global_influence(self, regional_amount: float) -> float:
+        """Business rule: Regional changes influence global at 20% rate"""
+        return regional_amount * 0.2
+    
+    def _create_reputation_event(self, previous: float, new: float, 
+                               change: float, reason: str, 
+                               source: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """Create reputation event record with business data"""
+        return {
+            "timestamp": datetime.utcnow().isoformat(),
+            "previous_reputation": previous,
+            "new_reputation": new,
+            "change": change,
+            "reason": reason,
+            "source": source or {}
+        }
+    
+    def _ensure_regional_reputations(self, faction) -> Dict[str, float]:
+        """Ensure regional reputations structure exists"""
+        if "regional_reputations" not in faction.state:
+            faction.state["regional_reputations"] = {}
+        return faction.state["regional_reputations"]
+    
+    def _ensure_character_reputations(self, faction) -> Dict[str, float]:
+        """Ensure character reputations structure exists"""
+        if "character_reputations" not in faction.state:
+            faction.state["character_reputations"] = {}
+        return faction.state["character_reputations"]
+    
+    def _update_reputation_history(self, faction, event: Dict[str, Any]) -> None:
+        """Update reputation history with business logic"""
+        if "reputation_history" not in faction.state:
+            faction.state["reputation_history"] = []
+        faction.state["reputation_history"].append(event)
+    
+    def _update_regional_reputation_history(self, faction, region_id: str, event: Dict[str, Any]) -> None:
+        """Update regional reputation history"""
+        if "regional_reputation_history" not in faction.state:
+            faction.state["regional_reputation_history"] = {}
+        if region_id not in faction.state["regional_reputation_history"]:
+            faction.state["regional_reputation_history"][region_id] = []
+        faction.state["regional_reputation_history"][region_id].append(event)
+    
+    def _update_character_reputation_history(self, faction, character_id: str, event: Dict[str, Any]) -> None:
+        """Update character reputation history"""
+        if "character_reputation_history" not in faction.state:
+            faction.state["character_reputation_history"] = {}
+        if character_id not in faction.state["character_reputation_history"]:
+            faction.state["character_reputation_history"][character_id] = []
+        faction.state["character_reputation_history"][character_id].append(event)
+    
+    def _update_reputation_brackets(self, faction, previous_bracket: str, 
+                                  current_bracket: str, reason: str) -> bool:
+        """Update reputation brackets with business logic"""
+        if "reputation_brackets" not in faction.state:
+            faction.state["reputation_brackets"] = {
+                "current": current_bracket,
+                "history": []
+            }
         
-    Returns:
-        String bracket name
-    """
-    if reputation >= 90:
-        return "revered"
-    elif reputation >= 70:
-        return "respected"
-    elif reputation >= 30:
-        return "friendly"
-    elif reputation >= -30:
-        return "neutral"
-    elif reputation >= -70:
-        return "unfriendly"
-    elif reputation >= -90:
-        return "hostile"
-    else:
-        return "reviled" 
+        faction.state["reputation_brackets"]["current"] = current_bracket
+        
+        if previous_bracket != current_bracket:
+            faction.state["reputation_brackets"]["history"].append({
+                "timestamp": datetime.utcnow().isoformat(),
+                "from_bracket": previous_bracket,
+                "to_bracket": current_bracket,
+                "reason": reason
+            })
+            return True
+        return False
+    
+    def _apply_character_reputation_to_membership(self, faction_id: int, 
+                                                character_id: int, 
+                                                reputation: float) -> Dict[str, Any]:
+        """Apply character reputation effects to membership (business rule)"""
+        # This is a placeholder for business logic that would interact with membership
+        effects = {}
+        
+        if reputation < -50:
+            effects["suggested_action"] = "consider_exile"
+        elif reputation > 70:
+            effects["suggested_action"] = "eligible_for_promotion"
+        elif reputation < -20:
+            effects["suggested_action"] = "restrict_privileges"
+        
+        return effects
+    
+    def _calculate_diplomacy_modifier(self, reputation: float) -> float:
+        """Business rule for diplomacy modifier based on reputation"""
+        return reputation / 200.0  # -0.5 to +0.5 modifier
+    
+    def _calculate_trade_modifier(self, reputation: float) -> float:
+        """Business rule for trade modifier based on reputation"""
+        return max(0, reputation / 100.0)  # 0 to +1.0 modifier
+    
+    def _calculate_recruitment_modifier(self, reputation: float) -> float:
+        """Business rule for recruitment modifier based on reputation"""
+        return reputation / 100.0  # -1.0 to +1.0 modifier
+    
+    def _calculate_defense_modifier(self, reputation: float) -> float:
+        """Business rule for defense modifier based on reputation"""
+        return max(0, reputation / 150.0)  # 0 to +0.67 modifier
+    
+    def _calculate_info_modifier(self, reputation: float) -> float:
+        """Business rule for information gathering modifier"""
+        return abs(reputation) / 200.0  # 0 to +0.5 modifier (both extremes help)
+
+
+def create_faction_reputation_service(database_service: ReputationDatabaseService) -> FactionReputationService:
+    """Factory function to create faction reputation service"""
+    return FactionReputationService(database_service) 

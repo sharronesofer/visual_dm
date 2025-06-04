@@ -31,7 +31,6 @@ class CriticalImportFixer:
             "from backend.infrastructure.repositories.": "from backend.infrastructure.shared.repositories.",
             
             # Fix event system imports
-            "# REMOVED: deprecated event_base import
             "from backend.systems.event_dispatcher import": "from backend.infrastructure.events.event_dispatcher import",
             
             # Fix specific modules that were moved
@@ -53,17 +52,17 @@ class CriticalImportFixer:
             "from backend.systems.faction.models import": "from backend.systems.faction.models.faction import",
             "from backend.systems.faction_goal.models import": "from backend.systems.faction.models.faction_goal import",
             "from backend.systems.rumor.models import": "from backend.systems.rumor.models.rumor import",
-            "from backend.systems.time_model.models import": "from backend.systems.time.models.time_model import",
-            "from backend.systems.calendar_model.models import": "from backend.systems.time.models.calendar_model import",
-            "from backend.systems.weather_model.models import": "from backend.systems.time.models.weather_model import",
-            "from backend.systems.event_model.models import": "from backend.systems.time.models.event_model import",
+            "from backend.systems.time_model.models import": "from backend.systems.game_time.models.time_model import",
+            "from backend.systems.calendar_model.models import": "from backend.systems.game_time.models.calendar_model import",
+            "from backend.systems.weather_model.models import": "from backend.systems.game_time.models.weather_model import",
+            "from backend.systems.event_model.models import": "from backend.systems.game_time.models.event_model import",
             "from backend.systems.item.models import": "from backend.systems.inventory.models.item import",
             "from backend.systems.inventory_item.models import": "from backend.systems.inventory.models.inventory_item import",
             "from backend.systems.item_category.models import": "from backend.systems.inventory.models.item_category import",
-            "from backend.systems.recipe.models import": "from backend.systems.crafting.models.recipe import",
-            "from backend.systems.ingredient.models import": "from backend.systems.crafting.models.ingredient import",
-            "from backend.systems.result.models import": "from backend.systems.crafting.models.result import",
-            "from backend.systems.station.models import": "from backend.systems.crafting.models.station import",
+            "from backend.systems.recipe.models import": "from backend.systems.equipment.models.recipe import",
+            "from backend.systems.ingredient.models import": "from backend.systems.equipment.models.ingredient import",
+            "from backend.systems.result.models import": "from backend.systems.equipment.models.result import",
+            "from backend.systems.station.models import": "from backend.systems.equipment.models.station import",
             
             # Fix service imports
             "from backend.systems.recipe_service.services import": "from backend.systems.crafting.services.recipe_service import",
@@ -72,10 +71,10 @@ class CriticalImportFixer:
             "from backend.systems.crafting_experience_service.services import": "from backend.systems.crafting.services.crafting_experience_service import",
             "from backend.systems.crafting_achievement_service.services import": "from backend.systems.crafting.services.crafting_achievement_service import",
             "from backend.systems.crafting_service.services import": "from backend.systems.crafting.services.crafting_service import",
-            "from backend.systems.time_manager.services import": "from backend.systems.time.services.time_manager import",
-            "from backend.systems.event_scheduler.services import": "from backend.systems.time.services.event_scheduler import",
-            "from backend.systems.calendar_service.services import": "from backend.systems.time.services.calendar_service import",
-            "from backend.systems.weather_service.services import": "from backend.systems.time.services.weather_service import",
+            "from backend.systems.time_manager.services import": "from backend.systems.game_time.services.time_manager import",
+            "from backend.systems.event_scheduler.services import": "from backend.systems.game_time.services.event_scheduler import",
+            "from backend.systems.calendar_service.services import": "from backend.systems.game_time.services.calendar_service import",
+            "from backend.systems.weather_service.services import": "from backend.systems.game_time.services.weather_service import",
             "from backend.infrastructure.data_service.services import": "from backend.infrastructure.data.services.data_service import",
             "from backend.systems.party_service.services import": "from backend.systems.character.services.party_service import",
             "from backend.systems.relationship_service.services import": "from backend.systems.character.services.relationship_service import",

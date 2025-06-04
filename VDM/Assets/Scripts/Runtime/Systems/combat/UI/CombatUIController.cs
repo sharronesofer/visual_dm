@@ -1,22 +1,23 @@
-using NativeWebSocket;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using TMPro;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using VDM.Systems.Combat.Models;
 using VDM.Systems.Combat.Services;
+using VDM.Infrastructure.Core.Core.Ui;
 using VDM.Infrastructure.Services;
-using VDM.Infrastructure.Services;
-
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using NativeWebSocket;
+using System.Linq;
 
 namespace VDM.Systems.Combat.Ui
 {
     /// <summary>
-    /// Controls the combat user interface and interactions
+    /// Combat UI Controller
+    /// Manages the combat interface, turn order, and player actions during combat encounters
     /// </summary>
-    public class CombatUIController : VDM.Runtime.Core.UI.UIController
+    public class CombatUIController : UIController
     {
         [Header("Combat UI References")]
         [SerializeField] private GameObject combatPanel;
@@ -180,7 +181,7 @@ namespace VDM.Systems.Combat.Ui
                 SetActionsEnabled(false);
                 
                 // Send action via WebSocket for immediate feedback
-                _webSocketHandler?.SendVDM.DTOs.Combat.CombatActionDTO(_currentCombatId, "player", action, targetId);
+                _webSocketHandler?.SendCombatAction(_currentCombatId, "player", action, targetId);
                 
                 // Also send via HTTP for reliability
                 var result = await _combatService.SubmitActionAsync(_currentCombatId, "player", action, targetId);
@@ -213,10 +214,11 @@ namespace VDM.Systems.Combat.Ui
             }
             
             // Create an end turn action
-            var endTurnAction = new VDM.DTOs.Combat.CombatActionDTO(VDM.DTOs.Combat.CombatActionDTOType.Wait, null, null)
+            var endTurnAction = new VDM.DTOs.Combat.CombatActionDTO
             {
                 Name = "End Turn",
-                Description = "End current turn"
+                Description = "End current turn",
+                Type = ActionType.Wait
             };
             
             ExecuteAction(endTurnAction);
@@ -332,7 +334,7 @@ namespace VDM.Systems.Combat.Ui
         private void SelectAction(VDM.DTOs.Combat.CombatActionDTO action)
         {
             // If action requires a target, wait for target selection
-            if (action.Range > 0 && action.Type == VDM.DTOs.Combat.CombatActionDTOType.Attack)
+            if (action.Range > 0 && action.Type == ActionType.Attack)
             {
                 // Highlight targetable combatants
                 HighlightTargets(true);

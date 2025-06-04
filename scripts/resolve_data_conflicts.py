@@ -52,9 +52,9 @@ def resolve_conflicts():
     # 3. religion files - merge approach since both have valid but different data
     print("🙏 Resolving religion files conflicts...")
     backend_religions = backup_dir / "religion/religions.json"
-    root_religions = Path("data/religion/religions.json")
+    root_religions = Path("data/systems/religion/religions.json")
     backend_memberships = backup_dir / "religion/memberships.json"
-    root_memberships = Path("data/religion/memberships.json")
+    root_memberships = Path("data/systems/religion/memberships.json")
     
     if backend_religions.exists():
         shutil.copy2(backend_religions, archives_dir / "religions_backend_version.json")
@@ -67,7 +67,7 @@ def resolve_conflicts():
     # 4. equipment/items.json - both are empty, keep root version
     print("⚔️  Resolving equipment/items.json conflict...")
     backend_items = backup_dir / "equipment/items.json"
-    root_items = Path("data/equipment/items.json")
+    root_items = Path("data/systems/equipment/items.json")
     
     if backend_items.exists():
         # Both are empty {}, so just archive the backend version

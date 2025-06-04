@@ -1,12 +1,12 @@
 """
-Migration Service
+Migration Service for POI System
 
-Handles population movement between POIs, migration triggers, and
-demographic changes in the POI system.
+Manages population migration patterns between POIs, including economic,
+political, and environmental factors that drive population movement.
 """
 
 from typing import Dict, List, Optional, Tuple, Set, Any
-from uuid import UUID
+from uuid import UUID, uuid4
 from enum import Enum
 from dataclasses import dataclass, field
 import logging
@@ -14,9 +14,9 @@ from datetime import datetime, timedelta
 import random
 import math
 
-from backend.systems.poi.models import PoiEntity, POIType, POIState
-from backend.infrastructure.database import get_db
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.systems.poi.models import PoiEntity, POIType, POIState
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -149,7 +149,7 @@ class MigrationService:
     """Service for managing population migration between POIs"""
     
     def __init__(self, db_session: Optional[Session] = None):
-        self.db_session = db_session or get_db()
+        self.db_session = db_session or get_db_session()
         self.event_dispatcher = EventDispatcher()
         
         # Migration data (in a real system, this would be in the database)

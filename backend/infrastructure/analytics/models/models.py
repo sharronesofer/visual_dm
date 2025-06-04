@@ -11,13 +11,10 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
-
-from backend.infrastructure.shared.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
+from backend.infrastructure.shared.models import SharedBaseModel
 
 class AnalyticsBaseModel(SharedBaseModel):
     """Base model for analytics system with common fields"""
@@ -33,7 +30,6 @@ class AnalyticsBaseModel(SharedBaseModel):
         populate_by_name=True
     )
 
-
 class AnalyticsModel(AnalyticsBaseModel):
     """Primary model for analytics system"""
     
@@ -41,7 +37,6 @@ class AnalyticsModel(AnalyticsBaseModel):
     description: Optional[str] = Field(None, description="Description of the analytics")
     status: str = Field(default="active", description="Status of the analytics")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
 
 class AnalyticsEntity(Base):
     """SQLAlchemy entity for analytics system"""
@@ -73,7 +68,6 @@ class AnalyticsEntity(Base):
             "is_active": self.is_active
         }
 
-
 # Request/Response Models
 class CreateAnalyticsRequest(BaseModel):
     """Request model for creating analytics"""
@@ -82,7 +76,6 @@ class CreateAnalyticsRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateAnalyticsRequest(BaseModel):
     """Request model for updating analytics"""
     
@@ -90,7 +83,6 @@ class UpdateAnalyticsRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class AnalyticsResponse(BaseModel):
     """Response model for analytics"""
@@ -105,7 +97,6 @@ class AnalyticsResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class AnalyticsListResponse(BaseModel):
     """Response model for analytics lists"""

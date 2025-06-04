@@ -1,19 +1,19 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
 cachedir: .pytest_cache
-rootdir: /Users/Sharrone/Visual_DM
+rootdir: /Users/Sharrone/Dreamforge
 configfile: pytest.ini
 plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
 asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
 collecting ... 
 ----------------------------- live log collection ------------------------------
-22:55:24 [INFO] backend.systems.storage.json_storage: JSONStorageManager initialized with base path: /Users/Sharrone/Visual_DM/data
+22:55:24 [INFO] backend.systems.storage.json_storage: JSONStorageManager initialized with base path: /Users/Sharrone/Dreamforge/data
 22:55:24 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
 collected 27 items / 1 error
 
 ==================================== ERRORS ====================================
 ___ ERROR collecting backend/tests/systems/memory/test_memory_categories.py ____
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/systems/memory/test_memory_categories.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/systems/memory/test_memory_categories.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -25,7 +25,7 @@ E   ModuleNotFoundError: No module named 'backend.systems.memory.models.memory_c
 🔑 Loaded GPT key from .env: sk-proj-if42...5uQA
 ------------------------------- Captured stderr --------------------------------
 WARNING:root:Event system not available, using stub implementation
-INFO:backend.systems.storage.json_storage:JSONStorageManager initialized with base path: /Users/Sharrone/Visual_DM/data
+INFO:backend.systems.storage.json_storage:JSONStorageManager initialized with base path: /Users/Sharrone/Dreamforge/data
 INFO:backend.systems.memory.memory_manager:MemoryManager initialized
 =============================== warnings summary ===============================
 ../.pyenv/versions/3.11.5/lib/python3.11/site-packages/pydantic/_internal/_config.py:323
@@ -34,7 +34,7 @@ INFO:backend.systems.memory.memory_manager:MemoryManager initialized
     warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
 
 backend/systems/storage/events.py:13
-  /Users/Sharrone/Visual_DM/backend/systems/storage/events.py:13: DeprecationWarning: Importing from backend.systems.events.event_dispatcher is deprecated. Use backend.app.core.events.event_dispatcher instead.
+  /Users/Sharrone/Dreamforge/backend/systems/storage/events.py:13: DeprecationWarning: Importing from backend.systems.events.event_dispatcher is deprecated. Use backend.app.core.events.event_dispatcher instead.
     from backend.systems.events.event_dispatcher import EventDispatcher
 
 ../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441

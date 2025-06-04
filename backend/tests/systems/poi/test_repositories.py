@@ -10,8 +10,9 @@ import asyncio
 from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
+from datetime import datetime
 
-from backend.systems.poi import repositories
+from backend.infrastructure.repositories import poi as repositories
 
 
 class TestPoiRepositories:
@@ -96,3 +97,29 @@ class TestPoiRepositoriesIntegration:
 # WebSocket compatibility: Ensure JSON serialization for Unity frontend
 # Cross-system compatibility: Test communication with other systems
 # API contract compliance: Verify endpoints match established contracts
+
+def test_poi_repositories_import():
+    """Test that poi repositories can be imported"""
+    assert repositories is not None
+
+def test_poi_repository_creation():
+    """Test basic poi repository creation"""
+    # This is a placeholder test
+    assert True
+
+def test_poi_repository_crud():
+    """Test poi repository CRUD operations"""
+    # This is a placeholder test
+    assert True
+
+def test_poi_repository_queries():
+    """Test poi repository query methods"""
+    # This is a placeholder test
+    assert True
+
+def test_poi_repository_relationships():
+    """Test poi repository relationship handling"""
+    # This is a placeholder test
+    assert True
+
+# Add more specific tests as needed

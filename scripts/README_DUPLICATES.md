@@ -27,17 +27,17 @@ The Visual DM project has accumulated duplicate code over time, causing maintena
 Before making any changes, create a backup of the entire project:
 
 ```bash
-./scripts/backup_project.sh /path/to/Visual_DM
+./scripts/backup_project.sh /path/to/Dreamforge
 ```
 
-This will create a timestamped backup in `/path/to/Visual_DM/backups/full_backup_{timestamp}`.
+This will create a timestamped backup in `/path/to/Dreamforge/backups/full_backup_{timestamp}`.
 
 ## Step 2: Find Duplicate C# Files
 
 Run the duplicate C# files finder to analyze the codebase for duplicated C# code:
 
 ```bash
-python3 scripts/find_duplicate_cs_files.py /path/to/Visual_DM/VDM/Assets /path/to/Visual_DM/scripts/cs_duplicates_report.json
+python3 scripts/find_duplicate_cs_files.py /path/to/Dreamforge/VDM/Assets /path/to/Dreamforge/scripts/cs_duplicates_report.json
 ```
 
 This will generate two files:
@@ -56,7 +56,7 @@ The script identifies these types of duplicates:
 Run the duplicate Python modules finder to analyze Python code:
 
 ```bash
-python3 scripts/find_duplicate_python_modules.py /path/to/Visual_DM/backend /path/to/Visual_DM/scripts/py_duplicates_report.json
+python3 scripts/find_duplicate_python_modules.py /path/to/Dreamforge/backend /path/to/Dreamforge/scripts/py_duplicates_report.json
 ```
 
 This will generate:
@@ -74,7 +74,7 @@ The script identifies these types of duplicates:
 After analyzing the duplicates, use the merge script to create a merge plan:
 
 ```bash
-python3 scripts/merge_duplicates.py /path/to/Visual_DM/scripts/cs_duplicates_report.json /path/to/Visual_DM/scripts/py_duplicates_report.json /path/to/Visual_DM /path/to/Visual_DM/scripts/consolidation
+python3 scripts/merge_duplicates.py /path/to/Dreamforge/scripts/cs_duplicates_report.json /path/to/Dreamforge/scripts/py_duplicates_report.json /path/to/Dreamforge /path/to/Dreamforge/scripts/consolidation
 ```
 
 This will:
@@ -87,7 +87,7 @@ This will:
 To execute the merge plan (after reviewing):
 
 ```bash
-python3 scripts/merge_duplicates.py /path/to/Visual_DM/scripts/cs_duplicates_report.json /path/to/Visual_DM/scripts/py_duplicates_report.json /path/to/Visual_DM /path/to/Visual_DM/scripts/consolidation --execute
+python3 scripts/merge_duplicates.py /path/to/Dreamforge/scripts/cs_duplicates_report.json /path/to/Dreamforge/scripts/py_duplicates_report.json /path/to/Dreamforge /path/to/Dreamforge/scripts/consolidation --execute
 ```
 
 This will:
@@ -101,13 +101,13 @@ This will:
 After merging duplicates, update references throughout the codebase:
 
 ```bash
-python3 scripts/update_references.py --project-root=/path/to/Visual_DM --merge-report=/path/to/Visual_DM/scripts/consolidation/merge_plan.json --dry-run
+python3 scripts/update_references.py --project-root=/path/to/Dreamforge --merge-report=/path/to/Dreamforge/scripts/consolidation/merge_plan.json --dry-run
 ```
 
 Review the output to ensure the updates look correct. Then run without the `--dry-run` flag:
 
 ```bash
-python3 scripts/update_references.py --project-root=/path/to/Visual_DM --merge-report=/path/to/Visual_DM/scripts/consolidation/merge_plan.json
+python3 scripts/update_references.py --project-root=/path/to/Dreamforge --merge-report=/path/to/Dreamforge/scripts/consolidation/merge_plan.json
 ```
 
 This will:
@@ -121,7 +121,7 @@ This will:
 Finally, restructure the directories to provide a cleaner organization:
 
 ```bash
-./scripts/restructure_directories.sh /path/to/Visual_DM
+./scripts/restructure_directories.sh /path/to/Dreamforge
 ```
 
 This will:

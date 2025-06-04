@@ -171,3 +171,6 @@ scripts/load-tests/results/load_metrics.json
 # Added by Claude Task Master
 # Task files
 tasks/ htmlcov/
+
+# Added by Task Master AI
+tasks/ 

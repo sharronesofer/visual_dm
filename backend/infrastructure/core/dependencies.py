@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 
-from backend.infrastructure.config import settings
+from backend.infrastructure.core.config import settings
 from backend.infrastructure.core.security import verify_password
 from backend.infrastructure.database import get_db
 # Placeholder - you'll need to adjust imports based on your actual User model

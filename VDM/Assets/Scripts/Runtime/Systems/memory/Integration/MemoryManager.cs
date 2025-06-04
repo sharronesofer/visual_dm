@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
@@ -9,6 +10,9 @@ using VDM.Systems.Events.Integration;
 using VDM.Systems.Events;
 using VDM.Systems.Memory.Models;
 using VDM.Systems.Memory.Services;
+using VDM.Infrastructure.Core.Core.Events;
+using VDM.Infrastructure.Services;
+using VDM.Systems.Events.Models;
 
 
 namespace VDM.Systems.Memory.Integration
@@ -34,7 +38,7 @@ namespace VDM.Systems.Memory.Integration
         
         // Caching
         private Dictionary<string, List<MemoryDTO>> _npcMemoriesCache = new();
-        private Dictionary<string, VDM.Systems.Memory.Models.MemorySummaryDTO> _npcSummariesCache = new();
+        private Dictionary<string, VDM.Systems.Memory.Services.MemorySummaryDTO> _npcSummariesCache = new();
         private Dictionary<string, DateTime> _lastMemoryRefresh = new();
         private Dictionary<string, DateTime> _lastSummaryRefresh = new();
         
@@ -53,15 +57,8 @@ namespace VDM.Systems.Memory.Integration
             {
                 LogDebug("Initializing Memory Manager...");
 
-                // Initialize HTTP service
-                var httpClient = FindObjectOfType<HttpClient>() ?? GetComponent<HttpClient>();
-                if (httpClient == null)
-                {
-                    LogError("HttpClient not found. Memory Manager requires HttpClient to function.");
-                    return;
-                }
-
-                _memoryService = new MemoryService(httpClient);
+                // Initialize memory service
+                _memoryService = new MemoryService();
 
                 // Setup event listeners
                 SetupEventListeners();
@@ -146,9 +143,9 @@ namespace VDM.Systems.Memory.Integration
 
                 // Fetch from API
                 var response = await _memoryService.GetNpcMemoriesAsync(npcId, maxCachedMemoriesPerNpc, 0);
-                if (response.Success && response.Data?.Memories != null)
+                if (response.Success && response.Memories != null)
                 {
-                    var memories = response.Data.Memories;
+                    var memories = response.Memories;
                     
                     // Update cache
                     _npcMemoriesCache[npcId] = memories;
@@ -173,7 +170,7 @@ namespace VDM.Systems.Memory.Integration
         /// <summary>
         /// Get summary of NPC's memories
         /// </summary>
-        public async Task<VDM.Systems.Memory.Models.MemorySummaryDTO> GetNPCMemorySummaryAsync(string npcId)
+        public async Task<VDM.Systems.Memory.Services.MemorySummaryDTO> GetNPCMemorySummaryAsync(string npcId)
         {
             if (string.IsNullOrEmpty(npcId))
             {
@@ -183,7 +180,8 @@ namespace VDM.Systems.Memory.Integration
 
             try
             {
-                return await _memoryService.GetNPCMemorySummaryAsync(npcId);
+                var response = await _memoryService.GetMemorySummaryAsync(npcId);
+                return response?.Data;
             }
             catch (Exception ex)
             {
@@ -205,10 +203,10 @@ namespace VDM.Systems.Memory.Integration
 
             try
             {
-                var response = await _memoryService.AddMemoryToNpcAsync(npcId, request);
-                if (response.Success && response.Data?.Memory != null)
+                var response = await _memoryService.CreateMemoryAsync(npcId, request);
+                if (response.Success && response.Memory != null)
                 {
-                    var memory = response.Data.Memory;
+                    var memory = response.Memory;
                     
                     // Update cache
                     InvalidateNpcCaches(npcId);
@@ -217,7 +215,7 @@ namespace VDM.Systems.Memory.Integration
                     OnMemoryCreated?.Invoke(memory);
                     EventBus.Publish(new MemoryCreatedEvent { Memory = memory, NpcId = npcId });
                     
-                    LogDebug($"Created memory {memory.MemoryId} for NPC {npcId}");
+                    LogDebug($"Created memory {memory.Id} for NPC {npcId}");
                     return memory;
                 }
                 else
@@ -236,7 +234,7 @@ namespace VDM.Systems.Memory.Integration
         /// <summary>
         /// Recall a specific memory for an NPC
         /// </summary>
-        public async Task<MemoryDTO> RecallMemoryAsync(string npcId, string memoryId, VDM.Systems.Memory.Models.RecallMemoryRequestDTO request = null)
+        public async Task<MemoryDTO> RecallMemoryAsync(string npcId, string memoryId, RecallMemoryRequestDTO request = null)
         {
             if (string.IsNullOrEmpty(npcId) || string.IsNullOrEmpty(memoryId))
             {
@@ -246,19 +244,22 @@ namespace VDM.Systems.Memory.Integration
 
             try
             {
-                request ??= new VDM.Systems.Memory.Models.RecallMemoryRequestDTO { Context = "manual" };
-                
                 var response = await _memoryService.RecallMemoryAsync(npcId, memoryId, request);
-                if (response.Success && response.Data?.Memory != null)
+                if (response.Success && response.Memory != null)
                 {
-                    var memory = response.Data.Memory;
+                    var memory = response.Memory;
                     
                     // Update cache
                     UpdateMemoryInCache(npcId, memory);
                     
                     // Fire event
                     OnMemoryRecalled?.Invoke(memory);
-                    EventBus.Publish(new MemoryRecalledEvent { Memory = memory, NpcId = npcId, Context = request.Context });
+                    EventBus.Publish(new MemoryRecalledEvent 
+                    { 
+                        Memory = memory, 
+                        NpcId = npcId, 
+                        Context = request?.Context ?? "Direct recall" 
+                    });
                     
                     LogDebug($"Recalled memory {memoryId} for NPC {npcId}");
                     return memory;
@@ -279,7 +280,7 @@ namespace VDM.Systems.Memory.Integration
         /// <summary>
         /// Reinforce a specific memory
         /// </summary>
-        public async Task<MemoryDTO> ReinforceMemoryAsync(string npcId, string memoryId, VDM.Systems.Memory.Models.ReinforceMemoryRequestDTO request = null)
+        public async Task<MemoryDTO> ReinforceMemoryAsync(string npcId, string memoryId, ReinforceMemoryRequestDTO request = null)
         {
             if (string.IsNullOrEmpty(npcId) || string.IsNullOrEmpty(memoryId))
             {
@@ -289,19 +290,24 @@ namespace VDM.Systems.Memory.Integration
 
             try
             {
-                request ??= new VDM.Systems.Memory.Models.ReinforceMemoryRequestDTO { Reinforcement = 1 };
+                request ??= new ReinforceMemoryRequestDTO { ReinforcementAmount = 1 };
                 
                 var response = await _memoryService.ReinforceMemoryAsync(npcId, memoryId, request);
-                if (response.Success && response.Data?.Memory != null)
+                if (response.Success && response.Memory != null)
                 {
-                    var memory = response.Data.Memory;
+                    var memory = response.Memory;
                     
                     // Update cache
                     UpdateMemoryInCache(npcId, memory);
                     
                     // Fire event
                     OnMemoryReinforced?.Invoke(memory);
-                    EventBus.Publish(new MemoryReinforcedEvent { Memory = memory, NpcId = npcId, Reinforcement = request.Reinforcement });
+                    EventBus.Publish(new MemoryReinforcedEvent 
+                    { 
+                        Memory = memory, 
+                        NpcId = npcId, 
+                        Reinforcement = (int)(request?.ReinforcementAmount ?? 1) 
+                    });
                     
                     LogDebug($"Reinforced memory {memoryId} for NPC {npcId}");
                     return memory;
@@ -320,9 +326,9 @@ namespace VDM.Systems.Memory.Integration
         }
 
         /// <summary>
-        /// Forget a specific memory
+        /// Make an NPC forget a specific memory
         /// </summary>
-        public async Task<bool> ForgetMemoryAsync(string npcId, string memoryId, VDM.Systems.Memory.Models.ForgetMemoryRequestDTO request = null)
+        public async Task<bool> ForgetMemoryAsync(string npcId, string memoryId, ForgetMemoryRequestDTO request = null)
         {
             if (string.IsNullOrEmpty(npcId) || string.IsNullOrEmpty(memoryId))
             {
@@ -332,7 +338,7 @@ namespace VDM.Systems.Memory.Integration
 
             try
             {
-                request ??= new VDM.Systems.Memory.Models.ForgetMemoryRequestDTO { Reason = "manual" };
+                request ??= new ForgetMemoryRequestDTO { Reason = "manual" };
                 
                 var response = await _memoryService.ForgetMemoryAsync(npcId, memoryId, request);
                 if (response.Success)

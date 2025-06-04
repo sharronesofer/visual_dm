@@ -8,7 +8,7 @@ using UnityEngine;
 using VDM.Infrastructure.Services;
 using VDM.Systems.Quest.Models;
 using VDM.Systems.Quest.Services;
-
+using QuestDTO = VDM.Systems.Quest.Models.QuestDTO;
 
 namespace VDM.Systems.Quest.Ui
 {

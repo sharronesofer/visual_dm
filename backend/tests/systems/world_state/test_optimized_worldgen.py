@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.world_state import optimized_worldgen
+    from backend.infrastructure.systems.world_state import optimized_worldgen
 except ImportError:
     pytest.skip(f"Module backend.systems.world_state.optimized_worldgen not found", allow_module_level=True)
 

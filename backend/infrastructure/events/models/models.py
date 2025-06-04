@@ -11,13 +11,10 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
-
-from backend.infrastructure.shared.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
+from backend.infrastructure.shared.models import SharedBaseModel
 
 class EventsBaseModel(SharedBaseModel):
     """Base model for events system with common fields"""
@@ -30,7 +27,6 @@ class EventsBaseModel(SharedBaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class EventsModel(EventsBaseModel):
     """Primary model for events system"""
     
@@ -38,7 +34,6 @@ class EventsModel(EventsBaseModel):
     description: Optional[str] = Field(None, description="Description of the events")
     status: str = Field(default="active", description="Status of the events")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
 
 class EventsEntity(Base):
     """SQLAlchemy entity for events system"""
@@ -70,7 +65,6 @@ class EventsEntity(Base):
             "is_active": self.is_active
         }
 
-
 # Request/Response Models
 class CreateEventsRequest(BaseModel):
     """Request model for creating events"""
@@ -79,7 +73,6 @@ class CreateEventsRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateEventsRequest(BaseModel):
     """Request model for updating events"""
     
@@ -87,7 +80,6 @@ class UpdateEventsRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class EventsResponse(BaseModel):
     """Response model for events"""
@@ -102,7 +94,6 @@ class EventsResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class EventsListResponse(BaseModel):
     """Response model for events lists"""

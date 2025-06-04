@@ -1,6 +1,6 @@
 # Code Quality Assessment Report
 
-**Project:** Visual_DM (Unity 2D, 100% runtime-generated)
+**Project:** Dreamforge (Unity 2D, 100% runtime-generated)
 **Assessment Task:** Task 25 – Conduct Code Quality Assessment
 
 ---

@@ -1,8 +1,8 @@
-# Visual_DM Testing and Fix System PRD
+# Dreamforge Testing and Fix System PRD
 
 ## Overview
 
-Visual_DM is a complex Python application for Dungeon Masters that has a large codebase with multiple interconnected systems. The application currently has numerous test failures that need to be addressed systematically. This PRD outlines a plan to create a comprehensive testing and fix system that will identify, categorize, and resolve these issues through automated batch scripts.
+Dreamforge is a complex Python application for Dungeon Masters that has a large codebase with multiple interconnected systems. The application currently has numerous test failures that need to be addressed systematically. This PRD outlines a plan to create a comprehensive testing and fix system that will identify, categorize, and resolve these issues through automated batch scripts.
 
 ## Objectives
 

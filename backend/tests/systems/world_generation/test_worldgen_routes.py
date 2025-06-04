@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.world_generation import worldgen_routes
+    from backend.systems.world_generation.routers import worldgen_routes
 except ImportError:
-    pytest.skip(f"Module backend.systems.world_generation.worldgen_routes not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.world_generation.routers.worldgen_routes not found", allow_module_level=True)
 
 
 class TestWorldgen_Routes:

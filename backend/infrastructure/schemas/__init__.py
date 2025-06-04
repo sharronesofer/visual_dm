@@ -1,7 +1,6 @@
 """Infrastructure Schemas Package."""
 
-from .user import UserCreate, UserUpdate, UserResponse
+# Import schemas as needed to avoid dependency issues
+# from .user import UserCreate, UserUpdate, UserResponse
 
-__all__ = [
-    'UserCreate', 'UserUpdate', 'UserResponse'
-] 
+__all__ = [] 

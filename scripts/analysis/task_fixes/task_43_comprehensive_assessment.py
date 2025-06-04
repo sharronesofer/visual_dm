@@ -282,6 +282,6 @@ class BackendSystemsAnalyzer:
         print(f"5. Validate all systems integration")
 
 if __name__ == "__main__":
-    project_root = "/Users/Sharrone/Visual_DM"
+    project_root = "/Users/Sharrone/Dreamforge"
     analyzer = BackendSystemsAnalyzer(project_root)
     analyzer.analyze_all() 

@@ -1,8 +1,8 @@
-# Visual_DM Character System Test Coverage Improvements PRD
+# Dreamforge Character System Test Coverage Improvements PRD
 
 ## Overview
 
-The backend/systems/character directory in the Visual_DM application currently has insufficient test coverage (currently at 17%). This PRD outlines the work needed to improve test coverage to at least 90% by adding comprehensive tests for all components in the character system.
+The backend/systems/character directory in the Dreamforge application currently has insufficient test coverage (currently at 17%). This PRD outlines the work needed to improve test coverage to at least 90% by adding comprehensive tests for all components in the character system.
 
 ## Objectives
 

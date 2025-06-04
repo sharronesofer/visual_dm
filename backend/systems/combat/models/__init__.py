@@ -1,5 +1,7 @@
-"""Models for combat system"""
+"""Models for combat system - Business Domain Models Only"""
 
-# Auto-generated imports
-from .models import *
-from .stats import *
+# Domain models (business logic)
+from .combat_encounter import *
+from .combatant import *
+from .combat_action import *
+from .status_effect import * 

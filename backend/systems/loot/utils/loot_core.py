@@ -1,10 +1,8 @@
 """
-Loot Core Module
+Loot Core Module - Pure Business Logic
 
-This module contains all core loot functionality expected by test_loot_core.py,
-including item validation, power calculation, equipment grouping, and loot generation.
-
-Implements the missing functions identified during the loot system refactor.
+This module contains all core loot functionality including item validation, 
+power calculation, equipment grouping, and loot generation. Pure business logic only.
 """
 
 from typing import Dict, List, Any, Optional, Tuple
@@ -13,8 +11,13 @@ from random import choice, randint
 import math
 from copy import deepcopy
 
-# TODO: Re-enable when shared events are implemented
-# from backend.infrastructure.events import EventDispatcher, EventBase
+# Import shared functions to avoid duplication
+from .shared_functions import (
+    group_equipment_by_type,
+    gpt_name_and_flavor,
+    merge_loot_sets,
+    apply_biome_to_loot_table
+)
 
 
 # Custom exception classes
@@ -26,26 +29,6 @@ class LootValidationError(Exception):
 class ItemGenerationError(Exception):
     """Exception raised when item generation fails"""
     pass
-
-
-def group_equipment_by_type(equipment_list: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
-    """
-    Categorizes equipment items into armor, weapon, and gear pools.
-    
-    Args:
-        equipment_list: List of equipment items
-        
-    Returns:
-        Dictionary with equipment items organized by category
-    """
-    pool = {"armor": [], "weapon": [], "gear": []}
-    for item in equipment_list:
-        category = item.get("category")
-        if category in pool:
-            pool[category].append(item)
-        elif category in ["melee", "ranged"]:
-            pool["weapon"].append(item)
-    return pool
 
 
 def validate_item(item: Dict[str, Any], valid_effects: List[Dict[str, Any]] = None) -> bool:
@@ -105,23 +88,6 @@ def calculate_item_power_score(item: Dict[str, Any]) -> int:
             stats_score += int(stat_value / 10)  # Every 10 points = 1 power score
     
     return base_score + effects_score + stats_score
-
-
-def gpt_name_and_flavor(base_type: str = "item") -> Tuple[str, str]:
-    """
-    Generates a name and flavor text for an item using GPT.
-    
-    Args:
-        base_type: The type of item to generate a name for
-        
-    Returns:
-        Tuple of (name, flavor_text)
-    """
-    # Stub — replace with real GPT call
-    return (
-        f"The Whispering {base_type.title()}",
-        f"This {base_type} hums with mysterious power linked to forgotten ruins."
-    )
 
 
 def generate_item_identity(item: Dict[str, Any]) -> Dict[str, Any]:
@@ -194,7 +160,7 @@ def generate_loot_bundle(
     monster_levels: List[int],
     equipment_pool: Dict[str, List[Dict[str, Any]]] = None,
     item_effects: List[Dict[str, Any]] = None,
-    monster_feats: List[Dict[str, Any]] = None,
+    monster_abilities: List[Dict[str, Any]] = None,
     source_type: str = "combat",
     location_id: Optional[int] = None,
     region_id: Optional[int] = None
@@ -206,104 +172,79 @@ def generate_loot_bundle(
         monster_levels: List of monster levels
         equipment_pool: Dict of equipment items by type
         item_effects: List of available magical effects
-        monster_feats: List of monster-specific effects
+        monster_abilities: List of monster-specific effects
         source_type: Source of the loot (combat, chest, quest reward, etc.)
         location_id: Optional ID of the location where loot was generated
         region_id: Optional ID of the region where loot was generated
         
     Returns:
-        Loot bundle with gold, equipment, quest items, and magical items
+        Complete loot bundle dictionary
     """
+    if not monster_levels:
+        monster_levels = [1]
+    
     if equipment_pool is None:
-        equipment_pool = {"weapon": [], "armor": [], "gear": []}
+        equipment_pool = {}
+    
     if item_effects is None:
         item_effects = []
-    if monster_feats is None:
-        monster_feats = []
     
-    loot = {
-        "gold": sum(randint(5 + ml, 12 + ml * 2) for ml in monster_levels),
-        "equipment": [],
-        "quest_item": None,
-        "magical_item": None
+    if monster_abilities is None:
+        monster_abilities = []
+    
+    # Calculate average level for scaling
+    avg_level = sum(monster_levels) / len(monster_levels)
+    
+    # Generate base loot amounts
+    base_gold = int(10 + (avg_level * 5) + random.randint(-5, 10))
+    gold_amount = max(0, base_gold)
+    
+    # Determine number of items (based on encounter size and level)
+    encounter_size = len(monster_levels)
+    item_count = min(encounter_size, max(1, int(avg_level / 3) + random.randint(0, 2)))
+    
+    equipment = []
+    quest_item = None
+    magical_item = None
+    
+    # Generate equipment items
+    for _ in range(item_count):
+        if equipment_pool:
+            # Choose random category
+            categories = list(equipment_pool.keys())
+            if categories:
+                category = random.choice(categories)
+                items = equipment_pool[category]
+                if items:
+                    base_item = random.choice(items).copy()
+                    
+                    # Apply level scaling and effects
+                    apply_level_scaling(base_item, avg_level)
+                    
+                    # Determine rarity
+                    rarity = determine_item_rarity(avg_level)
+                    base_item["rarity"] = rarity
+                    
+                    # Generate identity
+                    base_item = generate_item_identity(base_item)
+                    
+                    equipment.append(base_item)
+    
+    # Chance for quest item (rare)
+    if random.random() < 0.05:  # 5% chance
+        quest_item = generate_quest_item(avg_level)
+    
+    # Chance for magical item (scales with level)
+    magical_chance = min(0.3, 0.05 + (avg_level * 0.01))
+    if random.random() < magical_chance:
+        magical_item = generate_magical_item(avg_level, item_effects, monster_abilities)
+    
+    return {
+        "gold": gold_amount,
+        "equipment": equipment,
+        "quest_item": quest_item,
+        "magical_item": magical_item
     }
-
-    # === GEAR DROP ===
-    if random.random() < 0.5:
-        gear_items = equipment_pool.get("gear", [])
-        if gear_items:
-            item = deepcopy(choice(gear_items))
-            loot["equipment"].append(item)
-    else:
-        choices = equipment_pool.get("weapon", []) + equipment_pool.get("armor", [])
-        if choices:
-            item = deepcopy(choice(choices))
-            loot["equipment"].append(item)
-
-    # === QUEST ITEM (5%) ===
-    if random.random() < 0.05:
-        gear_items = equipment_pool.get("gear", [])
-        if gear_items:
-            gear_item = deepcopy(choice(gear_items))
-            name, flavor = gpt_name_and_flavor(base_type=gear_item.get("category", "item"))
-            gear_item.update({
-                "quest_hook": True,
-                "generated_name": name,
-                "flavor_text": flavor,
-                "name_revealed": False
-            })
-            loot["quest_item"] = gear_item
-
-    # === MAGICAL ITEM DROP ===
-    rarity = None
-    if random.random() < 0.5:
-        rarity_roll = random.random()
-        if rarity_roll <= 0.000025:
-            rarity = "legendary"
-        elif rarity_roll <= 0.0025:
-            rarity = "epic"
-        elif rarity_roll <= 0.05:
-            rarity = "rare"
-        else:
-            rarity = "normal"
-
-        choices = equipment_pool.get("weapon", []) + equipment_pool.get("armor", [])
-        if choices:
-            base_item = deepcopy(choice(choices))
-            max_effects = 20 if rarity == "legendary" else randint(8, 12) if rarity == "epic" else randint(3, 5)
-
-            effects = generate_item_effects(rarity, max_effects, item_effects, monster_feats)
-
-            base_item.update({
-                "rarity": rarity,
-                "unknown_effects": [e["effect"] for e in effects]
-            })
-
-            base_item = generate_item_identity(base_item)
-            loot["magical_item"] = base_item
-
-    return loot
-
-
-def merge_loot_sets(loot_sets: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """
-    Merges multiple loot sets into a single combined set.
-    
-    Args:
-        loot_sets: List of loot bundles to merge
-        
-    Returns:
-        Combined loot bundle
-    """
-    combined = {"gold": 0, "equipment": [], "quest_item": [], "magical_item": []}
-    for loot in loot_sets:
-        combined["gold"] += loot.get("gold", 0)
-        combined["equipment"].extend(loot.get("equipment", []))
-        if loot.get("quest_item"):
-            combined["quest_item"].append(loot["quest_item"])
-        if loot.get("magical_item"):
-            combined["magical_item"].append(loot["magical_item"])
-    return combined
 
 
 def generate_location_specific_loot(
@@ -316,52 +257,197 @@ def generate_location_specific_loot(
     monster_levels: List[int] = None,
     equipment_pool: Dict[str, List[Dict[str, Any]]] = None,
     item_effects: List[Dict[str, Any]] = None,
-    monster_feats: List[Dict[str, Any]] = None,
+    monster_abilities: List[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
-    Generates location-specific loot based on various contextual factors.
+    Generates location-specific loot with biome and faction influences.
     
     Args:
         location_id: ID of the location
-        location_type: Type of location (dungeon, ruins, etc.)
-        biome_type: Biome type (forest, desert, etc.)
+        location_type: Type of location (dungeon, wilderness, city, etc.)
+        biome_type: Biome affecting loot generation
         faction_id: ID of controlling faction
-        faction_type: Type of faction
-        motif: Current motif affecting the area
-        monster_levels: Levels of monsters in the area
+        faction_type: Type of faction (for theming)
+        motif: Current motif affecting the location
+        monster_levels: Levels of monsters in the location
         equipment_pool: Available equipment
         item_effects: Available magical effects
-        monster_feats: Monster-specific effects
+        monster_abilities: Available monster abilities
         
     Returns:
-        Location-specific loot bundle
+        Location-themed loot bundle
     """
     if monster_levels is None:
         monster_levels = [1]
     
     # Generate base loot
-    loot = generate_loot_bundle(
+    base_loot = generate_loot_bundle(
         monster_levels=monster_levels,
         equipment_pool=equipment_pool,
         item_effects=item_effects,
-        monster_feats=monster_feats,
-        source_type="location",
-        location_id=location_id
+        monster_abilities=monster_abilities
     )
     
-    # Apply location-specific modifiers
-    if location_type == "treasure_vault":
-        loot["gold"] = int(loot["gold"] * 2.5)
-    elif location_type == "ruins":
-        loot["gold"] = int(loot["gold"] * 0.7)
-        # More chance for rare items in ruins
-        if random.random() < 0.3 and not loot["magical_item"]:
-            # Generate a rare item
-            choices = equipment_pool.get("weapon", []) + equipment_pool.get("armor", []) if equipment_pool else []
-            if choices:
-                base_item = deepcopy(choice(choices))
-                base_item["rarity"] = "rare"
-                base_item = generate_item_identity(base_item)
-                loot["magical_item"] = base_item
+    # Apply biome effects if present
+    if biome_type:
+        base_loot = apply_biome_effects_to_loot(base_loot, biome_type)
     
-    return loot 
+    # Apply faction effects if present
+    if faction_id or faction_type:
+        base_loot = apply_faction_effects_to_loot(base_loot, faction_id, faction_type)
+    
+    # Apply motif effects if present
+    if motif:
+        base_loot = apply_motif_effects_to_loot(base_loot, motif)
+    
+    return base_loot
+
+
+# Helper functions for loot generation
+def apply_level_scaling(item: Dict[str, Any], level: float) -> None:
+    """Apply level-based scaling to item stats."""
+    if "stats" in item:
+        for stat_name, stat_value in item["stats"].items():
+            if isinstance(stat_value, (int, float)):
+                scaling_factor = 1.0 + (level - 1) * 0.1  # 10% per level
+                item["stats"][stat_name] = int(stat_value * scaling_factor)
+
+
+def determine_item_rarity(level: float) -> str:
+    """Determine item rarity based on level."""
+    rarity_chances = {
+        "common": 0.6 - (level * 0.02),
+        "uncommon": 0.25,
+        "rare": 0.12 + (level * 0.01),
+        "epic": 0.025 + (level * 0.005),
+        "legendary": 0.005 + (level * 0.002)
+    }
+    
+    # Normalize probabilities
+    total = sum(rarity_chances.values())
+    normalized_chances = {k: v/total for k, v in rarity_chances.items()}
+    
+    roll = random.random()
+    cumulative = 0
+    for rarity, chance in normalized_chances.items():
+        cumulative += chance
+        if roll <= cumulative:
+            return rarity
+    return "common"
+
+
+def generate_quest_item(level: float) -> Dict[str, Any]:
+    """Generate a quest-specific item."""
+    return {
+        "id": f"quest_item_{random.randint(1000, 9999)}",
+        "name": "Mysterious Artifact",
+        "category": "quest",
+        "rarity": "unique",
+        "description": "An ancient artifact of unknown purpose.",
+        "value": int(100 + level * 20),
+        "properties": {
+            "quest_related": True,
+            "unique": True
+        }
+    }
+
+
+def generate_magical_item(
+    level: float, 
+    item_effects: List[Dict[str, Any]], 
+    monster_abilities: List[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """Generate a magical item with effects."""
+    rarity = determine_item_rarity(level)
+    
+    # Determine max effects based on rarity
+    max_effects_by_rarity = {
+        "common": 0,
+        "uncommon": 1,
+        "rare": 2,
+        "epic": 3,
+        "legendary": 5
+    }
+    
+    max_effects = max_effects_by_rarity.get(rarity, 1)
+    effects = generate_item_effects(rarity, max_effects, item_effects, monster_abilities)
+    
+    magical_item = {
+        "id": f"magical_item_{random.randint(1000, 9999)}",
+        "name": "Enchanted Item",
+        "category": "magical",
+        "rarity": rarity,
+        "effects": effects,
+        "value": int(50 + level * 15),
+        "properties": {
+            "magical": True
+        }
+    }
+    
+    return generate_item_identity(magical_item)
+
+
+def apply_biome_effects_to_loot(loot: Dict[str, Any], biome: str) -> Dict[str, Any]:
+    """Apply biome-specific effects to loot."""
+    biome_modifiers = {
+        "forest": {"gold_multiplier": 0.9, "nature_items": True},
+        "desert": {"gold_multiplier": 1.1, "heat_resistance": True},
+        "mountains": {"gold_multiplier": 1.2, "cold_resistance": True},
+        "swamp": {"gold_multiplier": 0.8, "poison_resistance": True},
+        "ocean": {"gold_multiplier": 1.0, "water_items": True},
+        "underground": {"gold_multiplier": 1.3, "earth_items": True}
+    }
+    
+    modifier = biome_modifiers.get(biome.lower(), {"gold_multiplier": 1.0})
+    
+    # Adjust gold amount
+    loot["gold"] = int(loot["gold"] * modifier["gold_multiplier"])
+    
+    return loot
+
+
+def apply_faction_effects_to_loot(
+    loot: Dict[str, Any], 
+    faction_id: Optional[int], 
+    faction_type: Optional[str]
+) -> Dict[str, Any]:
+    """Apply faction-specific effects to loot."""
+    if faction_type:
+        faction_modifiers = {
+            "military": {"weapon_chance": 1.5, "armor_chance": 1.3},
+            "merchant": {"gold_multiplier": 1.4, "valuable_items": True},
+            "religious": {"magical_chance": 1.2, "holy_items": True},
+            "criminal": {"gold_multiplier": 1.1, "illegal_items": True}
+        }
+        
+        modifier = faction_modifiers.get(faction_type.lower(), {})
+        
+        if "gold_multiplier" in modifier:
+            loot["gold"] = int(loot["gold"] * modifier["gold_multiplier"])
+    
+    return loot
+
+
+def apply_motif_effects_to_loot(loot: Dict[str, Any], motif: str) -> Dict[str, Any]:
+    """Apply motif-specific effects to loot."""
+    motif_modifiers = {
+        "prosperity": {"gold_multiplier": 1.5, "quality_bonus": True},
+        "death": {"necromantic_items": True, "gold_multiplier": 0.7},
+        "war": {"weapon_chance": 2.0, "armor_chance": 1.5},
+        "peace": {"gold_multiplier": 1.1, "healing_items": True},
+        "chaos": {"random_effects": True, "unpredictable": True},
+        "order": {"consistent_quality": True, "lawful_items": True}
+    }
+    
+    modifier = motif_modifiers.get(motif.lower(), {})
+    
+    if "gold_multiplier" in modifier:
+        loot["gold"] = int(loot["gold"] * modifier["gold_multiplier"])
+    
+    return loot
+
+
+# Placeholder function for event system compatibility
+def get_event_dispatcher():
+    """Placeholder for event dispatcher - returns None in pure business logic"""
+    return None 

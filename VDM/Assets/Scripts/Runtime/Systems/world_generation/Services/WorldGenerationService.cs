@@ -137,29 +137,25 @@ namespace VDM.Systems.Worldgeneration.Services
         /// Generate regions for a specific continent
         /// POST /worldgen/continents/{continent_id}/generate-regions
         /// </summary>
-        public async Task<List<VDM.Systems.WorldGeneration.Models.RegionDTO>> GenerateRegionsForContinentAsync(string continentId, RegionGenerationConfig config)
+        public async Task<List<VDM.Systems.Worldgeneration.Models.RegionDTO>> GenerateRegionsForContinentAsync(string continentId, RegionGenerationConfig config)
         {
             try
             {
                 var requestData = new
                 {
-                    region_count = config.RegionCount,
-                    biome_distribution = config.BiomeDistribution,
-                    size_variance = config.SizeVariance,
-                    connectivity_factor = config.ConnectivityFactor,
-                    elevation_params = config.ElevationParams,
-                    climate_params = config.ClimateParams,
-                    resource_params = config.ResourceParams,
-                    settlement_params = config.SettlementParams
+                    config.NumRegions,
+                    biome_params = config.BiomeParams,
+                    settlement_params = config.SettlementParams,
+                    custom_params = config.CustomParams
                 };
 
-                var response = await PostAsync<List<VDM.Systems.WorldGeneration.Models.RegionDTO>>($"{CONTINENTS_ENDPOINT}/{continentId}/generate-regions", requestData);
-                return response ?? new List<VDM.Systems.WorldGeneration.Models.RegionDTO>();
+                var response = await PostAsync<List<VDM.Systems.Worldgeneration.Models.RegionDTO>>($"{CONTINENTS_ENDPOINT}/{continentId}/generate-regions", requestData);
+                return response ?? new List<VDM.Systems.Worldgeneration.Models.RegionDTO>();
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Failed to generate regions for continent {continentId}: {ex.Message}");
-                return new List<VDM.Systems.WorldGeneration.Models.RegionDTO>();
+                Debug.LogError($"Error generating regions for continent: {ex.Message}");
+                return new List<VDM.Systems.Worldgeneration.Models.RegionDTO>();
             }
         }
 
@@ -217,17 +213,17 @@ namespace VDM.Systems.Worldgeneration.Services
         /// <summary>
         /// Generate regions using template
         /// </summary>
-        public async Task<List<VDM.Systems.WorldGeneration.Models.RegionDTO>> GenerateRegionsFromTemplateAsync(string templateId, RegionGenerationConfig config)
+        public async Task<List<VDM.Systems.Worldgeneration.Models.RegionDTO>> GenerateRegionsFromTemplateAsync(string templateId, RegionGenerationConfig config)
         {
             try
             {
-                var response = await PostAsync<List<VDM.Systems.WorldGeneration.Models.RegionDTO>>($"{TEMPLATES_ENDPOINT}/{templateId}/generate-regions", config);
-                return response ?? new List<VDM.Systems.WorldGeneration.Models.RegionDTO>();
+                var response = await PostAsync<List<VDM.Systems.Worldgeneration.Models.RegionDTO>>($"{TEMPLATES_ENDPOINT}/{templateId}/generate-regions", config);
+                return response ?? new List<VDM.Systems.Worldgeneration.Models.RegionDTO>();
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error generating regions from template: {ex.Message}");
-                return new List<VDM.Systems.WorldGeneration.Models.RegionDTO>();
+                return new List<VDM.Systems.Worldgeneration.Models.RegionDTO>();
             }
         }
 

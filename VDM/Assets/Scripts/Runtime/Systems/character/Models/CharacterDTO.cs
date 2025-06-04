@@ -161,8 +161,16 @@ namespace VDM.Systems.Character.Models
         [JsonProperty("race")]
         public string Race { get; set; } = "human";
 
-        [JsonProperty("character_class")]
-        public string CharacterClass { get; set; } = "";
+        [JsonProperty("abilities")]
+        public List<string> Abilities { get; set; } = new List<string>();
+
+        // Backward compatibility - Visual DM uses "Abilities" terminology, but "Feats" is supported for legacy JSON
+        [JsonProperty("feats")]
+        public List<string> Feats
+        {
+            get => Abilities;
+            set => Abilities = value;
+        }
 
         [JsonProperty("level")]
         public int Level { get; set; } = 1;
@@ -184,9 +192,6 @@ namespace VDM.Systems.Character.Models
 
         [JsonProperty("skills")]
         public Dictionary<string, int> Skills { get; set; } = new Dictionary<string, int>();
-
-        [JsonProperty("abilities")]
-        public List<string> Abilities { get; set; } = new List<string>();
 
         [JsonProperty("languages")]
         public List<string> Languages { get; set; } = new List<string>();
@@ -230,8 +235,16 @@ namespace VDM.Systems.Character.Models
         [JsonProperty("race")]
         public string Race { get; set; } = "human";
 
-        [JsonProperty("character_class")]
-        public string CharacterClass { get; set; } = "";
+        [JsonProperty("abilities")]
+        public List<string> Abilities { get; set; } = new List<string>();
+
+        // Backward compatibility - Visual DM uses "Abilities" terminology, but "Feats" is supported for legacy JSON
+        [JsonProperty("feats")]
+        public List<string> Feats
+        {
+            get => Abilities;
+            set => Abilities = value;
+        }
 
         [JsonProperty("background")]
         public string Background { get; set; } = "";

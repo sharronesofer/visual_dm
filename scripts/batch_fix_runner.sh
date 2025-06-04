@@ -44,8 +44,8 @@ run_fix "Adding extend_existing=True to SQLAlchemy models" \
 run_fix "Creating data directories and placeholder files" \
   "mkdir -p data/{equipment,monsters,items} rules_json/ && \
    touch data/equipment/items.json data/equipment/effects.json \
-   data/monsters/feats.json rules_json/equipment.json \
-   rules_json/item_effects.json rules_json/monster_only_feats.json"
+   data/monsters/abilities.json rules_json/equipment.json \
+   rules_json/item_effects.json rules_json/monster_only_abilities.json"
 
 # 3. Run tests to verify fixes
 run_fix "Running tests to verify fixes" \

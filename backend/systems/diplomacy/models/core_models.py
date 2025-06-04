@@ -13,7 +13,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Union
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, ConfigDict
 
 
 class DiplomaticStatus(str, Enum):
@@ -337,7 +337,9 @@ class FactionRelationship(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
-    model_config = ConfigDict()        json_encoders = {
+    model_config = ConfigDict(
+        json_encoders={
             datetime: lambda v: v.isoformat(),
             UUID: str
-        } 
+        }
+    )

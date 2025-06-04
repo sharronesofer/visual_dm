@@ -12,13 +12,11 @@ from enum import Enum
 from pydantic import BaseModel, Field, validator, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey, Float
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
 
-from backend.infrastructure.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.shared.models.models import SharedBaseModel
 
 class ArcCompletionResult(Enum):
     """Result types for arc completion"""
@@ -27,7 +25,6 @@ class ArcCompletionResult(Enum):
     PARTIAL = "partial"
     ABANDONED = "abandoned"
     SKIPPED = "skipped"
-
 
 class ArcCompletionRecordModel(SharedBaseModel):
     """Model for recording completed arcs with outcomes and consequences"""
@@ -64,7 +61,6 @@ class ArcCompletionRecordModel(SharedBaseModel):
         return v
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class ArcCompletionRecordEntity(Base):
     """SQLAlchemy entity for arc completion records"""
@@ -129,7 +125,6 @@ class ArcCompletionRecordEntity(Base):
             "completion_metadata": self.completion_metadata
         }
 
-
 # Request/Response Models
 class CreateArcCompletionRecordRequest(BaseModel):
     """Request model for creating arc completion record"""
@@ -153,7 +148,6 @@ class CreateArcCompletionRecordRequest(BaseModel):
     character_development: Optional[Dict[str, Any]] = Field(default_factory=dict)
     completion_score: Optional[float] = Field(None, ge=0.0, le=100.0)
     achievements_unlocked: Optional[List[str]] = Field(default_factory=list)
-
 
 class ArcCompletionRecordResponse(BaseModel):
     """Response model for arc completion record"""
@@ -184,7 +178,6 @@ class ArcCompletionRecordResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class ArcCompletionRecordListResponse(BaseModel):
     """Response model for arc completion record lists"""
     
@@ -194,7 +187,6 @@ class ArcCompletionRecordListResponse(BaseModel):
     size: int
     has_next: bool
     has_prev: bool
-
 
 class ArcCompletionAnalytics(BaseModel):
     """Analytics model for arc completion data"""
@@ -209,7 +201,6 @@ class ArcCompletionAnalytics(BaseModel):
     most_rewarding_arcs: List[Dict[str, Any]]
     completion_trends: Dict[str, Any]
     player_retention_metrics: Dict[str, Any]
-
 
 # Alias for repository compatibility
 ArcCompletionRecord = ArcCompletionRecordEntity

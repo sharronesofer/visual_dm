@@ -118,20 +118,20 @@ namespace VDM.Infrastructure.Core
                 state.Initiative = combatant.Initiative;
                 state.IsAlive = combatant.IsAlive;
                 
-                // Populate stats dictionary
-                state.Stats["Dexterity"] = combatant.Dexterity;
+                // Populate attributes dictionary
+                state.Attributes["Dexterity"] = combatant.Dexterity;
             }
             
-            // Try to get additional stats from CharacterComponent
+            // Try to get additional attributes from CharacterComponent
             var character = entity.GetComponent<CharacterComponent>();
             if (character != null)
             {
-                state.Stats["Strength"] = character.Strength;
-                state.Stats["Dexterity"] = character.Dexterity;
-                state.Stats["Constitution"] = character.Constitution;
-                state.Stats["Intelligence"] = character.Intelligence;
-                state.Stats["Wisdom"] = character.Wisdom;
-                state.Stats["Charisma"] = character.Charisma;
+                state.Attributes["Strength"] = character.Strength;
+                state.Attributes["Dexterity"] = character.Dexterity;
+                state.Attributes["Constitution"] = character.Constitution;
+                state.Attributes["Intelligence"] = character.Intelligence;
+                state.Attributes["Wisdom"] = character.Wisdom;
+                state.Attributes["Charisma"] = character.Charisma;
             }
             
             return state;

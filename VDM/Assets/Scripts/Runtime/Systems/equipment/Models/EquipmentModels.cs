@@ -126,7 +126,6 @@ namespace VDM.Systems.Equipment.Models
         
         // Requirements
         public Dictionary<string, int> Requirements { get; set; } = new Dictionary<string, int>();
-        public List<string> ClassRestrictions { get; set; } = new List<string>();
         
         // Evolution data
         public int EvolutionLevel { get; set; }
@@ -219,12 +218,6 @@ namespace VDM.Systems.Equipment.Models
                 }
             }
             
-            // Check class restrictions
-            if (ClassRestrictions.Count > 0 && !ClassRestrictions.Contains(characterClass))
-            {
-                return false;
-            }
-            
             return true;
         }
 
@@ -301,7 +294,6 @@ namespace VDM.Systems.Equipment.Models
             clone.Stats = new Dictionary<string, int>(Stats);
             clone.Bonuses = new Dictionary<string, float>(Bonuses);
             clone.Requirements = new Dictionary<string, int>(Requirements);
-            clone.ClassRestrictions = new List<string>(ClassRestrictions);
             clone.Enchantments = new List<string>(Enchantments);
             clone.Properties = new List<EquipmentProperty>();
             foreach (var prop in Properties)

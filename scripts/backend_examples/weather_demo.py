@@ -21,9 +21,9 @@ parent_dir = current_dir.parent
 sys.path.append(str(parent_dir))
 
 try:
-    from backend.systems.time.services.time_manager import TimeManager
-    from backend.systems.time.models.calendar_model import Season
-    from backend.systems.time.models.weather_model import WeatherState
+    from backend.systems.game_time.services.time_manager import TimeManager
+    from backend.systems.game_time.models.calendar_model import Season
+    from backend.systems.game_time.models.weather_model import WeatherState
 except ImportError:
     print("Error: Could not import required modules.")
     print("Make sure you are running this script from the project root directory.")

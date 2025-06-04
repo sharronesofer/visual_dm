@@ -11,15 +11,22 @@ import asyncio
 from pathlib import Path
 from uuid import uuid4
 
-# Use fallback imports for missing dependencies
+# Initialize logger first
+logger = logging.getLogger(__name__)
+
+# Import infrastructure models
 try:
-    from backend.systems.motif.models import (
+    from backend.infrastructure.systems.motif.models import (
         Motif, MotifCreate, MotifUpdate, MotifFilter,
-        MotifScope, MotifLifecycle, MotifCategory, MotifEffect,
-        LocationInfo
+        MotifScope, MotifLifecycle, MotifCategory,
+        MotifEffect, MotifEffectTarget, LocationInfo,
+        MotifEvolutionRule, MotifEvolutionTrigger,
+        MotifConflict, MotifSynthesis,
+        PlayerCharacterMotif, MotifEvolutionEvent
     )
-except ImportError:
-    # Fallback mock classes for resilience
+except ImportError as e:
+    logger.error(f"Failed to import motif models: {e}")
+    # Use simplified fallback classes for resilience
     class MockEnum:
         BETRAYAL = "betrayal"
         CHAOS = "chaos"
@@ -62,9 +69,11 @@ except ImportError:
             for k, v in kwargs.items():
                 setattr(self, k, v)
 
+# Import service layer
 try:
-    from backend.systems.motif.service import MotifService
+    from backend.systems.motif.services.service import MotifService
 except ImportError:
+    logger.warning("MotifService not available - using mock implementation")
     class MotifService:
         def __init__(self, repository):
             self.repository = repository
@@ -72,9 +81,11 @@ except ImportError:
         async def create_motif(self, motif_data):
             return Motif(**motif_data.__dict__ if hasattr(motif_data, '__dict__') else motif_data)
 
+# Import repository layer
 try:
-from backend.systems.motif.repositories import MotifRepository, Vector2
+    from backend.infrastructure.systems.motif.repositories import MotifRepository, Vector2
 except ImportError:
+    logger.warning("MotifRepository not available - using mock implementation")
     class Vector2:
         def __init__(self, x, y):
             self.x = x
@@ -87,6 +98,7 @@ except ImportError:
         def __init__(self, data_path=None):
             self.data_path = data_path
 
+# Import utility functions - these should now work since chaos_utils.py is removed
 try:
     from backend.systems.motif.utils import (
         generate_motif_name, generate_motif_description,
@@ -94,13 +106,14 @@ try:
         motif_to_narrative_context, calculate_motif_spread,
         roll_chaos_event, NARRATIVE_CHAOS_TABLE
     )
-except ImportError:
-    # Mock functions if imports fail
+except ImportError as e:
+    logger.error(f"Failed to import motif utilities: {e}")
+    # These are critical functions, log error but provide minimal fallbacks
     def generate_motif_name(*args, **kwargs):
-        return "Mock Motif"
+        return "Generated Motif"
     
     def generate_motif_description(*args, **kwargs):
-        return "Mock description"
+        return "A generated motif description"
     
     def estimate_motif_compatibility(*args, **kwargs):
         return 0.5
@@ -115,17 +128,16 @@ except ImportError:
         return {}
     
     def roll_chaos_event(*args, **kwargs):
-        return "Mock chaos event"
+        return "A chaos event occurred"
     
-    NARRATIVE_CHAOS_TABLE = ["Mock chaos event"]
+    NARRATIVE_CHAOS_TABLE = ["Generic chaos event"]
 
 try:
-    from backend.systems.motif.motif_utils import synthesize_motifs
+    from backend.systems.motif.utils.motif_utils import synthesize_motifs
 except ImportError:
+    logger.warning("synthesize_motifs not available - using fallback")
     def synthesize_motifs(*args, **kwargs):
         return {"theme": "neutral", "tone": "neutral"}
-
-logger = logging.getLogger(__name__)
 
 
 class MotifManager:
@@ -318,10 +330,6 @@ class MotifManager:
         self._cache_timestamp = None
     
     # ==== Chaos System Integration ====
-    
-    def roll_chaos_event(self):
-        """Generate a random chaos event from the predefined table."""
-        return roll_chaos_event()
     
     async def inject_chaos_event(self, event_type, region=None, context=None):
         """

@@ -1,7 +1,7 @@
-# XML Documentation Style Guide for Visual_DM
+# XML Documentation Style Guide for Dreamforge
 
 ## Overview
-This guide defines the required XML documentation tags, formatting conventions, and usage patterns for all C# scripts in the Visual_DM project. All public classes, methods, and properties must be documented according to these standards. Special attention should be given to UI and quest-related code.
+This guide defines the required XML documentation tags, formatting conventions, and usage patterns for all C# scripts in the Dreamforge project. All public classes, methods, and properties must be documented according to these standards. Special attention should be given to UI and quest-related code.
 
 ## Required XML Tags
 - `<summary>`: Briefly describes the purpose of the class, method, or property.

@@ -70,7 +70,7 @@ def analyze_specific_systems():
         'backend.systems.diplomacy.calculators',
         
         # Equipment system components
-        'backend.systems.equipment.services',
+        'backend.infrastructure.equipment.services',
         
         # Faction system components
         'backend.systems.faction.models.faction_relationship',

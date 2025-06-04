@@ -1,20 +1,26 @@
 """
-Shop system functionality for the loot system.
+Shop system functionality for the loot system - Pure Business Logic
 
 This module provides shop-specific functions including dynamic pricing,
 specialization, economic factors, and inventory management.
+Pure business logic with no technical dependencies.
 """
 
 import random
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Protocol
 from copy import deepcopy
-import logging
 import math
 
-from backend.systems.loot.loot_core import generate_item_identity, calculate_item_power_score
+from backend.systems.loot.utils.loot_core import generate_item_identity, calculate_item_power_score
 
 
-logger = logging.getLogger(__name__)
+# Business Logic Protocols
+class ShopEventPublisher(Protocol):
+    """Protocol for publishing shop-related events"""
+    
+    def publish_shop_event(self, event_data: Dict[str, Any]) -> None:
+        """Publish shop event"""
+        ...
 
 
 # Data structures for shop specialization and economic factors
@@ -174,9 +180,7 @@ def get_region_economic_factors(region_id: int) -> Dict[str, float]:
     Returns:
         Dictionary with economic factors
     """
-    # This would normally query a database or economic system
-    # For now, generate some realistic factors based on region ID
-    
+    # Business logic for generating consistent regional economic factors
     base_factors = {
         "prosperity": 1.0,
         "trade_volume": 1.0,

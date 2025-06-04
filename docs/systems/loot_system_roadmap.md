@@ -1,4 +1,3 @@
-
 # 🛠️ Visual DM: Loot & Item System Roadmap
 
 This roadmap outlines the full loot generation, identification, and item evolution system for Visual DM, centered around a hybrid AI + rule-driven engine.
@@ -51,10 +50,10 @@ This roadmap outlines the full loot generation, identification, and item evoluti
 - Contains all valid effect types
 - Effects are tagged by item type
 - Supports:
-  - `feat`: pulls from feats list (excludes spellcasting feats)
+  - `ability`: pulls from abilities list (excludes spellcasting abilities)
   - `skill_bonus`: pulls from valid skills
   - `countable_effects`: stackable (e.g. DR, stat bonuses)
-  - Monster-only feats (for legendary items)
+  - Monster-only abilities (for legendary items)
 
 ### 2. Loot Generator
 - Takes in `player_level` and `battle_context`

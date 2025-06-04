@@ -12,8 +12,10 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func
 
-from backend.systems.economy.models import (
-    EconomyEntity,
+# Infrastructure layer - SQLAlchemy models for database operations
+from backend.infrastructure.database.economy.models import EconomyEntity
+# Business layer - Pydantic models for business logic
+from backend.systems.economy.models.models import (
     EconomyModel,
     CreateEconomyRequest,
     UpdateEconomyRequest,

@@ -5,8 +5,10 @@ using VDM.UI.Core;
 using VDM.Systems.Region.Models;
 using VDM.Systems.Worldgeneration.Models;
 using VDM.Systems.Region.Services;
+using VDM.Systems.Worldstate.Services;
 using System.Collections.Generic;
 using System.Linq;
+using VDM.DTOs.Game.Character;
 
 namespace VDM.UI.Systems.World
 {
@@ -62,10 +64,10 @@ namespace VDM.UI.Systems.World
         [SerializeField] private Toggle showDangerousAreasToggle;
         [SerializeField] private TMP_Dropdown regionTypeFilter;
         
-        private WorldService worldService;
+        private WorldStateService worldService;
         private WorldModel currentWorld;
-        private RegionModel selectedRegion;
-        private RegionModel currentPlayerRegion;
+        private VDM.Systems.Region.Models.RegionModel currentPlayerRegion;
+        private VDM.Systems.Region.Models.RegionModel selectedRegion;
         private List<GameObject> regionMarkers = new List<GameObject>();
         private List<GameObject> legendEntries = new List<GameObject>();
         
@@ -77,7 +79,7 @@ namespace VDM.UI.Systems.World
         protected override void Awake()
         {
             base.Awake();
-            worldService = FindObjectOfType<WorldService>();
+            worldService = FindObjectOfType<WorldStateService>();
             
             // Setup map controls
             if (zoomInButton != null)
@@ -114,34 +116,32 @@ namespace VDM.UI.Systems.World
                 regionTypeFilter.onValueChanged.AddListener(OnRegionTypeFilterChanged);
         }
         
-        protected override void OnEnable()
+        private void OnEnable()
         {
-            base.OnEnable();
+            // Subscribe to world events when panel becomes active
             if (worldService != null)
             {
                 worldService.OnWorldChanged += OnWorldChanged;
                 worldService.OnRegionDiscovered += OnRegionDiscovered;
-                worldService.OnPlayerLocationChanged += OnPlayerLocationChanged;
-                worldService.OnRegionStatusChanged += OnRegionStatusChanged;
+                worldService.OnRegionUpdated += OnRegionUpdated;
             }
         }
         
-        protected override void OnDisable()
+        private void OnDisable()
         {
-            base.OnDisable();
+            // Unsubscribe from world events when panel becomes inactive
             if (worldService != null)
             {
                 worldService.OnWorldChanged -= OnWorldChanged;
                 worldService.OnRegionDiscovered -= OnRegionDiscovered;
-                worldService.OnPlayerLocationChanged -= OnPlayerLocationChanged;
-                worldService.OnRegionStatusChanged -= OnRegionStatusChanged;
+                worldService.OnRegionUpdated -= OnRegionUpdated;
             }
         }
         
         /// <summary>
-        /// Display the world map
+        /// Display the world map with the specified world and player region
         /// </summary>
-        public void ShowWorldMap(WorldModel world, RegionModel playerRegion)
+        public void ShowWorldMap(WorldModel world, VDM.Systems.Region.Models.RegionModel playerRegion)
         {
             currentWorld = world;
             currentPlayerRegion = playerRegion;
@@ -278,7 +278,7 @@ namespace VDM.UI.Systems.World
         /// <summary>
         /// Show region information panel
         /// </summary>
-        private void ShowRegionInfo(RegionModel region)
+        private void ShowRegionInfo(VDM.Systems.Region.Models.RegionModel region)
         {
             selectedRegion = region;
             
@@ -289,7 +289,7 @@ namespace VDM.UI.Systems.World
             if (regionNameText != null)
                 regionNameText.text = region.Name;
             if (regionDescriptionText != null)
-                regionDescriptionText.text = region.Description;
+                regionDescriptionText.text = $"Climate: {region.Environment?.Weather?.CurrentWeather ?? "Unknown"}";
             if (regionLevelText != null)
                 regionLevelText.text = $"Recommended Level: {region.RecommendedLevel}";
             if (regionClimateText != null)
@@ -455,8 +455,9 @@ namespace VDM.UI.Systems.World
         
         #region Event Handlers
         
-        private void OnRegionSelected(RegionModel region)
+        private void OnRegionSelected(VDM.Systems.Region.Models.RegionModel region)
         {
+            selectedRegion = region;
             ShowRegionInfo(region);
         }
         
@@ -475,23 +476,16 @@ namespace VDM.UI.Systems.World
             ShowWorldMap(world, currentPlayerRegion);
         }
         
-        private void OnRegionDiscovered(RegionModel region)
+        private void OnRegionDiscovered(VDM.Systems.Region.Models.RegionModel region)
         {
-            CreateRegionMarkers(); // Refresh to show newly discovered region
+            CreateRegionMarkers(); // Refresh to include new region
             NotificationSystem.Instance?.ShowNotification(
                 $"Discovered new region: {region.Name}",
-                NotificationType.Success
+                NotificationType.Info
             );
         }
         
-        private void OnPlayerLocationChanged(RegionModel newRegion)
-        {
-            currentPlayerRegion = newRegion;
-            UpdatePlayerLocation();
-            UpdateTravelOptions();
-        }
-        
-        private void OnRegionStatusChanged(RegionModel region)
+        private void OnRegionUpdated(VDM.Systems.Region.Models.RegionModel region)
         {
             CreateRegionMarkers(); // Refresh to show status changes
         }

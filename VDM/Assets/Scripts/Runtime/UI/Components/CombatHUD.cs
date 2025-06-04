@@ -7,6 +7,7 @@ using VDM.Systems.Character.Models;
 using VDM.Systems.Combat.Services;
 using System.Collections.Generic;
 using System.Linq;
+using VDM.DTOs.Game.Character;
 
 namespace VDM.UI.Systems.Combat
 {
@@ -77,12 +78,12 @@ namespace VDM.UI.Systems.Combat
         private CombatService combatService;
         private CombatEncounter currentEncounter;
         private CharacterModel playerCharacter;
-        private List<GameObject> attackOptions = new List<GameObject>();
-        private List<GameObject> spellOptions = new List<GameObject>();
-        private List<GameObject> itemOptions = new List<GameObject>();
-        private List<GameObject> targetButtons = new List<GameObject>();
-        private List<GameObject> enemyDisplays = new List<GameObject>();
-        private List<GameObject> combatLogEntries = new List<GameObject>();
+        private List<AttackOption> attackOptions = new List<AttackOption>();
+        private List<SpellOption> spellOptions = new List<SpellOption>();
+        private List<ItemOption> itemOptions = new List<ItemOption>();
+        private List<TargetButton> targetButtons = new List<TargetButton>();
+        private List<EnemyDisplay> enemyDisplays = new List<EnemyDisplay>();
+        private List<CombatLogEntry> combatLogEntries = new List<CombatLogEntry>();
         
         private VDM.DTOs.Combat.CombatActionDTO pendingAction;
         private bool isSelectingTarget = false;
@@ -94,46 +95,42 @@ namespace VDM.UI.Systems.Combat
             
             // Setup action buttons
             if (attackButton != null)
-                attackButton.onClick.AddListener(() => ShowActionPanel(VDM.DTOs.Combat.CombatActionDTOType.Attack));
+                attackButton.onClick.AddListener(() => ShowActionPanel(ActionType.Attack));
             if (defendButton != null)
                 defendButton.onClick.AddListener(OnDefendAction);
             if (castSpellButton != null)
-                castSpellButton.onClick.AddListener(() => ShowActionPanel(VDM.DTOs.Combat.CombatActionDTOType.CastSpell));
+                castSpellButton.onClick.AddListener(() => ShowActionPanel(ActionType.CastSpell));
             if (useItemButton != null)
-                useItemButton.onClick.AddListener(() => ShowActionPanel(VDM.DTOs.Combat.CombatActionDTOType.UseItem));
+                useItemButton.onClick.AddListener(() => ShowActionPanel(ActionType.UseItem));
             if (moveButton != null)
-                moveButton.onClick.AddListener(() => ShowActionPanel(VDM.DTOs.Combat.CombatActionDTOType.Move));
+                moveButton.onClick.AddListener(() => ShowActionPanel(ActionType.Move));
             if (endTurnButton != null)
                 endTurnButton.onClick.AddListener(OnEndTurn);
             if (cancelTargetingButton != null)
                 cancelTargetingButton.onClick.AddListener(CancelTargeting);
         }
         
-        protected override void OnEnable()
+        private void OnEnable()
         {
-            base.OnEnable();
+            // Subscribe to combat events when panel becomes active
             if (combatService != null)
             {
                 combatService.OnCombatStarted += OnCombatStarted;
                 combatService.OnCombatEnded += OnCombatEnded;
                 combatService.OnTurnChanged += OnTurnChanged;
                 combatService.OnActionExecuted += OnActionExecuted;
-                combatService.OnCharacterDamaged += OnCharacterDamaged;
-                combatService.OnCharacterHealed += OnCharacterHealed;
             }
         }
         
-        protected override void OnDisable()
+        private void OnDisable()
         {
-            base.OnDisable();
+            // Unsubscribe from combat events when panel becomes inactive
             if (combatService != null)
             {
                 combatService.OnCombatStarted -= OnCombatStarted;
                 combatService.OnCombatEnded -= OnCombatEnded;
                 combatService.OnTurnChanged -= OnTurnChanged;
                 combatService.OnActionExecuted -= OnActionExecuted;
-                combatService.OnCharacterDamaged -= OnCharacterDamaged;
-                combatService.OnCharacterHealed -= OnCharacterHealed;
             }
         }
         
@@ -152,7 +149,7 @@ namespace VDM.UI.Systems.Combat
             ClearCombatLog();
             HideAllActionPanels();
             
-            AddCombatLogEntry("Combat begins!", Color.yellow);
+            AddCombatLogEntry(new CombatLogData(CombatLogType.SystemMessage, "Combat begins!"));
         }
         
         /// <summary>
@@ -199,15 +196,14 @@ namespace VDM.UI.Systems.Combat
             
             foreach (var enemy in currentEncounter.Enemies.Where(e => e.IsAlive))
             {
-                GameObject enemyDisplay = Instantiate(enemyDisplayPrefab, enemiesParent);
-                EnemyDisplay enemyComponent = enemyDisplay.GetComponent<EnemyDisplay>();
+                GameObject enemyDisplayObj = Instantiate(enemyDisplayPrefab, enemiesParent);
+                EnemyDisplay enemyComponent = enemyDisplayObj.GetComponent<EnemyDisplay>();
                 
                 if (enemyComponent != null)
                 {
                     enemyComponent.Initialize(enemy, OnEnemySelected);
+                    enemyDisplays.Add(enemyComponent);
                 }
-                
-                enemyDisplays.Add(enemyDisplay);
             }
         }
         
@@ -259,25 +255,25 @@ namespace VDM.UI.Systems.Combat
         /// <summary>
         /// Show specific action panel
         /// </summary>
-        private void ShowActionPanel(VDM.DTOs.Combat.CombatActionDTOType actionType)
+        private void ShowActionPanel(ActionType actionType)
         {
             HideAllActionPanels();
             
             switch (actionType)
             {
-                case VDM.DTOs.Combat.CombatActionDTOType.Attack:
+                case ActionType.Attack:
                     if (attackPanel != null) attackPanel.SetActive(true);
                     PopulateAttackOptions();
                     break;
-                case VDM.DTOs.Combat.CombatActionDTOType.CastSpell:
+                case ActionType.CastSpell:
                     if (spellPanel != null) spellPanel.SetActive(true);
                     PopulateSpellOptions();
                     break;
-                case VDM.DTOs.Combat.CombatActionDTOType.UseItem:
+                case ActionType.UseItem:
                     if (itemPanel != null) itemPanel.SetActive(true);
                     PopulateItemOptions();
                     break;
-                case VDM.DTOs.Combat.CombatActionDTOType.Move:
+                case ActionType.Move:
                     if (movePanel != null) movePanel.SetActive(true);
                     // Handle movement options
                     break;
@@ -308,15 +304,14 @@ namespace VDM.UI.Systems.Combat
             
             foreach (var weapon in playerCharacter.Equipment.EquippedWeapons)
             {
-                GameObject option = Instantiate(attackOptionPrefab, attackOptionsParent);
-                AttackOption optionComponent = option.GetComponent<AttackOption>();
+                GameObject optionObj = Instantiate(attackOptionPrefab, attackOptionsParent);
+                AttackOption optionComponent = optionObj.GetComponent<AttackOption>();
                 
                 if (optionComponent != null)
                 {
                     optionComponent.Initialize(weapon, () => OnAttackSelected(weapon));
+                    attackOptions.Add(optionComponent);
                 }
-                
-                attackOptions.Add(option);
             }
         }
         
@@ -334,15 +329,14 @@ namespace VDM.UI.Systems.Combat
             
             foreach (var spell in availableSpells)
             {
-                GameObject option = Instantiate(spellOptionPrefab, spellOptionsParent);
-                SpellOption optionComponent = option.GetComponent<SpellOption>();
+                GameObject optionObj = Instantiate(spellOptionPrefab, spellOptionsParent);
+                SpellOption optionComponent = optionObj.GetComponent<SpellOption>();
                 
                 if (optionComponent != null)
                 {
-                    optionComponent.Initialize(spell, () => OnSpellSelected(spell));
+                    optionComponent.Initialize(spell, () => OnSpellSelected(spell), playerCharacter.CombatStats.CurrentMana);
+                    spellOptions.Add(optionComponent);
                 }
-                
-                spellOptions.Add(option);
             }
         }
         
@@ -358,15 +352,14 @@ namespace VDM.UI.Systems.Combat
             
             foreach (var item in playerCharacter.Inventory.UsableItems.Where(i => i.Quantity > 0))
             {
-                GameObject option = Instantiate(itemOptionPrefab, itemOptionsParent);
-                ItemOption optionComponent = option.GetComponent<ItemOption>();
+                GameObject optionObj = Instantiate(itemOptionPrefab, itemOptionsParent);
+                ItemOption optionComponent = optionObj.GetComponent<ItemOption>();
                 
                 if (optionComponent != null)
                 {
                     optionComponent.Initialize(item, () => OnItemSelected(item));
+                    itemOptions.Add(optionComponent);
                 }
-                
-                itemOptions.Add(option);
             }
         }
         
@@ -378,25 +371,23 @@ namespace VDM.UI.Systems.Combat
             pendingAction = action;
             isSelectingTarget = true;
             
-            ClearTargetButtons();
-            
             if (targetSelectionPanel != null)
                 targetSelectionPanel.SetActive(true);
             
-            // Add valid targets based on action type
+            ClearTargetButtons();
+            
             var validTargets = GetValidTargets(action);
             
             foreach (var target in validTargets)
             {
-                GameObject targetButton = Instantiate(targetButtonPrefab, targetsParent);
-                TargetButton buttonComponent = targetButton.GetComponent<TargetButton>();
+                GameObject targetButtonObj = Instantiate(targetButtonPrefab, targetsParent);
+                TargetButton targetButtonComponent = targetButtonObj.GetComponent<TargetButton>();
                 
-                if (buttonComponent != null)
+                if (targetButtonComponent != null)
                 {
-                    buttonComponent.Initialize(target, () => OnTargetSelected(target));
+                    targetButtonComponent.Initialize(target, () => OnTargetSelected(target));
+                    targetButtons.Add(targetButtonComponent);
                 }
-                
-                targetButtons.Add(targetButton);
             }
         }
         
@@ -407,22 +398,31 @@ namespace VDM.UI.Systems.Combat
         {
             var targets = new List<CombatCharacter>();
             
-            switch (action.TargetType)
+            if (currentEncounter == null) return targets;
+            
+            // For attacks, target enemies
+            if (action.Type == ActionType.Attack)
             {
-                case TargetType.Enemy:
-                    targets.AddRange(currentEncounter.Enemies.Where(e => e.IsAlive));
-                    break;
-                case TargetType.Ally:
-                    targets.Add(playerCharacter);
-                    // Add party members if applicable
-                    break;
-                case TargetType.Self:
-                    targets.Add(playerCharacter);
-                    break;
-                case TargetType.Any:
-                    targets.AddRange(currentEncounter.Enemies.Where(e => e.IsAlive));
-                    targets.Add(playerCharacter);
-                    break;
+                targets.AddRange(currentEncounter.Participants.Where(p => p.IsAlive && !p.IsPlayerCharacter));
+            }
+            // For spells, depends on spell type (simplified logic)
+            else if (action.Type == ActionType.CastSpell)
+            {
+                if (action.Name.ToLower().Contains("heal") || action.Name.ToLower().Contains("buff"))
+                {
+                    // Healing/buff spells target allies
+                    targets.AddRange(currentEncounter.Participants.Where(p => p.IsAlive && p.IsAlly));
+                }
+                else
+                {
+                    // Damage spells target enemies
+                    targets.AddRange(currentEncounter.Participants.Where(p => p.IsAlive && !p.IsPlayerCharacter));
+                }
+            }
+            // For items, usually target self or allies
+            else if (action.Type == ActionType.UseItem)
+            {
+                targets.AddRange(currentEncounter.Participants.Where(p => p.IsAlive && p.IsAlly));
             }
             
             return targets;
@@ -431,31 +431,30 @@ namespace VDM.UI.Systems.Combat
         /// <summary>
         /// Add entry to combat log
         /// </summary>
-        private void AddCombatLogEntry(string message, Color color)
+        private void AddCombatLogEntry(CombatLogData logData)
         {
             if (combatLogContent == null || combatLogEntryPrefab == null) return;
             
-            GameObject logEntry = Instantiate(combatLogEntryPrefab, combatLogContent);
-            TextMeshProUGUI logText = logEntry.GetComponent<TextMeshProUGUI>();
-            
-            if (logText != null)
+            // Remove old entries if we have too many
+            while (combatLogEntries.Count >= maxLogEntries)
             {
-                logText.text = $"[{System.DateTime.Now:HH:mm:ss}] {message}";
-                logText.color = color;
-            }
-            
-            combatLogEntries.Add(logEntry);
-            
-            // Remove old entries if we exceed the limit
-            while (combatLogEntries.Count > maxLogEntries)
-            {
-                GameObject oldEntry = combatLogEntries[0];
+                var oldEntry = combatLogEntries[0];
                 combatLogEntries.RemoveAt(0);
                 if (oldEntry != null)
-                    DestroyImmediate(oldEntry);
+                    oldEntry.FadeOut();
             }
             
-            // Scroll to bottom
+            // Create new log entry
+            GameObject entryObj = Instantiate(combatLogEntryPrefab, combatLogContent);
+            CombatLogEntry entryComponent = entryObj.GetComponent<CombatLogEntry>();
+            
+            if (entryComponent != null)
+            {
+                entryComponent.Initialize(logData);
+                combatLogEntries.Add(entryComponent);
+            }
+            
+            // Auto-scroll to bottom
             if (combatLogScrollRect != null)
             {
                 Canvas.ForceUpdateCanvases();
@@ -473,14 +472,20 @@ namespace VDM.UI.Systems.Combat
             // Clear existing status effect displays
             foreach (Transform child in playerStatusEffectsParent)
             {
-                DestroyImmediate(child.gameObject);
+                Destroy(child.gameObject);
             }
             
             // Add current status effects
             foreach (var effect in playerCharacter.StatusEffects)
             {
-                // Create status effect icon/display
-                // Implementation depends on status effect prefab structure
+                // Create simple status effect icon/text
+                GameObject effectObj = new GameObject($"StatusEffect_{effect.Name}");
+                effectObj.transform.SetParent(playerStatusEffectsParent);
+                
+                var effectText = effectObj.AddComponent<TextMeshProUGUI>();
+                effectText.text = effect.Name;
+                effectText.fontSize = 12;
+                effectText.color = effect.IsBuff ? Color.green : Color.red;
             }
         }
         
@@ -490,7 +495,8 @@ namespace VDM.UI.Systems.Combat
         {
             foreach (var option in attackOptions)
             {
-                if (option != null) DestroyImmediate(option);
+                if (option != null && option.gameObject != null) 
+                    DestroyImmediate(option.gameObject);
             }
             attackOptions.Clear();
         }
@@ -499,7 +505,8 @@ namespace VDM.UI.Systems.Combat
         {
             foreach (var option in spellOptions)
             {
-                if (option != null) DestroyImmediate(option);
+                if (option != null && option.gameObject != null) 
+                    DestroyImmediate(option.gameObject);
             }
             spellOptions.Clear();
         }
@@ -508,7 +515,8 @@ namespace VDM.UI.Systems.Combat
         {
             foreach (var option in itemOptions)
             {
-                if (option != null) DestroyImmediate(option);
+                if (option != null && option.gameObject != null) 
+                    DestroyImmediate(option.gameObject);
             }
             itemOptions.Clear();
         }
@@ -517,7 +525,8 @@ namespace VDM.UI.Systems.Combat
         {
             foreach (var button in targetButtons)
             {
-                if (button != null) DestroyImmediate(button);
+                if (button != null && button.gameObject != null) 
+                    DestroyImmediate(button.gameObject);
             }
             targetButtons.Clear();
         }
@@ -526,7 +535,8 @@ namespace VDM.UI.Systems.Combat
         {
             foreach (var display in enemyDisplays)
             {
-                if (display != null) DestroyImmediate(display);
+                if (display != null && display.gameObject != null) 
+                    DestroyImmediate(display.gameObject);
             }
             enemyDisplays.Clear();
         }
@@ -535,7 +545,8 @@ namespace VDM.UI.Systems.Combat
         {
             foreach (var entry in combatLogEntries)
             {
-                if (entry != null) DestroyImmediate(entry);
+                if (entry != null && entry.gameObject != null) 
+                    DestroyImmediate(entry.gameObject);
             }
             combatLogEntries.Clear();
         }
@@ -552,8 +563,8 @@ namespace VDM.UI.Systems.Combat
         private void OnCombatEnded(CombatResult result)
         {
             string message = result.Victory ? "Victory!" : "Defeat!";
-            Color color = result.Victory ? Color.green : Color.red;
-            AddCombatLogEntry(message, color);
+            var logType = result.Victory ? CombatLogType.SystemMessage : CombatLogType.Critical;
+            AddCombatLogEntry(new CombatLogData(logType, message));
             
             // Hide combat HUD after a delay
             Invoke(nameof(Close), 3f);
@@ -563,7 +574,7 @@ namespace VDM.UI.Systems.Combat
         {
             UpdateTurnOrder();
             UpdateActionButtons();
-            AddCombatLogEntry($"{character.Name}'s turn begins.", Color.cyan);
+            AddCombatLogEntry(new CombatLogData(CombatLogType.TurnStart, $"{character.Name}'s turn begins."));
         }
         
         private void OnActionExecuted(VDM.DTOs.Combat.CombatActionDTO action, CombatResult result)
@@ -572,7 +583,7 @@ namespace VDM.UI.Systems.Combat
             if (action.Target != null)
                 message += $" on {action.Target.Name}";
             
-            AddCombatLogEntry(message, Color.white);
+            AddCombatLogEntry(new CombatLogData(CombatLogType.CombatAction, message));
             
             UpdatePlayerDisplay();
             UpdateEnemyDisplays();
@@ -580,22 +591,33 @@ namespace VDM.UI.Systems.Combat
         
         private void OnCharacterDamaged(CombatCharacter character, int damage)
         {
-            AddCombatLogEntry($"{character.Name} takes {damage} damage!", Color.red);
+            var logData = new CombatLogData(CombatLogType.Damage, $"{character.Name} takes {damage} damage!")
+            {
+                TargetName = character.Name,
+                DamageAmount = damage
+            };
+            AddCombatLogEntry(logData);
         }
         
         private void OnCharacterHealed(CombatCharacter character, int healing)
         {
-            AddCombatLogEntry($"{character.Name} recovers {healing} health!", Color.green);
+            var logData = new CombatLogData(CombatLogType.Healing, $"{character.Name} recovers {healing} health!")
+            {
+                TargetName = character.Name,
+                HealingAmount = healing
+            };
+            AddCombatLogEntry(logData);
         }
         
         private void OnAttackSelected(WeaponModel weapon)
         {
             var action = new VDM.DTOs.Combat.CombatActionDTO
             {
-                ActionType = VDM.DTOs.Combat.CombatActionDTOType.Attack,
-                Actor = playerCharacter,
-                Weapon = weapon,
-                TargetType = TargetType.Enemy
+                Type = ActionType.Attack,
+                Name = weapon.Name,
+                Description = $"Attack with {weapon.Name}",
+                Damage = weapon.Damage,
+                Range = weapon.Range
             };
             
             ShowTargetSelection(action);
@@ -605,10 +627,11 @@ namespace VDM.UI.Systems.Combat
         {
             var action = new VDM.DTOs.Combat.CombatActionDTO
             {
-                ActionType = VDM.DTOs.Combat.CombatActionDTOType.CastSpell,
-                Actor = playerCharacter,
-                Spell = spell,
-                TargetType = spell.TargetType
+                Type = ActionType.CastSpell,
+                Name = spell.Name,
+                Description = spell.Description,
+                ManaCost = spell.ManaCost,
+                Range = spell.Range
             };
             
             ShowTargetSelection(action);
@@ -618,10 +641,9 @@ namespace VDM.UI.Systems.Combat
         {
             var action = new VDM.DTOs.Combat.CombatActionDTO
             {
-                ActionType = VDM.DTOs.Combat.CombatActionDTOType.UseItem,
-                Actor = playerCharacter,
-                Item = item,
-                TargetType = item.TargetType
+                Type = ActionType.UseItem,
+                Name = item.Name,
+                Description = $"Use {item.Name}"
             };
             
             ShowTargetSelection(action);
@@ -641,16 +663,17 @@ namespace VDM.UI.Systems.Combat
         
         private void OnEnemySelected(EnemyModel enemy)
         {
-            // Show enemy details or handle selection
+            // Show enemy details or handle selection for targeting
+            Debug.Log($"Enemy selected: {enemy.Name}");
         }
         
         private void OnDefendAction()
         {
             var action = new VDM.DTOs.Combat.CombatActionDTO
             {
-                ActionType = VDM.DTOs.Combat.CombatActionDTOType.Defend,
-                Actor = playerCharacter,
-                Target = playerCharacter
+                Type = ActionType.Defend,
+                Name = "Defend",
+                Description = "Defensive stance"
             };
             
             combatService?.ExecuteAction(action);

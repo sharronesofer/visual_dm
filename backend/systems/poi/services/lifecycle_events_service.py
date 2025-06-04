@@ -1,8 +1,8 @@
 """
-Lifecycle Events Service
+Lifecycle Events Service for POI System
 
-Handles POI evolution, events, and lifecycle management over time.
-Manages the natural progression of POIs through different states and stages.
+Manages POI lifecycle events including creation, growth, decline, and destruction,
+coordinating with other systems for comprehensive world simulation.
 """
 
 from typing import Dict, List, Optional, Tuple, Set, Any, Callable
@@ -13,9 +13,9 @@ import logging
 from datetime import datetime, timedelta
 import random
 
-from backend.systems.poi.models import PoiEntity, POIType, POIState
-from backend.infrastructure.database import get_db
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.systems.poi.models import PoiEntity, POIType, POIState
+from backend.infrastructure.database import get_db_session
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -179,7 +179,7 @@ class LifecycleEventsService:
     """Service for managing POI lifecycle events and evolution"""
     
     def __init__(self, db_session: Optional[Session] = None):
-        self.db_session = db_session or get_db()
+        self.db_session = db_session or get_db_session()
         self.event_dispatcher = EventDispatcher()
         
         # Event and lifecycle data

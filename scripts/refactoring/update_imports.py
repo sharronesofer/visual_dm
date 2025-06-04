@@ -101,7 +101,7 @@ def update_imports_in_file(filepath):
         # Update time system imports
         content = re.sub(
             r'from backend\.app\.core\.time_system',
-            'from backend.systems.time',
+            'from backend.systems.game_time',
             content
         )
         

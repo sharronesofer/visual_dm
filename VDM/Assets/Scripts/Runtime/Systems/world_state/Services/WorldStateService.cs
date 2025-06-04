@@ -5,7 +5,7 @@ using UnityEngine;
 using VDM.DTOs.Common;
 using VDM.Systems.Character.Models;
 using VDM.Infrastructure.Services;
-using VDM.Infrastructure.Services;
+using VDM.Systems.Worldstate.Models;
 
 
 namespace VDM.Systems.Worldstate.Services
@@ -13,22 +13,14 @@ namespace VDM.Systems.Worldstate.Services
     /// <summary>
     /// Service for managing world state operations via HTTP API
     /// </summary>
-    public class WorldStateService : MonoBehaviour
+    public class WorldStateService : BaseHttpService
     {
         [Header("Configuration")]
-        [SerializeField] private string baseUrl = "http://localhost:8000";
         [SerializeField] private float requestTimeout = 30f;
         [SerializeField] private bool enableLogging = true;
 
-        private HttpService httpService;
-
-        private void Awake()
+        public WorldStateService(string baseUrl) : base(baseUrl)
         {
-            httpService = new HttpService(baseUrl);
-            if (enableLogging)
-            {
-                Debug.Log("WorldStateService initialized with HttpService");
-            }
         }
 
         #region World Regions
@@ -40,7 +32,7 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions";
+                var url = "/api/world-state/regions";
                 if (queryParams != null)
                 {
                     url += BuildQueryString(queryParams);
@@ -49,7 +41,7 @@ namespace VDM.Systems.Worldstate.Services
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Getting regions from: {url}");
 
-                var response = await httpService.GetAsync<WorldStateResponse<List<WorldRegion>>>(url);
+                var response = await GetAsync<WorldStateResponse<List<WorldRegion>>>(url);
                 return response;
             }
             catch (Exception ex)
@@ -70,12 +62,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions/{regionId}";
+                var url = $"/api/world-state/regions/{regionId}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Getting region: {regionId}");
 
-                var response = await httpService.GetAsync<WorldStateResponse<WorldRegion>>(url);
+                var response = await GetAsync<WorldStateResponse<WorldRegion>>(url);
                 return response;
             }
             catch (Exception ex)
@@ -96,12 +88,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions";
+                var url = "/api/world-state/regions";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Creating region: {region.name}");
 
-                var response = await httpService.PostAsync<WorldRegion, WorldStateResponse<WorldRegion>>(url, region);
+                var response = await PostAsync<WorldRegion, WorldStateResponse<WorldRegion>>(url, region);
                 return response;
             }
             catch (Exception ex)
@@ -122,12 +114,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions/{regionId}";
+                var url = $"/api/world-state/regions/{regionId}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Updating region: {regionId}");
 
-                var response = await httpService.PutAsync<WorldRegion, WorldStateResponse<WorldRegion>>(url, region);
+                var response = await PutAsync<WorldRegion, WorldStateResponse<WorldRegion>>(url, region);
                 return response;
             }
             catch (Exception ex)
@@ -148,12 +140,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions/{regionId}";
+                var url = $"/api/world-state/regions/{regionId}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Deleting region: {regionId}");
 
-                await httpService.DeleteAsync(url);
+                await DeleteAsync(url);
                 return new WorldStateResponse<bool>
                 {
                     success = true,
@@ -182,12 +174,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions/{regionId}/state/{category}";
+                var url = $"/api/world-state/regions/{regionId}/state/{category}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Getting region state: {regionId}, category: {category}");
 
-                var response = await httpService.GetAsync<WorldStateResponse<Dictionary<string, object>>>(url);
+                var response = await GetAsync<WorldStateResponse<Dictionary<string, object>>>(url);
                 return response;
             }
             catch (Exception ex)
@@ -208,12 +200,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions/{regionId}/state/{category}";
+                var url = $"/api/world-state/regions/{regionId}/state/{category}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Setting region state: {regionId}, category: {category}");
 
-                var response = await httpService.PutAsync<Dictionary<string, object>, WorldStateResponse<bool>>(url, stateData);
+                var response = await PutAsync<Dictionary<string, object>, WorldStateResponse<bool>>(url, stateData);
                 return response;
             }
             catch (Exception ex)
@@ -234,12 +226,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/regions/{regionId}/state/{category}/update";
+                var url = $"/api/world-state/regions/{regionId}/state/{category}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Updating region state: {regionId}, category: {category}");
 
-                var response = await httpService.PatchAsync<Dictionary<string, object>, WorldStateResponse<bool>>(url, updates);
+                var response = await PatchAsync<Dictionary<string, object>, WorldStateResponse<bool>>(url, updates);
                 return response;
             }
             catch (Exception ex)
@@ -264,12 +256,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/maps";
+                var url = "/api/world-state/maps";
 
                 if (enableLogging)
-                    Debug.Log($"[WorldStateService] Getting world maps");
+                    Debug.Log($"[WorldStateService] Getting maps");
 
-                var response = await httpService.GetAsync<WorldStateResponse<List<WorldMap>>>(url);
+                var response = await GetAsync<WorldStateResponse<List<WorldMap>>>(url);
                 return response;
             }
             catch (Exception ex)
@@ -290,12 +282,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/maps/{mapId}";
+                var url = $"/api/world-state/maps/{mapId}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Getting map: {mapId}");
 
-                var response = await httpService.GetAsync<WorldStateResponse<WorldMap>>(url);
+                var response = await GetAsync<WorldStateResponse<WorldMap>>(url);
                 return response;
             }
             catch (Exception ex)
@@ -316,12 +308,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/maps";
+                var url = "/api/world-state/maps";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Creating map: {map.name}");
 
-                var response = await httpService.PostAsync<WorldMap, WorldStateResponse<WorldMap>>(url, map);
+                var response = await PostAsync<WorldMap, WorldStateResponse<WorldMap>>(url, map);
                 return response;
             }
             catch (Exception ex)
@@ -346,12 +338,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/snapshots";
+                var url = "/api/world-state/snapshots";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Getting snapshots");
 
-                var response = await httpService.GetAsync<WorldStateResponse<List<WorldStateSnapshot>>>(url);
+                var response = await GetAsync<WorldStateResponse<List<WorldStateSnapshot>>>(url);
                 return response;
             }
             catch (Exception ex)
@@ -366,18 +358,18 @@ namespace VDM.Systems.Worldstate.Services
         }
 
         /// <summary>
-        /// Create a world state snapshot
+        /// Create a new world state snapshot
         /// </summary>
         public async Task<WorldStateResponse<WorldStateSnapshot>> CreateSnapshotAsync(CreateSnapshotRequest request)
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/snapshots";
+                var url = "/api/world-state/snapshots";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Creating snapshot: {request.name}");
 
-                var response = await httpService.PostAsync<CreateSnapshotRequest, WorldStateResponse<WorldStateSnapshot>>(url, request);
+                var response = await PostAsync<CreateSnapshotRequest, WorldStateResponse<WorldStateSnapshot>>(url, request);
                 return response;
             }
             catch (Exception ex)
@@ -398,12 +390,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/snapshots/{request.snapshotId}/restore";
+                var url = "/api/world-state/snapshots/restore";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Restoring snapshot: {request.snapshotId}");
 
-                var response = await httpService.PostAsync<RestoreSnapshotRequest, WorldStateResponse<bool>>(url, request);
+                var response = await PostAsync<RestoreSnapshotRequest, WorldStateResponse<bool>>(url, request);
                 return response;
             }
             catch (Exception ex)
@@ -424,12 +416,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/snapshots/{snapshotId}";
+                var url = $"/api/world-state/snapshots/{snapshotId}";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Deleting snapshot: {snapshotId}");
 
-                await httpService.DeleteAsync(url);
+                await DeleteAsync(url);
                 return new WorldStateResponse<bool>
                 {
                     success = true,
@@ -438,7 +430,7 @@ namespace VDM.Systems.Worldstate.Services
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[WorldStateService] Error deleting snapshot: {ex.Message}");
+                Debug.LogError($"[WorldStateService] Error deleting snapshot {snapshotId}: {ex.Message}");
                 return new WorldStateResponse<bool>
                 {
                     success = false,
@@ -449,16 +441,16 @@ namespace VDM.Systems.Worldstate.Services
 
         #endregion
 
-        #region State Changes
+        #region State Changes and Analytics
 
         /// <summary>
-        /// Get state change history
+        /// Get state change records
         /// </summary>
         public async Task<WorldStateResponse<List<StateChangeRecord>>> GetStateChangesAsync(WorldStateQueryParams queryParams = null)
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/changes";
+                var url = "/api/world-state/changes";
                 if (queryParams != null)
                 {
                     url += BuildQueryString(queryParams);
@@ -467,7 +459,7 @@ namespace VDM.Systems.Worldstate.Services
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Getting state changes");
 
-                var response = await httpService.GetAsync<WorldStateResponse<List<StateChangeRecord>>>(url);
+                var response = await GetAsync<WorldStateResponse<List<StateChangeRecord>>>(url);
                 return response;
             }
             catch (Exception ex)
@@ -481,10 +473,6 @@ namespace VDM.Systems.Worldstate.Services
             }
         }
 
-        #endregion
-
-        #region Analytics
-
         /// <summary>
         /// Get world state analytics
         /// </summary>
@@ -492,12 +480,12 @@ namespace VDM.Systems.Worldstate.Services
         {
             try
             {
-                var url = $"{baseUrl}/api/world-state/analytics";
+                var url = "/api/world-state/analytics";
 
                 if (enableLogging)
                     Debug.Log($"[WorldStateService] Getting analytics");
 
-                var response = await httpService.GetAsync<WorldStateResponse<WorldStateAnalytics>>(url);
+                var response = await GetAsync<WorldStateResponse<WorldStateAnalytics>>(url);
                 return response;
             }
             catch (Exception ex)

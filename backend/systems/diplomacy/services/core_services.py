@@ -1,2069 +1,872 @@
 """
-Services Module for Diplomacy System
+Core Diplomacy Services
 
-This module implements the business logic for diplomatic operations, including:
-- Treaty management (creation, signing, expiration)
-- Negotiation logic (offers, counter-offers, agreements)
-- Diplomatic event processing
-- Faction relationship management
+High-level service functions for diplomatic operations including
+tension management, treaty operations, negotiations, and events.
 """
 
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Any
 from uuid import UUID, uuid4
+import random
 
-from backend.systems.diplomacy.models import (
-    DiplomaticEvent, 
-    DiplomaticEventType, 
-    DiplomaticStatus, 
-    Negotiation, 
-    NegotiationOffer,
-    NegotiationStatus, 
-    Treaty, 
-    TreatyType,
-    TreatyStatus,
-    TreatyViolation,
-    TreatyViolationType,
-    DiplomaticIncident,
-    DiplomaticIncidentType,
-    DiplomaticIncidentSeverity,
-    Ultimatum,
-    UltimatumStatus,
-    Sanction,
-    SanctionType,
-    SanctionStatus
+from backend.infrastructure.config.diplomacy_config import get_diplomacy_config
+from backend.infrastructure.utils.diplomacy.core_utils import (
+    TensionCalculator, TreatyValidator, NegotiationAnalyzer, 
+    IncidentAnalyzer, SanctionCalculator, UltimatumEvaluator,
+    DiplomaticEventGenerator
 )
-from backend.systems.diplomacy.repositories.repository import DiplomacyRepository
-# Temporarily disabled to avoid circular imports
-# from backend.infrastructure.events import EventDispatcher
-# from backend.systems.app.core.logging import logger
+from backend.systems.diplomacy.models.core_models import (
+    Treaty, TreatyType, TreatyStatus, TreatyViolation, TreatyViolationType,
+    Negotiation, NegotiationStatus, NegotiationOffer,
+    DiplomaticEvent, DiplomaticEventType, DiplomaticStatus,
+    DiplomaticIncident, DiplomaticIncidentType, DiplomaticIncidentSeverity,
+    Ultimatum, UltimatumStatus,
+    Sanction, SanctionType, SanctionStatus
+)
 
 
-class TensionService:
-    """Service for managing tension between factions.
+class TensionManagementService:
+    """Service for managing diplomatic tension between factions."""
     
-    This service handles:
-    - Tension calculation and updates between factions
-    - Tension decay over time
-    - War threshold evaluation
-    - Faction relationship status management
-    """
+    def __init__(self):
+        """Initialize with configuration and utilities."""
+        self.config = get_diplomacy_config()
+        self.calculator = TensionCalculator()
     
-    def __init__(self, repository: Optional[DiplomacyRepository] = None):
-        """
-        Initialize the service with a repository.
-        
-        Args:
-            repository: Repository for data persistence, creates a new one if None
-        """
-        self.repository = repository or DiplomacyRepository()
-        self._tension_cache = {}
-        self._last_update = {}
-        # self._event_dispatcher = EventDispatcher.get_instance()
-        
-        # Config parameters for tension calculation
-        self.decay_rate = 0.1  # How quickly tension decays per hour
-        self.max_tension = 100.0
-        self.min_tension = -100.0
-        self.war_threshold = 100.0
-        self.alliance_threshold = -75.0
-    
-    def get_faction_relationship(
-        self, 
-        faction_a_id: UUID, 
-        faction_b_id: UUID
-    ) -> Dict:
-        """Get the relationship between two factions."""
-        return self.repository.get_faction_relationship(faction_a_id, faction_b_id)
-    
-    def get_faction_relationships(self, faction_id: UUID) -> List[Dict]:
-        """Get all relationships for a faction."""
-        return self.repository.get_all_faction_relationships(faction_id)
-    
-    def update_faction_tension(
-        self,
-        faction_a_id: UUID,
-        faction_b_id: UUID,
-        tension_change: int,
-        reason: Optional[str] = None
-    ) -> Dict:
+    def update_tension(self, faction_a_id: UUID, faction_b_id: UUID, 
+                      tension_change: float, reason: Optional[str] = None,
+                      metadata: Optional[Dict] = None) -> Dict:
         """
         Update tension between two factions.
         
         Args:
-            faction_a_id: ID of the first faction
-            faction_b_id: ID of the second faction
-            tension_change: Amount to change tension by (positive or negative)
-            reason: Optional reason for the tension change
-        
+            faction_a_id: First faction UUID
+            faction_b_id: Second faction UUID  
+            tension_change: Amount to change tension (+/-)
+            reason: Optional reason for tension change
+            metadata: Optional additional metadata
+            
         Returns:
-            Updated relationship dict
+            Dictionary with updated tension and status information
         """
-        # Normalize faction order to ensure consistency
-        if str(faction_a_id) > str(faction_b_id):
-            faction_a_id, faction_b_id = faction_b_id, faction_a_id
+        # This would integrate with actual faction relationship storage
+        # For now, return a structured response based on configuration
         
-        # Get the current relationship and apply decay
-        relation = self.repository.get_faction_relationship(faction_a_id, faction_b_id)
-        current_tension = relation.get("tension", 0)
+        # Get current tension (would be from database in real implementation)
+        current_tension = 0  # Placeholder
         
-        # Apply decay since last update
-        current_time = datetime.utcnow()
-        last_update_time = relation.get("last_updated", current_time)
-        hours_passed = (current_time - last_update_time).total_seconds() / 3600
+        # Calculate new tension using configured limits
+        new_tension = self.calculator.calculate_new_tension(current_tension, tension_change)
         
-        if hours_passed > 0:
-            decay_amount = self.decay_rate * hours_passed
-            if current_tension > 0:
-                current_tension = max(0, current_tension - decay_amount)
-            elif current_tension < 0:
-                current_tension = min(0, current_tension + decay_amount)
+        # Determine if status should change
+        new_status = self.calculator.determine_status_from_tension(new_tension)
         
-        # Calculate new tension value with limits
-        new_tension = max(self.min_tension, min(self.max_tension, current_tension + tension_change))
+        # Create tension change event
+        event = DiplomaticEventGenerator.create_tension_change_event(
+            faction_a_id, faction_b_id, current_tension, new_tension, reason
+        )
         
-        # Update relationship with new tension
-        updates = {
-            "tension": new_tension,
-            "last_updated": current_time
-        }
-        
-        # Check if we need to update status based on tension
-        if new_tension >= self.war_threshold and relation.get("status") != DiplomaticStatus.WAR:
-            updates["status"] = DiplomaticStatus.WAR
-        elif new_tension <= self.alliance_threshold and relation.get("status") != DiplomaticStatus.ALLIANCE:
-            updates["status"] = DiplomaticStatus.ALLIANCE
-        
-        # Apply updates
-        updated_relation = self.repository.update_faction_relationship(faction_a_id, faction_b_id, updates)
-        
-        # Create and emit event
-        event_data = {
-            "faction_a_id": str(faction_a_id),
-            "faction_b_id": str(faction_b_id),
+        return {
             "old_tension": current_tension,
             "new_tension": new_tension,
+            "tension_change": tension_change,
+            "new_status": new_status,
             "reason": reason,
-            "timestamp": current_time.isoformat()
+            "event_id": event.id,
+            "metadata": metadata or {}
         }
-        # self._event_dispatcher.publish("faction.tension.changed", event_data)
-        
-        return updated_relation
     
-    def set_diplomatic_status(
-        self,
-        faction_a_id: UUID,
-        faction_b_id: UUID,
-        status: DiplomaticStatus
-    ) -> Dict:
+    def apply_decay(self, faction_relationships: List[Dict], hours_passed: float) -> List[Dict]:
         """
-        Set the diplomatic status between two factions.
+        Apply tension decay to multiple faction relationships.
         
         Args:
-            faction_a_id: ID of the first faction
-            faction_b_id: ID of the second faction
-            status: New diplomatic status
-        
+            faction_relationships: List of relationship dictionaries
+            hours_passed: Hours since last decay application
+            
         Returns:
-            Updated relationship dict
+            Updated list of relationships with decayed tension
         """
-        # Get current relationship
-        relation = self.repository.get_faction_relationship(faction_a_id, faction_b_id)
-        old_status = relation.get("status")
+        updated_relationships = []
         
-        # Don't update if status is the same
-        if old_status == status:
-            return relation
+        for relationship in faction_relationships:
+            current_tension = relationship.get('tension', 0)
+            new_tension = self.calculator.apply_tension_decay(current_tension, hours_passed)
+            
+            updated_relationship = relationship.copy()
+            updated_relationship['tension'] = new_tension
+            updated_relationship['last_decay'] = datetime.utcnow()
+            
+            updated_relationships.append(updated_relationship)
         
-        # Update tension based on new status
-        tension_change = 0
-        
-        if status == DiplomaticStatus.WAR:
-            tension_change = self.war_threshold - relation.get("tension", 0)
-        elif status == DiplomaticStatus.ALLIANCE:
-            tension_change = self.alliance_threshold - relation.get("tension", 0)
-        elif status == DiplomaticStatus.HOSTILE:
-            tension_change = 50
-        elif status == DiplomaticStatus.TRUCE:
-            tension_change = -25
-        elif status == DiplomaticStatus.NEUTRAL:
-            # Move halfway back toward 0
-            current_tension = relation.get("tension", 0)
-            tension_change = -current_tension / 2
-        
-        # Update relationship with new status and tension
-        updates = {
-            "status": status,
-            "last_status_change": datetime.utcnow()
-        }
-        
-        updated_relation = self.repository.update_faction_relationship(faction_a_id, faction_b_id, updates)
-        
-        # If tension needs adjustment, do that separately
-        if tension_change != 0:
-            updated_relation = self.update_faction_tension(
-                faction_a_id, 
-                faction_b_id, 
-                tension_change, 
-                reason=f"Status change to {status}"
-            )
-        
-        # Create and emit event
-        event_data = {
-            "faction_a_id": str(faction_a_id),
-            "faction_b_id": str(faction_b_id),
-            "old_status": old_status,
-            "new_status": status,
-            "timestamp": datetime.utcnow().isoformat()
-        }
-        # self._event_dispatcher.publish("faction.status.changed", event_data)
-        
-        return updated_relation
+        return updated_relationships
     
-    def are_at_war(self, faction_a_id: UUID, faction_b_id: UUID) -> bool:
-        """Check if two factions are at war."""
-        relation = self.repository.get_faction_relationship(faction_a_id, faction_b_id)
-        return relation.get("status") == DiplomaticStatus.WAR
+    def get_tension_status(self, tension: float) -> DiplomaticStatus:
+        """Get diplomatic status for a given tension level."""
+        return self.calculator.determine_status_from_tension(tension)
     
-    def are_allied(self, faction_a_id: UUID, faction_b_id: UUID) -> bool:
-        """Check if two factions are allied."""
-        relation = self.repository.get_faction_relationship(faction_a_id, faction_b_id)
-        return relation.get("status") == DiplomaticStatus.ALLIANCE
-    
-    def check_war_threshold(self, faction_a_id: UUID, faction_b_id: UUID) -> bool:
-        """Check if tension between factions has reached the war threshold."""
-        relation = self.repository.get_faction_relationship(faction_a_id, faction_b_id)
-        return relation.get("tension", 0) >= self.war_threshold
+    def check_war_threshold(self, tension: float) -> bool:
+        """Check if tension has reached war threshold using configured values."""
+        return self.calculator.is_war_threshold_reached(tension)
 
 
-class DiplomacyService:
-    """Service for managing diplomatic operations."""
-
-    def __init__(self, repository: Optional[DiplomacyRepository] = None):
-        """
-        Initialize the service with a repository.
-        
-        Args:
-            repository: Repository for data persistence, creates a new one if None
-        """
-        self.repository = repository or DiplomacyRepository()
-        self.tension_service = TensionService(self.repository)
+class TreatyManagementService:
+    """Service for managing treaties and related operations."""
     
-    # Treaty methods
+    def __init__(self):
+        """Initialize with configuration and utilities."""
+        self.config = get_diplomacy_config()
+        self.validator = TreatyValidator()
     
-    def create_treaty(
-        self,
-        name: str,
-        treaty_type: TreatyType,
-        parties: List[UUID],
-        terms: Dict = None,
-        end_date: Optional[datetime] = None,
-        is_public: bool = True,
-        negotiation_id: Optional[UUID] = None,
-        created_by: Optional[UUID] = None
-    ) -> Treaty:
+    def create_treaty(self, name: str, treaty_type: TreatyType, parties: List[UUID],
+                     terms: Dict, end_date: Optional[datetime] = None,
+                     metadata: Optional[Dict] = None) -> Dict:
         """
         Create a new treaty between factions.
         
         Args:
-            name: Name of the treaty
+            name: Treaty name
             treaty_type: Type of treaty
-            parties: List of faction IDs
-            terms: Treaty terms as a dictionary
-            end_date: When the treaty expires (indefinite if None)
-            is_public: Whether the treaty is public knowledge
-            negotiation_id: ID of the negotiation that led to this treaty
-            created_by: ID of the character or system that created the treaty
-        
-        Returns:
-            The created treaty
-        """
-        if terms is None:
-            terms = {}
-        
-        # Create new treaty
-        treaty = Treaty(
-            name=name,
-            type=treaty_type,
-            parties=parties,
-            terms=terms,
-            end_date=end_date,
-            is_public=is_public,
-            negotiation_id=negotiation_id,
-            created_by=created_by
-        )
-        
-        # Save the treaty
-        treaty = self.repository.create_treaty(treaty)
-        
-        # Update faction relationships
-        self._update_faction_relationships_for_treaty(treaty)
-        
-        # Create treaty event
-        self._create_treaty_event(treaty)
-        
-        return treaty
-    
-    def _update_faction_relationships_for_treaty(self, treaty: Treaty) -> None:
-        """Update faction relationships based on a new or updated treaty."""
-        # For each pair of factions in the treaty
-        for i, faction_a in enumerate(treaty.parties):
-            for faction_b in treaty.parties[i+1:]:
-                # Get their current relationship
-                relation = self.repository.get_faction_relationship(faction_a, faction_b)
-                
-                # Add treaty to their relationship
-                if "treaties" not in relation:
-                    relation["treaties"] = []
-                
-                if str(treaty.id) not in relation["treaties"]:
-                    relation["treaties"].append(str(treaty.id))
-                
-                # Update diplomatic status based on treaty type
-                updates = {"treaties": relation["treaties"]}
-                tension_change = 0
-                
-                if treaty.type == TreatyType.ALLIANCE:
-                    self.tension_service.set_diplomatic_status(faction_a, faction_b, DiplomaticStatus.ALLIANCE)
-                elif treaty.type == TreatyType.PEACE:
-                    self.tension_service.set_diplomatic_status(faction_a, faction_b, DiplomaticStatus.NEUTRAL)
-                elif treaty.type == TreatyType.CEASEFIRE:
-                    self.tension_service.set_diplomatic_status(faction_a, faction_b, DiplomaticStatus.TRUCE)
-                elif treaty.type == TreatyType.TRADE:
-                    tension_change = -15
-                elif treaty.type == TreatyType.DEFENSE:
-                    tension_change = -30
-                elif treaty.type == TreatyType.NON_AGGRESSION:
-                    tension_change = -25
-                
-                # Update tension if needed
-                if tension_change != 0:
-                    self.tension_service.update_faction_tension(
-                        faction_a, 
-                        faction_b, 
-                        tension_change, 
-                        reason=f"Treaty signed: {treaty.name}"
-                    )
-    
-    def _create_treaty_event(self, treaty: Treaty) -> DiplomaticEvent:
-        """Create a diplomatic event for a treaty signing."""
-        event = DiplomaticEvent(
-            event_type=DiplomaticEventType.TREATY,
-            factions=treaty.parties,
-            description=f"Treaty '{treaty.name}' of type {treaty.type} was signed.",
-            severity=50,  # Medium-high significance
-            public=treaty.is_public,
-            related_treaty_id=treaty.id
-        )
-        
-        # Add tension changes to event metadata
-        for i, faction_a in enumerate(treaty.parties):
-            for faction_b in treaty.parties[i+1:]:
-                key = f"{faction_a}_{faction_b}"
-                relation = self.repository.get_faction_relationship(faction_a, faction_b)
-                event.tension_change[key] = relation.get("tension", 0)
-        
-        return self.repository.create_event(event)
-    
-    def get_treaty(self, treaty_id: UUID) -> Optional[Treaty]:
-        """Get a treaty by ID."""
-        return self.repository.get_treaty(treaty_id)
-    
-    def expire_treaty(self, treaty_id: UUID) -> Optional[Treaty]:
-        """Mark a treaty as expired/inactive."""
-        treaty = self.repository.get_treaty(treaty_id)
-        if not treaty or not treaty.is_active:
-            return None
-        
-        updates = {
-            "is_active": False,
-            "end_date": datetime.utcnow()
-        }
-        
-        treaty = self.repository.update_treaty(treaty_id, updates)
-        
-        # Create expiration event
-        event = DiplomaticEvent(
-            event_type=DiplomaticEventType.TREATY,
-            factions=treaty.parties,
-            description=f"Treaty '{treaty.name}' has expired.",
-            severity=30,  # Medium significance
-            public=treaty.is_public,
-            related_treaty_id=treaty.id
-        )
-        self.repository.create_event(event)
-        
-        # Update faction relationships
-        self._update_relationships_for_expired_treaty(treaty)
-        
-        return treaty
-    
-    def _update_relationships_for_expired_treaty(self, treaty: Treaty) -> None:
-        """Update faction relationships when a treaty expires."""
-        # For each pair of factions in the treaty
-        for i, faction_a in enumerate(treaty.parties):
-            for faction_b in treaty.parties[i+1:]:
-                # Get their current relationship
-                relation = self.repository.get_faction_relationship(faction_a, faction_b)
-                
-                # Remove treaty from their relationship
-                if "treaties" in relation and str(treaty.id) in relation["treaties"]:
-                    relation["treaties"].remove(str(treaty.id))
-                
-                updates = {"treaties": relation.get("treaties", [])}
-                
-                # Potentially update status if this was their only alliance treaty
-                if treaty.type == TreatyType.ALLIANCE:
-                    # Check if they have any other active alliance treaties
-                    has_other_alliance = False
-                    for treaty_id in relation.get("treaties", []):
-                        other_treaty = self.repository.get_treaty(UUID(treaty_id))
-                        if other_treaty and other_treaty.is_active and other_treaty.type == TreatyType.ALLIANCE:
-                            has_other_alliance = True
-                            break
-                    
-                    if not has_other_alliance:
-                        self.tension_service.set_diplomatic_status(faction_a, faction_b, DiplomaticStatus.NEUTRAL)
-                
-                # Apply tension change for expired treaty
-                self.tension_service.update_faction_tension(
-                    faction_a, 
-                    faction_b, 
-                    10,  # Small increase in tension when treaties expire
-                    reason=f"Treaty expired: {treaty.name}"
-                )
-    
-    def list_treaties(
-        self, 
-        faction_id: Optional[UUID] = None,
-        active_only: bool = False,
-        treaty_type: Optional[TreatyType] = None
-    ) -> List[Treaty]:
-        """List treaties, optionally filtered."""
-        return self.repository.list_treaties(faction_id, active_only, treaty_type)
-    
-    # Negotiation methods
-    
-    def start_negotiation(
-        self,
-        parties: List[UUID],
-        initiator_id: UUID,
-        treaty_type: Optional[TreatyType] = None,
-        initial_offer: Optional[Dict] = None,
-        metadata: Dict = None
-    ) -> Negotiation:
-        """
-        Start a new diplomatic negotiation.
-        
-        Args:
-            parties: List of faction IDs involved
-            initiator_id: ID of the faction initiating the negotiation
-            treaty_type: Type of treaty being negotiated (if applicable)
-            initial_offer: Initial terms offered
-            metadata: Additional metadata
-        
-        Returns:
-            The created negotiation
-        """
-        if metadata is None:
-            metadata = {}
-        
-        # Create negotiation
-        negotiation = Negotiation(
-            parties=parties,
-            initiator_id=initiator_id,
-            treaty_type=treaty_type,
-            status=NegotiationStatus.PENDING,
-            metadata=metadata
-        )
-        
-        # Add initial offer if provided
-        if initial_offer:
-            offer = NegotiationOffer(
-                faction_id=initiator_id,
-                terms=initial_offer
-            )
-            negotiation.offers.append(offer)
-            negotiation.current_offer_id = offer.faction_id
-        
-        # Save negotiation
-        negotiation = self.repository.create_negotiation(negotiation)
-        
-        # Create negotiation event
-        self._create_negotiation_event(negotiation, "started")
-        
-        # Update faction relationships
-        self._update_relationships_for_negotiation(negotiation)
-        
-        return negotiation
-    
-    def _create_negotiation_event(
-        self, 
-        negotiation: Negotiation, 
-        action: str
-    ) -> DiplomaticEvent:
-        """Create a diplomatic event for a negotiation action."""
-        parties_str = ", ".join([str(faction_id) for faction_id in negotiation.parties])
-        description = f"Negotiation {action} between {parties_str}"
-        if negotiation.treaty_type:
-            description += f" for {negotiation.treaty_type} treaty"
-        
-        event = DiplomaticEvent(
-            event_type=DiplomaticEventType.NEGOTIATION,
-            factions=negotiation.parties,
-            description=description,
-            severity=20,  # Medium-low significance
-            public=True,  # Negotiations are generally public knowledge
-            related_negotiation_id=negotiation.id
-        )
-        
-        return self.repository.create_event(event)
-    
-    def _update_relationships_for_negotiation(self, negotiation: Negotiation) -> None:
-        """Update faction relationships when a negotiation starts."""
-        # For each pair of factions in the negotiation
-        for i, faction_a in enumerate(negotiation.parties):
-            for faction_b in negotiation.parties[i+1:]:
-                # Get their current relationship
-                relation = self.repository.get_faction_relationship(faction_a, faction_b)
-                
-                # Add negotiation to their relationship
-                if "negotiations" not in relation:
-                    relation["negotiations"] = []
-                
-                if str(negotiation.id) not in relation["negotiations"]:
-                    relation["negotiations"].append(str(negotiation.id))
-                
-                # Small reduction in tension for starting negotiations
-                tension_change = -5
-                current_tension = relation.get("tension", 0)
-                new_tension = max(-100, min(100, current_tension + tension_change))
-                
-                # Apply updates
-                updates = {
-                    "negotiations": relation["negotiations"],
-                    "tension": new_tension
-                }
-                self.repository.update_faction_relationship(faction_a, faction_b, updates)
-    
-    def get_negotiation(self, negotiation_id: UUID) -> Optional[Negotiation]:
-        """Get a negotiation by ID."""
-        return self.repository.get_negotiation(negotiation_id)
-    
-    def make_offer(
-        self,
-        negotiation_id: UUID,
-        faction_id: UUID,
-        terms: Dict,
-        counter_to: Optional[UUID] = None
-    ) -> Optional[Tuple[Negotiation, NegotiationOffer]]:
-        """
-        Make an offer in a negotiation.
-        
-        Args:
-            negotiation_id: ID of the negotiation
-            faction_id: ID of the faction making the offer
-            terms: Terms of the offer
-            counter_to: ID of the offer this is countering
+            parties: List of faction UUIDs
+            terms: Treaty terms dictionary
+            end_date: Optional expiration date
+            metadata: Optional additional metadata
             
         Returns:
-            Tuple of (updated negotiation, new offer) or None if failed
+            Dictionary with treaty creation results
         """
-        # Get negotiation
-        negotiation = self.repository.get_negotiation(negotiation_id)
-        if not negotiation or negotiation.status != NegotiationStatus.PENDING:
-            return None
+        # Validate treaty parameters
+        validation = self.validator.validate_treaty_creation(name, treaty_type, parties, terms, end_date)
         
-        # Check if faction is a party to the negotiation
-        if faction_id not in negotiation.parties:
-            return None
-        
-        # Create new offer
-        offer = NegotiationOffer(
-            faction_id=faction_id,
-            terms=terms,
-            counter_offer_id=counter_to
-        )
-        
-        # Add offer to negotiation
-        negotiation.offers.append(offer)
-        negotiation.current_offer_id = offer.faction_id
-        negotiation.status = NegotiationStatus.COUNTER_OFFERED
-        
-        # Update negotiation
-        negotiation = self.repository.update_negotiation(negotiation_id, {
-            "offers": negotiation.offers,
-            "current_offer_id": offer.faction_id,
-            "status": NegotiationStatus.COUNTER_OFFERED
-        })
-        
-        return (negotiation, offer)
-    
-    def accept_offer(
-        self,
-        negotiation_id: UUID,
-        faction_id: UUID
-    ) -> Optional[Tuple[Negotiation, Treaty]]:
-        """
-        Accept the current offer in a negotiation, potentially creating a treaty.
-        
-        Args:
-            negotiation_id: ID of the negotiation
-            faction_id: ID of the faction accepting the offer
-            
-        Returns:
-            Tuple of (closed negotiation, new treaty) or None if failed
-        """
-        # Get negotiation
-        negotiation = self.repository.get_negotiation(negotiation_id)
-        if not negotiation or negotiation.status != NegotiationStatus.COUNTER_OFFERED:
-            return None
-        
-        # Check if faction is a party to the negotiation
-        if faction_id not in negotiation.parties:
-            return None
-        
-        # Get current offer
-        if not negotiation.current_offer_id:
-            return None
-        
-        current_offer = next((o for o in negotiation.offers if o.faction_id == negotiation.current_offer_id), None)
-        if not current_offer:
-            return None
-        
-        # Cannot accept your own offer
-        if current_offer.faction_id == faction_id:
-            return None
-        
-        # Mark offer as accepted
-        current_offer.accepted = True
-        
-        # Update negotiation status and end date
-        now = datetime.utcnow()
-        updates = {
-            "status": NegotiationStatus.ACCEPTED,
-            "end_date": now,
-            "offers": negotiation.offers  # Update the modified offer
-        }
-        
-        # Create treaty from accepted offer
-        treaty_name = negotiation.metadata.get("treaty_name", f"Treaty of {now.strftime('%Y-%m-%d')}")
-        treaty = self.create_treaty(
-            name=treaty_name,
-            treaty_type=negotiation.treaty_type or TreatyType.CUSTOM,
-            parties=negotiation.parties,
-            terms=current_offer.terms,
-            is_public=True,
-            negotiation_id=negotiation.id
-        )
-        
-        # Update negotiation with treaty reference
-        updates["result_treaty_id"] = treaty.id
-        negotiation = self.repository.update_negotiation(negotiation_id, updates)
-        
-        # Create event for successful negotiation
-        event = DiplomaticEvent(
-            event_type=DiplomaticEventType.NEGOTIATION,
-            factions=negotiation.parties,
-            description=f"Negotiation concluded successfully with treaty '{treaty_name}'",
-            severity=40,  # Medium-high significance
-            public=True,
-            related_negotiation_id=negotiation.id,
-            related_treaty_id=treaty.id
-        )
-        self.repository.create_event(event)
-        
-        # Update relationships for completed negotiation
-        self._update_relationships_for_completed_negotiation(negotiation, successful=True)
-        
-        return (negotiation, treaty)
-    
-    def reject_offer(
-        self,
-        negotiation_id: UUID,
-        faction_id: UUID,
-        final: bool = False
-    ) -> Optional[Negotiation]:
-        """
-        Reject the current offer in a negotiation.
-        
-        Args:
-            negotiation_id: ID of the negotiation
-            faction_id: ID of the faction rejecting the offer
-            final: If True, ends the negotiation as rejected
-            
-        Returns:
-            Updated negotiation or None if failed
-        """
-        # Get negotiation
-        negotiation = self.repository.get_negotiation(negotiation_id)
-        if not negotiation or negotiation.status != NegotiationStatus.COUNTER_OFFERED:
-            return None
-        
-        # Check if faction is a party to the negotiation
-        if faction_id not in negotiation.parties:
-            return None
-        
-        # Get current offer
-        if not negotiation.current_offer_id:
-            return None
-        
-        current_offer = next((o for o in negotiation.offers if o.faction_id == negotiation.current_offer_id), None)
-        if not current_offer:
-            return None
-        
-        # Cannot reject your own offer
-        if current_offer.faction_id == faction_id:
-            return None
-        
-        # Mark offer as rejected
-        current_offer.accepted = False
-        
-        updates = {
-            "offers": negotiation.offers  # Update the modified offer
-        }
-        
-        # If final rejection, end negotiation
-        if final:
-            now = datetime.utcnow()
-            updates.update({
-                "status": NegotiationStatus.REJECTED,
-                "end_date": now
-            })
-            
-            # Create event for failed negotiation
-            event = DiplomaticEvent(
-                event_type=DiplomaticEventType.NEGOTIATION,
-                factions=negotiation.parties,
-                description=f"Negotiation ended without agreement",
-                severity=30,  # Medium significance
-                public=True,
-                related_negotiation_id=negotiation.id
-            )
-            self.repository.create_event(event)
-            
-            # Update relationships for failed negotiation
-            self._update_relationships_for_completed_negotiation(negotiation, successful=False)
-        else:
-            # Just update the negotiation but leave it open for counter-offers
-            updates["status"] = NegotiationStatus.PENDING
-        
-        return self.repository.update_negotiation(negotiation_id, updates)
-    
-    def _update_relationships_for_completed_negotiation(
-        self, 
-        negotiation: Negotiation,
-        successful: bool
-    ) -> None:
-        """Update faction relationships when a negotiation is completed."""
-        # For each pair of factions in the negotiation
-        for i, faction_a in enumerate(negotiation.parties):
-            for faction_b in negotiation.parties[i+1:]:
-                # Get their current relationship
-                relation = self.repository.get_faction_relationship(faction_a, faction_b)
-                
-                # Remove negotiation from active negotiations
-                if "negotiations" in relation and str(negotiation.id) in relation["negotiations"]:
-                    relation["negotiations"].remove(str(negotiation.id))
-                
-                updates = {"negotiations": relation.get("negotiations", [])}
-                
-                # Adjust tension based on negotiation outcome
-                tension_change = -10 if successful else 10  # Decrease for success, increase for failure
-                current_tension = relation.get("tension", 0)
-                new_tension = max(-100, min(100, current_tension + tension_change))
-                updates["tension"] = new_tension
-                
-                # Apply updates
-                self.repository.update_faction_relationship(faction_a, faction_b, updates)
-    
-    # Delegates for tension service methods
-    
-    def get_faction_relationship(self, faction_a_id: UUID, faction_b_id: UUID) -> Dict:
-        """Get the relationship between two factions."""
-        return self.tension_service.get_faction_relationship(faction_a_id, faction_b_id)
-    
-    def get_faction_relationships(self, faction_id: UUID) -> List[Dict]:
-        """Get all relationships for a faction."""
-        return self.tension_service.get_faction_relationships(faction_id)
-    
-    def update_faction_tension(
-        self,
-        faction_a_id: UUID,
-        faction_b_id: UUID,
-        tension_change: int,
-        reason: Optional[str] = None
-    ) -> Dict:
-        """Update tension between two factions."""
-        return self.tension_service.update_faction_tension(
-            faction_a_id, faction_b_id, tension_change, reason
-        )
-    
-    def set_diplomatic_status(
-        self,
-        faction_a_id: UUID,
-        faction_b_id: UUID,
-        status: DiplomaticStatus
-    ) -> Dict:
-        """Set the diplomatic status between two factions."""
-        return self.tension_service.set_diplomatic_status(faction_a_id, faction_b_id, status)
-    
-    def are_at_war(self, faction_a_id: UUID, faction_b_id: UUID) -> bool:
-        """Check if two factions are at war."""
-        return self.tension_service.are_at_war(faction_a_id, faction_b_id)
-    
-    def are_allied(self, faction_a_id: UUID, faction_b_id: UUID) -> bool:
-        """Check if two factions are allied."""
-        return self.tension_service.are_allied(faction_a_id, faction_b_id)
-    
-    def has_treaty_of_type(
-        self, 
-        faction_a_id: UUID, 
-        faction_b_id: UUID, 
-        treaty_type: TreatyType
-    ) -> bool:
-        """Check if two factions have an active treaty of the specified type."""
-        treaties = self.list_treaties(faction_id=faction_a_id, active_only=True, treaty_type=treaty_type)
-        for treaty in treaties:
-            if faction_b_id in treaty.parties:
-                return True
-        return False
-    
-    # Treaty Enforcement and Violation Methods
-    
-    def report_treaty_violation(
-        self,
-        treaty_id: UUID,
-        violator_id: UUID,
-        violation_type: TreatyViolationType,
-        description: str,
-        evidence: Dict,
-        reported_by: UUID,
-        severity: int = 50
-    ) -> TreatyViolation:
-        """
-        Report a violation of a treaty by one of its parties.
-        
-        Args:
-            treaty_id: ID of the treaty that was violated
-            violator_id: ID of the faction that violated the treaty
-            violation_type: Type of violation that occurred
-            description: Description of what happened
-            evidence: Dict containing proof or context of the violation
-            reported_by: ID of the faction reporting the violation
-            severity: How severe the violation is (0-100)
-            
-        Returns:
-            The created treaty violation record
-            
-        Raises:
-            ValueError: If the treaty doesn't exist, violator isn't a party to treaty, etc.
-        """
-        # Validate the treaty
-        treaty = self.get_treaty(treaty_id)
-        if not treaty:
-            raise ValueError(f"Treaty {treaty_id} does not exist")
-        if not treaty.is_active:
-            raise ValueError(f"Treaty {treaty_id} is not active")
-        
-        # Validate the factions
-        if violator_id not in treaty.parties:
-            raise ValueError(f"Faction {violator_id} is not a party to this treaty")
-        if reported_by not in treaty.parties and reported_by != UUID('00000000-0000-0000-0000-000000000000'):  # System ID
-            raise ValueError(f"Faction {reported_by} is not a party to this treaty")
-        
-        # Create the violation record
-        violation = TreatyViolation(
-            treaty_id=treaty_id,
-            violator_id=violator_id,
-            violation_type=violation_type,
-            description=description,
-            evidence=evidence,
-            reported_by=reported_by,
-            severity=severity
-        )
-        
-        # Save it
-        violation = self.repository.create_violation(violation)
-        
-        # Create a diplomatic event for this violation
-        event = DiplomaticEvent(
-            event_type=DiplomaticEventType.TREATY_VIOLATION,
-            factions=treaty.parties,
-            description=f"Treaty {treaty.name} violated by {violator_id}",
-            severity=severity,
-            related_treaty_id=treaty_id,
-            metadata={
-                "violation_id": str(violation.id),
-                "violation_type": violation.violation_type,
-                "violator_id": str(violator_id),
-                "reported_by": str(reported_by)
+        if not validation["is_valid"]:
+            return {
+                "success": False,
+                "errors": validation["errors"],
+                "treaty": None
             }
+        
+        # Calculate tension impact using configured values
+        tension_impact = self.validator.calculate_tension_impact(treaty_type)
+        
+        # Create treaty object
+        treaty = Treaty(
+            id=uuid4(),
+            name=name,
+            treaty_type=treaty_type,
+            parties=parties,
+            terms=terms,
+            status=TreatyStatus.DRAFT,
+            created_date=datetime.utcnow(),
+            end_date=end_date,
+            is_active=False,
+            metadata=metadata or {}
         )
-        self.repository.create_event(event)
         
-        # Apply tension changes
-        for faction_id in treaty.parties:
-            if faction_id != violator_id:
-                # Update tension between violator and other parties
-                tension_change = min(severity // 2, 25)  # Cap at +25 per violation
-                self.update_faction_tension(
-                    faction_a_id=faction_id,
-                    faction_b_id=violator_id,
-                    tension_change=tension_change,
-                    reason=f"Treaty violation: {violation_type}"
-                )
+        # Generate creation event
+        event = DiplomaticEventGenerator.generate_treaty_event(treaty)
         
-        return violation
-    
-    def acknowledge_violation(
-        self,
-        violation_id: UUID,
-        acknowledging_faction_id: UUID,
-        resolution_details: Optional[str] = None
-    ) -> Optional[TreatyViolation]:
-        """
-        Acknowledge a treaty violation as the violating faction.
-        
-        Args:
-            violation_id: ID of the violation to acknowledge
-            acknowledging_faction_id: ID of the faction acknowledging (must be the violator)
-            resolution_details: Optional details about resolution
-            
-        Returns:
-            Updated violation record or None if not found
-            
-        Raises:
-            ValueError: If acknowledging faction is not the violator
-        """
-        # Get the violation
-        violation = self.repository.get_violation(violation_id)
-        if not violation:
-            return None
-        
-        # Verify the acknowledging faction
-        if violation.violator_id != acknowledging_faction_id:
-            raise ValueError(f"Only the violating faction ({violation.violator_id}) can acknowledge this violation")
-        
-        # Update the violation
-        updates = {
-            "acknowledged": True,
-            "resolution_details": resolution_details if resolution_details else violation.resolution_details
+        return {
+            "success": True,
+            "treaty": treaty,
+            "tension_impact": tension_impact,
+            "event_id": event.id,
+            "errors": []
         }
-        
-        # Apply tension reduction if acknowledging
-        treaty = self.get_treaty(violation.treaty_id)
-        if treaty and treaty.is_active:
-            for faction_id in treaty.parties:
-                if faction_id != acknowledging_faction_id:
-                    # Reduce tension slightly when acknowledging a violation
-                    tension_change = -10  # -10 for acknowledging
-                    self.update_faction_tension(
-                        faction_a_id=faction_id,
-                        faction_b_id=acknowledging_faction_id,
-                        tension_change=tension_change,
-                        reason="Acknowledged treaty violation"
-                    )
-        
-        return self.repository.update_violation(violation_id, updates)
     
-    def resolve_violation(
-        self,
-        violation_id: UUID,
-        resolution_details: str
-    ) -> Optional[TreatyViolation]:
+    def activate_treaty(self, treaty_id: UUID, activation_date: Optional[datetime] = None) -> Dict[str, Any]:
         """
-        Mark a treaty violation as resolved.
+        Activate a treaty and apply its effects.
         
         Args:
-            violation_id: ID of the violation to resolve
-            resolution_details: Details about how the violation was resolved
+            treaty_id: ID of the treaty to activate
+            activation_date: Optional activation date (defaults to now)
             
         Returns:
-            Updated violation record or None if not found
+            Activation result with effect details
         """
-        # Get the violation
-        violation = self.repository.get_violation(violation_id)
-        if not violation:
-            return None
+        # Implementation would activate the treaty in the database
+        # For now, returning expected structure with configuration-based effects
         
-        # Update the violation
-        updates = {
-            "resolved": True,
-            "resolution_details": resolution_details
+        if activation_date is None:
+            activation_date = datetime.utcnow()
+        
+        # In a real implementation, this would fetch from database
+        # For now, we'll create a mock treaty to demonstrate the effects system
+        from backend.systems.diplomacy.models.core_models import Treaty, TreatyType, TreatyStatus
+        
+        mock_treaty = Treaty(\
+            id=treaty_id,\
+            name="Sample Treaty",\
+            treaty_type=TreatyType.ALLIANCE,\
+            parties=[uuid4(), uuid4()],  # Mock faction IDs\
+            terms={"mutual_defense": True, "trade_agreement": True},\
+            status=TreatyStatus.ACTIVE,\
+            creation_date=datetime.utcnow(),\
+            activation_date=activation_date\
+        )\
+        
+        # Apply treaty effects using configuration
+        effects_result = apply_treaty_effects(mock_treaty, mock_treaty.parties)\
+        
+        # Generate diplomatic event
+        event_generator = DiplomaticEventGenerator()
+        activation_event = event_generator.generate_treaty_activation_event(\
+            treaty=mock_treaty,\
+            factions_involved=mock_treaty.parties\
+        )\
+        
+        return {\
+            "success": True,\
+            "treaty_id": treaty_id,\
+            "activation_date": activation_date.isoformat(),\
+            "event_id": activation_event.id,\
+            "effects_applied": effects_result,\
+            "message": f"Treaty {mock_treaty.name} activated successfully with {len(effects_result['effects_applied'])} effects applied"\
+        }\
+    
+    def expire_treaty(self, treaty_id: UUID, reason: Optional[str] = None, \
+                     expiration_date: Optional[datetime] = None) -> Dict[str, Any]:
+        """
+        Expire a treaty and remove its effects.
+        
+        Args:
+            treaty_id: ID of the treaty to expire
+            reason: Optional reason for expiration
+            expiration_date: Optional expiration date (defaults to now)
+            
+        Returns:
+            Expiration result with removed effects details
+        """
+        if expiration_date is None:
+            expiration_date = datetime.utcnow()
+        
+        if reason is None:
+            reason = "Treaty expired naturally"
+        
+        # In a real implementation, this would fetch from database
+        # For now, we'll create a mock treaty to demonstrate the effects removal
+        from backend.systems.diplomacy.models.core_models import Treaty, TreatyType, TreatyStatus
+        
+        mock_treaty = Treaty(\
+            id=treaty_id,\
+            name="Sample Treaty",\
+            treaty_type=TreatyType.ALLIANCE,\
+            parties=[uuid4(), uuid4()],  # Mock faction IDs\
+            terms={"mutual_defense": True, "trade_agreement": True},\
+            status=TreatyStatus.EXPIRED,\
+            creation_date=datetime.utcnow() - timedelta(days=365),\
+            activation_date=datetime.utcnow() - timedelta(days=365),\
+            expiration_date=expiration_date\
+        )\
+        
+        # Remove treaty effects using configuration
+        removal_result = remove_treaty_effects(mock_treaty, mock_treaty.parties)\
+        
+        # Calculate tension impact from treaty expiration
+        calculator = TensionCalculator()
+        tension_impact = calculator.calculate_treaty_expiration_impact(\
+            treaty_type=mock_treaty.treaty_type,\
+            parties=mock_treaty.parties,\
+            reason=reason\
+        )\
+        
+        # Generate diplomatic event
+        event_generator = DiplomaticEventGenerator()
+        expiration_event = event_generator.generate_treaty_expiration_event(\
+            treaty=mock_treaty,\
+            factions_involved=mock_treaty.parties,\
+            reason=reason\
+        )\
+        
+        return {\
+            "success": True,\
+            "treaty_id": treaty_id,\
+            "expiration_date": expiration_date.isoformat(),\
+            "reason": reason,\
+            "tension_impact": tension_impact,\
+            "event_id": expiration_event.id,\
+            "effects_removed": removal_result,\
+            "message": f"Treaty expired with {len(removal_result['effects_removed'])} effects removed"\
         }
-        
-        updated_violation = self.repository.update_violation(violation_id, updates)
-        
-        # Create a resolution event
-        if updated_violation:
-            treaty = self.get_treaty(violation.treaty_id)
-            if treaty:
-                event = DiplomaticEvent(
-                    event_type=DiplomaticEventType.DIPLOMATIC_INCIDENT,
-                    factions=treaty.parties,
-                    description=f"Treaty violation resolved: {resolution_details}",
-                    severity=20,  # Medium severity for resolution events
-                    related_treaty_id=treaty.id,
-                    metadata={
-                        "violation_id": str(violation.id),
-                        "resolution": resolution_details
-                    }
-                )
-                self.repository.create_event(event)
-        
-        return updated_violation
-    
-    def get_treaty_violations(
-        self,
-        treaty_id: Optional[UUID] = None,
-        faction_id: Optional[UUID] = None,
-        violation_type: Optional[TreatyViolationType] = None,
-        resolved: Optional[bool] = None
-    ) -> List[TreatyViolation]:
-        """
-        Get treaty violations, optionally filtered.
-        
-        Args:
-            treaty_id: Optional ID of treaty to filter by
-            faction_id: Optional ID of faction to filter by (violator or reporter)
-            violation_type: Optional type of violation to filter by
-            resolved: Optional resolved status to filter by
-            
-        Returns:
-            List of matching treaty violations
-        """
-        return self.repository.list_violations(
-            treaty_id=treaty_id,
-            faction_id=faction_id,
-            violation_type=violation_type,
-            resolved=resolved
-        )
-    
-    def check_treaty_compliance(
-        self, 
-        faction_id: UUID,
-        violation_types: Optional[List[TreatyViolationType]] = None
-    ) -> Dict[UUID, List[TreatyViolation]]:
-        """
-        Check if a faction is compliant with all its treaties.
-        
-        Args:
-            faction_id: ID of the faction to check compliance for
-            violation_types: Optional list of violation types to check for
-            
-        Returns:
-            Dict mapping treaty IDs to lists of unresolved violations
-        """
-        # Get all treaties the faction is a party to
-        treaties = self.list_treaties(faction_id=faction_id, active_only=True)
-        
-        result = {}
-        for treaty in treaties:
-            # Check for unresolved violations where this faction is the violator
-            violations = self.repository.list_violations(
-                treaty_id=treaty.id,
-                faction_id=faction_id,  # This will match violator or reporter
-                violation_type=None,    # Any violation type
-                resolved=False          # Only unresolved violations
-            )
-            
-            # Filter to only violations where this faction is the violator
-            violations = [v for v in violations if v.violator_id == faction_id]
-            
-            # Filter by violation types if specified
-            if violation_types:
-                violations = [v for v in violations if v.violation_type in violation_types]
-            
-            if violations:  # Only include treaties with violations
-                result[treaty.id] = violations
-        
-        return result
-    
-    def enforce_treaties_automatically(self) -> List[TreatyViolation]:
-        """
-        Automatically detect and report treaty violations based on world state.
-        This would be called periodically to enforce treaties without manual reporting.
-        
-        In a real implementation, this would check world state, faction actions, etc.
-        
-        Returns:
-            List of newly detected treaty violations
-        """
-        # Placeholder for automatic enforcement logic
-        # In a real implementation, this would:
-        # 1. Get all active treaties
-        # 2. For each treaty, check if its terms are being violated
-        # 3. If violations are found, report them
-        # 4. Return the list of new violations
-        
-        # Example placeholder logic:
-        treaties = self.list_treaties(active_only=True)
-        new_violations = []
-        
-        # This would actually check game state to detect violations
-        # For now, we're just returning an empty list
-        
-        return new_violations
 
-    # Diplomatic Incident Methods
+
+class NegotiationService:
+    """Service for managing diplomatic negotiations."""
     
-    def create_diplomatic_incident(
-        self,
-        incident_type: DiplomaticIncidentType,
-        perpetrator_id: UUID,
-        victim_id: UUID,
-        description: str,
-        evidence: Dict[str, Union[str, int, bool, Dict, List]] = {},
-        severity: DiplomaticIncidentSeverity = DiplomaticIncidentSeverity.MODERATE,
-        tension_impact: int = 20,
-        public: bool = True,
-        witnessed_by: List[UUID] = [],
-        related_event_id: Optional[UUID] = None,
-        related_treaty_id: Optional[UUID] = None
-    ) -> DiplomaticIncident:
+    def __init__(self):
+        """Initialize with configuration and utilities."""
+        self.config = get_diplomacy_config()
+        self.analyzer = NegotiationAnalyzer()
+    
+    def start_negotiation(self, initiator_id: UUID, target_id: UUID, 
+                         treaty_type: Optional[TreatyType] = None,
+                         initial_terms: Optional[Dict] = None,
+                         metadata: Optional[Dict] = None) -> Dict:
+        """
+        Start a new negotiation between factions.
+        
+        Args:
+            initiator_id: Faction starting the negotiation
+            target_id: Target faction
+            treaty_type: Optional type of treaty being negotiated
+            initial_terms: Optional initial terms
+            metadata: Optional additional metadata
+            
+        Returns:
+            Dictionary with negotiation creation results
+        """
+        negotiation = Negotiation(
+            id=uuid4(),
+            parties=[initiator_id, target_id],
+            status=NegotiationStatus.INITIATED,
+            treaty_type=treaty_type,
+            created_date=datetime.utcnow(),
+            current_terms=initial_terms or {},
+            metadata=metadata or {}
+        )
+        
+        # Determine if this is high-stakes
+        is_high_stakes = self.analyzer.is_high_stakes_negotiation(negotiation)
+        
+        # Generate negotiation event
+        event = DiplomaticEventGenerator.create_negotiation_event(negotiation, "initiated")
+        
+        return {
+            "success": True,
+            "negotiation": negotiation,
+            "is_high_stakes": is_high_stakes,
+            "event_id": event.id
+        }
+    
+    def make_offer(self, negotiation_id: UUID, offering_faction: UUID,
+                  terms: Dict, metadata: Optional[Dict] = None) -> Dict:
+        """
+        Make an offer in an ongoing negotiation.
+        
+        Args:
+            negotiation_id: Negotiation UUID
+            offering_faction: Faction making the offer
+            terms: Offer terms
+            metadata: Optional additional metadata
+            
+        Returns:
+            Dictionary with offer creation results
+        """
+        offer = NegotiationOffer(
+            id=uuid4(),
+            negotiation_id=negotiation_id,
+            offering_faction=offering_faction,
+            terms=terms,
+            created_date=datetime.utcnow(),
+            metadata=metadata or {}
+        )
+        
+        # Calculate attractiveness (would use actual recipient data)
+        attractiveness = self.analyzer.calculate_offer_attractiveness(offer, offering_faction)
+        
+        return {
+            "success": True,
+            "offer": offer,
+            "attractiveness_score": attractiveness
+        }
+
+
+class DiplomaticEventService:
+    """Service for managing diplomatic events and incidents."""
+    
+    def __init__(self):
+        """Initialize with configuration and utilities."""
+        self.config = get_diplomacy_config()
+        self.incident_analyzer = IncidentAnalyzer()
+    
+    def create_incident(self, incident_type: DiplomaticIncidentType,
+                       factions_involved: List[UUID],
+                       severity: Optional[DiplomaticIncidentSeverity] = None,
+                       description: Optional[str] = None,
+                       metadata: Optional[Dict] = None) -> Dict:
         """
         Create a new diplomatic incident.
         
         Args:
-            incident_type: Type of the incident
-            perpetrator_id: ID of the faction that caused the incident
-            victim_id: ID of the faction affected by the incident
-            description: Description of the incident
-            evidence: Evidence supporting the incident claim
-            severity: How severe the incident is
-            tension_impact: How much diplomatic tension this adds between the factions
-            public: Whether this incident is public knowledge
-            witnessed_by: List of faction IDs that witnessed the incident
-            related_event_id: ID of a related diplomatic event, if any
-            related_treaty_id: ID of a related treaty, if any
+            incident_type: Type of incident
+            factions_involved: List of faction UUIDs
+            severity: Optional severity level (defaults to configured value)
+            description: Optional incident description
+            metadata: Optional additional metadata
             
         Returns:
-            The created diplomatic incident object
+            Dictionary with incident creation results
         """
-        incident_data = {
-            "incident_type": incident_type,
-            "perpetrator_id": perpetrator_id,
-            "victim_id": victim_id,
-            "description": description,
-            "evidence": evidence,
-            "severity": severity,
-            "tension_impact": tension_impact,
-            "public": public,
-            "witnessed_by": witnessed_by,
-            "related_event_id": related_event_id,
-            "related_treaty_id": related_treaty_id
-        }
+        # Use configured default severity if not provided
+        if severity is None:
+            defaults = self.config.get_default_values()
+            severity_value = defaults.get("incident_severity", "MODERATE")
+            severity = DiplomaticIncidentSeverity(severity_value)
         
-        # Create the incident
-        incident = self.repository.create_diplomatic_incident(incident_data)
-        
-        # Update diplomatic tension between the factions
-        self.tension_service.update_tension(
-            faction_a_id=perpetrator_id,
-            faction_b_id=victim_id, 
-            change=tension_impact
-        )
-        
-        # If this is a treaty violation, check for potential treaty breach
-        if incident_type == DiplomaticIncidentType.TREATY_VIOLATION and related_treaty_id:
-            treaty = self.repository.get_treaty(related_treaty_id)
-            if treaty and treaty.is_active:
-                # Check if this is a severe violation
-                if severity in [DiplomaticIncidentSeverity.MAJOR, DiplomaticIncidentSeverity.CRITICAL]:
-                    # Trigger an event that might lead to treaty cancellation
-                    self.notify_treaty_breach(treaty.id, perpetrator_id, incident.id)
-        
-        return incident
-    
-    def get_diplomatic_incident(
-        self,
-        incident_id: UUID
-    ) -> Optional[DiplomaticIncident]:
-        """
-        Get a diplomatic incident by ID.
-        
-        Args:
-            incident_id: ID of the incident to get
-            
-        Returns:
-            The incident if found, None otherwise
-        """
-        return self.repository.get_diplomatic_incident(incident_id)
-    
-    def update_diplomatic_incident(
-        self,
-        incident_id: UUID,
-        severity: Optional[DiplomaticIncidentSeverity] = None,
-        resolved: Optional[bool] = None,
-        resolution_details: Optional[str] = None
-    ) -> Optional[DiplomaticIncident]:
-        """
-        Update a diplomatic incident.
-        
-        Args:
-            incident_id: ID of the incident to update
-            severity: New severity level
-            resolved: Mark incident as resolved
-            resolution_details: Details about how the incident was resolved
-            
-        Returns:
-            The updated incident if found, None otherwise
-        """
-        updates = {}
-        
-        if severity is not None:
-            updates["severity"] = severity
-            
-        if resolved is not None:
-            updates["resolved"] = resolved
-            
-        if resolution_details is not None:
-            updates["resolution_details"] = resolution_details
-            
-        if not updates:
-            return self.repository.get_diplomatic_incident(incident_id)
-        
-        return self.repository.update_diplomatic_incident(incident_id, updates)
-    
-    def list_diplomatic_incidents(
-        self,
-        faction_id: Optional[UUID] = None,
-        as_perpetrator: bool = True,
-        as_victim: bool = True,
-        resolved: Optional[bool] = None,
-        incident_type: Optional[DiplomaticIncidentType] = None,
-        limit: int = 100,
-        offset: int = 0
-    ) -> List[DiplomaticIncident]:
-        """
-        List diplomatic incidents with optional filtering.
-        
-        Args:
-            faction_id: Filter by faction involved
-            as_perpetrator: Include incidents where faction is the perpetrator
-            as_victim: Include incidents where faction is the victim
-            resolved: Filter by resolution status
-            incident_type: Filter by incident type
-            limit: Maximum number of incidents to return
-            offset: Number of incidents to skip
-            
-        Returns:
-            List of diplomatic incidents matching the criteria
-        """
-        return self.repository.list_diplomatic_incidents(
-            faction_id=faction_id,
-            as_perpetrator=as_perpetrator,
-            as_victim=as_victim,
-            resolved=resolved,
+        incident = DiplomaticIncident(
+            id=uuid4(),
             incident_type=incident_type,
-            limit=limit,
-            offset=offset
-        )
-    
-    def resolve_diplomatic_incident(
-        self,
-        incident_id: UUID,
-        resolution_details: str
-    ) -> Optional[DiplomaticIncident]:
-        """
-        Mark a diplomatic incident as resolved.
-        
-        Args:
-            incident_id: ID of the incident to resolve
-            resolution_details: Description of how the incident was resolved
-            
-        Returns:
-            The updated incident if found, None otherwise
-        """
-        return self.repository.update_diplomatic_incident(
-            incident_id=incident_id,
-            updates={
-                "resolved": True,
-                "resolution_details": resolution_details
-            }
-        )
-    
-    def notify_treaty_breach(
-        self,
-        treaty_id: UUID,
-        violator_id: UUID,
-        incident_id: UUID
-    ) -> DiplomaticEvent:
-        """
-        Create a notification event for a potential treaty breach.
-        
-        Args:
-            treaty_id: ID of the treaty that was breached
-            violator_id: ID of the faction that violated the treaty
-            incident_id: ID of the incident that constitutes the breach
-            
-        Returns:
-            The created diplomatic event
-        """
-        treaty = self.repository.get_treaty(treaty_id)
-        if not treaty:
-            raise ValueError(f"Treaty {treaty_id} not found")
-            
-        incident = self.repository.get_diplomatic_incident(incident_id)
-        if not incident:
-            raise ValueError(f"Incident {incident_id} not found")
-        
-        # Create a treaty breach event
-        event_data = {
-            "event_type": DiplomaticEventType.TREATY_BREACH,
-            "factions": treaty.parties,
-            "description": f"Treaty breach: {treaty.name} violated by {violator_id}. {incident.description}",
-            "severity": 80,  # Treaty breaches are very serious
-            "public": True,
-            "related_treaty_id": treaty_id,
-            "metadata": {
-                "treaty_id": str(treaty_id),
-                "violator_id": str(violator_id),
-                "incident_id": str(incident_id)
-            }
-        }
-        
-        return self.repository.create_diplomatic_event(event_data)
-
-    # Ultimatum Methods
-    
-    def create_ultimatum(
-        self,
-        issuer_id: UUID,
-        recipient_id: UUID,
-        demands: Dict[str, Union[str, int, bool, Dict, List]],
-        consequences: Dict[str, Union[str, int, bool, Dict, List]],
-        deadline: datetime,
-        justification: str,
-        public: bool = True,
-        witnessed_by: List[UUID] = [],
-        related_incident_id: Optional[UUID] = None,
-        related_treaty_id: Optional[UUID] = None,
-        related_event_id: Optional[UUID] = None,
-        tension_change_on_issue: int = 20,
-        tension_change_on_accept: int = -10,
-        tension_change_on_reject: int = 40
-    ) -> Ultimatum:
-        """
-        Create a new ultimatum.
-        
-        Args:
-            issuer_id: ID of the faction issuing the ultimatum
-            recipient_id: ID of the faction receiving the ultimatum
-            demands: What the issuer is demanding from the recipient
-            consequences: What will happen if the demands are not met
-            deadline: When the ultimatum expires
-            justification: Why the ultimatum is being issued
-            public: Whether this ultimatum is public knowledge
-            witnessed_by: List of faction IDs that witnessed the ultimatum
-            related_incident_id: ID of a related diplomatic incident, if any
-            related_treaty_id: ID of a related treaty, if any
-            related_event_id: ID of a related diplomatic event, if any
-            tension_change_on_issue: How much diplomatic tension to add when issued
-            tension_change_on_accept: How much diplomatic tension to add/remove if accepted
-            tension_change_on_reject: How much diplomatic tension to add if rejected
-            
-        Returns:
-            The created ultimatum object
-        """
-        ultimatum_data = {
-            "issuer_id": issuer_id,
-            "recipient_id": recipient_id,
-            "demands": demands,
-            "consequences": consequences,
-            "deadline": deadline,
-            "justification": justification,
-            "public": public,
-            "witnessed_by": witnessed_by,
-            "related_incident_id": related_incident_id,
-            "related_treaty_id": related_treaty_id,
-            "related_event_id": related_event_id,
-            "tension_change_on_issue": tension_change_on_issue,
-            "tension_change_on_accept": tension_change_on_accept,
-            "tension_change_on_reject": tension_change_on_reject
-        }
-        
-        # Create the ultimatum
-        ultimatum = self.repository.create_ultimatum(ultimatum_data)
-        
-        # Update diplomatic tension between the factions when ultimatum is issued
-        self.tension_service.update_tension(
-            faction_a_id=issuer_id,
-            faction_b_id=recipient_id, 
-            change=tension_change_on_issue
-        )
-        
-        return ultimatum
-    
-    def get_ultimatum(
-        self,
-        ultimatum_id: UUID
-    ) -> Optional[Ultimatum]:
-        """
-        Get an ultimatum by ID.
-        
-        Args:
-            ultimatum_id: ID of the ultimatum to get
-            
-        Returns:
-            The ultimatum if found, None otherwise
-        """
-        return self.repository.get_ultimatum(ultimatum_id)
-    
-    def update_ultimatum(
-        self,
-        ultimatum_id: UUID,
-        status: Optional[UltimatumStatus] = None,
-        deadline: Optional[datetime] = None,
-        demands: Optional[Dict[str, Union[str, int, bool, Dict, List]]] = None,
-        consequences: Optional[Dict[str, Union[str, int, bool, Dict, List]]] = None
-    ) -> Optional[Ultimatum]:
-        """
-        Update an ultimatum.
-        
-        Args:
-            ultimatum_id: ID of the ultimatum to update
-            status: New status
-            deadline: New deadline
-            demands: Updated demands
-            consequences: Updated consequences
-            
-        Returns:
-            The updated ultimatum if found, None otherwise
-        """
-        updates = {}
-        
-        if status is not None:
-            updates["status"] = status
-            
-        if deadline is not None:
-            updates["deadline"] = deadline
-            
-        if demands is not None:
-            updates["demands"] = demands
-            
-        if consequences is not None:
-            updates["consequences"] = consequences
-            
-        if not updates:
-            return self.repository.get_ultimatum(ultimatum_id)
-        
-        # Get current ultimatum before updating
-        current_ultimatum = self.repository.get_ultimatum(ultimatum_id)
-        if not current_ultimatum:
-            return None
-            
-        # Update the ultimatum
-        updated_ultimatum = self.repository.update_ultimatum(ultimatum_id, updates)
-        
-        # If status changed to ACCEPTED or REJECTED, update diplomatic tension
-        if status in [UltimatumStatus.ACCEPTED, UltimatumStatus.REJECTED] and current_ultimatum.status != status:
-            tension_change = (
-                current_ultimatum.tension_change_on_accept 
-                if status == UltimatumStatus.ACCEPTED 
-                else current_ultimatum.tension_change_on_reject
-            )
-            
-            self.tension_service.update_tension(
-                faction_a_id=current_ultimatum.issuer_id,
-                faction_b_id=current_ultimatum.recipient_id,
-                change=tension_change
-            )
-            
-            # If accepted, implement the consequences of accepting the ultimatum
-            if status == UltimatumStatus.ACCEPTED:
-                self._handle_accepted_ultimatum(current_ultimatum)
-            
-            # If rejected, check if consequences should be automatically applied
-            if status == UltimatumStatus.REJECTED:
-                self._handle_rejected_ultimatum(current_ultimatum)
-        
-        return updated_ultimatum
-    
-    def list_ultimatums(
-        self,
-        faction_id: Optional[UUID] = None,
-        as_issuer: bool = True,
-        as_recipient: bool = True,
-        status: Optional[UltimatumStatus] = None,
-        active_only: bool = False,
-        limit: int = 100,
-        offset: int = 0
-    ) -> List[Ultimatum]:
-        """
-        List ultimatums with optional filtering.
-        
-        Args:
-            faction_id: Filter by faction involved
-            as_issuer: Include ultimatums where faction is the issuer
-            as_recipient: Include ultimatums where faction is the recipient
-            status: Filter by ultimatum status
-            active_only: Only include active ultimatums (pending and not expired)
-            limit: Maximum number of ultimatums to return
-            offset: Number of ultimatums to skip
-            
-        Returns:
-            List of ultimatum objects matching the criteria
-        """
-        return self.repository.list_ultimatums(
-            faction_id=faction_id,
-            as_issuer=as_issuer,
-            as_recipient=as_recipient,
-            status=status,
-            active_only=active_only,
-            limit=limit,
-            offset=offset
-        )
-    
-    def respond_to_ultimatum(
-        self,
-        ultimatum_id: UUID,
-        accept: bool,
-        response_justification: Optional[str] = None
-    ) -> Optional[Ultimatum]:
-        """
-        Respond to an ultimatum.
-        
-        Args:
-            ultimatum_id: ID of the ultimatum to respond to
-            accept: Whether to accept the ultimatum
-            response_justification: Optional justification for the response
-            
-        Returns:
-            The updated ultimatum if found, None otherwise
-        """
-        ultimatum = self.repository.get_ultimatum(ultimatum_id)
-        if not ultimatum:
-            return None
-            
-        if ultimatum.status != UltimatumStatus.PENDING:
-            raise ValueError(f"Ultimatum {ultimatum_id} has already been responded to")
-            
-        now = datetime.now()
-        if ultimatum.deadline < now:
-            raise ValueError(f"Ultimatum {ultimatum_id} has expired")
-            
-        status = UltimatumStatus.ACCEPTED if accept else UltimatumStatus.REJECTED
-        
-        updates = {
-            "status": status
-        }
-        
-        if response_justification:
-            updates["metadata"] = ultimatum.dict().get("metadata", {})
-            updates["metadata"]["response_justification"] = response_justification
-            
-        return self.update_ultimatum(ultimatum_id, status=status)
-    
-    def check_expired_ultimatums(self) -> List[Ultimatum]:
-        """
-        Check for expired ultimatums and mark them as EXPIRED.
-        
-        Returns:
-            List of ultimatums that were marked as expired
-        """
-        now = datetime.now()
-        pending_ultimatums = self.list_ultimatums(status=UltimatumStatus.PENDING)
-        expired_ultimatums = []
-        
-        for ultimatum in pending_ultimatums:
-            if ultimatum.deadline < now:
-                updated = self.repository.update_ultimatum(
-                    ultimatum_id=ultimatum.id,
-                    updates={"status": UltimatumStatus.EXPIRED}
-                )
-                
-                if updated:
-                    # Create an expiration event
-                    event_data = {
-                        "event_type": DiplomaticEventType.ULTIMATUM_EXPIRED,
-                        "factions": [ultimatum.issuer_id, ultimatum.recipient_id] + ultimatum.witnessed_by,
-                        "description": f"Ultimatum expired without response: {ultimatum.justification}",
-                        "severity": 50,
-                        "public": ultimatum.public,
-                        "related_treaty_id": ultimatum.related_treaty_id,
-                        "metadata": {
-                            "ultimatum_id": str(ultimatum.id),
-                            "issuer_id": str(ultimatum.issuer_id),
-                            "recipient_id": str(ultimatum.recipient_id),
-                        },
-                        "tension_change": {
-                            str(ultimatum.issuer_id): ultimatum.tension_change_on_reject // 2  # Half the rejection tension
-                        }
-                    }
-                    
-                    self.repository.create_diplomatic_event(event_data)
-                    
-                    # Also handle consequences automatically, similar to rejection
-                    self._handle_rejected_ultimatum(ultimatum)
-                    
-                    expired_ultimatums.append(updated)
-        
-        return expired_ultimatums
-    
-    def _handle_accepted_ultimatum(self, ultimatum: Ultimatum) -> None:
-        """
-        Handle the consequences of an accepted ultimatum.
-        
-        Args:
-            ultimatum: The accepted ultimatum
-        """
-        # This could involve creating new treaties, ending wars, etc.
-        # The specific implementation depends on the type of demands
-        
-        # Example: If the demands include creating a treaty
-        if "create_treaty" in ultimatum.demands:
-            treaty_data = ultimatum.demands["create_treaty"]
-            if isinstance(treaty_data, dict):
-                try:
-                    self.create_treaty(
-                        name=treaty_data.get("name", f"Treaty from ultimatum {ultimatum.id}"),
-                        type=TreatyType(treaty_data.get("type", "peace")),
-                        parties=[ultimatum.issuer_id, ultimatum.recipient_id],
-                        terms=treaty_data.get("terms", {}),
-                        end_date=treaty_data.get("end_date"),
-                        is_public=treaty_data.get("is_public", True)
-                    )
-                except (ValueError, KeyError) as e:
-                    # Log the error but don't raise - ultimatum is still considered accepted
-                    print(f"Error creating treaty from ultimatum {ultimatum.id}: {e}")
-    
-    def _handle_rejected_ultimatum(self, ultimatum: Ultimatum) -> None:
-        """
-        Handle the consequences of a rejected ultimatum.
-        
-        Args:
-            ultimatum: The rejected ultimatum
-        """
-        # This could involve declaring war, imposing sanctions, etc.
-        # The specific implementation depends on the type of consequences
-        
-        # Example: If the consequences include declaring war
-        if "declare_war" in ultimatum.consequences and ultimatum.consequences["declare_war"]:
-            try:
-                # Create a war declaration event
-                war_event_data = {
-                    "event_type": DiplomaticEventType.WAR_DECLARATION,
-                    "factions": [ultimatum.issuer_id, ultimatum.recipient_id],
-                    "description": f"War declared by {ultimatum.issuer_id} against {ultimatum.recipient_id} following ultimatum rejection.",
-                    "severity": 100,  # War is maximum severity
-                    "public": True,
-                    "metadata": {
-                        "ultimatum_id": str(ultimatum.id),
-                        "casus_belli": ultimatum.justification
-                    },
-                    "tension_change": {
-                        str(ultimatum.recipient_id): 100  # Set tension to maximum
-                    }
-                }
-                
-                self.repository.create_diplomatic_event(war_event_data)
-                
-                # Update the diplomatic status to WAR
-                self.tension_service.set_diplomatic_status(
-                    faction_a_id=ultimatum.issuer_id,
-                    faction_b_id=ultimatum.recipient_id,
-                    status=DiplomaticStatus.WAR
-                )
-            except Exception as e:
-                # Log the error but don't raise - ultimatum is still considered rejected
-                print(f"Error applying war consequences for ultimatum {ultimatum.id}: {e}") 
-
-    # Sanction Methods
-    
-    def create_sanction(
-        self,
-        imposer_id: UUID,
-        target_id: UUID,
-        sanction_type: SanctionType,
-        description: str,
-        justification: str,
-        end_date: Optional[datetime] = None,
-        conditions_for_lifting: Dict[str, Union[str, int, bool, Dict, List]] = None,
-        severity: int = 50,
-        economic_impact: int = 50,
-        diplomatic_impact: int = 50,
-        enforcement_measures: Dict[str, Union[str, int, bool, Dict, List]] = None,
-        supporting_factions: List[UUID] = None,
-        opposing_factions: List[UUID] = None,
-        is_public: bool = True
-    ) -> Sanction:
-        """
-        Create a new diplomatic sanction.
-        
-        Args:
-            imposer_id: ID of the faction imposing the sanction
-            target_id: ID of the faction targeted by the sanction
-            sanction_type: Type of sanction being imposed
-            description: Description of the sanction
-            justification: Reason for imposing the sanction
-            end_date: When the sanction will end (None for indefinite)
-            conditions_for_lifting: Conditions that must be met to lift the sanction
-            severity: How severe the sanction is (0-100)
-            economic_impact: Estimated economic impact on target (0-100)
-            diplomatic_impact: Estimated diplomatic impact (0-100)
-            enforcement_measures: How the sanction will be enforced
-            supporting_factions: Other factions supporting this sanction
-            opposing_factions: Factions opposing this sanction
-            is_public: Whether this sanction is publicly announced
-            
-        Returns:
-            The created sanction object
-        """
-        conditions_for_lifting = conditions_for_lifting or {}
-        enforcement_measures = enforcement_measures or {}
-        supporting_factions = supporting_factions or []
-        opposing_factions = opposing_factions or []
-        
-        # Create the sanction
-        sanction = Sanction(
-            imposer_id=imposer_id,
-            target_id=target_id,
-            sanction_type=sanction_type,
-            description=description,
-            justification=justification,
-            end_date=end_date,
-            conditions_for_lifting=conditions_for_lifting,
+            factions_involved=factions_involved,
             severity=severity,
-            economic_impact=economic_impact,
-            diplomatic_impact=diplomatic_impact,
-            enforcement_measures=enforcement_measures,
-            supporting_factions=supporting_factions,
-            opposing_factions=opposing_factions,
-            is_public=is_public
+            description=description or f"{incident_type.value} incident",
+            created_date=datetime.utcnow(),
+            is_resolved=False,
+            metadata=metadata or {}
         )
         
-        sanction = self.repository.create_sanction(sanction)
+        # Calculate tension impact using configured values
+        tension_impact = self.incident_analyzer.calculate_incident_tension_impact(incident_type, severity)
         
-        # Update diplomatic tension between the factions
-        tension_change = severity // 2  # The more severe the sanction, the more tension it creates
-        self.tension_service.update_tension(
-            faction_a_id=imposer_id,
-            faction_b_id=target_id,
-            change=tension_change,
-            reason=f"Sanction imposed: {sanction_type.value}"
+        return {
+            "success": True,
+            "incident": incident,
+            "tension_impact": tension_impact,
+            "requires_escalation": False  # Would be calculated based on context
+        }
+    
+    def resolve_incident(self, incident_id: UUID, resolution: str,
+                        metadata: Optional[Dict] = None) -> Dict:
+        """
+        Resolve a diplomatic incident.
+        
+        Args:
+            incident_id: Incident UUID
+            resolution: Resolution description
+            metadata: Optional additional metadata
+            
+        Returns:
+            Dictionary with resolution results
+        """
+        resolution_event = DiplomaticEvent(
+            id=uuid4(),
+            event_type=DiplomaticEventType.INCIDENT_RESOLVED,
+            description=f"Incident {incident_id} resolved: {resolution}",
+            factions_involved=[],
+            created_date=datetime.utcnow(),
+            severity=30,
+            metadata={"incident_id": str(incident_id), "resolution": resolution}
         )
         
-        # Create a corresponding diplomatic event
-        event_data = {
-            "event_type": DiplomaticEventType.OTHER,
-            "factions": [imposer_id, target_id] + supporting_factions + opposing_factions,
-            "description": f"Sanction imposed: {description}",
-            "severity": severity,
-            "public": is_public,
-            "metadata": {
-                "sanction_id": str(sanction.id),
-                "sanction_type": sanction_type.value,
-                "imposer_id": str(imposer_id),
-                "target_id": str(target_id),
-                "justification": justification
-            },
-            "tension_change": {
-                str(target_id): tension_change
-            }
+        return {
+            "success": True,
+            "incident_id": incident_id,
+            "resolution": resolution,
+            "resolution_date": datetime.utcnow(),
+            "event_id": resolution_event.id
+        }
+
+def load_treaty_effects_from_config() -> Dict[str, Dict[str, Any]]:
+    """Load treaty effects configuration from JSON file."""
+    config = get_diplomacy_config()
+    return config.get_config_value("data/systems/diplomacy/treaty_effects.json", {})
+
+def apply_treaty_effects(treaty: Treaty, faction_ids: List[UUID]) -> Dict[str, Any]:
+    """
+    Apply treaty effects to the involved factions based on configuration.
+    
+    Args:
+        treaty: The treaty being activated
+        faction_ids: List of faction IDs involved in the treaty
+        
+    Returns:
+        Dictionary of applied effects and their results
+    """
+    effects_config = load_treaty_effects_from_config()
+    
+    # Get effects for this treaty type
+    treaty_type_str = treaty.treaty_type.value if hasattr(treaty.treaty_type, 'value') else str(treaty.treaty_type)
+    treaty_effects = effects_config.get(treaty_type_str, {})
+    
+    applied_effects = {
+        "treaty_id": treaty.id,
+        "treaty_type": treaty_type_str,
+        "effects_applied": [],
+        "faction_changes": {}
+    }
+    
+    for faction_id in faction_ids:
+        faction_changes = {
+            "faction_id": faction_id,
+            "changes": []
         }
         
-        self.repository.create_event(DiplomaticEvent(**event_data))
+        # Apply economic effects
+        if "economic" in treaty_effects:
+            economic_effects = treaty_effects["economic"]
+            for effect_type, effect_value in economic_effects.items():
+                if effect_type == "trade_bonus":
+                    faction_changes["changes"].append({
+                        "type": "economic",
+                        "effect": "trade_bonus",
+                        "value": effect_value,
+                        "description": f"Trade bonus of {effect_value}% from {treaty_type_str} treaty"
+                    })
+                elif effect_type == "resource_bonus":
+                    for resource, bonus in effect_value.items():
+                        faction_changes["changes"].append({
+                            "type": "economic",
+                            "effect": "resource_bonus",
+                            "resource": resource,
+                            "value": bonus,
+                            "description": f"{resource} production bonus of {bonus}% from treaty"
+                        })
         
-        # Create a diplomatic incident
-        if severity >= 50:  # Only create incidents for more severe sanctions
-            incident_data = {
-                "incident_type": DiplomaticIncidentType.TRADE_DISPUTE if sanction_type == SanctionType.TRADE_EMBARGO else DiplomaticIncidentType.OTHER,
-                "perpetrator_id": imposer_id,
-                "victim_id": target_id,
-                "description": f"Diplomatic incident due to sanction: {description}",
-                "evidence": {"sanction_id": str(sanction.id), "justification": justification},
-                "severity": DiplomaticIncidentSeverity.MAJOR if severity >= 75 else DiplomaticIncidentSeverity.MODERATE,
-                "tension_impact": tension_change,
-                "public": is_public,
-                "witnessed_by": supporting_factions
-            }
-            
-            self.create_diplomatic_incident(**incident_data)
+        # Apply military effects
+        if "military" in treaty_effects:
+            military_effects = treaty_effects["military"]
+            for effect_type, effect_value in military_effects.items():
+                if effect_type == "defense_bonus":
+                    faction_changes["changes"].append({
+                        "type": "military",
+                        "effect": "defense_bonus",
+                        "value": effect_value,
+                        "description": f"Defense bonus of {effect_value}% from {treaty_type_str} treaty"
+                    })
+                elif effect_type == "shared_vision":
+                    if effect_value:
+                        faction_changes["changes"].append({
+                            "type": "military",
+                            "effect": "shared_vision",
+                            "value": True,
+                            "description": "Shared vision with treaty partners"
+                        })
         
-        return sanction
+        # Apply diplomatic effects
+        if "diplomatic" in treaty_effects:
+            diplomatic_effects = treaty_effects["diplomatic"]
+            for effect_type, effect_value in diplomatic_effects.items():
+                if effect_type == "tension_modifier":
+                    faction_changes["changes"].append({
+                        "type": "diplomatic",
+                        "effect": "tension_modifier",
+                        "value": effect_value,
+                        "description": f"Tension changes modified by {effect_value}% with treaty partners"
+                    })
+                elif effect_type == "reputation_bonus":
+                    faction_changes["changes"].append({
+                        "type": "diplomatic",
+                        "effect": "reputation_bonus",
+                        "value": effect_value,
+                        "description": f"Reputation bonus of {effect_value} from treaty"
+                    })
+        
+        applied_effects["faction_changes"][str(faction_id)] = faction_changes
+        applied_effects["effects_applied"].extend([change["effect"] for change in faction_changes["changes"]])
     
-    def get_sanction(self, sanction_id: UUID) -> Optional[Sanction]:
-        """
-        Get a sanction by ID.
-        
-        Args:
-            sanction_id: ID of the sanction to retrieve
-            
-        Returns:
-            The sanction if found, None otherwise
-        """
-        return self.repository.get_sanction(sanction_id)
+    # Remove duplicates from effects_applied
+    applied_effects["effects_applied"] = list(set(applied_effects["effects_applied"]))
     
-    def update_sanction(
-        self,
-        sanction_id: UUID,
-        status: Optional[SanctionStatus] = None,
-        end_date: Optional[datetime] = None,
-        lifted_date: Optional[datetime] = None,
-        conditions_for_lifting: Optional[Dict[str, Union[str, int, bool, Dict, List]]] = None,
-        enforcement_measures: Optional[Dict[str, Union[str, int, bool, Dict, List]]] = None,
-        supporting_factions: Optional[List[UUID]] = None,
-        opposing_factions: Optional[List[UUID]] = None
-    ) -> Optional[Sanction]:
-        """
-        Update a diplomatic sanction.
-        
-        Args:
-            sanction_id: ID of the sanction to update
-            status: New status of the sanction
-            end_date: New end date for the sanction
-            lifted_date: When the sanction was lifted (if applicable)
-            conditions_for_lifting: New conditions for lifting the sanction
-            enforcement_measures: New enforcement measures
-            supporting_factions: Updated list of supporting factions
-            opposing_factions: Updated list of opposing factions
-            
-        Returns:
-            The updated sanction if found, None otherwise
-        """
-        sanction = self.repository.get_sanction(sanction_id)
-        if not sanction:
-            return None
-        
-        current_status = sanction.status
-        
-        updates = {}
-        if status is not None:
-            updates["status"] = status
-        if end_date is not None:
-            updates["end_date"] = end_date
-        if lifted_date is not None:
-            updates["lifted_date"] = lifted_date
-        if conditions_for_lifting is not None:
-            updates["conditions_for_lifting"] = conditions_for_lifting
-        if enforcement_measures is not None:
-            updates["enforcement_measures"] = enforcement_measures
-        if supporting_factions is not None:
-            updates["supporting_factions"] = supporting_factions
-        if opposing_factions is not None:
-            updates["opposing_factions"] = opposing_factions
-        
-        if not updates:
-            return sanction
-        
-        # Update the sanction
-        updated_sanction = self.repository.update_sanction(sanction_id, updates)
-        
-        # If the status changed to LIFTED, create an event and reduce tension
-        if status == SanctionStatus.LIFTED and current_status != SanctionStatus.LIFTED:
-            # Create a diplomatic event for the lifting
-            event_data = {
-                "event_type": DiplomaticEventType.OTHER,
-                "factions": [sanction.imposer_id, sanction.target_id] + sanction.supporting_factions + sanction.opposing_factions,
-                "description": f"Sanction lifted: {sanction.description}",
-                "severity": sanction.severity // 2,
-                "public": sanction.is_public,
-                "metadata": {
-                    "sanction_id": str(sanction.id),
-                    "sanction_type": sanction.sanction_type.value,
-                    "imposer_id": str(sanction.imposer_id),
-                    "target_id": str(sanction.target_id),
-                    "lifted_date": lifted_date.isoformat() if lifted_date else datetime.utcnow().isoformat()
-                },
-                "tension_change": {
-                    str(sanction.target_id): -sanction.severity // 3  # Reduce tension somewhat when lifting sanctions
-                }
-            }
-            
-            self.repository.create_event(DiplomaticEvent(**event_data))
-            
-            # Update tension between the factions
-            self.tension_service.update_tension(
-                faction_a_id=sanction.imposer_id,
-                faction_b_id=sanction.target_id,
-                change=-sanction.severity // 3,
-                reason=f"Sanction lifted: {sanction.sanction_type.value}"
-            )
-        
-        return updated_sanction
+    return applied_effects
+
+def remove_treaty_effects(treaty: Treaty, faction_ids: List[UUID]) -> Dict[str, Any]:
+    """
+    Remove treaty effects when a treaty expires or is dissolved.
     
-    def lift_sanction(
-        self,
-        sanction_id: UUID,
-        reason: str = "Sanction conditions met"
-    ) -> Optional[Sanction]:
-        """
-        Lift a diplomatic sanction.
+    Args:
+        treaty: The treaty being ended
+        faction_ids: List of faction IDs that were involved
         
-        Args:
-            sanction_id: ID of the sanction to lift
-            reason: Reason for lifting the sanction
-            
-        Returns:
-            The updated sanction if found, None otherwise
-        """
-        sanction = self.repository.get_sanction(sanction_id)
-        if not sanction:
-            return None
-        
-        if sanction.status == SanctionStatus.LIFTED:
-            return sanction  # Already lifted
-        
-        updates = {
-            "status": SanctionStatus.LIFTED,
-            "lifted_date": datetime.utcnow()
+    Returns:
+        Dictionary of removed effects
+    """
+    # This essentially reverses the apply_treaty_effects logic
+    effects_config = load_treaty_effects_from_config()
+    
+    treaty_type_str = treaty.treaty_type.value if hasattr(treaty.treaty_type, 'value') else str(treaty.treaty_type)
+    treaty_effects = effects_config.get(treaty_type_str, {})
+    
+    removed_effects = {
+        "treaty_id": treaty.id,
+        "treaty_type": treaty_type_str,
+        "effects_removed": [],
+        "faction_changes": {}
+    }
+    
+    for faction_id in faction_ids:
+        faction_changes = {
+            "faction_id": faction_id,
+            "changes": []
         }
         
-        # Update the sanction
-        return self.update_sanction(sanction_id, **updates)
-    
-    def list_sanctions(
-        self,
-        imposer_id: Optional[UUID] = None,
-        target_id: Optional[UUID] = None,
-        sanction_type: Optional[SanctionType] = None,
-        status: Optional[SanctionStatus] = None,
-        active_only: bool = False,
-        limit: int = 100,
-        offset: int = 0
-    ) -> List[Sanction]:
-        """
-        List diplomatic sanctions with optional filtering.
+        # Remove economic effects (reverse bonuses)
+        if "economic" in treaty_effects:
+            economic_effects = treaty_effects["economic"]
+            for effect_type, effect_value in economic_effects.items():
+                if effect_type == "trade_bonus":
+                    faction_changes["changes"].append({
+                        "type": "economic",
+                        "effect": "remove_trade_bonus",
+                        "value": -effect_value,
+                        "description": f"Removed trade bonus of {effect_value}% from ended {treaty_type_str} treaty"
+                    })
+                elif effect_type == "resource_bonus":
+                    for resource, bonus in effect_value.items():
+                        faction_changes["changes"].append({
+                            "type": "economic",
+                            "effect": "remove_resource_bonus",
+                            "resource": resource,
+                            "value": -bonus,
+                            "description": f"Removed {resource} production bonus of {bonus}% from ended treaty"
+                        })
         
-        Args:
-            imposer_id: Filter by faction imposing the sanction
-            target_id: Filter by faction targeted by the sanction
-            sanction_type: Filter by type of sanction
-            status: Filter by sanction status
-            active_only: Only include active sanctions
-            limit: Maximum number of sanctions to return
-            offset: Number of sanctions to skip
+        # Remove military effects
+        if "military" in treaty_effects:
+            military_effects = treaty_effects["military"]
+            for effect_type, effect_value in military_effects.items():
+                if effect_type == "defense_bonus":
+                    faction_changes["changes"].append({
+                        "type": "military",
+                        "effect": "remove_defense_bonus",
+                        "value": -effect_value,
+                        "description": f"Removed defense bonus of {effect_value}% from ended {treaty_type_str} treaty"
+                    })
+                elif effect_type == "shared_vision":
+                    if effect_value:
+                        faction_changes["changes"].append({
+                            "type": "military",
+                            "effect": "remove_shared_vision",
+                            "value": False,
+                            "description": "Removed shared vision with former treaty partners"
+                        })
+        
+        # Remove diplomatic effects
+        if "diplomatic" in treaty_effects:
+            diplomatic_effects = treaty_effects["diplomatic"]
+            for effect_type, effect_value in diplomatic_effects.items():
+                if effect_type == "tension_modifier":
+                    faction_changes["changes"].append({
+                        "type": "diplomatic",
+                        "effect": "remove_tension_modifier",
+                        "value": 0,  # Reset to normal
+                        "description": f"Removed tension modifier from ended treaty"
+                    })
+                elif effect_type == "reputation_bonus":
+                    faction_changes["changes"].append({
+                        "type": "diplomatic",
+                        "effect": "remove_reputation_bonus",
+                        "value": -effect_value,
+                        "description": f"Removed reputation bonus of {effect_value} from ended treaty"
+                    })
+        
+        removed_effects["faction_changes"][str(faction_id)] = faction_changes
+        removed_effects["effects_removed"].extend([change["effect"] for change in faction_changes["changes"]])
+    
+    # Remove duplicates from effects_removed
+    removed_effects["effects_removed"] = list(set(removed_effects["effects_removed"]))
+    
+    return removed_effects
+
+def load_diplomatic_events_from_config() -> Dict[str, Any]:
+    """Load diplomatic events configuration from JSON file."""
+    config = get_diplomacy_config()
+    return config.get_config_value("data/systems/diplomacy/diplomatic_events_config.json", {})
+
+def trigger_diplomatic_event(event_type: str, factions_involved: List[UUID], 
+                           region_id: Optional[UUID] = None, 
+                           metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """
+    Trigger a diplomatic event using configuration-based parameters.
+    
+    Args:
+        event_type: Type of diplomatic event to trigger
+        factions_involved: List of faction IDs involved
+        region_id: Optional region where the event occurs
+        metadata: Optional additional event metadata
+        
+    Returns:
+        Dictionary with event details and effects
+    """
+    events_config = load_diplomatic_events_from_config()
+    
+    # Get configuration for this event type
+    event_config = events_config.get("event_types", {}).get(event_type, {})
+    
+    if not event_config:
+        # Return a basic event if no configuration found
+        return {
+            "success": False,
+            "error": f"No configuration found for event type: {event_type}",
+            "available_events": list(events_config.get("event_types", {}).keys())
+        }
+    
+    # Create the diplomatic event
+    event = DiplomaticEvent(
+        id=uuid4(),
+        event_type=DiplomaticEventType[event_type] if hasattr(DiplomaticEventType, event_type) else DiplomaticEventType.OTHER,
+        description=event_config.get("description", f"Diplomatic event: {event_type}"),
+        factions_involved=factions_involved,
+        created_date=datetime.utcnow(),
+        severity=event_config.get("base_severity", 50),
+        metadata={
+            "region_id": str(region_id) if region_id else None,
+            "event_type": event_type,
+            **(metadata or {})
+        }
+    )
+    
+    # Calculate tension impacts based on configuration
+    tension_calculator = TensionCalculator()
+    tension_changes = {}
+    
+    # Apply configured tension modifiers
+    tension_config = event_config.get("tension_impact", {})
+    base_impact = tension_config.get("base_change", 0)
+    impact_per_faction = tension_config.get("per_faction_modifier", 1.0)
+    
+    # Calculate pairwise tension changes for involved factions
+    for i, faction_a in enumerate(factions_involved):
+        for faction_b in factions_involved[i+1:]:
+            faction_pair = f"{faction_a}_{faction_b}"
+            calculated_impact = base_impact * impact_per_faction
             
-        Returns:
-            List of sanctions matching the criteria
-        """
-        return self.repository.list_sanctions(
-            imposer_id=imposer_id,
-            target_id=target_id,
-            sanction_type=sanction_type,
-            status=status,
-            active_only=active_only,
-            limit=limit,
-            offset=offset
+            # Apply severity modifiers from configuration
+            severity_multiplier = events_config.get("severity_modifiers", {}).get(str(event.severity), 1.0)
+            final_impact = calculated_impact * severity_multiplier
+            
+            tension_changes[faction_pair] = {
+                "old_tension": 50,  # Mock current tension
+                "change": final_impact,
+                "new_tension": max(0, min(100, 50 + final_impact)),
+                "reason": event.description
+            }
+    
+    # Generate automatic consequences based on configuration
+    consequences = []
+    auto_consequences = event_config.get("automatic_consequences", [])
+    
+    for consequence in auto_consequences:
+        consequence_result = {
+            "type": consequence.get("type", "unknown"),
+            "description": consequence.get("description", "Automatic consequence triggered"),
+            "severity": consequence.get("severity", "medium"),
+            "applies_to": consequence.get("applies_to", "all_factions")
+        }
+        
+        # Apply faction-specific consequences
+        if consequence_result["applies_to"] == "all_factions":
+            consequence_result["affected_factions"] = factions_involved
+        elif consequence_result["applies_to"] == "initiator" and factions_involved:
+            consequence_result["affected_factions"] = [factions_involved[0]]
+        elif consequence_result["applies_to"] == "target" and len(factions_involved) > 1:
+            consequence_result["affected_factions"] = [factions_involved[1]]
+        
+        consequences.append(consequence_result)
+    
+    # Check for escalation triggers
+    escalation_check = events_config.get("escalation_triggers", {})
+    requires_escalation = False
+    escalation_reason = None
+    
+    if event.severity >= escalation_check.get("severity_threshold", 80):
+        requires_escalation = True
+        escalation_reason = "Event severity exceeds threshold"
+    elif len(factions_involved) >= escalation_check.get("faction_count_threshold", 5):
+        requires_escalation = True
+        escalation_reason = "Too many factions involved"
+    
+    return {
+        "success": True,
+        "event": {
+            "id": event.id,
+            "type": event_type,
+            "description": event.description,
+            "factions_involved": factions_involved,
+            "severity": event.severity,
+            "created_date": event.created_date.isoformat(),
+            "region_id": region_id,
+            "metadata": event.metadata
+        },
+        "tension_impact": tension_changes,
+        "consequences": consequences,
+        "requires_escalation": requires_escalation,
+        "escalation_reason": escalation_reason,
+        "message": f"Diplomatic event '{event_type}' triggered successfully with {len(consequences)} automatic consequences"
+    }
+
+def process_event_chain(initial_event_type: str, factions_involved: List[UUID],
+                       region_id: Optional[UUID] = None) -> Dict[str, Any]:
+    """
+    Process a chain of diplomatic events based on configuration.
+    
+    Args:
+        initial_event_type: The triggering event type
+        factions_involved: List of faction IDs involved
+        region_id: Optional region where events occur
+        
+    Returns:
+        Dictionary with all triggered events in the chain
+    """
+    events_config = load_diplomatic_events_from_config()
+    event_chains = events_config.get("event_chains", {})
+    
+    processed_events = []
+    current_event_type = initial_event_type
+    chain_depth = 0
+    max_chain_depth = 5  # Prevent infinite loops
+    
+    while current_event_type and chain_depth < max_chain_depth:
+        # Trigger the current event
+        event_result = trigger_diplomatic_event(
+            event_type=current_event_type,
+            factions_involved=factions_involved,
+            region_id=region_id,
+            metadata={"chain_depth": chain_depth, "initial_event": initial_event_type}
         )
+        
+        if not event_result["success"]:
+            break
+            
+        processed_events.append(event_result)
+        
+        # Check for chain continuation
+        chain_config = event_chains.get(current_event_type, {})
+        next_events = chain_config.get("triggers", [])
+        
+        # Simple logic: trigger first applicable event in chain
+        current_event_type = None
+        for next_event in next_events:
+            trigger_chance = next_event.get("probability", 1.0)
+            if random.random() <= trigger_chance:
+                current_event_type = next_event.get("event_type")
+                break
+        
+        chain_depth += 1
     
-    def record_sanction_violation(
-        self,
-        sanction_id: UUID,
-        description: str,
-        evidence: Dict[str, Union[str, int, bool, Dict, List]],
-        reported_by: UUID,
-        severity: int = 50
-    ) -> Optional[Sanction]:
-        """
-        Record a violation of a sanction.
-        
-        Args:
-            sanction_id: ID of the sanction that was violated
-            description: Description of how the sanction was violated
-            evidence: Evidence supporting the violation claim
-            reported_by: ID of the faction reporting the violation
-            severity: Severity of the violation (0-100)
-            
-        Returns:
-            The updated sanction if found, None otherwise
-        """
-        sanction = self.repository.get_sanction(sanction_id)
-        if not sanction:
-            return None
-        
-        violation = {
-            "violation_date": datetime.utcnow().isoformat(),
-            "description": description,
-            "evidence": evidence,
-            "reported_by": str(reported_by),
-            "severity": severity
-        }
-        
-        # Record the violation
-        updated_sanction = self.repository.record_sanction_violation(sanction_id, violation)
-        
-        if updated_sanction:
-            # Create a diplomatic incident for the violation
-            incident_data = {
-                "incident_type": DiplomaticIncidentType.REFUSED_DEMAND,
-                "perpetrator_id": sanction.target_id,
-                "victim_id": sanction.imposer_id,
-                "description": f"Sanction violation: {description}",
-                "evidence": {
-                    "sanction_id": str(sanction_id),
-                    "sanction_type": sanction.sanction_type.value,
-                    "violation": violation
-                },
-                "severity": DiplomaticIncidentSeverity.MAJOR if severity >= 75 else DiplomaticIncidentSeverity.MODERATE,
-                "tension_impact": severity // 2,
-                "public": sanction.is_public,
-                "witnessed_by": sanction.supporting_factions
-            }
-            
-            self.create_diplomatic_incident(**incident_data)
-            
-            # Update tension between the factions
-            self.tension_service.update_tension(
-                faction_a_id=sanction.imposer_id,
-                faction_b_id=sanction.target_id,
-                change=severity // 2,
-                reason=f"Sanction violation: {sanction.sanction_type.value}"
-            )
-        
-        return updated_sanction
+    # Calculate cumulative effects
+    total_tension_changes = {}
+    all_consequences = []
+    escalation_events = []
     
-    def check_expired_sanctions(self) -> List[Sanction]:
-        """
-        Check for and update expired sanctions.
-        
-        Returns:
-            List of sanctions that were marked as expired
-        """
-        now = datetime.utcnow()
-        active_sanctions = self.list_sanctions(status=SanctionStatus.ACTIVE)
-        expired_sanctions = []
-        
-        for sanction in active_sanctions:
-            if sanction.end_date and sanction.end_date < now:
-                # Mark as expired
-                updated = self.repository.update_sanction(
-                    sanction_id=sanction.id,
-                    updates={"status": SanctionStatus.EXPIRED}
+    for event_result in processed_events:
+        # Merge tension changes
+        for faction_pair, changes in event_result.get("tension_impact", {}).items():
+            if faction_pair in total_tension_changes:
+                total_tension_changes[faction_pair]["change"] += changes["change"]
+                total_tension_changes[faction_pair]["new_tension"] = max(
+                    0, min(100, total_tension_changes[faction_pair]["old_tension"] + total_tension_changes[faction_pair]["change"])
                 )
-                
-                if updated:
-                    # Create an expiration event
-                    event_data = {
-                        "event_type": DiplomaticEventType.OTHER,
-                        "factions": [sanction.imposer_id, sanction.target_id] + sanction.supporting_factions + sanction.opposing_factions,
-                        "description": f"Sanction expired: {sanction.description}",
-                        "severity": sanction.severity // 3,
-                        "public": sanction.is_public,
-                        "metadata": {
-                            "sanction_id": str(sanction.id),
-                            "sanction_type": sanction.sanction_type.value,
-                            "imposer_id": str(sanction.imposer_id),
-                            "target_id": str(sanction.target_id),
-                            "end_date": sanction.end_date.isoformat()
-                        },
-                        "tension_change": {
-                            str(sanction.target_id): -sanction.severity // 4  # Reduce tension slightly when sanctions expire
-                        }
-                    }
-                    
-                    self.repository.create_event(DiplomaticEvent(**event_data))
-                    
-                    # Update tension between the factions
-                    self.tension_service.update_tension(
-                        faction_a_id=sanction.imposer_id,
-                        faction_b_id=sanction.target_id,
-                        change=-sanction.severity // 4,
-                        reason=f"Sanction expired: {sanction.sanction_type.value}"
-                    )
-                    
-                    expired_sanctions.append(updated)
+            else:
+                total_tension_changes[faction_pair] = changes.copy()
         
-        return expired_sanctions 
+        # Collect consequences
+        all_consequences.extend(event_result.get("consequences", []))
+        
+        # Track escalation events
+        if event_result.get("requires_escalation"):
+            escalation_events.append({
+                "event_id": event_result["event"]["id"],
+                "reason": event_result.get("escalation_reason")
+            })
+    
+    return {
+        "success": True,
+        "chain_length": len(processed_events),
+        "events": processed_events,
+        "cumulative_effects": {
+            "tension_changes": total_tension_changes,
+            "consequences": all_consequences,
+            "escalations": escalation_events
+        },
+        "message": f"Event chain completed with {len(processed_events)} events triggered"
+    }

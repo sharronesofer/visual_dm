@@ -8,13 +8,75 @@ from datetime import datetime
 
 # Use fallback imports for missing dependencies
 try:
-    from backend.systems.motif.models import Motif
+    from backend.infrastructure.systems.motif.models import Motif
 except ImportError:
     # Fallback mock class for resilience
     class Motif:
         def __init__(self, **kwargs):
             for k, v in kwargs.items():
                 setattr(self, k, v)
+
+
+# Canonical motifs for the narrative system
+CANONICAL_MOTIFS = [
+    "betrayal", "redemption", "sacrifice", "discovery", "revenge", "love", "loss", 
+    "power", "corruption", "justice", "freedom", "oppression", "growth", "decay",
+    "mystery", "revelation", "conflict", "peace", "chaos", "order", "hope", "despair",
+    "unity", "division", "creation", "destruction", "wisdom", "ignorance", "courage",
+    "fear", "loyalty", "treachery", "honor", "shame", "ambition", "humility"
+]
+
+
+def roll_new_motif(exclude=None, chaos_source=False):
+    """
+    Generate a new motif with random properties.
+    
+    Args:
+        exclude: List of motif themes to exclude
+        chaos_source: Whether this is from a chaos event (affects weight)
+        
+    Returns:
+        Dictionary representing a new motif
+    """
+    exclude = exclude or []
+    available_motifs = [m for m in CANONICAL_MOTIFS if m not in exclude]
+    
+    if not available_motifs:
+        available_motifs = CANONICAL_MOTIFS  # Fallback if all excluded
+    
+    theme = random.choice(available_motifs)
+    
+    # Chaos motifs tend to have higher weight/intensity
+    if chaos_source:
+        weight = random.randint(3, 6)
+        lifespan = random.randint(5, 15)
+    else:
+        weight = random.randint(1, 4)
+        lifespan = random.randint(10, 25)
+    
+    return {
+        "theme": theme,
+        "weight": weight,
+        "lifespan": lifespan,
+        "entropy_tick": 0,
+        "created_at": datetime.utcnow().isoformat()
+    }
+
+
+def motif_needs_rotation(motif):
+    """
+    Check if a motif needs to be rotated out based on entropy.
+    
+    Args:
+        motif: Motif dictionary to check
+        
+    Returns:
+        True if motif should be rotated out, False otherwise
+    """
+    entropy_tick = motif.get("entropy_tick", 0)
+    lifespan = motif.get("lifespan", 10)
+    
+    return entropy_tick >= lifespan
 
 
 def synthesize_motifs(motifs: List[Motif]) -> Dict[str, Any]:
@@ -286,3 +348,100 @@ def estimate_motif_compatibility(*args, **kwargs):
 def calculate_motif_spread(*args, **kwargs):
     """Mock function for compatibility"""
     return {"spread_radius": 100.0, "effectiveness": 0.8}
+
+
+def generate_descriptors_from_theme(theme: str) -> List[str]:
+    """
+    Generate descriptive words based on a motif theme.
+    
+    Args:
+        theme: The theme name (e.g., "hope", "betrayal", "chaos")
+        
+    Returns:
+        List of descriptive words
+    """
+    theme_descriptors = {
+        "hope": ["bright", "optimistic", "uplifting", "inspiring", "promising"],
+        "betrayal": ["treacherous", "deceptive", "broken", "bitter", "painful"],
+        "chaos": ["unpredictable", "volatile", "turbulent", "disorderly", "wild"],
+        "death": ["somber", "final", "inevitable", "dark", "haunting"],
+        "power": ["commanding", "authoritative", "dominant", "forceful", "overwhelming"],
+        "redemption": ["healing", "transformative", "hopeful", "cleansing", "renewing"],
+        "peace": ["calm", "serene", "harmonious", "tranquil", "balanced"],
+        "vengeance": ["wrathful", "retributive", "fierce", "unforgiving", "consuming"],
+        "ascension": ["rising", "elevated", "transcendent", "noble", "enlightened"],
+        "collapse": ["crumbling", "deteriorating", "failing", "broken", "ruined"],
+        "revelation": ["illuminating", "shocking", "transformative", "eye-opening", "profound"],
+        "ruin": ["devastated", "destroyed", "desolate", "abandoned", "decaying"],
+        "protection": ["safe", "secure", "shielding", "defensive", "caring"],
+        "deception": ["misleading", "false", "illusory", "hidden", "manipulative"],
+        "sacrifice": ["noble", "costly", "meaningful", "painful", "selfless"]
+    }
+    
+    theme_lower = str(theme).lower()
+    
+    # Try to find exact match first
+    if theme_lower in theme_descriptors:
+        return theme_descriptors[theme_lower]
+    
+    # Try partial matches
+    for key, descriptors in theme_descriptors.items():
+        if key in theme_lower or theme_lower in key:
+            return descriptors
+    
+    # Default descriptors
+    return ["thematic", "influential", "present"]
+
+
+def determine_tone_from_theme(theme: str) -> str:
+    """
+    Determine the narrative tone based on a motif theme.
+    
+    Args:
+        theme: The theme name
+        
+    Returns:
+        Tone string: "light", "dark", or "neutral"
+    """
+    light_themes = ["hope", "peace", "redemption", "ascension", "protection", "healing", "love", "unity", "creation"]
+    dark_themes = ["betrayal", "chaos", "death", "vengeance", "collapse", "ruin", "deception", "corruption", "despair"]
+    
+    theme_lower = str(theme).lower()
+    
+    # Check for exact or partial matches
+    for light_theme in light_themes:
+        if light_theme in theme_lower:
+            return "light"
+    
+    for dark_theme in dark_themes:
+        if dark_theme in theme_lower:
+            return "dark"
+    
+    return "neutral"
+
+
+def determine_narrative_direction(theme: str) -> str:
+    """
+    Determine the narrative direction based on a motif theme.
+    
+    Args:
+        theme: The theme name
+        
+    Returns:
+        Direction string: "ascending", "descending", or "steady"
+    """
+    ascending_themes = ["hope", "ascension", "redemption", "growth", "healing", "revelation", "victory", "triumph"]
+    descending_themes = ["betrayal", "collapse", "death", "ruin", "decay", "corruption", "despair", "destruction"]
+    
+    theme_lower = str(theme).lower()
+    
+    # Check for exact or partial matches
+    for ascending_theme in ascending_themes:
+        if ascending_theme in theme_lower:
+            return "ascending"
+    
+    for descending_theme in descending_themes:
+        if descending_theme in theme_lower:
+            return "descending"
+    
+    return "steady"

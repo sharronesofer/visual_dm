@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import Dict, List, Any
 from datetime import datetime
 
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData
+
 class Task49ComprehensiveFix:
     """Comprehensive fix implementation for Task 49"""
     
@@ -79,7 +81,7 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 import math
 
-from backend.systems.chaos.models.pressure_data import PressureData
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData
 from backend.systems.chaos.core.config import ChaosConfig
 
 @dataclass
@@ -260,8 +262,8 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
 import random
 
-from backend.systems.chaos.models.chaos_events import ChaosEvent
-from backend.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
+from backend.infrastructure.systems.chaos.models.chaos_events import ChaosEvent
+from backend.infrastructure.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
 from backend.systems.chaos.core.config import ChaosConfig
 # REMOVED: deprecated event_base import
 
@@ -432,7 +434,7 @@ class EventTrigger:
         await asyncio.sleep(delay_hours * 3600)  # Convert to seconds
         
         # Create simplified chaos result for cascading event
-        from backend.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
+        from backend.infrastructure.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
         
         cascade_result = ChaosCalculationResult(
             chaos_score=chaos_score,
@@ -605,7 +607,7 @@ from datetime import datetime
 
 from backend.systems.chaos.core.chaos_engine import ChaosEngine, get_chaos_engine
 from backend.systems.chaos.services.mitigation_service import MitigationService
-from backend.systems.chaos.schemas.chaos_schemas import (
+from backend.infrastructure.systems.chaos.schemas.chaos_schemas import (
     ChaosStateResponse, 
     MitigationRequest,
     EventTriggerRequest
@@ -1285,11 +1287,11 @@ import asyncio
 from unittest.mock import Mock, AsyncMock
 from datetime import datetime, timedelta
 
-from backend.systems.chaos.utils.chaos_calculator import ChaosCalculator, ChaosCalculationResult
+from backend.infrastructure.systems.chaos.utils.chaos_calculator import ChaosCalculator, ChaosCalculationResult
 from backend.systems.chaos.core.event_trigger import EventTrigger
-from backend.systems.chaos.utils.mitigation_factor import MitigationFactorManager
-from backend.systems.chaos.utils.cross_system_integration import CrossSystemIntegrator
-from backend.systems.chaos.models.pressure_data import PressureData
+from backend.infrastructure.systems.chaos.utils.mitigation_factor import MitigationFactorManager
+from backend.infrastructure.systems.chaos.utils.cross_system_integration import CrossSystemIntegrator
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData
 from backend.systems.chaos.core.config import ChaosConfig
 
 class TestChaosCalculator:

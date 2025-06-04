@@ -7,7 +7,7 @@ using System.Text;
 using UnityEngine;
 using VDM.Infrastructure.Services;
 
-namespace VDM.Infrastructure.Services.Services.Websocket
+namespace VDM.Infrastructure.Services
 {
     /// <summary>
     /// Optimized WebSocket client with message batching, compression, and performance monitoring.

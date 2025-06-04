@@ -1,14 +1,28 @@
-"""Services for poi system"""
+"""Services for poi system - Pure Business Logic"""
 
-# Import services
-from .services import PoiService, create_poi_service
+# Import business logic services
+from .services import (
+    PoiData,
+    CreatePoiData,
+    UpdatePoiData,
+    PoiRepository,
+    PoiValidationService,
+    PoiBusinessService,
+    create_poi_business_service
+)
 from .poi_state_service import (
-    POIStateService,
+    POIStateBusinessService,
     StateTransitionValidator,
     StateTransitionRule,
-    StateTransitionEvent
+    StateTransitionEvent,
+    POIState,
+    POIType,
+    POIStateData,
+    POIRepository as StateRepository,
+    StateTransitionConfigService,
+    EventDispatcher,
+    create_poi_state_business_service
 )
-from .tilemap_service import placeholder_function
 from .metropolitan_spread_service import (
     MetropolitanSpreadService,
     MetropolitanArea,
@@ -67,15 +81,6 @@ from .landmark_service import (
     LandmarkQuest,
     get_landmark_service
 )
-from .poi_generator import (
-    POIGenerator,
-    GenerationType,
-    BiomeType,
-    GenerationRule,
-    WorldCell,
-    GenerationParameters,
-    get_poi_generator
-)
 from .event_integration_service import (
     EventIntegrationService,
     POIEventType,
@@ -85,7 +90,18 @@ from .event_integration_service import (
     publish_event_on_method,
     get_event_integration_service
 )
-from .unity_frontend_integration import (
+
+# Import technical services from infrastructure
+from backend.infrastructure.poi_generators import (
+    POIGenerator,
+    GenerationType,
+    BiomeType,
+    GenerationRule,
+    WorldCell,
+    GenerationParameters,
+    get_poi_generator
+)
+from backend.infrastructure.poi_integrations import (
     UnityFrontendIntegration,
     UnityMessageType,
     UnityUpdateFrequency,
@@ -94,15 +110,40 @@ from .unity_frontend_integration import (
     UnityEventNotification,
     get_unity_frontend_integration
 )
+from backend.infrastructure.tilemap_generators import (
+    TilemapService,
+    TileType,
+    RoomType,
+    Tile,
+    Room,
+    Tilemap,
+    get_tilemap_service
+)
 
 __all__ = [
-    "PoiService",
-    "create_poi_service",
-    "POIStateService",
+    # Core business services
+    "PoiData",
+    "CreatePoiData", 
+    "UpdatePoiData",
+    "PoiRepository",
+    "PoiValidationService",
+    "PoiBusinessService",
+    "create_poi_business_service",
+    
+    # State management business services
+    "POIStateBusinessService",
     "StateTransitionValidator", 
     "StateTransitionRule",
     "StateTransitionEvent",
-    "placeholder_function",
+    "POIState",
+    "POIType",
+    "POIStateData",
+    "StateRepository",
+    "StateTransitionConfigService",
+    "EventDispatcher",
+    "create_poi_state_business_service",
+    
+    # Other business services
     "MetropolitanSpreadService",
     "MetropolitanArea",
     "UrbanSize",
@@ -149,13 +190,6 @@ __all__ = [
     "LandmarkEffect",
     "LandmarkQuest",
     "get_landmark_service",
-    "POIGenerator",
-    "GenerationType",
-    "BiomeType",
-    "GenerationRule",
-    "WorldCell",
-    "GenerationParameters",
-    "get_poi_generator",
     "EventIntegrationService",
     "POIEventType",
     "EventPriority",
@@ -163,11 +197,27 @@ __all__ = [
     "EventSubscription",
     "publish_event_on_method",
     "get_event_integration_service",
+    
+    # Technical services (from infrastructure)
+    "POIGenerator",
+    "GenerationType",
+    "BiomeType",
+    "GenerationRule",
+    "WorldCell",
+    "GenerationParameters",
+    "get_poi_generator",
     "UnityFrontendIntegration",
     "UnityMessageType",
     "UnityUpdateFrequency",
     "UnityPOIModel",
     "UnitySystemStatus",
     "UnityEventNotification",
-    "get_unity_frontend_integration"
+    "get_unity_frontend_integration",
+    "TilemapService",
+    "TileType",
+    "RoomType",
+    "Tile",
+    "Room",
+    "Tilemap",
+    "get_tilemap_service"
 ]

@@ -1,4 +1,6 @@
-"""Models for faction system"""
+"""Models for faction system - Business Domain Models Only"""
 
-# Auto-generated imports
-from .models import *
+# Domain models (business logic)
+from .succession import *
+from .alliance import *
+from .faction import *

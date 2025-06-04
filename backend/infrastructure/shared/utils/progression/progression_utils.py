@@ -1,6 +1,6 @@
 from typing import Dict, Any
-from backend.systems.character.models import Character, Feat
-# # # from app.models import Character, Feat
+from backend.systems.character.models import Character, Ability
+# # # from app.models import Character, Ability
 
 def calculate_experience_needed(level: int) -> int:
     """Calculate the experience needed for the next level."""
@@ -44,14 +44,14 @@ def apply_ability_score_increase(character: Character, ability: str) -> Dict[str
     except Exception as e:
         return {"success": False, "error": str(e)}
 
-def select_feat(character: Character, feat: Feat) -> Dict[str, Any]:
-    """Select a feat for a character."""
+def select_ability(character: Character, ability: Ability) -> Dict[str, Any]:
+    """Select an ability for a character."""
     try:
-        if not character.can_take_feat(feat):
-            return {"success": False, "error": "Feat prerequisites not met"}
+        if not character.can_take_ability(ability):
+            return {"success": False, "error": "Ability prerequisites not met"}
         
-        character.feats.append(feat)
-        return {"success": True, "feat": feat.name}
+        character.abilities.append(ability)
+        return {"success": True, "ability": ability.name}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
@@ -60,8 +60,19 @@ def update_proficiency_bonus(character: Character) -> None:
     character.proficiency_bonus = 2 + ((character.level - 1) // 4)
 
 def calculate_hit_points(character: Character, is_level_up: bool = False) -> int:
-    """Calculate hit points for a character."""
-    base_hp = 10 if character.class_name == "Fighter" else 8
+    """Calculate hit points for a character based on their abilities and constitution."""
+    base_hp = 8  # Default base hit points
+    
+    # Check for combat-related abilities that might increase hit points
+    for ability in character.abilities:
+        ability_name = ability.name.lower() if hasattr(ability, 'name') else str(ability).lower()
+        if any(keyword in ability_name for keyword in ["toughness", "hardy", "resilient", "vitality"]):
+            base_hp = 10
+            break
+        elif any(keyword in ability_name for keyword in ["combat", "warrior", "fighter"]):
+            base_hp = 9
+            break
+    
     con_mod = (character.constitution - 10) // 2
     
     if is_level_up:

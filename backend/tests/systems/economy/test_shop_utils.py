@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.economy import shop_utils
+    from backend.infrastructure.utils import shop_utils
 except ImportError:
-    pytest.skip(f"Module backend.systems.economy.shop_utils not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.utils.shop_utils not found", allow_module_level=True)
 
 
 class TestShop_Utils:

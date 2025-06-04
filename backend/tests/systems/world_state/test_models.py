@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.world_state import models
+    from backend.infrastructure.systems.world_state import models
 except ImportError:
     pytest.skip(f"Module backend.systems.world_state.models not found", allow_module_level=True)
 

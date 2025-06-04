@@ -13,12 +13,12 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Union
 from uuid import UUID
 
-from backend.systems.diplomacy.core_services import DiplomacyService, TensionService
+from .core_services import DiplomacyService, TensionService
 from backend.systems.diplomacy.models import (
     DiplomaticStatus, TreatyType, DiplomaticEventType,
     DiplomaticIncidentType, DiplomaticIncidentSeverity
 )
-from backend.infrastructure.events.event_dispatcher import EventDispatcher
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 
 # Import services from other systems
 try:
@@ -37,16 +37,16 @@ except ImportError:
     CharacterService = None
 
 try:
-    from backend.systems.quest.services import QuestService
+    from backend.systems.quest.services.services import QuestBusinessService
 except ImportError:
     logging.warning("Quest services not available for diplomacy integration")
-    QuestService = None
+    QuestBusinessService = None
 
 try:
-    from backend.systems.world_state.services import WorldStateService
+    from backend.systems.world_state.services import World_StateService
 except ImportError:
     logging.warning("World state services not available for diplomacy integration")
-    WorldStateService = None
+    World_StateService = None
 
 logger = logging.getLogger(__name__)
 
@@ -480,7 +480,7 @@ class QuestDiplomacyIntegration:
         self.event_dispatcher = EventDispatcher.get_instance()
         
         # External services (may be None if not available)
-        self.quest_service = QuestService() if QuestService else None
+        self.quest_business_service = QuestBusinessService() if QuestBusinessService else None
         
         self._register_event_handlers()
     
@@ -581,8 +581,8 @@ class QuestDiplomacyIntegration:
             treaty_type = event_data.get("treaty_type")
             parties = [UUID(party_id) for party_id in event_data.get("parties", [])]
             
-            if not self.quest_service:
-                logger.warning("Quest service not available for treaty quest generation")
+            if not self.quest_business_service:
+                logger.warning("Quest business service not available for treaty quest generation")
                 return
             
             # Different treaty types generate different quest opportunities
@@ -633,7 +633,7 @@ class QuestDiplomacyIntegration:
                 }
                 
                 # This would call the quest service to create the quest
-                # self.quest_service.create_quest(quest_data)
+                # self.quest_business_service.create_quest(quest_data)
             
             logger.info(f"Generated {len(quest_templates)} quests for treaty {treaty_id}")
             
@@ -648,8 +648,8 @@ class QuestDiplomacyIntegration:
             perpetrator_id = UUID(event_data.get("perpetrator_id"))
             victim_id = UUID(event_data.get("victim_id"))
             
-            if not self.quest_service:
-                logger.warning("Quest service not available for incident quest generation")
+            if not self.quest_business_service:
+                logger.warning("Quest business service not available for incident quest generation")
                 return
             
             # Generate investigation or resolution quests based on incident type
@@ -687,8 +687,8 @@ class QuestDiplomacyIntegration:
             recipient_id = UUID(event_data.get("recipient_id"))
             deadline = event_data.get("deadline")
             
-            if not self.quest_service:
-                logger.warning("Quest service not available for ultimatum quest generation")
+            if not self.quest_business_service:
+                logger.warning("Quest business service not available for ultimatum quest generation")
                 return
             
             # Generate time-sensitive quests related to the ultimatum
@@ -728,7 +728,7 @@ class WorldStateDiplomacyIntegration:
         self.event_dispatcher = EventDispatcher.get_instance()
         
         # External services (may be None if not available)
-        self.world_state_service = WorldStateService() if WorldStateService else None
+        self.world_state_service = World_StateService() if World_StateService else None
         
         self._register_event_handlers()
     
@@ -873,34 +873,702 @@ class WorldStateDiplomacyIntegration:
     def get_regional_diplomatic_status(self, region_id: str) -> Dict[str, Any]:
         """Get diplomatic status summary for a specific region."""
         try:
-            if not self.world_state_service:
-                logger.warning("World state service not available for regional diplomatic status")
-                return {"available": False}
-            
-            # This would need integration with region/faction mapping
-            # For now, return a placeholder structure
+            # Initialize comprehensive status structure
             status = {
                 "available": True,
                 "region_id": region_id,
-                "active_treaties": 0,
-                "ongoing_negotiations": 0,
-                "recent_incidents": 0,
-                "tension_level": "unknown",
-                "last_updated": datetime.utcnow().isoformat()
+                "last_updated": datetime.utcnow().isoformat(),
+                "summary": {
+                    "active_treaties": 0,
+                    "ongoing_negotiations": 0,
+                    "recent_incidents": 0,
+                    "active_sanctions": 0,
+                    "pending_ultimatums": 0,
+                    "tension_level": "unknown"
+                },
+                "detailed_analysis": {
+                    "treaty_breakdown": {},
+                    "negotiation_status": {},
+                    "incident_severity": {},
+                    "sanction_impact": {},
+                    "relationship_matrix": {},
+                    "crisis_indicators": []
+                },
+                "recommendations": []
             }
             
-            # In a full implementation, this would:
-            # 1. Get all factions in the region
-            # 2. Analyze their diplomatic relationships
-            # 3. Count active treaties, negotiations, incidents
-            # 4. Calculate average tension levels
-            # 5. Identify recent diplomatic events
+            # If world state service is unavailable, try basic analysis without it
+            if not self.world_state_service:
+                logger.warning("World state service not available - performing limited analysis")
+                # Try to get basic diplomatic data without regional filtering
+                return self._get_basic_diplomatic_status(region_id, status)
+            
+            # Get factions in the region
+            try:
+                regional_factions = self._get_regional_factions(region_id)
+                if not regional_factions:
+                    logger.info(f"No factions found in region {region_id}")
+                    status["summary"]["tension_level"] = "peaceful"
+                    return status
+                    
+            except Exception as e:
+                logger.warning(f"Could not get regional factions for {region_id}: {e}")
+                return self._get_basic_diplomatic_status(region_id, status)
+            
+            # Analyze treaties involving regional factions
+            treaty_analysis = self._analyze_regional_treaties(regional_factions)
+            status["summary"]["active_treaties"] = treaty_analysis["total_count"]
+            status["detailed_analysis"]["treaty_breakdown"] = treaty_analysis["breakdown"]
+            
+            # Analyze ongoing negotiations
+            negotiation_analysis = self._analyze_regional_negotiations(regional_factions)
+            status["summary"]["ongoing_negotiations"] = negotiation_analysis["total_count"]
+            status["detailed_analysis"]["negotiation_status"] = negotiation_analysis["status"]
+            
+            # Analyze recent diplomatic incidents
+            incident_analysis = self._analyze_regional_incidents(regional_factions)
+            status["summary"]["recent_incidents"] = incident_analysis["total_count"]
+            status["detailed_analysis"]["incident_severity"] = incident_analysis["severity_breakdown"]
+            
+            # Analyze active sanctions
+            sanction_analysis = self._analyze_regional_sanctions(regional_factions)
+            status["summary"]["active_sanctions"] = sanction_analysis["total_count"]
+            status["detailed_analysis"]["sanction_impact"] = sanction_analysis["impact_analysis"]
+            
+            # Analyze pending ultimatums
+            ultimatum_analysis = self._analyze_regional_ultimatums(regional_factions)
+            status["summary"]["pending_ultimatums"] = ultimatum_analysis["total_count"]
+            
+            # Build relationship matrix
+            relationship_matrix = self._build_relationship_matrix(regional_factions)
+            status["detailed_analysis"]["relationship_matrix"] = relationship_matrix
+            
+            # Calculate overall tension level
+            tension_level = self._calculate_regional_tension_level(
+                treaty_analysis, incident_analysis, sanction_analysis, 
+                ultimatum_analysis, relationship_matrix
+            )
+            status["summary"]["tension_level"] = tension_level
+            
+            # Identify crisis indicators
+            crisis_indicators = self._identify_crisis_indicators(
+                regional_factions, incident_analysis, sanction_analysis, 
+                ultimatum_analysis, relationship_matrix
+            )
+            status["detailed_analysis"]["crisis_indicators"] = crisis_indicators
+            
+            # Generate recommendations
+            recommendations = self._generate_diplomatic_recommendations(
+                region_id, regional_factions, status["detailed_analysis"]
+            )
+            status["recommendations"] = recommendations
             
             return status
             
         except Exception as e:
-            logger.error(f"Error getting regional diplomatic status: {e}")
-            return {"available": False, "error": str(e)}
+            logger.error(f"Error getting regional diplomatic status for {region_id}: {e}")
+            return {
+                "available": False, 
+                "error": str(e),
+                "region_id": region_id,
+                "last_updated": datetime.utcnow().isoformat()
+            }
+
+    def _get_basic_diplomatic_status(self, region_id: str, status: Dict[str, Any]) -> Dict[str, Any]:
+        """Get basic diplomatic status without regional filtering."""
+        try:
+            # Get all active treaties
+            active_treaties = self.diplomacy_service.list_treaties(active_only=True)
+            status["summary"]["active_treaties"] = len(active_treaties)
+            
+            # Get recent incidents (last 30 days)
+            recent_incidents = self.diplomacy_service.list_diplomatic_incidents(
+                resolved=False,
+                limit=100
+            )
+            status["summary"]["recent_incidents"] = len(recent_incidents)
+            
+            # Basic tension assessment
+            if len(recent_incidents) > 10:
+                status["summary"]["tension_level"] = "high"
+            elif len(recent_incidents) > 5:
+                status["summary"]["tension_level"] = "moderate"
+            else:
+                status["summary"]["tension_level"] = "low"
+                
+        except Exception as e:
+            logger.error(f"Error in basic diplomatic analysis: {e}")
+            
+        return status
+
+    def _get_regional_factions(self, region_id: str) -> List[UUID]:
+        """Get list of faction IDs operating in the specified region."""
+        regional_factions = []
+        
+        try:
+            if self.faction_service:
+                # Try to get factions by region
+                factions = self.faction_service.get_factions_by_region(region_id)
+                regional_factions = [faction.id for faction in factions]
+            else:
+                # Fallback: try to infer from world state or return empty
+                logger.warning("Faction service not available for regional faction lookup")
+                
+        except AttributeError:
+            # Method doesn't exist, try alternative approach
+            logger.warning("get_factions_by_region method not available")
+            
+        except Exception as e:
+            logger.error(f"Error getting regional factions: {e}")
+            
+        return regional_factions
+
+    def _analyze_regional_treaties(self, regional_factions: List[UUID]) -> Dict[str, Any]:
+        """Analyze treaties involving regional factions."""
+        analysis = {
+            "total_count": 0,
+            "breakdown": {
+                "alliance": 0,
+                "trade": 0,
+                "non_aggression": 0,
+                "ceasefire": 0,
+                "mutual_defense": 0,
+                "custom": 0
+            }
+        }
+        
+        try:
+            for faction_id in regional_factions:
+                faction_treaties = self.diplomacy_service.list_treaties(
+                    faction_id=faction_id,
+                    active_only=True
+                )
+                
+                for treaty in faction_treaties:
+                    # Only count if at least one other party is also regional
+                    other_parties = [p for p in treaty.parties if p != faction_id]
+                    if any(p in regional_factions for p in other_parties):
+                        analysis["total_count"] += 1
+                        treaty_type = treaty.type.value if hasattr(treaty.type, 'value') else str(treaty.type)
+                        if treaty_type in analysis["breakdown"]:
+                            analysis["breakdown"][treaty_type] += 1
+                        else:
+                            analysis["breakdown"]["custom"] += 1
+                            
+        except Exception as e:
+            logger.error(f"Error analyzing regional treaties: {e}")
+            
+        return analysis
+
+    def _analyze_regional_incidents(self, regional_factions: List[UUID]) -> Dict[str, Any]:
+        """Analyze recent diplomatic incidents in the region."""
+        analysis = {
+            "total_count": 0,
+            "severity_breakdown": {
+                "minor": 0,
+                "moderate": 0,
+                "major": 0,
+                "critical": 0
+            }
+        }
+        
+        try:
+            for faction_id in regional_factions:
+                # Get incidents involving this faction
+                incidents = self.diplomacy_service.list_diplomatic_incidents(
+                    faction_id=faction_id,
+                    resolved=False,
+                    limit=50
+                )
+                
+                for incident in incidents:
+                    # Check if other party is also regional
+                    other_faction = incident.victim_id if incident.perpetrator_id == faction_id else incident.perpetrator_id
+                    if other_faction in regional_factions:
+                        analysis["total_count"] += 1
+                        severity = incident.severity.value if hasattr(incident.severity, 'value') else str(incident.severity)
+                        if severity in analysis["severity_breakdown"]:
+                            analysis["severity_breakdown"][severity] += 1
+                            
+        except Exception as e:
+            logger.error(f"Error analyzing regional incidents: {e}")
+            
+        return analysis
+
+    def _analyze_regional_negotiations(self, regional_factions: List[UUID]) -> Dict[str, Any]:
+        """Analyze ongoing negotiations between regional factions."""
+        analysis = {
+            "total_count": 0,
+            "status": {
+                "pending": 0,
+                "active": 0,
+                "counter_offered": 0,
+                "stalled": 0,
+                "final_review": 0
+            },
+            "negotiation_types": {
+                "treaty": 0,
+                "trade": 0,
+                "ceasefire": 0,
+                "territorial": 0,
+                "alliance": 0,
+                "other": 0
+            },
+            "urgency_indicators": {
+                "high_priority": 0,
+                "medium_priority": 0,
+                "low_priority": 0
+            },
+            "duration_analysis": {
+                "recently_started": 0,  # < 7 days
+                "ongoing": 0,           # 7-30 days
+                "long_running": 0       # > 30 days
+            },
+            "success_probability": {
+                "high": 0,
+                "medium": 0,
+                "low": 0
+            }
+        }
+        
+        try:
+            for faction_id in regional_factions:
+                # Get negotiations where this faction is involved
+                faction_negotiations = self.diplomacy_service.list_negotiations(
+                    faction_id=faction_id,
+                    active_only=True
+                )
+                
+                for negotiation in faction_negotiations:
+                    # Check if other party is also in region
+                    other_parties = [p for p in negotiation.participants if p != faction_id]
+                    if any(p in regional_factions for p in other_parties):
+                        analysis["total_count"] += 1
+                        
+                        # Analyze status
+                        status = negotiation.status.value if hasattr(negotiation.status, 'value') else str(negotiation.status)
+                        if status in analysis["status"]:
+                            analysis["status"][status] += 1
+                        else:
+                            analysis["status"]["active"] += 1  # Default fallback
+                        
+                        # Analyze negotiation type
+                        neg_type = self._determine_negotiation_type(negotiation)
+                        if neg_type in analysis["negotiation_types"]:
+                            analysis["negotiation_types"][neg_type] += 1
+                        else:
+                            analysis["negotiation_types"]["other"] += 1
+                        
+                        # Analyze urgency based on context and deadlines
+                        urgency = self._calculate_negotiation_urgency(negotiation, regional_factions)
+                        analysis["urgency_indicators"][urgency] += 1
+                        
+                        # Analyze duration
+                        duration_category = self._categorize_negotiation_duration(negotiation)
+                        analysis["duration_analysis"][duration_category] += 1
+                        
+                        # Analyze success probability
+                        success_prob = self._estimate_negotiation_success_probability(negotiation, regional_factions)
+                        analysis["success_probability"][success_prob] += 1
+                        
+        except Exception as e:
+            logger.error(f"Error analyzing regional negotiations: {e}")
+            
+        return analysis
+    
+    def _determine_negotiation_type(self, negotiation) -> str:
+        """Determine the type of negotiation based on its content."""
+        try:
+            # Check if negotiation has a type field
+            if hasattr(negotiation, 'type'):
+                return negotiation.type.value if hasattr(negotiation.type, 'value') else str(negotiation.type)
+            
+            # Infer from title or description
+            title_lower = getattr(negotiation, 'title', '').lower()
+            description_lower = getattr(negotiation, 'description', '').lower()
+            
+            if any(term in title_lower or term in description_lower for term in ['treaty', 'accord', 'pact']):
+                return "treaty"
+            elif any(term in title_lower or term in description_lower for term in ['trade', 'commerce', 'economic']):
+                return "trade"
+            elif any(term in title_lower or term in description_lower for term in ['ceasefire', 'armistice', 'truce']):
+                return "ceasefire"
+            elif any(term in title_lower or term in description_lower for term in ['territory', 'border', 'land']):
+                return "territorial"
+            elif any(term in title_lower or term in description_lower for term in ['alliance', 'partnership', 'coalition']):
+                return "alliance"
+            else:
+                return "other"
+                
+        except Exception as e:
+            logger.warning(f"Error determining negotiation type: {e}")
+            return "other"
+    
+    def _calculate_negotiation_urgency(self, negotiation, regional_factions: List[UUID]) -> str:
+        """Calculate urgency level of a negotiation."""
+        try:
+            urgency_score = 0
+            
+            # Check for deadlines
+            if hasattr(negotiation, 'deadline') and negotiation.deadline:
+                time_left = negotiation.deadline - datetime.utcnow()
+                if time_left.days < 3:
+                    urgency_score += 30
+                elif time_left.days < 7:
+                    urgency_score += 20
+                elif time_left.days < 14:
+                    urgency_score += 10
+            
+            # Check relationship status between parties
+            for i, faction_a in enumerate(negotiation.participants):
+                for faction_b in negotiation.participants[i+1:]:
+                    if faction_a in regional_factions and faction_b in regional_factions:
+                        try:
+                            relationship = self.diplomacy_service.get_faction_relationship(faction_a, faction_b)
+                            tension = relationship.get("tension", 0)
+                            if tension > 80:
+                                urgency_score += 25
+                            elif tension > 60:
+                                urgency_score += 15
+                            elif tension > 40:
+                                urgency_score += 5
+                        except Exception:
+                            pass
+            
+            # Check for crisis context
+            if hasattr(negotiation, 'context') and negotiation.context:
+                crisis_indicators = ['crisis', 'urgent', 'emergency', 'immediate', 'war', 'conflict']
+                context_lower = str(negotiation.context).lower()
+                if any(indicator in context_lower for indicator in crisis_indicators):
+                    urgency_score += 20
+            
+            # Determine urgency level
+            if urgency_score >= 40:
+                return "high_priority"
+            elif urgency_score >= 20:
+                return "medium_priority"
+            else:
+                return "low_priority"
+                
+        except Exception as e:
+            logger.warning(f"Error calculating negotiation urgency: {e}")
+            return "medium_priority"
+    
+    def _categorize_negotiation_duration(self, negotiation) -> str:
+        """Categorize negotiation by how long it has been ongoing."""
+        try:
+            if hasattr(negotiation, 'created_at'):
+                duration = datetime.utcnow() - negotiation.created_at
+                if duration.days < 7:
+                    return "recently_started"
+                elif duration.days <= 30:
+                    return "ongoing"
+                else:
+                    return "long_running"
+            else:
+                return "ongoing"  # Default if no creation date
+                
+        except Exception as e:
+            logger.warning(f"Error categorizing negotiation duration: {e}")
+            return "ongoing"
+    
+    def _estimate_negotiation_success_probability(self, negotiation, regional_factions: List[UUID]) -> str:
+        """Estimate the likelihood of negotiation success."""
+        try:
+            success_score = 50  # Start neutral
+            
+            # Factor in relationship status
+            for i, faction_a in enumerate(negotiation.participants):
+                for faction_b in negotiation.participants[i+1:]:
+                    if faction_a in regional_factions and faction_b in regional_factions:
+                        try:
+                            relationship = self.diplomacy_service.get_faction_relationship(faction_a, faction_b)
+                            tension = relationship.get("tension", 50)
+                            trust = relationship.get("trust_level", 50)
+                            
+                            # Lower tension and higher trust increase success probability
+                            success_score += (50 - tension) * 0.3
+                            success_score += (trust - 50) * 0.3
+                        except Exception:
+                            pass
+            
+            # Factor in negotiation progress
+            if hasattr(negotiation, 'status'):
+                status = str(negotiation.status).lower()
+                if 'final' in status or 'review' in status:
+                    success_score += 20
+                elif 'stalled' in status or 'deadlock' in status:
+                    success_score -= 30
+                elif 'active' in status:
+                    success_score += 10
+            
+            # Factor in duration (very long negotiations may be troubled)
+            if hasattr(negotiation, 'created_at'):
+                duration = datetime.utcnow() - negotiation.created_at
+                if duration.days > 60:
+                    success_score -= 15
+                elif duration.days > 30:
+                    success_score -= 5
+            
+            # Factor in external pressures
+            if hasattr(negotiation, 'external_pressures') and negotiation.external_pressures:
+                success_score -= len(negotiation.external_pressures) * 5
+            
+            # Determine success probability category
+            if success_score >= 70:
+                return "high"
+            elif success_score >= 40:
+                return "medium"
+            else:
+                return "low"
+                
+        except Exception as e:
+            logger.warning(f"Error estimating negotiation success probability: {e}")
+            return "medium"
+
+    def _analyze_regional_sanctions(self, regional_factions: List[UUID]) -> Dict[str, Any]:
+        """Analyze active sanctions involving regional factions."""
+        analysis = {
+            "total_count": 0,
+            "impact_analysis": {
+                "economic_impact": "low",
+                "diplomatic_impact": "low",
+                "affected_factions": []
+            }
+        }
+        
+        try:
+            for faction_id in regional_factions:
+                # Get sanctions imposed by this faction
+                imposed_sanctions = self.diplomacy_service.list_sanctions(
+                    imposer_id=faction_id,
+                    active_only=True
+                )
+                
+                # Get sanctions targeting this faction
+                targeted_sanctions = self.diplomacy_service.list_sanctions(
+                    target_id=faction_id,
+                    active_only=True
+                )
+                
+                for sanction in imposed_sanctions + targeted_sanctions:
+                    other_faction = sanction.target_id if sanction.imposer_id == faction_id else sanction.imposer_id
+                    if other_faction in regional_factions:
+                        analysis["total_count"] += 1
+                        if str(other_faction) not in analysis["impact_analysis"]["affected_factions"]:
+                            analysis["impact_analysis"]["affected_factions"].append(str(other_faction))
+                            
+        except Exception as e:
+            logger.error(f"Error analyzing regional sanctions: {e}")
+            
+        return analysis
+
+    def _analyze_regional_ultimatums(self, regional_factions: List[UUID]) -> Dict[str, Any]:
+        """Analyze pending ultimatums between regional factions."""
+        analysis = {
+            "total_count": 0,
+            "urgency_levels": {
+                "immediate": 0,
+                "urgent": 0,
+                "moderate": 0
+            }
+        }
+        
+        try:
+            for faction_id in regional_factions:
+                ultimatums = self.diplomacy_service.list_ultimatums(
+                    faction_id=faction_id,
+                    active_only=True
+                )
+                
+                for ultimatum in ultimatums:
+                    other_faction = ultimatum.recipient_id if ultimatum.issuer_id == faction_id else ultimatum.issuer_id
+                    if other_faction in regional_factions:
+                        analysis["total_count"] += 1
+                        
+                        # Calculate urgency based on deadline
+                        time_left = ultimatum.deadline - datetime.utcnow()
+                        if time_left.days < 1:
+                            analysis["urgency_levels"]["immediate"] += 1
+                        elif time_left.days < 7:
+                            analysis["urgency_levels"]["urgent"] += 1
+                        else:
+                            analysis["urgency_levels"]["moderate"] += 1
+                            
+        except Exception as e:
+            logger.error(f"Error analyzing regional ultimatums: {e}")
+            
+        return analysis
+
+    def _build_relationship_matrix(self, regional_factions: List[UUID]) -> Dict[str, Any]:
+        """Build a matrix of diplomatic relationships between regional factions."""
+        matrix = {}
+        
+        try:
+            for faction_a in regional_factions:
+                faction_a_str = str(faction_a)
+                matrix[faction_a_str] = {}
+                
+                for faction_b in regional_factions:
+                    if faction_a != faction_b:
+                        faction_b_str = str(faction_b)
+                        relationship = self.diplomacy_service.get_faction_relationship(faction_a, faction_b)
+                        matrix[faction_a_str][faction_b_str] = {
+                            "status": relationship.get("status", "neutral"),
+                            "tension": relationship.get("tension", 0),
+                            "trust": relationship.get("trust_level", 50)
+                        }
+                        
+        except Exception as e:
+            logger.error(f"Error building relationship matrix: {e}")
+            
+        return matrix
+
+    def _calculate_regional_tension_level(self, treaty_analysis, incident_analysis, 
+                                        sanction_analysis, ultimatum_analysis, 
+                                        relationship_matrix) -> str:
+        """Calculate overall tension level for the region."""
+        try:
+            tension_score = 0
+            
+            # Factor in incidents
+            tension_score += incident_analysis["total_count"] * 5
+            tension_score += incident_analysis["severity_breakdown"]["critical"] * 20
+            tension_score += incident_analysis["severity_breakdown"]["major"] * 10
+            
+            # Factor in sanctions
+            tension_score += sanction_analysis["total_count"] * 15
+            
+            # Factor in ultimatums
+            tension_score += ultimatum_analysis["total_count"] * 25
+            tension_score += ultimatum_analysis["urgency_levels"]["immediate"] * 30
+            
+            # Factor in negative treaties (reduce tension)
+            tension_score -= treaty_analysis["breakdown"]["alliance"] * 10
+            tension_score -= treaty_analysis["breakdown"]["trade"] * 5
+            
+            # Classify tension level
+            if tension_score >= 100:
+                return "critical"
+            elif tension_score >= 60:
+                return "high"
+            elif tension_score >= 30:
+                return "moderate"
+            elif tension_score >= 10:
+                return "low"
+            else:
+                return "peaceful"
+                
+        except Exception as e:
+            logger.error(f"Error calculating tension level: {e}")
+            return "unknown"
+
+    def _identify_crisis_indicators(self, regional_factions, incident_analysis, 
+                                  sanction_analysis, ultimatum_analysis, 
+                                  relationship_matrix) -> List[Dict[str, Any]]:
+        """Identify potential crisis situations in the region."""
+        indicators = []
+        
+        try:
+            # Check for immediate ultimatum deadlines
+            if ultimatum_analysis["urgency_levels"]["immediate"] > 0:
+                indicators.append({
+                    "type": "imminent_ultimatum_deadline",
+                    "severity": "high",
+                    "description": f"{ultimatum_analysis['urgency_levels']['immediate']} ultimatum(s) expire within 24 hours",
+                    "recommended_action": "immediate diplomatic intervention required"
+                })
+            
+            # Check for escalating incidents
+            if incident_analysis["severity_breakdown"]["critical"] > 0:
+                indicators.append({
+                    "type": "critical_incidents",
+                    "severity": "high",
+                    "description": f"{incident_analysis['severity_breakdown']['critical']} critical diplomatic incidents active",
+                    "recommended_action": "crisis management protocols should be activated"
+                })
+            
+            # Check for war-level tensions
+            for faction_a, relationships in relationship_matrix.items():
+                for faction_b, relationship in relationships.items():
+                    if relationship.get("status") == "war":
+                        indicators.append({
+                            "type": "active_warfare",
+                            "severity": "critical",
+                            "description": f"Active warfare between factions {faction_a} and {faction_b}",
+                            "recommended_action": "ceasefire negotiations urgently needed"
+                        })
+                    elif relationship.get("tension", 0) > 90:
+                        indicators.append({
+                            "type": "pre_war_tension",
+                            "severity": "high",
+                            "description": f"Extremely high tension between factions {faction_a} and {faction_b}",
+                            "recommended_action": "preventive diplomacy recommended"
+                        })
+                        
+        except Exception as e:
+            logger.error(f"Error identifying crisis indicators: {e}")
+            
+        return indicators
+
+    def _generate_diplomatic_recommendations(self, region_id: str, regional_factions: List[UUID], 
+                                           analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Generate diplomatic recommendations based on regional analysis."""
+        recommendations = []
+        
+        try:
+            # Recommend peace initiatives if high tension
+            if len(analysis.get("crisis_indicators", [])) > 0:
+                recommendations.append({
+                    "priority": "high",
+                    "type": "crisis_management",
+                    "title": "Implement Crisis Management Protocols",
+                    "description": "Multiple crisis indicators detected. Immediate diplomatic intervention recommended.",
+                    "actions": [
+                        "Deploy senior diplomatic personnel to region",
+                        "Establish direct communication channels between conflicting parties",
+                        "Consider emergency peace summit"
+                    ]
+                })
+            
+            # Recommend trade agreements if low cooperation
+            if analysis["treaty_breakdown"].get("trade", 0) < len(regional_factions) // 3:
+                recommendations.append({
+                    "priority": "medium",
+                    "type": "economic_cooperation",
+                    "title": "Promote Trade Agreements",
+                    "description": "Low level of economic cooperation detected. Trade agreements could improve stability.",
+                    "actions": [
+                        "Identify mutually beneficial trade opportunities",
+                        "Organize regional trade conferences",
+                        "Provide trade agreement templates and support"
+                    ]
+                })
+            
+            # Recommend alliance building if many neutral relationships
+            neutral_count = sum(
+                1 for relationships in analysis["relationship_matrix"].values()
+                for rel in relationships.values()
+                if rel.get("status") == "neutral"
+            )
+            
+            if neutral_count > len(regional_factions):
+                recommendations.append({
+                    "priority": "low",
+                    "type": "alliance_building",
+                    "title": "Foster Strategic Alliances",
+                    "description": "Many neutral relationships could be strengthened through alliance building.",
+                    "actions": [
+                        "Host regional diplomatic summits",
+                        "Facilitate cultural exchange programs",
+                        "Support mutual defense discussions"
+                    ]
+                })
+                
+        except Exception as e:
+            logger.error(f"Error generating recommendations: {e}")
+            
+        return recommendations
 
 
 class DiplomacyIntegrationManager:
@@ -937,8 +1605,8 @@ class DiplomacyIntegrationManager:
             return {
                 "faction_service_available": FactionService is not None,
                 "character_service_available": CharacterService is not None,
-                "quest_service_available": QuestService is not None,
-                "world_state_service_available": WorldStateService is not None,
+                "quest_service_available": QuestBusinessService is not None,
+                "world_state_service_available": World_StateService is not None,
                 "integrations_active": True,
                 "last_check": datetime.utcnow().isoformat()
             }

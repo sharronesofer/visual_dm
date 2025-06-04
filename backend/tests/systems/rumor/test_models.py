@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.rumor import models
+    from backend.infrastructure.systems.rumor import models
 except ImportError:
-    pytest.skip(f"Module backend.systems.rumor.models not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.rumor.models not found", allow_module_level=True)
 
 
 class TestModels:

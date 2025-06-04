@@ -1,7 +1,7 @@
 # FactionArc System Documentation
 
 ## Overview
-`FactionArc` is a robust data structure for representing faction-specific narrative arcs in the Visual_DM Arcs System. It extends the `GlobalArc` architecture, adding properties and logic for faction identity, goals, progression, inter-faction relationships, and completion criteria.
+`FactionArc` is a robust data structure for representing faction-specific narrative arcs in the Dreamforge Arcs System. It extends the `GlobalArc` architecture, adding properties and logic for faction identity, goals, progression, inter-faction relationships, and completion criteria.
 
 ---
 

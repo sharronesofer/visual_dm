@@ -1,2 +1,0 @@
-"""Repositories for economy system"""
-

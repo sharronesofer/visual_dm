@@ -1,15 +1,19 @@
 """
-Event Trigger - Handles chaos event triggering when thresholds are exceeded
+Event Trigger
+
+Core event triggering logic for the chaos system.
+Handles event probability calculations, cooldowns, and trigger execution.
 """
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Any
-from datetime import datetime, timedelta
 import random
+from typing import Dict, List, Optional, Any, Tuple
+from datetime import datetime, timedelta
+from dataclasses import dataclass
 
-from backend.systems.chaos.models.chaos_events import ChaosEvent
-from backend.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
+from backend.infrastructure.systems.chaos.models.chaos_events import ChaosEvent
+from backend.infrastructure.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
 from backend.systems.chaos.core.config import ChaosConfig
 # REMOVED: deprecated event_base import
 
@@ -56,7 +60,6 @@ class EventTrigger:
         
         # Check event cooldowns
         if self._is_region_in_cooldown(region_id):
-            logger.info(f"Region {region_id} in cooldown, skipping event trigger")
             return triggered_events
         
         # Select events based on recommendations
@@ -71,7 +74,7 @@ class EventTrigger:
                     await self._schedule_cascading_events(event)
                     
             except Exception as e:
-                logger.error(f"Failed to trigger chaos event {event_type}: {e}")
+                pass  # Error triggering event
         
         # Update cooldowns
         if triggered_events:
@@ -119,8 +122,7 @@ class EventTrigger:
         # Dispatch to affected systems
         await self._dispatch_to_systems(chaos_event)
         
-        # Log the event
-        logger.info(f"Triggered chaos event {event_type} in region {region_id}")
+        # Event triggered successfully
         
         # Track recent events
         self.recent_events.append({
@@ -148,7 +150,7 @@ class EventTrigger:
                     target_system=system_name
                 )
             except Exception as e:
-                logger.error(f"Failed to dispatch chaos event to {system_name}: {e}")
+                pass  # Error dispatching to system
     
     async def _schedule_cascading_events(self, primary_event: ChaosEvent):
         """Schedule cascading secondary events"""
@@ -180,7 +182,7 @@ class EventTrigger:
         await asyncio.sleep(delay_hours * 3600)  # Convert to seconds
         
         # Create simplified chaos result for cascading event
-        from backend.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
+        from backend.infrastructure.systems.chaos.utils.chaos_calculator import ChaosCalculationResult
         
         cascade_result = ChaosCalculationResult(
             chaos_score=chaos_score,

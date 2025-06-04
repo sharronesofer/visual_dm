@@ -1,36 +1,62 @@
 {
-  "id": "e7bb96b1-afe3-4fbc-ba41-f83a973bea9e",
-  "created_at": "2025-04-29T01:34:24.942935Z",
-  "updated_at": "2025-05-24T01:34:24.942938Z",
-  "name": "Michael Walton",
-  "race": "ELF",
-  "character_class": "WIZARD",
-  "level": 8,
-  "experience_points": 260954,
-  "stats": {
-    "strength": 12,
-    "dexterity": 17,
-    "constitution": 9,
-    "intelligence": 9,
-    "wisdom": 12,
-    "charisma": 11
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "player_id": "player_123",
+  "character_name": "Thorin Stormaxe",
+  "race": "DWARF",
+  "feats": ["COMBAT_EXPERTISE", "TOUGHNESS", "WEAPON_MASTERY"],
+  "level": 5,
+  "experience": 6500,
+  "background": "A former royal guard who lost his position in a political upheaval.",
+  "alignment": "lawful_good",
+  "attributes": {
+    "strength": 4,
+    "dexterity": 1,
+    "constitution": 3,
+    "intelligence": 0,
+    "wisdom": 2,
+    "charisma": -1
   },
-  "hit_points": {
-    "current": 35,
-    "maximum": 71
+  "derived_stats": {
+    "hit_points": 45,
+    "max_hit_points": 45,
+    "armor_class": 18,
+    "initiative": 1,
+    "speed": 25,
+    "proficiency_bonus": 3
   },
-  "location": {
-    "region_id": "1e6e582b-c4db-4e6c-b6f8-519b7da8d6a3",
-    "coordinates": {
-      "q": 8,
-      "r": 5,
-      "s": 1
-    }
+  "skills": {
+    "athletics": 7,
+    "intimidation": 2,
+    "perception": 5
   },
-  "background": "Guess Mrs final big defense at again wide.",
-  "personality_traits": [
-    "citizen",
-    "finally",
-    "ask"
-  ]
+  "abilities": ["Second Wind", "Action Surge", "Extra Attack"],
+  "languages": ["Common", "Dwarvish"],
+  "personality": {
+    "traits": ["Loyal to friends", "Suspicious of authority"],
+    "ideals": ["Justice must be served"],
+    "bonds": ["My former captain taught me everything"],
+    "flaws": ["I hold grudges for too long"]
+  },
+  "game_state": {
+    "gold": 450,
+    "reputation": 25,
+    "faction_affiliations": ["City Guard Alumni"],
+    "status_effects": [],
+    "conditions": []
+  },
+  "narrative": {
+    "backstory": "Once served as a royal guard in the mountain kingdom.",
+    "current_goal": "Restore honor to his family name",
+    "motivations": ["Justice", "Loyalty", "Honor"],
+    "fears": ["Political corruption"],
+    "secrets": ["Knows about corruption in the royal court"]
+  },
+  "metadata": {
+    "created_at": "2024-01-15T10:30:00Z",
+    "updated_at": "2024-01-20T14:45:00Z",
+    "version": "1.2",
+    "owner_id": "player_123"
+  },
+  "is_active": true,
+  "is_npc": false
 }

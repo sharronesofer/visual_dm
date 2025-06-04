@@ -61,7 +61,7 @@ If you need Mirror networking, add a stable version:
 ## 🔍 **VERIFICATION COMPLETED**
 
 ### **Unity CLI Monitoring Results:**
-- ✅ **Project path recognized:** `/Users/Sharrone/Visual_DM/VDM`
+- ✅ **Project path recognized:** `/Users/Sharrone/Dreamforge/VDM`
 - ✅ **Licensing successful:** Unity license validated
 - ✅ **Package Manager:** No resolution errors
 - ✅ **Assembly compilation:** All assemblies processed successfully
@@ -71,7 +71,7 @@ If you need Mirror networking, add a stable version:
 ```
 AssetDatabase: script compilation time: 14.393426s
 [Package Manager] Done resolving packages in 2.12 seconds
-Successfully changed project path to: /Users/Sharrone/Visual_DM/VDM
+Successfully changed project path to: /Users/Sharrone/Dreamforge/VDM
 ```
 
 ## 🛠️ **CLI TOOLS AVAILABLE**

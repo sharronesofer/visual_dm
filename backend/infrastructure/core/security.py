@@ -7,7 +7,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from backend.infrastructure.config import settings
+from backend.infrastructure.core.config import settings
 from backend.infrastructure.database import get_db
 # Placeholder import - will need actual user model
 # from backend.infrastructure.shared.models import User

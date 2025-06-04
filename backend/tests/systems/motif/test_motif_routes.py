@@ -10,9 +10,11 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.motif import motif_routes
+    from backend.infrastructure.systems.motif.routers import motif_routes
 except ImportError:
-    pytest.skip(f"Module backend.systems.motif.motif_routes not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.motif.routers.motif_routes not found", allow_module_level=True)
+
+from backend.infrastructure.systems.motif import routers
 
 
 class TestMotif_Routes:

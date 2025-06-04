@@ -74,21 +74,17 @@ class EnhancedBatchFixer:
         fixes = 0
         
         # Fix Calendar import in time manager tests
-        if 'test_time_manager.py' in file_path and 'Calendar' in content and 'from backend.systems.time.models.calendar_model import' not in content:
-            # Find import section
+        if 'test_time_manager.py' in file_path and 'Calendar' in content and 'from backend.systems.game_time.models.calendar_model import' not in content:
+            # Find imports section
             lines = content.split('\n')
-            import_line_idx = -1
+            import_line_idx = None
             for i, line in enumerate(lines):
-                if line.startswith('from backend.systems.time'):
+                if line.startswith('from backend.systems.game_time'):
                     import_line_idx = i
                     break
             
-            if import_line_idx >= 0:
-                # Add Calendar import
-                if 'CalendarData' in lines[import_line_idx]:
-                    lines[import_line_idx] = lines[import_line_idx].replace('CalendarData', 'CalendarData, Calendar')
-                else:
-                    lines.insert(import_line_idx + 1, 'from backend.systems.time.models.calendar_model import Calendar')
+            if import_line_idx is not None:
+                lines.insert(import_line_idx + 1, 'from backend.systems.game_time.models.calendar_model import Calendar')
                 
                 content = '\n'.join(lines)
                 fixes += 1

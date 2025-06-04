@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.npc.routers.npc_character_routes import npc_character_routes
+    from backend.systems.npc.routers import npc_character_routes
 except ImportError:
-    pytest.skip(f"Module backend.systems.npc.npc_character_routes not found", allow_module_level=True)
+    pytest.skip(f"Module backend.systems.npc.routers.npc_character_routes not found", allow_module_level=True)
 
 
 class TestNpc_Character_Routes:

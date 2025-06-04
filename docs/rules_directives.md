@@ -51,7 +51,7 @@ Start with taskmaster and begin with the first task/subtask, implemeneting, test
 
 ## Leveling & Progression
 - Characters do **NOT** have traditional "classes." All progression is feat-based and skill-based.
-- Feats: 7 at character creation (level 1), +3 additional feats per subsequent level.
+- Abilities: 7 at character creation (level 1), +3 additional abilities per subsequent level.
 - Skills: Maximum rank = Character Level + 3
 - Skill points per level: 4 + INT attribute score
 
@@ -59,4 +59,4 @@ Start with taskmaster and begin with the first task/subtask, implemeneting, test
 - No "class" attribute; all characters use a flexible, feat-driven schema.
 - Attributes explicitly tracked: STR, DEX, CON, INT, WIS, CHA
 - Derived stats: HP, MP, DR, AC explicitly calculated each level-up
-- Skills and feats selected explicitly at each level without class restrictions.
+- Skills and abilities selected explicitly at each level without class restrictions.

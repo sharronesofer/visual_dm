@@ -1,7 +1,7 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
 cachedir: .pytest_cache
-rootdir: /Users/Sharrone/Visual_DM
+rootdir: /Users/Sharrone/Dreamforge
 configfile: pytest.ini
 testpaths: backend/tests
 plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
@@ -11,7 +11,7 @@ collecting ...
 23:38:42 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
 23:38:42 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
 23:38:42 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
-23:38:42 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+23:38:42 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Dreamforge/backend/analytics_data
 23:38:42 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
 23:38:42 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
 23:38:42 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
@@ -29,8 +29,8 @@ collecting ...
 23:38:43 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
 23:38:43 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
 23:38:43 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
 23:38:45 [INFO] root: World Generator initialized.
 23:38:46 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
 23:38:46 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
@@ -81,7 +81,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 __________ ERROR collecting backend/tests/systems/llm/test_dm_core.py __________
@@ -105,7 +105,7 @@ backend/tests/systems/llm/test_dm_core.py:39: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 ______ ERROR collecting backend/tests/systems/motif/test_motif_router.py _______
@@ -135,7 +135,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 _______ ERROR collecting backend/tests/systems/quest/test_arc_manager.py _______
@@ -163,7 +163,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 ___________ ERROR collecting backend/tests/systems/rumor/test_api.py ___________
@@ -187,7 +187,7 @@ backend/tests/systems/rumor/test_api.py:14: in <module>
     from backend.systems.rumor.api import router, get_rumor_service
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 _____ ERROR collecting backend/tests/systems/rumor/test_prompt_manager.py ______
@@ -211,7 +211,7 @@ backend/tests/systems/rumor/test_prompt_manager.py:10: in <module>
     from backend.systems.rumor.prompt_manager import RumorPromptManager
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 ______________ ERROR collecting backend/tests/test_api_router.py _______________
@@ -239,7 +239,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 _______ ERROR collecting backend/tests/test_auth_relationship_router.py ________
@@ -435,7 +435,7 @@ _______________ ERROR collecting backend/tests/test_location.py ________________
     exec(co, module.__dict__)
 backend/tests/test_location.py:12: in <module>
     import systems.character.inventory.location
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/inventory/location.py", line 54
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/inventory/location.py", line 54
 E       id = Column(Integer, primary_key=True)
 E   IndentationError: unexpected indent
 ______________ ERROR collecting backend/tests/test_loot_routes.py ______________
@@ -482,7 +482,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 ___________ ERROR collecting backend/tests/test_mod_synchronizer.py ____________
@@ -502,7 +502,7 @@ backend/systems/character/utils/monitoring.py:21: in <module>
     StreamHandler.__init__(self, self._open())
 ../.pyenv/versions/3.11.5/lib/python3.11/logging/__init__.py:1213: in _open
     return open_func(self.baseFilename, self.mode,
-E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/Sharrone/Visual_DM/logs/system.log'
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/Sharrone/Dreamforge/logs/system.log'
 ___________ ERROR collecting backend/tests/test_newspaper_system.py ____________
 backend/tests/test_newspaper_system.py:12: in <module>
     import systems.world_state.utils.newspaper_system
@@ -530,7 +530,7 @@ _____________ ERROR collecting backend/tests/test_npc_features.py ______________
     exec(co, module.__dict__)
 backend/tests/test_npc_features.py:12: in <module>
     import systems.character.npc.npc_features
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/npc/npc_features.py", line 271
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/npc/npc_features.py", line 271
 E       ] 
 E       ^
 E   SyntaxError: unmatched ']'
@@ -553,7 +553,7 @@ __________ ERROR collecting backend/tests/test_npc_leveling_utils.py ___________
     exec(co, module.__dict__)
 backend/tests/test_npc_leveling_utils.py:12: in <module>
     import systems.character.npc.npc_leveling_utils
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/npc/npc_leveling_utils.py", line 60
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/npc/npc_leveling_utils.py", line 60
 E       }
 E       ^
 E   SyntaxError: unmatched '}'
@@ -584,7 +584,7 @@ ___________ ERROR collecting backend/tests/test_progression_utils.py ___________
     exec(co, module.__dict__)
 backend/tests/test_progression_utils.py:12: in <module>
     import systems.character.progression.progression_utils
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/progression_utils.py", line 23
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/progression/progression_utils.py", line 23
 E       def apply_ability_score_increase(character: Character, ability: str) -> Dict[str, Any]:
 E   SyntaxError: expected 'except' or 'finally' block
 ____________ ERROR collecting backend/tests/test_prompt_manager.py _____________
@@ -608,7 +608,7 @@ backend/tests/test_prompt_manager.py:12: in <module>
     import systems.rumor.prompt_manager
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 _______________ ERROR collecting backend/tests/test_religion.py ________________
@@ -640,7 +640,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 _________________ ERROR collecting backend/tests/test_rumor.py _________________
@@ -664,7 +664,7 @@ backend/tests/test_rumor.py:12: in <module>
     import systems.rumor.models.rumor
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 ________________ ERROR collecting backend/tests/test_scoring.py ________________
@@ -686,7 +686,7 @@ ________________ ERROR collecting backend/tests/test_scoring.py ________________
     exec(co, module.__dict__)
 backend/tests/test_scoring.py:12: in <module>
     import systems.character.progression.scoring
-E     File "/Users/Sharrone/Visual_DM/backend/tests/systems/tension_war/../../../systems/character/progression/scoring.py", line 53
+E     File "/Users/Sharrone/Dreamforge/backend/tests/systems/tension_war/../../../systems/character/progression/scoring.py", line 53
 E       }
 E       ^
 E   SyntaxError: unmatched '}'
@@ -763,7 +763,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 ___________ ERROR collecting backend/tests/test_terrain_generator.py ___________
@@ -879,7 +879,7 @@ backend/systems/quest/system_hooks.py:31: in <module>
     from backend.systems.rumor import RumorService
 backend/systems/rumor/__init__.py:24: in <module>
     from .schemas import (
-E     File "/Users/Sharrone/Visual_DM/backend/systems/rumor/schemas.py", line 52
+E     File "/Users/Sharrone/Dreamforge/backend/systems/rumor/schemas.py", line 52
 E       "example": {
 E   IndentationError: unexpected indent
 =========================== short test summary info ============================

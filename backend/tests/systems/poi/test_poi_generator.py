@@ -1,19 +1,24 @@
 """
-Test POI Generator functionality
+Test POI Generator Service
+
+Tests for the POI generation algorithms and world building functionality.
 """
 
 import pytest
 from unittest.mock import Mock, patch
-from backend.systems.poi.services.poi_generator import (
-    POIGenerator, 
-    GenerationParameters, 
-    GenerationType, 
+from uuid import uuid4
+from datetime import datetime
+
+from backend.infrastructure.poi_generators.poi_generator import (
+    POIGenerator,
+    GenerationType,
     BiomeType,
     GenerationRule,
     WorldCell,
+    GenerationParameters,
     get_poi_generator
 )
-from backend.systems.poi.models import POIType, POIState
+from backend.infrastructure.systems.poi.models import POIType, POIState
 
 
 class TestPOIGenerator:
@@ -44,11 +49,13 @@ class TestPOIGenerator:
         assert village_rule.poi_type == POIType.VILLAGE
         assert village_rule.min_distance_same_type < city_rule.min_distance_same_type
     
-    @patch('backend.systems.poi.services.poi_generator.get_db_session')
-    def test_generate_pois_for_region(self, mock_db):
+    @patch('backend.infrastructure.poi_generators.poi_generator.get_database_service')
+    def test_generate_pois_for_region(self, mock_get_db_service):
         """Test POI generation for a region"""
         mock_session = Mock()
-        mock_db.return_value = mock_session
+        mock_db_service = Mock()
+        mock_db_service.create_session.return_value = mock_session
+        mock_get_db_service.return_value = mock_db_service
         
         generator = POIGenerator(mock_session)
         
@@ -219,11 +226,13 @@ class TestPOIGenerator:
 class TestPOIGeneratorIntegration:
     """Integration tests for POI Generator"""
     
-    @patch('backend.systems.poi.services.poi_generator.get_db_session')
-    def test_full_generation_workflow(self, mock_db):
+    @patch('backend.infrastructure.poi_generators.poi_generator.get_database_service')
+    def test_full_generation_workflow(self, mock_get_db_service):
         """Test complete POI generation workflow"""
         mock_session = Mock()
-        mock_db.return_value = mock_session
+        mock_db_service = Mock()
+        mock_db_service.create_session.return_value = mock_session
+        mock_get_db_service.return_value = mock_db_service
         
         generator = POIGenerator(mock_session)
         
@@ -257,8 +266,14 @@ class TestPOIGeneratorIntegration:
         assert mock_session.add.call_count == len(pois)
         mock_session.commit.assert_called_once()
     
-    def test_multiple_region_generation(self):
+    @patch('backend.infrastructure.poi_generators.poi_generator.get_database_service')
+    def test_multiple_region_generation(self, mock_get_db_service):
         """Test generating POIs for multiple regions"""
+        mock_session = Mock()
+        mock_db_service = Mock()
+        mock_db_service.create_session.return_value = mock_session
+        mock_get_db_service.return_value = mock_db_service
+        
         generator = POIGenerator()
         
         regions = [

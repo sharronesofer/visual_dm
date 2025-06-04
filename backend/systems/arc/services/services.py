@@ -12,7 +12,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func
 
-from backend.systems.arc.models import (
+from backend.systems.arc.models.arc import (
     Arc,
     ArcModel,
     CreateArcRequest,

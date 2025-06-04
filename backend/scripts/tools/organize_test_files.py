@@ -11,7 +11,7 @@ import re
 
 def organize_test_files():
     """Organize misplaced test files according to protocol"""
-    backend_root = Path("/Users/Sharrone/Visual_DM/backend")
+    backend_root = Path("/Users/Sharrone/Dreamforge/backend")
     tests_dir = backend_root / "tests"
     systems_tests_dir = tests_dir / "systems"
     
@@ -90,7 +90,7 @@ def organize_test_files():
 
 def remove_duplicate_tests():
     """Remove duplicate test files identified in the inventory"""
-    backend_root = Path("/Users/Sharrone/Visual_DM/backend")
+    backend_root = Path("/Users/Sharrone/Dreamforge/backend")
     systems_tests_dir = backend_root / "tests" / "systems"
     
     # Known duplicates from inventory (keep the more appropriate location)

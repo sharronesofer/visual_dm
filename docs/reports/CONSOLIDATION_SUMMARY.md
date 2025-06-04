@@ -42,8 +42,8 @@ Successfully consolidated all JSON data files from various directories into the 
 ## Files Excluded from Consolidation
 The following JSON files were intentionally left in their original locations as they are configuration or system files, not game data:
 - `.vscode/settings.json` (VS Code configuration)
-- `Visual_DM/package.json` (Node.js package configuration)
-- `Visual_DM/public/manifest.json` (Web app manifest)
+- `Dreamforge/package.json` (Node.js package configuration)
+- `Dreamforge/public/manifest.json` (Web app manifest)
 - `reports/coverage/htmlcov/status.json` (Test coverage report)
 - `scripts/consolidation_config.json` (Script configuration)
 - `scripts/task-complexity-report.json` (Task analysis report)

@@ -79,9 +79,9 @@ The codebase now has a cleaner structure with these main modules:
 
 All files were backed up at every step of the process:
 
-1. Initial module backups: `/Users/Sharrone/Visual_DM/module_backups/20250521_083303/`
-2. Secondary module backups: `/Users/Sharrone/Visual_DM/module_backups/20250521_083923/`
-3. Archived redundant modules: `/Users/Sharrone/Visual_DM/archived_modules/`
+1. Initial module backups: `/Users/Sharrone/Dreamforge/module_backups/20250521_083303/`
+2. Secondary module backups: `/Users/Sharrone/Dreamforge/module_backups/20250521_083923/`
+3. Archived redundant modules: `/Users/Sharrone/Dreamforge/archived_modules/`
 
 ## Verification
 

@@ -462,14 +462,14 @@ class BaseService(ABC):
         functions_removed = 0
         
         # Database functions replacement
-        db_import = "from infrastructure.database import create_database_tables, setup_database_schema"
+        db_import = "from backend.infrastructure.database import create_database_tables, setup_database_schema"
         
-        # Constructor replacement mapping
-        constructor_replacements = {
-            'BaseEntity': 'from infrastructure.base_classes import BaseEntity',
-            'BaseManager': 'from infrastructure.base_classes import BaseManager',
-            'BaseRepository': 'from infrastructure.base_classes import BaseRepository',
-            'BaseService': 'from infrastructure.base_classes import BaseService'
+        # Common base class imports
+        base_imports = {
+            'BaseEntity': 'from backend.infrastructure.base_classes import BaseEntity',
+            'BaseManager': 'from backend.infrastructure.base_classes import BaseManager',
+            'BaseRepository': 'from backend.infrastructure.base_classes import BaseRepository',
+            'BaseService': 'from backend.infrastructure.base_classes import BaseService'
         }
         
         python_files = list(self.backend_dir.rglob("*.py"))

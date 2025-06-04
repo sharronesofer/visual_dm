@@ -3,10 +3,13 @@
 
 # Server settings
 server:
-  host: "localhost"
-  port: 3001
-  debug: false
-  cors_origins: ["http://localhost:3000", "http://localhost:8080", "https://unity-app.local"]
+  host: 0.0.0.0
+  port: 8000
+  debug: true
+  cors_origins:
+    - http://localhost:3000
+    - http://localhost:5173
+    - http://127.0.0.1:3000
 
 # Authentication simulation
 auth:
@@ -54,6 +57,9 @@ systems:
     max_list_size: 100
     generate_on_demand: true
     max_generation_count: 20
+    types: ["VILLAGER", "MERCHANT", "GUARD", "QUEST_GIVER", "ALLY", "ANTAGONIST"]
+    personality_traits: ["FRIENDLY", "HOSTILE", "NEUTRAL", "MYSTERIOUS", "HELPFUL"]
+    max_level: 15
   
   quest:
     max_list_size: 30
@@ -83,8 +89,10 @@ data_generation:
   
   # Character generation settings
   character:
-    races: ["HUMAN", "ELF", "DWARF", "HALFLING", "ORC"]
-    classes: ["FIGHTER", "WIZARD", "ROGUE", "CLERIC", "RANGER"]
+    races: ["HUMAN", "ELF", "DWARF", "HALFLING", "DRAGONBORN"]
+    feats: ["COMBAT_EXPERTISE", "ARCANE_MASTERY", "STEALTH_TRAINING", "DIVINE_BLESSING", "NATURE_BOND", "SOCIAL_INFLUENCE"]
+    max_level: 20
+    starting_gold: 100
     level_range: [1, 20]
     stat_range: [8, 18]
   

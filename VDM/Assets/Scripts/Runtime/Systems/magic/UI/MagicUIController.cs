@@ -9,7 +9,6 @@ using UnityEngine;
 using VDM.Infrastructure.Services;
 using VDM.Systems.Magic.Models;
 using VDM.Systems.Magic.Services;
-using VDM.Infrastructure.Services;
 
 
 namespace VDM.Systems.Magic.Ui
@@ -73,8 +72,8 @@ namespace VDM.Systems.Magic.Ui
             base.Awake();
             
             // Get services
-            _magicService = ServiceLocator.Get<MagicService>();
-            _webSocketHandler = ServiceLocator.Get<MagicWebSocketHandler>();
+            _magicService = ServiceLocator.Instance.GetService<MagicService>();
+            _webSocketHandler = ServiceLocator.Instance.GetService<MagicWebSocketHandler>();
             
             // Setup UI events
             if (castSelectedSpellButton != null)

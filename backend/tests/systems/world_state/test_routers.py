@@ -11,7 +11,7 @@ from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
 
-from backend.systems.world_state import routers
+from backend.infrastructure.systems.world_state import world_state_router
 
 
 class TestWorld_StateRouters:
@@ -36,6 +36,7 @@ class TestWorld_StateRouters:
         """Test routers initialization."""
         # Test initialization logic
         assert mock_db_session is not None
+        assert world_state_router is not None
         # Add specific initialization tests here
     
     @pytest.mark.asyncio

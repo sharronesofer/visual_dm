@@ -13,84 +13,84 @@
   "details": {
     "errors_found": [
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/combat/object_pool.py",
         "line": 82,
         "type": "coroutine_not_awaited",
         "content": "analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/combat/object_pool.py",
         "line": 106,
         "type": "coroutine_not_awaited",
         "content": "analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/combat/object_pool.py",
         "line": 140,
         "type": "coroutine_not_awaited",
         "content": "analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/combat/object_pool.py",
         "line": 216,
         "type": "coroutine_not_awaited",
         "content": "analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/combat/object_pool.py",
         "line": 337,
         "type": "coroutine_not_awaited",
         "content": "analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/combat/object_pool.py",
         "line": 469,
         "type": "coroutine_not_awaited",
         "content": "analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/character/services/analytics_middleware.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/character/services/analytics_middleware.py",
         "line": 72,
         "type": "coroutine_not_awaited",
         "content": "analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/dialogue/analytics_integration.py",
         "line": 84,
         "type": "coroutine_not_awaited",
         "content": "self.analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/dialogue/analytics_integration.py",
         "line": 237,
         "type": "coroutine_not_awaited",
         "content": "self.analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/dialogue/analytics_integration.py",
         "line": 300,
         "type": "coroutine_not_awaited",
         "content": "self.analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/dialogue/analytics_integration.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/dialogue/analytics_integration.py",
         "line": 421,
         "type": "coroutine_not_awaited",
         "content": "self.analytics_service.log_event(",
         "fix_needed": "Ensure log_event is called properly in sync context"
       },
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/events/middleware.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/events/middleware.py",
         "line": 122,
         "type": "coroutine_not_awaited",
         "content": "self.analytics_service.log_event(",
@@ -99,7 +99,7 @@
     ],
     "fixes_applied": [
       {
-        "file": "/Users/Sharrone/Visual_DM/backend/systems/combat/object_pool.py",
+        "file": "/Users/Sharrone/Dreamforge/backend/systems/combat/object_pool.py",
         "type": "analytics_coroutine_fix",
         "changes": 6
       }
@@ -108,24 +108,24 @@
     "test_relocations": [],
     "duplicates_found": [
       {
-        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_generation/test_optimized_worldgen.py",
-        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_state/test_optimized_worldgen.py"
+        "removed": "/Users/Sharrone/Dreamforge/backend/tests/systems/world_generation/test_optimized_worldgen.py",
+        "kept": "/Users/Sharrone/Dreamforge/backend/tests/systems/world_state/test_optimized_worldgen.py"
       },
       {
-        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_generation/test_world_utils.py",
-        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/world_state/test_world_utils.py"
+        "removed": "/Users/Sharrone/Dreamforge/backend/tests/systems/world_generation/test_world_utils.py",
+        "kept": "/Users/Sharrone/Dreamforge/backend/tests/systems/world_state/test_world_utils.py"
       },
       {
-        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/region/test_utils_comprehensive.py",
-        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/inventory/test_utils_comprehensive.py"
+        "removed": "/Users/Sharrone/Dreamforge/backend/tests/systems/region/test_utils_comprehensive.py",
+        "kept": "/Users/Sharrone/Dreamforge/backend/tests/systems/inventory/test_utils_comprehensive.py"
       },
       {
-        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/quest/test_quest_integration.py",
-        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/arc/test_quest_integration.py"
+        "removed": "/Users/Sharrone/Dreamforge/backend/tests/systems/quest/test_quest_integration.py",
+        "kept": "/Users/Sharrone/Dreamforge/backend/tests/systems/arc/test_quest_integration.py"
       },
       {
-        "removed": "/Users/Sharrone/Visual_DM/backend/tests/systems/inventory/test_utils.py",
-        "kept": "/Users/Sharrone/Visual_DM/backend/tests/systems/analytics/test_utils.py"
+        "removed": "/Users/Sharrone/Dreamforge/backend/tests/systems/inventory/test_utils.py",
+        "kept": "/Users/Sharrone/Dreamforge/backend/tests/systems/analytics/test_utils.py"
       }
     ]
   }

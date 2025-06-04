@@ -55,12 +55,12 @@ class CriticalImportFixer:
             "from backend.infrastructure.analytics.services.analytics_service import": "from backend.infrastructure.analytics.services.core.analytics_service import",
             
             # Tension war specific imports
-            "from backend.systems.tension_war.services.tension_manager import": "from backend.systems.tension_war.managers.tension_manager import",
-            "from backend.systems.tension_war.services.war_manager import": "from backend.systems.tension_war.managers.war_manager import",
-            "from backend.systems.tension_war.services.peace_manager import": "from backend.systems.tension_war.managers.peace_manager import",
-            "from backend.systems.tension_war.services.alliance_manager import": "from backend.systems.tension_war.managers.alliance_manager import",
-            "from backend.systems.tension_war.services.proxy_war_manager import": "from backend.systems.tension_war.managers.proxy_war_manager import",
-            "from backend.systems.tension_war.services.diplomatic_manager import": "from backend.systems.tension_war.managers.diplomatic_manager import",
+            "from backend.systems.tension.services.tension_manager import": "from backend.systems.tension.managers.tension_manager import",
+            "from backend.systems.tension.services.war_manager import": "from backend.systems.tension.managers.war_manager import",
+            "from backend.systems.tension.services.peace_manager import": "from backend.systems.tension.managers.peace_manager import",
+            "from backend.systems.tension.services.alliance_manager import": "from backend.systems.tension.managers.alliance_manager import",
+            "from backend.systems.tension.services.proxy_war_manager import": "from backend.systems.tension.managers.proxy_war_manager import",
+            "from backend.systems.tension.services.diplomatic_manager import": "from backend.systems.tension.managers.diplomatic_manager import",
         }
 
     def find_python_files(self) -> List[Path]:

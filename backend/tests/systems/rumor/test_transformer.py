@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.rumor.utils.transformer import transformer
+    from backend.infrastructure.systems.rumor.utils.transformer import transformer
 except ImportError:
     pytest.skip(f"Module backend.systems.rumor.transformer not found", allow_module_level=True)
 

@@ -1,9 +1,17 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
 from backend.infrastructure.core.config import settings
+
+# Import Base from the correct location
+try:
+    from backend.infrastructure.shared.database.base import Base
+except ImportError:
+    # Fallback - create Base here if shared doesn't exist
+    from sqlalchemy.orm import declarative_base
+    Base = declarative_base()
 
 # Sync SQLAlchemy setup
 engine = None
@@ -32,7 +40,6 @@ if settings.ASYNC_SQLALCHEMY_DATABASE_URI:
         class_=AsyncSession
     )
 
-Base = declarative_base()
 
 # Dependency for sync operations
 def get_db():

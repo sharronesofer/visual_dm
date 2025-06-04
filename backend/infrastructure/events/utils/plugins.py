@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Type, Union
 
 from backend.infrastructure.events.core.event_base import EventBase
-from backend.infrastructure.events import EventDispatcher
+from backend.infrastructure.events.services.event_dispatcher import EventDispatcher
 
 logger = logging.getLogger(__name__)
 

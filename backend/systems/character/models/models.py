@@ -11,13 +11,10 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
-
-from backend.infrastructure.shared.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
+from backend.infrastructure.shared.models import SharedBaseModel
 
 class CharacterBaseModel(SharedBaseModel):
     """Base model for character system with common fields"""
@@ -33,7 +30,6 @@ class CharacterBaseModel(SharedBaseModel):
         populate_by_name=True
     )
 
-
 class CharacterModel(CharacterBaseModel):
     """Primary model for character system"""
     
@@ -41,7 +37,6 @@ class CharacterModel(CharacterBaseModel):
     description: Optional[str] = Field(None, description="Description of the character")
     status: str = Field(default="active", description="Status of the character")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
 
 class CharacterEntity(Base):
     """SQLAlchemy entity for character system"""
@@ -73,7 +68,6 @@ class CharacterEntity(Base):
             "is_active": self.is_active
         }
 
-
 # Request/Response Models
 class CreateCharacterRequest(BaseModel):
     """Request model for creating character"""
@@ -82,7 +76,6 @@ class CreateCharacterRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateCharacterRequest(BaseModel):
     """Request model for updating character"""
     
@@ -90,7 +83,6 @@ class UpdateCharacterRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class CharacterResponse(BaseModel):
     """Response model for character"""
@@ -105,7 +97,6 @@ class CharacterResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class CharacterListResponse(BaseModel):
     """Response model for character lists"""

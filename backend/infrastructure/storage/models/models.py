@@ -8,16 +8,13 @@ the Development Bible standards.
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from uuid import UUID, uuid4
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
-
-from backend.infrastructure.shared.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
+from backend.infrastructure.shared.models import SharedBaseModel
 
 class StorageBaseModel(SharedBaseModel):
     """Base model for storage system with common fields"""
@@ -30,7 +27,6 @@ class StorageBaseModel(SharedBaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class StorageModel(StorageBaseModel):
     """Primary model for storage system"""
     
@@ -38,7 +34,6 @@ class StorageModel(StorageBaseModel):
     description: Optional[str] = Field(None, description="Description of the storage")
     status: str = Field(default="active", description="Status of the storage")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
 
 class StorageEntity(Base):
     """SQLAlchemy entity for storage system"""
@@ -70,7 +65,6 @@ class StorageEntity(Base):
             "is_active": self.is_active
         }
 
-
 # Request/Response Models
 class CreateStorageRequest(BaseModel):
     """Request model for creating storage"""
@@ -79,7 +73,6 @@ class CreateStorageRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateStorageRequest(BaseModel):
     """Request model for updating storage"""
     
@@ -87,7 +80,6 @@ class UpdateStorageRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class StorageResponse(BaseModel):
     """Response model for storage"""
@@ -102,7 +94,6 @@ class StorageResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class StorageListResponse(BaseModel):
     """Response model for storage lists"""

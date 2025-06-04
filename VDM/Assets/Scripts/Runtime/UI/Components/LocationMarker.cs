@@ -5,6 +5,7 @@ using TMPro;
 using VDM.UI.Core;
 using VDM.Systems.Region.Models;
 using System;
+using VDM.DTOs.Game.Character;
 
 namespace VDM.UI.Systems.Region
 {

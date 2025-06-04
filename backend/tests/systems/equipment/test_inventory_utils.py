@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.equipment.utils.inventory_utils import inventory_utils
+    import backend.infrastructure.systems.equipment.utils.inventory_utils as inventory_utils
 except ImportError:
     pytest.skip(f"Module backend.systems.equipment.inventory_utils not found", allow_module_level=True)
 

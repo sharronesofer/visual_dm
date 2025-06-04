@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using VDM.UI.Core;
+using VDM.Infrastructure.Ui.Ui.Framework;
 using TMPro;
 
 namespace VDM.Infrastructure.UI.Screens
@@ -497,10 +498,8 @@ namespace VDM.Infrastructure.UI.Screens
         
         #region Cleanup
         
-        protected override void OnCleanup()
+        private void OnCleanup()
         {
-            base.OnCleanup();
-            
             // Clean up button listeners
             if (newGameButton)
                 newGameButton.onClick.RemoveAllListeners();
@@ -523,6 +522,12 @@ namespace VDM.Infrastructure.UI.Screens
             
             if (backgroundParticles && backgroundParticles.isPlaying)
                 backgroundParticles.Stop();
+        }
+        
+        // Override OnDestroy to call cleanup
+        private void OnDestroy()
+        {
+            OnCleanup();
         }
         
         #endregion

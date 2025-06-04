@@ -12,7 +12,8 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func
 
-from backend.systems.npc.models import (
+# Use canonical imports from infrastructure
+from backend.infrastructure.systems.npc.models.models import (
     NpcEntity,
     NpcModel,
     CreateNpcRequest,
@@ -87,7 +88,7 @@ class NpcService(BaseService[NpcEntity]):
             return NpcResponse.from_orm(entity)
             
         except Exception as e:
-            logger.error(f"Error getting npc {_npc_id}: {str(e)}")
+            logger.error(f"Error getting npc {npc_id}: {str(e)}")
             raise
 
     async def update_npc(
@@ -99,7 +100,7 @@ class NpcService(BaseService[NpcEntity]):
         try:
             entity = await self._get_entity_by_id(npc_id)
             if not entity:
-                raise NpcNotFoundError(f"Npc {_npc_id} not found")
+                raise NpcNotFoundError(f"Npc {npc_id} not found")
             
             # Update fields
             update_data = request.dict(exclude_unset=True)
@@ -115,7 +116,7 @@ class NpcService(BaseService[NpcEntity]):
             return NpcResponse.from_orm(entity)
             
         except Exception as e:
-            logger.error(f"Error updating npc {_npc_id}: {str(e)}")
+            logger.error(f"Error updating npc {npc_id}: {str(e)}")
             self.db.rollback()
             raise
 
@@ -124,7 +125,7 @@ class NpcService(BaseService[NpcEntity]):
         try:
             entity = await self._get_entity_by_id(npc_id)
             if not entity:
-                raise NpcNotFoundError(f"Npc {_npc_id} not found")
+                raise NpcNotFoundError(f"Npc {npc_id} not found")
             
             entity.is_active = False
             entity.updated_at = datetime.utcnow()
@@ -134,7 +135,7 @@ class NpcService(BaseService[NpcEntity]):
             return True
             
         except Exception as e:
-            logger.error(f"Error deleting npc {_npc_id}: {str(e)}")
+            logger.error(f"Error deleting npc {npc_id}: {str(e)}")
             self.db.rollback()
             raise
 

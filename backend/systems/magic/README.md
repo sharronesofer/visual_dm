@@ -1,94 +1,87 @@
 # Magic System
 
-The Magic System is a comprehensive subsystem that handles all magic-related functionality in the Visual DM, including spells, magical abilities, spellbooks, spell effects, and spell slots.
+The Magic System is a comprehensive MP-based subsystem that handles all magic-related functionality in Visual DM, implementing the Development Bible's canonical magic system with Mana Points instead of spell slots.
 
 ## Core Features
 
-- **Spells**: Create, cast, and manage spells with various effects
-- **Magic Abilities**: Define and use innate or acquired magical abilities
-- **Spellbooks**: Manage collections of spells for characters and NPCs
+- **MP-Based Spellcasting**: Uses Mana Points (MP) for resource management instead of D&D spell slots
+- **Magic Domains**: Four domains (Arcane, Divine, Nature, Occult) with unique efficiency bonuses and primary abilities
+- **Permanent Spell Learning**: Spells are learned permanently through abilities (no daily preparation)
+- **Concentration Mechanics**: Advanced concentration tracking with break triggers and save mechanics  
 - **Spell Effects**: Track active magical effects on characters, objects, and locations
-- **Spell Slots**: Resource management for spell casting
-- **Magic Schools**: Categorize spells and abilities by traditional magic schools
-- **Spell Components**: Define material, somatic, and verbal requirements for spells
-- **Magic System Tick**: Process ongoing magical effects and regeneration
+- **Domain-Based Efficiency**: MP cost modifiers based on caster's domain specialization
+- **Combat Integration**: Seamless integration with combat system for spell casting and effects
 
 ## Services
 
-- **MagicService**: Core orchestrator that provides access to all magic functionalities
-- **SpellService**: Manages spell creation, casting, and modifications
-- **SpellbookService**: Handles spellbook operations like adding/removing spells
-- **SpellEffectService**: Manages active spell effects including creation, updates, and ending effects
-- **SpellSlotService**: Manages spell slot resources including creation, consumption, and refreshing
+- **MagicBusinessService**: Core MP-based spell casting and domain mechanics
+- **MagicCombatBusinessService**: Combat integration for spell casting and effect resolution
+- **MetamagicService**: Advanced spell modification capabilities
+- **SpellCombinationService**: Spell combination and synergy effects
 
 ## Utility Functions
 
 The magic system includes powerful utility functions for consistent rules enforcement:
 
-- `calculate_spell_power`: Calculate spell power based on caster level and spell base power
-- `validate_spell_requirements`: Check if a character meets the requirements to cast a spell
-- `check_spell_compatibility`: Validate class and alignment compatibility with a spell
-- `can_cast_spell`: Comprehensive check including requirements, compatibility, and resources
-- `apply_spell_effect`: Apply a spell's effect to a target and generate resulting changes
-- `calculate_spell_duration`: Determine effect duration based on spell and caster level
-- `check_spell_slot_availability`: Verify slot availability for casting
-- `calculate_spell_difficulty`: Determine save DC for spell effects
-- `parse_spell_target_area`: Parse and normalize target area information
-- `calculate_magic_learning_time`: Calculate time required to learn new spells
-- `format_spell_duration`: Convert round-based durations to human-readable format
-- `generate_effect_description`: Create human-readable descriptions of active effects
+- `calculate_mp_cost`: Calculate MP cost with domain efficiency bonuses
+- `can_cast_spell`: Comprehensive MP and domain compatibility checking
+- `cast_spell`: Execute spell casting with full effect generation
+- `calculate_spell_save_dc`: Calculate save DC using domain's primary ability
+- `check_concentration`: Validate concentration requirements and triggers
+- `apply_damage_with_resistances`: Handle damage type interactions and resistances
+- `get_available_spells_for_domain`: Get spells available to specific magic domains
 
 ## API Endpoints
 
-### Magic Abilities
-- `POST /magic/abilities`: Create a new magic ability
-- `GET /magic/abilities`: List magic abilities
-- `GET /magic/abilities/{id}`: Get a specific magic ability
-- `PUT /magic/abilities/{id}`: Update a magic ability
-- `DELETE /magic/abilities/{id}`: Delete a magic ability
+### Core Spellcasting (MP-Based)
+- `GET /magic/spells`: List spells with domain and MP cost filtering
+- `POST /magic/spells/cast`: Cast a spell using MP-based system
+- `GET /magic/spells/available/{character_id}`: Get character's learned spells by domain
 
-### Spells
-- `POST /magic/spells`: Create a new spell
-- `GET /magic/spells`: List spells with optional filtering
-- `GET /magic/spells/{id}`: Get a specific spell
-- `PUT /magic/spells/{id}`: Update a spell
-- `DELETE /magic/spells/{id}`: Delete a spell
-- `POST /magic/spells/{id}/cast`: Cast a spell
+### MP Management (Canonical System)  
+- `GET /magic/mp/{character_id}`: Get character's current MP status
+- `POST /magic/mp/{character_id}/rest`: Restore MP through rest mechanics
 
-### Spellbooks
-- `POST /magic/spellbooks`: Create a new spellbook
-- `GET /magic/spellbooks`: List all spellbooks
-- `GET /magic/spellbooks/{id}`: Get a specific spellbook
-- `GET /magic/characters/{id}/spellbook`: Get a character's spellbook
-- `POST /magic/spellbooks/{id}/spells/{spell_id}`: Add a spell to a spellbook
-- `DELETE /magic/spellbooks/{id}/spells/{spell_id}`: Remove a spell from a spellbook
+### Domain Access (Permanent Learning)
+- `GET /magic/domains/{character_id}`: Get character's domain access levels
+- `POST /magic/domains/{character_id}`: Update domain access and mastery
+- `POST /magic/spells/learn`: Learn a new spell permanently (no preparation)
 
-### Spell Effects
-- `GET /magic/effects`: List active spell effects
-- `GET /magic/effects/{id}`: Get a specific spell effect
-- `DELETE /magic/effects/{id}`: End a spell effect
-- `POST /magic/effects/{id}/dispel`: Attempt to dispel a spell effect
-- `PUT /magic/effects/{id}/modify-duration`: Modify a spell effect's duration
+### Concentration & Effects
+- `GET /magic/concentration/{character_id}`: Get active concentration effects
+- `DELETE /magic/concentration/{effect_id}`: End concentration effect
+- `GET /magic/effects/{target_type}/{target_id}`: Get active effects on target
 
-### Spell Slots
-- `POST /magic/characters/{id}/spell-slots`: Create spell slots for a character
-- `GET /magic/characters/{id}/spell-slots`: Get a character's spell slots
-- `GET /magic/characters/{id}/spell-slots/available`: Get a character's available spell slots
-- `POST /magic/spell-slots/{id}/use`: Use a spell slot
-- `POST /magic/characters/{id}/spell-slots/refresh`: Refresh a character's spell slots
+### Advanced Features
+- `POST /magic/spells/cast-with-metamagic`: Cast spell with metamagic modifications
+- `POST /magic/spells/cast-combination`: Cast spell combinations
+- `GET /magic/metamagic/available/{spell_id}`: Get available metamagic options
 
-### Magic System Utilities
-- `POST /magic/system/process-tick`: Process a tick of the magic system
-- `GET /magic/characters/{id}/magic-summary`: Get a summary of a character's magical abilities and resources
+### System Integration
+- `POST /magic/system/process-tick`: Process magic system updates
+- `GET /magic/characters/{id}/magic-summary`: Get character's magical capabilities
 
 ## Events
 
-The magic system publishes the following events that other systems can subscribe to:
+The Magic System publishes the following events to the EventDispatcher:
 
-- **MagicAbilityEvent**: When a magic ability is used
-- **SpellCastEvent**: When a spell is cast
-- **SpellEffectEvent**: When a spell effect starts or ends
-- **MagicSystemTickEvent**: When the magic system processes a tick
+### MP-Based System Events
+- `magic.mp.spent`: When MP is consumed for spellcasting
+- `magic.mp.restored`: When MP is restored through rest or abilities  
+- `magic.mp.insufficient`: When spell casting fails due to insufficient MP
+
+### Spellcasting Events (Canonical)
+- `magic.spell.cast.attempted`: When spell casting is initiated
+- `magic.spell.cast.successful`: When spell casting succeeds with effects applied
+- `magic.spell.cast.failed`: When spell casting fails due to validation or MP issues
+- `magic.spell.learned`: When a character permanently learns a new spell
+
+### Domain & Effect Events
+- `magic.domain.accessed`: When a character gains access to a new magic domain
+- `magic.concentration.started`: When a concentration effect begins
+- `magic.concentration.broken`: When concentration is broken by damage/distraction
+- `magic.effect.applied`: When a spell effect is successfully applied to a target
+- `magic.effect.ended`: When an active spell effect expires or is ended
 
 ## Integration with Other Systems
 

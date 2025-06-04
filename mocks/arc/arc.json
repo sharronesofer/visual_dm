@@ -1,82 +1,40 @@
 {
   "id": "e06832d2-143e-4464-bb69-8ff476bcab37",
+  "title": "The Merchants' Guild Rising",
+  "description": "A regional arc focusing on the growing influence of merchant guilds in the eastern provinces. Political intrigue and economic manipulation threaten the traditional power structures.",
+  "arc_type": "REGIONAL",
+  "status": "ACTIVE",
+  "priority": "MEDIUM",
+  "region_id": "eastern_provinces_001",
+  "character_id": null,
+  "npc_id": null,
+  "faction_ids": ["merchants_guild_001", "eastern_nobles_002"],
+  "narrative_summary": "The Merchants' Guild has been systematically gaining political influence through economic pressure and strategic alliances. Their ultimate goal is to establish a merchant republic in the eastern provinces.",
+  "objectives": [
+    "Investigate merchant guild activities",
+    "Uncover political connections",
+    "Determine the scope of their influence",
+    "Decide whether to support or oppose their goals"
+  ],
+  "themes": ["political intrigue", "economic power", "social change"],
+  "total_steps": 5,
+  "completed_steps": 2,
+  "progress_percentage": 40.0,
+  "estimated_duration_hours": 12.0,
+  "actual_duration_hours": 5.5,
+  "start_date": "2025-05-07T01:34:24.937380Z",
+  "end_date": null,
+  "last_activity": "2025-05-28T01:34:24.937383Z",
+  "tags": ["politics", "economics", "guilds", "regional"],
+  "difficulty_level": 6,
+  "player_impact": "Moderate - affects player's reputation with merchant and noble factions",
+  "world_impact": "Significant - could reshape power structure in eastern provinces",
   "created_at": "2025-05-07T01:34:24.937380Z",
   "updated_at": "2025-05-28T01:34:24.937383Z",
-  "title": "Sharable motivating task-force",
-  "description": "Forward receive hot season. Leg loss similar start pick however. Wish feel of he among. Manage professor alone really himself brother hand. Brother industry read stand easy decide raise agent. Goal special audience former. Language although research phone.",
-  "arc_type": "TERTIARY",
-  "arc_status": "FAILED",
-  "arc_priority": "LOW",
-  "progression_method": "BRANCHING",
-  "metadata": {
-    "themes": [
-      "week",
-      "hour",
-      "along"
-    ],
-    "target_characters": [
-      "f7318780-65d1-4e79-9510-448cc72c791c",
-      "41d368de-dddc-4ea4-b4f5-3f26e49939be",
-      "fb194827-c13d-463b-b54c-8eb38e5337ef",
-      "dec34e20-f9e8-44b5-8a70-41d1eece0771"
-    ],
-    "regions": [
-      "599e7602-56f7-4b9e-8da8-ebfd74c37880",
-      "4f302dbd-87f4-441f-88bc-8e9de1a2012b"
-    ],
-    "estimated_duration": 41
-  },
-  "steps": [
-    {
-      "step_id": "a81ec062-af90-4d00-a6d1-15338028ca3a",
-      "step_number": 1,
-      "title": "Item beyond type.",
-      "description": "While like difference. Somebody enough west concern table. Federal hundred performance play.",
-      "completion_criteria": "Theory court source beat agreement capital.",
-      "completed": true,
-      "completion_date": "2025-05-24T01:34:24.937549Z"
-    },
-    {
-      "step_id": "91834495-823f-41a9-9ed4-34778435b0a1",
-      "step_number": 2,
-      "title": "Admit save star.",
-      "description": "Arrive it senior type. Under let central young eight air.",
-      "completion_criteria": "South administration throughout.",
-      "completed": false,
-      "completion_date": "2025-05-24T01:34:24.937590Z"
-    },
-    {
-      "step_id": "6b3dfd6a-d64c-4b68-a83c-37d8ffa2bd6e",
-      "step_number": 3,
-      "title": "Value question onto address natural task.",
-      "description": "Local interesting meet important marriage. Fish smile us international control put effect. Around morning sense.",
-      "completion_criteria": "Water particular beautiful individual his all so.",
-      "completed": false,
-      "completion_date": "2025-05-23T01:34:24.937637Z"
-    },
-    {
-      "step_id": "7baa8696-2647-47fb-97d3-5b0beb059daf",
-      "step_number": 4,
-      "title": "Heavy store from some month.",
-      "description": "Current third religious. Factor quickly yes card black picture provide.",
-      "completion_criteria": "Range financial dream author two.",
-      "completed": false,
-      "completion_date": "2025-05-27T01:34:24.937676Z"
-    },
-    {
-      "step_id": "f67e59a6-02c7-44ab-80c2-5cfc4e8a144f",
-      "step_number": 5,
-      "title": "Blue leader support only dream.",
-      "description": "Early billion price all politics suffer.",
-      "completion_criteria": "Sit difference season environment.",
-      "completed": true,
-      "completion_date": "2025-05-22T01:34:24.937708Z"
-    }
-  ],
-  "progression": {
-    "current_step": 3,
-    "completion_percentage": 42,
-    "stalled": true,
-    "last_activity": "2025-05-26T01:34:24.937710Z"
+  "arc_metadata": {
+    "estimated_sessions": 4,
+    "key_locations": ["Goldport", "Merchant's Square", "Noble District"],
+    "involved_factions": ["merchants_guild_001", "eastern_nobles_002"],
+    "tone": "political thriller"
   }
 }

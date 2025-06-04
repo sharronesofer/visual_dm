@@ -6,7 +6,7 @@ and modification, following the builder pattern for flexible character construct
 """
 
 from typing import Dict, Any, List, Optional, Union
-from backend.systems.character.core.character_builder_class import CharacterBuilder as CharacterBuilderClass
+from backend.systems.character.services.character_builder import CharacterBuilder as CharacterBuilderClass
 
 
 # Re-export the CharacterBuilder class for compatibility
@@ -37,47 +37,50 @@ def create_character_builder_from_template(template: Dict[str, Any]) -> Characte
     
     # Set basic character data from template
     if "name" in template:
-        builder.set_name(template["name"])
+        builder.character_name = template["name"]
     if "race" in template:
         builder.set_race(template["race"])
     if "background" in template:
-        builder.set_background(template["background"])
+        # Background is not directly supported in the current builder
+        pass
     if "alignment" in template:
-        builder.set_alignment(template["alignment"])
+        # Alignment is set in finalize() method, not directly settable
+        pass
     
     # Set attributes/stats
     if "attributes" in template:
         for attr, value in template["attributes"].items():
-            builder.set_attribute(attr, value)
+            builder.assign_attribute(attr, value)
     elif "stats" in template:
         for stat, value in template["stats"].items():
-            builder.set_attribute(stat, value)
+            builder.assign_attribute(stat, value)
     
-    # Set level and experience
+    # Set level
     if "level" in template:
-        builder.set_level(template["level"])
+        builder.level = template["level"]
     if "experience" in template:
-        builder.set_experience(template["experience"])
+        # Experience is calculated in finalize(), not directly settable
+        pass
     
     # Set skills
     if "skills" in template:
         for skill in template["skills"]:
             if isinstance(skill, str):
-                builder.add_skill(skill)
+                builder.assign_skill(skill)
             elif isinstance(skill, dict):
-                builder.add_skill(skill.get("name", ""), skill.get("ranks", 1))
+                # The canonical builder doesn't support skill ranks
+                builder.assign_skill(skill.get("name", ""))
     
-    # Set equipment
-    if "equipment" in template:
-        for item in template["equipment"]:
-            if isinstance(item, str):
-                builder.add_equipment(item)
-            elif isinstance(item, dict):
-                builder.add_equipment(item.get("name", ""), item.get("quantity", 1))
+    # Set equipment via starter kit
+    if "equipment" in template or "starter_kit" in template:
+        starter_kit = template.get("starter_kit")
+        if starter_kit:
+            try:
+                builder.apply_starter_kit(starter_kit)
+            except ValueError:
+                # Starter kit not found, skip
+                pass
     
-    # Set notes
-    if "notes" in template:
-        for note in template["notes"]:
-            builder.add_note(note)
+    # Notes are not supported in the canonical builder
     
     return builder

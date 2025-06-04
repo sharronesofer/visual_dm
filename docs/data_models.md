@@ -28,7 +28,7 @@ The `items` table stores information about all game items that can be acquired, 
 | type | item_type (ENUM) | NOT NULL | Type category of the item |
 | weight | DECIMAL(10,2) | NOT NULL, CHECK (weight >= 0) | Weight of the item in game units |
 | value | INTEGER | NOT NULL, CHECK (value >= 0) | Base value of the item in currency units |
-| base_stats | JSONB | NOT NULL, DEFAULT '{}' | JSON object containing item statistics |
+| base_attributes | JSONB | NOT NULL, DEFAULT '{}' | JSON object containing item statistics |
 | rarity_id | INTEGER | FOREIGN KEY | Reference to rarity tier |
 | created_at | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 | updated_at | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT_TIMESTAMP | Last update timestamp |
@@ -70,7 +70,7 @@ WHERE i.type = 'WEAPON' AND r.name = 'LEGENDARY';
 
 -- Find items with specific stat
 SELECT * FROM items
-WHERE base_stats->>'strength' IS NOT NULL AND (base_stats->>'strength')::int > 10;
+WHERE base_attributes->>'strength' IS NOT NULL AND (base_attributes->>'strength')::int > 10;
 ```
 
 ### Rarity Tiers
@@ -117,7 +117,7 @@ The system is pre-configured with the following rarity tiers:
 2. Item value must be non-negative
 3. Item name must be between 1 and 100 characters
 4. Item type must be one of the predefined enum values
-5. Item base_stats must be valid JSON
+5. Item base_attributes must be valid JSON
 
 ### Rarity Validation
 
@@ -175,7 +175,7 @@ The following extensions are planned for future development:
 
 ### JSON/JSONB Field Usage
 
-- Use JSONB fields (like `base_stats`) for flexible attributes that may vary between items
+- Use JSONB fields (like `base_attributes`) for flexible attributes that may vary between items
 - Index frequently queried JSON paths using GIN indexes
 - Validate JSON structure before insertion to maintain data integrity
 - Use JSON path operators for efficient querying

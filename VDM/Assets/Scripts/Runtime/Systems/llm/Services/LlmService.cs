@@ -39,7 +39,7 @@ namespace VDM.Systems.Llm.Services
         public static event Action<string, string> OnModelStatusChanged;
 
         // Private fields
-        private VDM.Runtime.Core.Services.HttpService httpService;
+        private VDM.Infrastructure.Services.Services.Http.HttpService httpService;
         private List<AIModelConfig> availableModels;
         private Dictionary<string, PromptTemplate> promptTemplates;
         private Queue<GenerationTask> taskQueue;
@@ -72,7 +72,7 @@ namespace VDM.Systems.Llm.Services
         {
             if (isInitialized) return;
 
-            httpService = FindObjectOfType<VDM.Runtime.Core.Services.HttpService>();
+            httpService = FindObjectOfType<VDM.Infrastructure.Services.Services.Http.HttpService>();
             if (httpService == null)
             {
                 Debug.LogError("LlmService: HttpService not found!");

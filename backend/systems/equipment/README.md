@@ -1,261 +1,359 @@
-# Equipment System
+# Visual DM Equipment & Enchanting System
 
-## Overview
+A comprehensive equipment management system for Visual DM featuring innovative learn-by-disenchanting mechanics, quality-based durability, and AI-driven content generation.
 
-The Equipment System manages the equipping, unequipping, and effects of wearable/usable items in the game world. It builds upon the Inventory System but focuses specifically on equipment-related functionality.
+## 🌟 Features
 
-## Key Components
+### Core Equipment System
+- **Quality Tiers**: Basic, Military, Noble with different durability and value multipliers
+- **Time-Based Durability**: Automatic degradation over time based on quality
+- **Rarity System**: Common, Rare, Epic, Legendary with varying ability counts
+- **Ability Progression**: Level-gated ability revelation system
+- **Set Bonuses**: Thematic equipment sets with synergistic bonuses
 
-- **Equipment Service**: Manages equipment operations like equipping and unequipping items
-- **Equipment Stats**: Calculates bonuses and effects from equipped items
-- **Equipment Compatibility**: Determines what items can be equipped by which characters
-- **Equipment Slot Management**: Handles equipment slot availability and restrictions
-- **Set Bonus Management**: Tracks equipment sets and applies bonuses when multiple pieces from the same set are equipped
-- **Durability System**: Manages equipment wear, damage, repair, and performance degradation
+### Revolutionary Enchanting System
+- **Learn-by-Disenchanting**: Must sacrifice items to learn new enchantments
+- **Rarity Progression**: Basic → Military → Noble → Legendary access levels
+- **Abilities Integration**: "Arcane Manipulation" ability governs enchanting capability
+- **Risk/Reward Mechanics**: Failed disenchanting destroys items
+- **Mastery System**: Enchantments improve with repeated application
+- **Economic Stakes**: High costs prevent exploitation
 
-## Relationship with Inventory System
+### AI-Driven Features
+- **Semantic Set Detection**: GPT-powered thematic grouping via embedding similarity
+- **Dynamic Content**: AI generates enchantment descriptions and effects
+- **Thematic Coherence**: Prevents weird combinations through AI validation
 
-The Equipment and Inventory systems have distinct but complementary responsibilities:
+## 🏗️ Architecture
 
-### Equipment System Responsibilities
-- Handling equipment slot management
-- Managing equipment stats and effects
-- Handling equip/unequip operations
-- Calculating derived stats from equipped items
-- Defining equipment-specific properties and requirements
-- Managing set bonuses and equipment synergies
-- Tracking equipment durability and handling repairs
-
-### Inventory System Responsibilities
-- Storing and tracking all items (including equipment)
-- Managing inventory constraints
-- Providing item transfer operations
-- Validating inventory operations
-- Defining base item properties
-
-The Equipment System relies on the Inventory System to:
-1. Verify item existence and ownership
-2. Manage the storage of equipment items
-3. Provide base item properties
-4. Handle general inventory operations
-
-## Data Structure
-
-The Equipment System uses models from both its own domain and the Inventory System:
-
-### From Inventory System
-```python
-# Item model with equipment-specific properties
-class Item(db.Model):
-    # Base properties
-    id: Mapped[int]
-    name: Mapped[str]
-    # ... other base properties ...
-    
-    # Equipment-specific properties in the 'properties' JSON field:
-    # {
-    #    "equipment_type": "weapon",
-    #    "slot": "main_hand",
-    #    "damage": 10,
-    #    "requirements": {"strength": 12}
-    # }
+### Directory Structure
+```
+backend/systems/equipment/
+├── models/
+│   └── enchanting.py          # Core enchanting data models
+├── services/
+│   ├── enchanting_service.py  # Enchanting business logic
+│   ├── equipment_quality.py   # Quality/durability management
+│   └── durability_service.py  # Time-based degradation
+├── repositories/
+│   ├── enchanting_repository.py   # Enchanting data persistence
+│   └── equipment_repository.py    # Equipment data persistence
+├── routers/
+│   ├── enchanting_router.py   # Enchanting API endpoints
+│   └── __init__.py            # Main equipment API
+├── schemas/
+│   ├── enchanting_schemas.py  # Pydantic validation schemas
+│   └── __init__.py           # Equipment schemas
+├── events/
+│   └── __init__.py           # Equipment event system
+├── data/
+│   └── sample_enchantments.json  # Example enchantments
+└── examples/
+    └── enchanting_demo.py     # Complete demo script
 ```
 
-### Equipment-specific Models
-```python
-# Equipment slots with validation logic
-class EquipmentSlot(db.Model):
-    id: Mapped[int]
-    character_id: Mapped[int]
-    slot_type: Mapped[str]
-    item_id: Mapped[int]
+### Core Components
 
-# Current equipment configuration
-class Equipment(db.Model):
-    id: Mapped[int]
-    character_id: Mapped[int]
-    slot: Mapped[str]
-    item_id: Mapped[int]
-    current_durability: Mapped[float]
-    max_durability: Mapped[float]
-    is_broken: Mapped[bool]
+#### 1. Enchanting Models (`models/enchanting.py`)
+- `EnchantmentDefinition`: Defines learnable enchantments
+- `LearnedEnchantment`: Character's learned enchantments with mastery
+- `DisenchantmentAttempt`: Records disenchanting attempts
+- `EnchantmentApplication`: Records enchantment applications
+- `CharacterEnchantingProfile`: Complete character progression
 
-# Equipment sets for set bonuses
-class EquipmentSet(db.Model):
-    id: Mapped[int]
-    name: Mapped[str]
-    description: Mapped[str]
-    set_bonuses: Mapped[Dict]  # Maps number of pieces to bonuses
-    item_ids: Mapped[List[int]]  # List of item IDs that belong to this set
+#### 2. Enchanting Service (`services/enchanting_service.py`)
+- Risk calculation for disenchanting attempts
+- Success probability based on skill and item quality
+- Enchantment application with mastery progression
+- Integration with economy and character systems
 
-# Equipment durability history
-class EquipmentDurabilityLog(db.Model):
-    id: Mapped[int]
-    equipment_id: Mapped[int]
-    previous_durability: Mapped[float]
-    new_durability: Mapped[float]
-    change_amount: Mapped[float]
-    change_reason: Mapped[str]
-    event_details: Mapped[Dict]
-    timestamp: Mapped[datetime]
+#### 3. Repository Pattern (`repositories/`)
+- Clean data access abstraction
+- JSON-based persistence (easily swappable)
+- Character progression tracking
+- Attempt/application history
+
+#### 4. API Layer (`routers/`)
+- RESTful endpoints for all enchanting operations
+- Comprehensive request/response validation
+- Error handling and event publishing
+- Integration with main equipment API
+
+## 🚀 Quick Start
+
+### 1. Installation
+```bash
+# Install dependencies
+pip install fastapi pydantic uuid pathlib
+
+# Initialize the equipment system
+cd backend/systems/equipment/
 ```
 
-## Usage
+### 2. Run the Demo
+```bash
+python examples/enchanting_demo.py
+```
 
-The Equipment System exposes an API for managing character equipment:
+This will demonstrate:
+- Character learning enchantments by disenchanting items
+- Applying learned enchantments to new equipment  
+- Progression tracking and mastery system
+- Equipment durability and quality mechanics
+
+### 3. API Usage
+
+Start the FastAPI server and use the enchanting endpoints:
 
 ```python
-# Equip an item from inventory to character
-result = await equipment_service.equip_item(
-    character_id=character_id,
-    item_id=sword_id,
-    slot="main_hand"
-)
+import requests
 
-# Unequip an item
-result = await equipment_service.unequip_item(
-    character_id=character_id,
-    slot="main_hand"
-)
+# Disenchant an item to learn enchantments
+response = requests.post("/equipment/enchanting/disenchant", json={
+    "character_id": "uuid-here",
+    "item_id": "uuid-here", 
+    "item_data": {
+        "name": "Burning Sword",
+        "quality": "military",
+        "enchantments": ["flame_weapon"]
+    },
+    "arcane_manipulation_level": 5,
+    "character_level": 10
+})
 
-# Swap equipped items
-result = await equipment_service.swap_equipment(
-    character_id=character_id,
-    slot="main_hand",
-    new_item_id=better_sword_id
-)
+# Apply learned enchantment to item
+response = requests.post("/equipment/enchanting/enchant", json={
+    "character_id": "uuid-here",
+    "item_id": "uuid-here",
+    "item_data": {"name": "Plain Armor", "quality": "basic", "type": "armor"},
+    "enchantment_id": "flame_weapon",
+    "gold_available": 1000
+})
+```
 
-# Get equipment stats
-stats = await equipment_service.get_equipment_stats(character_id=character_id)
+## 📖 API Documentation
 
-# Get active set bonuses
-bonuses = await equipment_service.get_character_set_bonuses(character_id=character_id)
+### Enchanting Endpoints
 
-# Create equipment set
-result = await equipment_service.create_new_equipment_set(
-    name="Dragon Slayer Set",
-    description="Powerful set for dragon hunters",
-    item_ids=[sword_id, armor_id, helmet_id, boots_id],
-    set_bonuses={
-        "2": {"stats": {"strength": 5}, "effects": [{"name": "Fire Resistance"}]},
-        "4": {"stats": {"strength": 10, "vitality": 10}, "effects": [{"name": "Dragon Slayer"}]}
+#### `POST /equipment/enchanting/disenchant`
+Attempt to learn enchantments by disenchanting an item.
+
+**Request:**
+```json
+{
+  "character_id": "uuid",
+  "item_id": "uuid", 
+  "item_data": {
+    "name": "string",
+    "quality": "basic|military|noble",
+    "enchantments": ["enchantment_id_1", "enchantment_id_2"]
+  },
+  "arcane_manipulation_level": "integer (0-10)",
+  "character_level": "integer (1-20)",
+  "target_enchantment": "optional enchantment_id"
+}
+```
+
+**Response:**
+```json
+{
+  "success": "boolean",
+  "outcome": "success_learned|success_known|partial_success|failure_safe|failure_destroyed|critical_failure",
+  "enchantment_learned": "enchantment_id or null",
+  "item_destroyed": "boolean",
+  "experience_gained": "integer",
+  "additional_consequences": ["string array"],
+  "attempt_id": "uuid"
+}
+```
+
+#### `POST /equipment/enchanting/enchant`
+Apply a learned enchantment to an item.
+
+**Request:**
+```json
+{
+  "character_id": "uuid",
+  "item_id": "uuid",
+  "item_data": {
+    "name": "string",
+    "quality": "basic|military|noble", 
+    "type": "weapon|armor|accessory|tool"
+  },
+  "enchantment_id": "string",
+  "gold_available": "integer"
+}
+```
+
+**Response:**
+```json
+{
+  "success": "boolean",
+  "cost_paid": "integer", 
+  "final_power_level": "integer (1-100) or null",
+  "mastery_increased": "boolean",
+  "failure_reason": "string or null",
+  "materials_lost": "boolean",
+  "application_id": "uuid"
+}
+```
+
+#### `GET /equipment/enchanting/character/{character_id}/available`
+Get enchantments available for application to a specific item.
+
+#### `GET /equipment/enchanting/item/learnable`
+Get enchantments that can be learned from disenchanting an item.
+
+#### `GET /equipment/enchanting/character/{character_id}/profile`
+Get complete enchanting profile and statistics for a character.
+
+### Equipment Endpoints
+
+#### `POST /equipment/`
+Create new equipment with quality-based properties.
+
+#### `GET /equipment/{equipment_id}`
+Get equipment details with current durability and revealed abilities.
+
+#### `GET /equipment/`
+List equipment with filtering options.
+
+#### `DELETE /equipment/{equipment_id}`
+Permanently delete equipment.
+
+## 🔧 Configuration
+
+### Environment Variables
+```bash
+# Core API Settings
+ANTHROPIC_API_KEY=your_api_key_here    # Required for AI features
+MODEL=claude-3-opus-20240229           # Claude model to use
+MAX_TOKENS=8192                        # Max tokens for AI responses
+TEMPERATURE=0.7                        # AI response creativity
+
+# Enchanting Settings  
+DEFAULT_SUBTASKS=5                     # Default subtasks for expansion
+DEFAULT_PRIORITY=medium                # Default task priority
+PERPLEXITY_API_KEY=your_key_here      # For research features
+PERPLEXITY_MODEL=sonar-medium-online  # Perplexity model
+
+# Data Storage
+DATA_DIR=data/equipment               # Equipment data storage
+ENCHANTING_DATA_DIR=data/enchanting   # Enchanting data storage
+```
+
+### Quality Configuration
+Quality tiers are configured in `services/equipment_quality.py`:
+
+```python
+QUALITY_CONFIG = {
+    "basic": {
+        "durability_weeks": 1,      # Degrades in 1 week
+        "repair_cost": 500,         # 500 gold base repair
+        "value_multiplier": 1.0     # 1x base value
+    },
+    "military": {
+        "durability_weeks": 2,      # Degrades in 2 weeks  
+        "repair_cost": 750,         # 750 gold base repair
+        "value_multiplier": 3.0     # 3x base value
+    },
+    "noble": {
+        "durability_weeks": 4,      # Degrades in 4 weeks
+        "repair_cost": 1500,        # 1500 gold base repair  
+        "value_multiplier": 6.0     # 6x base value
     }
-)
-
-# Apply combat damage to equipment
-result = await equipment_service.apply_combat_damage(
-    equipment_id=sword_id,
-    equipment_type="weapon",
-    combat_intensity=1.5,  # Harder combat
-    is_critical=True       # Critical hit causes more damage
-)
-
-# Repair equipment
-result = await equipment_service.repair_equipment_item(
-    equipment_id=sword_id,
-    full_repair=True       # Fully repair the item
-)
+}
 ```
 
-## Integration Points
-
-The Equipment System interfaces with several other systems:
-
-- **Inventory System**: Sources items and manages storage
-- **Character System**: Equipment affects character stats and abilities
-- **Combat System**: Equipment determines combat capabilities
-- **Crafting System**: Creates equipable items
-- **Magic System**: Some equipment has magical properties and effects
-
-## Implementation Notes
-
-1. **Slot System**: Characters have a finite number of equipment slots, each accepting specific item types
-2. **Requirements**: Equipment may have requirements (stats, skills, etc.) that must be met before equipping
-3. **Effects**: Equipped items can provide passive effects and bonuses
-4. **Sets**: Some equipment items form sets that provide additional bonuses when worn together
-5. **Durability**: Equipment has durability that decreases with use and affects performance
-
-## Equipment Set Bonuses
-
-The Equipment Set system enables powerful combinations of gear that grant additional bonuses when multiple pieces from the same set are equipped:
-
-1. **Scalable Bonuses**: Different bonuses can be defined for different numbers of set pieces (e.g., 2-piece, 4-piece bonuses)
-2. **Stat Bonuses**: Direct stat increases (strength, vitality, etc.)
-3. **Special Effects**: Unique abilities or resistances that activate with set bonuses
-4. **Dynamic Calculation**: Set bonuses are recalculated whenever equipment changes
-5. **API Integration**: Full REST API for creating, updating, and managing equipment sets
-
-### Set Bonus Structure
+### Enchantment Configuration
+Sample enchantments are defined in `data/sample_enchantments.json`. You can add custom enchantments by following the schema:
 
 ```json
 {
-  "set_bonuses": {
-    "2": {
-      "stats": {"strength": 5, "agility": 3},
-      "effects": [{"name": "Frost Resistance", "description": "Reduces frost damage by 20%"}]
-    },
-    "4": {
-      "stats": {"strength": 10, "agility": 5, "critical_chance": 5},
-      "effects": [
-        {"name": "Frost Aura", "description": "Deals frost damage to nearby enemies"}
-      ]
+  "enchantments": {
+    "custom_enchant": {
+      "id": "custom_enchant",
+      "name": "Custom Enchantment",
+      "description": "Description of what it does",
+      "school": "elemental|protective|enhancement|utility|combat|mystical",
+      "rarity": "basic|military|noble|legendary",
+      "min_arcane_manipulation": 1,
+      "base_cost": 500,
+      "min_item_quality": "basic",
+      "compatible_item_types": ["weapon", "armor"],
+      "thematic_tags": ["fire", "damage"],
+      "power_scaling": {
+        "base_effect": 10.0,
+        "effect_per_mastery": 2.0
+      }
     }
   }
 }
 ```
 
-## Durability System
+## 🎯 Integration Points
 
-The Durability System models realistic wear and tear on equipment, affecting item performance over time:
+### Character System
+- **Arcane Manipulation Ability**: Governs enchanting success rates
+- **Character Level**: Affects identification limits and experience
+- **Gold/Economy**: Required for enchantment applications
 
-1. **Durability Tracking**: Each equipment item has current and maximum durability values
-2. **Combat Damage**: Equipment takes damage during combat based on intensity and critical hits
-3. **Wear and Tear**: Equipment degrades slowly over time with regular use
-4. **Environmental Factors**: Weather, terrain, and other conditions affect wear rates
-5. **Stat Degradation**: As durability decreases, equipment provides reduced bonuses
-6. **Repair System**: Items can be repaired at varying costs based on damage severity
-7. **Breaking Point**: Equipment with zero durability is considered broken and provides no benefits
-8. **Historical Tracking**: All durability changes are logged for analytics and narrative purposes
+### Combat System  
+- **Enchantment Effects**: Apply bonuses during combat calculations
+- **Durability Loss**: Combat damage affects equipment condition
+- **Set Bonuses**: Provide combat advantages
 
-### Durability Status Levels
+### Crafting System
+- **Material Requirements**: Some enchantments require specific materials
+- **Repair Materials**: Different qualities need different repair components
 
-The system defines several durability status levels that affect item performance:
+### Magic System
+- **School Synergy**: Enchantment schools align with spell schools
+- **Mana Integration**: Some enchantments affect mana costs/regeneration
 
-- **Perfect** (100%): No penalties, full stats
-- **Excellent** (90-99%): No penalties, full stats
-- **Good** (75-89%): No penalties, full stats
-- **Worn** (50-74%): 10% stat reduction
-- **Damaged** (25-49%): 25% stat reduction
-- **Very Damaged** (10-24%): 50% stat reduction
-- **Broken** (0-9%): Item cannot be equipped, provides no benefits
+## 🧪 Testing & Development
 
-### Repair Cost Formula
+### Running Tests
+```bash
+# Run the demo to test all components
+python examples/enchanting_demo.py
 
-Repair costs are calculated based on item value and damage severity:
-
-```
-repair_percentage = repair_amount / max_durability
-base_cost = item_value * repair_percentage
-
-# Apply cost multiplier based on how damaged the item is
-if durability_percentage < 10%:  # Very damaged items cost more to repair
-    cost_multiplier = 1.5
-elif durability_percentage < 30%:
-    cost_multiplier = 1.25
-else:
-    cost_multiplier = 1.0
-    
-total_cost = base_cost * cost_multiplier
+# Test specific components
+python -m pytest tests/test_enchanting.py   # (when tests are added)
 ```
 
-## Data Flow
+### Adding New Features
 
-1. Item exists in inventory (managed by Inventory System)
-2. Character attempts to equip item (Equipment System)
-3. Equipment System validates compatibility, requirements, and durability
-4. If valid, Equipment System updates equipment slots
-5. Character stats are recalculated with new equipment bonuses and set bonuses, adjusted for durability
-6. Equipment takes damage during use (combat, regular wear)
-7. Durability status affects equipment performance
-8. Repairs restore durability and performance
-9. Events are emitted to notify other systems of equipment changes and durability updates
+1. **New Enchantment Schools**: Add to `EnchantmentSchool` enum in `models/enchanting.py`
+2. **New Quality Tiers**: Update `QUALITY_CONFIG` in `services/equipment_quality.py`  
+3. **New Enchantments**: Add to `data/sample_enchantments.json` or register programmatically
+4. **New API Endpoints**: Add to appropriate router in `routers/`
+
+### Data Inspection
+The system generates JSON files for easy inspection:
+```bash
+# View character enchanting profile
+cat data/enchanting/profiles/{character_id}.json
+
+# View equipment items  
+cat data/equipment/items/{item_id}.json
+
+# View disenchantment history
+cat data/enchanting/attempts/{character_id}.json
+```
+
+## 🤝 Contributing
+
+1. Follow the existing code structure and patterns
+2. Add comprehensive docstrings to all functions
+3. Update this README when adding major features
+4. Consider the integration points with other Visual DM systems
+5. Test thoroughly with the demo script
+
+## 📄 License
+
+Part of the Visual DM project. See main project license for details.
+
+---
+
+**🎮 Ready to enchant some equipment?** Run the demo script and watch the magic happen!

@@ -16,7 +16,8 @@ namespace VDM.Systems.Motifs.Visualization
         [SerializeField] private Light motifLight;
         [SerializeField] private TextMeshPro nameText;
         [SerializeField] private TextMeshPro descriptionText;
-        [SerializeField] private SphereCollider influenceCollider;
+        // Note: SphereCollider requires Unity Physics package - uncomment when package is enabled
+        // [SerializeField] private SphereCollider influenceCollider;
 
         [Header("Visual Settings")]
         [SerializeField] private bool showInfluenceRadius = true;
@@ -91,8 +92,9 @@ namespace VDM.Systems.Motifs.Visualization
             if (nameText == null)
                 nameText = GetComponentInChildren<TextMeshPro>();
 
-            if (influenceCollider == null)
-                influenceCollider = GetComponent<SphereCollider>();
+            // Note: SphereCollider requires Unity Physics package - uncomment when package is enabled
+            // if (influenceCollider == null)
+            //     influenceCollider = GetComponent<SphereCollider>();
 
             // Create default components if missing
             CreateDefaultComponents();
@@ -118,11 +120,12 @@ namespace VDM.Systems.Motifs.Visualization
             }
 
             // Create influence collider if missing
-            if (influenceCollider == null)
-            {
-                influenceCollider = gameObject.AddComponent<SphereCollider>();
-                influenceCollider.isTrigger = true;
-            }
+            // Note: SphereCollider requires Unity Physics package - uncomment when package is enabled
+            // if (influenceCollider == null)
+            // {
+            //     influenceCollider = gameObject.AddComponent<SphereCollider>();
+            //     influenceCollider.isTrigger = true;
+            // }
 
             // Create particle system if missing and enabled
             if (particleSystem == null && enableParticles)
@@ -293,11 +296,11 @@ namespace VDM.Systems.Motifs.Visualization
 
         private void UpdateInfluenceRadius()
         {
-            if (influenceCollider != null && _currentMotif.location != null)
-            {
-                influenceCollider.radius = _currentMotif.location.radius;
-                influenceCollider.enabled = showInfluenceRadius;
-            }
+            if (_currentMotif?.location == null) return;
+
+            // Note: SphereCollider requires Unity Physics package - uncomment when package is enabled
+            // influenceCollider.radius = _currentMotif.location.radius;
+            // influenceCollider.enabled = showInfluenceRadius;
         }
 
         private void UpdateParticles()
@@ -570,10 +573,10 @@ namespace VDM.Systems.Motifs.Visualization
         public void SetInfluenceRadiusVisible(bool visible)
         {
             showInfluenceRadius = visible;
-            if (influenceCollider != null)
-            {
-                influenceCollider.enabled = visible;
-            }
+            
+            // Note: SphereCollider requires Unity Physics package - uncomment when package is enabled
+            // if (influenceCollider != null)
+            //     influenceCollider.enabled = visible;
         }
 
         /// <summary>

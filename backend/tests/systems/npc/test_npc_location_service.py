@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.npc.services.npc_location_service import npc_location_service
+    from backend.systems.npc.services.npc_location_service import NpcLocationService
 except ImportError:
-    pytest.skip(f"Module backend.systems.npc.npc_location_service not found", allow_module_level=True)
+    pytest.skip(f"Module backend.systems.npc.services.npc_location_service not found", allow_module_level=True)
 
 
 class TestNpc_Location_Service:
@@ -20,7 +20,7 @@ class TestNpc_Location_Service:
     
     def test_module_imports(self):
         """Test that the module can be imported successfully"""
-        assert npc_location_service is not None
+        assert NpcLocationService is not None
         
     @pytest.mark.asyncio
     async def test_basic_functionality(self):
@@ -31,4 +31,4 @@ class TestNpc_Location_Service:
     def test_module_structure(self):
         """Test that module has expected structure"""
         # TODO: Add tests for expected classes, functions, constants
-        assert hasattr(npc_location_service, '__name__')
+        assert hasattr(NpcLocationService, '__name__')

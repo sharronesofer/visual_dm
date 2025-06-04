@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.npc.utils.npc_loyalty_class import npc_loyalty_class
+    from backend.systems.npc.utils import npc_loyalty_class
 except ImportError:
-    pytest.skip(f"Module backend.systems.npc.npc_loyalty_class not found", allow_module_level=True)
+    pytest.skip(f"Module backend.systems.npc.utils.npc_loyalty_class not found", allow_module_level=True)
 
 
 class TestNpc_Loyalty_Class:

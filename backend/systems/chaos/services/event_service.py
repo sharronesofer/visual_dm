@@ -7,12 +7,13 @@ Provides high-level interface for event operations and queries.
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Any
-from datetime import datetime
+from typing import Dict, List, Optional, Any, Set
+from datetime import datetime, timedelta
+from uuid import UUID
 
 from backend.systems.chaos.services.event_manager import EventManager
 from backend.systems.chaos.core.config import ChaosConfig
-from backend.systems.chaos.models.chaos_events import ChaosEvent, ChaosEventType
+from backend.infrastructure.systems.chaos.models.chaos_events import ChaosEvent, ChaosEventType
 
 logger = logging.getLogger(__name__)
 
@@ -33,9 +34,7 @@ class EventService:
         """Initialize the event service."""
         try:
             await self.event_manager.initialize()
-            logger.info("Event Service initialized")
         except Exception as e:
-            logger.error(f"Failed to initialize Event Service: {e}")
             raise
     
     def get_active_events(self) -> List[ChaosEvent]:

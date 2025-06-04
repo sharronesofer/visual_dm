@@ -9,7 +9,6 @@ namespace VDM.DTOs.Character
     {
         public string id;
         public string name;
-        public string characterClass;
         public int level;
         public int experience;
         public int health;
@@ -36,7 +35,6 @@ namespace VDM.DTOs.Character
     public class CharacterCreateDTO
     {
         public string name;
-        public string characterClass;
         public Dictionary<string, int> attributes;
         
         public CharacterCreateDTO()
@@ -122,7 +120,6 @@ namespace VDM.DTOs.Character
     {
         public string id;
         public string name;
-        public string characterClass;
         public int level;
         public Vector3 position;
         public Quaternion rotation;

@@ -3,7 +3,7 @@ math.test.py - Auto-generated minimal implementation
 This file was automatically fixed due to syntax errors.
 """
 
-class Math.test:
+class MathTest:
     """Auto-generated class for math.test"""
     
     def __init__(self):

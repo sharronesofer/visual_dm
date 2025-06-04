@@ -463,7 +463,7 @@ Loot system needs proper integration with other game systems:
 
 **4. Character System Integration:**
 - Level-appropriate loot scaling
-- Class-specific equipment filtering
+
 - Skill-based item identification
 - Character progression rewards
 - Attribute-based item effectiveness

@@ -5,45 +5,58 @@
     "updated_at": "2025-05-27T01:34:24.968768Z",
     "title": "Monitored full-range system engine",
     "description": "System stop tell land those move. More program often painting tax. Safe your consumer support meeting pull upon.",
-    "quest_type": "CHARACTER",
-    "quest_status": "ABANDONED",
-    "giver_id": "2ec37bab-c24a-4d12-aed6-097ff611a117",
-    "target_character_id": "c8bebf61-8cf8-405f-8bd6-8091add4d1aa",
-    "requirements": {
-      "minimum_level": 2,
-      "required_items": [
-        "c07d8eb4-1485-4750-8519-bcccc91d5c48"
-      ],
-      "prerequisite_quests": [
-        "12884875-c149-4eb5-8c86-25b1e2e3761a"
-      ]
-    },
+    "status": "abandoned",
+    "difficulty": "medium",
+    "theme": "combat",
+    "npc_id": "2ec37bab-c24a-4d12-aed6-097ff611a117",
+    "player_id": "c8bebf61-8cf8-405f-8bd6-8091add4d1aa",
+    "level": 2,
     "rewards": {
-      "experience_points": 4096,
       "gold": 314,
+      "experience": 4096,
+      "reputation": {},
       "items": [
         {
           "item_id": "e7eb811f-a2e5-4668-84af-4fc9516e495d",
           "quantity": 2
         }
-      ]
+      ],
+      "special": {}
     },
     "steps": [
       {
-        "step_number": 1,
-        "step_type": "KILL",
+        "id": 1,
+        "title": "Eliminate threat",
         "description": "Fill try central write nothing.",
         "completed": true,
-        "target_id": null
+        "required": true,
+        "order": 1,
+        "metadata": {}
       },
       {
-        "step_number": 2,
-        "step_type": "KILL",
+        "id": 2,
+        "title": "Confirm elimination",
         "description": "Check claim structure yard collection seat father sometimes.",
         "completed": true,
-        "target_id": "566c410a-0cf7-42eb-881f-94253bfc90d6"
+        "required": true,
+        "order": 2,
+        "metadata": {
+          "target_id": "566c410a-0cf7-42eb-881f-94253bfc90d6"
+        }
       }
-    ]
+    ],
+    "properties": {
+      "legacy_quest_type": "CHARACTER",
+      "legacy_requirements": {
+        "minimum_level": 2,
+        "required_items": [
+          "c07d8eb4-1485-4750-8519-bcccc91d5c48"
+        ],
+        "prerequisite_quests": [
+          "12884875-c149-4eb5-8c86-25b1e2e3761a"
+        ]
+      }
+    }
   },
   {
     "id": "b5918ffc-fe7a-4869-932e-0e8f6e6d7c26",
@@ -51,48 +64,59 @@
     "updated_at": "2025-05-25T01:34:24.968842Z",
     "title": "Reduced fresh-thinking core",
     "description": "Recognize identify likely about theory. Development leader everyone analysis buy paper possible. Operation that indeed nor surface information. Director lose along such strategy thus.",
-    "quest_type": "SIDE",
-    "quest_status": "AVAILABLE",
-    "giver_id": "18ca5781-c681-405e-bb3a-2c50c8cfbcea",
-    "target_character_id": "9360f99c-60f3-4a22-a03f-5dde084793f9",
-    "requirements": {
-      "minimum_level": 5,
-      "required_items": [
-        "2cb9721c-1e3c-4d4e-98b2-ca395236c527",
-        "d09110a7-3e39-4428-bdc3-5d7d20933c7f",
-        "82d211bf-43ba-430e-a3a0-61f2703e6435"
-      ],
-      "prerequisite_quests": [
-        "f1e6c5c7-3eda-46c4-92f4-1280b4d29a42",
-        "eb0fa2cf-63b5-4710-910d-b7f89d8b9177"
-      ]
-    },
+    "status": "pending",
+    "difficulty": "medium",
+    "theme": "exploration",
+    "npc_id": "18ca5781-c681-405e-bb3a-2c50c8cfbcea",
+    "player_id": "9360f99c-60f3-4a22-a03f-5dde084793f9",
+    "level": 5,
     "rewards": {
-      "experience_points": 341,
       "gold": 807,
+      "experience": 341,
+      "reputation": {},
       "items": [
         {
           "item_id": "44e79479-9a2f-4edd-a70f-18c6e5e0b2cf",
           "quantity": 4
         }
-      ]
+      ],
+      "special": {}
     },
     "steps": [
       {
-        "step_number": 1,
-        "step_type": "KILL",
+        "id": 1,
+        "title": "Locate area",
         "description": "Church return hit anyone modern design evidence.",
         "completed": true,
-        "target_id": null
+        "required": true,
+        "order": 1,
+        "metadata": {}
       },
       {
-        "step_number": 2,
-        "step_type": "KILL",
+        "id": 2,
+        "title": "Survey region",
         "description": "Process hospital protect voice body analysis officer dinner.",
         "completed": true,
-        "target_id": null
+        "required": true,
+        "order": 2,
+        "metadata": {}
       }
-    ]
+    ],
+    "properties": {
+      "legacy_quest_type": "SIDE",
+      "legacy_requirements": {
+        "minimum_level": 5,
+        "required_items": [
+          "2cb9721c-1e3c-4d4e-98b2-ca395236c527",
+          "d09110a7-3e39-4428-bdc3-5d7d20933c7f",
+          "82d211bf-43ba-430e-a3a0-61f2703e6435"
+        ],
+        "prerequisite_quests": [
+          "f1e6c5c7-3eda-46c4-92f4-1280b4d29a42",
+          "eb0fa2cf-63b5-4710-910d-b7f89d8b9177"
+        ]
+      }
+    }
   },
   {
     "id": "1617be43-3a7d-40fa-9f4a-5441ee538e4e",
@@ -100,61 +124,80 @@
     "updated_at": "2025-05-29T01:34:24.968925Z",
     "title": "Cross-platform 24/7 ability",
     "description": "Church set at knowledge. Opportunity peace dog final. Drop side magazine send. Note picture change me. Before between red Republican because Republican brother.",
-    "quest_type": "CHARACTER",
-    "quest_status": "FAILED",
-    "giver_id": "38e52113-1fd9-4742-8f93-75471dc87808",
-    "target_character_id": "36773137-24a2-41ac-9ff9-349f25c41215",
-    "requirements": {
-      "minimum_level": 4,
-      "required_items": [
-        "fbc78a32-2a1c-4255-b380-d4a672c0b2b4",
-        "ce324475-ad7b-4a7b-9f29-ba48f743d35a",
-        "966d55a9-dbf2-4816-a2e5-95c1546ca2d0"
-      ],
-      "prerequisite_quests": [
-        "6140da05-d154-42f5-8821-5d15fbde73c1"
-      ]
-    },
+    "status": "failed",
+    "difficulty": "hard",
+    "theme": "mystery",
+    "npc_id": "38e52113-1fd9-4742-8f93-75471dc87808",
+    "player_id": "36773137-24a2-41ac-9ff9-349f25c41215",
+    "level": 4,
     "rewards": {
-      "experience_points": 1123,
       "gold": 655,
+      "experience": 1123,
+      "reputation": {},
       "items": [
         {
           "item_id": "33c2f353-3de3-49e6-820e-f17c8b45d235",
           "quantity": 3
         }
-      ]
+      ],
+      "special": {}
     },
     "steps": [
       {
-        "step_number": 1,
-        "step_type": "EXPLORE",
+        "id": 1,
+        "title": "Investigate scene",
         "description": "Personal over one many he address benefit.",
         "completed": false,
-        "target_id": null
+        "required": true,
+        "order": 1,
+        "metadata": {}
       },
       {
-        "step_number": 2,
-        "step_type": "DELIVER",
+        "id": 2,
+        "title": "Gather evidence",
         "description": "Realize animal his every.",
         "completed": true,
-        "target_id": null
+        "required": true,
+        "order": 2,
+        "metadata": {}
       },
       {
-        "step_number": 3,
-        "step_type": "DELIVER",
+        "id": 3,
+        "title": "Follow leads",
         "description": "Ten power author service soon.",
         "completed": true,
-        "target_id": "10a8cbc2-a604-49b8-8b7d-23c0bafac0b6"
+        "required": true,
+        "order": 3,
+        "metadata": {
+          "target_id": "10a8cbc2-a604-49b8-8b7d-23c0bafac0b6"
+        }
       },
       {
-        "step_number": 4,
-        "step_type": "TALK",
+        "id": 4,
+        "title": "Interview witness",
         "description": "Foot beyond speech at include recent society.",
         "completed": true,
-        "target_id": "6e5b8020-3956-4b78-891d-507e9ab0c871"
+        "required": false,
+        "order": 4,
+        "metadata": {
+          "target_id": "6e5b8020-3956-4b78-891d-507e9ab0c871"
+        }
       }
-    ]
+    ],
+    "properties": {
+      "legacy_quest_type": "CHARACTER",
+      "legacy_requirements": {
+        "minimum_level": 4,
+        "required_items": [
+          "fbc78a32-2a1c-4255-b380-d4a672c0b2b4",
+          "ce324475-ad7b-4a7b-9f29-ba48f743d35a",
+          "966d55a9-dbf2-4816-a2e5-95c1546ca2d0"
+        ],
+        "prerequisite_quests": [
+          "6140da05-d154-42f5-8821-5d15fbde73c1"
+        ]
+      }
+    }
   },
   {
     "id": "ca6f98a9-1090-42ec-914a-026885acc19a",
@@ -162,66 +205,85 @@
     "updated_at": "2025-05-25T01:34:24.969033Z",
     "title": "Phased hybrid matrices",
     "description": "Garden high top democratic. Everybody throughout station. Again section marriage sister. Least report beautiful song. Million positive author kid big. Range commercial material card get technology them.",
-    "quest_type": "CHARACTER",
-    "quest_status": "AVAILABLE",
-    "giver_id": "fa20c7d7-a633-470f-a44a-4dd44645ab8a",
-    "target_character_id": "5ee3d7dd-aa02-44cd-a640-3ba55a04b2ae",
-    "requirements": {
-      "minimum_level": 10,
-      "required_items": [
-        "37c22c2c-77ec-44bc-9f5d-90ce845c4387",
-        "91216193-8ba6-40f0-b61d-3770beca7e39",
-        "2731f4c6-c76d-4d04-a671-c87d2bc4f852"
-      ],
-      "prerequisite_quests": []
-    },
+    "status": "pending",
+    "difficulty": "epic",
+    "theme": "general",
+    "npc_id": "fa20c7d7-a633-470f-a44a-4dd44645ab8a",
+    "player_id": "5ee3d7dd-aa02-44cd-a640-3ba55a04b2ae",
+    "level": 10,
     "rewards": {
-      "experience_points": 1202,
       "gold": 279,
+      "experience": 1202,
+      "reputation": {},
       "items": [
         {
           "item_id": "6db84e68-239f-4556-8632-f2fc1ea87047",
           "quantity": 4
         }
-      ]
+      ],
+      "special": {}
     },
     "steps": [
       {
-        "step_number": 1,
-        "step_type": "DELIVER",
+        "id": 1,
+        "title": "Deliver package",
         "description": "Support ok energy employee.",
         "completed": false,
-        "target_id": null
+        "required": true,
+        "order": 1,
+        "metadata": {}
       },
       {
-        "step_number": 2,
-        "step_type": "KILL",
+        "id": 2,
+        "title": "Eliminate threats",
         "description": "Join think would indicate church.",
         "completed": true,
-        "target_id": null
+        "required": true,
+        "order": 2,
+        "metadata": {}
       },
       {
-        "step_number": 3,
-        "step_type": "TALK",
+        "id": 3,
+        "title": "Speak with contact",
         "description": "Responsibility create outside identify measure age.",
         "completed": true,
-        "target_id": null
+        "required": true,
+        "order": 3,
+        "metadata": {}
       },
       {
-        "step_number": 4,
-        "step_type": "GATHER",
+        "id": 4,
+        "title": "Collect materials",
         "description": "Lose information sister consider.",
         "completed": false,
-        "target_id": null
+        "required": false,
+        "order": 4,
+        "metadata": {}
       },
       {
-        "step_number": 5,
-        "step_type": "KILL",
+        "id": 5,
+        "title": "Final confrontation",
         "description": "Gun reason produce ball.",
         "completed": true,
-        "target_id": "87223733-6dd0-4b87-a9f3-3d8edec221e3"
+        "required": true,
+        "order": 5,
+        "metadata": {
+          "target_id": "87223733-6dd0-4b87-a9f3-3d8edec221e3"
+        }
       }
-    ]
+    ],
+    "properties": {
+      "legacy_quest_type": "CHARACTER",
+      "legacy_requirements": {
+        "minimum_level": 10,
+        "required_items": [
+          "37c22c2c-77ec-44bc-9f5d-90ce845c4387",
+          "91216193-8ba6-40f0-b61d-3770beca7e39",
+          "2731f4c6-c76d-4d04-a671-c87d2bc4f852"
+        ],
+        "prerequisite_quests": []
+      }
+    }
   },
   {
     "id": "1bf92660-ccc8-41d5-a93f-5b11f40b9c2f",
@@ -229,55 +291,70 @@
     "updated_at": "2025-05-26T01:34:24.969149Z",
     "title": "Fundamental dedicated database",
     "description": "Sport security heavy pressure care. Base serve reality project section goal six. Course remember family tax. Series worry meet certainly defense dream recognize tax. Fast whatever simply my.",
-    "quest_type": "SIDE",
-    "quest_status": "ABANDONED",
-    "giver_id": "0bdb139e-6357-4c80-88c4-b1cb360c10c3",
-    "target_character_id": "b78e026f-f7af-4af0-b939-101f289b6d67",
-    "requirements": {
-      "minimum_level": 1,
-      "required_items": [],
-      "prerequisite_quests": []
-    },
+    "status": "abandoned",
+    "difficulty": "easy",
+    "theme": "aid",
+    "npc_id": "0bdb139e-6357-4c80-88c4-b1cb360c10c3",
+    "player_id": "b78e026f-f7af-4af0-b939-101f289b6d67",
+    "level": 1,
     "rewards": {
-      "experience_points": 650,
       "gold": 493,
+      "experience": 650,
+      "reputation": {},
       "items": [
         {
           "item_id": "4a2dd560-e2b0-4722-b93c-3a2501aa12be",
           "quantity": 5
         }
-      ]
+      ],
+      "special": {}
     },
     "steps": [
       {
-        "step_number": 1,
-        "step_type": "KILL",
+        "id": 1,
+        "title": "Eliminate problem",
         "description": "Lay blue trip another attorney charge often.",
         "completed": true,
-        "target_id": null
+        "required": true,
+        "order": 1,
+        "metadata": {}
       },
       {
-        "step_number": 2,
-        "step_type": "TALK",
+        "id": 2,
+        "title": "Report to contact",
         "description": "Before situation still appear alone within call.",
         "completed": false,
-        "target_id": null
+        "required": true,
+        "order": 2,
+        "metadata": {}
       },
       {
-        "step_number": 3,
-        "step_type": "KILL",
+        "id": 3,
+        "title": "Resolve situation",
         "description": "Sit thus work.",
         "completed": false,
-        "target_id": null
+        "required": true,
+        "order": 3,
+        "metadata": {}
       },
       {
-        "step_number": 4,
-        "step_type": "DELIVER",
+        "id": 4,
+        "title": "Deliver results",
         "description": "Brother next sister evidence exactly.",
         "completed": false,
-        "target_id": null
+        "required": true,
+        "order": 4,
+        "metadata": {}
       }
-    ]
+    ],
+    "properties": {
+      "legacy_quest_type": "SIDE",
+      "legacy_requirements": {
+        "minimum_level": 1,
+        "required_items": [],
+        "prerequisite_quests": []
+      }
+    }
   },
   {
     "id": "11468099-5638-421b-b4ce-7f1a0ebdaa31",
@@ -285,39 +362,48 @@
     "updated_at": "2025-05-26T01:34:24.969244Z",
     "title": "Customer-focused grid-enabled installation",
     "description": "Ability week must whole health student. Choice help father three add. Plant too week. Director plant either.",
-    "quest_type": "SIDE",
-    "quest_status": "AVAILABLE",
-    "giver_id": "546d7c11-cee8-4546-9a04-c1ccf78a0fa3",
-    "target_character_id": "003b9e0c-c9a0-48cb-9b25-22a9cd9af84f",
-    "requirements": {
-      "minimum_level": 6,
-      "required_items": [
-        "c1cda198-534c-4248-b073-d90dfa5a3791",
-        "5ddd4b96-c592-48b7-89fb-2939c32688a1"
-      ],
-      "prerequisite_quests": [
-        "4cb7cac8-2cc2-4c6d-84e3-6b5688af41be",
-        "0756720f-73cb-497f-8818-30508901306a"
-      ]
-    },
+    "status": "pending",
+    "difficulty": "medium",
+    "theme": "crafting",
+    "npc_id": "546d7c11-cee8-4546-9a04-c1ccf78a0fa3",
+    "player_id": "003b9e0c-c9a0-48cb-9b25-22a9cd9af84f",
+    "level": 6,
     "rewards": {
-      "experience_points": 123,
       "gold": 201,
+      "experience": 123,
+      "reputation": {},
       "items": [
         {
           "item_id": "c34dc0ad-1be2-43ee-b038-ca51f3294b03",
           "quantity": 5
         }
-      ]
+      ],
+      "special": {}
     },
     "steps": [
       {
-        "step_number": 1,
-        "step_type": "GATHER",
+        "id": 1,
+        "title": "Gather materials",
         "description": "Board fund sound.",
         "completed": false,
-        "target_id": null
+        "required": true,
+        "order": 1,
+        "metadata": {}
       }
-    ]
+    ],
+    "properties": {
+      "legacy_quest_type": "SIDE",
+      "legacy_requirements": {
+        "minimum_level": 6,
+        "required_items": [
+          "c1cda198-534c-4248-b073-d90dfa5a3791",
+          "5ddd4b96-c592-48b7-89fb-2939c32688a1"
+        ],
+        "prerequisite_quests": [
+          "4cb7cac8-2cc2-4c6d-84e3-6b5688af41be",
+          "0756720f-73cb-497f-8818-30508901306a"
+        ]
+      }
+    }
   }
 ]

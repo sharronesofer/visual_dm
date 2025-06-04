@@ -1,7 +1,7 @@
 # Consolidation Verification Log
 Generated on Wed May 21 08:35:22 EDT 2025
 
-- Using backup directory: /Users/Sharrone/Visual_DM/module_backups/20250521_083303
+- Using backup directory: /Users/Sharrone/Dreamforge/module_backups/20250521_083303
 
 ## Verifying NPCs → Characters
 

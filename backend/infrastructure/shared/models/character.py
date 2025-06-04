@@ -18,13 +18,13 @@ class Character(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     race = Column(String(50), nullable=False)
-    character_class = Column(String(50), nullable=False)
     level = Column(Integer, default=1)
     stats = Column(JSON, nullable=False)  # Stores ability scores, HP, etc.
     background = Column(String(100))
     alignment = Column(String(50))
     equipment = Column(JSON, default=list)  # List of equipment items
-    skills = relationship('Skill', secondary=character_skills, backref='characters')
+    abilities = Column(JSON, default=list)  # Character abilities (Visual DM's ability-based system)
+    # Note: skills relationship will be defined in the systems layer where Skill is defined
     notes = Column(JSON, default=list)  # Character-specific notes
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -32,16 +32,5 @@ class Character(Base):
     def __repr__(self):
         return f"<Character {self.name}>"
 
-class Skill(Base):
-    __tablename__ = 'skills'
-    __table_args__ = {'extend_existing': True}
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    description = Column(String(500))
-    ability = Column(String(50))  # Associated ability score
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<Skill {self.name}>" 
+# Skill class moved to backend/systems/character/models/character.py 
+# to follow the development bible's clean separation of concerns 

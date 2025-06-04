@@ -22,7 +22,16 @@ import threading
 from enum import Enum
 
 # Import base event types
-# REMOVED: deprecated event_base import
+from backend.infrastructure.events.events.event_types import EventType
+from backend.infrastructure.events.core.event_base import EventBase as BaseEvent
+
+# Define EventPriority if not imported
+class EventPriority(Enum):
+    """Event priority levels"""
+    LOW = "low"
+    NORMAL = "normal"
+    HIGH = "high"
+    CRITICAL = "critical"
 
 logger = logging.getLogger(__name__)
 
@@ -337,7 +346,3 @@ async def dispatch_event(event: BaseEvent) -> int:
 async def unregister_handler(subscription_id: str) -> bool:
     """Unregister an event handler"""
     return await integration_event_bus.unsubscribe(subscription_id)
-
-
-# Alias for compatibility
-IntegrationEventBus = IntegrationEventBus

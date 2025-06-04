@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.npc.services.npc_builder_class import npc_builder_class
+    from backend.systems.npc.utils import npc_builder_class
 except ImportError:
-    pytest.skip(f"Module backend.systems.npc.npc_builder_class not found", allow_module_level=True)
+    pytest.skip(f"Module backend.systems.npc.utils.npc_builder_class not found", allow_module_level=True)
 
 
 class TestNpc_Builder_Class:

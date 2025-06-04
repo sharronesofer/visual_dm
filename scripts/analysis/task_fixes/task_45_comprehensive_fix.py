@@ -22,7 +22,7 @@ from collections import defaultdict
 import time
 
 # Get absolute paths
-PROJECT_ROOT = Path("/Users/Sharrone/Visual_DM")
+PROJECT_ROOT = Path("/Users/Sharrone/Dreamforge")
 BACKEND_ROOT = PROJECT_ROOT / "backend"
 SYSTEMS_ROOT = BACKEND_ROOT / "systems"
 TESTS_ROOT = BACKEND_ROOT / "tests"
@@ -118,7 +118,7 @@ import logging
 from enum import Enum
 
 from backend.infrastructure.shared.models.base import BaseModel
-from backend.systems.population.models import PopulationModel
+from backend.infrastructure.models.population.models import PopulationModel
 
 logger = logging.getLogger(__name__)
 

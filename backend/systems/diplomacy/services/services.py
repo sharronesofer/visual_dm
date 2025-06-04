@@ -3,6 +3,9 @@ Diplomacy System Services
 
 This module provides business logic services for the diplomacy system
 according to the Development Bible standards.
+
+This now acts as a facade for the UnifiedDiplomacyService while maintaining
+the async interface and additional business logic patterns.
 """
 
 import logging
@@ -11,6 +14,9 @@ from uuid import UUID
 from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func
+
+# Import unified service
+from backend.systems.diplomacy.services.unified_diplomacy_service import UnifiedDiplomacyService
 
 from backend.systems.diplomacy.models import (
     DiplomacyEntity,
@@ -30,11 +36,18 @@ logger = logging.getLogger(__name__)
 
 
 class DiplomacyService(BaseService[DiplomacyEntity]):
-    """Service class for diplomacy business logic"""
+    """
+    Service class for diplomacy business logic.
+    
+    This class now delegates to UnifiedDiplomacyService while maintaining
+    the async interface and additional business logic patterns.
+    """
     
     def __init__(self, db_session: Session):
         super().__init__(db_session, DiplomacyEntity)
         self.db = db_session
+        # Initialize the unified service
+        self._unified_service = UnifiedDiplomacyService(db_session=db_session)
 
     async def create_diplomacy(
         self, 
@@ -42,53 +55,11 @@ class DiplomacyService(BaseService[DiplomacyEntity]):
         user_id: Optional[UUID] = None
     ) -> DiplomacyResponse:
         """Create a new diplomacy"""
-        try:
-            logger.info(f"Creating diplomacy: {request.name}")
-            
-            # Validate unique constraints
-            existing = await self._get_by_name(request.name)
-            if existing:
-                raise DiplomacyConflictError(f"Diplomacy with name '{request.name}' already exists")
-            
-            # Create entity
-            entity_data = {
-                "name": request.name,
-                "description": request.description,
-                "properties": request.properties or {},
-                "status": "active",
-                "created_at": datetime.utcnow(),
-                "is_active": True
-            }
-            
-            entity = DiplomacyEntity(**entity_data)
-            self.db.add(entity)
-            self.db.commit()
-            self.db.refresh(entity)
-            
-            logger.info(f"Created diplomacy {entity.id} successfully")
-            return DiplomacyResponse.from_orm(entity)
-            
-        except Exception as e:
-            logger.error(f"Error creating diplomacy: {str(e)}")
-            self.db.rollback()
-            raise
+        return await self._unified_service.create_diplomacy_async(request, user_id)
 
     async def get_diplomacy_by_id(self, diplomacy_id: UUID) -> Optional[DiplomacyResponse]:
         """Get diplomacy by ID"""
-        try:
-            entity = self.db.query(DiplomacyEntity).filter(
-                DiplomacyEntity.id == diplomacy_id,
-                DiplomacyEntity.is_active == True
-            ).first()
-            
-            if not entity:
-                return None
-                
-            return DiplomacyResponse.from_orm(entity)
-            
-        except Exception as e:
-            logger.error(f"Error getting diplomacy {_diplomacy_id}: {str(e)}")
-            raise
+        return await self._unified_service.get_diplomacy_by_id_async(diplomacy_id)
 
     async def update_diplomacy(
         self, 
@@ -99,7 +70,7 @@ class DiplomacyService(BaseService[DiplomacyEntity]):
         try:
             entity = await self._get_entity_by_id(diplomacy_id)
             if not entity:
-                raise DiplomacyNotFoundError(f"Diplomacy {_diplomacy_id} not found")
+                raise DiplomacyNotFoundError(f"Diplomacy {diplomacy_id} not found")
             
             # Update fields
             update_data = request.dict(exclude_unset=True)
@@ -115,7 +86,7 @@ class DiplomacyService(BaseService[DiplomacyEntity]):
             return DiplomacyResponse.from_orm(entity)
             
         except Exception as e:
-            logger.error(f"Error updating diplomacy {_diplomacy_id}: {str(e)}")
+            logger.error(f"Error updating diplomacy {diplomacy_id}: {str(e)}")
             self.db.rollback()
             raise
 
@@ -124,7 +95,7 @@ class DiplomacyService(BaseService[DiplomacyEntity]):
         try:
             entity = await self._get_entity_by_id(diplomacy_id)
             if not entity:
-                raise DiplomacyNotFoundError(f"Diplomacy {_diplomacy_id} not found")
+                raise DiplomacyNotFoundError(f"Diplomacy {diplomacy_id} not found")
             
             entity.is_active = False
             entity.updated_at = datetime.utcnow()
@@ -134,7 +105,7 @@ class DiplomacyService(BaseService[DiplomacyEntity]):
             return True
             
         except Exception as e:
-            logger.error(f"Error deleting diplomacy {_diplomacy_id}: {str(e)}")
+            logger.error(f"Error deleting diplomacy {diplomacy_id}: {str(e)}")
             self.db.rollback()
             raise
 
@@ -206,8 +177,9 @@ class DiplomacyService(BaseService[DiplomacyEntity]):
             ).scalar()
             
             return {
-                "total_diplomacys": total_count,
-                "active_diplomacys": active_count,
+                "total_diplomacies": total_count,
+                "active_diplomacies": active_count,
+                "inactive_diplomacies": total_count - active_count,
                 "last_updated": datetime.utcnow().isoformat()
             }
             
@@ -216,7 +188,6 @@ class DiplomacyService(BaseService[DiplomacyEntity]):
             raise
 
 
-# Factory function for dependency injection
 def create_diplomacy_service(db_session: Session) -> DiplomacyService:
     """Create diplomacy service instance"""
     return DiplomacyService(db_session)

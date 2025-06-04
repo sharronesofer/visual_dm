@@ -9,7 +9,7 @@ import shutil
 from typing import Optional, List, Dict, Any
 from pathlib import Path
 from backend.infrastructure.utils import secure_filename
-from backend.infrastructure.events.base_manager import BaseManager
+from backend.infrastructure.events.utils.base_manager import BaseManager
 from backend.infrastructure.config import settings
 import json
 import yaml
@@ -27,7 +27,19 @@ class FileManager(BaseManager):
         self.upload_folder = self.base_path / "uploads"
         self.asset_folder = self.base_path / "assets"
         self.max_file_size = 16 * 1024 * 1024  # 16MB default
-        self.allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+        self.allowed_extensions = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt', 'md'}
+        self.max_filename_length = 255
+        
+        # MIME type validation mapping
+        self.allowed_mime_types = {
+            'png': 'image/png',
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'gif': 'image/gif',
+            'pdf': 'application/pdf',
+            'txt': 'text/plain',
+            'md': 'text/markdown'
+        }
         
         # Create necessary directories
         self.ensure_directories()
@@ -95,10 +107,58 @@ class FileManager(BaseManager):
             return False
             
     def _is_allowed_file(self, filename: str) -> bool:
-        """Check if the file type is allowed."""
-        return '.' in filename and \
-               filename.rsplit('.', 1)[1].lower() in self.allowed_extensions
-               
+        """Check if the file type is allowed with enhanced security validation."""
+        if not filename or not isinstance(filename, str):
+            return False
+            
+        # Check filename length
+        if len(filename) > self.max_filename_length:
+            logger.warning(f"Filename too long: {len(filename)} characters")
+            return False
+            
+        # Check for path traversal attempts
+        if '..' in filename or filename.startswith('/') or '\\' in filename:
+            logger.warning(f"Potential path traversal attempt: {filename}")
+            return False
+            
+        # Check for null bytes or control characters
+        if '\x00' in filename or any(ord(c) < 32 for c in filename if c not in '\t\n\r'):
+            logger.warning(f"Invalid characters in filename: {filename}")
+            return False
+            
+        # Standard extension check
+        if '.' not in filename:
+            return False
+            
+        extension = filename.rsplit('.', 1)[1].lower()
+        if extension not in self.allowed_extensions:
+            logger.warning(f"File extension not allowed: {extension}")
+            return False
+            
+        return True
+        
+    def _validate_file_content(self, file_path: str, expected_extension: str) -> bool:
+        """Validate file content matches expected type."""
+        try:
+            import magic
+            
+            # Get file MIME type
+            mime_type = magic.from_file(file_path, mime=True)
+            expected_mime = self.allowed_mime_types.get(expected_extension)
+            
+            if expected_mime and mime_type != expected_mime:
+                logger.warning(f"MIME type mismatch: expected {expected_mime}, got {mime_type}")
+                return False
+                
+            return True
+        except ImportError:
+            # python-magic not available, skip MIME validation
+            logger.warning("python-magic not installed, skipping MIME type validation")
+            return True
+        except Exception as e:
+            logger.error(f"Error validating file content: {e}")
+            return False
+
     def get_file_info(self, file_path: str) -> Optional[Dict[str, Any]]:
         """Get information about a file."""
         try:

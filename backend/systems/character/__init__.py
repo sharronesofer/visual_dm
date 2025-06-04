@@ -1,10 +1,9 @@
-"""Character system"""
+"""Character system module."""
 
-# Auto-generated imports
-from . import events
+# Import only business logic components
 from . import models
-from . import repositories
-from . import routers
-from . import schemas
 from . import services
+from . import core
 from . import utils
+
+__all__ = ["models", "services", "core", "utils"]

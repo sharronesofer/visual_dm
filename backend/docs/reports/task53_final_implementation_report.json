@@ -3,10 +3,10 @@
   "timestamp": "2025-05-29T08:42:50.575748",
   "status": "COMPLETED",
   "project_paths": {
-    "project_root": "/Users/Sharrone/Visual_DM",
-    "backend_root": "/Users/Sharrone/Visual_DM/backend",
-    "systems_directory": "/Users/Sharrone/Visual_DM/backend/systems",
-    "tests_directory": "/Users/Sharrone/Visual_DM/backend/tests"
+    "project_root": "/Users/Sharrone/Dreamforge",
+    "backend_root": "/Users/Sharrone/Dreamforge/backend",
+    "systems_directory": "/Users/Sharrone/Dreamforge/backend/systems",
+    "tests_directory": "/Users/Sharrone/Dreamforge/backend/tests"
   },
   "statistics": {
     "systems_analyzed": 34,
@@ -20,7 +20,7 @@
   },
   "systems_analysis": {
     "economy": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/economy",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/economy",
       "files": 21,
       "components": {
         "models": true,
@@ -36,7 +36,7 @@
       }
     },
     "motif": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/motif",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/motif",
       "files": 14,
       "components": {
         "models": false,
@@ -52,7 +52,7 @@
       }
     },
     "llm": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/llm",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/llm",
       "files": 23,
       "components": {
         "models": true,
@@ -68,7 +68,7 @@
       }
     },
     "tension_war": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/tension_war",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/tension_war",
       "files": 30,
       "components": {
         "models": true,
@@ -84,7 +84,7 @@
       }
     },
     "world_generation": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/world_generation",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/world_generation",
       "files": 26,
       "components": {
         "models": false,
@@ -100,7 +100,7 @@
       }
     },
     "memory": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/memory",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/memory",
       "files": 13,
       "components": {
         "models": true,
@@ -116,7 +116,7 @@
       }
     },
     "diplomacy": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/diplomacy",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/diplomacy",
       "files": 30,
       "components": {
         "models": true,
@@ -132,7 +132,7 @@
       }
     },
     "combat": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/combat",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/combat",
       "files": 61,
       "components": {
         "models": true,
@@ -148,7 +148,7 @@
       }
     },
     "magic": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/magic",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/magic",
       "files": 11,
       "components": {
         "models": false,
@@ -164,7 +164,7 @@
       }
     },
     "character": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/character",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/character",
       "files": 95,
       "components": {
         "models": true,
@@ -180,7 +180,7 @@
       }
     },
     "auth_user": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/auth_user",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/auth_user",
       "files": 16,
       "components": {
         "models": true,
@@ -196,7 +196,7 @@
       }
     },
     "integration": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/integration",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/integration",
       "files": 5,
       "components": {
         "models": false,
@@ -212,7 +212,7 @@
       }
     },
     "faction": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/faction",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/faction",
       "files": 25,
       "components": {
         "models": true,
@@ -228,7 +228,7 @@
       }
     },
     "event_base": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/event_base",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/event_base",
       "files": 1,
       "components": {
         "models": false,
@@ -244,7 +244,7 @@
       }
     },
     "rumor": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/rumor",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/rumor",
       "files": 10,
       "components": {
         "models": true,
@@ -260,7 +260,7 @@
       }
     },
     "shared": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/shared",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/shared",
       "files": 37,
       "components": {
         "models": true,
@@ -276,7 +276,7 @@
       }
     },
     "loot": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/loot",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/loot",
       "files": 13,
       "components": {
         "models": true,
@@ -292,7 +292,7 @@
       }
     },
     "storage": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/storage",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/storage",
       "files": 8,
       "components": {
         "models": false,
@@ -308,7 +308,7 @@
       }
     },
     "time": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/time",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/time",
       "files": 17,
       "components": {
         "models": true,
@@ -324,7 +324,7 @@
       }
     },
     "population": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/population",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/population",
       "files": 6,
       "components": {
         "models": false,
@@ -340,7 +340,7 @@
       }
     },
     "dialogue": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/dialogue",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/dialogue",
       "files": 21,
       "components": {
         "models": false,
@@ -356,7 +356,7 @@
       }
     },
     "poi": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/poi",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/poi",
       "files": 16,
       "components": {
         "models": false,
@@ -372,7 +372,7 @@
       }
     },
     "region": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/region",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/region",
       "files": 14,
       "components": {
         "models": false,
@@ -388,7 +388,7 @@
       }
     },
     "religion": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/religion",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/religion",
       "files": 6,
       "components": {
         "models": false,
@@ -404,7 +404,7 @@
       }
     },
     "quest": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/quest",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/quest",
       "files": 13,
       "components": {
         "models": false,
@@ -420,7 +420,7 @@
       }
     },
     "inventory": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/inventory",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/inventory",
       "files": 21,
       "components": {
         "models": true,
@@ -436,7 +436,7 @@
       }
     },
     "world_state": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/world_state",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/world_state",
       "files": 34,
       "components": {
         "models": false,
@@ -452,7 +452,7 @@
       }
     },
     "crafting": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/crafting",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/crafting",
       "files": 18,
       "components": {
         "models": true,
@@ -468,7 +468,7 @@
       }
     },
     "events": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/events",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/events",
       "files": 9,
       "components": {
         "models": true,
@@ -484,7 +484,7 @@
       }
     },
     "arc": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/arc",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/arc",
       "files": 28,
       "components": {
         "models": true,
@@ -500,7 +500,7 @@
       }
     },
     "data": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/data",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/data",
       "files": 17,
       "components": {
         "models": true,
@@ -516,7 +516,7 @@
       }
     },
     "equipment": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/equipment",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/equipment",
       "files": 10,
       "components": {
         "models": false,
@@ -532,7 +532,7 @@
       }
     },
     "npc": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/npc",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/npc",
       "files": 15,
       "components": {
         "models": true,
@@ -548,7 +548,7 @@
       }
     },
     "analytics": {
-      "path": "/Users/Sharrone/Visual_DM/backend/systems/analytics",
+      "path": "/Users/Sharrone/Dreamforge/backend/systems/analytics",
       "files": 12,
       "components": {
         "models": true,
@@ -581,22 +581,22 @@
     "Fixed 6 import issues in motif",
     "Fixed 2 import issues in character",
     "Fixed 3 import issues in analytics",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/llm/routes/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/diplomacy/calculators/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/diplomacy/events/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/diplomacy/service_modules/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/combat/calculators/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/combat/validators/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/combat/events/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/character/progression/party_api.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/integration/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/integration/event_bus/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/world_state/integration/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/world_state/features/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/world_state/examples/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/world_state/persistence/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/events/utils/__init__.py",
-    "Removed duplicate: /Users/Sharrone/Visual_DM/backend/systems/analytics/examples/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/llm/routes/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/diplomacy/calculators/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/diplomacy/events/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/diplomacy/service_modules/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/combat/calculators/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/combat/validators/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/combat/events/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/character/progression/party_api.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/integration/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/integration/event_bus/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/world_state/integration/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/world_state/features/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/world_state/examples/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/world_state/persistence/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/events/utils/__init__.py",
+    "Removed duplicate: /Users/Sharrone/Dreamforge/backend/systems/analytics/examples/__init__.py",
     "Updated systems inventory",
     "Created README for integration",
     "Created README for event_base",

@@ -11,16 +11,16 @@ import json
 from unittest.mock import Mock, AsyncMock, patch
 from datetime import datetime
 
-from backend.systems.economy.economy_manager import EconomyManager
+from backend.systems.economy.services.economy_manager import EconomyManager
 from backend.systems.economy.resource_service import ResourceService
 from backend.systems.economy.market_service import MarketService
-from backend.systems.economy.database_service import EconomyDatabaseService
+from backend.infrastructure.database.economy import EconomyDatabaseService
 from backend.systems.economy.events import (
     EconomyEventBus, EconomyEventType, get_event_bus,
     publish_resource_event, publish_market_event
 )
-from backend.systems.economy.websocket_events import economy_websocket_manager
-from backend.systems.economy.deployment import (
+from backend.infrastructure.websocket.economy import economy_websocket_manager
+from backend.infrastructure.deployment.economy import (
     EconomyDeploymentManager, DeploymentConfig, HealthStatus
 )
 

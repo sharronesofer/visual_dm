@@ -224,4 +224,39 @@ namespace VDM.Systems.Events.Integration
             // For Unity serialization
         }
     }
+
+    /// <summary>
+    /// EventBus alias for EventManager to maintain compatibility with existing code
+    /// </summary>
+    public static class EventBus
+    {
+        /// <summary>
+        /// EventBus instance that delegates to EventManager
+        /// </summary>
+        public static EventManager Instance => EventManager.Instance;
+
+        /// <summary>
+        /// Subscribe to events of a specific type
+        /// </summary>
+        public static void Subscribe<T>(Action<T> handler) where T : IEvent
+        {
+            EventManager.Subscribe(handler);
+        }
+
+        /// <summary>
+        /// Unsubscribe from events of a specific type
+        /// </summary>
+        public static void Unsubscribe<T>(Action<T> handler) where T : IEvent
+        {
+            EventManager.Unsubscribe(handler);
+        }
+
+        /// <summary>
+        /// Publish an event to all subscribers
+        /// </summary>
+        public static void Publish<T>(T eventData) where T : IEvent
+        {
+            EventManager.Publish(eventData);
+        }
+    }
 } 

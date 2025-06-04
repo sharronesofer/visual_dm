@@ -13,16 +13,15 @@ from datetime import datetime, timedelta
 from enum import Enum
 from uuid import UUID
 
-from backend.systems.chaos.models.chaos_events import (
+from backend.infrastructure.systems.chaos.models.chaos_events import (
     ChaosEvent, ChaosEventType, EventSeverity, EventStatus,
     PoliticalUpheavalEvent, NaturalDisasterEvent, EconomicCollapseEvent,
     WarOutbreakEvent, ResourceScarcityEvent, FactionBetrayalEvent,
     CharacterRevelationEvent, EventTemplate
 )
-from backend.systems.chaos.models.chaos_state import ChaosState, EventCooldown, ChaosLevel
-from backend.systems.chaos.models.pressure_data import PressureData, RegionalPressure
+from backend.infrastructure.systems.chaos.models.chaos_state import ChaosState, EventCooldown, ChaosLevel
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData, RegionalPressure
 from backend.systems.chaos.core.config import ChaosConfig
-from backend.systems.chaos.utils.chaos_math import ChaosCalculationResult
 
 logger = logging.getLogger(__name__)
 
@@ -51,19 +50,17 @@ class EventTriggerSystem:
         self.events_triggered_today = 0
         self.last_reset_date = datetime.now().date()
         
-    async def evaluate_triggers(self, chaos_result: ChaosCalculationResult, 
+    async def evaluate_triggers(self, chaos_result: Any, 
                               pressure_data: PressureData, chaos_state: ChaosState) -> List[ChaosEvent]:
         """
         Evaluate whether to trigger any chaos events based on current conditions
         """
-        logger.debug(f"Evaluating event triggers - chaos score: {chaos_result.chaos_score}")
         
         # Reset daily counter if needed
         self._reset_daily_counter_if_needed()
         
         # Check rate limiting
         if not self._can_trigger_events():
-            logger.debug("Event triggering rate limited")
             return []
         
         # Clean up expired events and cooldowns
@@ -76,7 +73,6 @@ class EventTriggerSystem:
         )
         
         if not candidate_events:
-            logger.debug("No candidate events found")
             return []
         
         # Select and trigger events
@@ -92,17 +88,75 @@ class EventTriggerSystem:
         all_triggered = triggered_events + cascade_events
         
         if all_triggered:
-            logger.info(f"Triggered {len(all_triggered)} chaos events")
             for event in all_triggered:
-                logger.info(f"  - {event.event_type.value} (severity: {event.severity.value})")
+                pass  # Events processed by other systems
         
         return all_triggered
     
+    async def evaluate_and_trigger(self, chaos_result: Any, 
+                                 pressure_data: PressureData, chaos_state: ChaosState) -> List[ChaosEvent]:
+        """
+        Alias for evaluate_triggers method to match event manager expectations
+        """
+        return await self.evaluate_triggers(chaos_result, pressure_data, chaos_state)
+    
+    async def get_candidate_events(self, chaos_result: Any,
+                                 pressure_data: PressureData, chaos_state: ChaosState) -> List[ChaosEvent]:
+        """
+        Get candidate events without triggering them (for narrative intelligence weighting)
+        """
+        
+        # Reset daily counter if needed
+        self._reset_daily_counter_if_needed()
+        
+        # Check rate limiting
+        if not self._can_trigger_events():
+            return []
+        
+        # Clean up expired events and cooldowns
+        self._cleanup_expired_events()
+        chaos_state.clean_expired_cooldowns()
+        
+        # Find candidate events
+        candidate_templates = self._find_candidate_events(
+            chaos_result, pressure_data, chaos_state
+        )
+        
+        if not candidate_templates:
+            return []
+        
+        # Convert template candidates to actual events without triggering
+        candidate_events = []
+        for template, trigger_probability in candidate_templates:
+            try:
+                # Determine event severity and affected regions
+                severity = self._determine_event_severity(chaos_result.chaos_score)
+                affected_regions = self._select_affected_regions(
+                    template, chaos_result, chaos_state
+                )
+                
+                # Create event from template but don't trigger it
+                event = template.create_event(
+                    chaos_result.chaos_score,
+                    severity_override=severity,
+                    affected_regions=affected_regions
+                )
+                
+                # Set the trigger probability for narrative intelligence weighting
+                event.trigger_probability = trigger_probability
+                
+                candidate_events.append(event)
+                
+            except Exception as e:
+                pass  # Error creating candidate event
+        
+        return candidate_events
+    
     async def initialize(self) -> None:
         """Initialize the event trigger system"""
-        logger.info("Event trigger system initialized")
+        pass  # Initialization complete
     
-    def _find_candidate_events(self, chaos_result: ChaosCalculationResult,
+    def _find_candidate_events(self, chaos_result: Any,
                              pressure_data: PressureData, chaos_state: ChaosState) -> List[Tuple[EventTemplate, float]]:
         """Find events that could potentially be triggered"""
         candidates = []
@@ -130,7 +184,7 @@ class EventTriggerSystem:
         return candidates
     
     def _calculate_trigger_probability(self, template: EventTemplate, 
-                                     chaos_result: ChaosCalculationResult,
+                                     chaos_result: Any,
                                      pressure_data: PressureData, 
                                      chaos_state: ChaosState) -> float:
         """Calculate the probability of triggering this event template"""
@@ -212,12 +266,11 @@ class EventTriggerSystem:
         # Cap probability
         final_probability = max(0.0, min(1.0, final_probability))
         
-        logger.debug(f"Event {template.event_type.value} probability: {final_probability:.3f}")
         
         return final_probability
     
     async def _select_and_trigger_events(self, candidates: List[Tuple[EventTemplate, float]],
-                                       chaos_result: ChaosCalculationResult,
+                                       chaos_result: Any,
                                        chaos_state: ChaosState) -> List[ChaosEvent]:
         """Select which events to trigger from candidates"""
         triggered_events = []
@@ -244,7 +297,7 @@ class EventTriggerSystem:
         return triggered_events
     
     async def _create_and_trigger_event(self, template: EventTemplate,
-                                      chaos_result: ChaosCalculationResult,
+                                      chaos_result: Any,
                                       chaos_state: ChaosState) -> Optional[ChaosEvent]:
         """Create and trigger a specific event"""
         try:
@@ -287,16 +340,14 @@ class EventTriggerSystem:
             # Record in chaos state
             chaos_state.record_event(event.get_event_summary())
             
-            logger.info(f"Triggered event: {event.title} (ID: {event.event_id})")
             
             return event
             
         except Exception as e:
-            logger.error(f"Failed to create/trigger event from template {template.event_type.value}: {e}")
             return None
     
     async def _handle_cascading_events(self, triggered_events: List[ChaosEvent],
-                                     chaos_result: ChaosCalculationResult,
+                                     chaos_result: Any,
                                      chaos_state: ChaosState) -> List[ChaosEvent]:
         """Handle cascading secondary events"""
         cascade_events = []
@@ -316,7 +367,6 @@ class EventTriggerSystem:
                 try:
                     secondary_type = ChaosEventType(secondary_type_str)
                 except ValueError:
-                    logger.warning(f"Invalid secondary event type: {secondary_type_str}")
                     continue
                 
                 # Find template for secondary event
@@ -327,7 +377,6 @@ class EventTriggerSystem:
                         break
                 
                 if not secondary_template:
-                    logger.warning(f"No template found for secondary event: {secondary_type_str}")
                     continue
                 
                 # Check cooldowns for secondary event
@@ -343,7 +392,6 @@ class EventTriggerSystem:
                 
                 if cascade_event:
                     cascade_events.append(cascade_event)
-                    logger.info(f"Cascaded event: {cascade_event.title} from {event.title}")
         
         return cascade_events
     
@@ -363,7 +411,7 @@ class EventTriggerSystem:
             return EventSeverity.CATASTROPHIC
     
     def _select_affected_regions(self, template: EventTemplate,
-                               chaos_result: ChaosCalculationResult,
+                               chaos_result: Any,
                                chaos_state: ChaosState) -> List[Union[str, UUID]]:
         """Select which regions are affected by an event"""
         # For now, select regions with highest chaos scores

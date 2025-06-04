@@ -1,98 +1,260 @@
 """
-Test repositories for inventory system.
+Test repository interfaces for inventory system.
 
-Tests the repositories component according to Development_Bible.md standards.
-Achieves ≥90% coverage target as specified in backend_development_protocol.md.
+Tests the business repository interfaces according to Development_Bible.md standards.
+Infrastructure repositories should be tested in infrastructure tests.
 """
 
 import pytest
 import asyncio
 from unittest.mock import Mock, AsyncMock, patch
-from uuid import uuid4
-from sqlalchemy.orm import Session
+from uuid import uuid4, UUID
+from datetime import datetime
 
-from backend.systems.inventory import repositories
+from backend.systems.inventory.services import InventoryRepositoryInterface
+from backend.systems.inventory.models import InventoryModel
 
 
-class TestInventoryRepositories:
-    """Test suite for inventory repositories."""
+class TestInventoryRepositoryInterface:
+    """Test suite for inventory repository interface."""
+    
+    def test_repository_interface_methods(self):
+        """Test that repository interface has required methods."""
+        # Verify interface has all required methods
+        assert hasattr(InventoryRepositoryInterface, 'create')
+        assert hasattr(InventoryRepositoryInterface, 'get_by_id')
+        assert hasattr(InventoryRepositoryInterface, 'get_by_name')
+        assert hasattr(InventoryRepositoryInterface, 'update')
+        assert hasattr(InventoryRepositoryInterface, 'delete')
+        assert hasattr(InventoryRepositoryInterface, 'list')
+        assert hasattr(InventoryRepositoryInterface, 'get_statistics')
+    
+    def test_interface_method_signatures(self):
+        """Test that interface methods have correct signatures."""
+        import inspect
+        
+        # Test create method signature
+        create_sig = inspect.signature(InventoryRepositoryInterface.create)
+        assert 'data' in create_sig.parameters
+        
+        # Test get_by_id method signature  
+        get_by_id_sig = inspect.signature(InventoryRepositoryInterface.get_by_id)
+        assert 'inventory_id' in get_by_id_sig.parameters
+        
+        # Test get_by_name method signature
+        get_by_name_sig = inspect.signature(InventoryRepositoryInterface.get_by_name)
+        assert 'name' in get_by_name_sig.parameters
+        
+        # Test update method signature
+        update_sig = inspect.signature(InventoryRepositoryInterface.update)
+        assert 'inventory_id' in update_sig.parameters
+        assert 'data' in update_sig.parameters
+        
+        # Test delete method signature
+        delete_sig = inspect.signature(InventoryRepositoryInterface.delete)
+        assert 'inventory_id' in delete_sig.parameters
+        
+        # Test list method signature
+        list_sig = inspect.signature(InventoryRepositoryInterface.list)
+        assert 'page' in list_sig.parameters
+        assert 'size' in list_sig.parameters
+        assert 'status' in list_sig.parameters
+        assert 'search' in list_sig.parameters
+
+
+class ConcreteTestRepository:
+    """Concrete implementation for testing repository behavior."""
+    
+    def __init__(self):
+        self.data = {}
+        
+    async def create(self, data):
+        inventory = InventoryModel(
+            id=uuid4(),
+            name=data["name"],
+            description=data.get("description"),
+            status=data.get("status", "active"),
+            properties=data.get("properties", {}),
+            created_at=datetime.utcnow(),
+            is_active=True
+        )
+        self.data[inventory.id] = inventory
+        return inventory
+        
+    async def get_by_id(self, inventory_id):
+        return self.data.get(inventory_id)
+        
+    async def get_by_name(self, name):
+        for inventory in self.data.values():
+            if inventory.name == name:
+                return inventory
+        return None
+        
+    async def update(self, inventory_id, data):
+        inventory = self.data.get(inventory_id)
+        if inventory:
+            for key, value in data.items():
+                setattr(inventory, key, value)
+        return inventory
+        
+    async def delete(self, inventory_id):
+        if inventory_id in self.data:
+            del self.data[inventory_id]
+            return True
+        return False
+        
+    async def list(self, page=1, size=50, status=None, search=None):
+        items = list(self.data.values())
+        if status:
+            items = [i for i in items if i.status == status]
+        if search:
+            items = [i for i in items if search.lower() in i.name.lower()]
+        
+        start = (page - 1) * size
+        end = start + size
+        return items[start:end], len(items)
+        
+    async def get_statistics(self):
+        return {"total": len(self.data)}
+
+
+class TestRepositoryBehavior:
+    """Test expected repository behavior with concrete implementation."""
     
     @pytest.fixture
-    def mock_db_session(self):
-        """Mock database session for testing."""
-        return Mock(spec=Session)
+    def repository(self):
+        """Create test repository."""
+        return ConcreteTestRepository()
     
     @pytest.fixture
-    def sample_inventory_data(self):
-        """Sample data for inventory testing."""
+    def sample_data(self):
+        """Sample inventory data."""
         return {
-            "id": str(uuid4()),
-            "name": f"Test Inventory",
+            "name": "Test Inventory",
             "description": "Test description",
-            "is_active": True
+            "status": "active",
+            "properties": {"test": "value"}
         }
     
-    def test_repositories_initialization(self, mock_db_session):
-        """Test repositories initialization."""
-        # Test initialization logic
-        assert mock_db_session is not None
-        # Add specific initialization tests here
+    @pytest.mark.asyncio
+    async def test_create_and_retrieve(self, repository, sample_data):
+        """Test creating and retrieving inventory."""
+        created = await repository.create(sample_data)
+        
+        assert created.name == sample_data["name"]
+        assert created.description == sample_data["description"]
+        assert created.status == sample_data["status"]
+        assert created.id is not None
+        
+        # Test retrieval by ID
+        retrieved = await repository.get_by_id(created.id)
+        assert retrieved is not None
+        assert retrieved.id == created.id
+        assert retrieved.name == created.name
     
     @pytest.mark.asyncio
-    async def test_repositories_basic_operations(self, mock_db_session, sample_inventory_data):
-        """Test basic repositories operations."""
-        # Test basic CRUD operations
-        # Add specific operation tests here
-        assert sample_inventory_data is not None
-    
-    @pytest.mark.asyncio 
-    async def test_repositories_error_handling(self, mock_db_session):
-        """Test repositories error handling."""
-        # Test error scenarios and edge cases
-        # Add specific error handling tests here
-        pass
+    async def test_get_by_name(self, repository, sample_data):
+        """Test retrieving inventory by name."""
+        created = await repository.create(sample_data)
+        
+        retrieved = await repository.get_by_name(sample_data["name"])
+        assert retrieved is not None
+        assert retrieved.id == created.id
+        assert retrieved.name == created.name
     
     @pytest.mark.asyncio
-    async def test_repositories_validation(self, mock_db_session, sample_inventory_data):
-        """Test repositories validation logic."""
-        # Test input validation and constraints
-        # Add specific validation tests here
-        assert sample_inventory_data["name"] is not None
+    async def test_update_inventory(self, repository, sample_data):
+        """Test updating inventory."""
+        created = await repository.create(sample_data)
+        
+        update_data = {
+            "name": "Updated Name",
+            "description": "Updated description",
+            "updated_at": datetime.utcnow()
+        }
+        
+        updated = await repository.update(created.id, update_data)
+        
+        assert updated.name == "Updated Name"
+        assert updated.description == "Updated description"
+        assert updated.updated_at is not None
     
-    def test_repositories_integration(self, mock_db_session):
-        """Test repositories integration with other components."""
-        # Test cross-component integration
-        # Add specific integration tests here
-        pass
-
-
-class TestInventoryRepositoriesIntegration:
-    """Integration tests for inventory repositories."""
-    
-    @pytest.mark.integration
     @pytest.mark.asyncio
-    async def test_repositories_full_workflow(self):
-        """Test complete repositories workflow integration."""
-        # Test end-to-end workflow
-        # Add specific integration workflow tests here
-        pass
+    async def test_delete_inventory(self, repository, sample_data):
+        """Test deleting inventory."""
+        created = await repository.create(sample_data)
+        
+        result = await repository.delete(created.id)
+        assert result is True
+        
+        # Verify deletion
+        retrieved = await repository.get_by_id(created.id)
+        assert retrieved is None
     
-    @pytest.mark.integration
-    def test_repositories_database_integration(self):
-        """Test repositories database integration."""
-        # Test actual database operations
-        # Add specific database integration tests here  
-        pass
+    @pytest.mark.asyncio
+    async def test_list_with_pagination(self, repository):
+        """Test listing inventories with pagination."""
+        # Create test data
+        for i in range(5):
+            await repository.create({
+                "name": f"Inventory {i}",
+                "description": f"Description {i}",
+                "status": "active" if i % 2 == 0 else "inactive"
+            })
+        
+        # Test pagination
+        items, total = await repository.list(page=1, size=3)
+        assert len(items) == 3
+        assert total == 5
+        
+        # Test second page
+        items, total = await repository.list(page=2, size=3)
+        assert len(items) == 2
+        assert total == 5
     
-    @pytest.mark.integration
-    def test_repositories_api_integration(self):
-        """Test repositories API integration."""
-        # Test API endpoint integration
-        # Add specific API integration tests here
-        pass
+    @pytest.mark.asyncio
+    async def test_list_with_status_filter(self, repository):
+        """Test listing inventories with status filter."""
+        # Create test data with different statuses
+        await repository.create({"name": "Active 1", "status": "active"})
+        await repository.create({"name": "Active 2", "status": "active"})
+        await repository.create({"name": "Inactive 1", "status": "inactive"})
+        
+        # Test status filter
+        items, total = await repository.list(status="active")
+        assert len(items) == 2
+        assert all(item.status == "active" for item in items)
+        
+        items, total = await repository.list(status="inactive")
+        assert len(items) == 1
+        assert all(item.status == "inactive" for item in items)
+    
+    @pytest.mark.asyncio
+    async def test_list_with_search(self, repository):
+        """Test listing inventories with search filter."""
+        # Create test data
+        await repository.create({"name": "Player Inventory"})
+        await repository.create({"name": "Chest Container"})
+        await repository.create({"name": "Shop Inventory"})
+        
+        # Test search
+        items, total = await repository.list(search="inventory")
+        assert len(items) == 2  # "Player Inventory" and "Shop Inventory"
+        assert all("inventory" in item.name.lower() for item in items)
+    
+    @pytest.mark.asyncio
+    async def test_get_statistics(self, repository):
+        """Test getting repository statistics."""
+        # Create test data
+        for i in range(3):
+            await repository.create({"name": f"Test {i}"})
+        
+        stats = await repository.get_statistics()
+        assert stats["total"] == 3
 
 
-# Coverage requirements: ≥90% as per backend_development_protocol.md
-# WebSocket compatibility: Ensure JSON serialization for Unity frontend
-# Cross-system compatibility: Test communication with other systems
-# API contract compliance: Verify endpoints match established contracts
+# Business repository interface tests focus on:
+# - Interface contract verification
+# - Expected behavior patterns
+# - Data consistency and integrity
+# - Query and filtering capabilities

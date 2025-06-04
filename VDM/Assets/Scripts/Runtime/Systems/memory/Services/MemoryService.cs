@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine;
 using VDM.Infrastructure.Services;
-using VDM.Systems.Memory.Models;
+using VDM.DTOs.Common;
+using VDM.DTOs.Social.Memory;
 
 
 namespace VDM.Systems.Memory.Services
@@ -18,7 +19,7 @@ namespace VDM.Systems.Memory.Services
         /// <summary>
         /// Get memories for an NPC with optional filters
         /// </summary>
-        public async Task<MemoryListResponseDTO> GetNpcMemoriesAsync(string npcId, int limit = 10, int offset = 0, List<string> tags = null)
+        public async Task<MemoriesResponseDTO> GetNpcMemoriesAsync(string npcId, int limit = 10, int offset = 0, List<string> tags = null)
         {
             try
             {
@@ -34,13 +35,13 @@ namespace VDM.Systems.Memory.Services
                     queryParams.Add($"tags={string.Join(",", tags)}");
 
                 var queryString = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : "";
-                var response = await GetAsync<MemoryListResponseDTO>($"{BASE_ENDPOINT}/{npcId}/memories{queryString}");
-                return response ?? new MemoryListResponseDTO();
+                var response = await GetAsync<MemoriesResponseDTO>($"{BASE_ENDPOINT}/{npcId}/memories{queryString}");
+                return response ?? new MemoriesResponseDTO();
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error getting NPC memories: {ex.Message}");
-                return new MemoryListResponseDTO();
+                return new MemoriesResponseDTO();
             }
         }
 
@@ -64,17 +65,37 @@ namespace VDM.Systems.Memory.Services
         /// <summary>
         /// Recall memories based on a query
         /// </summary>
-        public async Task<MemoryListResponseDTO> RecallMemoriesAsync(string npcId, RecallMemoryRequestDTO request)
+        public async Task<MemoriesResponseDTO> RecallMemoriesAsync(string npcId, RecallMemoryRequestDTO request)
         {
             try
             {
-                var response = await PostAsync<RecallMemoryRequestDTO, MemoryListResponseDTO>($"{BASE_ENDPOINT}/{npcId}/recall", request);
-                return response ?? new MemoryListResponseDTO();
+                var response = await PostAsync<RecallMemoryRequestDTO, MemoriesResponseDTO>($"{BASE_ENDPOINT}/{npcId}/recall", request);
+                return response ?? new MemoriesResponseDTO();
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error recalling memories: {ex.Message}");
-                return new MemoryListResponseDTO();
+                return new MemoriesResponseDTO();
+            }
+        }
+
+        /// <summary>
+        /// Recall a specific memory by ID
+        /// </summary>
+        public async Task<MemoryResponseDTO> RecallMemoryAsync(string npcId, string memoryId, RecallMemoryRequestDTO request = null)
+        {
+            try
+            {
+                if (request == null)
+                    request = new RecallMemoryRequestDTO();
+
+                var response = await PostAsync<RecallMemoryRequestDTO, MemoryResponseDTO>($"{BASE_ENDPOINT}/{npcId}/memories/{memoryId}/recall", request);
+                return response ?? new MemoryResponseDTO { Success = false, Message = "Failed to recall memory" };
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error recalling memory: {ex.Message}");
+                return new MemoryResponseDTO { Success = false, Message = ex.Message };
             }
         }
 
@@ -140,7 +161,7 @@ namespace VDM.Systems.Memory.Services
         /// <summary>
         /// Get memories filtered by tags
         /// </summary>
-        public async Task<MemoryListResponseDTO> GetMemoriesByTagsAsync(string npcId, List<string> tags, int limit = 10, int offset = 0)
+        public async Task<MemoriesResponseDTO> GetMemoriesByTagsAsync(string npcId, List<string> tags, int limit = 10, int offset = 0)
         {
             return await GetNpcMemoriesAsync(npcId, limit, offset, tags);
         }
@@ -192,5 +213,28 @@ namespace VDM.Systems.Memory.Services
                 return false;
             }
         }
+    }
+
+    /// <summary>
+    /// Temporary memory summary DTO for compatibility
+    /// </summary>
+    [System.Serializable]
+    public class MemorySummaryDTO
+    {
+        public string EntityId { get; set; }
+        public int TotalMemories { get; set; }
+        public int ImportantMemories { get; set; }
+        public float AverageImportance { get; set; }
+        public string MostRecentMemory { get; set; }
+        public List<string> CommonTags { get; set; } = new List<string>();
+    }
+
+    /// <summary>
+    /// Temporary memory summary response DTO for compatibility
+    /// </summary>
+    [System.Serializable]
+    public class MemorySummaryResponseDTO : SuccessResponseDTO
+    {
+        public MemorySummaryDTO Data { get; set; }
     }
 } 

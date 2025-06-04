@@ -258,8 +258,8 @@ namespace VDM.Infrastructure.Core
             
             // Basic movement speed check (30 feet default)
             var movementSpeed = 30f;
-            if (state.Stats.ContainsKey("MovementSpeed"))
-                movementSpeed = state.Stats["MovementSpeed"];
+            if (state.Attributes.ContainsKey("MovementSpeed"))
+                movementSpeed = state.Attributes["MovementSpeed"];
                 
             return distance <= movementSpeed;
         }

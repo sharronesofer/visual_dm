@@ -11,7 +11,7 @@ from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
 
-from backend.systems.world_state import repositories
+from backend.infrastructure.systems.world_state import repositories
 
 
 class TestWorld_StateRepositories:

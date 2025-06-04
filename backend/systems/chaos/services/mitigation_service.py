@@ -6,17 +6,14 @@ Handles diplomatic actions, stability measures, and positive interventions.
 """
 
 import asyncio
-import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Union, Tuple
 from uuid import UUID, uuid4
 from dataclasses import dataclass, field
 
-from backend.systems.chaos.models.chaos_state import MitigationFactor, ChaosState
-from backend.systems.chaos.models.pressure_data import PressureData, PressureSource
+from backend.infrastructure.systems.chaos.models.chaos_state import MitigationFactor, ChaosState
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData, PressureSource
 from backend.systems.chaos.core.config import ChaosConfig
-
-logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -37,11 +34,15 @@ class MitigationEffect:
 
 class MitigationService:
     """
-    Service for managing chaos mitigation factors and their effects
+    Service for managing chaos mitigation factors and their effects.
+    Enhanced with LLM-powered dynamic mitigation suggestions.
     """
     
     def __init__(self, config: ChaosConfig):
         self.config = config
+        
+        # LLM service reference (set by chaos manager)
+        self.llm_service: Optional[Any] = None
         
         # Mitigation effectiveness configurations
         self.mitigation_configs = self._initialize_mitigation_configs()
@@ -55,7 +56,13 @@ class MitigationService:
         self.total_effectiveness_applied = 0.0
         self.last_cleanup = datetime.now()
         
-        logger.info("Mitigation Service initialized")
+        # LLM metrics
+        self.llm_suggestions_generated = 0
+        self.template_suggestions_generated = 0
+    
+    def set_llm_service(self, llm_service: Any) -> None:
+        """Set the LLM service for enhanced mitigation suggestions"""
+        self.llm_service = llm_service
     
     def _initialize_mitigation_configs(self) -> Dict[str, Dict[str, Any]]:
         """Initialize mitigation configurations for different types"""
@@ -203,7 +210,7 @@ class MitigationService:
                 'affects_sources': ['corruption', 'population_stress'],
                 'decay_rate': 0.01,
                 'max_concurrent': 3,
-                'stacking_multiplier': 0.8
+                'stacking_multiplier': 0.9
             },
             'administrative_efficiency': {
                 'base_effectiveness': 0.25,
@@ -263,295 +270,462 @@ class MitigationService:
                              source_type: str, magnitude: float = 1.0,
                              affected_regions: List[str] = None,
                              additional_context: Dict[str, Any] = None) -> Optional[MitigationFactor]:
-        """Apply a mitigation action and return the created mitigation factor"""
-        try:
-            # Validate mitigation type
-            if mitigation_type not in self.mitigation_configs:
-                logger.error(f"Unknown mitigation type: {mitigation_type}")
-                return None
-            
-            config = self.mitigation_configs[mitigation_type]
-            
-            # Check concurrent limits
-            current_count = self._count_active_mitigations(mitigation_type)
-            if current_count >= config['max_concurrent']:
-                logger.warning(f"Maximum concurrent {mitigation_type} mitigations reached ({current_count})")
-                return None
-            
-            # Calculate effectiveness with stacking penalties
-            base_effectiveness = config['base_effectiveness'] * magnitude
-            stacking_multiplier = config['stacking_multiplier'] ** current_count
-            final_effectiveness = base_effectiveness * stacking_multiplier
-            
-            # Apply context-based modifiers
-            if additional_context:
-                final_effectiveness = self._apply_context_modifiers(
-                    final_effectiveness, mitigation_type, additional_context
-                )
-            
-            # Create mitigation factor
-            mitigation = MitigationFactor(
-                mitigation_id=str(uuid4()),
-                mitigation_type=mitigation_type,
-                source_id=source_id,
-                source_type=source_type,
-                effectiveness=final_effectiveness,
-                duration_hours=config['duration_hours'],
-                affected_regions=affected_regions or [],
-                affected_sources=config['affects_sources'],
-                description=f"{mitigation_type} from {source_type} {source_id}",
-                metadata={
-                    'base_effectiveness': base_effectiveness,
-                    'stacking_multiplier': stacking_multiplier,
-                    'magnitude': magnitude,
-                    'concurrent_count': current_count,
-                    **(additional_context or {})
-                }
-            )
-            
-            # Add to active mitigations
-            self.active_mitigations[mitigation.mitigation_id] = mitigation
-            self.mitigation_history.append(mitigation)
-            
-            # Update tracking
-            self.mitigation_applications += 1
-            self.total_effectiveness_applied += final_effectiveness
-            
-            logger.info(f"Applied mitigation: {mitigation_type} (effectiveness: {final_effectiveness:.3f}, "
-                       f"duration: {config['duration_hours']}h)")
-            
-            return mitigation
-            
-        except Exception as e:
-            logger.error(f"Error applying mitigation {mitigation_type}: {e}")
+        """Apply a mitigation factor to the chaos system"""
+        if mitigation_type not in self.mitigation_configs:
+            print(f"Warning: Unknown mitigation type '{mitigation_type}', applying generic mitigation")
+            return await self._apply_generic_mitigation(mitigation_type, source_id, source_type, magnitude, affected_regions, additional_context)
+        
+        config = self.mitigation_configs[mitigation_type]
+        
+        # Check if we've exceeded maximum concurrent instances
+        active_count = self._count_active_mitigations(mitigation_type)
+        if active_count >= config['max_concurrent']:
+            print(f"Maximum concurrent instances of {mitigation_type} reached ({config['max_concurrent']})")
             return None
+        
+        # Calculate effectiveness with context modifiers
+        base_effectiveness = config['base_effectiveness'] * magnitude
+        final_effectiveness = self._apply_context_modifiers(
+            base_effectiveness, mitigation_type, additional_context or {}
+        )
+        
+        # Apply stacking penalty if there are other instances
+        if active_count > 0:
+            stacking_penalty = config['stacking_multiplier'] ** active_count
+            final_effectiveness *= stacking_penalty
+        
+        # Create mitigation factor
+        mitigation = MitigationFactor(
+            mitigation_id=str(uuid4()),
+            source_type=source_type,
+            source_id=source_id,
+            mitigation_type=mitigation_type,
+            effectiveness=final_effectiveness,
+            applied_at=datetime.now(),
+            duration_hours=config['duration_hours'],
+            affected_sources=config['affects_sources'].copy(),
+            affected_regions=affected_regions or [],
+            decay_rate=config['decay_rate'],
+            description=additional_context.get('description', f'{mitigation_type} applied by {source_type}'),
+            metadata=additional_context or {}
+        )
+        
+        # Store mitigation
+        self.active_mitigations[mitigation.mitigation_id] = mitigation
+        self.mitigation_history.append(mitigation)
+        
+        # Update tracking
+        self.mitigation_applications += 1
+        self.total_effectiveness_applied += final_effectiveness
+        
+        print(f"Applied mitigation: {mitigation_type} (effectiveness: {final_effectiveness:.2f})")
+        return mitigation
+    
+    async def _apply_generic_mitigation(self, mitigation_type: str, source_id: str,
+                                      source_type: str, magnitude: float,
+                                      affected_regions: List[str],
+                                      additional_context: Dict[str, Any]) -> Optional[MitigationFactor]:
+        """Apply a generic mitigation for unknown types"""
+        mitigation = MitigationFactor(
+            mitigation_id=str(uuid4()),
+            source_type=source_type,
+            source_id=source_id,
+            mitigation_type=mitigation_type,
+            effectiveness=0.2 * magnitude,  # Conservative generic effectiveness
+            applied_at=datetime.now(),
+            duration_hours=72.0,  # 3 days default
+            affected_sources=['all'],
+            affected_regions=affected_regions or [],
+            decay_rate=0.05,
+            description=additional_context.get('description', f'Generic {mitigation_type} applied'),
+            metadata=additional_context or {}
+        )
+        
+        self.active_mitigations[mitigation.mitigation_id] = mitigation
+        self.mitigation_history.append(mitigation)
+        return mitigation
     
     def _apply_context_modifiers(self, base_effectiveness: float, 
                                mitigation_type: str, context: Dict[str, Any]) -> float:
         """Apply context-based modifiers to mitigation effectiveness"""
         effectiveness = base_effectiveness
         
-        # Success quality modifier
-        if 'success_quality' in context:
-            quality = context['success_quality']  # 0.0 to 2.0, where 1.0 is normal
-            effectiveness *= quality
-        
-        # Urgency modifier
-        if 'urgency' in context:
-            urgency = context['urgency']  # 0.0 to 2.0
-            if mitigation_type in ['disaster_relief', 'crisis_management']:
-                effectiveness *= (1.0 + urgency * 0.5)  # Emergency responses more effective when urgent
-        
-        # Regional stability modifier
-        if 'regional_stability' in context:
-            stability = context['regional_stability']  # 0.0 to 1.0
-            if stability < 0.3:  # Very unstable regions
-                effectiveness *= 1.3  # Higher impact in unstable areas
-            elif stability > 0.8:  # Very stable regions
-                effectiveness *= 0.8  # Lower impact in stable areas
-        
-        # Population support modifier
-        if 'population_support' in context:
-            support = context['population_support']  # 0.0 to 1.0
-            effectiveness *= (0.5 + support * 0.8)  # 0.5x to 1.3x based on support
-        
-        # Resource availability modifier
+        # Resource availability modifiers
         if 'resource_availability' in context:
-            resources = context['resource_availability']  # 0.0 to 2.0
-            effectiveness *= min(2.0, 0.3 + resources * 0.85)  # Better resources = better outcomes
+            resource_mult = max(0.5, min(2.0, context['resource_availability']))
+            effectiveness *= resource_mult
         
-        # Faction relations modifier
-        if 'faction_relations' in context:
-            relations = context['faction_relations']  # -1.0 to 1.0
-            if mitigation_type.startswith('diplomatic'):
-                effectiveness *= (1.0 + relations * 0.5)  # Better relations help diplomacy
+        # Public support modifiers
+        if 'public_support' in context:
+            support_mult = 0.7 + (context['public_support'] * 0.6)  # 0.7 to 1.3 multiplier
+            effectiveness *= support_mult
         
-        return max(0.0, min(2.0, effectiveness))  # Cap between 0 and 2x effectiveness
+        # Crisis urgency modifiers (higher urgency = higher effectiveness)
+        if 'crisis_urgency' in context:
+            urgency_mult = 1.0 + (context['crisis_urgency'] * 0.5)  # Up to +50% in urgent situations
+            effectiveness *= urgency_mult
+        
+        # Diplomatic relations modifiers (for diplomatic mitigations)
+        if mitigation_type.startswith('diplomatic') and 'diplomatic_relations' in context:
+            relations = context['diplomatic_relations']
+            if relations > 0.5:
+                effectiveness *= 1.2  # Good relations boost effectiveness
+            elif relations < 0.3:
+                effectiveness *= 0.8  # Poor relations reduce effectiveness
+        
+        # Economic conditions modifiers (for economic mitigations)
+        if ('economic' in mitigation_type or 'trade' in mitigation_type) and 'economic_stability' in context:
+            stability = context['economic_stability']
+            if stability > 0.6:
+                effectiveness *= 1.1  # Stable economy helps
+            elif stability < 0.4:
+                effectiveness *= 0.9  # Unstable economy hinders
+        
+        return max(0.0, effectiveness)  # Ensure non-negative
     
     def _count_active_mitigations(self, mitigation_type: str) -> int:
-        """Count active mitigations of a specific type"""
-        count = 0
-        for mitigation in self.active_mitigations.values():
-            if mitigation.mitigation_type == mitigation_type and mitigation.is_active():
-                count += 1
-        return count
+        """Count currently active mitigations of a specific type"""
+        now = datetime.now()
+        return sum(1 for m in self.active_mitigations.values() 
+                  if m.mitigation_type == mitigation_type and m.expires_at > now)
     
     def calculate_total_mitigation_effect(self, pressure_data: PressureData, 
                                         chaos_state: ChaosState) -> Dict[str, float]:
-        """Calculate total mitigation effects for each pressure source"""
-        # Clean up expired mitigations first
+        """Calculate total mitigation effects across all pressure sources"""
         self._cleanup_expired_mitigations()
         
         mitigation_effects = {}
+        now = datetime.now()
         
-        # Initialize all pressure sources with 0 mitigation
+        # Initialize all pressure sources with zero mitigation
         for source in PressureSource:
             mitigation_effects[source.value] = 0.0
         
         # Calculate effects from active mitigations
         for mitigation in self.active_mitigations.values():
-            if not mitigation.is_active():
+            if mitigation.expires_at <= now:
                 continue
             
-            # Calculate current effectiveness (may decay over time)
             current_effectiveness = self._calculate_current_effectiveness(mitigation)
             
-            # Apply to affected pressure sources
-            affected_sources = mitigation.affected_sources
-            if 'all' in affected_sources:
-                # Apply to all pressure sources
-                for source in PressureSource:
-                    mitigation_effects[source.value] += current_effectiveness
-            else:
-                # Apply to specific sources
-                for source_name in affected_sources:
-                    if source_name in mitigation_effects:
-                        mitigation_effects[source_name] += current_effectiveness
+            # Apply to specified pressure sources
+            for source in mitigation.affected_sources:
+                if source == 'all':
+                    # Apply to all sources
+                    for pressure_source in PressureSource:
+                        mitigation_effects[pressure_source.value] += current_effectiveness
+                elif source in mitigation_effects:
+                    mitigation_effects[source] += current_effectiveness
         
-        # Apply diminishing returns for high mitigation values
-        for source, effect in mitigation_effects.items():
-            if effect > 1.0:
-                # Logarithmic scaling for very high mitigation
-                mitigation_effects[source] = 1.0 + (effect - 1.0) * 0.5
-            
-            # Cap maximum mitigation at 90%
-            mitigation_effects[source] = min(0.9, mitigation_effects[source])
+        # Cap mitigation effects (can't reduce pressure below 0 or above 100%)
+        for source in mitigation_effects:
+            mitigation_effects[source] = max(0.0, min(1.0, mitigation_effects[source]))
         
         return mitigation_effects
     
     def _calculate_current_effectiveness(self, mitigation: MitigationFactor) -> float:
-        """Calculate current effectiveness considering decay"""
-        if not mitigation.is_active():
-            return 0.0
+        """Calculate current effectiveness accounting for decay"""
+        now = datetime.now()
+        hours_active = (now - mitigation.applied_at).total_seconds() / 3600
         
-        config = self.mitigation_configs.get(mitigation.mitigation_type)
-        if not config:
-            return mitigation.effectiveness
+        # Apply decay
+        decay_factor = 1.0 - (mitigation.decay_rate * (hours_active / 24.0))  # decay per day
+        decay_factor = max(0.0, decay_factor)
         
-        # Calculate time-based decay
-        age_hours = (datetime.now() - mitigation.applied_at).total_seconds() / 3600.0
-        decay_rate = config.get('decay_rate', 0.0)
-        
-        # Apply exponential decay
-        decay_factor = (1.0 - decay_rate) ** (age_hours / 24.0)  # Daily decay rate
-        
-        current_effectiveness = mitigation.effectiveness * decay_factor
-        
-        return max(0.0, current_effectiveness)
+        return mitigation.effectiveness * decay_factor
     
     def _cleanup_expired_mitigations(self) -> None:
         """Remove expired mitigations"""
-        # Check if it's time for cleanup
-        if (datetime.now() - self.last_cleanup).total_seconds() < 300:  # Every 5 minutes
+        now = datetime.now()
+        
+        # Only clean up if it's been more than an hour since last cleanup
+        if (now - self.last_cleanup).total_seconds() < 3600:
             return
         
-        expired_ids = []
-        for mitigation_id, mitigation in self.active_mitigations.items():
-            if not mitigation.is_active():
-                expired_ids.append(mitigation_id)
+        expired_ids = [
+            mid for mid, mitigation in self.active_mitigations.items()
+            if mitigation.expires_at <= now
+        ]
         
-        for mitigation_id in expired_ids:
-            del self.active_mitigations[mitigation_id]
+        for mid in expired_ids:
+            del self.active_mitigations[mid]
         
         if expired_ids:
-            logger.debug(f"Cleaned up {len(expired_ids)} expired mitigations")
+            print(f"Cleaned up {len(expired_ids)} expired mitigations")
         
-        self.last_cleanup = datetime.now()
+        self.last_cleanup = now
     
     def get_mitigation_summary(self) -> Dict[str, Any]:
-        """Get summary of current mitigation state"""
-        active_mitigations = list(self.active_mitigations.values())
-        active_count = len([m for m in active_mitigations if m.is_active()])
+        """Get a summary of current mitigation status"""
+        self._cleanup_expired_mitigations()
         
-        # Group by type
-        by_type = {}
-        for mitigation in active_mitigations:
-            if mitigation.is_active():
-                mitigation_type = mitigation.mitigation_type
-                if mitigation_type not in by_type:
-                    by_type[mitigation_type] = {
-                        'count': 0,
-                        'total_effectiveness': 0.0,
-                        'average_effectiveness': 0.0
-                    }
-                
-                current_effectiveness = self._calculate_current_effectiveness(mitigation)
-                by_type[mitigation_type]['count'] += 1
-                by_type[mitigation_type]['total_effectiveness'] += current_effectiveness
+        active_by_type = {}
+        total_effectiveness_by_source = {}
         
-        # Calculate averages
-        for type_data in by_type.values():
-            if type_data['count'] > 0:
-                type_data['average_effectiveness'] = type_data['total_effectiveness'] / type_data['count']
+        # Initialize source tracking
+        for source in PressureSource:
+            total_effectiveness_by_source[source.value] = 0.0
+        
+        # Analyze active mitigations
+        for mitigation in self.active_mitigations.values():
+            # Count by type
+            if mitigation.mitigation_type not in active_by_type:
+                active_by_type[mitigation.mitigation_type] = 0
+            active_by_type[mitigation.mitigation_type] += 1
+            
+            # Sum effectiveness by source
+            current_effectiveness = self._calculate_current_effectiveness(mitigation)
+            for source in mitigation.affected_sources:
+                if source == 'all':
+                    for pressure_source in PressureSource:
+                        total_effectiveness_by_source[pressure_source.value] += current_effectiveness
+                elif source in total_effectiveness_by_source:
+                    total_effectiveness_by_source[source] += current_effectiveness
         
         return {
-            'active_mitigations': active_count,
-            'total_applications': self.mitigation_applications,
-            'total_effectiveness_applied': self.total_effectiveness_applied,
-            'mitigations_by_type': by_type,
-            'last_cleanup': self.last_cleanup.isoformat()
+            'total_active_mitigations': len(self.active_mitigations),
+            'active_by_type': active_by_type,
+            'effectiveness_by_source': total_effectiveness_by_source,
+            'total_applications_lifetime': self.mitigation_applications,
+            'average_effectiveness': (
+                self.total_effectiveness_applied / max(1, self.mitigation_applications)
+            ),
+            'llm_suggestions_generated': self.llm_suggestions_generated,
+            'template_suggestions_generated': self.template_suggestions_generated
         }
     
-    def get_mitigation_recommendations(self, pressure_data: PressureData, 
-                                     chaos_state: ChaosState) -> List[Dict[str, Any]]:
-        """Get recommendations for mitigation actions based on current state"""
+    async def get_mitigation_recommendations(self, chaos_event: Any,
+                                           available_resources: Dict[str, Any],
+                                           pressure_data: Optional[PressureData] = None,
+                                           chaos_state: Optional[ChaosState] = None) -> List[Dict[str, Any]]:
+        """
+        Get context-aware mitigation recommendations using LLM analysis when available.
+        
+        Args:
+            chaos_event: The chaos event to mitigate
+            available_resources: Available resources and capabilities
+            pressure_data: Current pressure data (optional)
+            chaos_state: Current chaos state (optional)
+            
+        Returns:
+            List of mitigation recommendations
+        """
+        
+        # Try LLM-powered recommendations first
+        if self.llm_service:
+            try:
+                llm_response = await self.llm_service.suggest_mitigations(chaos_event, available_resources)
+                
+                if llm_response.success:
+                    self.llm_suggestions_generated += 1
+                    return await self._parse_llm_mitigation_suggestions(llm_response.content, available_resources)
+                    
+            except Exception as e:
+                print(f"LLM mitigation suggestions failed: {e}")
+                # Continue to template-based recommendations
+        
+        # Fallback to template-based recommendations
+        self.template_suggestions_generated += 1
+        return self._get_template_mitigation_recommendations(chaos_event, available_resources, pressure_data, chaos_state)
+    
+    async def _parse_llm_mitigation_suggestions(self, llm_content: str, 
+                                              available_resources: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Parse LLM response into structured mitigation recommendations"""
+        try:
+            import json
+            suggestions_data = json.loads(llm_content)
+            recommendations = []
+            
+            for mitigation_info in suggestions_data.get('mitigations', []):
+                recommendation = {
+                    'type': mitigation_info.get('type', 'diplomatic'),
+                    'name': mitigation_info.get('name', 'Unknown Mitigation'),
+                    'description': mitigation_info.get('description', 'LLM-suggested mitigation'),
+                    'effectiveness': mitigation_info.get('effectiveness', 0.5),
+                    'resource_cost': mitigation_info.get('resource_cost', 'Unknown'),
+                    'duration_hours': mitigation_info.get('duration_hours', 72),
+                    'prerequisites': mitigation_info.get('prerequisites', []),
+                    'side_effects': mitigation_info.get('side_effects', []),
+                    'priority': self._calculate_recommendation_priority(mitigation_info, available_resources),
+                    'feasibility': self._assess_feasibility(mitigation_info, available_resources),
+                    'source': 'llm'
+                }
+                recommendations.append(recommendation)
+            
+            # Sort by priority and feasibility
+            recommendations.sort(key=lambda x: (x['priority'] * x['feasibility']), reverse=True)
+            return recommendations[:5]  # Return top 5
+            
+        except (json.JSONDecodeError, KeyError) as e:
+            print(f"Failed to parse LLM mitigation suggestions: {e}")
+            return []
+    
+    def _calculate_recommendation_priority(self, mitigation_info: Dict[str, Any], 
+                                         available_resources: Dict[str, Any]) -> float:
+        """Calculate priority score for a mitigation recommendation"""
+        effectiveness = mitigation_info.get('effectiveness', 0.5)
+        duration = mitigation_info.get('duration_hours', 72)
+        
+        # Higher effectiveness = higher priority
+        priority = effectiveness
+        
+        # Longer duration = slightly higher priority (lasting effects)
+        duration_bonus = min(0.2, duration / 1000.0)  # Cap at 20% bonus
+        priority += duration_bonus
+        
+        return min(1.0, priority)
+    
+    def _assess_feasibility(self, mitigation_info: Dict[str, Any], 
+                          available_resources: Dict[str, Any]) -> float:
+        """Assess how feasible a mitigation is given available resources"""
+        prerequisites = mitigation_info.get('prerequisites', [])
+        resource_cost = mitigation_info.get('resource_cost', '').lower()
+        
+        feasibility = 1.0
+        
+        # Check prerequisites
+        for prereq in prerequisites:
+            if isinstance(prereq, str):
+                # Simple string matching for now
+                prereq_lower = prereq.lower()
+                found = False
+                for resource_type, resources in available_resources.items():
+                    if resource_type.lower() in prereq_lower or prereq_lower in str(resources).lower():
+                        found = True
+                        break
+                if not found:
+                    feasibility *= 0.7  # Reduce feasibility for missing prerequisites
+        
+        # Check resource costs
+        if 'expensive' in resource_cost or 'high' in resource_cost:
+            economic_resources = available_resources.get('economic', {})
+            if not economic_resources or str(economic_resources).lower() in ['limited', 'low', 'poor']:
+                feasibility *= 0.6
+        
+        return max(0.1, feasibility)  # Minimum 10% feasibility
+    
+    def _get_template_mitigation_recommendations(self, chaos_event: Any,
+                                               available_resources: Dict[str, Any],
+                                               pressure_data: Optional[PressureData] = None,
+                                               chaos_state: Optional[ChaosState] = None) -> List[Dict[str, Any]]:
+        """Generate template-based mitigation recommendations"""
         recommendations = []
         
-        # Analyze current pressure sources
-        pressure_breakdown = pressure_data.global_pressure.get_pressure_breakdown()
+        # Determine event type and suggest appropriate mitigations
+        event_type = getattr(chaos_event, 'event_type', None)
+        event_severity = getattr(chaos_event, 'severity', None)
         
-        # Find top pressure sources
-        top_sources = sorted(pressure_breakdown.items(), key=lambda x: x[1], reverse=True)[:3]
-        
-        for source_name, pressure_value in top_sources:
-            if pressure_value < 0.3:  # Skip low pressure sources
-                continue
+        if event_type:
+            event_type_str = event_type.value if hasattr(event_type, 'value') else str(event_type)
             
-            # Find appropriate mitigations for this pressure source
-            suitable_mitigations = []
-            for mitigation_type, config in self.mitigation_configs.items():
-                if source_name in config['affects_sources'] or 'all' in config['affects_sources']:
-                    # Check if we can apply more of this type
-                    current_count = self._count_active_mitigations(mitigation_type)
-                    if current_count < config['max_concurrent']:
-                        effectiveness_score = config['base_effectiveness'] * (config['stacking_multiplier'] ** current_count)
-                        suitable_mitigations.append({
-                            'type': mitigation_type,
-                            'effectiveness': effectiveness_score,
-                            'duration': config['duration_hours'],
-                            'current_count': current_count,
-                            'max_concurrent': config['max_concurrent']
-                        })
+            # Map event types to mitigation strategies
+            if 'political' in event_type_str.lower():
+                recommendations.extend([
+                    {
+                        'type': 'diplomatic',
+                        'name': 'Emergency Diplomatic Talks',
+                        'description': 'Initiate emergency negotiations with key political factions',
+                        'effectiveness': 0.7,
+                        'resource_cost': 'Diplomatic resources',
+                        'duration_hours': 48,
+                        'prerequisites': ['Access to faction leaders'],
+                        'side_effects': ['May reveal political weaknesses'],
+                        'priority': 0.8,
+                        'feasibility': 0.9,
+                        'source': 'template'
+                    },
+                    {
+                        'type': 'governance',
+                        'name': 'Leadership Demonstration',
+                        'description': 'Demonstrate strong, decisive leadership to restore confidence',
+                        'effectiveness': 0.6,
+                        'resource_cost': 'Political capital',
+                        'duration_hours': 72,
+                        'prerequisites': ['Authority position'],
+                        'side_effects': ['Increased scrutiny of future decisions'],
+                        'priority': 0.7,
+                        'feasibility': 0.8,
+                        'source': 'template'
+                    }
+                ])
             
-            if suitable_mitigations:
-                # Sort by effectiveness
-                suitable_mitigations.sort(key=lambda x: x['effectiveness'], reverse=True)
-                
-                recommendations.append({
-                    'pressure_source': source_name,
-                    'pressure_value': pressure_value,
-                    'priority': 'high' if pressure_value > 0.7 else 'medium',
-                    'recommended_mitigations': suitable_mitigations[:3]  # Top 3 recommendations
-                })
+            if 'economic' in event_type_str.lower():
+                recommendations.extend([
+                    {
+                        'type': 'economic',
+                        'name': 'Emergency Economic Stimulus',
+                        'description': 'Inject resources into the economy to stabilize markets',
+                        'effectiveness': 0.6,
+                        'resource_cost': 'Economic reserves',
+                        'duration_hours': 168,  # 1 week
+                        'prerequisites': ['Available funds'],
+                        'side_effects': ['Depletion of reserves'],
+                        'priority': 0.8,
+                        'feasibility': 0.7,
+                        'source': 'template'
+                    },
+                    {
+                        'type': 'trade',
+                        'name': 'Emergency Trade Agreements',
+                        'description': 'Establish temporary trade deals to stabilize supply chains',
+                        'effectiveness': 0.5,
+                        'resource_cost': 'Trade concessions',
+                        'duration_hours': 240,  # 10 days
+                        'prerequisites': ['Trading partners'],
+                        'side_effects': ['Potential dependency'],
+                        'priority': 0.6,
+                        'feasibility': 0.8,
+                        'source': 'template'
+                    }
+                ])
+            
+            if 'social' in event_type_str.lower():
+                recommendations.extend([
+                    {
+                        'type': 'social',
+                        'name': 'Community Outreach Program',
+                        'description': 'Deploy community leaders to address grievances and concerns',
+                        'effectiveness': 0.5,
+                        'resource_cost': 'Personnel and time',
+                        'duration_hours': 120,  # 5 days
+                        'prerequisites': ['Trusted community figures'],
+                        'side_effects': ['Exposure of deeper issues'],
+                        'priority': 0.7,
+                        'feasibility': 0.9,
+                        'source': 'template'
+                    },
+                    {
+                        'type': 'humanitarian',
+                        'name': 'Emergency Aid Distribution',
+                        'description': 'Distribute emergency supplies and aid to affected populations',
+                        'effectiveness': 0.4,
+                        'resource_cost': 'Supplies and logistics',
+                        'duration_hours': 48,
+                        'prerequisites': ['Available supplies'],
+                        'side_effects': ['Resource depletion'],
+                        'priority': 0.6,
+                        'feasibility': 0.8,
+                        'source': 'template'
+                    }
+                ])
         
-        return recommendations
-    
-    def force_remove_mitigation(self, mitigation_id: str) -> bool:
-        """Force remove a mitigation (for admin/testing purposes)"""
-        if mitigation_id in self.active_mitigations:
-            del self.active_mitigations[mitigation_id]
-            logger.info(f"Force removed mitigation: {mitigation_id}")
-            return True
-        return False
-    
-    def get_mitigation_by_id(self, mitigation_id: str) -> Optional[MitigationFactor]:
-        """Get a specific mitigation by ID"""
-        return self.active_mitigations.get(mitigation_id)
-    
-    def get_mitigations_by_source(self, source_id: str) -> List[MitigationFactor]:
-        """Get all mitigations from a specific source"""
-        return [m for m in self.active_mitigations.values() if m.source_id == source_id]
-    
-    def get_mitigations_by_type(self, mitigation_type: str) -> List[MitigationFactor]:
-        """Get all mitigations of a specific type"""
-        return [m for m in self.active_mitigations.values() if m.mitigation_type == mitigation_type] 
+        # Add general mitigations that work for any crisis
+        recommendations.extend([
+            {
+                'type': 'information',
+                'name': 'Crisis Communication Campaign',
+                'description': 'Launch coordinated communication to manage public perception',
+                'effectiveness': 0.3,
+                'resource_cost': 'Communication resources',
+                'duration_hours': 72,
+                'prerequisites': ['Communication channels'],
+                'side_effects': ['Potential backlash if message fails'],
+                'priority': 0.5,
+                'feasibility': 0.9,
+                'source': 'template'
+            }
+        ])
+        
+        # Sort by priority and return top recommendations
+        recommendations.sort(key=lambda x: x['priority'] * x['feasibility'], reverse=True)
+        return recommendations[:4]  # Return top 4 template recommendations 

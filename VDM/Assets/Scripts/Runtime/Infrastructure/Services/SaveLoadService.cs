@@ -9,7 +9,8 @@ using VDM.DTOs.Game.SaveLoad;
 using VDM.DTOs.Game.Time;
 using VDM.Infrastructure.Services;
 using VDM.Systems;
-using VDM.DTOs.Common;
+using VDM.Systems.Quest.Services;
+using VDM.Systems.WorldState.Services;
 
 
 namespace VDM.Infrastructure.Services

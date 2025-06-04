@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.motif import repository
+    from backend.infrastructure.systems.motif.repositories import repository
 except ImportError:
     pytest.skip(f"Module backend.systems.motif.repository not found", allow_module_level=True)
 

@@ -7,6 +7,8 @@ using UnityEngine;
 using VDM.Systems.Events.Integration;
 using VDM.DTOs.Common;
 using VDM.Systems.Rumor.Services;
+using VDM.Systems.Events.Models;
+using VDM.Systems.Rumor.Models;
 
 
 namespace VDM.Systems.Rumor.Ui
@@ -596,22 +598,40 @@ namespace VDM.Systems.Rumor.Ui
 
     #region Events
 
-    public class RumorCreatedEvent
+    public class RumorCreatedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "rumor.created";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RumorPanelController";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RumorId { get; set; }
         public string Content { get; set; }
         public string OriginatorId { get; set; }
     }
 
-    public class RumorSpreadEvent
+    public class RumorSpreadEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "rumor.spread";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RumorPanelController";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RumorId { get; set; }
         public string FromEntityId { get; set; }
         public string ToEntityId { get; set; }
     }
 
-    public class RumorDeletedEvent
+    public class RumorDeletedEvent : IEvent
     {
+        public string EventId { get; } = Guid.NewGuid().ToString();
+        public string EventType => "rumor.deleted";
+        public DateTime Timestamp { get; } = DateTime.UtcNow;
+        public string Source => "RumorPanelController";
+        public EventPriority Priority => EventPriority.Normal;
+
         public string RumorId { get; set; }
     }
 

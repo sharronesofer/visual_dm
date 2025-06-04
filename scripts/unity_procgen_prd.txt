@@ -1,7 +1,7 @@
 # Unity Procedural Generation Game - Product Requirements Document
 
 ## Project Overview
-Transform the Visual_DM project from its current broken Unity state to a fully functional procedural generation game with backend integration and basic playtesting capabilities.
+Transform the Dreamforge project from its current broken Unity state to a fully functional procedural generation game with backend integration and basic playtesting capabilities.
 
 ## Current State Analysis
 - **Unity Project Status**: Broken - opens in safe mode, multiple compilation errors

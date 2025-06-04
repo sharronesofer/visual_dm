@@ -8,12 +8,16 @@ from datetime import datetime, timedelta
 from typing import Optional, Dict, Any, Tuple
 from jose import JWTError, jwt
 import secrets
+import os
+import logging
 
 # Configuration for JWT
 from backend.infrastructure.shared.config import config
 
 TOKEN_TYPE_ACCESS = "access"
 TOKEN_TYPE_REFRESH = "refresh"
+
+logger = logging.getLogger(__name__)
 
 def create_access_token(
     data: Dict[str, Any],
@@ -60,10 +64,15 @@ def create_access_token(
             algorithm=config.jwt.algorithm
         )
     except AttributeError:
-        # Fallback if config is not properly set up
+        # Configuration error - should not use fallback in production
+        if os.environ.get("ENVIRONMENT") == "production":
+            raise Exception("JWT configuration not properly initialized - cannot create tokens")
+        
+        # Development fallback with warning
+        logger.warning("JWT config not available, using development fallback")
         return jwt.encode(
             to_encode,
-            "fallback-secret-key",  # This should be replaced with proper config
+            os.environ.get("JWT_SECRET_KEY", secrets.token_urlsafe(32)),
             algorithm="HS256"
         )
 
@@ -108,10 +117,15 @@ def create_refresh_token(
             algorithm=config.jwt.algorithm
         )
     except AttributeError:
-        # Fallback if config is not properly set up
+        # Configuration error - should not use fallback in production
+        if os.environ.get("ENVIRONMENT") == "production":
+            raise Exception("JWT configuration not properly initialized - cannot create tokens")
+        
+        # Development fallback with warning
+        logger.warning("JWT config not available, using development fallback")
         return jwt.encode(
             to_encode,
-            "fallback-secret-key",  # This should be replaced with proper config
+            os.environ.get("JWT_SECRET_KEY", secrets.token_urlsafe(32)),
             algorithm="HS256"
         )
 
@@ -153,10 +167,15 @@ def verify_token(token: str, token_type: Optional[str] = None) -> Optional[Dict[
                 algorithms=[config.jwt.algorithm]
             )
         except AttributeError:
-            # Fallback if config is not properly set up
+            # Configuration error - should not use fallback in production
+            if os.environ.get("ENVIRONMENT") == "production":
+                raise Exception("JWT configuration not properly initialized - cannot verify tokens")
+            
+            # Development fallback with warning
+            logger.warning("JWT config not available, using development fallback for token verification")
             payload = jwt.decode(
                 token,
-                "fallback-secret-key",
+                os.environ.get("JWT_SECRET_KEY", secrets.token_urlsafe(32)),
                 algorithms=["HS256"]
             )
         

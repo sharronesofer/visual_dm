@@ -6,7 +6,7 @@ using UnityEngine;
 using VDM.Infrastructure.Services;
 using VDM.Systems.Worldgeneration.Models;
 using VDM.Systems.Region.Models;
-
+using Newtonsoft.Json.Linq;
 
 namespace VDM.Systems.Worldgeneration.Services
 {
@@ -36,8 +36,8 @@ namespace VDM.Systems.Worldgeneration.Services
         
         // Entity creation events (detailed)
         public event Action<ContinentDTO> OnContinentGenerated;
-        public event Action<VDM.Systems.WorldGeneration.Models.RegionDTO> OnRegionGeneratedDetailed;
-        public event Action<List<VDM.Systems.WorldGeneration.Models.RegionDTO>> OnRegionsGenerated;
+        public event Action<VDM.Systems.Worldgeneration.Models.RegionDTO> OnRegionGeneratedDetailed;
+        public event Action<List<VDM.Systems.Worldgeneration.Models.RegionDTO>> OnRegionsGenerated;
         public event Action<BiomeConfigDTO> OnBiomeUpdate;
 
         protected override void HandleMessage(string message)
@@ -117,7 +117,7 @@ namespace VDM.Systems.Worldgeneration.Services
                         if (messageData.TryGetValue("data", out var regionData))
                         {
                             var regionJson = JsonConvert.SerializeObject(regionData);
-                            var region = JsonConvert.DeserializeObject<VDM.Systems.WorldGeneration.Models.RegionDTO>(regionJson);
+                            var region = JsonConvert.DeserializeObject<VDM.Systems.Worldgeneration.Models.RegionDTO>(regionJson);
                             if (region != null)
                             {
                                 OnRegionGeneratedDetailed?.Invoke(region);

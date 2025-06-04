@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
-using VDM.Systems.Memory.Models;
+using VDM.DTOs.Common;
+using VDM.DTOs.Social.Memory;
 using VDM.Systems.Memory.Services;
 using VDM.Infrastructure.Services;
 using VDM.UI.Core;
+using VDM.UI.Components;
 
 
 namespace VDM.Systems.Memory.Ui
@@ -90,8 +92,7 @@ namespace VDM.Systems.Memory.Ui
         private void InitializeComponents()
         {
             // Initialize memory service
-            var httpClient = FindObjectOfType<HttpClient>();
-            _memoryService = new MemoryService(httpClient);
+            _memoryService = new MemoryService();
 
             // Setup button listeners
             if (loadMemoriesButton) loadMemoriesButton.onClick.AddListener(LoadMemoriesForNpc);
@@ -164,7 +165,7 @@ namespace VDM.Systems.Memory.Ui
                 var npcId = npcIdInput?.text?.Trim();
                 if (string.IsNullOrEmpty(npcId))
                 {
-                    ShowNotification("Please enter an NPC ID", NotificationType.Warning);
+                    NotificationSystem.Instance?.ShowNotification("Please enter an NPC ID", NotificationType.Warning);
                     return;
                 }
 
@@ -180,17 +181,17 @@ namespace VDM.Systems.Memory.Ui
                     // Load summary
                     await LoadMemorySummary(npcId);
 
-                    ShowNotification($"Loaded {_memories.Count} memories for NPC {npcId}", NotificationType.Success);
+                    NotificationSystem.Instance?.ShowNotification($"Loaded {_memories.Count} memories for NPC {npcId}", NotificationType.Success);
                 }
                 else
                 {
-                    ShowNotification($"Failed to load memories: {response.Message}", NotificationType.Error);
+                    NotificationSystem.Instance?.ShowNotification($"Failed to load memories: {response.Message}", NotificationType.Error);
                 }
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error loading memories: {ex.Message}");
-                ShowNotification("Error loading memories", NotificationType.Error);
+                NotificationSystem.Instance?.ShowNotification("Error loading memories", NotificationType.Error);
             }
         }
 
@@ -298,15 +299,20 @@ namespace VDM.Systems.Memory.Ui
         {
             if (_selectedMemory == null) return;
 
-            if (memoryIdText) memoryIdText.text = $"ID: {_selectedMemory.MemoryId}";
+            if (memoryIdText) memoryIdText.text = $"ID: {_selectedMemory.Id}";
             if (memoryContentText) memoryContentText.text = _selectedMemory.Content;
             if (memoryImportanceText) memoryImportanceText.text = $"Importance: {_selectedMemory.Importance}/10";
-            if (memoryCreatedAtText) memoryCreatedAtText.text = $"Created: {_selectedMemory.CreatedAt}";
-            if (memoryLastRecalledText) 
-            {
-                var lastRecalled = string.IsNullOrEmpty(_selectedMemory.LastRecalled) ? "Never" : _selectedMemory.LastRecalled;
-                memoryLastRecalledText.text = $"Last Recalled: {lastRecalled}";
-            }
+            
+            // Convert timestamp to readable date
+            var createdAt = DateTimeOffset.FromUnixTimeSeconds((long)_selectedMemory.Timestamp).ToString("yyyy-MM-dd HH:mm");
+            if (memoryCreatedAtText) memoryCreatedAtText.text = $"Created: {createdAt}";
+
+            // Convert last recalled timestamp to readable date
+            var lastRecalled = _selectedMemory.LastRecalled > 0 
+                ? DateTimeOffset.FromUnixTimeSeconds((long)_selectedMemory.LastRecalled).ToString("yyyy-MM-dd HH:mm")
+                : "Never";
+            if (memoryLastRecalledText) memoryLastRecalledText.text = $"Last Recalled: {lastRecalled}";
+
             if (memoryRecallCountText) memoryRecallCountText.text = $"Recall Count: {_selectedMemory.RecallCount}";
 
             UpdateTagsList(_selectedMemory.Tags);
@@ -335,29 +341,27 @@ namespace VDM.Systems.Memory.Ui
 
         private void UpdateRelatedEntitiesList(MemoryDTO memory)
         {
-            if (!relatedEntitiesContainer) return;
+            if (relatedEntitiesContainer == null) return;
 
+            // Clear existing items
             foreach (Transform child in relatedEntitiesContainer)
             {
                 Destroy(child.gameObject);
             }
 
-            // Add related NPCs
-            foreach (var npcId in memory.RelatedNpcs)
+            // Add entities involved
+            if (memory.EntitiesInvolved != null)
             {
-                CreateRelatedEntityItem("NPC", npcId);
+                foreach (var entityId in memory.EntitiesInvolved)
+                {
+                    CreateRelatedEntityItem("Entity", entityId);
+                }
             }
 
-            // Add related factions
-            foreach (var factionId in memory.RelatedFactions)
+            // Add location if available
+            if (!string.IsNullOrEmpty(memory.Location))
             {
-                CreateRelatedEntityItem("Faction", factionId);
-            }
-
-            // Add related locations
-            foreach (var locationId in memory.RelatedLocations)
-            {
-                CreateRelatedEntityItem("Location", locationId);
+                CreateRelatedEntityItem("Location", memory.Location);
             }
         }
 
@@ -416,42 +420,41 @@ namespace VDM.Systems.Memory.Ui
 
                 if (string.IsNullOrEmpty(npcId) || string.IsNullOrEmpty(content))
                 {
-                    ShowNotification("NPC ID and content are required", NotificationType.Warning);
+                    NotificationSystem.Instance?.ShowNotification("NPC ID and content are required", NotificationType.Warning);
                     return;
                 }
 
                 var request = new CreateMemoryRequestDTO
                 {
+                    OwnerId = npcId,
                     Content = content,
                     Importance = Mathf.RoundToInt(createImportanceSlider?.value ?? 5),
                     Tags = ParseListInput(createTagsInput?.text),
-                    RelatedNpcs = ParseListInput(createRelatedNpcsInput?.text),
-                    RelatedFactions = ParseListInput(createRelatedFactionsInput?.text),
-                    RelatedLocations = ParseListInput(createRelatedLocationsInput?.text)
+                    EntitiesInvolved = ParseListInput(createRelatedNpcsInput?.text)
+                        .Concat(ParseListInput(createRelatedFactionsInput?.text))
+                        .Concat(ParseListInput(createRelatedLocationsInput?.text))
+                        .ToList()
                 };
 
-                var response = await _memoryService.AddMemoryToNpcAsync(npcId, request);
-                if (response.Success && response.Data != null)
+                var response = await _memoryService.CreateMemoryAsync(npcId, request);
+                if (response.Success && response.Memory != null)
                 {
-                    ShowNotification("Memory created successfully", NotificationType.Success);
-                    OnMemoryCreated?.Invoke(response.Data.Memory);
+                    NotificationSystem.Instance?.ShowNotification("Memory created successfully", NotificationType.Success);
+                    OnMemoryCreated?.Invoke(response.Memory);
                     
-                    // Refresh if this is the current NPC
-                    if (npcId == _currentNpcId)
-                    {
-                        await RefreshMemories();
-                    }
+                    ClearCreateForm();
+                    await RefreshMemories();
                     ShowListPanel();
                 }
                 else
                 {
-                    ShowNotification($"Failed to create memory: {response.Message}", NotificationType.Error);
+                    NotificationSystem.Instance?.ShowNotification($"Failed to create memory: {response.Message}", NotificationType.Error);
                 }
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error creating memory: {ex.Message}");
-                ShowNotification("Error creating memory", NotificationType.Error);
+                NotificationSystem.Instance?.ShowNotification("Error creating memory", NotificationType.Error);
             }
         }
 
@@ -466,10 +469,10 @@ namespace VDM.Systems.Memory.Ui
                     Context = recallContextInput?.text?.Trim() ?? ""
                 };
 
-                var response = await _memoryService.RecallMemoryAsync(_currentNpcId, _selectedMemory.MemoryId, request);
+                var response = await _memoryService.RecallMemoryAsync(_currentNpcId, _selectedMemory.Id, request);
                 if (response.Success && response.Data != null)
                 {
-                    ShowNotification("Memory recalled successfully", NotificationType.Success);
+                    NotificationSystem.Instance?.ShowNotification("Memory recalled successfully", NotificationType.Success);
                     OnMemoryRecalled?.Invoke(response.Data.Memory);
                     
                     // Update the selected memory
@@ -479,13 +482,13 @@ namespace VDM.Systems.Memory.Ui
                 }
                 else
                 {
-                    ShowNotification($"Failed to recall memory: {response.Message}", NotificationType.Error);
+                    NotificationSystem.Instance?.ShowNotification($"Failed to recall memory: {response.Message}", NotificationType.Error);
                 }
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error recalling memory: {ex.Message}");
-                ShowNotification("Error recalling memory", NotificationType.Error);
+                NotificationSystem.Instance?.ShowNotification("Error recalling memory", NotificationType.Error);
             }
         }
 
@@ -497,13 +500,13 @@ namespace VDM.Systems.Memory.Ui
             {
                 var request = new ReinforceMemoryRequestDTO
                 {
-                    Reinforcement = Mathf.RoundToInt(reinforceAmountSlider?.value ?? 1)
+                    ReinforcementAmount = reinforceAmountSlider?.value ?? 1
                 };
 
-                var response = await _memoryService.ReinforceMemoryAsync(_currentNpcId, _selectedMemory.MemoryId, request);
+                var response = await _memoryService.ReinforceMemoryAsync(_currentNpcId, _selectedMemory.Id, request);
                 if (response.Success && response.Data != null)
                 {
-                    ShowNotification("Memory reinforced successfully", NotificationType.Success);
+                    NotificationSystem.Instance?.ShowNotification("Memory reinforced successfully", NotificationType.Success);
                     OnMemoryReinforced?.Invoke(response.Data.Memory);
                     
                     // Update the selected memory
@@ -513,13 +516,13 @@ namespace VDM.Systems.Memory.Ui
                 }
                 else
                 {
-                    ShowNotification($"Failed to reinforce memory: {response.Message}", NotificationType.Error);
+                    NotificationSystem.Instance?.ShowNotification($"Failed to reinforce memory: {response.Message}", NotificationType.Error);
                 }
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error reinforcing memory: {ex.Message}");
-                ShowNotification("Error reinforcing memory", NotificationType.Error);
+                NotificationSystem.Instance?.ShowNotification("Error reinforcing memory", NotificationType.Error);
             }
         }
 
@@ -534,24 +537,24 @@ namespace VDM.Systems.Memory.Ui
                     Reason = forgetReasonInput?.text?.Trim() ?? "manual"
                 };
 
-                var response = await _memoryService.ForgetMemoryAsync(_currentNpcId, _selectedMemory.MemoryId, request);
+                var response = await _memoryService.ForgetMemoryAsync(_currentNpcId, _selectedMemory.Id, request);
                 if (response.Success)
                 {
-                    ShowNotification("Memory forgotten successfully", NotificationType.Success);
-                    OnMemoryForgotten?.Invoke(_selectedMemory.MemoryId);
+                    NotificationSystem.Instance?.ShowNotification("Memory forgotten successfully", NotificationType.Success);
+                    OnMemoryForgotten?.Invoke(_selectedMemory.Id);
                     
                     await RefreshMemories();
                     ShowListPanel();
                 }
                 else
                 {
-                    ShowNotification($"Failed to forget memory: {response.Message}", NotificationType.Error);
+                    NotificationSystem.Instance?.ShowNotification($"Failed to forget memory: {response.Message}", NotificationType.Error);
                 }
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Error forgetting memory: {ex.Message}");
-                ShowNotification("Error forgetting memory", NotificationType.Error);
+                NotificationSystem.Instance?.ShowNotification("Error forgetting memory", NotificationType.Error);
             }
         }
 
@@ -641,6 +644,39 @@ namespace VDM.Systems.Memory.Ui
                 if (memory.Tags.Count > 3) tagDisplay += "...";
                 tagsText.text = tagDisplay;
             }
+        }
+    }
+
+    /// <summary>
+    /// Extension methods for MemoryDTO
+    /// </summary>
+    public static class MemoryDTOExtensions
+    {
+        /// <summary>
+        /// Get a preview of the memory content
+        /// </summary>
+        public static string GetPreview(this MemoryDTO memory, int maxLength = 100)
+        {
+            if (string.IsNullOrEmpty(memory.Content))
+                return "No content";
+
+            if (memory.Content.Length <= maxLength)
+                return memory.Content;
+
+            return memory.Content.Substring(0, maxLength - 3) + "...";
+        }
+
+        /// <summary>
+        /// Check if memory is related to a specific entity
+        /// </summary>
+        public static bool IsRelatedTo(this MemoryDTO memory, string entityId)
+        {
+            if (string.IsNullOrEmpty(entityId))
+                return false;
+
+            return memory.EntitiesInvolved?.Contains(entityId) == true ||
+                   memory.Tags?.Contains(entityId) == true ||
+                   memory.Content?.Contains(entityId, StringComparison.OrdinalIgnoreCase) == true;
         }
     }
 } 

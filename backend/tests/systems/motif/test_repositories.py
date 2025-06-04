@@ -11,7 +11,7 @@ from unittest.mock import Mock, AsyncMock, patch
 from uuid import uuid4
 from sqlalchemy.orm import Session
 
-from backend.systems.motif import repositories
+from backend.infrastructure.systems.motif import repositories
 
 
 class TestMotifRepositories:

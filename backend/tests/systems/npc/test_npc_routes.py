@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-from backend.systems.npc.routers.npc_routes import npc_routes
+    from backend.systems.npc.routers.npc_routes import npc_routes
 except ImportError:
     pytest.skip(f"Module backend.systems.npc.npc_routes not found", allow_module_level=True)
 
@@ -31,4 +31,4 @@ class TestNpc_Routes:
     def test_module_structure(self):
         """Test that module has expected structure"""
         # TODO: Add tests for expected classes, functions, constants
-        assert hasattr(npc_routes, '__name__')
+        assert hasattr(npc_routes, '__name__') 

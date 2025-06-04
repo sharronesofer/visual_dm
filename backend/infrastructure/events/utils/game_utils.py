@@ -11,7 +11,7 @@ from backend.infrastructure.shared.utils.constants import (
     BASE_HEALTH,
     ATTRIBUTE_LIMITS,
     VALID_RACES,
-    VALID_CLASSES,
+    VALID_ARCHETYPES,
     VALID_DIFFICULTIES,
     VALID_BACKGROUNDS,
     VALID_ATTRIBUTES
@@ -167,7 +167,7 @@ class GameValidator:
         self,
         attributes: Dict[str, int],
         race: str,
-        character_class: str
+        abilities: List[str] = None
     ) -> Tuple[bool, List[str]]:
         """Validate character creation parameters"""
         errors = []
@@ -187,9 +187,12 @@ class GameValidator:
             if race.lower() not in VALID_RACES:
                 errors.append(f"Invalid race: {race}")
             
-            # Validate class
-            if character_class.lower() not in VALID_CLASSES:
-                errors.append(f"Invalid class: {character_class}")
+            # Validate abilities (if provided)
+            if abilities:
+                # Basic ability validation - could be expanded with actual ability list
+                for ability in abilities:
+                    if not isinstance(ability, str) or len(ability.strip()) == 0:
+                        errors.append(f"Invalid ability: {ability}")
             
             return len(errors) == 0, errors
             

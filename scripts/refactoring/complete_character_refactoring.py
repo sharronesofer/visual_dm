@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 # Base directory for the project
-BASE_DIR = Path("/Users/Sharrone/Visual_DM")
+BASE_DIR = Path("/Users/Sharrone/Dreamforge")
 BACKEND_DIR = BASE_DIR / "backend"
 CHARACTER_DIR = BACKEND_DIR / "systems" / "character"
 
@@ -75,7 +75,7 @@ IMPORT_REPLACEMENTS = [
     (r"from backend\.systems\.character\.models\.worldgen_utils", "from backend.systems.world_generation.utils.worldgen_utils"),
     
     # Tension/War
-    (r"from backend\.systems\.character\.models\.tension_utils", "from backend.systems.tension_war.utils.tension_utils"),
+    (r"from backend\.systems\.character\.models\.tension_utils", "from backend.systems.tension.utils.tension_utils"),
     
     # Region
     (r"from backend\.systems\.character\.models\.region_revolt_utils", "from backend.systems.region.utils.region_revolt_utils"),
@@ -87,7 +87,7 @@ IMPORT_REPLACEMENTS = [
     (r"from backend\.systems\.character\.models\.user_models", "from backend.infrastructure.auth_user.models.user_models"),
     
     # Economy
-    (r"from backend\.systems\.character\.models\.shop_utils", "from backend.systems.economy.utils.shop_utils"),
+    (r"from backend\.systems\.character\.models\.shop_utils", "from backend.infrastructure.utils.shop_utils"),
 ]
 
 def ensure_directory_exists(path: Path):

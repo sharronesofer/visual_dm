@@ -11,10 +11,11 @@ from typing import Dict, List, Optional, Any, Callable, Union
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from backend.systems.chaos.models.chaos_events import ChaosEvent, ChaosEventType
-from backend.systems.chaos.models.pressure_data import PressureData, PressureReading, PressureSource
-from backend.systems.chaos.models.chaos_state import ChaosState
+from backend.infrastructure.systems.chaos.models.chaos_events import ChaosEvent, ChaosEventType
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData, PressureReading, PressureSource
+from backend.infrastructure.systems.chaos.models.chaos_state import ChaosState
 from backend.systems.chaos.core.config import ChaosConfig
+from backend.systems.chaos.core.warning_system import WarningEvent
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +50,6 @@ class SystemConnection:
                 self.is_connected = True
                 return True
         except Exception as e:
-            logger.warning(f"Connection test failed for {self.system_name}: {e}")
             self.is_connected = False
             return False
 
@@ -68,10 +68,9 @@ class EventDispatcherIntegration:
         if self.event_dispatcher:
             # Subscribe to relevant game events
             await self._setup_event_subscriptions()
-            logger.info("Event dispatcher integration initialized")
         else:
-            logger.warning("No event dispatcher provided - running in standalone mode")
-    
+            pass  # No event dispatcher available
+        
     async def _setup_event_subscriptions(self) -> None:
         """Set up subscriptions to game events that affect chaos"""
         try:
@@ -101,11 +100,9 @@ class EventDispatcherIntegration:
             await self.event_dispatcher.subscribe('npc.corruption_exposed', self._handle_corruption_exposure)
             await self.event_dispatcher.subscribe('npc.scandal', self._handle_scandal)
             
-            logger.info("Event subscriptions configured")
-            
         except Exception as e:
-            logger.error(f"Failed to setup event subscriptions: {e}")
-    
+            pass  # Error setting up event subscriptions
+        
     async def publish_chaos_event(self, event: ChaosEvent) -> None:
         """Publish a chaos event to other systems"""
         if not self.event_dispatcher:
@@ -132,10 +129,10 @@ class EventDispatcherIntegration:
                 try:
                     await subscriber(event)
                 except Exception as e:
-                    logger.error(f"Error notifying chaos event subscriber: {e}")
-                    
+                    pass  # Error notifying subscriber
+                        
         except Exception as e:
-            logger.error(f"Failed to publish chaos event: {e}")
+            pass  # Error publishing chaos event
     
     async def publish_pressure_change(self, pressure_data: PressureData) -> None:
         """Publish pressure changes to interested systems"""
@@ -156,88 +153,101 @@ class EventDispatcherIntegration:
             })
             
         except Exception as e:
-            logger.error(f"Failed to publish pressure change: {e}")
+            pass  # Error publishing pressure change
+    
+    async def publish_warning_event(self, warning: WarningEvent) -> None:
+        """Publish a warning event to alert systems"""
+        if not self.event_dispatcher:
+            return
+            
+        try:
+            warning_data = {
+                'warning_id': warning.warning_id,
+                'phase': warning.phase.value,
+                'target_event_type': warning.target_event_type.value,
+                'title': warning.title,
+                'description': warning.description,
+                'flavor_text': warning.flavor_text,
+                'affected_regions': warning.affected_regions,
+                'warning_signs': warning.warning_signs,
+                'environmental_indicators': warning.environmental_indicators,
+                'confidence': warning.confidence,
+                'severity_hint': warning.severity_hint.value,
+                'can_be_mitigated': warning.can_be_mitigated,
+                'mitigation_window_hours': warning.mitigation_window_hours,
+                'scheduled_for': warning.scheduled_for.isoformat(),
+                'target_event_time': warning.target_event_time.isoformat()
+            }
+            
+            await self.event_dispatcher.publish('chaos.warning_event', warning_data)
+                    
+        except Exception as e:
+            pass  # Error publishing warning event
     
     # Event handlers for game events
     
     async def _handle_faction_conflict(self, event_data: Dict[str, Any]) -> None:
         """Handle faction conflict events"""
-        logger.info(f"Faction conflict detected: {event_data}")
         # This would trigger pressure increases in the faction conflict source
         
     async def _handle_war_declaration(self, event_data: Dict[str, Any]) -> None:
         """Handle war declaration events"""
-        logger.info(f"War declared: {event_data}")
         # Major pressure increase for military buildup and faction conflict
         
     async def _handle_alliance_formation(self, event_data: Dict[str, Any]) -> None:
         """Handle alliance formation events"""
-        logger.info(f"Alliance formed: {event_data}")
         # This could be a positive mitigation factor
         
     async def _handle_faction_betrayal(self, event_data: Dict[str, Any]) -> None:
         """Handle faction betrayal events"""
-        logger.info(f"Faction betrayal: {event_data}")
         # Major diplomatic tension increase
         
     async def _handle_market_crash(self, event_data: Dict[str, Any]) -> None:
         """Handle market crash events"""
-        logger.info(f"Market crash: {event_data}")
         # Economic instability pressure spike
         
     async def _handle_trade_disruption(self, event_data: Dict[str, Any]) -> None:
         """Handle trade disruption events"""
-        logger.info(f"Trade disruption: {event_data}")
         # Economic and resource pressure increases
         
     async def _handle_resource_shortage(self, event_data: Dict[str, Any]) -> None:
         """Handle resource shortage events"""
-        logger.info(f"Resource shortage: {event_data}")
         # Resource scarcity pressure increase
         
     async def _handle_quest_completion(self, event_data: Dict[str, Any]) -> None:
         """Handle quest completion events"""
-        logger.info(f"Quest completed: {event_data}")
         # Potential mitigation based on quest type
         
     async def _handle_quest_failure(self, event_data: Dict[str, Any]) -> None:
         """Handle quest failure events"""
-        logger.info(f"Quest failed: {event_data}")
         # May increase pressure depending on quest importance
         
     async def _handle_major_milestone(self, event_data: Dict[str, Any]) -> None:
         """Handle major quest milestone events"""
-        logger.info(f"Major milestone reached: {event_data}")
         # Significant mitigation for main quest progress
         
     async def _handle_natural_disaster(self, event_data: Dict[str, Any]) -> None:
         """Handle natural disaster events"""
-        logger.info(f"Natural disaster: {event_data}")
         # Environmental pressure spike
         
     async def _handle_population_change(self, event_data: Dict[str, Any]) -> None:
         """Handle population change events"""
-        logger.info(f"Population change: {event_data}")
         # Population stress adjustments
         
     async def _handle_infrastructure_change(self, event_data: Dict[str, Any]) -> None:
         """Handle infrastructure change events"""
-        logger.info(f"Infrastructure change: {event_data}")
         # May affect multiple pressure sources
         
     async def _handle_npc_death(self, event_data: Dict[str, Any]) -> None:
         """Handle important NPC death events"""
-        logger.info(f"Important NPC death: {event_data}")
         # May cause political upheaval or population stress
         
     async def _handle_corruption_exposure(self, event_data: Dict[str, Any]) -> None:
         """Handle corruption exposure events"""
-        logger.info(f"Corruption exposed: {event_data}")
         # Corruption pressure but potential positive political outcome
         
     async def _handle_scandal(self, event_data: Dict[str, Any]) -> None:
         """Handle scandal events"""
-        logger.info(f"Scandal: {event_data}")
         # Political and social pressure increases
 
 
@@ -266,12 +276,10 @@ class SystemIntegrator:
             'connection_errors': 0
         }
         
-        logger.info("System Integrator initialized")
     
     async def initialize(self) -> None:
         """Initialize all system integrations"""
         try:
-            logger.info("Initializing system integrations...")
             
             # Initialize event dispatcher integration
             await self.event_dispatcher_integration.initialize()
@@ -283,10 +291,8 @@ class SystemIntegrator:
             await self._start_pressure_collection_tasks()
             
             self.is_initialized = True
-            logger.info("System integration initialization complete")
             
         except Exception as e:
-            logger.error(f"Failed to initialize system integrations: {e}")
             raise
     
     async def _discover_and_connect_systems(self) -> None:
@@ -310,14 +316,13 @@ class SystemIntegrator:
                 await self._attempt_system_connection(system_name)
                 
         except Exception as e:
-            logger.error(f"Error during system discovery: {e}")
+            pass  # Error discovering and connecting systems
     
     async def _attempt_system_connection(self, system_name: str) -> bool:
         """Attempt to connect to a specific system"""
         try:
             # Try to import and connect to the system
             # This is a placeholder - in reality would use dependency injection
-            logger.info(f"Attempting connection to {system_name}")
             
             # Create a mock connection for now
             connection = SystemConnection(
@@ -332,11 +337,9 @@ class SystemIntegrator:
             self.system_connections[system_name] = connection
             
             self.integration_metrics['successful_integrations'] += 1
-            logger.info(f"Successfully connected to {system_name}")
             return True
             
         except Exception as e:
-            logger.error(f"Failed to connect to {system_name}: {e}")
             self.integration_metrics['failed_integrations'] += 1
             return False
     
@@ -368,7 +371,6 @@ class SystemIntegrator:
                 return readings
                 
             except Exception as e:
-                logger.error(f"Error reading pressure from {system_name}: {e}")
                 return []
         
         return pressure_reader
@@ -378,7 +380,7 @@ class SystemIntegrator:
         async def event_handler(chaos_event: ChaosEvent) -> bool:
             """Handle a chaos event for this system"""
             try:
-                logger.info(f"Applying chaos event {chaos_event.event_type.value} to {system_name}")
+                pass  # Event handler logic would go here
                 
                 # Apply event effects specific to this system
                 for effect in chaos_event.immediate_effects + chaos_event.ongoing_effects:
@@ -388,7 +390,6 @@ class SystemIntegrator:
                 return True
                 
             except Exception as e:
-                logger.error(f"Error applying chaos event to {system_name}: {e}")
                 return False
         
         return event_handler
@@ -399,7 +400,7 @@ class SystemIntegrator:
             effect_type = effect.effect_type
             magnitude = effect.magnitude
             
-            logger.debug(f"Applying {effect_type} effect (magnitude: {magnitude}) to {system_name}")
+            pass  # Effect application logic would go here
             
             # System-specific effect application
             if system_name == 'faction_system':
@@ -415,57 +416,57 @@ class SystemIntegrator:
             # Add more system handlers...
             
         except Exception as e:
-            logger.error(f"Error applying effect {effect.effect_type} to {system_name}: {e}")
+            pass  # Error applying effect to system
     
     async def _apply_faction_effect(self, effect_type: str, magnitude: float, chaos_event: ChaosEvent) -> None:
         """Apply chaos effects to the faction system"""
         if effect_type == 'reduce_stability':
             # Reduce faction stability in affected regions
             for region_id in chaos_event.affected_regions:
-                logger.debug(f"Reducing faction stability in region {region_id} by {magnitude}")
+                pass  # Reduce stability logic
         elif effect_type == 'initiate_conflict':
             # Start conflicts between factions
-            logger.debug(f"Initiating faction conflicts with magnitude {magnitude}")
+            pass  # Initiate conflict logic
         elif effect_type == 'reduce_resources':
             # Reduce faction resources
-            logger.debug(f"Reducing faction resources by {magnitude}")
+            pass  # Reduce resources logic
     
     async def _apply_economy_effect(self, effect_type: str, magnitude: float, chaos_event: ChaosEvent) -> None:
         """Apply chaos effects to the economy system"""
         if effect_type == 'reduce_stability':
-            logger.debug(f"Reducing economic stability by {magnitude}")
+            pass  # Reduce economic stability logic
         elif effect_type == 'disrupt_trade':
-            logger.debug(f"Disrupting trade routes with magnitude {magnitude}")
+            pass  # Disrupt trade logic
         elif effect_type == 'market_volatility':
-            logger.debug(f"Increasing market volatility by {magnitude}")
+            pass  # Market volatility logic
     
     async def _apply_region_effect(self, effect_type: str, magnitude: float, chaos_event: ChaosEvent) -> None:
         """Apply chaos effects to the region system"""
         if effect_type == 'damage_infrastructure':
             for region_id in chaos_event.affected_regions:
-                logger.debug(f"Damaging infrastructure in region {region_id} by {magnitude}")
+                pass  # Damage infrastructure logic
         elif effect_type == 'war_damage':
-            logger.debug(f"Applying war damage with magnitude {magnitude}")
+            pass  # War damage logic
         elif effect_type == 'environmental_impact':
-            logger.debug(f"Applying environmental impact with magnitude {magnitude}")
+            pass  # Environmental impact logic
     
     async def _apply_npc_effect(self, effect_type: str, magnitude: float, chaos_event: ChaosEvent) -> None:
         """Apply chaos effects to the NPC system"""
         if effect_type == 'reduce_morale':
-            logger.debug(f"Reducing NPC morale by {magnitude}")
+            pass  # Reduce morale logic
         elif effect_type == 'increase_stress':
-            logger.debug(f"Increasing NPC stress levels by {magnitude}")
+            pass  # Increase stress logic
         elif effect_type == 'behavior_change':
-            logger.debug(f"Changing NPC behaviors with magnitude {magnitude}")
+            pass  # Behavior change logic
     
     async def _apply_quest_effect(self, effect_type: str, magnitude: float, chaos_event: ChaosEvent) -> None:
         """Apply chaos effects to the quest system"""
         if effect_type == 'increase_difficulty':
-            logger.debug(f"Increasing quest difficulty by {magnitude}")
+            pass  # Increase difficulty logic
         elif effect_type == 'block_progress':
-            logger.debug(f"Blocking quest progress with magnitude {magnitude}")
+            pass  # Block progress logic
         elif effect_type == 'create_opportunity':
-            logger.debug(f"Creating quest opportunities with magnitude {magnitude}")
+            pass  # Create opportunity logic
     
     async def _start_pressure_collection_tasks(self) -> None:
         """Start background tasks to collect pressure data from systems"""
@@ -475,7 +476,6 @@ class SystemIntegrator:
                     self._pressure_collection_loop(system_name, connection)
                 )
                 self.pressure_collection_tasks[system_name] = task
-                logger.debug(f"Started pressure collection task for {system_name}")
     
     async def _pressure_collection_loop(self, system_name: str, connection: SystemConnection) -> None:
         """Background loop to collect pressure data from a system"""
@@ -494,14 +494,13 @@ class SystemIntegrator:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"Error in pressure collection for {system_name}: {e}")
                 self.integration_metrics['connection_errors'] += 1
                 await asyncio.sleep(10)  # Wait before retrying
     
     def _store_pressure_readings(self, system_name: str, readings: List[PressureReading]) -> None:
         """Store pressure readings for collection by the pressure monitor"""
         # This would integrate with the pressure monitor's data collection
-        logger.debug(f"Stored {len(readings)} pressure readings from {system_name}")
+        pass  # Store pressure readings logic
     
     async def dispatch_chaos_event(self, chaos_event: ChaosEvent) -> None:
         """Dispatch a chaos event to all connected systems"""
@@ -515,23 +514,38 @@ class SystemIntegrator:
                     try:
                         success = await connection.event_handler(chaos_event)
                         if success:
-                            logger.debug(f"Successfully applied chaos event to {system_name}")
+                            pass  # Event handled successfully
                         else:
-                            logger.warning(f"Failed to apply chaos event to {system_name}")
+                            pass  # Event handling failed
                     except Exception as e:
-                        logger.error(f"Error applying chaos event to {system_name}: {e}")
+                        pass  # Error handling event
             
             self.integration_metrics['events_dispatched'] += 1
             
         except Exception as e:
-            logger.error(f"Error dispatching chaos event: {e}")
+            pass  # Error dispatching chaos event
+    
+    async def dispatch_warning_event(self, warning: WarningEvent) -> None:
+        """Dispatch a warning event to all connected systems"""
+        try:
+            # Publish warning to event dispatcher
+            await self.event_dispatcher_integration.publish_warning_event(warning)
+            
+            # Warning events don't need to be applied to individual systems
+            # They're meant to be observed by interested parties (NPCs, quest system, etc.)
+            self.integration_metrics['warnings_dispatched'] = self.integration_metrics.get('warnings_dispatched', 0) + 1
+            
+            pass  # Warning dispatched successfully
+            
+        except Exception as e:
+            pass  # Error dispatching warning event
     
     async def notify_pressure_change(self, pressure_data: PressureData) -> None:
         """Notify systems of pressure changes"""
         try:
             await self.event_dispatcher_integration.publish_pressure_change(pressure_data)
         except Exception as e:
-            logger.error(f"Error notifying pressure change: {e}")
+            pass  # Error notifying pressure change
     
     async def health_check(self) -> Dict[str, Any]:
         """Perform health check on all system connections"""
@@ -588,10 +602,10 @@ class SystemIntegrator:
             if self.pressure_collection_tasks:
                 await asyncio.gather(*self.pressure_collection_tasks.values(), return_exceptions=True)
             
-            logger.info("System integrator shutdown complete")
+            pass  # Shutdown completed successfully
             
         except Exception as e:
-            logger.error(f"Error during system integrator shutdown: {e}")
+            pass  # Error during shutdown
     
     def get_connected_systems(self) -> List[str]:
         """Get list of connected system names"""

@@ -48,6 +48,27 @@ class BatchTestFixer:
             # Add the correct import
             if "from backend.infrastructure.data.schemas.biome_schema import BiomeSchema" not in content:
                 content = "from backend.infrastructure.data.schemas.biome_schema import BiomeSchema\n" + content
+        
+        # Fix world_generation models that moved to infrastructure
+        if "from backend.systems.world_generation.models import" in content:
+            content = content.replace(
+                "from backend.systems.world_generation.models import",
+                "from backend.systems.world_generation.models import"
+            )
+        
+        # Fix world_generation repositories that moved to infrastructure
+        if "from backend.systems.world_generation.repositories" in content:
+            content = content.replace(
+                "from backend.systems.world_generation.repositories",
+                "from backend.systems.world_generation.repositories"
+            )
+        
+        # Fix world_generation routers that moved to infrastructure
+        if "from backend.systems.world_generation.routers" in content:
+            content = content.replace(
+                "from backend.systems.world_generation.routers",
+                "from backend.systems.world_generation.routers"
+            )
             
         return content != original_content
 
@@ -151,8 +172,8 @@ class BatchTestFixer:
         if "time_utils" in str(file_path) and "@patch" in content:
             # Replace direct TimeManager patches with _get_time_manager patches
             content = re.sub(
-                r'@patch\([\'"]backend\.systems\.time\.utils\.time_utils\.TimeManager[\'"]',
-                r'@patch("backend.systems.time.utils.time_utils._get_time_manager"',
+                r'@patch\([\'"]backend\.systems\.game_time\.utils\.time_utils\.TimeManager[\'"]',
+                r'@patch("backend.systems.game_time.utils.time_utils._get_time_manager"',
                 content
             )
             

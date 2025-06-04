@@ -1,16 +1,18 @@
 using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 using TMPro;
-using VDM.UI.Core;
 using VDM.Systems.Faction.Models;
 using VDM.Systems.Faction.Services;
+using VDM.Infrastructure.Ui.Ui.Core;
 using VDM.Infrastructure.Services;
 using VDM.DTOs.Common;
+using VDM.Infrastructure.Core.Core.Enums;
 
-
-namespace VDM.Systems.Faction.Ui
+namespace VDM.Systems.Faction.UI
 {
     /// <summary>
     /// Main faction display and management panel

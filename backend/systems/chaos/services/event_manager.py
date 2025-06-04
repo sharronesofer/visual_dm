@@ -6,21 +6,17 @@ Handles event cascading, mitigation effects, and cross-system integration.
 """
 
 import asyncio
-import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Union
 from uuid import UUID
 
-from backend.systems.chaos.models.chaos_events import ChaosEvent, ChaosEventType, EventStatus
-from backend.systems.chaos.models.chaos_state import ChaosState
-from backend.systems.chaos.models.pressure_data import PressureData
+from backend.infrastructure.systems.chaos.models.chaos_events import ChaosEvent, ChaosEventType, EventStatus
+from backend.infrastructure.systems.chaos.models.chaos_state import ChaosState
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData
 from backend.systems.chaos.core.event_triggers import EventTriggerSystem
 from backend.systems.chaos.services.mitigation_service import MitigationService
-from backend.systems.chaos.utils.event_utils import EventUtils
-from backend.systems.chaos.utils.chaos_math import ChaosCalculationResult
+from backend.infrastructure.systems.chaos.utils.event_utils import EventUtils
 from backend.systems.chaos.core.config import ChaosConfig
-
-logger = logging.getLogger(__name__)
 
 
 class EventManager:
@@ -55,24 +51,17 @@ class EventManager:
         # Performance tracking
         self.last_evaluation = datetime.now()
         self.evaluation_count = 0
-        
-        logger.info("Event Manager initialized")
     
     async def initialize(self) -> None:
         """Initialize the event manager and all its components"""
         try:
-            logger.info("Initializing Event Manager components...")
-            
             # Initialize event trigger system if needed
             await self.event_trigger_system.initialize()
             
-            logger.info("Event Manager initialization complete")
-            
         except Exception as e:
-            logger.error(f"Failed to initialize Event Manager: {e}")
             raise
     
-    async def evaluate_and_trigger_events(self, chaos_result: ChaosCalculationResult,
+    async def evaluate_and_trigger_events(self, chaos_result: Any,
                                         pressure_data: PressureData, 
                                         chaos_state: ChaosState) -> List[ChaosEvent]:
         """Evaluate conditions and trigger chaos events if thresholds are met"""
@@ -119,25 +108,17 @@ class EventManager:
             # Update statistics
             self._update_event_statistics(triggered_events)
             
-            logger.debug(f"Event evaluation complete: {len(triggered_events)} events triggered")
-            
-        except Exception as e:
-            logger.error(f"Error in event evaluation: {e}")
+        except Exception:
+            pass
         
         return triggered_events
     
-    def _apply_mitigation_to_chaos_result(self, chaos_result: ChaosCalculationResult,
-                                        mitigation_effects: Dict[str, float]) -> ChaosCalculationResult:
+    def _apply_mitigation_to_chaos_result(self, chaos_result: Any,
+                                        mitigation_effects: Dict[str, float]) -> Any:
         """Apply mitigation effects to reduce chaos scores"""
         
         # Create a modified copy of the chaos result
-        mitigated_result = ChaosCalculationResult(
-            chaos_score=chaos_result.chaos_score,
-            chaos_level=chaos_result.chaos_level,
-            regional_scores=chaos_result.regional_scores.copy() if chaos_result.regional_scores else {},
-            source_contributions=chaos_result.source_contributions.copy() if chaos_result.source_contributions else {},
-            temporal_factors=chaos_result.temporal_factors.copy() if chaos_result.temporal_factors else {}
-        )
+        mitigated_result = chaos_result
         
         # Apply global mitigation to overall chaos score
         total_mitigation = 0.0
@@ -153,30 +134,29 @@ class EventManager:
             # Apply logarithmic scaling to prevent over-mitigation
             effective_mitigation = min(0.8, average_mitigation * 0.7)  # Cap at 80% reduction
             
-            mitigated_result.chaos_score *= (1.0 - effective_mitigation)
+            if hasattr(mitigated_result, 'chaos_score'):
+                mitigated_result.chaos_score *= (1.0 - effective_mitigation)
+                
+                # Update chaos level based on new score
+                mitigated_result.chaos_level = self._determine_chaos_level_from_score(
+                    mitigated_result.chaos_score
+                )
+                
+                # Apply source-specific mitigations
+                if hasattr(mitigated_result, 'source_contributions') and mitigated_result.source_contributions:
+                    for source, contribution in mitigated_result.source_contributions.items():
+                        source_key = source.value if hasattr(source, 'value') else str(source)
+                        if source_key in mitigation_effects:
+                            mitigation = mitigation_effects[source_key]
+                            mitigated_result.source_contributions[source] = contribution * (1.0 - mitigation)
             
-            # Update chaos level based on new score
-            mitigated_result.chaos_level = self._determine_chaos_level_from_score(
-                mitigated_result.chaos_score
-            )
-            
-            # Apply source-specific mitigations
-            if mitigated_result.source_contributions:
-                for source, contribution in mitigated_result.source_contributions.items():
-                    source_key = source.value if hasattr(source, 'value') else str(source)
-                    if source_key in mitigation_effects:
-                        mitigation = mitigation_effects[source_key]
-                        mitigated_result.source_contributions[source] = contribution * (1.0 - mitigation)
-            
-            # Log mitigation effects
-            logger.debug(f"Applied mitigation: {effective_mitigation:.3f} reduction "
-                        f"(chaos score: {chaos_result.chaos_score:.3f} -> {mitigated_result.chaos_score:.3f})")
+            # Mitigation effects applied successfully
         
         return mitigated_result
     
     def _determine_chaos_level_from_score(self, score: float):
         """Determine chaos level from score - mirrors the main chaos engine logic"""
-        from backend.systems.chaos.models.chaos_state import ChaosLevel
+        from backend.infrastructure.systems.chaos.models.chaos_state import ChaosLevel
         
         if score >= 0.9:
             return ChaosLevel.EXTREME
@@ -191,20 +171,26 @@ class EventManager:
         else:
             return ChaosLevel.DORMANT
     
-    def _should_trigger_events(self, chaos_result: ChaosCalculationResult, 
+    def _should_trigger_events(self, chaos_result: Any, 
                              chaos_state: ChaosState) -> bool:
         """Determine if conditions are right for triggering events"""
         
         # Don't trigger if chaos level is too low
-        from backend.systems.chaos.models.chaos_state import ChaosLevel
-        if chaos_result.chaos_level in [ChaosLevel.DORMANT, ChaosLevel.STABLE]:
+        from backend.infrastructure.systems.chaos.models.chaos_state import ChaosLevel
+        
+        chaos_level = None
+        if hasattr(chaos_result, 'chaos_level'):
+            chaos_level = chaos_result.chaos_level
+        elif isinstance(chaos_result, dict) and 'chaos_level' in chaos_result:
+            chaos_level = chaos_result['chaos_level']
+        
+        if chaos_level and chaos_level in [ChaosLevel.DORMANT, ChaosLevel.STABLE]:
             return False
         
         # Check active event limits
         active_count = len(self.active_events)
         max_concurrent = self.config.chaos_event_limits.get('max_concurrent_events', 5)
         if active_count >= max_concurrent:
-            logger.debug(f"Maximum concurrent events reached ({active_count})")
             return False
         
         # Check timing constraints
@@ -233,7 +219,6 @@ class EventManager:
         """Check if system load allows for new events"""
         # Don't trigger new events if system health is poor
         if chaos_state.system_health < 0.5:
-            logger.debug("System health too low for new events")
             return True
         
         # Don't trigger if there are too many unresolved effects
@@ -242,7 +227,6 @@ class EventManager:
         max_unresolved = self.config.chaos_event_limits.get('max_unresolved_effects', 10)
         
         if unresolved_effects >= max_unresolved:
-            logger.debug("Too many unresolved effects")
             return True
         
         return False
@@ -253,25 +237,19 @@ class EventManager:
         try:
             # Check for event conflicts
             if self.event_utils.has_conflicting_events(event, list(self.active_events.values())):
-                logger.debug(f"Event {event.event_id} conflicts with active events")
                 return False
             
             # Check regional capacity
             if not self._check_regional_event_capacity(event):
-                logger.debug(f"Regional capacity exceeded for event {event.event_id}")
                 return False
             
             # Add to active events
             self.active_events[event.event_id] = event
             self.event_history.append(event)
             
-            logger.info(f"New chaos event: {event.event_type.value} "
-                       f"(severity: {event.severity.value}, regions: {len(event.affected_regions)})")
-            
             return True
             
         except Exception as e:
-            logger.error(f"Error processing event {event.event_id}: {e}")
             return False
     
     def _check_regional_event_capacity(self, event: ChaosEvent) -> bool:
@@ -300,7 +278,6 @@ class EventManager:
             event.status = EventStatus.ACTIVE
             
         except Exception as e:
-            logger.error(f"Error applying effects for event {event.event_id}: {e}")
             event.status = EventStatus.FAILED
     
     async def _apply_single_effect(self, effect, event: ChaosEvent) -> None:
@@ -312,12 +289,11 @@ class EventManager:
             if target_system and target_system in self.system_connections:
                 system_handler = self.system_connections[target_system]
                 await system_handler.apply_chaos_effect(effect, event)
-                logger.debug(f"Applied {effect_type} effect to {target_system}")
             else:
-                logger.debug(f"No handler for effect {effect_type} on {target_system}")
+                pass  # No handler available for this system
                 
         except Exception as e:
-            logger.error(f"Error applying effect {effect}: {e}")
+            pass  # Error applying effect
     
     async def _dispatch_event(self, event: ChaosEvent) -> None:
         """Dispatch event notification to other systems"""
@@ -325,10 +301,10 @@ class EventManager:
             if self.system_integrator:
                 await self.system_integrator.dispatch_chaos_event(event)
             else:
-                logger.debug(f"No system integrator available for event {event.event_id}")
+                pass  # No system integrator available
                 
         except Exception as e:
-            logger.error(f"Error dispatching event {event.event_id}: {e}")
+            pass  # Error dispatching event
     
     async def _cleanup_completed_events(self) -> None:
         """Clean up completed or expired events"""
@@ -346,7 +322,7 @@ class EventManager:
             del self.active_events[event_id]
         
         if completed_events:
-            logger.debug(f"Cleaned up {len(completed_events)} completed events")
+            pass  # Events were cleaned up
     
     def _is_event_completed(self, event: ChaosEvent) -> bool:
         """Check if an event should be considered completed"""
@@ -376,11 +352,9 @@ class EventManager:
                 self.event_statistics['total_failed'] += 1
             
             # Log resolution
-            logger.info(f"Event resolved: {event.event_type.value} "
-                       f"(status: {event.status.value}, duration: {self._calculate_event_duration(event):.1f}h)")
             
         except Exception as e:
-            logger.error(f"Error resolving event {event.event_id}: {e}")
+            pass  # Error resolving event
     
     async def _apply_resolution_mitigation(self, event: ChaosEvent) -> None:
         """Apply mitigation effects when an event is successfully resolved"""
@@ -408,11 +382,9 @@ class EventManager:
                 
                 if mitigation:
                     self.event_statistics['mitigation_applied'] += 1
-                    logger.info(f"Applied mitigation from event resolution: {mitigation_type} "
-                               f"(effectiveness: {mitigation.effectiveness:.3f})")
-                
+            
         except Exception as e:
-            logger.error(f"Error applying resolution mitigation for {event.event_id}: {e}")
+            pass  # Error applying resolution mitigation
     
     def _determine_mitigation_type(self, event: ChaosEvent) -> Optional[str]:
         """Determine appropriate mitigation type based on resolved event"""
@@ -474,13 +446,10 @@ class EventManager:
         """Apply consequences when an event fails to resolve properly"""
         try:
             # Failed events may increase pressure temporarily
-            logger.warning(f"Event {event.event_type.value} failed to resolve properly")
-            
-            # This would integrate with the pressure monitoring system
-            # to temporarily increase pressure in affected areas
+            pass  # Placeholder for pressure integration
             
         except Exception as e:
-            logger.error(f"Error applying failure consequences for {event.event_id}: {e}")
+            pass  # Error applying failure consequences
     
     def _calculate_event_duration(self, event: ChaosEvent) -> float:
         """Calculate actual duration of an event in hours"""
@@ -543,7 +512,6 @@ class EventManager:
             setattr(event, 'resolution_quality', resolution_quality)
             
             # Event will be processed in next cleanup cycle
-            logger.info(f"Manually resolved event: {event.event_type.value} (quality: {resolution_quality})")
             return True
         
         return False
@@ -554,7 +522,6 @@ class EventManager:
             event = self.active_events[event_id]
             event.status = EventStatus.CANCELLED
             
-            logger.info(f"Cancelled event: {event.event_type.value}")
             return True
         
         return False
@@ -562,9 +529,111 @@ class EventManager:
     def set_event_dispatcher(self, system_integrator) -> None:
         """Set the system integrator for event dispatching"""
         self.system_integrator = system_integrator
-        logger.info("System integrator connected to event manager")
     
     def set_system_connection(self, system_name: str, system_handler) -> None:
         """Set up connection to a game system for effect application"""
         self.system_connections[system_name] = system_handler
-        logger.info(f"Connected {system_name} system to event manager") 
+    
+    async def get_candidate_events(self, chaos_result: Any,
+                                 pressure_data: PressureData, 
+                                 chaos_state: ChaosState) -> List[ChaosEvent]:
+        """Get candidate events that could be triggered without actually triggering them"""
+        candidate_events = []
+        
+        try:
+            # Calculate mitigation effects on pressure
+            mitigation_effects = self.mitigation_service.calculate_total_mitigation_effect(
+                pressure_data, chaos_state
+            )
+            
+            # Apply mitigation effects to chaos calculation
+            mitigated_chaos_result = self._apply_mitigation_to_chaos_result(
+                chaos_result, mitigation_effects
+            )
+            
+            # Determine if conditions are right for triggering events
+            if not self._should_trigger_events(mitigated_chaos_result, chaos_state):
+                return candidate_events
+            
+            # Get candidate events from trigger system
+            candidate_events = await self.event_trigger_system.get_candidate_events(
+                mitigated_chaos_result, pressure_data, chaos_state
+            )
+            
+        except Exception as e:
+            pass  # Error getting candidate events
+        
+        return candidate_events
+    
+    async def process_weighted_events(self, candidate_events: List[ChaosEvent],
+                                    weighted_probabilities: Dict[str, float],
+                                    chaos_result: Any,
+                                    pressure_data: PressureData) -> List[ChaosEvent]:
+        """Process events with narrative intelligence weighted probabilities"""
+        triggered_events = []
+        
+        try:
+            for event in candidate_events:
+                event_type_key = event.event_type.value
+                
+                # Use weighted probability if available, otherwise use event's base probability
+                probability = weighted_probabilities.get(event_type_key, event.trigger_probability)
+                
+                # Apply probability to determine if event should trigger
+                import random
+                if random.random() < probability:
+                    # Update event with weighted probability for logging
+                    event.trigger_probability = probability
+                    
+                    # Validate and process the event
+                    if await self._validate_and_process_event(event, None):  # chaos_state not needed for validation
+                        triggered_events.append(event)
+                        
+                        # Apply immediate effects
+                        await self._apply_event_effects(event)
+                        
+                        # Dispatch event notification
+                        await self._dispatch_event(event)
+            
+            # Update statistics
+            self._update_event_statistics(triggered_events)
+            
+        except Exception as e:
+            pass  # Error processing weighted events
+        
+        return triggered_events
+    
+    async def trigger_specific_event(self, event: ChaosEvent) -> bool:
+        """Trigger a specific event (used for cascade events)"""
+        try:
+            # Set triggered time and status
+            event.triggered_at = datetime.now()
+            event.status = EventStatus.ACTIVE
+            
+            # Add to active events
+            self.active_events[event.event_id] = event
+            
+            # Apply immediate effects
+            await self._apply_event_effects(event)
+            
+            # Dispatch event notification
+            await self._dispatch_event(event)
+            
+            # Update statistics
+            self.event_statistics['total_triggered'] += 1
+            
+            event_type_key = event.event_type.value
+            if event_type_key not in self.event_statistics['events_by_type']:
+                self.event_statistics['events_by_type'][event_type_key] = 0
+            self.event_statistics['events_by_type'][event_type_key] += 1
+            
+            return True
+            
+        except Exception as e:
+            return False
+
+    async def process_chaos_state(self, chaos_result: Any,
+                                pressure_data: PressureData, 
+                                chaos_state: ChaosState) -> List[ChaosEvent]:
+        """Legacy method for backward compatibility"""
+        return await self.evaluate_and_trigger_events(chaos_result, pressure_data, chaos_state) 

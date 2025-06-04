@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Collections;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
-using VDM.Infrastructure.Core.Core.Patterns;
-using VDM.Systems.Faction.Models;
+using VDM.Infrastructure.Core.Core.Systems;
 using VDM.Systems.Faction.Services;
 using VDM.Systems.Faction.Models;
-
+using VDM.Systems.Faction.UI;
 
 namespace VDM.Systems.Faction.Integration
 {
@@ -77,7 +78,13 @@ namespace VDM.Systems.Faction.Integration
             _lastRelationshipUpdate = Time.time;
         }
 
-        protected override void OnDestroy()
+        protected override void OnInitializeSystem()
+        {
+            // Called after InitializeSystem completes
+            Debug.Log("[FactionSystemManager] System initialization completed");
+        }
+
+        public override void ShutdownSystem()
         {
             // Cleanup service events
             if (_factionService != null)
@@ -91,7 +98,13 @@ namespace VDM.Systems.Faction.Integration
                 _factionService.OnDiplomaticEvent -= HandleDiplomaticEvent;
             }
 
-            base.OnDestroy();
+            base.ShutdownSystem();
+        }
+
+        protected override void OnShutdownSystem()
+        {
+            // Called after ShutdownSystem completes
+            Debug.Log("[FactionSystemManager] System shutdown completed");
         }
 
         private void Update()

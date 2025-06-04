@@ -11,13 +11,10 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLAlchemyUUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy.orm import relationship
-
-from backend.infrastructure.shared.models import BaseModel as SharedBaseModel
-
-Base = declarative_base()
-
+from backend.infrastructure.database import Base, UUIDMixin, TimestampMixin
+from backend.infrastructure.shared.models import SharedBaseModel
 
 class Auth_UserBaseModel(SharedBaseModel):
     """Base model for auth_user system with common fields"""
@@ -30,7 +27,6 @@ class Auth_UserBaseModel(SharedBaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class Auth_UserModel(Auth_UserBaseModel):
     """Primary model for auth_user system"""
     
@@ -38,7 +34,6 @@ class Auth_UserModel(Auth_UserBaseModel):
     description: Optional[str] = Field(None, description="Description of the auth_user")
     status: str = Field(default="active", description="Status of the auth_user")
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
-
 
 class Auth_UserEntity(Base):
     """SQLAlchemy entity for auth_user system"""
@@ -70,7 +65,6 @@ class Auth_UserEntity(Base):
             "is_active": self.is_active
         }
 
-
 # Request/Response Models
 class CreateAuth_UserRequest(BaseModel):
     """Request model for creating auth_user"""
@@ -79,7 +73,6 @@ class CreateAuth_UserRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     properties: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-
 class UpdateAuth_UserRequest(BaseModel):
     """Request model for updating auth_user"""
     
@@ -87,7 +80,6 @@ class UpdateAuth_UserRequest(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     status: Optional[str] = Field(None)
     properties: Optional[Dict[str, Any]] = None
-
 
 class Auth_UserResponse(BaseModel):
     """Response model for auth_user"""
@@ -102,7 +94,6 @@ class Auth_UserResponse(BaseModel):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class Auth_UserListResponse(BaseModel):
     """Response model for auth_user lists"""

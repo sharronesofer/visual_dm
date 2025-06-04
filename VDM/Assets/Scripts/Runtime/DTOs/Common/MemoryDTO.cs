@@ -381,6 +381,34 @@ namespace VDM.DTOs.Social.Memory
         public string Context { get; set; }
     }
 
+    /// <summary>
+    /// Recall memory request DTO
+    /// </summary>
+    public class RecallMemoryRequestDTO
+    {
+        public string OwnerId { get; set; }
+
+        public string QueryContext { get; set; }
+
+        public int MaxMemories { get; set; } = 10;
+
+        public float RelevanceThreshold { get; set; } = 0.3f;
+
+        public bool UpdateRecallStats { get; set; } = true;
+    }
+
+    /// <summary>
+    /// Forget memory request DTO
+    /// </summary>
+    public class ForgetMemoryRequestDTO
+    {
+        public string MemoryId { get; set; }
+
+        public string Reason { get; set; } = "manual";
+
+        public bool Permanent { get; set; } = false;
+    }
+
     // ===========================================
     // MEMORY LINK MANAGEMENT DTOs
     // ===========================================

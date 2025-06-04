@@ -1,7 +1,21 @@
-"""Domain Repositories Package."""
+"""
+Infrastructure Repositories Package
 
-from .market_repository import MarketRepository
+Provides concrete implementations of repository interfaces for data persistence.
+"""
+
+from .equipment_template_repository import (
+    EquipmentTemplateRepository,
+    create_equipment_template_repository
+)
+from .character_equipment_repository import (
+    CharacterEquipmentRepository,
+    create_character_equipment_repository
+)
 
 __all__ = [
-    'MarketRepository'
+    'EquipmentTemplateRepository',
+    'create_equipment_template_repository',
+    'CharacterEquipmentRepository', 
+    'create_character_equipment_repository'
 ] 

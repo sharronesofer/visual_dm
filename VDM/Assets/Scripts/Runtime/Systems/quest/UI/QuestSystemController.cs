@@ -1,17 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using VDM.Infrastructure.Core;
-using VDM.Infrastructure.Core.Core.Systems;
-using VDM.Systems.Events;
-using VDM.Systems.Quest.Models;
 using VDM.Systems.Quest.Services;
 using VDM.Systems.Quest.Models;
+using VDM.Infrastructure.Core.Core.Systems;
+using VDM.Infrastructure.Core.Core.Events;
+using VDM.Systems.Quest.Ui;
+using VDM.Systems.Quest.Integration;
+using QuestDTO = VDM.Systems.Quest.Models.QuestDTO;
 
-
-namespace VDM.Systems.Quest.Integration
+namespace VDM.Systems.Quest.UI
 {
     /// <summary>
     /// Main controller for the Quest system, coordinating all quest-related functionality

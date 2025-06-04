@@ -4,8 +4,8 @@ using System;
 using UnityEngine;
 using VDM.Infrastructure.Services;
 using VDM.Systems.Quest.Models;
-using VDM.Infrastructure.Services;
 using VDM.DTOs.Common;
+using System.Linq;
 using QuestDTO = VDM.Systems.Quest.Models.QuestDTO;
 
 namespace VDM.Systems.Quest.Services
@@ -13,7 +13,7 @@ namespace VDM.Systems.Quest.Services
     /// <summary>
     /// Service for Quest HTTP API communication with backend
     /// </summary>
-    public class QuestService : MonoBehaviour
+    public class QuestService : BaseHTTPClient
     {
         private static QuestService _instance;
         public static QuestService Instance
@@ -35,11 +35,15 @@ namespace VDM.Systems.Quest.Services
         }
 
         [Header("Quest Service Settings")]
-        public string baseUrl = "http://localhost:8000/api/quest";
-        public bool enableLogging = true;
+        [SerializeField] private bool enableLogging = true;
         
         private List<QuestDTO> activeQuests = new List<QuestDTO>();
         private List<QuestDTO> completedQuests = new List<QuestDTO>();
+
+        protected override string GetClientName()
+        {
+            return "QuestService";
+        }
         
         void Start()
         {
@@ -51,6 +55,7 @@ namespace VDM.Systems.Quest.Services
             
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeClient();
         }
         
         /// <summary>
@@ -71,34 +76,54 @@ namespace VDM.Systems.Quest.Services
             string regionId = null,
             string arcId = null)
         {
-            try
+            return await Task.Run(() =>
             {
-                var queryParams = new Dictionary<string, string>();
+                var tcs = new TaskCompletionSource<List<QuestDTO>>();
                 
-                if (!string.IsNullOrEmpty(status))
-                    queryParams.Add("status", status);
-                if (!string.IsNullOrEmpty(type))
-                    queryParams.Add("type", type);
-                if (!string.IsNullOrEmpty(characterId))
-                    queryParams.Add("character_id", characterId);
-                if (!string.IsNullOrEmpty(factionId))
-                    queryParams.Add("faction_id", factionId);
-                if (!string.IsNullOrEmpty(regionId))
-                    queryParams.Add("region_id", regionId);
-                if (!string.IsNullOrEmpty(arcId))
-                    queryParams.Add("arc_id", arcId);
+                try
+                {
+                    var queryParams = new List<string>();
+                    
+                    if (!string.IsNullOrEmpty(status))
+                        queryParams.Add($"status={status}");
+                    if (!string.IsNullOrEmpty(type))
+                        queryParams.Add($"type={type}");
+                    if (!string.IsNullOrEmpty(characterId))
+                        queryParams.Add($"character_id={characterId}");
+                    if (!string.IsNullOrEmpty(factionId))
+                        queryParams.Add($"faction_id={factionId}");
+                    if (!string.IsNullOrEmpty(regionId))
+                        queryParams.Add($"region_id={regionId}");
+                    if (!string.IsNullOrEmpty(arcId))
+                        queryParams.Add($"arc_id={arcId}");
+                    
+                    var query = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : "";
+                    var endpoint = $"/quest{query}";
+                    
+                    StartCoroutine(GetRequestCoroutine(endpoint, (success, response) =>
+                    {
+                        if (success)
+                        {
+                            var result = SafeDeserializeList<QuestDTO>(response);
+                            tcs.SetResult(result ?? new List<QuestDTO>());
+                        }
+                        else
+                        {
+                            if (enableLogging)
+                                Debug.LogError($"Failed to get quests: {response}");
+                            tcs.SetResult(new List<QuestDTO>());
+                        }
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    if (enableLogging)
+                        Debug.LogError($"Failed to get quests: {ex.Message}");
+                    tcs.SetResult(new List<QuestDTO>());
+                }
                 
-                var url = BuildUrlWithQuery(baseUrl, queryParams);
-                var response = await GetAsync<List<QuestDTO>>(url);
-                
-                return response ?? new List<QuestDTO>();
-            }
-            catch (Exception ex)
-            {
-                if (enableLogging)
-                    Debug.LogError($"Failed to get quests: {ex.Message}");
-                return new List<QuestDTO>();
-            }
+                return tcs.Task;
+            });
         }
         
         /// <summary>
@@ -108,27 +133,48 @@ namespace VDM.Systems.Quest.Services
         /// <returns>Quest DTO or null if not found</returns>
         public async Task<QuestDTO> GetQuestAsync(string questId)
         {
-            try
+            return await Task.Run(() =>
             {
-                if (enableLogging)
-                    Debug.Log($"QuestService: Getting quest {questId}");
+                var tcs = new TaskCompletionSource<QuestDTO>();
                 
-                if (string.IsNullOrEmpty(questId))
+                try
                 {
                     if (enableLogging)
-                        Debug.LogError("Quest ID cannot be null or empty");
-                    return null;
+                        Debug.Log($"QuestService: Getting quest {questId}");
+                    
+                    if (string.IsNullOrEmpty(questId))
+                    {
+                        if (enableLogging)
+                            Debug.LogError("Quest ID cannot be null or empty");
+                        tcs.SetResult(null);
+                        return tcs.Task;
+                    }
+                    
+                    var endpoint = $"/quest/{questId}";
+                    StartCoroutine(GetRequestCoroutine(endpoint, (success, response) =>
+                    {
+                        if (success)
+                        {
+                            var result = SafeDeserialize<QuestDTO>(response);
+                            tcs.SetResult(result);
+                        }
+                        else
+                        {
+                            if (enableLogging)
+                                Debug.LogError($"QuestService: Failed to get quest {questId} - {response}");
+                            tcs.SetResult(null);
+                        }
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    if (enableLogging)
+                        Debug.LogError($"QuestService: Failed to get quest {questId} - {ex.Message}");
+                    tcs.SetResult(null);
                 }
                 
-                var url = $"{baseUrl}/{questId}";
-                return await GetAsync<QuestDTO>(url);
-            }
-            catch (Exception ex)
-            {
-                if (enableLogging)
-                    Debug.LogError($"QuestService: Failed to get quest {questId} - {ex.Message}");
-                return null;
-            }
+                return tcs.Task;
+            });
         }
         
         /// <summary>
@@ -138,23 +184,44 @@ namespace VDM.Systems.Quest.Services
         /// <returns>Created quest DTO</returns>
         public async Task<QuestDTO> CreateQuestAsync(CreateQuestRequestDTO request)
         {
-            try
+            return await Task.Run(() =>
             {
-                if (request == null)
+                var tcs = new TaskCompletionSource<QuestDTO>();
+                
+                try
+                {
+                    if (request == null)
+                    {
+                        if (enableLogging)
+                            Debug.LogError("Create quest request cannot be null");
+                        tcs.SetResult(null);
+                        return tcs.Task;
+                    }
+                    
+                    StartCoroutine(PostRequestCoroutine("/quest", request, (success, response) =>
+                    {
+                        if (success)
+                        {
+                            var result = SafeDeserialize<QuestDTO>(response);
+                            tcs.SetResult(result);
+                        }
+                        else
+                        {
+                            if (enableLogging)
+                                Debug.LogError($"Failed to create quest: {response}");
+                            tcs.SetResult(null);
+                        }
+                    }));
+                }
+                catch (Exception ex)
                 {
                     if (enableLogging)
-                        Debug.LogError("Create quest request cannot be null");
-                    return null;
+                        Debug.LogError($"Failed to create quest: {ex.Message}");
+                    tcs.SetResult(null);
                 }
                 
-                return await PostAsync<QuestDTO>(baseUrl, request);
-            }
-            catch (Exception ex)
-            {
-                if (enableLogging)
-                    Debug.LogError($"Failed to create quest: {ex.Message}");
-                return null;
-            }
+                return tcs.Task;
+            });
         }
         
         /// <summary>
@@ -181,7 +248,7 @@ namespace VDM.Systems.Quest.Services
                     return null;
                 }
                 
-                var url = $"{baseUrl}/{questId}";
+                var url = $"/quest/{questId}";
                 return await PutAsync<QuestDTO>(url, request);
             }
             catch (Exception ex)
@@ -208,7 +275,7 @@ namespace VDM.Systems.Quest.Services
                     return false;
                 }
                 
-                var url = $"{baseUrl}/{questId}";
+                var url = $"/quest/{questId}";
                 return await DeleteAsync(url);
             }
             catch (Exception ex)
@@ -236,7 +303,7 @@ namespace VDM.Systems.Quest.Services
                     return null;
                 }
                 
-                var url = $"{baseUrl}/{questId}/start";
+                var url = $"/quest/{questId}/start";
                 var request = new { character_id = characterId };
                 return await PostAsync<QuestDTO>(url, request);
             }
@@ -265,7 +332,7 @@ namespace VDM.Systems.Quest.Services
                     return null;
                 }
                 
-                var url = $"{baseUrl}/{questId}/complete";
+                var url = $"/quest/{questId}/complete";
                 var request = new { character_id = characterId };
                 return await PostAsync<QuestDTO>(url, request);
             }
@@ -295,7 +362,7 @@ namespace VDM.Systems.Quest.Services
                     return null;
                 }
                 
-                var url = $"{baseUrl}/{questId}/steps/{stepId}";
+                var url = $"/quest/{questId}/steps/{stepId}";
                 return await PutAsync<QuestDTO>(url, progress);
             }
             catch (Exception ex)
@@ -322,7 +389,7 @@ namespace VDM.Systems.Quest.Services
                     return new List<QuestDTO>();
                 }
                 
-                var url = $"{baseUrl}/available/{characterId}";
+                var url = $"/quest/available/{characterId}";
                 var response = await GetAsync<List<QuestDTO>>(url);
                 
                 return response ?? new List<QuestDTO>();
@@ -351,7 +418,7 @@ namespace VDM.Systems.Quest.Services
                     return new List<QuestDTO>();
                 }
                 
-                var url = $"{baseUrl}/active/{characterId}";
+                var url = $"/quest/active/{characterId}";
                 var response = await GetAsync<List<QuestDTO>>(url);
                 
                 return response ?? new List<QuestDTO>();
@@ -380,7 +447,7 @@ namespace VDM.Systems.Quest.Services
                     return new List<QuestDTO>();
                 }
                 
-                var url = $"{baseUrl}/completed/{characterId}";
+                var url = $"/quest/completed/{characterId}";
                 var response = await GetAsync<List<QuestDTO>>(url);
                 
                 return response ?? new List<QuestDTO>();
@@ -402,7 +469,7 @@ namespace VDM.Systems.Quest.Services
         {
             try
             {
-                var url = $"{baseUrl}/generate";
+                var url = $"/quest/generate";
                 var response = await PostAsync<List<QuestDTO>>(url, parameters);
                 
                 return response ?? new List<QuestDTO>();
@@ -424,7 +491,7 @@ namespace VDM.Systems.Quest.Services
         {
             try
             {
-                var url = $"{baseUrl}/stats";
+                var url = $"/quest/stats";
                 if (!string.IsNullOrEmpty(characterId))
                 {
                     url += $"?character_id={characterId}";

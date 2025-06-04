@@ -9,12 +9,16 @@ Following the design principles from the Development Bible, this implementation:
 2. Defines standard action types and validates their usage
 3. Tracks action usage throughout combat turns
 4. Enforces correct sequencing and limitations
+
+This is pure business logic - no I/O or database operations.
 """
 
 import logging
 from enum import Enum, auto
 from typing import Dict, List, Any, Optional, Callable, Type, TypeVar, Set, Union
 from dataclasses import dataclass, field
+
+from backend.infrastructure.config_loaders.combat_config_loader import combat_config
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -316,7 +320,8 @@ class ActionSystem:
     
     def get_actions_for_combatant(self, combatant) -> List[ActionDefinition]:
         """
-        Get all actions available to a combatant.
+        Get all available actions for a specific combatant based on their abilities,
+        equipment, status effects, and other factors.
         
         Args:
             combatant: The combatant to get actions for
@@ -324,9 +329,278 @@ class ActionSystem:
         Returns:
             List of ActionDefinition objects
         """
-        # This implementation is a placeholder - would normally check
-        # combatant abilities, equipment, etc. to determine available actions
-        return list(self._actions.values())
+        available_actions = []
+        
+        # Get combatant data
+        combatant_data = self._extract_combatant_data(combatant)
+        
+        # Check each registered action
+        for action in self._actions.values():
+            if self._can_combatant_use_action(combatant_data, action):
+                available_actions.append(action)
+        
+        return available_actions
+    
+    def _extract_combatant_data(self, combatant) -> Dict[str, Any]:
+        """
+        Extract relevant data from a combatant for action validation.
+        
+        Args:
+            combatant: The combatant object or dictionary
+            
+        Returns:
+            Dictionary with combatant data
+        """
+        data = {}
+        
+        # Handle both ORM objects and dictionaries
+        if hasattr(combatant, '__dict__'):
+            # ORM object - extract attributes
+            data["level"] = getattr(combatant, 'level', 1)
+            data["equipment"] = getattr(combatant, 'equipment', [])
+            data["abilities"] = getattr(combatant, 'abilities', [])
+            data["feats"] = getattr(combatant, 'feats', [])  # Legacy field - Visual DM uses 'abilities'
+            data["status_effects"] = getattr(combatant, 'status_effects', [])
+            data["hp"] = getattr(combatant, 'hp', 100)
+            data["resources"] = getattr(combatant, 'resources', {})
+            
+            # Get stats/attributes
+            if hasattr(combatant, 'stats'):
+                stats = combatant.stats
+                if isinstance(stats, dict):
+                    data.update(stats)
+                    
+        else:
+            # Dictionary - direct access
+            data["level"] = combatant.get('level', 1)
+            data["equipment"] = combatant.get('equipment', [])
+            data["abilities"] = combatant.get('abilities', [])
+            data["feats"] = combatant.get('feats', [])  # Legacy field - Visual DM uses 'abilities'
+            data["status_effects"] = combatant.get('status_effects', [])
+            data["hp"] = combatant.get('hp', 100)
+            data["resources"] = combatant.get('resources', {})
+            
+            # Copy other fields
+            for key in ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']:
+                if key in combatant:
+                    data[key] = combatant[key]
+        
+        return data
+    
+    def _can_combatant_use_action(self, combatant_data: Dict[str, Any], action: ActionDefinition) -> bool:
+        """
+        Check if a combatant can use a specific action based on their capabilities.
+        
+        Args:
+            combatant_data: Extracted combatant data
+            action: The action to check
+            
+        Returns:
+            True if the combatant can use the action, False otherwise
+        """
+        # Check basic requirements
+        for requirement in action.requirements:
+            if not self._check_requirement(combatant_data, requirement):
+                return False
+        
+        # Check status effects that might prevent action
+        for effect in combatant_data["status_effects"]:
+            effect_name = effect.get("name", "") if isinstance(effect, dict) else str(effect)
+            if self._status_effect_blocks_action(effect_name, action):
+                return False
+        
+        # Check resource costs
+        for resource, cost in action.resource_cost.items():
+            if not self._has_sufficient_resource(combatant_data, resource, cost):
+                return False
+        
+        # Check action-specific tags
+        if action.tags:
+            if not self._meets_tag_requirements(combatant_data, action.tags):
+                return False
+        
+        return True
+    
+    def _check_requirement(self, combatant_data: Dict[str, Any], requirement: str) -> bool:
+        """
+        Check if a combatant meets a specific requirement.
+        
+        Args:
+            combatant_data: Combatant data
+            requirement: Requirement string to check
+            
+        Returns:
+            True if requirement is met
+        """
+        # Parse requirement string
+        req_lower = requirement.lower()
+        
+        # Level requirements
+        if req_lower.startswith("level_"):
+            required_level = int(req_lower.split("_")[1])
+            return combatant_data["level"] >= required_level
+        
+        # Equipment requirements
+        if req_lower.startswith("weapon_") or req_lower == "weapon_equipped":
+            equipment = combatant_data["equipment"]
+            if req_lower == "weapon_equipped":
+                return any("weapon" in str(item).lower() for item in equipment)
+            else:
+                weapon_type = req_lower.split("_", 1)[1]
+                return any(weapon_type in str(item).lower() for item in equipment)
+        
+        # Shield requirements
+        if req_lower == "shield_equipped":
+            equipment = combatant_data["equipment"]
+            return any("shield" in str(item).lower() for item in equipment)
+        
+        # Spell level requirements
+        if req_lower.startswith("spell_level_"):
+            required_level = int(req_lower.split("_")[2])
+            # Check if combatant can cast spells of this level
+            caster_level = self._get_caster_level(combatant_data)
+            return caster_level >= required_level
+        
+        # Ability requirements
+        if req_lower.startswith("ability_"):
+            ability_name = req_lower.split("_", 1)[1]
+            abilities = combatant_data["abilities"]
+            return any(ability_name in str(ability).lower() for ability in abilities)
+        
+        # Attribute requirements (e.g., "str_13" means STR >= 13)
+        for attr in ["str", "dex", "con", "int", "wis", "cha"]:
+            if req_lower.startswith(f"{attr}_"):
+                try:
+                    required_value = int(req_lower.split("_")[1])
+                    actual_value = combatant_data["attributes"].get(attr.upper(), 10)
+                    return actual_value >= required_value
+                except (ValueError, IndexError):
+                    continue
+        
+        # Tag requirements
+        if req_lower.startswith("tag_"):
+            required_tag = req_lower.split("_", 1)[1]
+            return required_tag in [tag.lower() for tag in combatant_data["tags"]]
+        
+        # Default: unknown requirement is not met
+        logger.warning(f"Unknown requirement: {requirement}")
+        return False
+    
+    def _status_effect_blocks_action(self, effect_name: str, action: ActionDefinition) -> bool:
+        """
+        Check if a status effect blocks an action.
+        
+        Args:
+            effect_name: Name of the status effect
+            action: The action to check
+            
+        Returns:
+            True if the effect blocks the action
+        """
+        effect_lower = effect_name.lower()
+        
+        # Stunned blocks all actions except reactions
+        if effect_lower in ["stunned", "unconscious", "paralyzed"]:
+            return action.action_type != ActionType.REACTION
+        
+        # Silenced blocks spells
+        if effect_lower in ["silenced", "silence"] and "spell" in action.tags:
+            return True
+        
+        # Grappled blocks movement
+        if effect_lower == "grappled" and action.action_type == ActionType.MOVEMENT:
+            return True
+        
+        # Blinded might affect certain actions
+        if effect_lower == "blinded" and "ranged" in action.tags:
+            return True
+        
+        return False
+    
+    def _has_sufficient_resource(self, combatant_data: Dict[str, Any], resource: str, cost: int) -> bool:
+        """
+        Check if combatant has sufficient resources for an action.
+        
+        Args:
+            combatant_data: Combatant data
+            resource: Resource type (e.g., "mp", "stamina", "spell_slots")
+            cost: Required amount
+            
+        Returns:
+            True if sufficient resources available
+        """
+        if resource == "mp" or resource == "mana":
+            current_mp = combatant_data["attributes"].get("mp", 0)
+            return current_mp >= cost
+        
+        if resource == "stamina":
+            current_stamina = combatant_data["attributes"].get("stamina", 100)
+            return current_stamina >= cost
+        
+        if resource.startswith("spell_slot_"):
+            # For spell slot requirements
+            level = resource.split("_")[-1]
+            available_slots = combatant_data["attributes"].get(f"spell_slots_{level}", 0)
+            return available_slots >= cost
+        
+        # Default: assume resource is available
+        return True
+    
+    def _meets_tag_requirements(self, combatant_data: Dict[str, Any], action_tags: List[str]) -> bool:
+        """
+        Check if combatant meets tag-based requirements for an action.
+        
+        Args:
+            combatant_data: Combatant data
+            action_tags: List of action tags
+            
+        Returns:
+            True if requirements are met
+        """
+        # If action requires spellcasting
+        if "spell" in action_tags:
+            caster_level = self._get_caster_level(combatant_data)
+            if caster_level <= 0:
+                return False
+        
+        # If action requires specific weapon type
+        weapon_tags = [tag for tag in action_tags if tag.endswith("_weapon")]
+        if weapon_tags:
+            equipment = combatant_data["equipment"]
+            for weapon_tag in weapon_tags:
+                weapon_type = weapon_tag.replace("_weapon", "")
+                if not any(weapon_type in str(item).lower() for item in equipment):
+                    return False
+        
+        return True
+    
+    def _get_caster_level(self, combatant_data: Dict[str, Any]) -> int:
+        """
+        Get the effective caster level for a combatant based on their abilities.
+        Note: Uses 'feats' field for backward compatibility, but Visual DM uses 'abilities' terminology.
+        
+        Args:
+            combatant_data: Combatant data
+            
+        Returns:
+            Caster level (0 if not a caster)
+        """
+        level = combatant_data["level"]
+        abilities = combatant_data.get("feats", [])  # Legacy field name for backward compatibility
+        
+        # Check for spellcasting abilities to determine caster level
+        if "arcane_mastery" in abilities or "divine_mastery" in abilities:
+            # Full caster equivalent
+            return level
+        elif "arcane_initiate" in abilities or "divine_magic" in abilities:
+            # Half caster equivalent  
+            return max(0, level // 2)
+        elif "minor_magic" in abilities or "cantrip_adept" in abilities:
+            # Third caster equivalent
+            return max(0, level // 3)
+        
+        # Non-casters
+        return 0
     
     def reset_combatant_actions(self, combatant, movement: float = 30.0) -> None:
         """

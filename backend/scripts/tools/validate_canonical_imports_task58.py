@@ -139,7 +139,8 @@ def test_system_imports() -> Dict[str, str]:
         'backend.systems.world_generation',
         'backend.systems.inventory',
         'backend.systems.equipment',
-        'backend.systems.magic',
+        'backend.systems.magic',  # Business logic only
+        'backend.infrastructure.magic',  # Technical infrastructure
         'backend.systems.region',
         'backend.systems.population',
         'backend.systems.npc',

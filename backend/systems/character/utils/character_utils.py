@@ -13,6 +13,16 @@ from datetime import datetime
 import os
 import json
 
+# Import the canonical rules system
+from backend.systems.rules.rules import (
+    balance_constants,
+    calculate_ability_modifier,
+    calculate_proficiency_bonus,
+    calculate_hp_for_level,
+    calculate_mana_points as rules_calculate_mana_points,
+    get_starting_equipment
+)
+
 # Import exceptions
 try:
     from backend.infrastructure.utils import ValidationError, NotFoundError, DatabaseError
@@ -29,60 +39,10 @@ except ImportError:
 
 # Constants for character generation and validation
 RACES = ['human', 'elf', 'dwarf', 'halfling', 'gnome', 'half-elf', 'half-orc', 'tiefling']
-CLASSES = ['fighter', 'wizard', 'cleric', 'rogue', 'barbarian', 'bard', 'druid', 'monk', 'paladin', 'ranger', 'sorcerer', 'warlock']
 
-# Balance constants (these should eventually be moved to a dedicated config module)
-BALANCE_CONSTANTS = {
-    'BASE_HIT_POINTS': 10,
-    'BASE_MANA_POINTS': 8,
-    'STARTING_SKILL_POINTS': 4,
-    'STARTING_GOLD': 100,
-    'MIN_ABILITY_SCORE': 8,
-    'MAX_ABILITY_SCORE': 18,
-    'MIN_LEVEL': 1,
-    'MAX_LEVEL': 20,
-    'BASE_XP': 300,
-    'XP_SCALING_FACTOR': 1.5,
-    'DEFAULT_CLASS': 'fighter',
-    'DEFAULT_SPELLCASTER_CLASS': 'wizard',
-    'DEFAULT_HIT_DIE': 8,
-    'DEFAULT_MANA_DIE': 6,
-    'SKILL_POINTS_PER_LEVEL': 2,
-    'CLASS_HIT_DICE': {
-        'barbarian': 12,
-        'fighter': 10,
-        'paladin': 10,
-        'ranger': 10,
-        'monk': 8,
-        'rogue': 8,
-        'bard': 8,
-        'cleric': 8,
-        'druid': 8,
-        'warlock': 8,
-        'wizard': 6,
-        'sorcerer': 6
-    },
-    'CLASS_MANA_DICE': {
-        'wizard': 8,
-        'sorcerer': 8,
-        'bard': 6,
-        'warlock': 6,
-        'cleric': 6,
-        'druid': 6,
-        'paladin': 4,
-        'ranger': 4
-    },
-    'CLASS_SPELLCASTING_ABILITY': {
-        'wizard': 'intelligence',
-        'sorcerer': 'charisma',
-        'bard': 'charisma',
-        'warlock': 'charisma',
-        'cleric': 'wisdom',
-        'druid': 'wisdom',
-        'paladin': 'charisma',
-        'ranger': 'wisdom'
-    }
-}
+# Use balance constants from rules system (deprecated local constants)
+# These are maintained for backward compatibility but will delegate to rules system
+BALANCE_CONSTANTS = balance_constants
 
 # Skill to ability mappings
 SKILL_TO_ABILITY = {
@@ -108,10 +68,10 @@ SKILL_TO_ABILITY = {
     "diplomacy": "CHA"
 }
 
-def generate_character_stats() -> Dict[str, int]:
-    """Generate random character statistics using balance constants."""
-    min_score = BALANCE_CONSTANTS['MIN_ABILITY_SCORE']
-    max_score = BALANCE_CONSTANTS['MAX_ABILITY_SCORE']
+def generate_character_attributes() -> Dict[str, int]:
+    """Generate random character attributes using balance constants."""
+    min_score = balance_constants['min_stat']
+    max_score = balance_constants['max_stat']
     return {
         'strength': random.randint(min_score, max_score),
         'dexterity': random.randint(min_score, max_score),
@@ -119,253 +79,231 @@ def generate_character_stats() -> Dict[str, int]:
         'intelligence': random.randint(min_score, max_score),
         'wisdom': random.randint(min_score, max_score),
         'charisma': random.randint(min_score, max_score),
-        'hit_points': BALANCE_CONSTANTS['BASE_HIT_POINTS'],
-        'mana_points': BALANCE_CONSTANTS['BASE_MANA_POINTS'],
-        'skill_points': BALANCE_CONSTANTS['STARTING_SKILL_POINTS']
+        'hit_points': balance_constants.get('base_hp', 10),
+        'mana_points': balance_constants.get('base_mana_points', 8),
+        'skill_points': balance_constants.get('starting_skill_points', 4)
     }
 
 def generate_character_skills() -> Dict[str, bool]:
     """Generate random character skills."""
     all_skills = list(SKILL_TO_ABILITY.keys())
+    skill_count = random.randint(3, 6)  # Random number of proficient skills
+    selected_skills = random.sample(all_skills, skill_count)
     
-    skills = {skill: False for skill in all_skills}
-    num_proficient = random.randint(2, 4)
-    proficient_skills = random.sample(all_skills, num_proficient)
-    
-    for skill in proficient_skills:
-        skills[skill] = True
-    
-    return skills
+    return {skill: skill in selected_skills for skill in all_skills}
 
 def validate_character_data(data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
     """
-    Validate character data for creation or updating.
+    Validate complete character data.
     
     Args:
-        data: Dictionary containing character data
+        data: Dictionary containing complete character data
         
     Returns:
         Tuple of (is_valid, error_message)
     """
+    # Check required fields
     required_fields = ['name', 'race']
-    
-    # Check for required fields
     for field in required_fields:
         if field not in data:
             return False, f"Missing required field: {field}"
-            
-    # Validate name
-    if not isinstance(data['name'], str) or len(data['name']) < 2:
-        return False, "Name must be a string with at least 2 characters"
-        
-    # Validate race
-    if data['race'] not in RACES:
-        return False, f"Invalid race. Must be one of: {', '.join(RACES)}"
-        
-    # Validate class if present
-    if 'class' in data and data['class'] not in CLASSES:
-        return False, f"Invalid class. Must be one of: {', '.join(CLASSES)}"
     
-    # Validate stats if present
-    if 'stats' in data:
-        is_valid, error = validate_character_stats(data['stats'])
-        if not is_valid:
+    # Validate race
+    if data['race'].lower() not in [race.lower() for race in RACES]:
+        return False, f"Invalid race: {data['race']}. Must be one of {RACES}"
+    
+    # Validate attributes if present
+    if 'attributes' in data:
+        valid, error = validate_character_attributes(data['attributes'])
+        if not valid:
             return False, error
     
     return True, None
 
-def validate_character_stats(stats: Dict[str, int]) -> Tuple[bool, Optional[str]]:
+def validate_character_attributes(attributes: Dict[str, int]) -> Tuple[bool, Optional[str]]:
     """
-    Validate character statistics.
+    Validate character attributes.
     
     Args:
-        stats: Dictionary containing character statistics
+        attributes: Dictionary containing character attributes
         
     Returns:
         Tuple of (is_valid, error_message)
     """
-    basic_stats = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']
-    min_score = BALANCE_CONSTANTS['MIN_ABILITY_SCORE']
-    max_score = BALANCE_CONSTANTS['MAX_ABILITY_SCORE']
+    basic_attributes = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']
+    min_score = balance_constants['min_stat']
+    max_score = balance_constants['max_stat']
     
-    for stat in basic_stats:
-        if stat in stats:
-            if not isinstance(stats[stat], int):
-                return False, f"{stat} must be an integer"
-            if stats[stat] < min_score or stats[stat] > max_score:
-                return False, f"{stat} must be between {min_score} and {max_score}"
+    for attribute in basic_attributes:
+        if attribute in attributes:
+            if not isinstance(attributes[attribute], int):
+                return False, f"{attribute} must be an integer"
+            if attributes[attribute] < min_score or attributes[attribute] > max_score:
+                return False, f"{attribute} must be between {min_score} and {max_score}"
     
     return True, None
 
 def calculate_level(xp: int) -> int:
-    """Calculate character level from experience points using exponential progression."""
+    """Calculate character level from experience points using XP thresholds from rules system."""
     if xp < 0:
-        return BALANCE_CONSTANTS['MIN_LEVEL']
-        
-    # Standard exponential progression
-    level = 1
-    xp_threshold = 0
-    while xp >= xp_threshold and level < BALANCE_CONSTANTS['MAX_LEVEL']:
-        level += 1
-        xp_threshold = BALANCE_CONSTANTS['BASE_XP'] * (level - 1) ** BALANCE_CONSTANTS['XP_SCALING_FACTOR']
+        return balance_constants['starting_level']
     
-    return level - 1
+    # Use XP thresholds from rules system
+    xp_thresholds = balance_constants['xp_thresholds']
+    
+    for level, threshold in enumerate(xp_thresholds):
+        if xp < threshold:
+            return max(1, level)  # Return previous level (1-indexed)
+    
+    # If XP exceeds all thresholds, return max level
+    return balance_constants['max_level']
 
 def calculate_xp_for_level(level: int) -> int:
     """Calculate the experience points required for a given level."""
     if level <= 1:
         return 0
-    return int(BALANCE_CONSTANTS['BASE_XP'] * (level - 1) ** BALANCE_CONSTANTS['XP_SCALING_FACTOR'])
+    
+    # Use XP thresholds from rules system
+    xp_thresholds = balance_constants['xp_thresholds']
+    
+    if level <= len(xp_thresholds):
+        return xp_thresholds[level - 1]
+    
+    # For levels beyond the table, use the last threshold
+    return xp_thresholds[-1]
 
-def calculate_ability_modifier(score: int) -> int:
-    """Calculate ability score modifier using standard D&D formula."""
-    return (max(1, score) - 10) // 2
+def calculate_hit_points(level: int, constitution_modifier: int) -> int:
+    """
+    Calculate hit points using the CANONICAL rules system calculation.
+    
+    Args:
+        level: Character level
+        constitution_modifier: Constitution modifier (NOT raw score)
+        
+    Returns:
+        Total hit points
+    """
+    # Use the canonical calculation from rules system
+    return calculate_hp_for_level(level, constitution_modifier)
 
-def calculate_hit_points(level: int, constitution: int, class_: Optional[str] = None) -> int:
-    """Calculate character hit points using class-specific hit dice."""
-    if not class_:
-        class_ = BALANCE_CONSTANTS['DEFAULT_CLASS']
+def calculate_mana_points(level: int, intelligence_modifier: int) -> int:
+    """
+    Calculate mana points using the CANONICAL rules system calculation.
     
-    hit_die = BALANCE_CONSTANTS['CLASS_HIT_DICE'].get(class_, BALANCE_CONSTANTS['DEFAULT_HIT_DIE'])
-    con_mod = calculate_ability_modifier(constitution)
-    
-    # First level gets max hit die + con mod
-    hp = hit_die + con_mod
-    
-    # Additional levels get average of hit die + con mod
-    if level > 1:
-        avg_hp_per_level = (hit_die // 2 + 1) + con_mod
-        hp += (level - 1) * avg_hp_per_level
-    
-    return max(1, hp)  # Minimum 1 HP
+    Args:
+        level: Character level
+        intelligence_modifier: Intelligence modifier (NOT raw score)
+        
+    Returns:
+        Total mana points
+    """
+    # Use the canonical calculation from rules system
+    return rules_calculate_mana_points(level, intelligence_modifier)
 
-def calculate_mana_points(level: int, spellcasting_ability: int, class_: Optional[str] = None) -> int:
-    """Calculate character mana points for spellcasters."""
-    if not class_ or not has_spellcasting(class_):
+def calculate_skill_modifier(character_attributes: Dict[str, int], skill: str, is_proficient: bool = False) -> int:
+    """
+    Calculate skill modifier for a character.
+    
+    Args:
+        character_attributes: Dictionary containing character attributes
+        skill: Name of the skill
+        is_proficient: Whether the character is proficient in the skill
+        
+    Returns:
+        Skill modifier
+    """
+    # Get the associated ability for this skill
+    ability = SKILL_TO_ABILITY.get(skill)
+    if not ability:
         return 0
     
-    mana_die = BALANCE_CONSTANTS['CLASS_MANA_DICE'].get(class_, BALANCE_CONSTANTS['DEFAULT_MANA_DIE'])
-    ability_mod = calculate_ability_modifier(spellcasting_ability)
+    # Get ability score and calculate modifier using canonical function
+    ability_score = character_attributes.get(ability.lower(), 10)
+    ability_modifier = calculate_ability_modifier(ability_score)
     
-    # First level gets max mana die + ability mod
-    mp = mana_die + ability_mod
-    
-    # Additional levels get average of mana die + ability mod
-    if level > 1:
-        avg_mp_per_level = (mana_die // 2 + 1) + ability_mod
-        mp += (level - 1) * avg_mp_per_level
-    
-    return max(0, mp)  # Minimum 0 MP
-
-def has_spellcasting(class_: str) -> bool:
-    """Check if a class has spellcasting abilities."""
-    return class_ in BALANCE_CONSTANTS['CLASS_SPELLCASTING_ABILITY']
-
-def get_spellcasting_ability(class_: str) -> Optional[str]:
-    """Get the primary spellcasting ability for a class."""
-    return BALANCE_CONSTANTS['CLASS_SPELLCASTING_ABILITY'].get(class_)
-
-def calculate_skill_modifier(character_stats: Dict[str, int], skill: str, is_proficient: bool = False) -> int:
-    """Calculate skill modifier for a character."""
-    if skill not in SKILL_TO_ABILITY:
-        return 0
-    
-    ability = SKILL_TO_ABILITY[skill].lower()
-    ability_score = character_stats.get(ability, 10)
-    ability_mod = calculate_ability_modifier(ability_score)
-    
+    # Add proficiency bonus if proficient
     proficiency_bonus = 0
     if is_proficient:
-        # Calculate proficiency bonus based on character level
-        level = character_stats.get('level', 1)
-        proficiency_bonus = math.ceil(level / 4) + 1  # Standard D&D proficiency progression
+        level = character_attributes.get('level', 1)
+        proficiency_bonus = calculate_proficiency_bonus(level)
     
-    return ability_mod + proficiency_bonus
+    return ability_modifier + proficiency_bonus
 
 def get_character_creation_summary(character_data: Dict[str, Any]) -> str:
-    """Generate a summary string for character creation."""
+    """
+    Generate a summary of character creation choices for ability-based system.
+    
+    Args:
+        character_data: Dictionary containing character data
+        
+    Returns:
+        Formatted summary string
+    """
     name = character_data.get('name', 'Unknown')
     race = character_data.get('race', 'Unknown')
-    class_ = character_data.get('class', 'Unknown')
     level = character_data.get('level', 1)
     
-    stats = character_data.get('stats', {})
-    hp = stats.get('hit_points', 0)
-    mp = stats.get('mana_points', 0)
+    summary = f"Character: {name}\n"
+    summary += f"Race: {race.title()}\n"
+    summary += f"Level: {level}\n"
+    summary += f"System: Ability-based progression\n"
     
-    summary = f"{name} - Level {level} {race.title()} {class_.title()}"
-    if hp > 0:
-        summary += f" (HP: {hp}"
-        if mp > 0:
-            summary += f", MP: {mp}"
-        summary += ")"
+    # Add stats if available
+    if 'attributes' in character_data:
+        summary += "\nAttributes:\n"
+        for stat, value in character_data['attributes'].items():
+            summary += f"  {stat.upper()}: {value}\n"
     
     return summary
 
-def apply_racial_modifiers(stats: Dict[str, int], race: str) -> Dict[str, int]:
-    """Apply racial ability score modifiers to character stats."""
-    # Standard D&D racial modifiers
-    racial_modifiers = {
-        'human': {'strength': 1, 'dexterity': 1, 'constitution': 1, 'intelligence': 1, 'wisdom': 1, 'charisma': 1},
-        'elf': {'dexterity': 2, 'constitution': -1},
-        'dwarf': {'constitution': 2, 'charisma': -1},
-        'halfling': {'dexterity': 2, 'strength': -1},
-        'gnome': {'intelligence': 2, 'strength': -1},
-        'half-elf': {'charisma': 2},
-        'half-orc': {'strength': 2, 'intelligence': -1},
-        'tiefling': {'charisma': 2, 'intelligence': 1, 'wisdom': -1}
-    }
+def apply_racial_modifiers(attributes: Dict[str, int], race: str) -> Dict[str, int]:
+    """
+    Apply racial modifiers to character attributes using rules system data.
     
-    modifiers = racial_modifiers.get(race, {})
-    modified_stats = stats.copy()
+    Args:
+        attributes: Dictionary containing base character attributes
+        race: Character race
+        
+    Returns:
+        Modified attributes dictionary
+    """
+    modified_attributes = attributes.copy()
     
-    for ability, modifier in modifiers.items():
-        if ability in modified_stats:
-            modified_stats[ability] = max(
-                BALANCE_CONSTANTS['MIN_ABILITY_SCORE'],
-                min(BALANCE_CONSTANTS['MAX_ABILITY_SCORE'], modified_stats[ability] + modifier)
-            )
+    # Get racial bonuses from rules system
+    racial_bonuses = balance_constants.get('racial_bonuses', {})
+    race_bonuses = racial_bonuses.get(race.lower(), {})
     
-    return modified_stats
+    # Apply racial bonuses
+    for bonus_type, bonus_value in race_bonuses.items():
+        if bonus_type == "all_stats":
+            for attribute in ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']:
+                if attribute in modified_attributes:
+                    modified_attributes[attribute] += bonus_value
+        else:
+            if bonus_type in modified_attributes:
+                modified_attributes[bonus_type] += bonus_value
+    
+    return modified_attributes
 
-def get_available_skills_for_class(class_: str) -> List[str]:
-    """Get the list of skills available for a given class."""
-    # Standard D&D class skill lists
-    class_skills = {
-        'barbarian': ['animal_handling', 'athletics', 'intimidation', 'nature', 'perception', 'survival'],
-        'bard': ['deception', 'history', 'investigation', 'persuasion', 'performance', 'sleight_of_hand'],
-        'cleric': ['history', 'insight', 'medicine', 'persuasion', 'religion'],
-        'druid': ['arcana', 'animal_handling', 'insight', 'medicine', 'nature', 'perception', 'religion', 'survival'],
-        'fighter': ['acrobatics', 'animal_handling', 'athletics', 'history', 'insight', 'intimidation', 'perception', 'survival'],
-        'monk': ['acrobatics', 'athletics', 'history', 'insight', 'religion', 'stealth'],
-        'paladin': ['athletics', 'insight', 'intimidation', 'medicine', 'persuasion', 'religion'],
-        'ranger': ['animal_handling', 'athletics', 'insight', 'investigation', 'nature', 'perception', 'stealth', 'survival'],
-        'rogue': ['acrobatics', 'athletics', 'deception', 'insight', 'intimidation', 'investigation', 'perception', 'performance', 'persuasion', 'sleight_of_hand', 'stealth'],
-        'sorcerer': ['arcana', 'deception', 'insight', 'intimidation', 'persuasion', 'religion'],
-        'warlock': ['arcana', 'deception', 'history', 'intimidation', 'investigation', 'nature', 'religion'],
-        'wizard': ['arcana', 'history', 'insight', 'investigation', 'medicine', 'religion']
-    }
-    
-    return class_skills.get(class_, list(SKILL_TO_ABILITY.keys()))
+def get_available_skills() -> List[str]:
+    """Get the list of all available skills (no class restrictions in ability-based system)."""
+    return list(SKILL_TO_ABILITY.keys())
 
 __all__ = [
-    'generate_character_stats',
+    'generate_character_attributes',
     'generate_character_skills', 
     'validate_character_data',
-    'validate_character_stats',
+    'validate_character_attributes',
     'calculate_level',
     'calculate_xp_for_level',
     'calculate_ability_modifier',
     'calculate_hit_points',
     'calculate_mana_points',
-    'has_spellcasting',
-    'get_spellcasting_ability',
     'calculate_skill_modifier',
     'get_character_creation_summary',
     'apply_racial_modifiers',
-    'get_available_skills_for_class',
+    'get_available_skills',
     'RACES',
-    'CLASSES',
     'BALANCE_CONSTANTS',
     'SKILL_TO_ABILITY'
 ] 

@@ -15,9 +15,9 @@ from typing import Dict, List, Any
 # Import chaos system components
 from backend.systems.chaos.core.chaos_engine import ChaosEngine
 from backend.systems.chaos.core.config import ChaosConfig
-from backend.systems.chaos.models.chaos_state import ChaosState, ChaosLevel
-from backend.systems.chaos.models.pressure_data import PressureData
-from backend.systems.chaos.models.chaos_events import (
+from backend.infrastructure.systems.chaos.models.chaos_state import ChaosState, ChaosLevel
+from backend.infrastructure.systems.chaos.models.pressure_data import PressureData
+from backend.infrastructure.systems.chaos.models.chaos_events import (
     ChaosEvent, PoliticalUpheavalEvent, NaturalDisasterEvent, 
     EconomicCollapseEvent, WarOutbreakEvent, ResourceScarcityEvent,
     FactionBetrayalEvent, CharacterRevelationEvent
@@ -25,8 +25,8 @@ from backend.systems.chaos.models.chaos_events import (
 from backend.systems.chaos.services.chaos_service import ChaosService
 from backend.systems.chaos.services.pressure_service import PressureService
 from backend.systems.chaos.services.event_service import EventService
-from backend.systems.chaos.utils.event_helpers import EventHelpers
-from backend.systems.chaos.utils.chaos_math import ChaosMath
+from backend.infrastructure.systems.chaos.utils.event_helpers import EventHelpers
+from backend.infrastructure.systems.chaos.utils.chaos_math import ChaosMath
 
 
 class TestChaosSystemImports:
@@ -45,9 +45,9 @@ class TestChaosSystemImports:
     
     def test_model_imports(self):
         """Test that chaos models import correctly."""
-        from backend.systems.chaos.models.chaos_state import ChaosState, ChaosLevel
-        from backend.systems.chaos.models.pressure_data import PressureData
-        from backend.systems.chaos.models.chaos_events import ChaosEvent
+        from backend.infrastructure.systems.chaos.models.chaos_state import ChaosState, ChaosLevel
+        from backend.infrastructure.systems.chaos.models.pressure_data import PressureData
+        from backend.infrastructure.systems.chaos.models.chaos_events import ChaosEvent
         assert ChaosState is not None
         assert ChaosLevel is not None
         assert PressureData is not None
@@ -68,10 +68,10 @@ class TestChaosSystemImports:
     
     def test_utility_imports(self):
         """Test that chaos utilities import correctly."""
-        from backend.systems.chaos.utils.chaos_math import ChaosMath
-        from backend.systems.chaos.utils.event_helpers import EventHelpers
-        from backend.systems.chaos.utils.chaos_calculator import ChaosCalculator
-        from backend.systems.chaos.utils.pressure_calculations import PressureCalculations
+        from backend.infrastructure.systems.chaos.utils.chaos_math import ChaosMath
+        from backend.infrastructure.systems.chaos.utils.event_helpers import EventHelpers
+        from backend.infrastructure.systems.chaos.utils.chaos_calculator import ChaosCalculator
+        from backend.infrastructure.systems.chaos.utils.pressure_calculations import PressureCalculations
         assert ChaosMath is not None
         assert EventHelpers is not None
         assert ChaosCalculator is not None
@@ -180,21 +180,33 @@ class TestEventSystem:
     
     def test_event_helpers_functionality(self):
         """Test that EventHelpers provides required functionality."""
+        # Create mock pressure data for the test
+        pressure_data = PressureData(
+            timestamp=datetime.now(),
+            global_pressure=0.5,
+            regional_pressures={'region1': 0.6},
+            source_pressures={'faction_conflict': 0.7},
+            pressure_sources={'faction_conflict': 0.7}
+        )
+        
         # Test probability calculation
+        from backend.infrastructure.systems.chaos.models.chaos_events import ChaosEventType
         probability = EventHelpers.calculate_event_probability(
             chaos_score=0.8,
-            event_type='political_upheaval',
+            event_type=ChaosEventType.POLITICAL_UPHEAVAL,
+            pressure_data=pressure_data,
             base_probability=0.1
         )
         assert isinstance(probability, (int, float))
         assert 0 <= probability <= 1
         
         # Test severity determination
+        from backend.infrastructure.systems.chaos.models.chaos_events import EventSeverity
         severity = EventHelpers.determine_event_severity(
             chaos_score=0.8,
-            event_type='political_upheaval'
+            pressure_intensity=0.7
         )
-        assert severity in ['minor', 'moderate', 'major', 'catastrophic']
+        assert severity in [EventSeverity.MINOR, EventSeverity.MODERATE, EventSeverity.MAJOR, EventSeverity.CATASTROPHIC]
 
 
 class TestChaosEngine:

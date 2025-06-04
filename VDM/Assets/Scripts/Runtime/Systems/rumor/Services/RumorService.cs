@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using VDM.Infrastructure.Services;
 using VDM.DTOs.Common;
+using VDM.Systems.Rumor.Models;
 
 
 namespace VDM.Systems.Rumor.Services

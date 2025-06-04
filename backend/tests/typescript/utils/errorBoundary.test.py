@@ -3,7 +3,7 @@ errorBoundary.test.py - Auto-generated minimal implementation
 This file was automatically fixed due to syntax errors.
 """
 
-class Errorboundary.test:
+class ErrorBoundaryTest:
     """Auto-generated class for errorBoundary.test"""
     
     def __init__(self):

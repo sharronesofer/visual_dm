@@ -1,5 +1,6 @@
 using UnityEngine;
 using VDM.DTOs.Common;
+using VDM.Systems.Worldgeneration.Models;
 
 namespace VDM.Systems.Worldgeneration.Ui
 {

@@ -14,8 +14,8 @@ from datetime import datetime, timedelta
 from uuid import uuid4, UUID
 from typing import Dict, List, Any
 
-# Import models to test
-from backend.systems.diplomacy.models import (
+# Import models to test - Fixed to import directly from model files
+from backend.systems.diplomacy.models.core_models import (
     DiplomaticStatus,
     TreatyType,
     TreatyStatus,
@@ -37,17 +37,17 @@ from backend.systems.diplomacy.models import (
     Sanction
 )
 
-# Import database models
-from backend.systems.diplomacy.db_models import (
-    FactionRelationship as DBFactionRelationship,
-    Treaty as DBTreaty,
-    Negotiation as DBNegotiation,
-    DiplomaticEvent as DBDiplomaticEvent,
-    TreatyViolation as DBTreatyViolation,
-    DiplomaticIncident as DBDiplomaticIncident,
-    Ultimatum as DBUltimatum,
-    Sanction as DBSanction
-)
+# Import database models - Commented out due to dependency issues
+# from backend.systems.diplomacy.db_models import (
+#     FactionRelationship as DBFactionRelationship,
+#     Treaty as DBTreaty,
+#     Negotiation as DBNegotiation,
+#     DiplomaticEvent as DBDiplomaticEvent,
+#     TreatyViolation as DBTreatyViolation,
+#     DiplomaticIncident as DBDiplomaticIncident,
+#     Ultimatum as DBUltimatum,
+#     Sanction as DBSanction
+# )
 
 
 class TestDiplomaticEnums:

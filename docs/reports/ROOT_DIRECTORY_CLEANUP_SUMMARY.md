@@ -65,7 +65,7 @@ Cleaned up the root directory by moving misplaced files to their proper location
 The root directory now contains only essential project files:
 
 ```
-Visual_DM/
+Dreamforge/
 ├── backend/           # Backend codebase
 ├── docs/              # All documentation
 ├── scripts/           # Utility scripts organized by purpose

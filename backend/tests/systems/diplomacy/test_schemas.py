@@ -10,9 +10,9 @@ from unittest.mock import Mock, patch
 
 # Import the module under test
 try:
-    from backend.systems.diplomacy import schemas
+    from backend.infrastructure.schemas import diplomacy_schemas as schemas
 except ImportError:
-    pytest.skip(f"Module backend.systems.diplomacy.schemas not found", allow_module_level=True)
+    pytest.skip(f"Module backend.infrastructure.schemas.diplomacy_schemas not found", allow_module_level=True)
 
 
 class TestSchemas:

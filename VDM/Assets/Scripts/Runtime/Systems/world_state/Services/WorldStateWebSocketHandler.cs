@@ -7,6 +7,7 @@ using VDM.Infrastructure.Services.Websocket;
 using VDM.DTOs.Common;
 using VDM.Systems.Character.Models;
 using VDM.Infrastructure.Services;
+using VDM.Systems.Worldstate.Models;
 
 
 namespace VDM.Systems.Worldstate.Services

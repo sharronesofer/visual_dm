@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VDM.Core.csproj": {}
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VDM.Core.csproj": {}
   },
   "projects": {
-    "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VDM.Core.csproj": {
+    "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VDM.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VDM.Core.csproj",
+        "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VDM.Core.csproj",
         "projectName": "VDM.Core",
-        "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VDM.Core.csproj",
+        "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VDM.Core.csproj",
         "packagesPath": "/Users/Sharrone/.nuget/packages/",
-        "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//VDM.Core/",
+        "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//VDM.Core/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Sharrone/.nuget/NuGet/NuGet.Config"

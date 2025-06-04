@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Consolidated.csproj",
+      "projectUniqueName": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Consolidated.csproj",
       "projectName": "VisualDM.Consolidated",
-      "projectPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/VisualDM.Consolidated.csproj",
+      "projectPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/VisualDM.Consolidated.csproj",
       "packagesPath": "/Users/Sharrone/.nuget/packages/",
-      "outputPath": "/Users/Sharrone/Visual_DM/VDM/ProjectFiles/Temp/obj//VisualDM.Consolidated/",
+      "outputPath": "/Users/Sharrone/Dreamforge/VDM/ProjectFiles/Temp/obj//VisualDM.Consolidated/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Sharrone/.nuget/NuGet/NuGet.Config"

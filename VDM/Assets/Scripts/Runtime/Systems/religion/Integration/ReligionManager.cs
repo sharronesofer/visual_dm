@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using VDM.DTOs.Common;
 using VDM.Systems.Religion.Services;
 using VDM.Systems.Religion.Ui;
 using VDM.Systems.Faction.Models;
 using VDM.Systems.Events.Integration;
 using VDM.Infrastructure.Services;
+using VDM.Infrastructure.Core.Core.Systems;
+using VDM.Systems.Religion.Models;
+using VDM.Infrastructure.Core.Core.Events;
+using VDM.Systems.Region.Models;
 
 namespace VDM.Systems.Religion.Integration
 {

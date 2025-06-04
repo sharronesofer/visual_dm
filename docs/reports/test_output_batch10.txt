@@ -1,7 +1,7 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
 cachedir: .pytest_cache
-rootdir: /Users/Sharrone/Visual_DM
+rootdir: /Users/Sharrone/Dreamforge
 configfile: pytest.ini
 testpaths: backend/tests
 plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
@@ -11,7 +11,7 @@ collecting ...
 00:08:22 [WARNING] backend.systems.shared.rules: Unknown balance constant: version
 00:08:22 [WARNING] backend.systems.shared.rules: Unknown balance constant: constants
 00:08:22 [INFO] world_state_manager: WorldStateManager initialized with JSON persistence
-00:08:22 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Visual_DM/backend/analytics_data
+00:08:22 [INFO] backend.systems.analytics.services.analytics_service: AnalyticsService initialized. Storage path: /Users/Sharrone/Dreamforge/backend/analytics_data
 00:08:22 [INFO] backend.systems.combat.object_pool: CombatObjectPoolManager initialized
 00:08:22 [INFO] backend.systems.combat.combat_animation_system: CombatAnimationSystem initialized
 00:08:22 [INFO] backend.systems.combat.effect_visualizer: EffectVisualizer initialized
@@ -27,8 +27,8 @@ collecting ...
 00:08:23 [INFO] backend.systems.llm.core.dm_core: DungeonMaster initialized
 00:08:23 [WARNING] backend.systems.equipment.inventory_utils: Canonical inventory system not available. Using fallback implementations.
 00:08:23 [WARNING] backend.systems.equipment.shop_utils: Canonical inventory system not available. Shop functions will be limited.
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
-Loaded adjacency rules from /Users/Sharrone/Visual_DM/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
+Loaded adjacency rules from /Users/Sharrone/Dreamforge/data/system/runtime/adjacency.json
 00:08:24 [INFO] root: World Generator initialized.
 00:08:24 [INFO] systems.combat.combat_animation_system: CombatAnimationSystem initialized
 00:08:24 [INFO] systems.combat.object_pool: CombatObjectPoolManager initialized
@@ -46,7 +46,7 @@ collected 2603 items / 1 error / 26 skipped
 
 ==================================== ERRORS ====================================
 _ ERROR collecting backend/tests/systems/auth_user/integration/test_auth_integration.py _
-ImportError while importing test module '/Users/Sharrone/Visual_DM/backend/tests/systems/auth_user/integration/test_auth_integration.py'.
+ImportError while importing test module '/Users/Sharrone/Dreamforge/backend/tests/systems/auth_user/integration/test_auth_integration.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../.pyenv/versions/3.11.5/lib/python3.11/importlib/__init__.py:126: in import_module
@@ -55,7 +55,7 @@ backend/tests/systems/auth_user/integration/test_auth_integration.py:5: in <modu
     from backend.systems.auth_user.models import User, Role, Permission
 backend/systems/auth_user/__init__.py:30: in <module>
     from .services.auth_service import (
-E   ImportError: cannot import name 'register_new_user' from 'backend.systems.auth_user.services.auth_service' (/Users/Sharrone/Visual_DM/backend/systems/auth_user/services/auth_service.py)
+E   ImportError: cannot import name 'register_new_user' from 'backend.systems.auth_user.services.auth_service' (/Users/Sharrone/Dreamforge/backend/systems/auth_user/services/auth_service.py)
 =========================== short test summary info ============================
 ERROR backend/tests/systems/auth_user/integration/test_auth_integration.py
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!

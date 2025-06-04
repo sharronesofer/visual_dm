@@ -1,2 +1,0 @@
-"""Schemas for npc system"""
-

@@ -20,7 +20,7 @@ sys.path.append(str(project_root))
 def validate_api_endpoints():
     """Validate diplomacy API endpoints and their capabilities."""
     try:
-        from backend.systems.diplomacy.routers.router import router
+        from backend.infrastructure.api.diplomacy_router import router
         
         print("🔍 DIPLOMACY API ENDPOINT ANALYSIS")
         print("=" * 50)
@@ -105,7 +105,7 @@ def validate_api_endpoints():
 def validate_schemas():
     """Validate API schemas for frontend compatibility."""
     try:
-        from backend.systems.diplomacy.schemas.schemas import (
+        from backend.infrastructure.schemas.diplomacy_schemas import (
             TreatySchema, NegotiationSchema, DiplomaticEventSchema,
             FactionRelationshipSchema, TreatyViolationSchema,
             DiplomaticIncidentSchema, UltimatumSchema, SanctionSchema
@@ -151,7 +151,7 @@ def validate_schemas():
 def validate_enums():
     """Validate enum compatibility for frontend."""
     try:
-        from backend.systems.diplomacy.core_models import (
+        from backend.systems.diplomacy.models import (
             DiplomaticStatus, TreatyType, NegotiationStatus,
             DiplomaticEventType, TreatyViolationType,
             DiplomaticIncidentType, DiplomaticIncidentSeverity,

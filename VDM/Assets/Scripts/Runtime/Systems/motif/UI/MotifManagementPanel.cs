@@ -6,6 +6,7 @@ using TMPro;
 using VDM.Infrastructure.Services;
 using VDM.Systems.Motifs.Models;
 using VDM.Systems.Motifs.Services;
+using VDM.Infrastructure.Core.Core.Ui;
 
 namespace VDM.Systems.Motifs.Ui
 {
@@ -79,10 +80,8 @@ namespace VDM.Systems.Motifs.Ui
                 motifDetailsPanel.SetActive(false);
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
-            base.OnDestroy();
-            
             if (_motifManager != null)
             {
                 _motifManager.OnMotifsLoaded -= OnMotifsLoaded;

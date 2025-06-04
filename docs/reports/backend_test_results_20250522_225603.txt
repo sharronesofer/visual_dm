@@ -1,13 +1,13 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.11.5, pytest-8.3.5, pluggy-1.6.0 -- /Users/Sharrone/.pyenv/versions/3.11.5/bin/python3.11
 cachedir: .pytest_cache
-rootdir: /Users/Sharrone/Visual_DM
+rootdir: /Users/Sharrone/Dreamforge
 configfile: pytest.ini
 plugins: anyio-4.9.0, asyncio-0.26.0, mock-3.14.0, cov-6.1.1
 asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
 collecting ... 
 ----------------------------- live log collection ------------------------------
-22:56:05 [INFO] backend.systems.storage.json_storage: JSONStorageManager initialized with base path: /Users/Sharrone/Visual_DM/data
+22:56:05 [INFO] backend.systems.storage.json_storage: JSONStorageManager initialized with base path: /Users/Sharrone/Dreamforge/data
 22:56:05 [INFO] backend.systems.memory.memory_manager: MemoryManager initialized
 collected 31 items
 
@@ -375,7 +375,7 @@ INFO     backend.systems.memory.memory_manager:memory_manager.py:104 MemoryManag
     warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
 
 backend/systems/storage/events.py:13
-  /Users/Sharrone/Visual_DM/backend/systems/storage/events.py:13: DeprecationWarning: Importing from backend.systems.events.event_dispatcher is deprecated. Use backend.app.core.events.event_dispatcher instead.
+  /Users/Sharrone/Dreamforge/backend/systems/storage/events.py:13: DeprecationWarning: Importing from backend.systems.events.event_dispatcher is deprecated. Use backend.app.core.events.event_dispatcher instead.
     from backend.systems.events.event_dispatcher import EventDispatcher
 
 ../.pyenv/versions/3.11.5/lib/python3.11/site-packages/_pytest/config/__init__.py:1441
@@ -385,7 +385,7 @@ backend/systems/storage/events.py:13
 
 backend/tests/systems/memory/test_memory_manager.py: 13 warnings
   /Users/Sharrone/.pyenv/versions/3.11.5/lib/python3.11/site-packages/pytest_asyncio/plugin.py:884: DeprecationWarning: The event_loop fixture provided by pytest-asyncio has been redefined in
-  /Users/Sharrone/Visual_DM/backend/tests/conftest.py:245
+  /Users/Sharrone/Dreamforge/backend/tests/conftest.py:245
   Replacing the event_loop fixture with a custom implementation is deprecated
   and will lead to errors in the future.
   If you want to request an asyncio event loop with a scope other than function
@@ -396,31 +396,31 @@ backend/tests/systems/memory/test_memory_manager.py: 13 warnings
     warnings.warn(
 
 backend/tests/systems/memory/test_memory_manager.py: 13 warnings
-  /Users/Sharrone/Visual_DM/backend/systems/memory/memory_manager.py:109: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
+  /Users/Sharrone/Dreamforge/backend/systems/memory/memory_manager.py:109: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
     self.event_dispatcher.subscribe("character.created", self._on_character_created)
   Enable tracemalloc to get traceback where the object was allocated.
   See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
 
 backend/tests/systems/memory/test_memory_manager.py: 13 warnings
-  /Users/Sharrone/Visual_DM/backend/systems/memory/memory_manager.py:110: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
+  /Users/Sharrone/Dreamforge/backend/systems/memory/memory_manager.py:110: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
     self.event_dispatcher.subscribe("character.deleted", self._on_character_deleted)
   Enable tracemalloc to get traceback where the object was allocated.
   See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
 
 backend/tests/systems/memory/test_memory_manager.py: 13 warnings
-  /Users/Sharrone/Visual_DM/backend/systems/memory/memory_manager.py:113: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
+  /Users/Sharrone/Dreamforge/backend/systems/memory/memory_manager.py:113: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
     self.event_dispatcher.subscribe("narrative.generated", self._on_narrative_generated)
   Enable tracemalloc to get traceback where the object was allocated.
   See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
 
 backend/tests/systems/memory/test_memory_manager.py: 13 warnings
-  /Users/Sharrone/Visual_DM/backend/systems/memory/memory_manager.py:116: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
+  /Users/Sharrone/Dreamforge/backend/systems/memory/memory_manager.py:116: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
     self.event_dispatcher.subscribe("character.interaction", self._on_character_interaction)
   Enable tracemalloc to get traceback where the object was allocated.
   See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
 
 backend/tests/systems/memory/test_memory_manager.py: 91 warnings
-  /Users/Sharrone/Visual_DM/backend/systems/memory/memory_manager.py:451: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  /Users/Sharrone/Dreamforge/backend/systems/memory/memory_manager.py:451: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
     mem_dict = mem.dict()
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html

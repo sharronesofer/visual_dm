@@ -3,7 +3,7 @@ GPT-based flavor text generation for items, effects, and relationships.
 """
 
 from typing import Dict, Any, List, Optional
-from backend.infrastructure.shared.utils.gpt.client import GPTClient
+from .client import GPTClient
 
 def gpt_flavor_identify_effect(item_name: str, effect: str) -> str:
     """

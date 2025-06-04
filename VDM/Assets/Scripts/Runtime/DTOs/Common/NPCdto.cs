@@ -180,8 +180,6 @@ namespace VDM.DTOs.Social.NPC
 
         public NPCRaceType? Race { get; set; }
 
-        public NPCClassType? ClassType { get; set; }
-
         public List<NPCPersonalityTrait> PersonalityTraits { get; set; } = new();
 
         public string? Backstory { get; set; }
@@ -240,8 +238,6 @@ namespace VDM.DTOs.Social.NPC
         public NPCProfessionType? Profession { get; set; }
 
         public NPCRaceType? Race { get; set; }
-
-        public NPCClassType? ClassType { get; set; }
 
         public List<NPCPersonalityTrait> PersonalityTraits { get; set; } = new();
 
@@ -770,6 +766,10 @@ namespace VDM.DTOs.Social.NPC
         public NPCRumorStatsDTO RumorStats { get; set; } = new();
     }
 
+    /// <summary>
+    /// NPC rumor statistics
+    /// </summary>
+    [Serializable]
     public class NPCRumorStatsDTO
     {
         public int TotalRumors { get; set; }
@@ -786,11 +786,32 @@ namespace VDM.DTOs.Social.NPC
 
         public float AverageCredibility { get; set; }
 
-        // Computed Properties
+        // Computed properties
         public string MostCommonCategory => CategoryDistribution
             .OrderByDescending(kvp => kvp.Value)
             .FirstOrDefault().Key.ToString();
+
         public bool IsGullible => AverageBeliefStrength > 0.8f;
         public bool IsSkeptical => AverageBeliefStrength < 0.3f;
+    }
+
+    // ===========================================
+    // COMPATIBILITY ALIASES FOR FRONTEND
+    // ===========================================
+
+    /// <summary>
+    /// Compatibility alias for NPCData (maps to NPCDT0)
+    /// </summary>
+    public class NPCData : NPCDT0
+    {
+        // Inherits all properties from NPCDT0
+    }
+
+    /// <summary>
+    /// Compatibility alias for CharacterRelationship (maps to NPCRelationshipDTO)
+    /// </summary>
+    public class CharacterRelationship : NPCRelationshipDTO
+    {
+        // Inherits all properties from NPCRelationshipDTO
     }
 } 

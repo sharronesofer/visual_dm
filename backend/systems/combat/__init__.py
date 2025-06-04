@@ -1,10 +1,6 @@
-"""Combat system"""
+"""Combat system - Business logic only"""
 
-# Auto-generated imports
-from . import events
-from . import models
-from . import repositories
-from . import routers
-from . import schemas
-from . import services
+# Business logic imports
 from . import utils
+from .combat_utils import *
+from .status_effects import *
